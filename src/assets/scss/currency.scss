@@ -1,0 +1,514 @@
+@import "./flex.scss";
+@import "./font.scss";
+@import "./common.scss";
+
+//input title
+.labelTitle {
+  min-width: 2.4rem;
+  max-width: 2.4rem;
+  text-align: right;
+  color: #4A4A4A;
+}
+
+//vant checkbox
+.van-checkbox {
+  @include flex();
+  margin-bottom: .2rem;
+}
+
+//带看打卡图标
+#punchClock, #goSignContract {
+  .icon_location {
+    @include flex('flex-center');
+    img {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 8px;
+      @include radius(50%);
+    }
+  }
+  .staffContent {
+    width: 56px;
+    height: 60px;
+    @include bgImage("../image/common/staffContentlocation.png");
+  }
+  .villageContent {
+    width: 40px;
+    height: 40px;
+    @include bgImage("../image/common/villageContentlocation.png");
+    div {
+      white-space: nowrap;
+      font-size: 16px;
+      padding: 4px 6px;
+      margin-bottom: 50px;
+      color: #4570FE;
+      background-color: #FFFFFF;
+      @include radius(6px);
+      @include boxShaw(0px 2px 14px 0px rgba(69, 112, 254, 0.3));
+    }
+  }
+}
+
+//数字字体
+.numberFont {
+  @include numberFont;
+}
+
+//input 提示信息
+.prompts {
+  color: #FF4081;
+  padding-left: 2.65rem;
+  margin: -.1rem 0 .1rem;
+  font-size: .23rem;
+}
+
+//底部按钮
+.footerStatic {
+  position: static !important;
+}
+
+//input 操做按钮 验证按钮
+.zl-button, .zl-confirmation {
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+//input 操做按钮
+.zl-button {
+  @include radius(1rem);
+  font-size: .28rem;
+  padding: .13rem .3rem;
+  background: linear-gradient(137deg, rgba(68, 138, 255, 1) 0%, rgba(69, 112, 254, 1) 100%);
+}
+
+//input 验证按钮
+.zl-confirmation {
+  @include flex('items-center');
+  font-size: .24rem;
+  padding: .12rem .3rem .15rem;
+  margin-right: -.2rem;
+  @include radius(1rem 0 0 1rem);
+  background: linear-gradient(137deg, rgba(68, 138, 255, 1) 0%, rgba(69, 112, 254, 1) 100%);
+  i {
+    width: .3rem;
+    height: .3rem;
+    margin: .02rem .1rem 0 0;
+  }
+  .identity {
+    @include bgImage('../image/common/shenfen.png');
+  }
+  .bank {
+    @include bgImage('../image/common/yinhangka.png');
+  }
+}
+
+//bank验证 图标
+.zl-confirmation.bank {
+  background: rgba(0, 172, 193, 1);
+}
+
+//新建待办任务 button
+.addToBeDone {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1rem;
+  @include bgImage('../image/common/xinjiananniu.png');
+  width: 1.2rem;
+  height: 1.2rem;
+  @include radius(50%);
+  @include boxShaw(0 2px 14px 0 rgba(69, 112, 254, 0.3));
+}
+
+//新建待办任务 module
+.showAddPopup {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  left: 2rem;
+  padding-right: 2rem;
+  text-align: center;
+  border-top: 1px solid #5E5E5E;
+  background-color: #FFFFFF;
+  @include radius(.2rem 0 0 .2rem);
+  .addTitle {
+    span {
+      font-size: .36rem;
+    }
+  }
+  .mainModule {
+    .module {
+      position: absolute;
+      @include radius(50%);
+      @include flex('flex-center');
+      i {
+        display: inline-block;
+        width: .6rem;
+        height: .6rem;
+        margin: -.1rem 0 .1rem;
+      }
+    }
+  }
+  .popupBottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 2rem;
+  }
+}
+
+// popup 头部 radius
+.van-popup.van-popup--bottom {
+  @include radius(.2rem .2rem 0 0);
+  //头部
+  .popupTop {
+    @include flex('items-bet');
+    padding: .4rem;
+    h3 {
+      color: #4570FE;
+    }
+  }
+}
+
+//家电 picker内选择样式
+.popupModule {
+  //input
+  .pickerInput {
+    @include flex('items-center');
+    flex-wrap: wrap;
+    border-bottom: .1rem solid #F8F8F8;
+    > div {
+      width: 33.33%;
+    }
+  }
+  //家电家具
+  .electricalList {
+    @include flex();
+    flex-wrap: wrap;
+    margin-bottom: .2rem;
+    div {
+      @include flex('items-center');
+      width: 25%;
+      padding: .1rem;
+      p {
+        width: 100%;
+        text-align: center;
+        background-color: #EEEDEE;
+        padding: .16rem 0;
+        @include radius(1rem);
+        span {
+          font-size: .28rem;
+        }
+      }
+    }
+  }
+  .electricalNum {
+    @include flex('justify-around');
+    padding: .3rem 0;
+    border-top: .01rem solid #D8D8D8;
+    span {
+      width: .88rem;
+      height: .88rem;
+      text-align: center;
+      line-height: .88rem;
+      border: .01rem solid #9B9B9B;
+      @include radius(50%);
+    }
+  }
+  .choose {
+    color: #FFFFFF !important;
+    border-color: #4570FE !important;
+    background-color: #4570FE !important;
+  }
+}
+
+//radio checkbox 样式
+.radioChecksLabel {
+  label {
+    display: inline-block;
+    padding: .2rem .1rem;
+  }
+}
+
+.radioChecks {
+  @include flex('items-center');
+  flex-wrap: wrap;
+  padding: .1rem 0 .2rem;
+  div {
+    width: 25%;
+    @include flex('flex-center');
+    margin-bottom: .3rem;
+    p {
+      font-size: .26rem;
+      width: 88%;
+      padding: .2rem 0;
+      text-align: center;
+      background-color: #EEEDEE;
+      @include radius(1rem);
+    }
+  }
+}
+
+//多选选中
+.chooseCheck {
+  color: #4570FE;
+  background: rgba(69, 112, 254, .1) !important;
+}
+
+//家电家具
+.electrical {
+  > label {
+    min-width: 1.8rem;
+    text-align: right;
+    padding-top: .2rem;
+  }
+  > div {
+    flex-wrap: wrap;
+    padding-left: .3rem;
+    div {
+      width: 15%;
+      margin-top: .15rem;
+      h1 {
+        width: .6rem;
+        height: .6rem;
+        border-radius: 50%;
+        margin: 0 auto;
+        background-color: #4570FE;
+        @include flex('flex-center');
+        span {
+          width: .26rem;
+          height: .26rem;
+        }
+        @for $i from 1 through 12 {
+          .electrical-#{$i} {
+            @include bgImage("../../assets/image/electrical/electrical#{$i}.png");
+          }
+        }
+      }
+      p {
+        text-align: center;
+        padding-top: .05rem;
+      }
+    }
+  }
+}
+
+//按钮
+.commonBtn {
+  @include flex('justify-around');
+  align-items: center;
+  .btn {
+    color: #FFFFFF;
+    padding: .2rem .6rem;
+    @include radius(1rem);
+    @include bgImage('../image/footer/queding.png');
+  }
+  //转jiao
+  .deliver {
+    @include bgImage('../image/footer/yuding.png');
+  }
+  //重置
+  .reset {
+    @include bgImage('../image/footer/chongzhi.png');
+  }
+  //取消
+  .back {
+    color: #212121;
+    @include bgImage('../image/footer/quxiao.png');
+  }
+}
+
+//搜索 module
+.searchModule {
+  @include flex('bet-column');
+  background-color: #FFFFFF;
+  .searchInput {
+    padding: 0 .4rem;
+  }
+  .popupSearch {
+    @include scroll;
+    height: 100%;
+    padding: 0 .6rem;
+    div {
+      height: 100%;
+    }
+    ul {
+      li {
+        padding: .3rem 0;
+        @include flex('items-bet');
+      }
+    }
+  }
+  .depart {
+    ul {
+      li {
+        p {
+          @include flex('items-center');
+          i {
+            width: .36rem;
+            height: .36rem;
+            margin-right: .2rem;
+            padding: .06rem;
+            border: 1px solid #C4C4C4;
+            @include radius(50%);
+            @include flex('flex-center');
+            b {
+              @include radius(50%);
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+      }
+      .chooseDepart {
+        color: #4570FE;
+        p {
+          i {
+            border-color: #4570FE;
+            b {
+              background-color: #4570FE;
+            }
+          }
+        }
+      }
+    }
+  }
+  // 部门导航
+  .crumbs {
+    padding: .2rem .2rem .2rem .4rem;
+    line-height: .5rem;
+    margin-bottom: .1rem;
+  }
+  .colorChoose {
+    cursor: pointer;
+    color: #4570FE;
+  }
+  .searchFoot {
+    min-height: 1.5rem;
+    max-height: 1.5rem;
+    margin-top: .3rem;
+    border-top: 1px dashed #C6CAD8;
+  }
+}
+
+//搜索 input
+.searchInput {
+  width: 100%;
+  margin-bottom: .3rem;
+  .input {
+    @include flex('flex-center');
+    background-color: #F2F2F2;
+    @include radius(1rem);
+    div {
+      width: 100%;
+      @include flex('items-center');
+      input {
+        width: 100%;
+        padding: 0 .3rem 0 .42rem;
+      }
+      span {
+        min-width: .42rem;
+        height: .42rem;
+        margin-right: .1rem;
+        @include bgImage('../image/common/guanbi.png');
+      }
+    }
+    p {
+      background-color: #D2D2D2;
+      white-space: nowrap;
+      padding: .16rem .36rem;
+      @include radius(1rem);
+      @include flex('flex-center');
+      i {
+        width: .2rem;
+        height: .3rem;
+        margin-left: .1rem;
+        @include bgImage('../image/common/choosedown.png');
+      }
+    }
+    .searchBtn {
+      color: #FFFFFF;
+      background-color: #4570FE;
+    }
+  }
+  .chooseBtn {
+    @include flex('items-center');
+    flex-wrap: wrap;
+    p {
+      margin-top: .2rem;
+      padding: 0 .1rem;
+      width: 25%;
+      @include flex('flex-center');
+      b {
+        width: 100%;
+        padding: .2rem 0;
+        text-align: center;
+        @include radius(1rem);
+        background-color: #EEEDEE;
+      }
+      .choose {
+        background-color: rgba(69, 112, 254, .1);
+        color: #4570FE;
+      }
+    }
+  }
+}
+
+// video
+#videoId {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  @include flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 1);
+  #video {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .close {
+    position: absolute;
+    width: 1rem;
+    height: 0.6rem;
+    text-align: center;
+    line-height: 0.8rem;
+    @include radius(50%);
+    bottom: 1rem;
+    color: #FFFFFF;
+    transform: translate(-50%);
+    span {
+      width: 100%;
+      height: 100%;
+      background-color: #8e8b8b;
+      @include radius(.06rem);
+      img {
+        width: .26rem;
+        height: .26rem;
+      }
+    }
+  }
+}
+
+.video-ios {
+  #video {
+    top: 0;
+  }
+  .close {
+    top: .4%;
+    right: 12%;
+  }
+}
+
+.video-android {
+  #video {
+    top: .7rem;
+  }
+  .close {
+    top: .3%;
+    right: 2%;
+  }
+}

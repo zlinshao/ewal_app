@@ -1,0 +1,136 @@
+@import "font.scss";
+@import "flex.scss";
+
+@mixin inputColor($c) {
+  input {
+    background-color: transparent;
+  }
+
+  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: $c;
+  }
+
+  input::-moz-placeholder, textarea::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: $c;
+  }
+
+  input:-moz-placeholder, textarea:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: $c;
+  }
+
+  input:-ms-input-placeholder, textarea:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: $c;
+  }
+}
+
+@mixin scroll {
+  overflow: auto;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+@mixin bgImage($m) {
+  background: url($m) no-repeat scroll center;
+  background-size: 100% 100%;
+}
+
+@mixin radius($m) {
+  -webkit-border-radius: $m;
+  -moz-border-radius: $m;
+  border-radius: $m;
+}
+
+@mixin transition($t) {
+  -webkit-transition: $t;
+  -moz-transition: $t;
+  -ms-transition: $t;
+  -o-transition: $t;
+  transition: $t;
+}
+
+@mixin delay($s) {
+  transition-delay: $s + s;
+  -webkit-transition-delay: $s + s;
+}
+
+@mixin transform($s) {
+  -webkit-transform: $s;
+  -moz-transform: $s;
+  -ms-transform: $s;
+  -o-transform: $s;
+  transform: $s;
+}
+
+@mixin animation($a) {
+  -webkit-animation: $a;
+  -moz-animation: $a;
+  -o-animation: $a;
+  animation: $a;
+}
+
+@mixin transOrigin($z) {
+  -webkit-transform-origin: $z;
+  -moz-transform-origin: $z;
+  -ms-transform-origin: $z;
+  -o-transform-origin: $z;
+  transform-origin: $z;
+}
+
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+
+@mixin line-clamp($n: 1) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $n;
+}
+
+@mixin writingMode {
+  writing-mode: vertical-rl;
+  writing-mode: tb-rl;
+}
+
+@mixin boxShaw($s) {
+  -webkit-box-shadow: $s;
+  -moz-box-shadow: $s;
+  box-shadow: $s;
+}
+
+@mixin backFace {
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+//数字字体
+@mixin numberFont($b: '') {
+  font-family: 'dingziti' + $b;
+}
+
+.writingMode {
+  @include writingMode;
+}
+
+.line-clamp1 {
+  @include line-clamp();
+}
+
+.line-clamp2 {
+  @include line-clamp(2);
+}
+
+.line-clamp3 {
+  @include line-clamp(3);
+}
+
+.scroll_bar {
+  @include scroll;
+}

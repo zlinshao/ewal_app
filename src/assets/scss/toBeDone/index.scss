@@ -1,0 +1,188 @@
+@import "../common.scss";
+
+#toBeDone {
+  @mixin toBeDoneImg($n) {
+    @include bgImage('../../../assets/image/toBeDone/' + $n + '.png');
+  }
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(248, 248, 248, 1) 100%);
+  .toBeDoneTop {
+    padding: 0 .3rem;
+    border-top: .1rem solid #F4F4F4;
+    @include flex('items-bet');
+    .searchInput {
+      margin: .2rem 0;
+    }
+  }
+  .main {
+    ul {
+      li {
+        padding: .3rem 0 .3rem .3rem;
+        margin: 0 .3rem .16rem ;
+        @include radius(.1rem);
+        background-color: #FFFFFF;
+        .mainTitle {
+          @include flex('items-bet');
+          label {
+            @include line-clamp();
+          }
+          p {
+            min-width: .9rem;
+            max-width: .9rem;
+            height: .55rem;
+            margin-left: .3rem;
+            background: rgba(207, 46, 51, .1);
+            @include radius(1rem 0 0 1rem);
+            @include flex('flex-center');
+            i {
+              width: .36rem;
+              height: .36rem;
+              @include toBeDoneImg('jieshurenwu');
+            }
+          }
+        }
+        .statusBtn {
+          @include flex('items-center');
+          margin: .15rem 0 .5rem;
+          span {
+            margin-right: .2rem;
+            padding: .15rem .3rem;
+            color: #4570FE;
+            @include radius(1rem);
+            background-color: rgba(69, 112, 254, .1);
+          }
+          label {
+            color: #686874;
+          }
+        }
+        .handleBtn {
+          padding: 0 .1rem;
+          @include flex('items-around');
+          p {
+            width: 100%;
+            @include flex('items-center');
+            i {
+              width: .33rem;
+              height: .33rem;
+              margin-right: .1rem;
+            }
+          }
+          .deliver, .collectReport {
+            i {
+              width: .4rem;
+              height: .4rem;
+            }
+          }
+          .punchClock {
+            i {
+              height: .4rem;
+            }
+          }
+        }
+      }
+    }
+    .noMore, .noData {
+      @include flex('flex-center');
+      width: 100%;
+      padding: .2rem;
+      background-color: transparent;
+    }
+    .noData {
+      height: 8rem;
+    }
+  }
+  /*bottom 操作*/
+  .showTabsModule {
+    position: fixed;
+    bottom: -1.5rem;
+    right: -1.5rem;
+    width: 3rem;
+    height: 3rem;
+    @include radius(50%);
+    background: #43A046;
+    opacity: 1;
+    transform: translateX(0);
+    @include transition(all .3s);
+    div {
+      margin: .6rem;
+      width: .6rem;
+      height: .6rem;
+      background-color: #9CE054;
+      @include radius(50%);
+      @include flex('flex-center');
+      i {
+        width: .1rem;
+        height: .1rem;
+        margin: .02rem;
+        @include radius(50%);
+        background-color: #FFFFFF;
+      }
+    }
+  }
+  .hiddenTabsModule {
+    opacity: 0;
+    transform: translateX(1rem) translateY(1rem);
+  }
+  .tabsModule {
+    height: 8.4rem;
+    width: 8.4rem;
+    margin-bottom: -4rem;
+    @include radius(50%);
+    background-color: #43A046;
+    .modules {
+      @include flex('justify-center');
+      div {
+        margin: 1rem .3rem 0;
+        padding-bottom: .2rem;
+        @include radius(1rem);
+        border: .02rem solid rgba(255, 255, 255, .5);;
+        color: #FFFFFF;
+        @include flex('items-column');
+        i {
+          width: .6rem;
+          padding: .1rem .12rem .12rem;
+          margin: .04rem .04rem .24rem;
+          height: .6rem;
+          background: rgba(255, 255, 255, .2);
+          @include radius(50%);
+        }
+      }
+    }
+  }
+  /*右侧 popup*/
+  .showAddPopup {
+    .addTitle {
+      margin-top: 30%;
+    }
+    .mainModule {
+      .module {
+        position: absolute;
+        width: 3rem;
+        height: 3rem;
+        right: 2rem;
+        @include transform(translateX(-42%));
+      }
+      .module1 {
+        bottom: 45%;
+        color: #FFFFFF;
+        background-color: #4171FE;
+        i {
+          @include toBeDoneImg('xinjiandaikan');
+        }
+      }
+      .module2 {
+        z-index: 1;
+        bottom: 1rem;
+        background-color: #FED836;
+        i {
+          height: .7rem;
+          @include toBeDoneImg('buchongxieyi');
+        }
+      }
+    }
+    .popupBottom {
+      height: 1.5rem;
+      @include toBeDoneImg('xinjiandaikandibu');
+    }
+  }
+}

@@ -1,0 +1,120 @@
+@mixin flex($f: '') {
+  display: flex;
+  display: -webkit-flex;
+
+  @if $f == 'bet-column' {
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  @if $f == 'space-column' {
+    flex-direction: column;
+    justify-content: center;
+  }
+  @if $f == 'items-column' {
+    flex-direction: column;
+    align-items: center;
+  }
+  @if $f == 'flex-center' {
+    align-items: center;
+    justify-content: center;
+  }
+  @if $f == 'items-bet' {
+    align-items: center;
+    justify-content: space-between;
+  }
+  @if $f == 'items-center' {
+    align-items: center;
+  }
+  @if $f == 'items-start' {
+    align-items: flex-start;
+  }
+  @if $f == 'items-end' {
+    align-items: flex-end;
+  }
+  @if $f == 'justify-center' {
+    justify-content: center;
+  }
+  @if $f == 'justify-around' {
+    justify-content: space-around;
+  }
+  @if $f == 'items-around' {
+    align-items: center;
+    justify-content: space-around;
+  }
+  @if $f == 'justify-bet' {
+    justify-content: space-between;
+  }
+  @if $f == 'justify-start' {
+    justify-content: flex-start;
+  }
+  @if $f == 'justify-end' {
+    justify-content: flex-end;
+  }
+}
+
+.flex {
+  @include flex();
+}
+
+.bet-column {
+  @include flex('bet-column');
+}
+
+.space-column {
+  @include flex('space-column');
+}
+
+.items-column {
+  @include flex('items-column');
+}
+
+// 上下左右居中
+.flex-center {
+  @include flex('flex-center');
+}
+
+// 上下居中 左右对齐
+.items-bet {
+  @include flex('items-bet');
+}
+
+// 上下居中
+.items-center {
+  @include flex('items-center');
+}
+
+.items-start {
+  @include flex('items-start');
+}
+
+.items-end {
+  @include flex('items-end');
+}
+
+// 水平居中
+.justify-center {
+  @include flex('justify-center');
+}
+
+//水平 平均分布
+.justify-around {
+  @include flex('justify-around');
+}
+
+// 上下居中 水平 平均分布
+.items-around {
+  @include flex('items-around');
+}
+
+// 左右对齐
+.justify-bet {
+  @include flex('justify-bet');
+}
+
+.justify-start {
+  @include flex('justify-start');
+}
+
+.justify-end {
+  @include flex('justify-end');
+}
