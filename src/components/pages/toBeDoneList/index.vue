@@ -9,7 +9,6 @@
         </div>
         <div class="topSearch" @click="searchToBeDone"></div>
       </div>
-
       <div class="main" :style="mainHeight">
         <!--未完成-->
         <div class="noFinish" v-if="tabs === 'noFinish'">
@@ -311,12 +310,17 @@
           this.onSearch(this.tabs);
         }
       },
+      // 确认搜索
       onSearch(val) {
         if (val === 'noFinish') {
           this.getNoFinishList(this.noParams);
         } else {
           this.getFinishList(this.params);
         }
+      },
+      // 已完成 / 未完成 切换
+      changeTop(val) {
+        this.tabs = val;
       },
       // 未完成
       getNoFinishList(val) {
@@ -356,10 +360,7 @@
           }
         })
       },
-      changeTop(val) {
-        this.tabs = val;
-      },
-      // 搜索待办
+      // 搜索模态框
       searchToBeDone() {
         this.searchHigh = !this.searchHigh;
       },

@@ -310,6 +310,7 @@
             }
             break;
           case '3':
+            console.log(tab);
             if (status === 0) {
               this.urlApi = 'runtime/tasks';
             } else {
@@ -363,10 +364,12 @@
       },
       // 头部切换
       changeApproval(val) {
-        this.tabs.tab = val.id;
-        this.$store.dispatch('change_tabs', this.tabs);
         let tab = val.id;
-        let params = this.params['params' + tab];
+        this.tabs.tab = tab;
+        this.$store.dispatch('change_tabs', this.tabs);
+        if (tab === '4') {
+          this.urlApi = 'runtime/process-instances';
+        }
       },
       // 二级切换
       tabsTag(status) {
