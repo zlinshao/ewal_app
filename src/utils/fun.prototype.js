@@ -61,6 +61,9 @@ export default {
     Vue.prototype.mainListHeight = function (remove = 0) {
       return {height: (Number(sessionStorage.windowHeight) - remove) + 'px'};
     };
+    Vue.prototype.screenWidth = function() {
+      return Number(sessionStorage.windowWidth);
+    }
     // 手机类型
     Vue.prototype.phoneType = function () {
       let u = navigator.userAgent;
