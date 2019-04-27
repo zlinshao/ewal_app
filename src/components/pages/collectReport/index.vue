@@ -300,11 +300,14 @@
       this.mainHeight = this.mainListHeight(title);
       this.$prompt('正在加载...', 'send');
       let query = this.$route.query;
+      let params = {};
       this.allDetails = query;
       if (query.revise) {
         this.getRevise(query.bm_detail_request_url);
       } else {
-        this.getDraft('collect');
+        params.to = 'collect';
+        params.type = '1';
+        this.getDraft(params);
       }
     },
     watch: {
@@ -329,12 +332,7 @@
 
         })
       },
-      // 计算押金
-      countPrice() {
-        let bet = Number(this.form.pay_way_bet || 0);
-        let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
-        this.form.deposit = bet * price;
-      },
+
       // 日期计算
       listenInput(key) {
         let begin = this.form.begin_date;//合同开始日期
@@ -690,8 +688,8 @@
         }
       },
       // 草稿
-      getDraft(val) {
-        this.$http.getBulletinDraft(val).then(data => {
+      getDraft(params) {
+        this.$http.getBulletinDraft(params).then(data => {
           if (!data) {
             this.getPunchClockData();
           } else {
@@ -713,7 +711,7 @@
       },
       // 获取待办信息
       getPunchClockData() {
-        this.form = hhhhhhhhhhhh;
+        // this.form = hhhhhhhhhhhh;
         if (!Object.keys(this.bulletinDetail).length) return;
         this.form.task_id = this.bulletinDetail.task_id;
         let res = this.bulletinDetail.content;
@@ -869,6 +867,7 @@
       // 初始化数据
       resetting() {
         let allForm = [];
+        let id = this.form.id;
         this.drawSlither = this.jsonClone(this.resetDrawing);
         for (let item of Object.keys(this.drawSlither)) {
           allForm = allForm.concat(this.drawSlither[item]);
@@ -883,6 +882,8 @@
         for (let item of all.value) {
           item.num = this.form[item.key];
         }
+        this.form.id = id || '';
+        console.log(111111111)
         this.form.bank = '上海浦东发展银行';
         this.form.account = '6225212583158743';
         this.form.account_name = '贾少君';

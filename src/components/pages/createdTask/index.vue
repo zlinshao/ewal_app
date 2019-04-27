@@ -470,14 +470,14 @@
             this.$http.createdTask(this.form, this.postName).then(res => {
               if (res.success) {
                 this.resetting();
-                this.routerReplace('/toBeDone', {}, 'goBack');
+                this.$router.go(-1);
               }
             });
             break;
           case 'reset'://重置
             this.resetting();
             break;
-          case 'cancel'://取消
+          case 'back'://取消
             this.$router.go(-1);
             this.resetting();
             break;

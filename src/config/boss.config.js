@@ -1,5 +1,5 @@
 globalConfig = {
-  serrrr: 'http://test.v3.api.boss.lejias.cn/',
+  login: 'http://test.v3.api.boss.lejias.cn/',
   server: 'http://recommend.ewal.lejias.cn/',//文件上传
   server_code: 'http://test.financial.api.ewal.lejias.cn/',//报备标识码
   server_market: 'http://test.market.api.ewal.lejias.cn/',//报备接口

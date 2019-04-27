@@ -3,17 +3,18 @@
     <div>
       <div class="listTop" ref="listTop">
         <div>
-          <p @click="changeTop('noFinish')" :style="{'color': tabs === 'noFinish' ? '#FED836' : ''}">
-            未完成&nbsp;{{total}}</p>
-          <p @click="changeTop('finish')" :style="{'color': tabs === 'finish' ? '#FED836' : ''}">已完成</p>
+          <p @click="changeTop(item.id)" v-for="item in finishTop"
+             :style="{'color': tabs === item.id ? '#FED836' : ''}">
+            {{item.text}}&nbsp;<span v-if="item.id === '1'">{{total['total1']}}</span>
+          </p>
         </div>
         <div class="topSearch" @click="searchToBeDone"></div>
       </div>
       <div class="main" :style="mainHeight">
         <!--未完成-->
-        <div class="noFinish" v-if="tabs === 'noFinish'">
+        <div class="noFinish" v-if="tabs === '1'">
           <scroll-load :name="'flex-warp'" :remHeight="remHeight" @getLoadMore="scrollLoad" :disabled="!fullLoading">
-            <li class="noFinishMain" v-for="(item,index) in noFinishList">
+            <li class="noFinishMain" v-for="(item,index) in finishList['list1']">
               <div :class="['main-'+index,listLength.includes(index)?'mainTransform':'']">
                 <p>发货的是卡了和卡拉恢复扩大分开了</p>
                 <div class="toBeDoneType">物品补给跟进</div>
@@ -29,18 +30,18 @@
                 </div>
               </div>
             </li>
-            <li class="noMore" v-if="noFinishList.length === paging && noFinishList.length > 6">
+            <li class="noMore" v-if="finishList['list2'].length === total['total2'] && finishList['list2'].length > 6">
               <span v-if="!fullLoading">没有更多了</span>
             </li>
-            <li class="noData" v-if="!noFinishList.length">
+            <li class="noData" v-if="!finishList['list2'].length">
               <span v-if="!fullLoading">暂无相关数据...</span>
             </li>
           </scroll-load>
         </div>
         <!--已完成-->
-        <div class="finish" v-if="tabs === 'finish'">
+        <div class="finish" v-if="tabs === '2'">
           <scroll-load :remHeight="remHeight" @getLoadMore="scrollLoad" :disabled="fullLoading">
-            <li class="finishMain" v-for="(item,index) in finishList" @click="goOperates(item)">
+            <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'goSign')">
               <div>
                 <div class="finish1">
                   <h1>{{item.title}}</h1>
@@ -55,10 +56,10 @@
                 </div>
               </div>
             </li>
-            <li class="noMore" v-if="finishList.length === paging && finishList.length > 4">
+            <li class="noMore" v-if="finishList['list2'].length === total['total1'] && finishList['list2'].length > 4">
               <span v-if="!fullLoading">没有更多了</span>
             </li>
-            <li class="noData" v-if="!finishList.length">
+            <li class="noData" v-if="!finishList['list2'].length">
               <span v-if="!fullLoading">暂无相关数据...</span>
             </li>
           </scroll-load>
@@ -91,10 +92,10 @@
       <div class="searchInput">
         <div class="input">
           <div>
-            <input type="text" v-model="highParams.title" @keyup.enter="onSearch(tabs)" placeholder="请输入搜索内容">
+            <input type="text" v-model="highParams.title" @keyup.enter="onSearch()" placeholder="请输入搜索内容">
             <span v-if="highParams.title" @click="highParams.title = ''"></span>
           </div>
-          <p v-if="highParams.title" class="searchBtn" @click="onSearch(tabs)">搜索</p>
+          <p v-if="highParams.title" class="searchBtn" @click="onSearch()">搜索</p>
           <p v-if="!highParams.title" @click="searchHigh = false">取消</p>
         </div>
       </div>
@@ -120,31 +121,56 @@
         </p>
       </div>
     </van-popup>
+    <!--是否去签约-->
+    <go-sign-contract :module="goSignModule" :detail="moduleDetail" @close="hiddenGoSign"></go-sign-contract>
   </div>
 </template>
 
 <script>
+  import GoSignContract from './components/goSignContract.vue';
+
   export default {
     name: "index",
+    components: {GoSignContract},
     data() {
       return {
-        tabs: 'noFinish',
+        tabs: '1',
         fullLoading: false,//加载是否结束
         mainHeight: '',
         remHeight: 0,
-        // 未完成
-        total: 0,
-        noFinishList: [],
         listLength: [],//中间上移 index
-        noParams: {},
-        // 已完成
-        finishList: [],
-        paging: 0,
-        params: {
-          title: '',
-          page: 1,
-          taskDefinitionKey: 'CollectReportConfirm',
+        finishTop: [
+          {
+            id: '1',
+            text: "未完成"
+          }, {
+            id: '2',
+            text: "已完成"
+          },
+        ],
+        // 列表
+        finishList: {
+          list1: [],
+          list2: [],
         },
+        // 筛选条件
+        params: {
+          params1: {
+            title: '',
+            page: 1,
+          },
+          params2: {
+            title: '',
+            page: 1,
+            finished: true,
+          },
+        },
+        // 总条数
+        total: {
+          total1: 0,
+          total2: 0,
+        },
+
         //右侧栏
         showAddPopup: false,
         addShowList: [
@@ -263,102 +289,87 @@
             },
           ]
         },
+        //是否去签约
+        goSignModule: false,
+        moduleDetail: {},
       }
     },
     created() {
-      this.noParams = this.jsonClone(this.params);
       this.resetting();
     },
     mounted() {
     },
     activated() {
-      this.tabs = this.$route.query.status || 'finish';
+      this.tabs = this.$route.query.status || '1';
       let listTop = this.$refs.listTop.offsetHeight;
       this.remHeight = listTop;
       this.mainHeight = this.mainListHeight(listTop);
-      this.onSearch('finish');
-      this.onSearch('noFinish');
+      this.onSearch('1');
+      this.onSearch('2');
     },
     watch: {},
     computed: {},
     methods: {
-      // 底部按钮跳转
-      footerTag(val) {
-        switch (val) {
-          case 1:
-            this.routerLink('/index');
-            break;
-        }
-      },
-      // 滚动加载
-      scrollLoad(val) {
-        if (this.tabs === 'noFinish') {
-          if (!val) {
-            this.noParams.page = 1;
-          } else {
-            if (this.noFinishList.length === this.total) return;
-            this.noParams.page++;
-          }
-          this.onSearch(this.tabs);
-        } else {
-          if (!val) {
-            this.params.page = 1;
-          } else {
-            if (this.finishList.length === this.paging) return;
-            this.params.page++;
-          }
-          this.onSearch(this.tabs);
-        }
-      },
-      // 确认搜索
-      onSearch(val) {
-        if (val === 'noFinish') {
-          this.getNoFinishList(this.noParams);
-        } else {
-          this.getFinishList(this.params);
-        }
-      },
       // 已完成 / 未完成 切换
       changeTop(val) {
         this.tabs = val;
       },
-      // 未完成
-      getNoFinishList(val) {
+      // 滚动加载
+      scrollLoad(val) {
+        let tab = this.tabs;
+        if (!val) {
+          this.params['params' + tab].page = 1;
+        } else {
+          if (this.finishList['list' + tab].length === this.total['total' + tab]) return;
+          this.params['params' + tab].page++;
+        }
+        this.onSearch(this.tabs);
+      },
+      // 请求列表
+      getFinishList(tab) {
+        let params = this.params['params' + tab];
         this.fullLoading = true;
-        this.$http.getToBeDoneApi(val).then(res => {
+        this.$http.getToBeDoneListApi(params).then(res => {
           this.fullLoading = false;
-          this.total = res.total;
+          this.total['total' + tab] = res.total;
           let data = this.punchClockHandlerData(res.data);
-          if (this.noParams.page === 1) {
-            this.noFinishList = data;
+          if (params.page === 1) {
+            this.finishList['list' + tab] = data;
           } else {
             for (let item of data) {
-              this.noFinishList.push(item);
+              this.finishList['list' + tab].push(item);
             }
           }
+          if (tab === '2') return;
           this.listLength = [];
           let index = 1;
-          for (let i of this.noFinishList) {
+          for (let i of this.finishList['list' + tab]) {
             this.listLength.push(index);
             index = index + 3;
           }
         })
       },
-      // 已完成
-      getFinishList(val) {
-        this.fullLoading = true;
-        this.$http.getToBeDoneApi(val).then(res => {
-          this.fullLoading = false;
-          this.paging = res.total;
-          let data = this.punchClockHandlerData(res.data);
-          if (this.params.page === 1) {
-            this.finishList = data;
-          } else {
-            for (let item of data) {
-              this.finishList.push(item);
-            }
-          }
-        })
+      // 列表事件
+      goOperates(val, type) {
+        switch (type) {
+          case 'goSign':
+            this.goSignModule = true;
+            this.moduleDetail = val;
+            break;
+        }
+        // this.routerLink(val.task_action, val);
+      },
+      // 是否签约
+      hiddenGoSign(val) {
+        this.cancel();
+        if (val === 'again') {
+          this.scrollLoad(false);
+        }
+      },
+      // 取消
+      cancel() {
+        this.searchHigh = false;
+        this.goSignModule = false;
       },
       // 搜索模态框
       searchToBeDone() {
@@ -374,21 +385,18 @@
         }
         this.highParams = Object.assign({}, this.highParams);
       },
-      goOperates(val) {
-        this.routerLink(val.task_action, val);
-      },
       // 搜索按钮
       searchBtn(val) {
         switch (val) {
           case 'cancel':
-            this.searchHigh = false;
+            this.cancel();
             break;
           case 'reset':
             this.resetting();
             break;
           default:
-            this.onSearch();
-            this.searchHigh = false;
+            this.onSearch(this.tabs);
+            this.cancel();
             break;
         }
       },
@@ -399,6 +407,18 @@
           this.highParams[item] = list[item].keyType;
         }
         this.highParams.title = '';
+      },
+      // 确认搜索
+      onSearch(tab) {
+        this.getFinishList(tab);
+      },
+      // 底部按钮跳转
+      footerTag(val) {
+        switch (val) {
+          case 1:
+            this.routerLink('/index');
+            break;
+        }
       },
     },
   }
