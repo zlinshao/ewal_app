@@ -14,6 +14,9 @@ import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
 import CreatedTask from '@/components/pages/createdTask/index.vue'//新建 带看任务
 import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建小区
 
+//房源管理
+import HouseResource from '@/components/pages/houseResource/index.vue';
+
 Vue.use(Router);
 
 export default new Router({
@@ -100,5 +103,11 @@ export default new Router({
       component: CollectReport,
       meta: {title: '收房报备', index: 5},
     },
+    {
+      path: '/houseResource',
+      name: '收房报备',
+      component: HouseResource,
+      meta: {title: '房源管理', index: 7},
+    }
   ]
 })
