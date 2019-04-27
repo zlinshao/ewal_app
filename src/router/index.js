@@ -11,7 +11,7 @@ import PunchClock from '@/components/pages/punchClock/index.vue'//待办
 import GoSignContract from '@/components/pages/punchClock/goSignContract.vue'//去签署
 import Approvals from '@/components/pages/approvals/index.vue'//审批
 import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
-import CreatedTask from '@/components/pages/toBeDoneList/createdTask/index.vue'//新建 带看任务
+import CreatedTask from '@/components/pages/createdTask/index.vue'//新建 带看任务
 import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建小区
 
 Vue.use(Router);

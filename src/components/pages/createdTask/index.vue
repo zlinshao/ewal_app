@@ -93,9 +93,9 @@
 </template>
 
 <script>
-  import NoPicker from '../../../common/no-picker.vue';
-  import SearchStaff from '../../../common/searchStaff.vue';
-  import SearchVillage from '../../../common/searchVillage.vue';
+  import NoPicker from '../../common/no-picker.vue';
+  import SearchStaff from '../../common/searchStaff.vue';
+  import SearchVillage from '../../common/searchVillage.vue';
 
   export default {
     name: "index",
@@ -470,8 +470,7 @@
             this.$http.createdTask(this.form, this.postName).then(res => {
               if (res.success) {
                 this.resetting();
-                this.routerReplace('/toBeDone');
-                this.$router.go(-1);
+                this.routerReplace('/toBeDone', {}, 'goBack');
               }
             });
             break;
@@ -602,14 +601,14 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../../../assets/scss/common.scss";
+  @import "../../../assets/scss/common.scss";
 
   #createdTask {
     background-color: #F8F8F8;
     .createdTask {
       .taskTop {
         height: .8rem;
-        @include bgImage('../../../../assets/image/add/toubupolang.png');
+        @include bgImage('../../../assets/image/add/toubupolang.png');
       }
       .main, .commonBtn {
         background-color: #FFFFFF;
@@ -636,7 +635,7 @@
             i {
               width: .4rem;
               height: .4rem;
-              @include bgImage('../../../../assets/image/toBeDone/downselect.png');
+              @include bgImage('../../../assets/image/toBeDone/downselect.png');
               @include transition(all .5s);
             }
             .downSelect {
