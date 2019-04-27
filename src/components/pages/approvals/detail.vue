@@ -217,7 +217,7 @@
             action: true,
             route: "back",
             title: "取消"
-          }
+          },
         ];
         for (let val of btn) {
           this.operates.outcomeOptions.push(val);

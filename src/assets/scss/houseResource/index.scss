@@ -1,2 +1,218 @@
 @import "../common.scss";
 
+@mixin houseBg($m) {
+  @include bgImage('../../../assets/image/houseResource/' + $m);
+}
+
+#houseResource {
+  > div.houseResource {
+    .search-type {
+      text-align: center;
+      border-top: 1px solid #F4F4F4;;
+      margin-top: 10px;
+      padding: .2rem .3rem 0 .3rem;
+      span {
+        width: 100%;
+        .van-icon {
+          vertical-align: middle;
+          font-size: 12px;
+        }
+        &:not(:last-child) {
+          margin-right: 4px;
+        }
+      }
+    }
+    .search-content {
+      height: 300px;
+    }
+    .top-search {
+      padding: .3rem 0;
+      border-top: .1rem solid #F4F4F4;
+      border-bottom: .1rem solid #F4F4F4;
+      .searchInput {
+        padding:0 .3rem;
+      }
+    }
+    .main-house-list {
+      div.house {
+        padding: .3rem;
+        min-height: 100px;
+        border-bottom: 1px dashed #F2F2F2;
+        background-color: white;
+        .leftPic {
+          width: 100pt;
+          height: 100pt;
+          position: relative;
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+          }
+          a {
+            min-width: 15pt;
+            min-height: 35pt;
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: white;
+            letter-spacing: 1px;
+            line-height: 15pt;
+            padding: 3px 0;
+            border-radius: 0 4px 0 8px;
+            text-align: center;
+            font-family: 'dingzitiblod';
+            font-size: 12px;
+          }
+          .status1 {
+            background-color: #E53A36;
+          }
+          .status2 {
+            background-color: #FFB205;
+          }
+          .status3 {
+            background-color: #00ACC1;
+          }
+          .status4 {
+            background-color: #7CB342;
+          }
+        }
+        .rightInfo {
+          margin-left: .3rem;
+          position: relative;
+          > h2 {
+            font-family: 'dingzitiblod';
+            a.notice {
+              display: inline-block;
+              width: 18px;
+              height: 16px;
+              vertical-align: top;
+            }
+            a.notice1 {
+              @include houseBg('gantan-cheng.png');
+            }
+            a.notice2 {
+              @include houseBg('gantan-hong.png');
+            }
+          }
+          div.info {
+            padding: 15px 0;
+            a {
+              font-family: 'dingzitiblod';
+              color: #808080;
+              font-size: 12px;
+            }
+            i {
+              width: 0;
+              height: 12px;
+              border-right: 1px dashed #808080;
+              margin: 0 5px;
+              position: relative;
+              top: 2px;
+            }
+          }
+          div.tag {
+            a {
+              font-size: 14px;
+              padding: 3px 5px;
+              border-right: 3px;
+              &:not(:last-child) {
+                margin-right: 5px;
+              }
+              font-family: 'dingzitiblod';
+            }
+            a.tag1 {
+              background-color: #F0F0F0;
+              color: #808080;
+            }
+            a.tag2 {
+              color: #EE7B78;
+              background-color: #FFF2F2;
+            }
+          }
+          div.bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            a {
+              width: 15px;
+              height: 15px;
+              @include houseBg('fangwu.png');
+              margin-right: 5px;
+              vertical-align: middle;
+              position: relative;
+              top: 3px;
+            }
+            h3 {
+              color: #808087;
+              font-family: 'dingzitiblod';
+            }
+            span {
+              font-size: 16px;
+              color: #EE7B78;
+              position: absolute;
+              right: 0;
+              top: 3px;
+            }
+          }
+        }
+      }
+      .noMore, .noData {
+        @include flex('flex-center');
+        width: 100%;
+        padding: .2rem;
+        background-color: transparent;
+      }
+    }
+    .filter-content {
+      background-color: white;
+      min-height: 300px;
+      .chooseBtn {
+        @include flex('items-center');
+        flex-wrap: wrap;
+        p {
+          margin-top: .2rem;
+          padding: 0 .1rem;
+          width: 25%;
+          @include flex('flex-center');
+          b {
+            width: 100%;
+            padding: .2rem 0;
+            text-align: center;
+            @include radius(1rem);
+            background-color: #EEEDEE;
+          }
+          .choose {
+            background-color: rgba(69, 112, 254, .1);
+            color: #4570FE;
+          }
+        }
+      }
+    }
+  }
+}
+
+.commonFooterTag {
+  position: fixed;
+  bottom: 0;
+  height: 1.8rem;
+  width: 100%;
+  padding: .15rem .4rem;
+  @include flex('justify-around');
+  align-items: flex-end;
+  @include bgImage("../../../assets/image/common/commonFooterTag.png");
+  p {
+    width: .6rem;
+    height: .6rem;
+  }
+  @for $i from 1 through 4 {
+    .p-#{$i} {
+      @include bgImage("../../../assets/image/home/tab_home#{$i}.png");
+    }
+  }
+  .p-3 {
+    @include bgImage("../../../assets/image/home/tab_home_pre3.png");
+  }
+}
+

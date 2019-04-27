@@ -239,7 +239,7 @@
         this.tabsModule = false;
         switch (val) {
           case '3':// 历史带看
-            this.routerLink('/toBeDoneList', {status: 'finish'});
+            this.routerLink('/toBeDoneList', {status: '2'});
             break;
         }
       },

@@ -283,7 +283,26 @@ class Axios {
     });
   }
 
-  // 获取 待办列表
+  // 获取 所有待办列表
+  static getToBeDoneListApi(data) {
+    let params = {
+      title: '',
+      page: 1,
+      size: 12,
+      assignee: '2405',//登陆人
+      taskDefinitionKey: 'CollectReportConfirm',
+    };
+    for (let key of Object.keys(data)) {
+      params[key] = data[key]
+    }
+    return new Promise((resolve, reject) => {
+      this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
+        resolve(res);
+      });
+    });
+  }
+
+  // 获取 报备待办列表
   static getToBeDoneApi(taskKey = {}, tenant = 'market') {
     let params = {
       title: '',
@@ -294,7 +313,6 @@ class Axios {
       taskDefinitionKeySuffix: '',
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
-      sort: 'createTime',
       order: 'desc',
     };
     for (let key of Object.keys(taskKey)) {
@@ -388,7 +406,7 @@ class Axios {
   // 收房报备 修改
   static putReviseReport(task_id, data) {
     return new Promise((resolve, reject) => {
-      this.put(`${market}v1.0/market/bulletin/${task_id}?to=collect`, data, 'prompt').then(res => {
+      this.put(`${market}v1.0/market/bulletin/${task_id}to=collect`, data, 'prompt').then(res => {
         if (Number(res.code) === 200) {
           resolve(res);
           $httpPrompt(res.message, 'success');
@@ -401,13 +419,14 @@ class Axios {
     });
   }
 
-  // 报备预填
-  static getBulletinDraft(val) {
+  // 报备 草稿
+  static getBulletinDraft(params) {
     return new Promise((resolve, reject) => {
-      this.get(`${market}v1.0/market/bulletin?to=${val}`).then(res => {
-        if (res.success) {
+      this.get(`${market}v1.0/market/bulletin`, params, 'prompt').then(res => {
+        if (Number(res.code) === 200) {
           resolve(res);
         } else {
+          $httpPrompt(res.message);
           resolve(false);
         }
       });
