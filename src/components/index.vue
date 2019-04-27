@@ -145,7 +145,7 @@
             this.routerLink('/toBeDoneList', {status: 'noFinish'});
             break;
           case '3':
-            this.routerLink('/houseResource', {status: 'houseResource'})
+            this.routerLink('/houseResource');
             break;
         }
       },
