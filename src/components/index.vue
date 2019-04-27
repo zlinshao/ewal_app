@@ -142,10 +142,10 @@
         this.tabs = val;
         switch (val) {
           case '4':
-            this.routerLink('/toBeDoneList', {status: 'noFinish'});
+            this.routerLink('/toBeDoneList', {status: '1'});
             break;
           case '3':
-            this.routerLink('/houseResource', {status: 'houseResource'})
+            this.routerLink('/houseResource', {status: 'houseResource'});
             break;
         }
       },

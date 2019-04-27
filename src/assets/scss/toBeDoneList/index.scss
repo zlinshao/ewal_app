@@ -232,26 +232,3 @@
     padding: .3rem 0;
   }
 }
-
-.commonFooterTag {
-  position: fixed;
-  bottom: 0;
-  height: 1.8rem;
-  width: 100%;
-  padding: .15rem .4rem;
-  @include flex('justify-around');
-  align-items: flex-end;
-  @include bgImage("../../../assets/image/common/commonFooterTag.png");
-  p {
-    width: .6rem;
-    height: .6rem;
-  }
-  @for $i from 1 through 4 {
-    .p-#{$i} {
-      @include bgImage("../../../assets/image/home/tab_home#{$i}.png");
-    }
-  }
-  .p-4 {
-    @include bgImage("../../../assets/image/home/tab_home_pre4.png");
-  }
-}

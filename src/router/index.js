@@ -8,7 +8,7 @@ import CollectReport from '@/components/pages/collectReport/index.vue'//收房
 import ToBeDone from '@/components/pages/toBeDone/index.vue'//市场部待办
 import ToBeDoneList from '@/components/pages/toBeDoneList/index.vue'//所有待办
 import PunchClock from '@/components/pages/punchClock/index.vue'//待办
-import GoSignContract from '@/components/pages/punchClock/goSignContract.vue'//去签署
+// import GoSignContract from '@/components/pages/punchClock/goSignContract.vue'//去签署
 import Approvals from '@/components/pages/approvals/index.vue'//审批
 import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
 import CreatedTask from '@/components/pages/createdTask/index.vue'//新建 带看任务
@@ -52,7 +52,7 @@ export default new Router({
       name: '待办',
       hidden: 'index',
       component: ToBeDoneList,
-      meta: {title: '待办', index: 2},
+      meta: {title: '待办', index: 4},
     },
     {
       path: '/punchClock',
@@ -61,13 +61,13 @@ export default new Router({
       component: PunchClock,
       meta: {title: '带看打卡', index: 3},
     },
-    {
-      path: '/goSignContract',
-      name: '去签署',
-      hidden: 'index',
-      component: GoSignContract,
-      meta: {title: '去签署', index: 4},
-    },
+    // {
+    //   path: '/goSignContract',
+    //   name: '去签署',
+    //   hidden: 'index',
+    //   component: GoSignContract,
+    //   meta: {title: '去签署', index: 4},
+    // },
     {
       path: '/approvals',
       name: '审批',
@@ -95,13 +95,13 @@ export default new Router({
       hidden: 'index',
       component: ToBeDone,
       params: {type: 'rent'},
-      meta: {title: '租房', index: 5},
+      meta: {title: '租房', index: 2},
     },
     {
       path: '/collectReport',
       name: '收房报备',
       component: CollectReport,
-      meta: {title: '收房报备', index: 5},
+      meta: {title: '收房报备', index: 3},
     },
     {
       path: '/houseResource',

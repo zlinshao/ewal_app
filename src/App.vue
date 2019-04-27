@@ -27,8 +27,8 @@
       data.department_id = '134';
       data.department_name = '南京马群组';
       this.$store.dispatch('personal_storage', JSON.stringify(data));
-      // this.loading = true;
       dd.ui.webViewBounce.disable();
+      // this.loading = true;
       // this.personalGet().then(res => {
       //   this.loading = !res;
       // });
@@ -66,6 +66,7 @@
     },
     computed: {},
     methods: {
+      // 字典
       getDict() {
         // 楼层
         for (let i = -3; i < 41; i++) {

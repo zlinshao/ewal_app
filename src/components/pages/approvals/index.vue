@@ -310,7 +310,6 @@
             }
             break;
           case '3':
-            console.log(tab);
             if (status === 0) {
               this.urlApi = 'runtime/tasks';
             } else {

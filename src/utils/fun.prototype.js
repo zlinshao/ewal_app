@@ -10,7 +10,7 @@ import ScrollLoad from '../components/common/scrollLoad'
 
 export default {
   install(Vue, options) {
-    let urls = globalConfig.serrrr;
+    let urls = globalConfig.login;
     // 全局组件
     Vue.component('picker', Picker);//正常picker
     Vue.component('picker-slot', PickerSlot);//带表单 弹出窗
@@ -29,7 +29,7 @@ export default {
       }
     };
     // 关闭当前页面 跳转
-    Vue.prototype.routerReplace = function (url, data, go) {
+    Vue.prototype.routerReplace = function (url, data) {
       if (data) {
         this.$router.replace({path: url, query: data});
       } else {
@@ -73,14 +73,6 @@ export default {
         return 'ios'
       }
     };
-    // 清空图片
-    Vue.prototype.closeImage = function () {
-      let bool = false;
-      setTimeout(_ => {
-        bool = true;
-      }, 100);
-      return bool;
-    };
     // 克隆数据/JSON数据转换
     Vue.prototype.jsonClone = function (val) {
       return JSON.parse(JSON.stringify(val));
@@ -106,9 +98,9 @@ export default {
       }
       for (let item of data) {
         let obj = {};
-        obj.task_id = item.id;
         obj.name = item.name;
-        obj.process_id = item.processInstanceId;
+        obj.task_id = item.id;
+        obj.process_id = item.rootProcessInstanceId;
         for (let key of item.variables) {
           if (task.includes(key.name)) {
             obj[key.name] = key.value;
