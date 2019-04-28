@@ -111,6 +111,12 @@ export default new Router({
       meta: {title: '收房报备', index: 3},
     },
     {
+      path: '/houseResource',
+      name: '房源管理',
+      component: HouseResource,
+      meta: {title: '房源管理', index: 8}
+    },
+    {
       path: '/houseDetail',
       name: '房源详情',
       component: HouseDetail,
