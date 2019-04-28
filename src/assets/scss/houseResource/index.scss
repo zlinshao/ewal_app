@@ -62,7 +62,7 @@
             border-radius: 0 4px 0 8px;
             text-align: center;
             font-family: 'dingzitiblod';
-            font-size: 12px;
+            font-size: .25rem;
           }
           .status1 {
             background-color: #E53A36;
@@ -100,7 +100,7 @@
             a {
               font-family: 'dingzitiblod';
               color: #808080;
-              font-size: 12px;
+              font-size: .25rem;
             }
             i {
               width: 0;
@@ -113,7 +113,7 @@
           }
           div.tag {
             a {
-              font-size: 12px;
+              font-size: .2rem;
               padding: 3px 5px;
               border-right: 3px;
               &:not(:last-child) {
@@ -149,7 +149,7 @@
               font-family: 'dingzitiblod';
             }
             span {
-              font-size: 16px;
+              font-size: .3rem;
               color: #EE7B78;
               position: absolute;
               right: 0;

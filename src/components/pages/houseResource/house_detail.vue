@@ -21,7 +21,7 @@
           <!--标签-->
           <div class="tags flex">
             <a v-if="detail && detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
-            <a class="tag tag-quality">已空置15天</a>
+            <a class="tag tag-quality" v-if="detail && detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{ detail && detail.house_detail && detail.house_detail.warning_current_days }}</a>
           </div>
           <!--属性-->
           <div class="property">
@@ -38,7 +38,7 @@
                 <a class="label">楼层</a><span class="val">{{ detail && detail.floor && detail.floor.this }}/{{ detail && detail.floor.all }}</span>
               </van-col>
               <van-col span="12">
-                <a class="label">朝向</a><span class="val">{{ detail && detail.direction && detail.direction.name || '/'}}</span>
+                <a class="label">朝向</a><span class="val">{{ detail && detail.house_toward || '/'}}</span>
               </van-col>
             </van-row>
           </div>
@@ -48,31 +48,31 @@
                 <a class="label">装修</a><span class="val">{{ detail && detail.decoration_name }}</span>
               </van-col>
               <van-col span="12">
-                <a class="label">所属部门</a><span class="val">{{ detail && detail.hk }}</span>
+                <a class="label">所属部门</a><span class="val">{{ detail && detail.department_name || '/' }}</span>
               </van-col>
             </van-row>
             <van-row>
               <van-col span="12">
-                <a class="label">类型</a><span class="val">{{ detail && detail.house_detail && house_type[detail.house_detail.house_identity] || '/'}}</span>
+                <a class="label">类型</a><span class="val">{{ detail && detail.house_identity || '/'}}</span>
               </van-col>
               <van-col span="12">
-                <a class="label">负责人</a><span class="val">{{ detail && detail.direction && detail.direction.name || '冯宝宝'}}</span>
-              </van-col>
-            </van-row>
-            <van-row>
-              <van-col span="12">
-                <a class="label">门锁</a><span class="val">{{ detail && detail.direction && detail.direction.name || '普通锁'}}</span>
-              </van-col>
-              <van-col span="12">
-                <a class="label">有效时长</a><span class="val">{{ detail && detail.direction && detail.direction.name || '1年5月12天'}}</span>
+                <a class="label">负责人</a><span class="val">{{ detail && detail.leader_name || '/'}}</span>
               </van-col>
             </van-row>
             <van-row>
               <van-col span="12">
-                <a class="label">电梯</a><span class="val">{{ detail && detail.direction && detail.direction.name || '有'}}</span>
+                <a class="label">门锁</a><span class="val">{{ detail && detail.lock_type || '/'}}</span>
               </van-col>
               <van-col span="12">
-                <a class="label">租赁建议</a><span class="val">{{ detail && detail.direction && detail.direction.name || '12月付'}}</span>
+                <a class="label">有效时长</a><span class="val">{{ detail && detail.month }}月{{ detail && detail.day }}天</span>
+              </van-col>
+            </van-row>
+            <van-row>
+              <van-col span="12">
+                <a class="label">电梯</a><span class="val">{{ detail && detail.house_lift || '/'}}</span>
+              </van-col>
+              <van-col span="12">
+                <a class="label">租赁建议</a><span class="val">{{ detail && detail.house_detail && detail.house_detail.suggest_price || '/'}}元/月</span>
               </van-col>
             </van-row>
           </div>
@@ -80,7 +80,7 @@
           <div class="configuration">
             <div class="flex">
               <h2>房屋配置</h2>
-              <a>查看交接单<van-icon name="arrow" style="vertical-align: middle"></van-icon></a>
+              <a>查看交接单<van-icon name="arrow" style="vertical-align: middle" @click="handleLookAssociate"></van-icon></a>
             </div>
             <div class="furniture">
               <van-row>
@@ -114,7 +114,7 @@
           <!--推荐房源-->
           <div class="more-house">
             <h3>推荐房源</h3>
-            <div v-for="item in 5" :key="item" class="flex">
+            <div v-for="item in 5" class="flex" :key="item">
               <img src="./detail.png" alt="">
               <div>
                 <div class="flex">
@@ -144,14 +144,6 @@
       return {
         server: globalConfig.server_market,
         detail: '',
-        house_type: {
-          419: '住宅',
-          420: '公寓',
-          421: '商用两住',
-          422: '别墅',
-          423: '平房',
-          424: '其他'
-        },
         mainHeight: '',
       }
     },
@@ -163,6 +155,9 @@
     watch: {},
     computed: {},
     methods: {
+      handleLookAssociate() {
+        this.routerLink('/houseProperty');
+      },
       handleGetHouseDetail() {
         if (!this.$route.query) {
           return false;
@@ -214,7 +209,7 @@
             }
             > div.address {
               font-family: 'dingzitiblod';
-              font-size: 14px;
+              font-size: .25rem;
               padding: .2rem 0;
               color: #9B9B9B;
               border-bottom: 1px dashed #F2F2F2;
@@ -238,7 +233,7 @@
               padding: 3px 8px;
               border-radius: 3px;
               font-family: 'dingzitiblod';
-              font-size: 14px;
+              font-size: .25rem;
               &:not(:last-child) {
                 margin-right: 5px;
               }
@@ -256,7 +251,7 @@
             }
             .label ,.val{
               font-family: 'dingzitiblod';
-              font-size: 14px;
+              font-size: .25rem;
             }
             .label {
               display: inline-block;
@@ -281,10 +276,10 @@
                   position: absolute;
                   right: -.3rem;
                   top: 0;
-                  min-width: 85pt;
+                  min-width: 75pt;
                   height: 15pt;
                   background-color: #FED836;
-                  font-size: 14px;
+                  font-size: .2rem;
                   padding-left: .2rem;
                   line-height: 15pt;
                   border-radius: 10px 0 0 10px;
