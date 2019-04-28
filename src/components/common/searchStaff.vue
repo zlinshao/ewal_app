@@ -51,7 +51,6 @@
     props: ['module', 'config'],
     data() {
       return {
-        url: globalConfig.server_hr,
         searchModule: false,
         fullLoading: false,
         keywords: '',
@@ -97,17 +96,9 @@
       searchStaff(val = '') {
         this.fullLoading = false;
         this.searchList = [];
-        this.$http.get(this.url + 'staff/user', {
-          search: val,
-          org_id: '',
-          limit: 9999,
-        }, 'prompt').then(res => {
+        this.$http.searchStaffList(val).then(res => {
           this.fullLoading = true;
-          if (res.code.endsWith('0')) {
-            this.searchList = res.data.data;
-          }
-        }).catch(_ => {
-          this.close_();
+          this.searchList = res.data.data;
         })
       },
       pickChoose(val) {
