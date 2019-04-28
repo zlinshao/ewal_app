@@ -109,7 +109,7 @@
                 <a>{{ item.area }}㎡</a><i v-if="item.area"></i>
                 <a>15/30</a><i></i>
                 <a>{{ item.hk }}</a><i v-if="item.hk"></i>
-                <a>{{ item.direction && item.direction.name }}</a><i></i>
+                <a>{{ item.direction && item.direction.name || '/'}}</a><i></i>
                 <a>{{ item.decorate }}</a>
               </div>
               <div class="flex tag">
@@ -269,8 +269,8 @@
     methods: {
       //请求房屋详情
       handleHouseDetail(item) {
-        // this.routerLink('/houseDetail',{id: item.id});
-        this.routerLink('/houseDetail',{id: 248073});
+        this.routerLink('/houseDetail',{id: item.id});
+        // this.routerLink('/houseDetail',{id: 248073});
       },
       //按钮
       searchBtn(type) {
@@ -324,6 +324,7 @@
       scrollLoad(val) {
         console.log(val);
         if (!val) {
+          this.house_list = [];
           this.params.page = 1;
           this.handleGetHouseResource();
         } else {

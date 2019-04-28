@@ -1,0 +1,123 @@
+@import "../common";
+
+@mixin questionnaireImg($n) {
+  @include bgImage('../../../assets/image/questionnaire/' + $n + '.png');
+}
+
+
+#create_questionnaire {
+  .create-container {
+    background-color: #F2F2F2;
+    padding: .3rem;
+
+    .create-container-main {
+      .title-tip {
+        font-family: PingFangHK-Regular;
+        padding: .2rem 0;
+        color: #404040;
+        font-size: .32rem;
+      }
+
+      .add-questionnaire {
+        margin-top: .4rem;
+        height: 2.4rem;
+        background-color: #FFFFFF;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        > div {
+          width: 100%;
+          height: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          //background-color: red;
+          .icon-add {
+            width: .4rem;
+            height: .4rem;
+            @include questionnaireImg('tianjia@2x');
+          }
+
+          .icon-add-desc {
+            padding-left: .1rem;
+            color: #D2D2D2;
+          }
+        }
+      }
+    }
+  }
+
+  .commonBtn {
+    width: 100%;
+    padding: .3rem 0;
+    background-color: #FFFFFF;
+  }
+
+  .action-sheet-container {
+    display: flex;
+    flex-direction: column;
+
+    .btn-container {
+      width: 100%;
+      flex: 1;
+      background-color: #FFFFFF;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-around;
+      padding-top: 1rem;
+
+      .btn-item {
+        height: 1.8rem;
+        width: 20%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        > div:first-child {
+          width: 1rem;
+          height: 1rem;
+
+          &.icon-single {
+            @include questionnaireImg('xuanze@2x');
+          }
+
+          &.icon-judge {
+            @include questionnaireImg('panduan@2x');
+          }
+
+          &.icon-short {
+            width: .8rem;
+            height: .8rem;
+            @include questionnaireImg('xuhao@2x');
+          }
+
+        }
+
+        > div:nth-child(2) {
+          padding-top: .2rem;
+        }
+      }
+    }
+
+    .cancel-container {
+      box-shadow: 0px -2px 14px 0px rgba(224, 224, 224, 0.3);
+      width: 100%;
+      height: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .btn-cancel {
+        width: 50%;
+        height: .7rem;
+        @include questionnaireImg('quxiao');
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+  }
+}

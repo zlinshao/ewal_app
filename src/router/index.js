@@ -21,7 +21,8 @@ import HouseDetail from '@/components/pages/houseResource/house_detail.vue';
 
 
 //问卷调查
-import Questionnaire from '@/components/pages/questionnaire';
+import Questionnaire from '@/components/pages/questionnaire/index.vue';
+import CreateQuestionnaire from '@/components/pages/questionnaire/createQuestionnaire.vue';
 import Exam from '@/components/pages/exam';
 
 Vue.use(Router);
@@ -126,7 +127,13 @@ export default new Router({
       path:'/questionnaire',
       name:'questionnaire',
       component:Questionnaire,
-      meta:{title:'问卷调查',index:3}
+      meta:{title:'问卷调查',index:1},
+    },
+    {
+      path:'/createQuestionnaire',
+      name:'createQuestionnaire',
+      component:CreateQuestionnaire,
+      meta:{title:'创建问卷',index:2}
     },
     {/*考试*/
       path:'/exam',
