@@ -313,7 +313,9 @@
       },
       // 图片ids
       getImgData(val) {
+        console.log(val);
         this.form[val[0]] = val[1];
+        console.log(this.form);
       },
       // 初始化数据
       resetting() {

@@ -182,19 +182,21 @@
     },
     computed: {},
     methods: {
+      // 滚动加载
       scrollLoad(val) {
         if (!val) {
-          this.params.page = 1;
           this.onSearch();
         } else {
-          if(this.fullLoading) return;
+          if (this.fullLoading) return;
           if (this.toBeDoneList.length === this.paging) return;
           this.params.page++;
-          this.onSearch();
+          this.getToBeDoneList(this.params);
         }
       },
       // 搜索
       onSearch() {
+        this.params.page = 1;
+        this.toBeDoneList = [];
         this.getToBeDoneList(this.params);
       },
       // 待办  历史带看

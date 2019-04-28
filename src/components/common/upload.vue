@@ -240,7 +240,7 @@
             data.raw_name = res.key;
             data.type = fileType;
             data.size = file.size;
-            that.$http.uploadServer(data).then(res => {
+            that.$httpZll.uploadServer(data).then(res => {
               if (res.code === "110100") {
                 that.ids.push(Number(res.data.id));
                 let status = that.ids.length === that.showFile.length;
