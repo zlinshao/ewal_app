@@ -39,20 +39,13 @@ class myUtils {
     return str === null || str.length === 0 || str === '';
   }
 
-  // 清空图片
-  static emptyPic(val) {
-    for (let item of val) {
-      item.setFile = [];
-    }
-  }
-
   // 判断是否为Number类型
   static isNum(num) {
     if (num === '') return false;
     return !Number.isNaN(Number(num));
   }
 
-  // 计算后格式化
+  // 计算后格式化 日期
   static formatAddRem(interval, num, date, type) {
     return this.formatDate(this.dateAdd(interval, num, date), type);
   }

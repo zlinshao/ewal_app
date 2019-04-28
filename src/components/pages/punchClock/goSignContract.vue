@@ -72,7 +72,7 @@
         data.value = action.action;
         postData.variables.push(data);
         postData.action = 'complete';
-        this.$http.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
+        this.$httpZll.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
           if (action.route === 'back') {
             this.$router.go(-1);
           } else {
@@ -80,7 +80,7 @@
               taskDefinitionKey: 'CollectReport-TODO01',
               rootProcessInstanceId: this.allDetail.process_id,
             };
-            this.$http.getNewTaskId(params).then(res => {
+            this.$httpZll.getNewTaskId(params).then(res => {
               this.allDetail.task_id = res.data[0].id;
               this.$store.dispatch('bulletin_draft', this.allDetail);
               this.routerReplace('/collectReport');
@@ -89,7 +89,7 @@
         })
       },
       getVillageDetail(api) {
-        this.$http.get(api).then(res => {
+        this.$httpZll.get(api).then(res => {
           let address = {};
           if (res.success) {
             this.allDetail.content = res.data.content;
@@ -99,7 +99,7 @@
             this.villageDetail = res.data.content.add_data;
             for (let item of this.villageDetail) {
               if (item.name.includes('photo')) {
-                this.$http.getUploadUrl(item.value).then(res => {
+                this.$httpZll.getUploadUrl(item.value).then(res => {
                   if (res) {
                     item.value = res.data;
                   } else {

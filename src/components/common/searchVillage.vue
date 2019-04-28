@@ -61,7 +61,7 @@
       }
     },
     mounted() {
-      this.$http.getCityList().then(res => {
+      this.$httpZll.getCityList().then(res => {
         this.cityList = res.data;
         this.getBeforeCity(res.data).then(res => {
           this.params.city = res.city;
@@ -104,7 +104,7 @@
       onSearch() {
         if (!this.params.name) return;
         this.fullLoading = false;
-        this.$http.searchVillageList(this.params).then(res => {
+        this.$httpZll.searchVillageList(this.params).then(res => {
           this.fullLoading = true;
           this.searchList = res.data.data;
         });

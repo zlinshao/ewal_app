@@ -78,7 +78,7 @@
         return new Promise(resolve => {
           this.departList = [];
           this.fullLoading = false;
-          this.$http.getOrganization(org, status).then(res => {
+          this.$httpZll.getOrganization(org, status).then(res => {
             this.fullLoading = true;
             if (res.code.endsWith('0')) {
               this.departList = res.data.data;

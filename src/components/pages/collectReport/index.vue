@@ -328,7 +328,7 @@
     methods: {
       // 获取银行名称
       getBankName() {
-        this.$http.get(globalConfig.server_market + 'v1.0/market/helper/bank_name?card=6225212583158743&owner=贾少君').then(res => {
+        this.$httpZll.get(globalConfig.server_market + 'v1.0/market/helper/bank_name?card=6225212583158743&owner=贾少君').then(res => {
 
         })
       },
@@ -660,7 +660,7 @@
           case 0:// 发布
           case 1:// 草稿
             this.form.spot_code = this.$refs.code.spot_code;
-            this.$http.submitReport(this.form).then(res => {
+            this.$httpZll.submitReport(this.form).then(res => {
               if (res) {
                 if (val === 1) {
                   this.form.id = Number(res.data.id);
@@ -678,7 +678,7 @@
           case 3:// 修改
             this.form.is_draft = 0;
             this.form.task_id = this.allDetails.task_id;
-            this.$http.putReviseReport(this.form.id, this.form).then(res => {
+            this.$httpZll.putReviseReport(this.form.id, this.form).then(res => {
               if (res) {
                 this.resetting();
                 this.routerReplace('/approvalDetail', this.allDetails);
@@ -689,7 +689,7 @@
       },
       // 草稿
       getDraft(params) {
-        this.$http.getBulletinDraft(params).then(data => {
+        this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
             this.getPunchClockData();
           } else {
@@ -701,7 +701,7 @@
       },
       // 修改
       getRevise(val) {
-        this.$http.getApprovalDetail(val).then(data => {
+        this.$httpZll.getApprovalDetail(val).then(data => {
           let res = data.data;
           this.form.spot_code = '';//唯一识别码
           this.form.id = '';//草稿ID

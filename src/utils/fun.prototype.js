@@ -67,7 +67,7 @@ export default {
     };
     Vue.prototype.screenWidth = function() {
       return Number(sessionStorage.windowWidth);
-    }
+    };
     // 手机类型
     Vue.prototype.phoneType = function () {
       let u = navigator.userAgent;

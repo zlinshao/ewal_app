@@ -9,7 +9,9 @@ import Boss from './config/boss.config.js'
 import remAndPhoneConfig from './config/remConfig.js'
 import fun from './utils/fun.prototype.js'
 import myUtils from './utils/myUtils.js'
-import Axios from './utils/httpService.js'
+import httpZll from './utils/httpZll.js'
+import httpTj from './utils/httpTj.js'
+import httpHs from './utils/httpHs.js'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import './assets/scss/rest.css'
@@ -24,11 +26,13 @@ Vue.use(fun);
 remAndPhoneConfig();
 Vue.prototype.myUtils = myUtils;
 Vue.config.productionTip = false;
-Vue.prototype.$http = Axios;
+Vue.prototype.$httpZll = httpZll;
+Vue.prototype.$httpTj = httpTj;
+Vue.prototype.$httpHs = httpHs;
 
-import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
-let vConsole = new VConsole(); // 初始化
-Vue.use(vConsole);
+// import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
+// let vConsole = new VConsole(); // 初始化
+// Vue.use(vConsole);
 
 // 监听软键盘
 (function () {

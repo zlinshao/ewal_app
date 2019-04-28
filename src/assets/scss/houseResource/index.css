@@ -121,4 +121,196 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+#houseResource > div.houseResource .search-type {
+  text-align: center;
+  border-top: 1px solid #F4F4F4;
+  margin-top: 10px;
+  padding: .2rem .3rem 0 .3rem; }
+  #houseResource > div.houseResource .search-type span {
+    width: 100%; }
+    #houseResource > div.houseResource .search-type span .van-icon {
+      vertical-align: middle;
+      font-size: 12px; }
+    #houseResource > div.houseResource .search-type span:not(:last-child) {
+      margin-right: 4px; }
+#houseResource > div.houseResource .search-content {
+  height: 300px; }
+#houseResource > div.houseResource .top-search {
+  padding: .3rem 0;
+  border-top: .1rem solid #F4F4F4;
+  border-bottom: .1rem solid #F4F4F4; }
+  #houseResource > div.houseResource .top-search .searchInput {
+    padding: 0 .3rem; }
+#houseResource > div.houseResource .main-house-list div.house {
+  padding: .3rem;
+  min-height: 100px;
+  border-bottom: 1px dashed #F2F2F2;
+  background-color: white; }
+  #houseResource > div.houseResource .main-house-list div.house .leftPic {
+    width: 100pt;
+    height: 100pt;
+    position: relative; }
+    #houseResource > div.houseResource .main-house-list div.house .leftPic img {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px; }
+    #houseResource > div.houseResource .main-house-list div.house .leftPic a {
+      min-width: 15pt;
+      min-height: 35pt;
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: white;
+      letter-spacing: 1px;
+      line-height: 15pt;
+      padding: 3px 0;
+      border-radius: 0 4px 0 8px;
+      text-align: center;
+      font-family: 'dingzitiblod';
+      font-size: 12px; }
+    #houseResource > div.houseResource .main-house-list div.house .leftPic .status1 {
+      background-color: #E53A36; }
+    #houseResource > div.houseResource .main-house-list div.house .leftPic .status2 {
+      background-color: #FFB205; }
+    #houseResource > div.houseResource .main-house-list div.house .leftPic .status3 {
+      background-color: #00ACC1; }
+    #houseResource > div.houseResource .main-house-list div.house .leftPic .status4 {
+      background-color: #7CB342; }
+  #houseResource > div.houseResource .main-house-list div.house .rightInfo {
+    margin-left: .3rem;
+    position: relative; }
+    #houseResource > div.houseResource .main-house-list div.house .rightInfo > h2 {
+      font-family: 'dingzitiblod'; }
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo > h2 a.notice {
+        display: inline-block;
+        width: 18px;
+        height: 16px;
+        vertical-align: top; }
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo > h2 a.notice1 {
+        background: url("../../../assets/image/houseResource/gantan-cheng.png") no-repeat scroll center;
+        background-size: 100% 100%; }
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo > h2 a.notice2 {
+        background: url("../../../assets/image/houseResource/gantan-hong.png") no-repeat scroll center;
+        background-size: 100% 100%; }
+    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info {
+      padding: 15px 0; }
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info a {
+        font-family: 'dingzitiblod';
+        color: #808080;
+        font-size: 12px; }
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info i {
+        width: 0;
+        height: 12px;
+        border-right: 1px dashed #808080;
+        margin: 0 5px;
+        position: relative;
+        top: 2px; }
+    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a {
+      font-size: 12px;
+      padding: 3px 5px;
+      border-right: 3px;
+      font-family: 'dingzitiblod'; }
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a:not(:last-child) {
+        margin-right: 5px; }
+    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a.tag1 {
+      background-color: #F0F0F0;
+      color: #808080; }
+    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a.tag2 {
+      color: #EE7B78;
+      background-color: #FFF2F2; }
+    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%; }
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom a {
+        width: 15px;
+        height: 15px;
+        background: url("../../../assets/image/houseResource/fangwu.png") no-repeat scroll center;
+        background-size: 100% 100%;
+        margin-right: 5px;
+        vertical-align: middle;
+        position: relative;
+        top: 3px; }
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom h3 {
+        color: #808087;
+        font-family: 'dingzitiblod'; }
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom span {
+        font-size: 16px;
+        color: #EE7B78;
+        position: absolute;
+        right: 0;
+        top: 3px; }
+  #houseResource > div.houseResource .main-house-list div.house:active {
+    background-color: #F2F2F2; }
+#houseResource > div.houseResource .main-house-list .noMore, #houseResource > div.houseResource .main-house-list .noData {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: .2rem;
+  background-color: transparent; }
+#houseResource > div.houseResource .filter-content {
+  background-color: white;
+  max-height: 400px; }
+  #houseResource > div.houseResource .filter-content .chooseBtn {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    flex-wrap: wrap; }
+    #houseResource > div.houseResource .filter-content .chooseBtn p {
+      margin-top: .2rem;
+      padding: 0 .1rem;
+      width: 25%;
+      display: flex;
+      display: -webkit-flex;
+      align-items: center;
+      justify-content: center; }
+      #houseResource > div.houseResource .filter-content .chooseBtn p b {
+        width: 100%;
+        padding: .2rem 0;
+        text-align: center;
+        -webkit-border-radius: 1rem;
+        -moz-border-radius: 1rem;
+        border-radius: 1rem;
+        background-color: #EEEDEE; }
+      #houseResource > div.houseResource .filter-content .chooseBtn p .choose {
+        background-color: rgba(69, 112, 254, 0.1);
+        color: #4570FE; }
+  #houseResource > div.houseResource .filter-content .house-type > div {
+    margin-bottom: 10px; }
+
+.commonFooterTag {
+  position: fixed;
+  bottom: 0;
+  height: 1.8rem;
+  width: 100%;
+  padding: .15rem .4rem;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  background: url("../../../assets/image/common/commonFooterTag.png") no-repeat scroll center;
+  background-size: 100% 100%; }
+  .commonFooterTag p {
+    width: .6rem;
+    height: .6rem; }
+  .commonFooterTag .p-1 {
+    background: url("../../../assets/image/home/tab_home1.png") no-repeat scroll center;
+    background-size: 100% 100%; }
+  .commonFooterTag .p-2 {
+    background: url("../../../assets/image/home/tab_home2.png") no-repeat scroll center;
+    background-size: 100% 100%; }
+  .commonFooterTag .p-3 {
+    background: url("../../../assets/image/home/tab_home3.png") no-repeat scroll center;
+    background-size: 100% 100%; }
+  .commonFooterTag .p-4 {
+    background: url("../../../assets/image/home/tab_home4.png") no-repeat scroll center;
+    background-size: 100% 100%; }
+  .commonFooterTag .p-3 {
+    background: url("../../../assets/image/home/tab_home_pre3.png") no-repeat scroll center;
+    background-size: 100% 100%; }
+
 /*# sourceMappingURL=index.css.map */

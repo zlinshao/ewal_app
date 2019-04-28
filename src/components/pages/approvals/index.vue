@@ -372,6 +372,7 @@
         if (!val) {
           this.params['params' + tab].page = 1;
         } else {
+          if(this.fullLoading) return;
           let length = this.approvalList['list' + tab]['data' + this.twoLevel['tab' + tab]].length;
           if (length === this.total['total' + tab]) return;
           this.params['params' + tab].page++;
@@ -381,7 +382,7 @@
       // 接口请求
       getApproval(url, params, tab) {
         this.fullLoading = true;
-        this.$http.getMeInitiate(url, params).then(res => {
+        this.$httpZll.getMeInitiate(url, params).then(res => {
           this.fullLoading = false;
           let twoLevel = this.twoLevel['tab' + tab];
           this.total['total' + tab] = res.total;

@@ -255,7 +255,7 @@
         this.remHeight = top;
         this.mainHeight = this.mainListHeight(top + 50);
       });
-      this.$http.getCityList().then(res => {
+      this.$httpZll.getCityList().then(res => {
         this.cityList = res.data;
         this.getBeforeCity(res.data).then(res => {
           this.params.city = res.city;
@@ -310,13 +310,10 @@
       //获取房源列表
       handleGetHouseResource() {
         this.fullLoading = true;
-        this.$http.get(this.server + 'v1.0/market/house',this.params,'加载中...').then(res => {
+        this.$httpZll.get(this.server + 'v1.0/market/house',this.params,'加载中...').then(res => {
           this.fullLoading = false;
           if (res.code === 200) {
-            // this.house_list = res.data.data;
-            for (var item of res.data.data) {
-              this.house_list.push(item);
-            }
+            this.house_list = res.data.data;
             this.paging = res.data.all_count;
           } else {
             this.house_list = [];
@@ -331,7 +328,7 @@
           this.params.page = 1;
           this.handleGetHouseResource();
         } else {
-          if (this.fullLoading) return;
+          if(this.fullLoading) return;
           if (this.house_list.length === this.paging) return;
           this.params.page++;
           this.handleGetHouseResource();
