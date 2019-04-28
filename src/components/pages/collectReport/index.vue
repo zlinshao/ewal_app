@@ -666,7 +666,7 @@
                   this.form.id = Number(res.data.id);
                 } else {
                   this.resetting();
-                  this.$store.dispatch('change_tabs', {tab: '2', status: false});
+                  this.$store.dispatch('approval_tabs', {tab: '2', status: false});
                   this.routerReplace('/approvals');
                 }
               }
@@ -883,7 +883,6 @@
           item.num = this.form[item.key];
         }
         this.form.id = id || '';
-        console.log(111111111)
         this.form.bank = '上海浦东发展银行';
         this.form.account = '6225212583158743';
         this.form.account_name = '贾少君';

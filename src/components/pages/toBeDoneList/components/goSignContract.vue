@@ -63,8 +63,14 @@
       },
       detail(val) {
         this.allDetail = val;
-        this.taskAction = JSON.parse(val.outcome);
-        this.getVillageDetail(val.ctl_detail_request_url);
+        let btn = '';
+        if (val.outcome) {
+          btn = '';
+          this.taskAction = JSON.parse(val.outcome);
+        } else {
+          btn = 'no';
+        }
+        this.getVillageDetail(val.ctl_detail_request_url, btn);
       },
       popupModule(val) {
         if (!val) {
@@ -87,10 +93,14 @@
             this.$emit('close', 'again');
           } else {
             let params = {
-              taskDefinitionKey: 'InputBulletinData',
+              taskDefinitionKey: 'InputBulletinData-TODO01',
               rootProcessInstanceId: this.allDetail.process_id,
             };
             this.$http.getNewTaskId(params).then(res => {
+              if (!res.data.length) {
+                this.$prompt('未找到签约信息,请联系产品经理！');
+                return;
+              }
               this.allDetail.task_id = res.data[0].id;
               this.$store.dispatch('bulletin_draft', this.allDetail);
               this.routerReplace('/collectReport');
@@ -100,10 +110,13 @@
         })
       },
       // 获取任务详情
-      getVillageDetail(api) {
+      getVillageDetail(api, btn) {
         this.$http.get(api).then(res => {
           let address = {};
           if (res.success) {
+            if (btn) {
+              this.$prompt('当前报备暂不能签约,请联系产品经理！');
+            }
             this.allDetail.content = res.data.content;
             let community = res.data.content.community;
             address.location = [community.longitude, community.latitude];

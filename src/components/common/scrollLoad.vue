@@ -9,8 +9,6 @@
 </template>
 
 <script>
-  import {PullRefresh} from 'vant';
-
   export default {
     name: "scroll-load",
     props: ['remHeight', 'disabled', 'name'],

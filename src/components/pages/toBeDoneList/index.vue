@@ -1,14 +1,14 @@
 <template>
   <div id="toBeDoneList">
     <div>
-      <div class="listTop" ref="listTop">
+      <div class="listTop" ref="listTop" @dblclick="goToTop">
         <div>
           <p @click="changeTop(item.id)" v-for="item in finishTop"
              :style="{'color': tabs === item.id ? '#FED836' : ''}">
             {{item.text}}&nbsp;<span v-if="item.id === '1'">{{total['total1']}}</span>
           </p>
         </div>
-        <div class="topSearch" @click="searchToBeDone"></div>
+        <div class="topSearch" @click="searchHigh = !searchHigh"></div>
       </div>
       <div class="main" :style="mainHeight">
         <!--未完成-->
@@ -30,10 +30,10 @@
                 </div>
               </div>
             </li>
-            <li class="noMore" v-if="finishList['list2'].length === total['total2'] && finishList['list2'].length > 6">
+            <li class="noMore" v-if="finishList['list1'].length === total['total1'] && finishList['list1'].length > 6">
               <span v-if="!fullLoading">没有更多了</span>
             </li>
-            <li class="noData" v-if="!finishList['list2'].length">
+            <li class="noData" v-if="!finishList['list1'].length">
               <span v-if="!fullLoading">暂无相关数据...</span>
             </li>
           </scroll-load>
@@ -56,7 +56,7 @@
                 </div>
               </div>
             </li>
-            <li class="noMore" v-if="finishList['list2'].length === total['total1'] && finishList['list2'].length > 4">
+            <li class="noMore" v-if="finishList['list2'].length === total['total2'] && finishList['list2'].length > 3">
               <span v-if="!fullLoading">没有更多了</span>
             </li>
             <li class="noData" v-if="!finishList['list2'].length">
@@ -92,10 +92,10 @@
       <div class="searchInput">
         <div class="input">
           <div>
-            <input type="text" v-model="highParams.title" @keyup.enter="onSearch()" placeholder="请输入搜索内容">
+            <input type="text" v-model="highParams.title" @keyup.enter="getFinishList(tabs)" placeholder="请输入搜索内容">
             <span v-if="highParams.title" @click="highParams.title = ''"></span>
           </div>
-          <p v-if="highParams.title" class="searchBtn" @click="onSearch()">搜索</p>
+          <p v-if="highParams.title" class="searchBtn" @click="getFinishList(tabs)">搜索</p>
           <p v-if="!highParams.title" @click="searchHigh = false">取消</p>
         </div>
       </div>
@@ -134,7 +134,6 @@
     components: {GoSignContract},
     data() {
       return {
-        tabs: '1',
         fullLoading: false,//加载是否结束
         mainHeight: '',
         remHeight: 0,
@@ -163,6 +162,8 @@
             title: '',
             page: 1,
             finished: true,
+            assignee: '69',//登陆人
+            // taskDefinitionKey: 'CollectReportConfirm',
           },
         },
         // 总条数
@@ -298,21 +299,31 @@
       this.resetting();
     },
     mounted() {
+      this.getFinishList('1');
+      this.getFinishList('2');
     },
     activated() {
-      this.tabs = this.$route.query.status || '1';
       let listTop = this.$refs.listTop.offsetHeight;
       this.remHeight = listTop;
       this.mainHeight = this.mainListHeight(listTop);
-      this.onSearch('1');
-      this.onSearch('2');
+      let tab = this.tabs;
+      this.params['params' + tab].page = 1;
+      this.getFinishList(tab);
     },
     watch: {},
-    computed: {},
+    computed: {
+      tabs() {
+        return this.$store.state.app.doneTab;
+      }
+    },
     methods: {
       // 已完成 / 未完成 切换
       changeTop(val) {
-        this.tabs = val;
+        if (this.tabs === val) return;
+        this.$store.dispatch('done_tabs', val);
+        // this.finishList['list' + val] = [];
+        // this.params['params' + val].page = 1;
+        // this.getFinishList(val);
       },
       // 滚动加载
       scrollLoad(val) {
@@ -323,7 +334,10 @@
           if (this.finishList['list' + tab].length === this.total['total' + tab]) return;
           this.params['params' + tab].page++;
         }
-        this.onSearch(this.tabs);
+        setTimeout(_ => {
+          console.log(this.params['params' + tab].page);
+          this.getFinishList(this.tabs);
+        }, 500);
       },
       // 请求列表
       getFinishList(tab) {
@@ -357,7 +371,6 @@
             this.moduleDetail = val;
             break;
         }
-        // this.routerLink(val.task_action, val);
       },
       // 是否签约
       hiddenGoSign(val) {
@@ -370,10 +383,6 @@
       cancel() {
         this.searchHigh = false;
         this.goSignModule = false;
-      },
-      // 搜索模态框
-      searchToBeDone() {
-        this.searchHigh = !this.searchHigh;
       },
       // 筛选条件
       checkChoose(val, key) {
@@ -388,14 +397,14 @@
       // 搜索按钮
       searchBtn(val) {
         switch (val) {
-          case 'cancel':
+          case 'back':
             this.cancel();
             break;
           case 'reset':
             this.resetting();
             break;
           default:
-            this.onSearch(this.tabs);
+            this.getFinishList(this.tabs);
             this.cancel();
             break;
         }
@@ -407,10 +416,6 @@
           this.highParams[item] = list[item].keyType;
         }
         this.highParams.title = '';
-      },
-      // 确认搜索
-      onSearch(tab) {
-        this.getFinishList(tab);
       },
       // 底部按钮跳转
       footerTag(val) {

@@ -245,7 +245,7 @@
     computed: {
       // 1我审批的 2我发起的 3抄送我的 4暂不处理
       tabs() {
-        return this.$store.state.app.tabs;
+        return this.$store.state.app.approvalTab;
       },
     },
     methods: {
@@ -328,9 +328,47 @@
         }
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
+      // 接口配置
+      apiHandle(tab, status) {
+        switch (tab) {
+          case '1':
+            this.urlApi = 'runtime/tasks';
+            break;
+          case '2':
+            switch (status) {
+              case 0:
+              case 1:
+                if (status === 0) {
+                  this.urlApi = 'runtime/process-instances';
+                } else {
+                  this.urlApi = 'history/process-instances';
+                }
+                break;
+              case 2:
+                this.urlApi = 'runtime/tasks';
+                break;
+              case 3:
+                this.urlApi = 'runtime/tasks';
+                break;
+            }
+            break;
+          case '3':
+            if (status === 0) {
+              this.urlApi = 'runtime/tasks';
+            } else {
+              this.urlApi = 'history/tasks';
+            }
+            break;
+          case '4':
+            this.urlApi = 'runtime/process-instances';
+            break;
+        }
+      },
       // 滚动加载
       scrollLoad(val) {
         let tab = this.tabs.tab;
+        let status = this.tabs.status;
+        this.apiHandle(tab, status);
         if (!val) {
           this.params['params' + tab].page = 1;
         } else {
@@ -364,18 +402,22 @@
       // 头部切换
       changeApproval(val) {
         let tab = val.id;
+        let status = this.twoLevel['tab' + tab];
         this.tabs.tab = tab;
-        this.$store.dispatch('change_tabs', this.tabs);
+        this.tabs.status = status;
+        this.$store.dispatch('approval_tabs', this.tabs);
+        this.apiHandle(tab, status);
         if (tab === '4') {
           this.urlApi = 'runtime/process-instances';
         }
       },
       // 二级切换
       tabsTag(status) {
-        this.tabs.status = status;
         let tab = this.tabs.tab;
-        this.$store.dispatch('change_tabs', this.tabs);
+        if (this.tabs.status === status) return;
+        this.tabs.status = status;
         this.twoLevel['tab' + tab] = status;
+        this.$store.dispatch('approval_tabs', this.tabs);
         this.paramsHandle(tab, status);
       },
     },

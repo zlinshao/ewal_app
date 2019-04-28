@@ -11,10 +11,12 @@ const app = {
     },
     bulletinPreFill: {},
     //审批切换
-    tabs: {
+    approvalTab: {
       tab: '1',
       status: 0,
     },
+    // 待办任务切换
+    doneTab: '1',
   },
   // 计算属性
   getter: {},
@@ -37,8 +39,12 @@ const app = {
       state.key_up_status = view;
     },
     // 审批切换
-    CHANGE_TABS(state, view) {
-      state.tabs = view;
+    APPROVAL_TABS(state, view) {
+      state.approvalTab = view;
+    },
+    // 待办切换
+    DONE_TABS(state, view) {
+      state.doneTab = view;
     },
   },
   // 执行函数
@@ -60,8 +66,12 @@ const app = {
       commit('BULLETIN_DRAFT', view);
     },
     // 审批切换
-    change_tabs({commit}, view) {
-      commit('CHANGE_TABS', view);
+    approval_tabs({commit}, view) {
+      commit('APPROVAL_TABS', view);
+    },
+    // 待办切换
+    done_tabs({commit}, view) {
+      commit('DONE_TABS', view);
     },
   }
 };

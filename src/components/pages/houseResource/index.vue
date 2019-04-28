@@ -30,20 +30,76 @@
         </div>
       </div>
       <ExpandContainer :offset-top="offset_top" @close="handleCloseExpand">
-        <div class="filter-content">
-          <div class="chooseBtn">
+        <div class="filter-content scroll_bar">
+          <div class="chooseBtn" v-if="current_filter === 1">
             <p v-for="item in house_status" @click="chooseHouseStatus(item)">
               <b :class="{'choose': status_choose === item.id}">{{ item.val }}</b>
             </p>
+          </div>
+          <div v-if="current_filter === 2" class="house-type">
+            <h4>房型</h4>
+            <div class="chooseBtn">
+              <p v-for="item in house_type" @click="chooseHouseProperty(item,'room')">
+                <b :class="{'choose': params.room.includes(item.id)}">{{ item.val }}</b>
+              </p>
+            </div>
+            <h4>装修</h4>
+            <div class="chooseBtn">
+              <p v-for="item in house_decorate" @click="chooseHouseProperty(item,'decorate')">
+                <b :class="{'choose': params.decorate.includes(item.id)}">{{ item.val }}</b>
+              </p>
+            </div>
+            <h4>朝向</h4>
+            <div class="chooseBtn">
+              <p v-for="item in house_orientation" @click="chooseHouseProperty(item,'orientation')">
+                <b :class="{'choose': params.orientation.includes(item.id)}">{{ item.val }}</b>
+              </p>
+            </div>
+            <h4>楼层</h4>
+            <div class="chooseBtn">
+              <p v-for="item in house_floor" @click="chooseHouseProperty(item,'floor')">
+                <b :class="{'choose': params.floor.includes(item.id)}">{{ item.val }}</b>
+              </p>
+            </div>
+            <h4>电梯</h4>
+            <div class="chooseBtn">
+              <p v-for="item in house_lift" @click="chooseHouseProperty(item,'lift')">
+                <b :class="{'choose': params.lift.includes(item.id)}">{{ item.val }}</b>
+              </p>
+            </div>
+            <div class="commonBtn radioChecksFoot">
+              <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type)">
+                {{item.label}}
+              </p>
+            </div>
+          </div>
+          <div v-if="current_filter === 4" class="house-type">
+            <h4>房屋剩余时长</h4>
+            <div class="chooseBtn">
+              <p v-for="item in residue_time" @click="chooseHouseProperty(item,'residue_time')">
+                <b :class="{'choose': params.residue_time.includes(item.id)}">{{ item.val }}</b>
+              </p>
+            </div>
+            <h4>预警状态</h4>
+            <div class="chooseBtn">
+              <p v-for="item in house_warning_status" @click="chooseHouseProperty(item,'house_warning_status')">
+                <b :class="{'choose': params.house_warning_status.includes(item.id)}">{{ item.val }}</b>
+              </p>
+            </div>
+            <div class="commonBtn radioChecksFoot">
+              <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type)">
+                {{item.label}}
+              </p>
+            </div>
           </div>
         </div>
       </ExpandContainer>
       <!--中间房源列表-->
       <div class="main-house-list" :style="mainHeight">
         <scroll-load :remHeight="remHeight" @getLoadMore="scrollLoad" :disabled="!fullLoading">
-          <div class="house flex" v-for="(item,key) in house_list" :key="key">
+          <div class="house flex" v-for="(item,key) in house_list" :key="key" @click="handleHouseDetail(item)">
             <div class="leftPic">
-              <img src="./house.jpg" alt="">
+              <img src="./detail.png" alt="">
               <!--<a class="writingMode status1">{{ item.house_status_name }}</a>-->
               <a class="writingMode status2">未出租</a>
             </div>
@@ -53,7 +109,7 @@
                 <a>{{ item.area }}㎡</a><i v-if="item.area"></i>
                 <a>15/30</a><i></i>
                 <a>{{ item.hk }}</a><i v-if="item.hk"></i>
-                <a>南</a><i></i>
+                <a>{{ item.direction && item.direction.name }}</a><i></i>
                 <a>{{ item.decorate }}</a>
               </div>
               <div class="flex tag">
@@ -90,6 +146,16 @@
     components: { ExpandContainer },
     data() {
       return {
+        buttons: [
+          {
+            label: '重置',
+            type: 'reset'
+          },
+          {
+            label: '确定',
+            type: 'confirm'
+          },
+        ],
         server: globalConfig.server_market,
         offset_top: 0,
 
@@ -101,19 +167,65 @@
         //房屋筛选
         filter_list: [
           {id: 1,val: '房屋状态',active: false},
-          {id: 2,val: '房屋熟悉',active: false},
+          {id: 2,val: '房屋属性',active: false},
           {id: 3,val: '部门员工',active: false},
           {id: 4,val: '筛选',active: false},
         ],
+        current_filter: 0,
         house_status: [
-          {id: 1,val: '不限'},
-          {id: 2,val: '未出租'},
-          {id: 3,val: '已预订'},
-          {id: 4,val: '已出租'},
-          {id: 5,val: '待入住'},
-          {id: 6,val: '已结束'},
+          {id: 0,val: '不限'},
+          {id: 1,val: '未出租'},
+          {id: 2,val: '已预订'},
+          {id: 3,val: '已出租'},
+          {id: 4,val: '待入住'},
+          {id: 5,val: '已结束'},
         ],
         status_choose: '',
+
+        house_type: [
+          {id: 0,val: '不限'},
+          {id: 1,val: '一室'},
+          {id: 2,val: '两室'},
+          {id: 3,val: '两室+'},
+        ],
+        house_decorate: [
+          {id: 0,val: '不限'},
+          {id: 1,val: '毛坯'},
+          {id: 2,val: '简装'},
+          {id: 3,val: '精装'},
+          {id: 4,val: '豪装'},
+        ],
+        house_orientation: [
+          {id: 0,val: '不限'},
+          {id: 1,val: '东'},
+          {id: 2,val: '南'},
+          {id: 3,val: '西'},
+          {id: 4,val: '北'},
+        ],
+        house_floor: [
+          {id: 0,val: '不限'},
+          {id: 1,val: '低楼层'},
+          {id: 2,val: '中楼层'},
+          {id: 3,val: '高楼层'},
+        ],
+        house_lift: [
+          {id: 0,val: '不限'},
+          {id: 1,val: '有电梯'},
+          {id: 2,val: '无电梯'},
+        ],
+        residue_time: [
+          {id: 0,val: '不限'},
+          {id: 1,val: '一年以下'},
+          {id: 2,val: '1-2年'},
+          {id: 3,val: '2年以上'},
+        ],
+        house_warning_status: [
+          {id: 0,val: '不限'},
+          {id: 1,val: '正常'},
+          {id: 2,val: '黄色预警'},
+          {id: 3,val: '橙色预警'},
+          {id: 4,val: '红色预警'},
+        ],
         //城市选择
         cityList: [],
         chooseCity: false,
@@ -126,6 +238,13 @@
           search: '',
           name: '',
           city: [],
+          room: [], //房型
+          decorate:[], //装修
+          orientation: [], //朝向
+          floor: [],// 楼层
+          lift: [], //电梯
+          residue_time: [], //剩余时长
+          house_warning_status: [] //预警
         },
         house_list: [], //房屋列表
       }
@@ -148,6 +267,32 @@
     watch: {},
     computed: {},
     methods: {
+      //请求房屋详情
+      handleHouseDetail(item) {
+        // this.routerLink('/houseDetail',{id: item.id});
+        this.routerLink('/houseDetail',{id: 248073});
+      },
+      //按钮
+      searchBtn(type) {
+        console.log(type);
+        switch (type) {
+          case 'reset':
+            this.params.lift = [];
+            this.params.floor = [];
+            this.params.decorate = [];
+            this.params.orientation = [];
+            this.params.room = [];
+            break;
+        }
+      },
+      //选择房屋属性
+      chooseHouseProperty(item,type) {
+        if (this.params[type].indexOf(item.id) !== -1) {
+          this.params[type].splice(this.params[type].indexOf(item.id),1);
+        } else {
+          this.params[type].push(item.id);
+        }
+      },
       //选择房屋状态
       chooseHouseStatus(tmp) {
         this.status_choose = tmp.id;
@@ -187,12 +332,14 @@
       },
       //房屋筛选
       handleFilterHouse(tmp) {
+        console.log(tmp);
+        this.offset_top = this.current_filter === tmp.id ? 0 : 117;
         this.filter_list[tmp.id - 1].active = this.offset_top <= 0;
         switch (tmp.id) {
           case 1:
             break;
         }
-        this.offset_top = this.offset_top <= 0 ? 117 : 0;
+        this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
       },
       // 选择城市
       chooseClickCity(item) {

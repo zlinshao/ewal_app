@@ -185,7 +185,8 @@
         this.$http.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
             this.close_();
-            this.routerReplace('/toBeDoneList', {status: '2'});
+            this.$store.dispatch('done_tabs', '2');
+            this.routerReplace('/toBeDoneList');
           }
         });
       },

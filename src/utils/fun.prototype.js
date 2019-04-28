@@ -28,6 +28,10 @@ export default {
         this.$router.push(url);
       }
     };
+    Vue.prototype.goToTop = function () {
+      let mainContent = document.getElementById('mainContent');
+      mainContent.scrollTop = 0;
+    };
     // 关闭当前页面 跳转
     Vue.prototype.routerReplace = function (url, data) {
       if (data) {
@@ -185,6 +189,7 @@ export default {
             album[up.keyName] = [];
           }
         } else if (item.picker === 'album') {
+          // 新建小区
           form[item.keyName] = item.keyType;
           album[item.keyName] = item.keyType;
           for (let up of item.value) {
@@ -225,9 +230,9 @@ export default {
             }
           }
           if (item.showForm) {
-            formatData[item.keyName] = item.keyType;
+            formatData[item.keyName] = item.keyType || '';
             if (item.keyType && dicties[item.keyName]) {
-              formatData[item.keyName] = dicties[item.keyName][Number(item.keyType)]
+              formatData[item.keyName] = dicties[item.keyName][Number(item.keyType)] || '';
             }
           }
         }
