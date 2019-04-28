@@ -16,6 +16,7 @@ import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建
 
 //房源管理
 import HouseResource from '@/components/pages/houseResource/index.vue';
+import HouseDetail from '@/components/pages/houseResource/house_detail.vue';
 
 Vue.use(Router);
 
@@ -105,9 +106,15 @@ export default new Router({
     },
     {
       path: '/houseResource',
-      name: '收房报备',
+      name: '房源管理',
       component: HouseResource,
       meta: {title: '房源管理', index: 7},
+    },
+    {
+      path: '/houseDetail',
+      name: '房源详情',
+      component: HouseDetail,
+      meta: {title: '房源详情', index: 8},
     }
   ]
 })

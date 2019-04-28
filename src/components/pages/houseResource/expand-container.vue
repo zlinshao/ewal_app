@@ -55,7 +55,8 @@
     overflow: hidden;
     > div {
       background-color: white;
-      min-height: 300px;
+      padding: .2rem .3rem .5rem .3rem;
+      min-height: 150px;
     }
   }
 </style>
