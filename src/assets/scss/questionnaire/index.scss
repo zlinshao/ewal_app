@@ -77,12 +77,29 @@
             width: 40%;
             display: flex;
             align-items: center;
+
             .item-middle-left__status {
               font-family: PingFangHK-Regular;
               color: #4570FE;
               background-color: #ECF0FE;
               padding: 2px 3px;
               margin-right: 5px;
+
+              &.status0 {
+                color: #FD9007;
+                background-color: #FEF3E6;
+              }
+
+              &.status1 {
+                color: #4570FE;
+                background-color: #ECF0FE;
+              }
+
+              &.status2 {
+                color: #8F8F8F;
+                background-color: #F4F4F4;
+              }
+
             }
 
             .item-middle-left__data {
@@ -107,7 +124,7 @@
           align-items: center;
           justify-content: space-between;
           //padding: 0.3rem;
-          >div {
+          > div {
             width: 33%;
             height: 1rem;
             display: flex;
@@ -124,12 +141,15 @@
             .icon {
               width: .3rem;
               height: .3rem;
+
               &.icon-edit {
                 @include questionnaireImg('bianjiwenjuan@2x');
               }
+
               &.icon-view {
                 @include questionnaireImg('chakanshuju@2x');
               }
+
               &.icon-more {
                 @include questionnaireImg('gengduo@2x');
               }
@@ -176,12 +196,29 @@
             width: 40%;
             display: flex;
             align-items: center;
+
             .item-middle-left__status {
               font-family: PingFangHK-Regular;
               color: #4570FE;
               background-color: #ECF0FE;
               padding: 2px 3px;
               margin-right: 5px;
+
+              &.status0 {
+                color: #FD9007;
+                background-color: #FEF3E6;
+              }
+
+              &.status1 {
+                color: #4570FE;
+                background-color: #ECF0FE;
+              }
+
+              &.status2 {
+                color: #8F8F8F;
+                background-color: #F4F4F4;
+              }
+
             }
 
             .item-middle-left__data {
@@ -213,6 +250,7 @@
             align-items: center;
             justify-content: flex-start;
           }
+
           .item-bottom-right {
             width: 30%;
             height: .6rem;
@@ -236,34 +274,40 @@
         height: 2.4rem;
         display: flex;
         align-items: center;
+
         .operate-container {
           width: 100%;
           height: 1rem;
           display: flex;
           align-items: center;
           justify-content: space-around;
-          >div {
+
+          > div {
             display: flex;
             flex-direction: column;
             width: 33%;
             height: 90%;
             justify-content: center;
             align-items: center;
+
             .icon {
               width: .3rem;
               height: .3rem;
+
               &.icon-stop {
                 @include questionnaireImg('zanting@2x');
               }
+
               &.icon-preview {
                 @include questionnaireImg('yulan@2x');
               }
+
               &.icon-delete {
                 @include questionnaireImg('shanchuxuanxiang@2x');
               }
             }
 
-            >:last-child {
+            > :last-child {
               margin-top: .05rem;
               font-size: .2rem;
               font-family: PingFangHK-Regular;
