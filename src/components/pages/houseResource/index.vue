@@ -100,8 +100,8 @@
           <div class="house flex" v-for="(item,key) in house_list" :key="key" @click="handleHouseDetail(item)">
             <div class="leftPic">
               <img src="./detail.png" alt="">
-              <!--<a class="writingMode status1">{{ item.house_status_name }}</a>-->
-              <a class="writingMode status2">未出租</a>
+              <a class="writingMode status1">{{ item.house_status_name }}</a>
+              <!--<a class="writingMode status2">未出租</a>-->
             </div>
             <div class="rightInfo">
               <h2>{{ item.name }} <a class="notice notice1" :class="['notice' + item.warning_status]"></a></h2>
@@ -269,8 +269,8 @@
     methods: {
       //请求房屋详情
       handleHouseDetail(item) {
-        this.routerLink('/houseDetail',{id: item.id});
-        // this.routerLink('/houseDetail',{id: 248073});
+        // this.routerLink('/houseDetail',{id: item.id});
+        this.routerLink('/houseDetail',{id: 248073});
       },
       //按钮
       searchBtn(type) {
@@ -311,9 +311,12 @@
       handleGetHouseResource() {
         this.fullLoading = true;
         this.$httpZll.get(this.server + 'v1.0/market/house',this.params,'加载中...').then(res => {
+          console.log(res);
           this.fullLoading = false;
           if (res.code === 200) {
-            this.house_list = res.data.data;
+            for (var item of res.data.data) {
+              this.house_list.push(item);
+            }
             this.paging = res.data.all_count;
           } else {
             this.house_list = [];
@@ -322,7 +325,6 @@
       },
       //滚动
       scrollLoad(val) {
-        console.log(val);
         if (!val) {
           this.house_list = [];
           this.params.page = 1;

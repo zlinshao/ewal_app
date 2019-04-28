@@ -17,6 +17,7 @@ import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建
 //房源管理
 import HouseResource from '@/components/pages/houseResource/index.vue';
 import HouseDetail from '@/components/pages/houseResource/house_detail.vue';
+import HouseProperty from '@/components/pages/houseResource/house_property.vue';
 
 
 
@@ -121,6 +122,12 @@ export default new Router({
       name: '房源详情',
       component: HouseDetail,
       meta: {title: '房源详情', index: 8}
+    },
+    {
+      path: '/houseProperty',
+      name: '房屋配置',
+      component: HouseProperty,
+      meta: {title: '房屋配置', index: 9}
     },
     {/*问卷调查*/
       path:'/questionnaire',
