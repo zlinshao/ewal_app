@@ -102,7 +102,7 @@
             <h3>同小区成交</h3>
             <a class="clinch-btn">最新3套成交</a>
             <van-steps direction="vertical" :active="-1">
-              <van-step v-for="item in 5">
+              <van-step v-for="item in 5" :key="item">
                 <div class="flex house-clinch">
                   <h3>仙居雅苑1-101</h3>
                   <a>20000元/月</a>
@@ -114,7 +114,7 @@
           <!--推荐房源-->
           <div class="more-house">
             <h3>推荐房源</h3>
-            <div v-for="item in 5" class="flex">
+            <div v-for="item in 5" :key="item" class="flex">
               <img src="./detail.png" alt="">
               <div>
                 <div class="flex">
