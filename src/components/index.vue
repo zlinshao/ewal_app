@@ -73,11 +73,11 @@
             name: '合同',
             icon: ic_hetong,
           }, {
-            url: '',
+            url: '/questionnaire',
             name: '问卷',
             icon: ic_wenjuan,
           }, {
-            url: '',
+            url: '/exam',
             name: '考试',
             icon: ic_kaoshi,
           }
@@ -142,7 +142,7 @@
         this.tabs = val;
         switch (val) {
           case '4':
-            this.routerLink('/toBeDoneList', {status: '1'});
+            this.routerLink('/toBeDoneList');
             break;
           case '3':
             this.routerLink('/houseResource');

@@ -18,6 +18,12 @@ import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建
 import HouseResource from '@/components/pages/houseResource/index.vue';
 import HouseDetail from '@/components/pages/houseResource/house_detail.vue';
 
+
+
+//问卷调查
+import Questionnaire from '@/components/pages/questionnaire';
+import Exam from '@/components/pages/exam';
+
 Vue.use(Router);
 
 export default new Router({
@@ -105,16 +111,22 @@ export default new Router({
       meta: {title: '收房报备', index: 3},
     },
     {
-      path: '/houseResource',
-      name: '房源管理',
-      component: HouseResource,
-      meta: {title: '房源管理', index: 7},
-    },
-    {
       path: '/houseDetail',
       name: '房源详情',
       component: HouseDetail,
-      meta: {title: '房源详情', index: 8},
+      meta: {title: '房源详情', index: 8}
+    },
+    {/*问卷调查*/
+      path:'/questionnaire',
+      name:'questionnaire',
+      component:Questionnaire,
+      meta:{title:'问卷调查',index:3}
+    },
+    {/*考试*/
+      path:'/exam',
+      component:Exam,
+      name:'exam',
+      meta: {title:'考试',index:4},
     }
   ]
 })

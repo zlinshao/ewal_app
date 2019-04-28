@@ -158,7 +158,6 @@
         params: {
           title: '',
           page: 1,
-          taskDefinitionKeySuffix: 'TODO01',
         },
         toBeDoneList: [],
         detail_request_url: '',
@@ -239,7 +238,8 @@
         this.tabsModule = false;
         switch (val) {
           case '3':// 历史带看
-            this.routerLink('/toBeDoneList', {status: '2'});
+            this.$store.dispatch('done_tabs', '2');
+            this.routerLink('/toBeDoneList');
             break;
         }
       },

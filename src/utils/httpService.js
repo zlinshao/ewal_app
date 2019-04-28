@@ -88,7 +88,7 @@ axios.interceptors.response.use(response => {
 let msg = '正在处理..';
 
 class Axios {
-  static get(url, params = {}, noPrompt = '') {
+  static get(url, params = {}, noPrompt = '', close = '') {
     return new Promise((resolve, reject) => {
       if (noPrompt) {
         msg = noPrompt === 'prompt' ? msg : noPrompt;
@@ -98,7 +98,9 @@ class Axios {
         if (response.status > 399) {
           return;
         }
-        $httpPrompt('', 'close');
+        if (!close) {
+          $httpPrompt('', 'close');
+        }
         resolve(response.data);
       }).catch(err => {
         reject(err);
@@ -106,7 +108,7 @@ class Axios {
     })
   }
 
-  static post(url, data = {}, noPrompt = '') {
+  static post(url, data = {}, noPrompt = '', close = '') {
     if (noPrompt) {
       msg = noPrompt === 'prompt' ? msg : noPrompt;
       $httpPrompt(msg, 'send');
@@ -116,7 +118,9 @@ class Axios {
         if (response.status > 399) {
           return;
         }
-        $httpPrompt('', 'close');
+        if (!close) {
+          $httpPrompt('', 'close');
+        }
         resolve(response.data);
       }).catch(err => {
         console.log(err);
@@ -124,7 +128,7 @@ class Axios {
     })
   }
 
-  static put(url, data = {}, noPrompt = '') {
+  static put(url, data = {}, noPrompt = '', close = '') {
     if (noPrompt) {
       msg = noPrompt === 'prompt' ? msg : noPrompt;
       $httpPrompt(msg, 'send');
@@ -134,7 +138,9 @@ class Axios {
         if (response.status > 399) {
           return;
         }
-        $httpPrompt('', 'close');
+        if (!close) {
+          $httpPrompt('', 'close');
+        }
         resolve(response.data);
       }).catch(err => {
         console.log(err);
@@ -142,7 +148,7 @@ class Axios {
     })
   }
 
-  static delete(url, data = {}, noPrompt = '') {
+  static delete(url, data = {}, noPrompt = '', close = '') {
     if (noPrompt) {
       msg = noPrompt === 'prompt' ? msg : noPrompt;
       $httpPrompt(msg, 'send');
@@ -152,7 +158,9 @@ class Axios {
         if (response.status > 399) {
           return;
         }
-        $httpPrompt('', 'close');
+        if (!close) {
+          $httpPrompt('', 'close');
+        }
         resolve(response.data);
       }).catch(err => {
         console.log(err);
@@ -160,7 +168,7 @@ class Axios {
     })
   }
 
-  static patch(url, data = {}, noPrompt = '') {
+  static patch(url, data = {}, noPrompt = '', close = '') {
     if (noPrompt) {
       msg = noPrompt === 'prompt' ? msg : noPrompt;
       $httpPrompt(msg, 'send');
@@ -170,7 +178,9 @@ class Axios {
         if (response.status > 399) {
           return;
         }
-        $httpPrompt('', 'close');
+        if (!close) {
+          $httpPrompt('', 'close');
+        }
         resolve(response.data);
       }).catch(err => {
         console.log(err);
@@ -244,6 +254,39 @@ class Axios {
     });
   }
 
+  // 房屋搜索
+  static searchHouseList(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/house`, params, 'prompt').then(res => {
+        if (Number(res.code) === 200) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+      });
+    });
+  }
+
+  // 员工搜索
+  static searchStaffList(val) {
+    let params = {
+      search: val,
+      org_id: '',
+      limit: 9999,
+    };
+    return new Promise((resolve, reject) => {
+      this.get(`${url_hr}staff/user`, params, 'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+      });
+    });
+  }
+
   // 组织架构 部门
   static getOrganization(org, status) {
     return new Promise((resolve, reject) => {
@@ -289,8 +332,7 @@ class Axios {
       title: '',
       page: 1,
       size: 12,
-      assignee: '2405',//登陆人
-      taskDefinitionKey: 'CollectReportConfirm',
+      // assignee: '69',//登陆人
     };
     for (let key of Object.keys(data)) {
       params[key] = data[key]
@@ -309,8 +351,9 @@ class Axios {
       page: 1,
       size: 12,
       tenantId: tenant,
-      taskDefinitionKey: '',
-      taskDefinitionKeySuffix: '',
+      assignee: '69',//登陆人
+      // taskDefinitionKeyIn: 'CollectTakeLook,InputBulletinData,SignEC',
+      taskDefinitionKeySuffix: 'TODO01',
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
       order: 'desc',
@@ -436,7 +479,7 @@ class Axios {
   // 图片id获取图片地址
   static getUploadUrl(ids) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/output/file`, {ids: ids}).then(res => {
+      this.post(`${market}v1.0/output/file`, {ids: ids}, '', 'close').then(res => {
         if (res.success) {
           resolve(res);
         } else {
