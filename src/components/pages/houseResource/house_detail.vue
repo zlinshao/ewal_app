@@ -174,7 +174,7 @@
           return false;
         }
         var house_id = this.$route.query.id;
-        this.$http.get(this.server + `v1.0/market/house/detail/${house_id}`,{},'获取中...').then(res => {
+        this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`,{},'获取中...').then(res => {
           console.log(res);
           if (res.code === 200) {
             this.detail = res.data;

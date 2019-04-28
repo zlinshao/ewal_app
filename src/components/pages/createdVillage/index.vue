@@ -393,7 +393,7 @@
           let name = this.pickers.keyName;
           if (name === 'province') {
             this.closeSelect();
-            this.$http.getAllCityList({province: value.province}).then(res => {
+            this.$httpZll.getAllCityList({province: value.province}).then(res => {
               let data = {};
               for (let val of res.data) {
                 data[val.city_id] = val.city_name;
@@ -404,7 +404,7 @@
           if (name === 'city') {
             this.formatData.village_name = show.city;
             this.closeSelect('city');
-            this.$http.getAllCityList({province: this.form.province, city: value.city}).then(res => {
+            this.$httpZll.getAllCityList({province: this.form.province, city: value.city}).then(res => {
               let data = {};
               for (let val of res.data) {
                 data[val.area_id] = val.area_name;
@@ -413,7 +413,7 @@
             });
           }
           if (name === 'area') {
-            this.$http.getAllCityList({
+            this.$httpZll.getAllCityList({
               province: this.form.province,
               city: this.form.city,
               area: value.area
@@ -447,7 +447,7 @@
         this.form.album[val[0]] = val[1];
       },
       okAddVillage() {
-        this.$http.newAddVillage(this.form).then(res => {
+        this.$httpZll.newAddVillage(this.form).then(res => {
           if (res.success) {
             this.resetting();
             this.$router.go(-1);

@@ -252,7 +252,7 @@
             data.value = action.action;
             postData.variables.push(data);
             postData.action = 'complete';
-            this.$http.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
+            this.$httpZll.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
               this.routerReplace('/approvals', {tabs: '1'});
             });
             break;
@@ -323,7 +323,7 @@
       },
       // 获取详情数据
       approvalDetail(url) {
-        this.$http.getApprovalDetail(url).then(res => {
+        this.$httpZll.getApprovalDetail(url).then(res => {
           if (res) {
             this.formatData = res.data.content;
             this.handleDetail(res.data.content)
