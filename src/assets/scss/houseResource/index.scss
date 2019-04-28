@@ -8,7 +8,7 @@
   > div.houseResource {
     .search-type {
       text-align: center;
-      border-top: 1px solid #F4F4F4;;
+      border-top: 1px solid #F4F4F4;
       margin-top: 10px;
       padding: .2rem .3rem 0 .3rem;
       span {
@@ -113,7 +113,7 @@
           }
           div.tag {
             a {
-              font-size: 14px;
+              font-size: 12px;
               padding: 3px 5px;
               border-right: 3px;
               &:not(:last-child) {
@@ -157,6 +157,9 @@
             }
           }
         }
+        &:active {
+          background-color: #F2F2F2;
+        }
       }
       .noMore, .noData {
         @include flex('flex-center');
@@ -167,7 +170,7 @@
     }
     .filter-content {
       background-color: white;
-      min-height: 300px;
+      max-height: 400px;
       .chooseBtn {
         @include flex('items-center');
         flex-wrap: wrap;
@@ -187,6 +190,11 @@
             background-color: rgba(69, 112, 254, .1);
             color: #4570FE;
           }
+        }
+      }
+      .house-type {
+        > div {
+          margin-bottom: 10px;
         }
       }
     }
