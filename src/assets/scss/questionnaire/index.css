@@ -1,0 +1,224 @@
+@font-face {
+  font-family: 'dingzitiblod';
+  src: url("/static/font/DIN-Bold.otf"); }
+@font-face {
+  font-family: 'dingziti';
+  src: url("/static/font/DIN-Light.otf"); }
+@font-face {
+  font-family: 'fangzhengjianti';
+  src: url("/static/font/fangzhengjianti.ttf"); }
+@font-face {
+  font-family: 'jingdianxingshu';
+  src: url("/static/font/JINGDIANXINGSHU.otf"); }
+.flex {
+  display: flex;
+  display: -webkit-flex; }
+
+.bet-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  justify-content: space-between; }
+
+.space-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  justify-content: center; }
+
+.items-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  align-items: center; }
+
+.flex-center {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: center; }
+
+.items-bet {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: space-between; }
+
+.items-center {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center; }
+
+.items-start {
+  display: flex;
+  display: -webkit-flex;
+  align-items: flex-start; }
+
+.items-end {
+  display: flex;
+  display: -webkit-flex;
+  align-items: flex-end; }
+
+.justify-center {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center; }
+
+.justify-around {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-around; }
+
+.items-around {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: space-around; }
+
+.justify-bet {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between; }
+
+.justify-start {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: flex-start; }
+
+.justify-end {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: flex-end; }
+
+.writingMode {
+  writing-mode: vertical-rl;
+  writing-mode: tb-rl; }
+
+.line-clamp1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1; }
+
+.line-clamp2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; }
+
+.line-clamp3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; }
+
+.scroll_bar {
+  overflow: auto;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden; }
+
+#questionnaire .questionnaire-container {
+  background-color: #F2F2F2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+  #questionnaire .questionnaire-container .top-banner {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center; }
+    #questionnaire .questionnaire-container .top-banner .banner {
+      width: 100%;
+      height: 2.7rem;
+      background: url("../../../assets/image/questionnaire/banner@2x.png") no-repeat scroll center;
+      background-size: 100% 100%;
+      overflow: visible;
+      position: relative; }
+    #questionnaire .questionnaire-container .top-banner .search-bar {
+      position: absolute;
+      bottom: -.6rem;
+      width: 90%; }
+      #questionnaire .questionnaire-container .top-banner .search-bar .input {
+        background-color: white; }
+  #questionnaire .questionnaire-container .list-container {
+    width: 96%;
+    text-align: center;
+    /*display: flex;
+    flex-direction: column;
+    align-items: center;*/
+    margin-top: .4rem; }
+    #questionnaire .questionnaire-container .list-container .item {
+      height: 2.4rem;
+      background-color: #FFFFFF;
+      margin: .1rem .3rem;
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column; }
+      #questionnaire .questionnaire-container .list-container .item .item-top {
+        width: 100%;
+        height: .6rem;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start; }
+      #questionnaire .questionnaire-container .list-container .item .item-middle {
+        width: 100%;
+        height: .8rem;
+        display: flex;
+        border-bottom: 1px dashed #F2F2F2;
+        align-items: center; }
+        #questionnaire .questionnaire-container .list-container .item .item-middle .item-middle-left {
+          width: 40%;
+          display: flex;
+          align-items: center; }
+          #questionnaire .questionnaire-container .list-container .item .item-middle .item-middle-left .item-middle-left__status {
+            font-family: PingFangHK-Regular;
+            color: #4570FE;
+            background-color: #ECF0FE;
+            padding: 2px 3px;
+            margin-right: 5px; }
+          #questionnaire .questionnaire-container .list-container .item .item-middle .item-middle-left .item-middle-left__data {
+            color: #8F8F8F;
+            font-family: PingFangHK-Regular; }
+        #questionnaire .questionnaire-container .list-container .item .item-middle .item-middle-right {
+          width: 60%;
+          text-align: right;
+          font-size: .25rem;
+          color: #D2D2D2; }
+      #questionnaire .questionnaire-container .list-container .item .item-bottom {
+        width: 100%;
+        height: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; }
+        #questionnaire .questionnaire-container .list-container .item .item-bottom > div {
+          width: 33%;
+          height: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center; }
+          #questionnaire .questionnaire-container .list-container .item .item-bottom > div .icon {
+            width: .3rem;
+            height: .3rem; }
+            #questionnaire .questionnaire-container .list-container .item .item-bottom > div .icon.icon-edit {
+              background: url("../../../assets/image/questionnaire/bianjiwenjuan@2x.png") no-repeat scroll center;
+              background-size: 100% 100%; }
+            #questionnaire .questionnaire-container .list-container .item .item-bottom > div .icon.icon-view {
+              background: url("../../../assets/image/questionnaire/chakanshuju@2x.png") no-repeat scroll center;
+              background-size: 100% 100%; }
+            #questionnaire .questionnaire-container .list-container .item .item-bottom > div .icon.icon-more {
+              background: url("../../../assets/image/questionnaire/gengduo@2x.png") no-repeat scroll center;
+              background-size: 100% 100%; }
+          #questionnaire .questionnaire-container .list-container .item .item-bottom > div .item-icon-desc {
+            font-family: PingFangHK-Regular;
+            color: #8F8F8F;
+            padding-left: .1rem; }
+    #questionnaire .questionnaire-container .list-container .item-operate {
+      height: 2.4rem;
+      background-color: blue; }
+
+/*# sourceMappingURL=index.css.map */
