@@ -131,7 +131,7 @@
       },
       // 获取token
       uploadPic(event) {
-        this.$http.getToken().then(res => {
+        this.$httpZll.getToken().then(res => {
           this.token = res.data.data;
           this.startUpload();
           event.target.value = '';

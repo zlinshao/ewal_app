@@ -624,7 +624,7 @@
       saveSubmit(val = '') {
         switch (val) {
           case 'submit'://提交
-            this.$http.createdTask(this.form, this.postName).then(res => {
+            this.$httpZll.createdTask(this.form, this.postName).then(res => {
               if (res.success) {
                 this.resetting();
                 this.$router.go(-1);

@@ -182,7 +182,7 @@
       // 确定打卡
       finishPunchClock() {
         this.postForm.variables = this.jsonClone(this.form);
-        this.$http.postFinishPunchClock(this.postForm).then(res => {
+        this.$httpZll.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
             this.close_();
             this.$store.dispatch('done_tabs', '2');
@@ -198,7 +198,7 @@
       // 带看小区信息 详情
       villageDetail(api) {
         this.successPunchClock = false;
-        this.$http.get(api).then(res => {
+        this.$httpZll.get(api).then(res => {
           if (res.success) {
             let village = res.data.content.community;
             this.villageInfo.location = [village.longitude, village.latitude];

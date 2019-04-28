@@ -331,19 +331,17 @@
         if (!val) {
           this.params['params' + tab].page = 1;
         } else {
+          if(this.fullLoading) return;
           if (this.finishList['list' + tab].length === this.total['total' + tab]) return;
           this.params['params' + tab].page++;
         }
-        setTimeout(_ => {
-          console.log(this.params['params' + tab].page);
-          this.getFinishList(this.tabs);
-        }, 500);
+        this.getFinishList(this.tabs);
       },
       // 请求列表
       getFinishList(tab) {
         let params = this.params['params' + tab];
         this.fullLoading = true;
-        this.$http.getToBeDoneListApi(params).then(res => {
+        this.$httpZll.getToBeDoneListApi(params).then(res => {
           this.fullLoading = false;
           this.total['total' + tab] = res.total;
           let data = this.punchClockHandlerData(res.data);

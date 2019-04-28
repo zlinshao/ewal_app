@@ -109,7 +109,7 @@
                 <a>{{ item.area }}㎡</a><i v-if="item.area"></i>
                 <a>15/30</a><i></i>
                 <a>{{ item.hk }}</a><i v-if="item.hk"></i>
-                <a>{{ item.direction && item.direction.name }}</a><i></i>
+                <a>{{ item.direction && item.direction.name || '/'}}</a><i></i>
                 <a>{{ item.decorate }}</a>
               </div>
               <div class="flex tag">
@@ -255,7 +255,7 @@
         this.remHeight = top;
         this.mainHeight = this.mainListHeight(top + 50);
       });
-      this.$http.getCityList().then(res => {
+      this.$httpZll.getCityList().then(res => {
         this.cityList = res.data;
         this.getBeforeCity(res.data).then(res => {
           this.params.city = res.city;
@@ -269,8 +269,8 @@
     methods: {
       //请求房屋详情
       handleHouseDetail(item) {
-        // this.routerLink('/houseDetail',{id: item.id});
-        this.routerLink('/houseDetail',{id: 248073});
+        this.routerLink('/houseDetail',{id: item.id});
+        // this.routerLink('/houseDetail',{id: 248073});
       },
       //按钮
       searchBtn(type) {
@@ -309,10 +309,12 @@
       },
       //获取房源列表
       handleGetHouseResource() {
-        this.$http.get(this.server + 'v1.0/market/house',this.params,'加载中...').then(res => {
-          console.log(res);
+        this.fullLoading = true;
+        this.$httpZll.get(this.server + 'v1.0/market/house',this.params,'加载中...').then(res => {
+          this.fullLoading = false;
           if (res.code === 200) {
             this.house_list = res.data.data;
+            this.paging = res.data.all_count;
           } else {
             this.house_list = [];
           }
@@ -322,9 +324,11 @@
       scrollLoad(val) {
         console.log(val);
         if (!val) {
+          this.house_list = [];
           this.params.page = 1;
           this.handleGetHouseResource();
         } else {
+          if(this.fullLoading) return;
           if (this.house_list.length === this.paging) return;
           this.params.page++;
           this.handleGetHouseResource();

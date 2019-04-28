@@ -70,7 +70,7 @@
       }
     },
     mounted() {
-      this.$http.searchHouseList(this.params).then(res => {
+      this.$httpZll.searchHouseList(this.params).then(res => {
         if (res) {
           this.searchList = res.data.data;
           this.total = res.data.all_count;

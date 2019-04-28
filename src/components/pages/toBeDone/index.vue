@@ -187,6 +187,7 @@
           this.params.page = 1;
           this.onSearch();
         } else {
+          if(this.fullLoading) return;
           if (this.toBeDoneList.length === this.paging) return;
           this.params.page++;
           this.onSearch();
@@ -199,7 +200,7 @@
       // 待办  历史带看
       getToBeDoneList(val) {
         this.fullLoading = true;
-        this.$http.getToBeDoneApi(val).then(res => {
+        this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           this.paging = res.total;
           if (this.params.page === 1) {
@@ -220,7 +221,7 @@
             return;
           }
           this.detail_request_url = val.ctl_detail_request_url;
-          this.$http.get(val.ctl_detail_request_url).then(res => {
+          this.$httpZll.get(val.ctl_detail_request_url).then(res => {
             if (res.success) {
               let data = {};
               data.content = res.data.content;

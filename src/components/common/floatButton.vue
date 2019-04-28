@@ -73,7 +73,7 @@
       identificationCode() {
         let types = 'EWAL:' + this.type;
         // let prefix = (this.type == 1 ? 'EWAL:payable' : 'EWAL:receivable');
-        this.$http.bulletinCode(types).then(res => {
+        this.$httpZll.bulletinCode(types).then(res => {
           if (res) {
             this.spot_code = res.data.uniq_code
           } else {

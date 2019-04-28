@@ -87,7 +87,7 @@
         }
         dicties.built_year = year;
         // 所有城市
-        this.$http.getAllCityList().then(res => {
+        this.$httpZll.getAllCityList().then(res => {
           let data = {};
           for (let val of res.data) {
             data[val.province_id] = val.province_name;
@@ -95,7 +95,7 @@
           dicties['province'] = data;
         });
         // 字典
-        this.$http.getAllDict().then(res => {
+        this.$httpZll.getAllDict().then(res => {
           let dict = res.data;
           dicties.decorate = dict[404];//装修
           dicties.card_type = dict[409];//card_type
