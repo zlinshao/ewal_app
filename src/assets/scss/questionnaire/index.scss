@@ -77,12 +77,29 @@
             width: 40%;
             display: flex;
             align-items: center;
+
             .item-middle-left__status {
               font-family: PingFangHK-Regular;
               color: #4570FE;
               background-color: #ECF0FE;
               padding: 2px 3px;
               margin-right: 5px;
+
+              &.status0 {
+                color: #FD9007;
+                background-color: #FEF3E6;
+              }
+
+              &.status1 {
+                color: #4570FE;
+                background-color: #ECF0FE;
+              }
+
+              &.status2 {
+                color: #8F8F8F;
+                background-color: #F4F4F4;
+              }
+
             }
 
             .item-middle-left__data {
@@ -107,22 +124,32 @@
           align-items: center;
           justify-content: space-between;
           //padding: 0.3rem;
-          >div {
+          > div {
             width: 33%;
             height: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
 
+            /*&:nth-child(1) {
+              justify-content: flex-start;
+            }
+            &:nth-child(3) {
+              justify-content: flex-end;
+            }*/
+
             .icon {
               width: .3rem;
               height: .3rem;
+
               &.icon-edit {
                 @include questionnaireImg('bianjiwenjuan@2x');
               }
+
               &.icon-view {
                 @include questionnaireImg('chakanshuju@2x');
               }
+
               &.icon-more {
                 @include questionnaireImg('gengduo@2x');
               }
@@ -139,10 +166,164 @@
 
       }
 
-      .item-operate {
+      .item-no-authority {
+        //width: 90%;
         height: 2.4rem;
-        background-color: blue;
+        background-color: #FFFFFF;
+        margin: .1rem .3rem;
+        flex: 1 0 auto;
+
+        display: flex;
+        flex-direction: column;
+
+        .item-top {
+          width: 100%;
+          height: .6rem;
+          display: flex;
+          align-items: flex-end;
+          justify-content: flex-start;
+        }
+
+        .item-middle {
+          width: 100%;
+          height: .8rem;
+          display: flex;
+          border-bottom: 1px dashed #F2F2F2;
+
+          align-items: center;
+
+          .item-middle-left {
+            width: 40%;
+            display: flex;
+            align-items: center;
+
+            .item-middle-left__status {
+              font-family: PingFangHK-Regular;
+              color: #4570FE;
+              background-color: #ECF0FE;
+              padding: 2px 3px;
+              margin-right: 5px;
+
+              &.status0 {
+                color: #FD9007;
+                background-color: #FEF3E6;
+              }
+
+              &.status1 {
+                color: #4570FE;
+                background-color: #ECF0FE;
+              }
+
+              &.status2 {
+                color: #8F8F8F;
+                background-color: #F4F4F4;
+              }
+
+            }
+
+            .item-middle-left__data {
+              color: #8F8F8F;
+              font-family: PingFangHK-Regular;
+            }
+          }
+
+          .item-middle-right {
+            width: 60%;
+            text-align: right;
+            font-size: .25rem;
+            color: #D2D2D2;
+          }
+
+        }
+
+        .item-bottom {
+          width: 100%;
+          height: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          //padding: 0.3rem;
+          .item-bottom-left {
+            color: #D2D2D2;
+            width: 70%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+          }
+
+          .item-bottom-right {
+            width: 30%;
+            height: .6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include questionnaireImg('矩形@2x');
+          }
+        }
+
+
       }
+
+      .bottom-tip {
+        color: #8F8F8F;
+        padding: .3rem 1rem;
+      }
+
+      .item-operate {
+        background-color: #E5E5E5;
+        height: 2.4rem;
+        display: flex;
+        align-items: center;
+
+        .operate-container {
+          width: 100%;
+          height: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+
+          > div {
+            display: flex;
+            flex-direction: column;
+            width: 33%;
+            height: 90%;
+            justify-content: center;
+            align-items: center;
+
+            .icon {
+              width: .3rem;
+              height: .3rem;
+
+              &.icon-stop {
+                @include questionnaireImg('zanting@2x');
+              }
+
+              &.icon-preview {
+                @include questionnaireImg('yulan@2x');
+              }
+
+              &.icon-delete {
+                @include questionnaireImg('shanchuxuanxiang@2x');
+              }
+            }
+
+            > :last-child {
+              margin-top: .05rem;
+              font-size: .2rem;
+              font-family: PingFangHK-Regular;
+            }
+          }
+        }
+      }
+    }
+
+    .add-button-circle {
+      position: fixed;
+      bottom: 2.5rem;
+      right: .3rem;
+      width: 1rem;
+      height: 1rem;
+      @include questionnaireImg('tianjia@2x');
     }
   }
 }
