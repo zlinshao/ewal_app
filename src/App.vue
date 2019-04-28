@@ -35,6 +35,7 @@
     },
     mounted() {
       sessionStorage.setItem('windowHeight', String(window.innerHeight));
+      sessionStorage.setItem('windowWidth', String(window.innerWidth));
     },
     activated() {
     },
