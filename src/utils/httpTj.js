@@ -6,10 +6,10 @@ function $httpPrompt(msg, type) {
   common.prompt(msg, type);
 }
 
-let url = globalConfig.server;//文件上传
+let url_upload = globalConfig.server;//文件上传
 let url_code = globalConfig.server_code;//报备标识码
 let market = globalConfig.server_market; //报备
-let url_hr = globalConfig.server_hr;//人资组织机构
+let url = globalConfig.server_hr;//人资组织机构
 let url_done = globalConfig.server_done;//小飞 待办
 
 class httpTj extends httpService {
@@ -26,6 +26,18 @@ class httpTj extends httpService {
   //     })
   //   })
   // }
+  static getQuestionnaireList(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url}questionnaire`, params,'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
 }
 
 export default httpTj

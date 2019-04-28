@@ -161,7 +161,10 @@
           all: 1,
         };
         this.fullLoading = true;
-        this.$http.get(`${this.url}questionnaire`, params, 'prompt').then(res => {
+        this.$httpTj.getQuestionnaireList(params).then(res=>{
+
+        });
+        /*this.$http.get(`${this.url}questionnaire`, params, 'prompt').then(res => {
           if (res.code.endsWith('0')) {
             this.fullLoading = false;
             this.paging = res.data.count;
@@ -173,7 +176,7 @@
               }
             }
           }
-        });
+        });*/
       },
 
 
