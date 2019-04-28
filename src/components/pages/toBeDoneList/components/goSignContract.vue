@@ -124,7 +124,7 @@
             this.villageDetail = res.data.content.add_data || [];
             for (let item of this.villageDetail) {
               if (item.name.includes('photo')) {
-                this.$httpZll.getUploadUrl(item.value).then(res => {
+                this.$httpZll.getUploadUrl(item.value, btn).then(res => {
                   if (res) {
                     item.value = res.data;
                   } else {

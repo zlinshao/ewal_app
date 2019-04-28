@@ -13,7 +13,6 @@ let url_hr = globalConfig.server_hr;//人资组织机构
 let url_done = globalConfig.server_done;//小飞 待办
 
 class httpZll extends httpService {
-
   // 所有字典
   static getAllDict() {
     return new Promise((resolve, reject) => {
@@ -303,9 +302,9 @@ class httpZll extends httpService {
   }
 
   // 图片id获取图片地址
-  static getUploadUrl(ids) {
+  static getUploadUrl(ids, close) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/output/file`, {ids: ids}).then(res => {
+      this.post(`${market}v1.0/output/file`, {ids: ids}, '', close).then(res => {
         if (res.success) {
           resolve(res);
         } else {

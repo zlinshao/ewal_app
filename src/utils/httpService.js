@@ -5,6 +5,7 @@ import common from './myUtils.js';
 function $httpPrompt(msg, type) {
   common.prompt(msg, type);
 }
+
 axios.defaults.timeout = 5000;
 
 // 发送请求拦截
@@ -82,13 +83,13 @@ axios.interceptors.response.use(response => {
 let msg = '正在处理..';
 
 class Axios {
-  static get(url, params = {}, noPrompt = '', close = '') {
+  static get(url, data = {}, noPrompt = '', close = '') {
     return new Promise((resolve, reject) => {
       if (noPrompt) {
         msg = noPrompt === 'prompt' ? msg : noPrompt;
         $httpPrompt(msg, 'send');
       }
-      axios.get(url, {params: params}).then(response => {
+      axios.get(url, {params: data}).then(response => {
         if (response.status > 399) {
           return;
         }
