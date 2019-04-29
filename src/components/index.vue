@@ -4,7 +4,7 @@
       <!--头部标签-->
       <div class="indexTop">
         <div>
-          <p v-for="(item,index) in indexTop" :class="['p'+(index+1)]" @click="routerLink(item.url)">
+          <p v-for="(item,index) in indexTop" :class="['p'+(index+1)]" @click="topTabsTag(item.url)">
             <img :src="item.icon">
           </p>
         </div>
@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="indexBottom">
-      <p v-for="item in indexBottom" @click="tabsTag(item.id)">
+      <p v-for="item in indexBottom" @click="bottomTabsTag(item.id)">
         <img :src="item.icon">
       </p>
     </div>
@@ -62,7 +62,6 @@
     components: {CirclePanel},
     data() {
       return {
-        tabs: '1',
         indexTop: [
           {
             url: '/approvals',
@@ -138,8 +137,16 @@
     watch: {},
     computed: {},
     methods: {
-      tabsTag(val) {
-        this.tabs = val;
+      // 头部
+      topTabsTag(url) {
+        let tabs = {};
+        tabs.tab = '3';
+        tabs.status = 0;
+        this.$store.dispatch('approval_tabs', tabs);
+        this.routerLink(url);
+      },
+      // 底部
+      bottomTabsTag(val) {
         switch (val) {
           case '4':
             this.routerLink('/toBeDoneList');

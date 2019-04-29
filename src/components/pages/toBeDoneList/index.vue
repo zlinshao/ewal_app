@@ -13,7 +13,7 @@
       <div class="main" :style="mainHeight">
         <!--未完成-->
         <div class="noFinish" v-if="tabs === '1'">
-          <scroll-load :name="'flex-warp'" @getLoadMore="scrollLoad" :disabled="!fullLoading">
+          <scroll-load :name="'flex-warp'" @getLoadMore="scrollLoad" :disabled="!fullLoading['load1']">
             <li class="noFinishMain" v-for="(item,index) in finishList['list1']">
               <div :class="['main-'+index,listLength.includes(index)?'mainTransform':'']">
                 <p>发货的是卡了和卡拉恢复扩大分开了</p>
@@ -31,16 +31,16 @@
               </div>
             </li>
             <li class="noMore" v-if="finishList['list1'].length === total['total1'] && finishList['list1'].length > 6">
-              <span v-if="!fullLoading">没有更多了</span>
+              <span v-if="!fullLoading['load1']">没有更多了</span>
             </li>
             <li class="noData" v-if="!finishList['list1'].length">
-              <span v-if="!fullLoading">暂无相关数据...</span>
+              <span v-if="!fullLoading['load1']">暂无相关数据...</span>
             </li>
           </scroll-load>
         </div>
         <!--已完成-->
         <div class="finish" v-if="tabs === '2'">
-          <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading">
+          <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading['load2']">
             <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'goSign')">
               <div>
                 <div class="finish1">
@@ -57,10 +57,10 @@
               </div>
             </li>
             <li class="noMore" v-if="finishList['list2'].length === total['total2'] && finishList['list2'].length > 3">
-              <span v-if="!fullLoading">没有更多了</span>
+              <span v-if="!fullLoading['load2']">没有更多了</span>
             </li>
             <li class="noData" v-if="!finishList['list2'].length">
-              <span v-if="!fullLoading">暂无相关数据...</span>
+              <span v-if="!fullLoading['load2']">暂无相关数据...</span>
             </li>
           </scroll-load>
         </div>
@@ -134,8 +134,12 @@
     components: {GoSignContract},
     data() {
       return {
-        fullLoading: false,//加载是否结束
-        mainHeight: '',
+        //加载是否结束
+        fullLoading: {
+          load1: false,
+          load2: false,
+        },
+        mainHeight: '',// 滚动 部分高度
         listLength: [],//中间上移 index
         finishTop: [
           {
@@ -290,27 +294,20 @@
         //是否去签约
         goSignModule: false,
         moduleDetail: {},
-
-        indexNum: 1,
       }
     },
     created() {
       this.resetting();
     },
     mounted() {
-      this.getFinishList('1');
-      this.getFinishList('2');
-      this.indexNum++;
+      this.tabs === '1' ? this.getFinishList('2') : this.getFinishList('1');
     },
     activated() {
       let listTop = this.$refs.listTop.offsetHeight;
       this.mainHeight = this.mainListHeight(listTop);
-      let tab = this.tabs;
-      if (this.indexNum > 2) {
-        this.params['params' + tab].page = 1;
-        this.getFinishList(tab);
-      }
-      this.indexNum++;
+      let tab = this.tabs || '1';
+      this.params['params' + tab].page = 1;
+      this.getFinishList(tab);
     },
     watch: {},
     computed: {
@@ -319,8 +316,12 @@
       }
     },
     methods: {
+      getQueryDetail() {
+        let query = this.$route.query;
+      },
       // 已完成 / 未完成 切换
       changeTop(val) {
+        this.goToTop();
         if (this.tabs === val) return;
         this.resetting();
         this.$store.dispatch('done_tabs', val);
@@ -334,7 +335,7 @@
         if (!val) {
           this.params['params' + tab].page = 1;
         } else {
-          if (this.fullLoading) return;
+          if (this.fullLoading['load' + tab]) return;
           if (this.finishList['list' + tab].length === this.total['total' + tab]) return;
           this.params['params' + tab].page++;
         }
@@ -342,12 +343,12 @@
       },
       // 请求列表
       getFinishList(tab) {
+        this.fullLoading['load' + tab] = true;
         let params = this.params['params' + tab];
-        this.fullLoading = true;
         let url = tab === '1' ? 'runtime/tasks' : 'history/tasks';
         this.$httpZll.getToBeDoneListApi(url, params).then(res => {
-          this.fullLoading = false;
-          this.total['total' + tab] = res.total;
+          this.fullLoading['load' + tab] = false;
+          this.total['total' + tab] = res.total || 0;
           let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome'];
           let data = this.groupHandlerListData(res.data, task);
           if (params.page === 1) {
@@ -357,12 +358,13 @@
               this.finishList['list' + tab].push(item);
             }
           }
-          if (tab === '2') return;
-          this.listLength = [];
-          let index = 1;
-          for (let i of this.finishList['list' + tab]) {
-            this.listLength.push(index);
-            index = index + 3;
+          if (tab === '1') {
+            this.listLength = [];
+            let index = 1;
+            for (let i of this.finishList['list1']) {
+              this.listLength.push(index);
+              index = index + 3;
+            }
           }
         })
       },

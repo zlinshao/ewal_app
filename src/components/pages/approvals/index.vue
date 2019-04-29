@@ -23,7 +23,7 @@
         <i></i>
       </div>
       <div class="mainContent" :style="mainHeight">
-        <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading">
+        <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
           <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]">
             <div class="contentList">
               <div class="listUp" :class="[leftShift ? 'leftShift' : '']"
@@ -63,10 +63,11 @@
           <li class="noMore"
               v-if="approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]].length === total['total'+tabs.tab] &&
                     approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]].length > 4">
-            <div v-if="!fullLoading">没有更多了</div>
+            <div v-if="!fullLoading['load'+tabs.tab]">没有更多了</div>
           </li>
-          <li class="noData" v-if="!approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]].length">
-            <div v-if="!fullLoading">暂无相关数据...</div>
+          <li class="noData"
+              v-if="!approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]].length">
+            <div v-if="!fullLoading['load'+tabs.tab]">暂无相关数据...</div>
           </li>
         </scroll-load>
       </div>
@@ -84,10 +85,15 @@
     name: "index",
     data() {
       return {
-        mountedHttp: 1,
         leftShift: false,
         mainHeight: '',
-        fullLoading: false,
+        //加载是否结束
+        fullLoading: {
+          load1: false,
+          load2: false,
+          load3: false,
+          load4: false,
+        },
         approvalTerm: [
           {
             id: '1',
@@ -225,19 +231,18 @@
       }
     },
     mounted() {
-      this.mountedHttp++;
       for (let i = 1; i < 5; i++) {
-        this.getApprovalsList(i);
+        if (this.tabs.tab !== String(i)) {
+          this.getApprovalsList(i);
+        }
       }
     },
     activated() {
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
       this.mainHeight = this.mainListHeight((approvalTop + mainTop));
-      if (this.mountedHttp > 2) {
-        this.getApprovalsList(this.tabs.tab);
-      }
-      this.mountedHttp++;
+      this.close_(this.tabs.tab);
+      this.getApprovalsList(this.tabs.tab);
     },
     watch: {},
     computed: {
@@ -247,13 +252,19 @@
       },
     },
     methods: {
+      // 清空 数据列表
+      close_(tab) {
+        let status = Number(this.tabs.status);
+        this.approvalList['list' + tab]['data' + status] = [];
+        this.paramsHandle(tab, status);
+      },
       // 报备详情
       routerLinkDetail(val) {
         this.routerLink('/approvalDetail', val);
       },
       // 进入页面 请求
-      getApprovalsList(i) {
-        let tab = String(i);
+      getApprovalsList(num) {
+        let tab = String(num);
         let status = Number(this.tabs.status);
         this.twoLevel['tab' + tab] = status;
         this.paramsHandle(tab, status);
@@ -355,7 +366,7 @@
         if (!val) {
           this.params['params' + tab].page = 1;
         } else {
-          if (this.fullLoading) return;
+          if (this.fullLoading['load' + tab]) return;
           let length = this.approvalList['list' + tab]['data' + this.twoLevel['tab' + tab]].length;
           if (length === this.total['total' + tab]) return;
           this.params['params' + tab].page++;
@@ -364,9 +375,9 @@
       },
       // 接口请求
       getApproval(url, params, tab) {
-        this.fullLoading = true;
+        this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
-          this.fullLoading = false;
+          this.fullLoading['load' + tab] = false;
           let twoLevel = this.twoLevel['tab' + tab];
           this.total['total' + tab] = res.total;
           if (!twoLevel) {
@@ -402,6 +413,7 @@
         this.tabs.status = status;
         this.twoLevel['tab' + tab] = status;
         this.$store.dispatch('approval_tabs', this.tabs);
+        this.close_(tab);
         this.paramsHandle(tab, status);
       },
     },
@@ -414,7 +426,6 @@
   @mixin approvalsImg($n) {
     @include bgImage('../../../assets/image/approvals/' + $n + '.png');
   }
-
   #approvals {
     .approvalTop {
       background: #E6F4F9;
