@@ -18,8 +18,11 @@ import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建
 import HouseResource from '@/components/pages/houseResource/index.vue';
 import HouseDetail from '@/components/pages/houseResource/house_detail.vue';
 import HouseProperty from '@/components/pages/houseResource/house_property.vue';
+import HouseContract from '@/components/pages/houseResource/houseContract.vue';
+import HouseImage from '@/components/pages/houseResource/house_image.vue';
 
-
+//合同管理
+import Contract from '@/components/pages/contract/index.vue';
 
 //问卷调查
 import Questionnaire from '@/components/pages/questionnaire/index.vue';
@@ -129,6 +132,24 @@ export default new Router({
       name: '房屋配置',
       component: HouseProperty,
       meta: {title: '房屋配置', index: 9}
+    },
+    {
+      path: '/houseContract',
+      name: '房屋合同',
+      component: HouseContract,
+      meta: {title: '房屋合同', index: 10}
+    },
+    {
+      path: '/houseImage',
+      name: '房屋照片',
+      component: HouseImage,
+      meta: {title: '房屋照片', index: 11}
+    },
+    {
+      path: '/contract',
+      name: '合同管理',
+      component: Contract,
+      meta: {title: '合同管理', index: 12}
     },
     {/*问卷调查*/
       path:'/questionnaire',

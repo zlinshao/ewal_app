@@ -2,8 +2,8 @@
   <div id="house_detail">
     <div>
       <div class="main-img">
-        <img :src="detail.house_detail.cover" alt="" v-if="detail && detail.house_detail && detail.house_detail.cover">
-        <img src="./detail.png" v-else alt="">
+        <img :src="detail.house_detail.cover" alt="" v-if="detail && detail.house_detail && detail.house_detail.cover" @click="handleLookPics(detail)">
+        <img src="./detail.png" v-else alt="none" @click="handleLookPics(detail)">
       </div>
       <div class="main-content scroll_bar" ref="house_main" :style="mainHeight">
         <div>
@@ -126,7 +126,7 @@
             </div>
           </div>
           <div class="footer">
-            <div>
+            <div @click="handleGoContract">
               <a></a>
               <h5>历史合同</h5>
             </div>
@@ -155,6 +155,12 @@
     watch: {},
     computed: {},
     methods: {
+      handleLookPics(detail) {
+        this.routerLink('/houseImage');
+      },
+      handleGoContract() {
+        this.routerLink('/houseContract',this.$route.query);
+      },
       handleLookAssociate() {
         this.routerLink('/houseProperty');
       },

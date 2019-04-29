@@ -45,14 +45,14 @@
             </div>
             <h4>装修</h4>
             <div class="chooseBtn">
-              <p v-for="item in house_decorate" @click="chooseHouseProperty(item,'decorate')">
-                <b :class="{'choose': params.decorate.includes(item.id)}">{{ item.val }}</b>
+              <p v-for="item in house_decorate" @click="chooseHouseProperty(item,'decoration')">
+                <b :class="{'choose': params.decoration.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>朝向</h4>
             <div class="chooseBtn">
-              <p v-for="item in house_orientation" @click="chooseHouseProperty(item,'orientation')">
-                <b :class="{'choose': params.orientation.includes(item.id)}">{{ item.val }}</b>
+              <p v-for="item in house_orientation" @click="chooseHouseProperty(item,'house_toward')">
+                <b :class="{'choose': params.house_toward.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>楼层</h4>
@@ -60,34 +60,90 @@
               <p v-for="item in house_floor" @click="chooseHouseProperty(item,'floor')">
                 <b :class="{'choose': params.floor.includes(item.id)}">{{ item.val }}</b>
               </p>
+              <p>
+                <van-field placeholder="最低层" type="number" @input="handleInputBottom"></van-field>
+              </p>
+              <a style="margin-top: .2rem">-</a>
+              <p>
+                <van-field placeholder="最高层" type="number" @input="handleInputTop"></van-field>
+              </p>
             </div>
             <h4>电梯</h4>
             <div class="chooseBtn">
-              <p v-for="item in house_lift" @click="chooseHouseProperty(item,'lift')">
-                <b :class="{'choose': params.lift.includes(item.id)}">{{ item.val }}</b>
+              <p v-for="item in house_lift" @click="chooseHouseProperty(item,'house_lift')">
+                <b :class="{'choose': params.house_lift.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <div class="commonBtn radioChecksFoot">
-              <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type)">
+              <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,1)">
                 {{item.label}}
               </p>
+            </div>
+          </div>
+          <div v-if="current_filter === 3" class="house-type">
+            <div class="searchInput">
+              <div class="input">
+                <p @click="depart_staff_visible = !depart_staff_visible">
+                  {{ staff_depart.name }}
+                  <i></i>
+                </p>
+                <div>
+                  <input type="text" placeholder="请输入搜索内容" v-model="staff_depart.search">
+                  <span v-if="staff_depart.search" @click="staff_depart.search = ''"></span>
+                </div>
+                <p class="searchBtn" @click="handleSearch">搜索</p>
+              </div>
+              <div class="chooseBtn" v-if="depart_staff_visible">
+                <p v-for="item in staff_depart_list" @click="chooseSearch(item)">
+                  <b :class="{'choose': staff_depart.current_choose === item.id}">{{item.val}}</b>
+                </p>
+              </div>
+            </div>
+            <div>
+              ...
             </div>
           </div>
           <div v-if="current_filter === 4" class="house-type">
             <h4>房屋剩余时长</h4>
             <div class="chooseBtn">
-              <p v-for="item in residue_time" @click="chooseHouseProperty(item,'residue_time')">
-                <b :class="{'choose': params.residue_time.includes(item.id)}">{{ item.val }}</b>
+              <p v-for="item in residue_time" @click="chooseHouseProperty(item,'rent_days')">
+                <b :class="{'choose': params.rent_days.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>预警状态</h4>
             <div class="chooseBtn">
-              <p v-for="item in house_warning_status" @click="chooseHouseProperty(item,'house_warning_status')">
-                <b :class="{'choose': params.house_warning_status.includes(item.id)}">{{ item.val }}</b>
+              <p v-for="item in house_warning_status" @click="chooseHouseProperty(item,'warning_status')">
+                <b :class="{'choose': params.warning_status.includes(item.id)}">{{ item.val }}</b>
+              </p>
+            </div>
+            <h4>当前空置时长</h4>
+            <div class="chooseBtn">
+              <p v-for="item in house_floor" @click="chooseHouseProperty(item,'kong')">
+                <b :class="{'choose': params.kong.includes(item.id)}">{{ item.val }}</b>
+              </p>
+              <p>
+                <van-field placeholder="请输入" type="number" @input="handleKongBottom"></van-field>
+              </p>
+              <a style="margin-top: .2rem">-</a>
+              <p>
+                <van-field placeholder="请输入" type="number" @input="handleKongTop"></van-field>
+              </p>
+            </div>
+            <h4>出租价格</h4>
+            <div class="chooseBtn">
+              <p v-for="item in house_floor" @click="chooseHouseProperty(item,'rent_price')">
+                <b :class="{'choose': params.rent_price.includes(item.id)}">{{ item.val }}</b>
+              </p>
+              <p>
+                <van-field placeholder="请输入" type="number" @input="handlePriceBottom"></van-field>
+              </p>
+              <a style="margin-top: .2rem">-</a>
+              <p>
+                <van-field placeholder="请输入" type="number" @input="handlePriceTop"></van-field>
               </p>
             </div>
             <div class="commonBtn radioChecksFoot">
-              <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type)">
+              <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,2)">
                 {{item.label}}
               </p>
             </div>
@@ -96,7 +152,7 @@
       </ExpandContainer>
       <!--中间房源列表-->
       <div class="main-house-list" :style="mainHeight">
-        <scroll-load :remHeight="remHeight" @getLoadMore="scrollLoad" :disabled="!fullLoading">
+        <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
           <div class="house flex" v-for="(item,key) in house_list" :key="key" @click="handleHouseDetail(item)">
             <div class="leftPic">
               <img src="./detail.png" alt="">
@@ -107,13 +163,13 @@
               <h2>{{ item.name }} <a class="notice" :class="['notice' + item.warning_status]"></a></h2>
               <div class="info flex">
                 <a>{{ item.area }}㎡</a><i v-if="item.area"></i>
-                <a>15/30</a><i></i>
+                <a>{{ item.floor && item.floor.this || 0 }}/{{ item.floor && item.floor.all || 0 }}</a><i></i>
                 <a>{{ item.hk }}</a><i v-if="item.hk"></i>
                 <a>{{ item.direction && item.direction.name || '/'}}</a><i></i>
                 <a>{{ item.decorate }}</a>
               </div>
               <div class="flex tag">
-                <a class="tag1">余1年5月12天</a>
+                <a class="tag1">余{{ item.remaining_rent_days }}天</a>
                 <a class="tag2" v-if="item.quality === 1">低质量</a>
               </div>
               <div class="bottom flex">
@@ -146,6 +202,17 @@
     components: { ExpandContainer },
     data() {
       return {
+        staff_depart: {
+          name: '员工',
+          current_choose: 1,
+          search: '',
+        },
+        depart_staff_visible: false,
+        staff_depart_list: [
+          {id: 1,val: '员工'},
+          {id: 2,val: '部门'},
+        ],
+
         buttons: [
           {
             label: '重置',
@@ -161,7 +228,6 @@
 
         mainHeight: '',
         paging: 0,
-        remHeight: 0,
         fullLoading: false,
 
         //房屋筛选
@@ -204,9 +270,6 @@
         ],
         house_floor: [
           {id: 0,val: '不限'},
-          {id: 1,val: '低楼层'},
-          {id: 2,val: '中楼层'},
-          {id: 3,val: '高楼层'},
         ],
         house_lift: [
           {id: 0,val: '不限'},
@@ -237,14 +300,17 @@
           limit: 12,
           search: '',
           name: '',
+          status: [],
           city: [],
           room: [], //房型
-          decorate:[], //装修
-          orientation: [], //朝向
+          decoration:[], //装修
+          house_toward: [], //朝向
           floor: [],// 楼层
-          lift: [], //电梯
-          residue_time: [], //剩余时长
-          house_warning_status: [] //预警
+          house_lift: [], //电梯
+          rent_days: [], //剩余时长
+          warning_status: [], //预警
+          rent_price: [],
+          kong: []
         },
         house_list: [], //房屋列表
       }
@@ -252,7 +318,6 @@
     mounted() {
       this.$nextTick(function () {
         let top = this.$refs.topSearch.offsetHeight;
-        this.remHeight = top;
         this.mainHeight = this.mainListHeight(top + 50);
       });
       this.$httpZll.getCityList().then(res => {
@@ -267,22 +332,64 @@
     watch: {},
     computed: {},
     methods: {
+      chooseSearch(item) {
+        this.staff_depart.current_choose = item.id;
+        this.staff_depart.name = item.val;
+        this.depart_staff_visible = false;
+      },
+      handleSearch() {
+        console.log(this.staff_depart);
+      },
+      handleKongBottom(val) {
+        this.params.kong[0] = val;
+      },
+      handleKongTop() {
+        this.params.kong[1] = val;
+      },
+      handlePriceBottom() {
+        this.params.rent_price[0] = val;
+      },
+      handlePriceTop() {
+        this.params.rent_price[1] = val;
+      },
+      handleInputBottom(val) {
+        this.params.floor[0] = val;
+      },
+      handleInputTop(val) {
+        this.params.floor[1] = val;
+      },
       //请求房屋详情
       handleHouseDetail(item) {
         // this.routerLink('/houseDetail',{id: item.id});
         this.routerLink('/houseDetail',{id: 248073});
       },
       //按钮
-      searchBtn(type) {
+      searchBtn(type,idx) {
         console.log(type);
-        switch (type) {
-          case 'reset':
-            this.params.lift = [];
-            this.params.floor = [];
-            this.params.decorate = [];
-            this.params.orientation = [];
-            this.params.room = [];
-            break;
+        if (idx === 1) {
+          switch (type) {
+            case 'reset':
+              this.params.house_lift = [];
+              this.params.house_toward = [];
+              this.params.floor = [];
+              this.params.decoration = [];
+              this.params.room = [];
+              break;
+            case 'confirm':
+              this.onSearch();
+              break;
+          }
+        } else {
+          switch (type) {
+            case 'reset':
+              this.params.rent_price = [];
+              this.params.rent_days = [];
+              this.params.warning_status = [];
+              break;
+            case 'confirm':
+              this.onSearch();
+              break;
+          }
         }
       },
       //选择房屋属性
@@ -294,8 +401,14 @@
         }
       },
       //选择房屋状态
-      chooseHouseStatus(tmp) {
-        this.status_choose = tmp.id;
+      chooseHouseStatus(item) {
+        this.status_choose = item.id;
+        console.log(item);
+        if (this.params.status.indexOf(item.id) !== -1) {
+          this.params.status.splice(this.params.status.indexOf(item.id),1);
+        } else {
+          this.params.status.push(item.id);
+        }
       },
       handleCloseExpand() {
         this.offset_top = 0;
@@ -305,6 +418,8 @@
       },
       //搜索
       onSearch() {
+        this.offset_top = 0;
+        this.house_list = [];
         this.handleGetHouseResource(this.params);
       },
       //获取房源列表
@@ -349,6 +464,7 @@
       },
       // 选择城市
       chooseClickCity(item) {
+        this.offset_top = 0;
         this.chooseCity = !this.chooseCity;
         if (this.params.city === item) return;
         this.params.city = [];

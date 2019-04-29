@@ -26,6 +26,32 @@ class httpHs extends httpService {
   //     })
   //   })
   // }
+
+  //获取合同列表历史记录
+  static getContractList({house_id,contract_type,page,limit},msg) {
+    return new Promise((resolve,reject) => {
+      this.get(market + 'v1.0/market/contract/house-contract',{house_id,contract_type,page,limit},msg).then(res => {
+        if (Number(res.code) === 200) {
+          resolve(res.data);
+        } else {
+          $httpPrompt(res.message);
+        }
+      })
+    })
+  }
+
+  //合同列表
+  static ContractList(params,msg) {
+    return new Promise((resolve,reject) => {
+      this.get(market + 'v1.0/market/contract',params,msg).then(res => {
+        if (Number(res.code) === 200) {
+          resolve(res.data);
+        } else {
+          $httpPrompt(res.message);
+        }
+      })
+    })
+  }
 }
 
 export default httpHs
