@@ -70,7 +70,8 @@
         } else {
           btn = 'no';
         }
-        this.getVillageDetail(val.ctl_detail_request_url, btn);
+        console.log(val);
+        this.getVillageDetail(val.rtl_detail_request_url, btn);
       },
       popupModule(val) {
         if (!val) {

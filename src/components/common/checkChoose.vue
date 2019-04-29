@@ -70,7 +70,7 @@
     methods: {
       // 复选
       checkChoose(item, value) {
-        this.checkChooseCommon(item, value);
+        this.checkChooseCommon(item, value, 'obj');
       },
       finish() {
         let name = this.checksList.keyName;

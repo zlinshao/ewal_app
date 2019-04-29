@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="main" :style="mainHeight">
-      <scroll-load :remHeight="remHeight" @getLoadMore="scrollLoad" :disabled="!fullLoading">
+      <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
         <li v-for="item in toBeDoneList">
           <div class="mainTitle">
             <label>{{item.title}}</label>
@@ -154,7 +154,6 @@
         ],
 
         paging: 0,
-        remHeight: '',//头部高度
         params: {
           title: '',
           page: 1,
@@ -168,7 +167,6 @@
     mounted() {
       this.$nextTick(function () {
         let top = this.$refs.toBeDoneTop.offsetHeight;
-        this.remHeight = top;
         this.mainHeight = this.mainListHeight(top);
       })
     },
@@ -205,10 +203,11 @@
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           this.paging = res.total;
+          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome'];
+          let data = this.groupHandlerListData(res.data, task);
           if (this.params.page === 1) {
-            this.toBeDoneList = this.punchClockHandlerData(res.data);
+            this.toBeDoneList = data;
           } else {
-            let data = this.punchClockHandlerData(res.data);
             for (let item of data) {
               this.toBeDoneList.push(item);
             }

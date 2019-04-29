@@ -85,24 +85,29 @@ export default {
       return JSON.parse(JSON.stringify(val));
     };
     // 复选
-    Vue.prototype.checkChooseCommon = function (item, value) {
+    Vue.prototype.checkChooseCommon = function (item, value, type = 'id') {
       if (value.length) {
         if (value.includes(item)) {
           let index = value.indexOf(item);
           value.splice(index, 1);
         } else {
-          value.push(item);
+          if (type === 'id') {
+            value.push(item.id);
+          } else {
+            value.push(item);
+          }
         }
       } else {
-        value.push(item);
+        if (type === 'id') {
+          value.push(item.id);
+        } else {
+          value.push(item);
+        }
       }
     };
     // 去打卡数据重组
-    Vue.prototype.punchClockHandlerData = function (data, task) {
+    Vue.prototype.groupHandlerListData = function (data, task = ['title']) {
       let arr = [];
-      if (!task) {
-        task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome'];
-      }
       for (let item of data) {
         let obj = {};
         obj.name = item.name;
@@ -357,9 +362,10 @@ export default {
     };
     // 存储个人信息
     Vue.prototype.personalData = function (res, resolve) {
-      let data = {};
+      let token = res.token;
       console.log(res.user);
-      console.log(res.token);
+      globalConfig.token = token.token_type + ' ' + token.access_token;
+      console.log(globalConfig.token);
       // let info = res.data;
       // data.avatar = info.avatar;
       // data.phone = info.phone;
