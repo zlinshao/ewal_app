@@ -23,7 +23,7 @@
         <i></i>
       </div>
       <div class="mainContent" :style="mainHeight">
-        <scroll-load :remHeight="remHeight" @getLoadMore="scrollLoad" :disabled="fullLoading">
+        <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading">
           <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]">
             <div class="contentList">
               <div class="listUp" :class="[leftShift ? 'leftShift' : '']"
@@ -151,7 +151,6 @@
           ],
           tab4: [],
         },
-        remHeight: 0,
         // 数据列表
         approvalList: {
           list1: {
@@ -234,7 +233,6 @@
     activated() {
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
-      this.remHeight = approvalTop + mainTop;
       this.mainHeight = this.mainListHeight((approvalTop + mainTop));
       if (this.mountedHttp > 2) {
         this.getApprovalsList(this.tabs.tab);
@@ -260,11 +258,11 @@
         this.twoLevel['tab' + tab] = status;
         this.paramsHandle(tab, status);
       },
-      // 配置筛选项
+      // params 配置
       paramsHandle(tab, status) {
+        this.apiHandle(tab, status);
         switch (tab) {
           case '1':
-            this.urlApi = 'runtime/tasks';
             this.params['params' + tab] = {
               page: 1,
               assignee: '69',//登陆人
@@ -277,11 +275,6 @@
             switch (status) {
               case 0:
               case 1:
-                if (status === 0) {
-                  this.urlApi = 'runtime/process-instances';
-                } else {
-                  this.urlApi = 'history/process-instances';
-                }
                 this.params['params' + tab] = {
                   page: 1,
                   taskOwner: '69',//登陆人
@@ -290,7 +283,6 @@
                 };
                 break;
               case 2:
-                this.urlApi = 'runtime/tasks';
                 this.params['params' + tab] = {
                   page: 1,
                   assignee: '69',//登陆人
@@ -299,7 +291,6 @@
                 };
                 break;
               case 3:
-                this.urlApi = 'runtime/tasks';
                 this.params['params' + tab] = {
                   page: 1,
                   cancelled: true,//已撤销
@@ -310,20 +301,12 @@
             }
             break;
           case '3':
-            if (status === 0) {
-              this.urlApi = 'runtime/tasks';
-            } else {
-              this.urlApi = 'history/tasks';
-            }
             this.params['params' + tab] = {
               page: 1,
               assignee: '69',//登陆人
               category: 'cc',
               finished: Boolean(status),
             };
-            break;
-          case '4':
-            this.urlApi = 'runtime/process-instances';
             break;
         }
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
@@ -372,7 +355,7 @@
         if (!val) {
           this.params['params' + tab].page = 1;
         } else {
-          if(this.fullLoading) return;
+          if (this.fullLoading) return;
           let length = this.approvalList['list' + tab]['data' + this.twoLevel['tab' + tab]].length;
           if (length === this.total['total' + tab]) return;
           this.params['params' + tab].page++;
@@ -390,10 +373,10 @@
             this.paging['paging' + tab] = res.total;
           }
           let task = ['house_address', 'bm_detail_request_url', 'outcome'];
+          let data = this.groupHandlerListData(res.data, task);
           if (this.params['params' + tab].page === 1) {
-            this.approvalList['list' + tab]['data' + twoLevel] = this.punchClockHandlerData(res.data, task);
+            this.approvalList['list' + tab]['data' + twoLevel] = data;
           } else {
-            let data = this.punchClockHandlerData(res.data, task);
             for (let item of data) {
               this.approvalList['list' + tab]['data' + twoLevel].push(item);
             }

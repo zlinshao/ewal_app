@@ -11,7 +11,7 @@
 <script>
   export default {
     name: "scroll-load",
-    props: ['remHeight', 'disabled', 'name'],
+    props: ['disabled', 'name'],
     data() {
       return {
         scrollHeight: '',
@@ -46,7 +46,7 @@
           listContent = document.getElementById('listContent');
           scrollHeight = listContent.scrollHeight;
           scrollTop = mainContent.scrollTop;
-          if (scrollHeight - (scrollTop + mainHeight) < 30) {
+          if (scrollHeight - (scrollTop + mainHeight) < 60) {
             that.isGetMore = true;
             that.$emit('getLoadMore', that.isGetMore);
           }

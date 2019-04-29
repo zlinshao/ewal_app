@@ -13,7 +13,7 @@
       <div class="main" :style="mainHeight">
         <!--未完成-->
         <div class="noFinish" v-if="tabs === '1'">
-          <scroll-load :name="'flex-warp'" :remHeight="remHeight" @getLoadMore="scrollLoad" :disabled="!fullLoading">
+          <scroll-load :name="'flex-warp'" @getLoadMore="scrollLoad" :disabled="!fullLoading">
             <li class="noFinishMain" v-for="(item,index) in finishList['list1']">
               <div :class="['main-'+index,listLength.includes(index)?'mainTransform':'']">
                 <p>发货的是卡了和卡拉恢复扩大分开了</p>
@@ -40,7 +40,7 @@
         </div>
         <!--已完成-->
         <div class="finish" v-if="tabs === '2'">
-          <scroll-load :remHeight="remHeight" @getLoadMore="scrollLoad" :disabled="fullLoading">
+          <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading">
             <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'goSign')">
               <div>
                 <div class="finish1">
@@ -105,7 +105,7 @@
           <div class="radioChecks">
             <div v-for="val in highList[item].value" class="contents">
               <p @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
-                 :class="{'chooseCheck': highParams[item].includes(val)}">
+                 :class="{'chooseCheck': highParams[item].includes(val.id)}">
                 {{val.text}}
               </p>
               <p @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}" v-else>
@@ -136,7 +136,6 @@
       return {
         fullLoading: false,//加载是否结束
         mainHeight: '',
-        remHeight: 0,
         listLength: [],//中间上移 index
         finishTop: [
           {
@@ -291,6 +290,8 @@
         //是否去签约
         goSignModule: false,
         moduleDetail: {},
+
+        indexNum: 1,
       }
     },
     created() {
@@ -299,14 +300,17 @@
     mounted() {
       this.getFinishList('1');
       this.getFinishList('2');
+      this.indexNum++;
     },
     activated() {
       let listTop = this.$refs.listTop.offsetHeight;
-      this.remHeight = listTop;
       this.mainHeight = this.mainListHeight(listTop);
       let tab = this.tabs;
-      this.params['params' + tab].page = 1;
-      this.getFinishList(tab);
+      if (this.indexNum > 2) {
+        this.params['params' + tab].page = 1;
+        this.getFinishList(tab);
+      }
+      this.indexNum++;
     },
     watch: {},
     computed: {
@@ -318,6 +322,7 @@
       // 已完成 / 未完成 切换
       changeTop(val) {
         if (this.tabs === val) return;
+        this.resetting();
         this.$store.dispatch('done_tabs', val);
         // this.finishList['list' + val] = [];
         // this.params['params' + val].page = 1;
@@ -343,7 +348,8 @@
         this.$httpZll.getToBeDoneListApi(url, params).then(res => {
           this.fullLoading = false;
           this.total['total' + tab] = res.total;
-          let data = this.punchClockHandlerData(res.data);
+          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome'];
+          let data = this.groupHandlerListData(res.data, task);
           if (params.page === 1) {
             this.finishList['list' + tab] = data;
           } else {
@@ -390,6 +396,7 @@
           this.checkChooseCommon(val, this.highParams[key]);
         }
         this.highParams = Object.assign({}, this.highParams);
+        console.log(this.highParams)
       },
       // 搜索按钮
       searchBtn(val) {
@@ -401,6 +408,7 @@
             this.resetting();
             break;
           default:
+            // this.params['params'+this.tabs] = this.highParams;
             this.getFinishList(this.tabs);
             this.cancel();
             break;
