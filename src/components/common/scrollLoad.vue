@@ -26,19 +26,19 @@
     watch: {
       disabled(val) {
         this.isGetMore = val;
-        this.isScroll(this.remHeight);
+        this.isScroll();
       }
     },
     computed: {},
     methods: {
-      isScroll(rem = 0) {
+      isScroll() {
         /**
          @监听滚动加载
          **/
           // 当前可视列表高度
         let that = this, mainContent, mainHeight, listContent, scrollHeight, scrollTop;
         mainContent = document.getElementById('mainContent');
-        mainHeight = window.innerHeight - (rem);
+        mainHeight = mainContent.offsetHeight;
         // 滚动条到顶部的位置
         scrollTop = 0;
         mainContent.onscroll = function () {
@@ -46,7 +46,7 @@
           listContent = document.getElementById('listContent');
           scrollHeight = listContent.scrollHeight;
           scrollTop = mainContent.scrollTop;
-          if (scrollHeight - (scrollTop + mainHeight) < 10) {
+          if (scrollHeight - (scrollTop + mainHeight) < 30) {
             that.isGetMore = true;
             that.$emit('getLoadMore', that.isGetMore);
           }

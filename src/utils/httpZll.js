@@ -7,12 +7,45 @@ function $httpPrompt(msg, type) {
 }
 
 let url = globalConfig.server;//文件上传
+let url_login = globalConfig.login;//文件上传
 let url_code = globalConfig.server_code;//报备标识码
 let market = globalConfig.server_market; //报备
 let url_hr = globalConfig.server_hr;//人资组织机构
 let url_done = globalConfig.server_done;//小飞 待办
 
 class httpZll extends httpService {
+
+  // 登录
+  static getDDConfig() {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_login}api/sns/dingtalk/config`).then(res => {
+        resolve(res);
+      })
+    })
+  }
+
+  // 获取 登录信息
+  static getUserInfo(code) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_login}api/sns/dingtalk/fromClient`, {code: code}).then(res => {
+        resolve(res);
+      })
+    })
+  }
+
+  // 获取 token
+  static getOauthToken() {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_login}oauth/token`).then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          $httpPrompt(res.message);
+        }
+      })
+    })
+  }
+
   // 所有字典
   static getAllDict() {
     return new Promise((resolve, reject) => {
@@ -152,18 +185,18 @@ class httpZll extends httpService {
   }
 
   // 获取 所有待办列表
-  static getToBeDoneListApi(data) {
+  static getToBeDoneListApi(url, data) {
     let params = {
       title: '',
       page: 1,
       size: 12,
-      // assignee: '69',//登陆人
+      assignee: '69',//登陆人
     };
     for (let key of Object.keys(data)) {
       params[key] = data[key]
     }
     return new Promise((resolve, reject) => {
-      this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
+      this.get(`${url_done}${url}`, params, 'prompt').then(res => {
         resolve(res);
       });
     });

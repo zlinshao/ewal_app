@@ -162,8 +162,6 @@
             title: '',
             page: 1,
             finished: true,
-            assignee: '69',//登陆人
-            // taskDefinitionKey: 'CollectReportConfirm',
           },
         },
         // 总条数
@@ -331,7 +329,7 @@
         if (!val) {
           this.params['params' + tab].page = 1;
         } else {
-          if(this.fullLoading) return;
+          if (this.fullLoading) return;
           if (this.finishList['list' + tab].length === this.total['total' + tab]) return;
           this.params['params' + tab].page++;
         }
@@ -341,7 +339,8 @@
       getFinishList(tab) {
         let params = this.params['params' + tab];
         this.fullLoading = true;
-        this.$httpZll.getToBeDoneListApi(params).then(res => {
+        let url = tab === '1' ? 'runtime/tasks' : 'history/tasks';
+        this.$httpZll.getToBeDoneListApi(url, params).then(res => {
           this.fullLoading = false;
           this.total['total' + tab] = res.total;
           let data = this.punchClockHandlerData(res.data);

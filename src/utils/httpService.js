@@ -20,30 +20,48 @@ axios.interceptors.response.use(response => {
   return response
 }, err => {
   if (err && err.response) {
+    let msg = err.response.data.msg;
+    let message = err.response.data.message;
+    console.log(err.response.data);
     switch (err.response.status) {
       case 400:
-        console.log('错误请求');
-        $httpPrompt('错误请求');
-        break;
       case 401:
-        console.log('未授权，请重新登录');
-        $httpPrompt('未授权，请重新登录');
-        break;
       case 403:
-        console.log('拒绝访问');
-        $httpPrompt('拒绝访问');
-        break;
       case 404:
-        console.log('请求错误,未找到该资源');
-        $httpPrompt('请求错误,未找到该资源');
-        break;
       case 405:
-        console.log('请求方法未允许');
-        $httpPrompt('请求方法未允许');
-        break;
       case 408:
-        console.log('请求超时');
-        $httpPrompt('请求超时');
+        if (msg) {
+          $httpPrompt(msg);
+        } else if (message) {
+          $httpPrompt(message);
+        } else {
+          switch (err.response.status) {
+            case 400:
+              console.log('错误请求');
+              $httpPrompt('错误请求');
+              break;
+            case 401:
+              console.log('未授权，请重新登录');
+              $httpPrompt('未授权，请重新登录');
+              break;
+            case 403:
+              console.log('拒绝访问');
+              $httpPrompt('拒绝访问');
+              break;
+            case 404:
+              console.log('请求错误,未找到该资源');
+              $httpPrompt('请求错误,未找到该资源');
+              break;
+            case 405:
+              console.log('请求方法未允许');
+              $httpPrompt('请求方法未允许');
+              break;
+            case 408:
+              console.log('请求超时');
+              $httpPrompt('请求超时');
+              break;
+          }
+        }
         break;
       case 500:
         console.log('服务器故障请联系产品经理');
@@ -83,10 +101,10 @@ axios.interceptors.response.use(response => {
 let msg = '正在处理..';
 
 class Axios {
-  static get(url, data = {}, noPrompt = '', close = '') {
+  static get(url, data = {}, prompt = '', close = '') {
     return new Promise((resolve, reject) => {
-      if (noPrompt) {
-        msg = noPrompt === 'prompt' ? msg : noPrompt;
+      if (prompt) {
+        msg = prompt === 'prompt' ? msg : prompt;
         $httpPrompt(msg, 'send');
       }
       axios.get(url, {params: data}).then(response => {
@@ -103,9 +121,9 @@ class Axios {
     })
   }
 
-  static post(url, data = {}, noPrompt = '', close = '') {
-    if (noPrompt) {
-      msg = noPrompt === 'prompt' ? msg : noPrompt;
+  static post(url, data = {}, prompt = '', close = '') {
+    if (prompt) {
+      msg = prompt === 'prompt' ? msg : prompt;
       $httpPrompt(msg, 'send');
     }
     return new Promise((resolve, reject) => {
@@ -123,9 +141,9 @@ class Axios {
     })
   }
 
-  static put(url, data = {}, noPrompt = '', close = '') {
-    if (noPrompt) {
-      msg = noPrompt === 'prompt' ? msg : noPrompt;
+  static put(url, data = {}, prompt = '', close = '') {
+    if (prompt) {
+      msg = prompt === 'prompt' ? msg : prompt;
       $httpPrompt(msg, 'send');
     }
     return new Promise((resolve, reject) => {
@@ -143,9 +161,9 @@ class Axios {
     })
   }
 
-  static delete(url, data = {}, noPrompt = '', close = '') {
-    if (noPrompt) {
-      msg = noPrompt === 'prompt' ? msg : noPrompt;
+  static delete(url, data = {}, prompt = '', close = '') {
+    if (prompt) {
+      msg = prompt === 'prompt' ? msg : prompt;
       $httpPrompt(msg, 'send');
     }
     return new Promise((resolve, reject) => {
@@ -163,9 +181,9 @@ class Axios {
     })
   }
 
-  static patch(url, data = {}, noPrompt = '', close = '') {
-    if (noPrompt) {
-      msg = noPrompt === 'prompt' ? msg : noPrompt;
+  static patch(url, data = {}, prompt = '', close = '') {
+    if (prompt) {
+      msg = prompt === 'prompt' ? msg : prompt;
       $httpPrompt(msg, 'send');
     }
     return new Promise((resolve, reject) => {

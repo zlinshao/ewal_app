@@ -168,7 +168,7 @@
       border-radius: 0 4px 0 8px;
       text-align: center;
       font-family: 'dingzitiblod';
-      font-size: 12px; }
+      font-size: .25rem; }
     #houseResource > div.houseResource .main-house-list div.house .leftPic .status1 {
       background-color: #E53A36; }
     #houseResource > div.houseResource .main-house-list div.house .leftPic .status2 {
@@ -198,7 +198,7 @@
       #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info a {
         font-family: 'dingzitiblod';
         color: #808080;
-        font-size: 12px; }
+        font-size: .25rem; }
       #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info i {
         width: 0;
         height: 12px;
@@ -207,7 +207,7 @@
         position: relative;
         top: 2px; }
     #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a {
-      font-size: 12px;
+      font-size: .2rem;
       padding: 3px 5px;
       border-right: 3px;
       font-family: 'dingzitiblod'; }
@@ -237,7 +237,7 @@
         color: #808087;
         font-family: 'dingzitiblod'; }
       #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom span {
-        font-size: 16px;
+        font-size: .3rem;
         color: #EE7B78;
         position: absolute;
         right: 0;

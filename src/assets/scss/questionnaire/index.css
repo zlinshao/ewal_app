@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: 'dingzitiblod';
   src: url("/static/font/DIN-Bold.otf"); }
@@ -181,6 +182,15 @@
             background-color: #ECF0FE;
             padding: 2px 3px;
             margin-right: 5px; }
+            #questionnaire .questionnaire-container .list-container .item .item-middle .item-middle-left .item-middle-left__status.status0 {
+              color: #FD9007;
+              background-color: #FEF3E6; }
+            #questionnaire .questionnaire-container .list-container .item .item-middle .item-middle-left .item-middle-left__status.status1 {
+              color: #4570FE;
+              background-color: #ECF0FE; }
+            #questionnaire .questionnaire-container .list-container .item .item-middle .item-middle-left .item-middle-left__status.status2 {
+              color: #8F8F8F;
+              background-color: #F4F4F4; }
           #questionnaire .questionnaire-container .list-container .item .item-middle .item-middle-left .item-middle-left__data {
             color: #8F8F8F;
             font-family: PingFangHK-Regular; }
@@ -200,7 +210,13 @@
           height: 1rem;
           display: flex;
           align-items: center;
-          justify-content: center; }
+          justify-content: center;
+          /*&:nth-child(1) {
+            justify-content: flex-start;
+          }
+          &:nth-child(3) {
+            justify-content: flex-end;
+          }*/ }
           #questionnaire .questionnaire-container .list-container .item .item-bottom > div .icon {
             width: .3rem;
             height: .3rem; }
@@ -217,8 +233,116 @@
             font-family: PingFangHK-Regular;
             color: #8F8F8F;
             padding-left: .1rem; }
-    #questionnaire .questionnaire-container .list-container .item-operate {
+    #questionnaire .questionnaire-container .list-container .item-no-authority {
       height: 2.4rem;
-      background-color: blue; }
+      background-color: #FFFFFF;
+      margin: .1rem .3rem;
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column; }
+      #questionnaire .questionnaire-container .list-container .item-no-authority .item-top {
+        width: 100%;
+        height: .6rem;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start; }
+      #questionnaire .questionnaire-container .list-container .item-no-authority .item-middle {
+        width: 100%;
+        height: .8rem;
+        display: flex;
+        border-bottom: 1px dashed #F2F2F2;
+        align-items: center; }
+        #questionnaire .questionnaire-container .list-container .item-no-authority .item-middle .item-middle-left {
+          width: 40%;
+          display: flex;
+          align-items: center; }
+          #questionnaire .questionnaire-container .list-container .item-no-authority .item-middle .item-middle-left .item-middle-left__status {
+            font-family: PingFangHK-Regular;
+            color: #4570FE;
+            background-color: #ECF0FE;
+            padding: 2px 3px;
+            margin-right: 5px; }
+            #questionnaire .questionnaire-container .list-container .item-no-authority .item-middle .item-middle-left .item-middle-left__status.status0 {
+              color: #FD9007;
+              background-color: #FEF3E6; }
+            #questionnaire .questionnaire-container .list-container .item-no-authority .item-middle .item-middle-left .item-middle-left__status.status1 {
+              color: #4570FE;
+              background-color: #ECF0FE; }
+            #questionnaire .questionnaire-container .list-container .item-no-authority .item-middle .item-middle-left .item-middle-left__status.status2 {
+              color: #8F8F8F;
+              background-color: #F4F4F4; }
+          #questionnaire .questionnaire-container .list-container .item-no-authority .item-middle .item-middle-left .item-middle-left__data {
+            color: #8F8F8F;
+            font-family: PingFangHK-Regular; }
+        #questionnaire .questionnaire-container .list-container .item-no-authority .item-middle .item-middle-right {
+          width: 60%;
+          text-align: right;
+          font-size: .25rem;
+          color: #D2D2D2; }
+      #questionnaire .questionnaire-container .list-container .item-no-authority .item-bottom {
+        width: 100%;
+        height: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; }
+        #questionnaire .questionnaire-container .list-container .item-no-authority .item-bottom .item-bottom-left {
+          color: #D2D2D2;
+          width: 70%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start; }
+        #questionnaire .questionnaire-container .list-container .item-no-authority .item-bottom .item-bottom-right {
+          width: 30%;
+          height: .6rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: url("../../../assets/image/questionnaire/鐭╁舰@2x.png") no-repeat scroll center;
+          background-size: 100% 100%; }
+    #questionnaire .questionnaire-container .list-container .bottom-tip {
+      color: #8F8F8F;
+      padding: .3rem 1rem; }
+    #questionnaire .questionnaire-container .list-container .item-operate {
+      background-color: #E5E5E5;
+      height: 2.4rem;
+      display: flex;
+      align-items: center; }
+      #questionnaire .questionnaire-container .list-container .item-operate .operate-container {
+        width: 100%;
+        height: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-around; }
+        #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div {
+          display: flex;
+          flex-direction: column;
+          width: 33%;
+          height: 90%;
+          justify-content: center;
+          align-items: center; }
+          #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div .icon {
+            width: .3rem;
+            height: .3rem; }
+            #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div .icon.icon-stop {
+              background: url("../../../assets/image/questionnaire/zanting@2x.png") no-repeat scroll center;
+              background-size: 100% 100%; }
+            #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div .icon.icon-preview {
+              background: url("../../../assets/image/questionnaire/yulan@2x.png") no-repeat scroll center;
+              background-size: 100% 100%; }
+            #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div .icon.icon-delete {
+              background: url("../../../assets/image/questionnaire/shanchuxuanxiang@2x.png") no-repeat scroll center;
+              background-size: 100% 100%; }
+          #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div > :last-child {
+            margin-top: .05rem;
+            font-size: .2rem;
+            font-family: PingFangHK-Regular; }
+  #questionnaire .questionnaire-container .add-button-circle {
+    position: fixed;
+    bottom: 2.5rem;
+    right: .3rem;
+    width: 1rem;
+    height: 1rem;
+    background: url("../../../assets/image/questionnaire/tianjia@2x.png") no-repeat scroll center;
+    background-size: 100% 100%; }
 
 /*# sourceMappingURL=index.css.map */

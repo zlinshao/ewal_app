@@ -322,9 +322,10 @@ export default {
     // 钉钉认证
     Vue.prototype.personalGet = function () {
       let that = this;
+      // 隐藏 右上角更多
       dd.biz.navigation.setRight({show: false});
       return new Promise((resolve, reject) => {
-        that.$http.get(urls + 'special/special/dingConfig').then((res) => {
+        that.$httpZll.getDDConfig().then((res) => {
           let _config = res;
           dd.config({
             agentId: _config.agentId, // 必填，微应用ID
@@ -334,35 +335,21 @@ export default {
             signature: _config.signature, // 必填，签名
             jsApiList: ['biz.cspace.saveFile', 'biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
           });
-          dd.ready(function () {
+          dd.ready(() => {
             dd.runtime.permission.requestAuthCode({
               corpId: _config.corpId,
               onSuccess(info) {
-                that.$http.get(urls + 'special/special/userInfo', {
-                  code: info.code,
-                }).then((res) => {
-                  if (res) {
-                    if (res.status !== 'fail') {
-                      that.personalData(res, resolve);
-                    } else {
-                      alert('读取信息失败，稍后再试！');
-                      that.closeDD();
-                    }
-                  } else {
-                    setTimeout(() => {
-                      alert('请求超时请稍后再试');
-                      that.closeDD();
-                    }, 3000);
-                  }
+                that.$httpZll.getUserInfo(info.code).then((res) => {
+                  that.personalData(res, resolve);
                 })
               },
               onFail(err) {
-                alert('您不在系统内，请联系管理员添加！！');
+                alert('您不在系统内，请联系管理员添加！');
                 that.closeDD();
               }
             });
           });
-          dd.error(function (err) {
+          dd.error((err) => {
             alert('dd error: ' + JSON.stringify(err));
           });
         });
@@ -371,15 +358,17 @@ export default {
     // 存储个人信息
     Vue.prototype.personalData = function (res, resolve) {
       let data = {};
-      let info = res.data;
-      data.avatar = info.avatar;
-      data.phone = info.phone;
-      data.staff_id = info.id;
-      data.staff_name = info.name;
-      data.department_name = info.org[0].name;
-      data.department_id = info.org[0].id;
-      this.$store.dispatch('personal_storage', JSON.stringify(data));
-      resolve(true);
+      console.log(res.user);
+      console.log(res.token);
+      // let info = res.data;
+      // data.avatar = info.avatar;
+      // data.phone = info.phone;
+      // data.staff_id = info.id;
+      // data.staff_name = info.name;
+      // data.department_name = info.org[0].name;
+      // data.department_id = info.org[0].id;
+      // this.$store.dispatch('personal_storage', JSON.stringify(data));
+      // resolve(true);
     };
     // 关闭钉钉
     Vue.prototype.closeDD = function () {
