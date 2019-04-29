@@ -104,7 +104,7 @@
               <!--<a class="writingMode status2">未出租</a>-->
             </div>
             <div class="rightInfo">
-              <h2>{{ item.name }} <a class="notice notice1" :class="['notice' + item.warning_status]"></a></h2>
+              <h2>{{ item.name }} <a class="notice" :class="['notice' + item.warning_status]"></a></h2>
               <div class="info flex">
                 <a>{{ item.area }}㎡</a><i v-if="item.area"></i>
                 <a>15/30</a><i></i>

@@ -4,10 +4,10 @@
       <div class="property-list">
         <h3 class="label">房屋配置</h3>
         <van-row>
-          <van-col span="6" v-for="item in 8" :key="item">
+          <van-col span="6" v-for="(item,key) in property_list" :key="item.key">
             <div class="pro-item">
-              <a class="pro-icon"></a>
-              <h4>空调</h4>
+              <a class="pro-icon" :class="['pro-icon-' + item.key]"></a>
+              <h4>{{ item.label }}*{{ item.val }}</h4>
             </div>
           </van-col>
         </van-row>
@@ -20,7 +20,50 @@
   export default {
     name: "index",
     data() {
-      return {}
+      return {
+        property_list: {
+          a: {
+            label: '空调',
+            key: 1,
+            val: 1
+          },
+          b: {
+            label: '冰箱',
+            key: 2,
+            val: 2
+          },
+          c: {
+            label: '电视',
+            key: 3,
+            val: 2
+          },
+          d: {
+            label: '煤气',
+            key: 4,
+            val: 2
+          },
+          e: {
+            label: '油烟机',
+            key: 5,
+            val: 1
+          },
+          f: {
+            label: '微波炉',
+            key: 6,
+            val: 1
+          },
+          g: {
+            label: '洗衣机',
+            key: 7,
+            val: 1
+          },
+          h: {
+            label: '热水器',
+            key: 8,
+            val: 1
+          },
+        }
+      }
     },
     mounted() {
     },
@@ -40,7 +83,7 @@
       .property-list {
         padding: .3rem 0;
         border-bottom: 1px dashed #F2F2F2;
-        h3.label {
+        h3.label ,h4{
           font-family: 'dingzitiblod';
         }
         div.pro-item {
@@ -50,7 +93,16 @@
             display: inline-block;
             width: 25pt;
             height: 25pt;
-            background-color: rebeccapurple;
+          }
+          @for $i from 1 to 9 {
+            a.pro-icon-#{$i} {
+              $url: '../../../assets/image/houseResource/pro_icon_#{$i}.png';
+              @include bgImage($url);
+              background-size: contain;
+            }
+          }
+          h4 {
+            font-size: .25rem;
           }
         }
       }
