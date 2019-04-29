@@ -78,9 +78,9 @@
           </div>
           <!--配置-->
           <div class="configuration">
-            <div class="flex">
+            <div class="flex" @click="handleLookAssociate">
               <h2>房屋配置</h2>
-              <a>查看交接单<van-icon name="arrow" style="vertical-align: middle" @click="handleLookAssociate"></van-icon></a>
+              <a>查看交接单<van-icon name="arrow" style="vertical-align: middle"></van-icon></a>
             </div>
             <div class="furniture">
               <van-row>
