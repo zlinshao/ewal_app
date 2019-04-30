@@ -88,7 +88,7 @@
                     <div class="item-bottom-left">
                       {{item.start_time}}
                     </div>
-                    <div v-if="item.status==1" class="item-bottom-right">
+                    <div @click="answer(item)" v-if="item.status==1" class="item-bottom-right">
                       去回答>
                     </div>
                   </div>
@@ -103,13 +103,14 @@
             <span v-if="!fullLoading">暂无相关数据...</span>
           </li>
         </scroll-load>
-
-
         <!--        <div class="bottom-tip">拼一把,让明天的你感谢今天的自己!</div>-->
       </div>
-
       <div @click="routerLink('/createQuestionnaire')" v-if="hasAuthority" class="add-button-circle"></div>
     </div>
+
+
+
+    <test-paper :type="2" :questionnaire-data="questionnaire_data" :visible.sync="test_paper_visible"></test-paper>
   </div>
 </template>
 
@@ -132,16 +133,27 @@
         remHeight: 0,
         paging: 0,
         fullLoading: false,
-        questionnaireList: [],
+        questionnaireList: [],//问卷列表
         listHeight: 0,
         sliderWidth: 0,
-        hasAuthority: true,//是否有权限
-
-
-
+        hasAuthority: false,//是否有权限
+        test_paper_visible:false,
+        questionnaire_data:[],
       }
     },
     methods: {
+
+      answer(item) {
+        debugger
+        this.$httpTj.getQuestionnaireDetail(item.id).then(res=> {
+          debugger
+          this.questionnaire_data = res.data;
+        });
+        this.test_paper_visible = true;
+      },
+
+
+
       scrollLoad(val) {
         if (!val) {
           this.params.page = 1;
@@ -162,7 +174,15 @@
         };
         this.fullLoading = true;
         this.$httpTj.getQuestionnaireList(params).then(res=>{
-
+          this.fullLoading = false;
+          this.paging = res.data.count;
+          if (this.params.page === 1) {
+            this.questionnaireList = res.data.data;
+          } else {
+            for (let item of res.data.data) {
+              this.questionnaireList.push(item);
+            }
+          }
         });
         /*this.$http.get(`${this.url}questionnaire`, params, 'prompt').then(res => {
           if (res.code.endsWith('0')) {
