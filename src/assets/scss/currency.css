@@ -694,7 +694,7 @@
       display: -webkit-flex;
       align-items: center;
       justify-content: center; }
-      .searchInput .chooseBtn p b {
+      .searchInput .chooseBtn p b, .searchInput .chooseBtn p div.van-cell, .searchInput .chooseBtn p div.van-field {
         width: 100%;
         padding: .2rem 0;
         text-align: center;

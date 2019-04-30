@@ -313,11 +313,12 @@ export default {
         }
       }
       let index = images.indexOf(uri);
+      let that = this;
       ImagePreview({
         images: images,
         startPosition: index,
         onClose() {
-          this.$store.dispatch('switch_video',true);
+          that.$store.dispatch('switch_video',true);
         }
       });
     };
