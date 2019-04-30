@@ -68,7 +68,7 @@
             name: '审批',
             icon: ic_shenpi,
           }, {
-            url: '',
+            url: '/contract',
             name: '合同',
             icon: ic_hetong,
           }, {

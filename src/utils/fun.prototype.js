@@ -317,6 +317,7 @@ export default {
         images: images,
         startPosition: index,
         onClose() {
+          this.$store.dispatch('switch_video',true);
         }
       });
     };

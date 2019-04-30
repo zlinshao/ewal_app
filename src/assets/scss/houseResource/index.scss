@@ -103,7 +103,7 @@
             a {
               font-family: 'dingzitiblod';
               color: #808080;
-              font-size: .25rem;
+              font-size: .23rem;
             }
             i {
               width: 0;
@@ -147,16 +147,18 @@
               position: relative;
               top: 3px;
             }
+            h3,span {
+              font-family: 'dingzitiblod';
+            }
             h3 {
               color: #808087;
-              font-family: 'dingzitiblod';
             }
             span {
               font-size: .3rem;
               color: #EE7B78;
               position: absolute;
               right: 0;
-              top: 3px;
+              top: 0;
             }
           }
         }
@@ -185,6 +187,14 @@
           b {
             width: 100%;
             padding: .2rem 0;
+            text-align: center;
+            @include radius(1rem);
+            background-color: #EEEDEE;
+          }
+          div.van-cell,div.van-field {
+            width: 100%;
+            padding: .1rem 0;
+            padding-left: .2rem;
             text-align: center;
             @include radius(1rem);
             background-color: #EEEDEE;

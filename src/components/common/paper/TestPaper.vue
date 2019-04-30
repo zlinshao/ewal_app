@@ -3,28 +3,11 @@
     <van-actionsheet v-model="action_sheet_visible">
       <div class="action-sheet-container" :style="{height:screenHeight+'px'}">
         <div class="main-container">
-          <div class="edit-container">
-            <div class="paper-stem">
-              <van-field @focus="clearTipContent" @blur="fixTipContent" v-model="paper_item.stem" placeholder="请输入题目名称" />
-            </div>
+          <div class="banner-top">
 
-            <div class="choose-list">
-              <div v-for="(val,key,index) in paper_item.choice" :key="index" class="choose-item">
-                <div class="choose-item-left">
-                  <van-field v-model="paper_item.choice[key]" placeholder="点击编辑选项" />
-                </div>
-                <div class="choose-item-right">
-                  <div class="right-btn-container">
-                    <div class="icon-delete"></div>
-                  </div>
-                </div>
+          </div>
+          <div class="exam-container">
 
-              </div>
-            </div>
-            <div @click="addChooseItem" class="add-item">
-              <div class="icon-add"></div>
-              <div class="icon-add-desc">添加选项</div>
-            </div>
           </div>
         </div>
         <div class="btn-container">
@@ -38,46 +21,98 @@
 
 <script>
   import _ from 'lodash';
+
   export default {
     name: "TestPaper",
     data() {
       return {
         action_sheet_visible: false,
-        paper_item:{
-          stem:'点击编辑题目名称',//题干
-          choice:{
-            A: '',
-            B: '',
-          },
-        },
+
+
+        exam_total_score:0,//总分值
+        exam_category_list: {
+          single: {
+            exam_list: [],
+          },//单选题
+          judge: {
+            exam_list: [],
+          },//判断题
+          short: {
+            exam_list: [],
+          },//简答题
+        }
       }
     },
     props: {
       type: {
-        default: 1,
+        default: 1,//一为考试 2为问卷调查
       },
       visible: {
         required: true,
         default: false,
-      }
+      },
+      questionnaireData: {//问卷详情里的数据
+      },
     },
     watch: {
       visible: {
-        handler(val,oldVal) {
+        handler(val, oldVal) {
           this.action_sheet_visible = val;
         },
-        immediate:true,
+        immediate: true,
       },
       action_sheet_visible: {
-        handler(val,oldVal) {
-          this.$emit('update:visible',this.action_sheet_visible);
+        handler(val, oldVal) {
+          this.$emit('update:visible', this.action_sheet_visible);
         },
-        immediate:true,
+        immediate: true,
+      },
+      questionnaireData: {
+        handler(val, oldVal) {
+          if(val) {
+            _.forEach(val.question_set, (item, index) => {
+              /*if(item.category==1) {
+                this.exam_category_list.single.exam_list.push(item);
+              }*/
+              this.exam_total_score += item.score || 0;
+              switch (item.category) {
+                case 1:
+                  this.exam_category_list.single.exam_list.push(item);
+                  break;
+                case 2:
+                  this.exam_category_list.judge.exam_list.push(item);
+                  break;
+                case 3:
+                  this.exam_category_list.short.exam_list.push(item);
+              }
+            });
+          }
+        },
+        immediate: true,
+      },
+    },
+    methods: {
+      cancelActionSheet() {
+        this.action_sheet_visible = false
       },
     },
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .van-cell.van-field {
+    border-radius: 5px;
+  }
 
+  .van-actionsheet {
+    max-height: 100%;
+  }
+
+  .van-popup.van-popup--bottom {
+    border-radius: 0;
+  }
+</style>
+
+<style scoped lang="scss">
+  @import "../../../assets/scss/common/paper/TestPaper";
 </style>

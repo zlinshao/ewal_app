@@ -1,5 +1,6 @@
 const app = {
   state: {
+    video_visible: true, //显示隐藏全局video
     key_up_status: false,
     personalDetail: {},//所有个人信息
     // 姓名/部门
@@ -46,6 +47,10 @@ const app = {
     DONE_TABS(state, view) {
       state.doneTab = view;
     },
+    // 开关video
+    SWITCH_VIDEO(state,status) {
+      state.video_visible = status;
+    }
   },
   // 执行函数
   actions: {
@@ -73,6 +78,10 @@ const app = {
     done_tabs({commit}, view) {
       commit('DONE_TABS', view);
     },
+    // 开关video
+    switch_video({commit},status) {
+      commit('SWITCH_VIDEO',status);
+    }
   }
 };
 

@@ -21,7 +21,6 @@
     mounted() {},
     watch: {
       offsetTop(top) {
-        console.log(top);
         if (top) {
           if (typeof top !== 'number') {
             return false;
