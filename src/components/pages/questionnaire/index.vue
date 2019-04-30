@@ -138,15 +138,13 @@
         sliderWidth: 0,
         hasAuthority: false,//是否有权限
         test_paper_visible:false,
-        questionnaire_data:[],
+        questionnaire_data:{},
       }
     },
     methods: {
 
       answer(item) {
-        debugger
         this.$httpTj.getQuestionnaireDetail(item.id).then(res=> {
-          debugger
           this.questionnaire_data = res.data;
         });
         this.test_paper_visible = true;
@@ -170,7 +168,7 @@
       getQuestionnaireList() {
         let params = {
           ...this.params,
-          all: 1,
+          //all: 1,
         };
         this.fullLoading = true;
         this.$httpTj.getQuestionnaireList(params).then(res=>{

@@ -14,17 +14,121 @@
     .main-container {
       width: 100%;
       flex: 1;
-      background-color: #F2F2F2;
+      background-color: #FFFFFF;
       display: flex;
       align-items: flex-start;
       //justify-content: space-around;
       flex-direction: column;
-      padding: .3rem .3rem 0;
+      padding: .3rem .6rem 0;
 
       .banner-top {
-        height: 3rem;
+        //height: 3rem;
         width: 100%;
-        background-color: yellowgreen;
+        border-bottom: 1px dotted #F2F2F2;
+        //background-color: yellowgreen;
+
+        .questionnaire-banner {
+          height: 100%;
+          .banner-title {
+            display: flex;
+            align-items: center;
+            height: .6rem;
+            font-family: PingFangHK-Semibold;
+            font-weight: 600;
+            font-size: .4rem;
+          }
+          .banner-user-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: .4rem 0;
+            .info-left {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              img {
+                width: .6rem;
+                height: .6rem;
+                border-radius: 50%;
+                overflow: hidden;
+              }
+              .user-name {
+                width: 1.6rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-left: .3rem;
+                font-family: PingFangHK-Regular;
+                font-weight: 400;
+              }
+            }
+            .info-right {
+              width: 3.6rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              color: #8F8F8F;
+              text-align: right;
+            }
+          }
+
+          .banner-content {
+            color: #929292;
+          }
+          .banner-datetime {
+            color: #8F8F8F;
+            text-align: right;
+            font-size: .25rem;
+            margin: .2rem 0;
+            font-family: PingFangHK-Regular;
+          }
+        }
+      }
+
+      .exam-container {
+        color: #000000;
+        .exam-single {
+          .single-title {
+            padding: .2rem 0;
+          }
+          .single-container {
+            .exam-single-item {
+              .single-item-stem {
+                padding-bottom: .2rem;
+              }
+            }
+          }
+        }
+        .exam-judge {
+          .exam-judge-item {
+            padding: .1rem 0;
+          }
+        }
+        .exam-short {
+          .exam-short-item {
+            .short-item-stem {
+              padding: .1rem 0;
+            }
+          }
+        }
+        .end-tip {
+          margin: .3rem 0;
+          width: 100%;
+          height: 3rem;
+          background-color: #F2F2F2;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          >span {
+            padding-bottom: .2rem;
+            color: #8F8F8F;
+            display: flex;
+            width: 100%;
+            margin: 0 auto;
+            justify-content: center;
+          }
+        }
       }
 
     }
