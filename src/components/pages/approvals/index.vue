@@ -49,8 +49,9 @@
                     <span>以等待18分钟</span>
                   </div>
                 </div>
-                <div class="approvalStatus publish"></div>
-                <div class="moreOperate" @click.stop="leftShift = !leftShift"></div>
+                <div class="approvalStatus publish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
+                <div class="moreOperate" @click.stop="leftShift = !leftShift"
+                     v-if="tabs.tab === '2' && tabs.status === 1"></div>
               </div>
               <div class="listDown">
                 <div v-for="item in moreOperate" :class="moreOperate.length>2?'':'lessThan2'">
@@ -233,7 +234,7 @@
     mounted() {
       for (let i = 1; i < 5; i++) {
         if (this.tabs.tab !== String(i)) {
-          this.getApprovalsList(i);
+          this.onSearch(i);
         }
       }
     },
@@ -241,8 +242,7 @@
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
       this.mainHeight = this.mainListHeight((approvalTop + mainTop));
-      this.close_(this.tabs.tab);
-      this.getApprovalsList(this.tabs.tab);
+      this.onSearch(this.tabs.tab);
     },
     watch: {},
     computed: {
@@ -252,9 +252,11 @@
       },
     },
     methods: {
-      // 清空 数据列表
-      close_(tab) {
+      // 数据列表
+      onSearch(num) {
+        let tab = String(num);
         let status = Number(this.tabs.status);
+        this.twoLevel['tab' + tab] = status;
         this.approvalList['list' + tab]['data' + status] = [];
         this.paramsHandle(tab, status);
       },
@@ -262,71 +264,11 @@
       routerLinkDetail(val) {
         this.routerLink('/approvalDetail', val);
       },
-      // 进入页面 请求
-      getApprovalsList(num) {
-        let tab = String(num);
-        let status = Number(this.tabs.status);
-        this.twoLevel['tab' + tab] = status;
-        this.paramsHandle(tab, status);
-      },
-      // params 配置
-      paramsHandle(tab, status) {
-        this.apiHandle(tab, status);
-        switch (tab) {
-          case '1':
-            this.params['params' + tab] = {
-              page: 1,
-              assignee: '69',//登陆人
-              processDefinitionKey: 'MC-Bulletin',//市场部
-              category: 'approval',
-              finished: Boolean(status),
-            };
-            break;
-          case '2':
-            switch (status) {
-              case 0:
-              case 1:
-                this.params['params' + tab] = {
-                  page: 1,
-                  taskOwner: '69',//登陆人
-                  processDefinitionKey: 'MC-Bulletin',//市场部
-                  processInstanceName: 'Collect',//区分报备类型
-                };
-                break;
-              case 2:
-                this.params['params' + tab] = {
-                  page: 1,
-                  assignee: '69',//登陆人
-                  taskDefinitionKey: 'SignEC',
-                  processInstanceName: 'Collect',//区分报备类型
-                };
-                break;
-              case 3:
-                this.params['params' + tab] = {
-                  page: 1,
-                  cancelled: true,//已撤销
-                  taskDefinitionKey: 'InputBulletinData',
-                  processInstanceName: 'Collect',//区分报备类型
-                };
-                break;
-            }
-            break;
-          case '3':
-            this.params['params' + tab] = {
-              page: 1,
-              assignee: '69',//登陆人
-              category: 'cc',
-              finished: Boolean(status),
-            };
-            break;
-        }
-        this.getApproval(this.urlApi, this.params['params' + tab], tab);
-      },
       // 接口配置
       apiHandle(tab, status) {
         switch (tab) {
           case '1':
-            this.urlApi = 'runtime/tasks';
+            this.urlApi = status === 1 ? 'history/tasks' : 'runtime/tasks';
             break;
           case '2':
             switch (status) {
@@ -357,6 +299,62 @@
             this.urlApi = 'runtime/process-instances';
             break;
         }
+      },
+      // params 配置
+      paramsHandle(tab, status) {
+        this.apiHandle(tab, status);
+        switch (tab) {
+          case '1':
+            this.params['params' + tab] = {};
+            this.params['params' + tab] = {
+              page: 1,
+              // assignee: '69',//登陆人
+              processDefinitionKey: 'MG-BulletinApproval',//市场部
+              category: 'approval',
+            };
+            if (status === 1) {
+              this.params['params' + tab].finished = Boolean(status)
+            }
+            break;
+          case '2':
+            switch (status) {
+              case 0:
+              case 1:
+                this.params['params' + tab] = {
+                  page: 1,
+                  // taskOwner: '69',//登陆人
+                  processDefinitionKey: 'MG-BulletinApproval',//市场部
+                  processInstanceName: 'Collect',//区分报备类型
+                };
+                break;
+              case 2:
+                this.params['params' + tab] = {
+                  page: 1,
+                  // assignee: '69',//登陆人
+                  taskDefinitionKey: 'SignEC',
+                  processInstanceName: 'Collect',//区分报备类型
+                };
+                break;
+              case 3:
+                this.params['params' + tab] = {
+                  page: 1,
+                  cancelled: true,//已撤销
+                  taskDefinitionKey: 'InputBulletinData',
+                  processInstanceName: 'Collect',//区分报备类型
+                };
+                break;
+            }
+            break;
+          case '3':
+            this.params['params' + tab] = {
+              page: 1,
+              // assignee: '69',//登陆人
+              category: 'cc',
+              finished: Boolean(status),
+            };
+            break;
+        }
+        this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 滚动加载
       scrollLoad(val) {
@@ -401,10 +399,10 @@
         this.tabs.tab = tab;
         this.tabs.status = status;
         this.$store.dispatch('approval_tabs', this.tabs);
-        this.apiHandle(tab, status);
         if (tab === '4') {
           this.urlApi = 'runtime/process-instances';
         }
+        this.paramsHandle(tab, status);
       },
       // 二级切换
       tabsTag(status) {
@@ -413,8 +411,7 @@
         this.tabs.status = status;
         this.twoLevel['tab' + tab] = status;
         this.$store.dispatch('approval_tabs', this.tabs);
-        this.close_(tab);
-        this.paramsHandle(tab, status);
+        this.onSearch(tab);
       },
     },
   }
@@ -426,6 +423,7 @@
   @mixin approvalsImg($n) {
     @include bgImage('../../../assets/image/approvals/' + $n + '.png');
   }
+
   #approvals {
     .approvalTop {
       background: #E6F4F9;

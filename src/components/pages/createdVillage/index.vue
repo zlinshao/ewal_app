@@ -55,7 +55,7 @@
             <!--上传-->
             <div v-else-if="item.picker === 'album' && item.value" class="uploadForm">
               <div v-for="upload in item.value" class="flex">
-                <Upload :file="upload" :getImg="formatData[upload.keyName]" @success="getImgData"></Upload>
+                <Upload :file="upload" :getImg="album" @success="getImgData"></Upload>
               </div>
             </div>
             <!--普通输入框-->
@@ -76,7 +76,7 @@
           <div id="container" style="width: 100%;height: 4.2rem;margin-top: .3rem;"></div>
         </div>
         <div class="commonBtn" :class="{'footerStatic': keyUpStatus}">
-          <p class="btn back" @click="$router.go(-1)">取消</p>
+          <p class="btn back" @click="resetting();$router.go(-1)">取消</p>
           <p class="btn reset" @click="resetting()">重置</p>
           <p class="btn" @click="okAddVillage">确定</p>
           <i></i>
@@ -102,6 +102,7 @@
         form: {},
         formatData: {},               //DOM显示数据
         showData: {},
+        album: {},
         drawSlither: [              //表单数据
           {
             label: '省',

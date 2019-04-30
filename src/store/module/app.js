@@ -40,7 +40,6 @@ const app = {
     },
     // 审批切换
     APPROVAL_TABS(state, view) {
-      console.log(view);
       state.approvalTab = view;
     },
     // 待办切换

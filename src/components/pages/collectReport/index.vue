@@ -4,10 +4,13 @@
       <div>
         <div class="bulletinTitle" ref="title">
           <label>{{mainTop[slither]}}</label>
-          <p><i v-for="(i,idx) in 4" :class="{'hover': idx === slither}" @click="slither = idx"></i></p>
+          <p v-if="allReportNum > 1">
+            <i v-for="(i,idx) in allReportNum" :class="{'hover': idx === slither}" @click="slither = idx"></i>
+          </p>
         </div>
-        <div class="mainRadius" ref="main" @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
-          <div class="justify-around transition" :class="['slide' + slither]" :style="[mainHeight]">
+        <div class="mainRadius" :class="['mainRadius'+allReportNum]" ref="main"
+             @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
+          <div class="justify-around transition" :class="['slide' + slither]" :style="[slitherCss]">
             <div class="main" :style="[mainWidth]" v-for="(slither,i) in Object.keys(drawSlither)">
               <!--显示formatData -->
               <div v-if="item.showForm === 'formatData'" v-for="(item,index) in drawSlither[slither]">
@@ -237,7 +240,7 @@
     components: {Electrical, SearchStaff, searchDepart, NoPicker, CheckChoose, RemarkTerms},
     data() {
       return {
-        mainHeight: {},
+        slitherCss: {},
         mainWidth: {},
         form: {},
         formatData: {},                     //DOM显示数据
@@ -285,6 +288,8 @@
         checksList: [],
 
         allDetails: {},
+        electronicContractNumber: '',   //电子合同编号
+        allReportNum: 0,//滑动列表数
       }
     },
     created() {
@@ -293,11 +298,13 @@
     },
     activated() {
       this.slither = 0;
+      this.allReportNum = Object.keys(this.resetDrawing).length;
       this.getBankName();
       let title = this.$refs.title.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
       this.mainWidth = {minWidth: main, maxWidth: main};
-      this.mainHeight = this.mainListHeight(title);
+      this.slitherCss = this.mainListHeight(title);
+      this.slitherCss.width = this.allReportNum + '00%';
       this.$prompt('正在加载...', 'send');
       let query = this.$route.query;
       let params = {};
@@ -326,13 +333,59 @@
       }
     },
     methods: {
+      // touch 左右切换
+      tapStart(event) {
+        for (let item of event.touches) {
+          this.startClientX = item.clientX;
+          this.endClientX = item.clientX;
+        }
+      },
+      tapMove(event) {
+        for (let item of event.touches) {
+          this.endClientX = item.clientX;
+        }
+      },
+      tapEnd() {
+        let start = this.startClientX;
+        let end = this.endClientX;
+        if (start - end > 66) {
+          if ((this.allReportNum - 1) > this.slither > 0) {
+            this.slither++;
+          }
+        }
+        if (start - end < -66) {
+          if (this.slither > 0) {
+            this.slither--;
+          }
+        }
+      },
+      // 获取电子合同
+      electronicContract() {
+        let data = {
+          city_id: this.form.community.city,
+          version: '1.1',
+          ticket: this.$refs.code.spot_code,
+        };
+        this.$httpZll.getElectronicContract(data).then(res => {
+          this.electronicContractNumber = res.data.number || '';
+        });
+      },
       // 获取银行名称
       getBankName() {
-        this.$httpZll.get(globalConfig.server_market + 'v1.0/market/helper/bank_name?card=6225212583158743&owner=贾少君').then(res => {
+        let params = {
+          card: '6225212583158743',
+          owner: '贾少君',
+        };
+        this.$httpZll.getBankNameAttestation(params).then(res => {
 
         })
       },
-
+      // 计算押金
+      countPrice() {
+        let bet = Number(this.form.pay_way_bet || 0);
+        let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
+        this.form.deposit = bet * price;
+      },
       // 日期计算
       listenInput(key) {
         let begin = this.form.begin_date;//合同开始日期
@@ -348,7 +401,7 @@
             break;
         }
       },
-      // 日期 计算
+      // 日期计算
       contractEnd(begin_date) {
         if (!begin_date) return;
         let begin = new Date(begin_date);//合同开始日期
@@ -451,32 +504,6 @@
         let change_end_date = this.form.pay_first_date;
         this.changeDateCount(change_end_date, this.form[key], key);
       },
-      // touch 左右切换
-      tapStart(event) {
-        for (let item of event.touches) {
-          this.startClientX = item.clientX;
-          this.endClientX = item.clientX;
-        }
-      },
-      tapMove(event) {
-        for (let item of event.touches) {
-          this.endClientX = item.clientX;
-        }
-      },
-      tapEnd() {
-        let start = this.startClientX;
-        let end = this.endClientX;
-        if (start - end > 66) {
-          if (3 > this.slither > 0) {
-            this.slither++;
-          }
-        }
-        if (start - end < -66) {
-          if (this.slither > 0) {
-            this.slither--;
-          }
-        }
-      },
       // // 员工搜索结果
       // getStaffInfo(val) {
       //   this.onCancel();
@@ -573,35 +600,54 @@
       // input 显示隐藏
       inputStatus(name, form) {
         if (name === 'is_agency' || name === 'is_electronic_contract') {
-          for (let slither of Object.keys(this.drawSlither)) {
-            for (let list of this.drawSlither[slither]) {
-              if (list.keyName) {
-                switch (name) {
-                  case 'is_electronic_contract':
-                    if (Number(form['is_electronic_contract']) === 0) {
-                      this.form.contract_number = 'LJSF';
-                    } else {
-                      this.form.contract_number = 'LJSFE';
-                    }
-                    break;
-                  case 'is_agency':
-                    if (list.keyName.includes('agency_')) {
-                      if (Number(form['is_agency']) === 0) {
-                        list.hidden = true;
-                        this.form[list.keyName] = list.keyType;
-                      } else {
-                        list.hidden = false;
-                      }
-                    }
-                    break;
+          switch (name) {
+            case 'is_electronic_contract':
+              let num = Number(form['is_electronic_contract']);
+              if (num === 0) {
+                this.contractDis();
+                this.form.contract_number = 'LJSF';
+              } else {
+                this.contractDis('disabled');
+                this.form.contract_number = this.electronicContractNumber;
+              }
+              break;
+            case 'is_agency':
+              this.emptyAgencyInfo(form);
+              break;
+          }
+        }
+        if (name === 'signatory_identity') {
+          this.showCustomer = Number(form[name]) === 2;
+        }
+      },
+      // 合同编号 禁用
+      contractDis(val = null) {
+        for (let slither of Object.keys(this.drawSlither)) {
+          for (let list of this.drawSlither[slither]) {
+            if (list.keyName) {
+              if (list.keyName === 'contract_number') {
+                list.disabled = val;
+              }
+            }
+          }
+        }
+      },
+      // 清空中介信息
+      emptyAgencyInfo(form) {
+        for (let slither of Object.keys(this.drawSlither)) {
+          for (let list of this.drawSlither[slither]) {
+            if (list.keyName) {
+              if (list.keyName.includes('agency_')) {
+                let num = Number(form['is_agency']);
+                if (num === 0) {
+                  list.hidden = true;
+                  this.form[list.keyName] = list.keyType;
+                } else {
+                  list.hidden = false;
                 }
               }
             }
           }
-          return;
-        }
-        if (name === 'signatory_identity') {
-          this.showCustomer = form[name] == 2;
         }
       },
       // 复选 非房东费用
@@ -653,6 +699,7 @@
       saveReport(val) {
         this.form.type = 1;
         this.form.is_draft = val;
+        // 重置 附属房东变化
         if (this.form.signatory_identity == 1) {
           this.resetChange('subsidiary_customer');
         }
@@ -663,7 +710,7 @@
             this.$httpZll.submitReport(this.form).then(res => {
               if (res) {
                 if (val === 1) {
-                  this.form.id = Number(res.data.id);
+                  this.form.id = res.data.id;
                 } else {
                   this.resetting();
                   this.$store.dispatch('approval_tabs', {tab: '2', status: false});
@@ -682,6 +729,7 @@
               if (res) {
                 this.resetting();
                 this.routerReplace('/approvalDetail', this.allDetails);
+                this.$rouer.go(-1);
               }
             });
             break;
@@ -691,12 +739,15 @@
       getDraft(params) {
         this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
+            this.handlePreFill(hhhhhhhhhhhh);
             this.getPunchClockData();
           } else {
             let res = data.data;
             this.form.id = '';//草稿ID
+            this.form = hhhhhhhhhhhh;
             this.handlePreFill(res);
           }
+          this.electronicContract();
         });
       },
       // 修改
@@ -711,7 +762,6 @@
       },
       // 获取待办信息
       getPunchClockData() {
-        // this.form = hhhhhhhhhhhh;
         if (!Object.keys(this.bulletinDetail).length) return;
         this.form.task_id = this.bulletinDetail.task_id;
         let res = this.bulletinDetail.content;
@@ -942,20 +992,10 @@
         @include radius(.06rem);
         background-color: rgba(255, 255, 255, .9);
         .transition {
-          width: 400%;
           @include transition(all .3s);
         }
         .slide0 {
           @include transform(translateX(0));
-        }
-        .slide1 {
-          @include transform(translateX(-25%));
-        }
-        .slide2 {
-          @include transform(translateX(-50%));
-        }
-        .slide3 {
-          @include transform(translateX(-75%));
         }
         .main {
           height: 100%;
@@ -966,6 +1006,30 @@
             text-align: center;
             padding: .2rem 0 .4rem;
           }
+        }
+      }
+      .mainRadius2 {
+        .slide1 {
+          @include transform(translateX(50%));
+        }
+      }
+      .mainRadius3 {
+        .slide1 {
+          @include transform(translateX(-33.33%));
+        }
+        .slide2 {
+          @include transform(translateX(-66.33%));
+        }
+      }
+      .mainRadius4 {
+        .slide1 {
+          @include transform(translateX(-25%));
+        }
+        .slide2 {
+          @include transform(translateX(-50%));
+        }
+        .slide3 {
+          @include transform(translateX(-75%));
         }
       }
       .payWayChange {

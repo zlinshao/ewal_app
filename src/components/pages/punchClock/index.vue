@@ -26,7 +26,7 @@
               <!--上传-->
               <div v-if="item.picker === 'upload' && item.value" class="uploadForm">
                 <div v-for="upload in item.value" class="flex">
-                  <Upload :file="upload" :getImg="formatData[upload.keyName]" @success="getImgData"></Upload>
+                  <Upload :file="upload" :getImg="album" @success="getImgData"></Upload>
                 </div>
               </div>
               <!--普通输入框-->
@@ -94,6 +94,7 @@
         form: {},                     //生成表单
         formatData: {},               //DOM显示数据
         showData: {},
+        album: {},
         drawSlither: [              //表单数据
           {
             label: '打卡时间',
@@ -173,7 +174,7 @@
       this.postForm = {};
       this.postForm.task_id = query.task_id;
       this.postForm.flow_type = query.flow_type;
-      this.postForm.process_id = query.process_id;
+      this.postForm.process_id = query.root_id;
       this.villageDetail(api);
     },
     watch: {},
@@ -313,9 +314,7 @@
       },
       // 图片ids
       getImgData(val) {
-        console.log(val);
         this.form[val[0]] = val[1];
-        console.log(this.form);
       },
       // 初始化数据
       resetting() {

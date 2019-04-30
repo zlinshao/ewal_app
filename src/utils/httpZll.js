@@ -12,6 +12,7 @@ let url_code = globalConfig.server_code;//报备标识码
 let market = globalConfig.server_market; //报备
 let url_hr = globalConfig.server_hr;//人资组织机构
 let url_done = globalConfig.server_done;//小飞 待办
+let url_identity = globalConfig.server_identity;//身份认证 / 电子合同编号（马国明）
 
 class httpZll extends httpService {
 
@@ -131,15 +132,14 @@ class httpZll extends httpService {
     let params = {
       search: val,
       org_id: '',
-      limit: 9999,
     };
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}staff/user`, params, 'prompt').then(res => {
         if (res.code.endsWith('0')) {
           resolve(res);
         } else {
-          resolve(false);
           $httpPrompt(res.message);
+          resolve(false);
         }
       });
     });
@@ -187,10 +187,8 @@ class httpZll extends httpService {
   // 获取 所有待办列表
   static getToBeDoneListApi(url, data) {
     let params = {
-      title: '',
-      page: 1,
       size: 12,
-      assignee: '69',//登陆人
+      // assignee: '69',//登陆人
     };
     for (let key of Object.keys(data)) {
       params[key] = data[key]
@@ -205,16 +203,13 @@ class httpZll extends httpService {
   // 获取 报备待办列表
   static getToBeDoneApi(taskKey = {}, tenant = 'market') {
     let params = {
-      title: '',
-      page: 1,
       size: 12,
       tenantId: tenant,
-      assignee: '69',//登陆人
-      // taskDefinitionKeyIn: 'CollectTakeLook,InputBulletinData,SignEC',
-      taskDefinitionKeySuffix: 'CollectTakeLook-TODO01',
+      // assignee: '69',//登陆人
+      order: 'desc',
+      taskDefinitionKeySuffix: 'TODO01',
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
-      order: 'desc',
     };
     for (let key of Object.keys(taskKey)) {
       params[key] = taskKey[key]
@@ -275,6 +270,35 @@ class httpZll extends httpService {
     })
   }
 
+  // 银行名称认证
+  static getBankNameAttestation(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/helper/bank_name`, params, '', 'close').then((res) => {
+        if (Number(res.code) === 200) {
+          resolve(res);
+        } else {
+          $httpPrompt(res.msg);
+          resolve(false);
+        }
+      })
+    })
+
+  }
+
+  // 获取电子合同编号
+  static getElectronicContract(data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_identity}fdd/number/take`, data, '', 'close').then((res) => {
+        if (res.code === '20000') {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
   // 报备唯一标识码
   static bulletinCode = function (code) {
     return new Promise((resolve, reject) => {
@@ -307,7 +331,7 @@ class httpZll extends httpService {
   // 收房报备 修改
   static putReviseReport(task_id, data) {
     return new Promise((resolve, reject) => {
-      this.put(`${market}v1.0/market/bulletin/${task_id}to=collect`, data, 'prompt').then(res => {
+      this.put(`${market}v1.0/market/bulletin/${task_id}?to=collect`, data, 'prompt').then(res => {
         if (Number(res.code) === 200) {
           resolve(res);
           $httpPrompt(res.message, 'success');

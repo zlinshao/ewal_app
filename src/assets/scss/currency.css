@@ -281,6 +281,7 @@
   bottom: 0;
   height: 1.8rem;
   width: 100%;
+  z-index: 6;
   padding: .15rem .4rem;
   display: flex;
   display: -webkit-flex;

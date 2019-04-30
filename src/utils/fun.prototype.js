@@ -112,7 +112,8 @@ export default {
         let obj = {};
         obj.name = item.name;
         obj.task_id = item.id;
-        obj.process_id = item.rootProcessInstanceId;
+        obj.root_id = item.rootProcessInstanceId;
+        obj.process_id = item.processInstanceId;
         for (let key of item.variables) {
           if (task.includes(key.name)) {
             obj[key.name] = key.value;
