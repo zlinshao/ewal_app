@@ -1,6 +1,6 @@
 <template>
   <div id="contract">
-    <div class="top-search flex-center" ref="topSearch">
+    <div class="top-search" ref="topSearch">
       <div class="searchInput">
         <div class="input">
           <p @click="show_btn = !show_btn">
@@ -8,10 +8,10 @@
             <i></i>
           </p>
           <div>
-            <input type="text" placeholder="请输入搜索内容" v-model="params.search" @keyup.enter="onSearch()">
+            <input type="text" placeholder="请输入搜索内容" v-model="params.search">
             <span v-if="params.search" @click="params.search = ''"></span>
           </div>
-          <p class="searchBtn" @click="onSearch()">搜索</p>
+          <p class="searchBtn" @click="onSearch">搜索</p>
         </div>
         <div class="chooseBtn" v-if="show_btn">
           <p v-for="item in contract_type_list" @click="chooseClickType(item)">
@@ -19,11 +19,41 @@
           </p>
         </div>
       </div>
+      <div class="search-type flex-center">
+          <span v-for="tmp in filter_list" :key="tmp.id" @click="handleFilterContract(tmp)">
+            {{ tmp.val }}
+            <van-icon name="arrow-down"></van-icon>
+          </span>
+      </div>
     </div>
+    <ExpandContainer :offset-top="offset_top">
+      <div v-if="current_filter === 1" class="house-type">
+        <h4>合同状态</h4>
+        <div class="chooseBtn">
+          <p v-for="item in status_list" @click="chooseHouseProperty(item,'remaining')">
+            <b :class="{'choose': params.remaining === item.id }">{{ item.val }}</b>
+          </p>
+        </div>
+        <h4>合同剩余时长</h4>
+        <div class="chooseBtn">
+          <p v-for="item in remaining_list" @click="chooseHouseProperty(item,'status')">
+            <b :class="{'choose': params.status === item.id }">{{ item.val }}</b>
+          </p>
+        </div>
+        <div class="commonBtn radioChecksFoot">
+          <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type)">
+            {{item.label}}
+          </p>
+        </div>
+      </div>
+      <div v-if="current_filter === 2" class="house-type">
+        <StaffDepartSearch :visible="staff_depart_visible" @close="handleGetInfo"></StaffDepartSearch>
+      </div>
+    </ExpandContainer>
     <div class="main-content" ref="mainContent" :style="mainHeight">
       <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
-        <div class="contract-item" v-for="(item,key) in contract_list" :key="key">
-          <a class="status">生效中</a>
+        <div class="contract-item" v-for="(item,key) in contract_list" :key="key" @click="handleGoDetail(item)">
+          <a class="status" :class="['status' + item.is_effective ]">{{ item.is_effective === 1 ? '生效中' : item.is_effective === 2 ? '快到期' : item.is_effective === 3 ? '已过期' : '已结束'}}</a>
           <h2>
             <a class="type-icon icon-collect" v-if="params.contract_type === 1">收</a>
             <a class="type-icon icon-rent" v-if="params.contract_type === 2">租</a>
@@ -56,10 +86,34 @@
 </template>
 
 <script>
+  import ExpandContainer from '../houseResource/expand-container.vue';
+  import StaffDepartSearch from '../../common/staff-depart-search.vue';
+
   export default {
     name: "index",
+    components: { ExpandContainer ,StaffDepartSearch},
     data() {
       return {
+        staff_depart_visible: false,
+
+        buttons: [
+          {
+            label: '重置',
+            type: 'reset'
+          },
+          {
+            label: '确定',
+            type: 'confirm'
+          },
+        ],
+        //房屋筛选
+        filter_list: [
+          {id: 1,val: '合同搜索'},
+          {id: 2,val: '员工部门'},
+        ],
+        current_filter: '',
+        offset_top: 0,
+
         contract_type_list: [
           {id: 1,val: '收房'},
           {id: 2,val: '租房'},
@@ -69,8 +123,25 @@
           limit: 12,
           contract_type: 1,
           contract_txt: '收房',
-          search: ''
+          search: '',
+          status: '',
+          remaining: '',
+          signer: [],
+          org: []
         },
+        status_list: [
+          {id: 0,val: '不限'},
+          {id: 1,val: '生效中'},
+          {id: 2,val: '快到期'},
+          {id: 3,val: '已过期'},
+          {id: 4,val: '已结束'},
+        ],
+        remaining_list: [
+          {id: 0,val: '不限'},
+          {id: 1,val: '一年以下'},
+          {id: 2,val: '1-2年'},
+          {id: 3,val: '2年以上'},
+        ],
         show_btn: false,
         mainHeight: {
           height: 0
@@ -89,6 +160,57 @@
     watch: {},
     computed: {},
     methods: {
+      //合同详情
+      handleGoDetail(item) {
+        this.routerLink('/contract_detail');
+      },
+      handleGetInfo(val,type) {
+        console.log(val,type);
+        if (val !== 'close') {
+          switch (type) {
+            case 'staff':
+              this.params.signer = [];
+              for (var staff of val) {
+                this.params.signer.push(staff.id);
+              }
+              break;
+            case 'depart':
+              this.params.org = [];
+              for (var depart of val) {
+                this.params.org.push(depart.id);
+                break;
+              }
+          }
+          this.contract_list = [];
+          this.handleGetContractList();
+        }
+        this.offset_top = 0;
+        this.current_filter = '';
+        this.staff_depart_visible = false;
+      },
+      searchBtn(type) {
+        switch (type) {
+          case 'reset':
+            this.params.status = '';
+            this.params.remaining = '';
+            break;
+          case 'confirm':
+            this.contract_list = [];
+            this.handleGetContractList();
+            this.offset_top = '';
+            this.current_filter = '';
+            break;
+        }
+      },
+      //选择
+      chooseHouseProperty(item,type) {
+        this.params[type] = item.id;
+      },
+      //房屋筛选
+      handleFilterContract(tmp) {
+        this.offset_top = this.current_filter === tmp.id ? 0 : 123;
+        this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
+      },
       handleGetContractList() {
         this.fullLoading = true;
         this.$httpHs.ContractList(this.params,'加载中...').then(res => {
@@ -112,11 +234,16 @@
         }
       },
       onSearch() {
+        this.contract_list = [];
         this.show_btn = false;
+        this.handleGetContractList();
       },
       chooseClickType(item) {
         this.params.contract_type = item.id;
         this.params.contract_txt = item.val;
+        this.show_btn = false;
+        this.contract_list = [];
+        this.handleGetContractList();
       },
     },
   }
@@ -133,6 +260,56 @@
       .searchInput {
         padding:0 .3rem;
         margin-top: .1rem;
+      }
+      .search-type {
+        text-align: center;
+        border-top: 1px solid #F4F4F4;
+        margin-top: 10px;
+        padding: .2rem .3rem 0 .3rem;
+        span {
+          width: 100%;
+          .van-icon {
+            vertical-align: middle;
+            font-size: 12px;
+          }
+          &:not(:last-child) {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+    .chooseBtn {
+      @include flex('items-center');
+      flex-wrap: wrap;
+      p {
+        margin-top: .2rem;
+        padding: 0 .1rem;
+        width: 25%;
+        @include flex('flex-center');
+        b {
+          width: 100%;
+          padding: .2rem 0;
+          text-align: center;
+          @include radius(1rem);
+          background-color: #EEEDEE;
+        }
+        div.van-cell,div.van-field {
+          width: 100%;
+          padding: .1rem 0;
+          padding-left: .2rem;
+          text-align: center;
+          @include radius(1rem);
+          background-color: #EEEDEE;
+        }
+        .choose {
+          background-color: rgba(69, 112, 254, .1);
+          color: #4570FE;
+        }
+      }
+    }
+    .house-type {
+      > div {
+        margin-bottom: 10px;
       }
     }
     .main-content {
@@ -151,13 +328,27 @@
           position: absolute;
           top: .2rem;
           right: 0;
-          background-color: #E5F0D9;
           min-width: 1.5rem;
           padding: .1rem .15rem;
           border-radius: .1rem 0 0 .1rem;
           text-align: center;
-          color: #84B74F;
           font-size: .25rem;
+        }
+        a.status1 {
+          color: #84B74F;
+          background-color: #E5F0D9;
+        }
+        a.status2 {
+          color: #FEA434;
+          background-color: #FFE9CE;
+        }
+        a.status3 {
+          color: #A7A7A7;
+          background-color: #E6E6E6;
+        }
+        a.status4 {
+          color: #F66E44;
+          background-color: #FDDCD2;
         }
         a.type-icon {
           width: 8pt;

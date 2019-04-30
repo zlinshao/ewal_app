@@ -81,27 +81,7 @@
             </div>
           </div>
           <div v-if="current_filter === 3" class="house-type">
-            <div class="searchInput">
-              <div class="input">
-                <p @click="depart_staff_visible = !depart_staff_visible">
-                  {{ staff_depart.name }}
-                  <i></i>
-                </p>
-                <div>
-                  <input type="text" placeholder="请输入搜索内容" v-model="staff_depart.search">
-                  <span v-if="staff_depart.search" @click="staff_depart.search = ''"></span>
-                </div>
-                <p class="searchBtn" @click="handleSearch">搜索</p>
-              </div>
-              <div class="chooseBtn" v-if="depart_staff_visible">
-                <p v-for="item in staff_depart_list" @click="chooseSearch(item)">
-                  <b :class="{'choose': staff_depart.current_choose === item.id}">{{item.val}}</b>
-                </p>
-              </div>
-            </div>
-            <div>
-              ...
-            </div>
+            <StaffDepartSearch :visible="staff_depart_visible" @close="handleGetStaffDepartInfo"></StaffDepartSearch>
           </div>
           <div v-if="current_filter === 4" class="house-type">
             <h4>房屋剩余时长</h4>
@@ -162,11 +142,11 @@
             <div class="rightInfo">
               <h2>{{ item.name }} <a class="notice" :class="['notice' + item.warning_status]"></a></h2>
               <div class="info flex">
-                <a>{{ item.area }}㎡</a><i v-if="item.area"></i>
+                <a>{{ item.area || 0}}㎡</a><i></i>
                 <a>{{ item.floor && item.floor.this || 0 }}/{{ item.floor && item.floor.all || 0 }}</a><i></i>
-                <a>{{ item.hk }}</a><i v-if="item.hk"></i>
-                <a>{{ item.direction && item.direction.name || '/'}}</a><i></i>
-                <a>{{ item.decorate }}</a>
+                <a>{{ item.hk || '/'}}</a><i></i>
+                <a>{{ item.house_toward || '/'}}</a><i></i>
+                <a>{{ item.decorate || '/'}}</a>
               </div>
               <div class="flex tag">
                 <a class="tag1">余{{ item.remaining_rent_days }}天</a>
@@ -196,22 +176,14 @@
 
 <script>
   import ExpandContainer from './expand-container.vue';
+  import StaffDepartSearch from '../../common/staff-depart-search.vue';
 
   export default {
     name: "index",
-    components: { ExpandContainer },
+    components: { ExpandContainer ,StaffDepartSearch},
     data() {
       return {
-        staff_depart: {
-          name: '员工',
-          current_choose: 1,
-          search: '',
-        },
-        depart_staff_visible: false,
-        staff_depart_list: [
-          {id: 1,val: '员工'},
-          {id: 2,val: '部门'},
-        ],
+        staff_depart_visible: false, //员工部门选择
 
         buttons: [
           {
@@ -310,7 +282,9 @@
           rent_days: [], //剩余时长
           warning_status: [], //预警
           rent_price: [],
-          kong: []
+          kong: [], //空置天数
+          is_org_user: 0,
+          org_user_id: []
         },
         house_list: [], //房屋列表
       }
@@ -332,13 +306,18 @@
     watch: {},
     computed: {},
     methods: {
-      chooseSearch(item) {
-        this.staff_depart.current_choose = item.id;
-        this.staff_depart.name = item.val;
-        this.depart_staff_visible = false;
-      },
-      handleSearch() {
-        console.log(this.staff_depart);
+      handleGetStaffDepartInfo(val,type) {
+        if (val !== 'close') {
+          this.params.org_user_id = [];
+          this.params.is_org_user = type === 'staff' ? 2 : 1;
+          for (var item of val) {
+            this.params.org_user_id.push(item.id);
+          }
+          this.handleGetHouseResource();
+        }
+        this.staff_depart_visible = false;
+        this.offset_top = 0;
+        this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
       },
       handleKongBottom(val) {
         this.params.kong[0] = val;
@@ -419,6 +398,7 @@
       //搜索
       onSearch() {
         this.offset_top = 0;
+        this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
         this.house_list = [];
         this.handleGetHouseResource(this.params);
       },
@@ -426,7 +406,6 @@
       handleGetHouseResource() {
         this.fullLoading = true;
         this.$httpZll.get(this.server + 'v1.0/market/house',this.params,'加载中...').then(res => {
-          console.log(res);
           this.fullLoading = false;
           if (res.code === 200) {
             for (var item of res.data.data) {
@@ -453,13 +432,9 @@
       },
       //房屋筛选
       handleFilterHouse(tmp) {
-        console.log(tmp);
         this.offset_top = this.current_filter === tmp.id ? 0 : 117;
         this.filter_list[tmp.id - 1].active = this.offset_top <= 0;
-        switch (tmp.id) {
-          case 1:
-            break;
-        }
+        this.staff_depart_visible = tmp.id === 3;
         this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
       },
       // 选择城市

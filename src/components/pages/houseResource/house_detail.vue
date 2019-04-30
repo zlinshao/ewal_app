@@ -156,7 +156,7 @@
     computed: {},
     methods: {
       handleLookPics(detail) {
-        this.routerLink('/houseImage');
+        this.routerLink('/house_image');
       },
       handleGoContract() {
         this.routerLink('/houseContract',this.$route.query);
