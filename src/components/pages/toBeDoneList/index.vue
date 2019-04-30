@@ -1,5 +1,8 @@
 <template>
   <div id="toBeDoneList">
+    <!--<div style="position: fixed;top: 0;bottom: 8rem;left: 0;right: 0;z-index: 1;" class="justify-around">-->
+    <!--<div v-for="item in 3" style="height: 100%;border-left: 1px solid #000;"></div>-->
+    <!--</div>-->
     <div>
       <div class="listTop" ref="listTop" @dblclick="goToTop">
         <div>
@@ -164,7 +167,7 @@
           params2: {
             title: '',
             page: 1,
-            finished: true,
+            // finished: true,
           },
         },
         // 总条数
@@ -294,6 +297,7 @@
         //是否去签约
         goSignModule: false,
         moduleDetail: {},
+        path: '',
       }
     },
     created() {
@@ -305,8 +309,9 @@
     activated() {
       let listTop = this.$refs.listTop.offsetHeight;
       this.mainHeight = this.mainListHeight(listTop);
-      let tab = this.tabs || '1';
-      this.params['params' + tab].page = 1;
+      this.path = this.$route.query.path || '';
+      let tab = this.tabs;
+      this.close_(tab);
       this.getFinishList(tab);
     },
     watch: {},
@@ -329,6 +334,11 @@
         // this.params['params' + val].page = 1;
         // this.getFinishList(val);
       },
+      // 清空 列表
+      close_(tab) {
+        this.params['params' + tab].page = 1;
+        this.finishList['list' + tab] = [];
+      },
       // 滚动加载
       scrollLoad(val) {
         let tab = this.tabs;
@@ -345,7 +355,8 @@
       getFinishList(tab) {
         this.fullLoading['load' + tab] = true;
         let params = this.params['params' + tab];
-        let url = tab === '1' ? 'runtime/tasks' : 'history/tasks';
+        // let url = tab === '1' ? 'runtime/tasks' : 'history/tasks';
+        let url = 'runtime/tasks';
         this.$httpZll.getToBeDoneListApi(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
           this.total['total' + tab] = res.total || 0;
@@ -376,6 +387,23 @@
             this.moduleDetail = val;
             break;
         }
+      },
+      // 下个任务
+      nextTask(id) {
+        let params = {
+          taskDefinitionKey: 'InputBulletinData-TODO01',
+          rootProcessInstanceId: id,
+        };
+        this.$httpZll.getNewTaskId(params).then(res => {
+          // if (!res.data.length) {
+          //   this.$prompt('未找到签约信息,请联系产品经理！');
+          //   return;
+          // }
+          // this.allDetail.task_id = res.data[0].id;
+          // this.$store.dispatch('bulletin_draft', this.allDetail);
+          // this.routerReplace('/collectReport');
+          // this.$emit('close');
+        });
       },
       // 是否签约
       hiddenGoSign(val) {
@@ -428,7 +456,10 @@
       footerTag(val) {
         switch (val) {
           case 1:
-            this.routerLink('/index');
+            this.routerReplace('/index');
+            if (this.path === 'index') {
+              this.$router.go(-1);
+            }
             break;
         }
       },

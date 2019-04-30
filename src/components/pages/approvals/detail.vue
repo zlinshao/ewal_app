@@ -77,7 +77,7 @@
         <p>
           <i v-for="(i,idx) in 4" :class="{'hover': idx === slither}"></i>
         </p>
-        <div>
+        <div v-if="operates.variableName">
           <h1 v-for="(item,idx) in operates.outcomeOptions" class="btn" :class="item.route || ''"
               @click="clickBtn(operates.variableName, item)">
             <span class="writingMode">{{item.title}}</span>
@@ -206,6 +206,8 @@
     methods: {
       // 获取操作按钮
       getOperates(query) {
+        this.operates = [];
+        if (!query.outcome) return;
         this.operates = JSON.parse(query.outcome);
         let btn = [
           {
@@ -253,7 +255,7 @@
             postData.variables.push(data);
             postData.action = 'complete';
             this.$httpZll.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
-              this.routerReplace('/approvals', {tabs: '1'});
+              this.$router.go(-1);
             });
             break;
         }
@@ -323,10 +325,11 @@
       },
       // 获取详情数据
       approvalDetail(url) {
+        this.formatData = {};
         this.$httpZll.getApprovalDetail(url).then(res => {
           if (res) {
             this.formatData = res.data.content;
-            this.handleDetail(res.data.content)
+            this.handleDetail(res.data.content);
           }
         })
       },
@@ -621,7 +624,6 @@
       }
       .operates {
         overflow: hidden;
-        height: 2.8rem;
         @include flex('bet-column');
         border-top: 1px dashed #C6CAD8;
         p {
@@ -640,7 +642,7 @@
           }
         }
         div {
-          height: 100%;
+          height: 2.6rem;
           padding: 0 .8rem;
           margin-bottom: -.6rem;
           @include flex('justify-around');
@@ -714,7 +716,7 @@
     }
     /*评论弹窗*/
     .commentPopup {
-      padding: .3rem;
+      padding: .42rem .3rem .3rem;
       @include radius(.1rem);
       @include flex('bet-column');
       h1 {

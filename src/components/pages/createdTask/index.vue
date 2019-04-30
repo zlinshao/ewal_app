@@ -414,6 +414,17 @@
           // 保洁任务
           HouseCleaning: [
             {
+              label: '房屋地址',
+              placeholder: '必填 请选择',
+              readonly: 'readonly',
+              keyName: 'house_id',
+              keyType: '',
+              type: 'text',
+              picker: 'searchHouse',
+              showForm: 'formatData',//picker 显示form 或 formatData
+              slot: '',
+            },
+            {
               label: '保洁时间',
               placeholder: '必填 请选择',
               readonly: 'readonly',
@@ -425,55 +436,35 @@
               slot: '',
             },
             {
-              label: '带看地址',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'house_id',
-              keyType: '',
-              type: 'text',
-              picker: 'searchHouse',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '维修内容',
+              label: '保洁内容',
               placeholder: '必填 请输入',
               keyName: 'repair_item',
               keyType: '',
-              type: 'text',
+              type: 'textarea',
               status: '',
               slot: '',
             },
             {
-              label: '客户电话',
-              placeholder: '必填 请输入',
-              keyName: 'contact_phone',
-              keyType: '',
-              type: 'text',
-              status: '',
-              slot: '',
-            },
-            {
-              label: '带看人',
+              label: '处理人',
               placeholder: '必填 请选择',
               readonly: 'readonly',
-              keyName: 'take_peoples',
-              keyType: [],
+              keyName: 'cleaning_type',
+              keyType: '',
               type: 'text',
-              status: '',
-              picker: 'searchStaff',
+              status: 'objInt',
+              picker: 'picker',
               showForm: 'formatData',//picker 显示form 或 formatData
               slot: '',
             },
             {
-              label: '主带看人',
+              label: '任务接收人',
               placeholder: '必填 请选择',
               readonly: 'readonly',
-              keyName: 'primary',
-              keyType: [],
+              keyName: 'receive_id',
+              keyType: '',
               type: 'text',
-              status: 'objInt',
-              picker: 'picker',
+              status: '',
+              picker: 'searchStaff',
               showForm: 'formatData',//picker 显示form 或 formatData
               slot: '',
             },
@@ -492,6 +483,17 @@
           // 维修任务
           HouseRepair: [
             {
+              label: '房屋地址',
+              placeholder: '必填 请选择',
+              readonly: 'readonly',
+              keyName: 'house_id',
+              keyType: '',
+              type: 'text',
+              picker: 'searchHouse',
+              showForm: 'formatData',//picker 显示form 或 formatData
+              slot: '',
+            },
+            {
               label: '维修时间',
               placeholder: '必填 请选择',
               readonly: 'readonly',
@@ -503,55 +505,35 @@
               slot: '',
             },
             {
-              label: '带看地址',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'house_id',
-              keyType: '',
-              type: 'text',
-              picker: 'searchHouse',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
               label: '维修内容',
               placeholder: '必填 请输入',
               keyName: 'repair_item',
               keyType: '',
-              type: 'text',
+              type: 'textarea',
               status: '',
               slot: '',
             },
             {
-              label: '客户电话',
-              placeholder: '必填 请输入',
-              keyName: 'contact_phone',
-              keyType: '',
-              type: 'text',
-              status: '',
-              slot: '',
-            },
-            {
-              label: '带看人',
+              label: '处理人',
               placeholder: '必填 请选择',
               readonly: 'readonly',
-              keyName: 'take_peoples',
-              keyType: [],
+              keyName: 'repair_type',
+              keyType: '',
               type: 'text',
-              status: '',
-              picker: 'searchStaff',
+              status: 'objInt',
+              picker: 'picker',
               showForm: 'formatData',//picker 显示form 或 formatData
               slot: '',
             },
             {
-              label: '主带看人',
+              label: '任务接收人',
               placeholder: '必填 请选择',
               readonly: 'readonly',
-              keyName: 'primary',
-              keyType: [],
+              keyName: 'receive_id',
+              keyType: '',
               type: 'text',
-              status: 'objInt',
-              picker: 'picker',
+              status: '',
+              picker: 'searchStaff',
               showForm: 'formatData',//picker 显示form 或 formatData
               slot: '',
             },
@@ -568,12 +550,8 @@
             },
           ],
         },
-        searchStaffModule: false,       //员工搜索
-        staffConfig: {                  //员工搜索 配置
-          num: 3,
-          preFill: [],
-          keys: 'take_peoples',
-        },
+        searchStaffModule: false,//员工搜索
+        staffConfig: {},//员工搜索 配置
         // 小区搜索
         searchVillageModule: false,
         // 搜索房屋
@@ -673,9 +651,17 @@
               }
             }
           } else {
-            for (let key of Object.keys(val)) {
-              this.form[key] = val[key];
+            switch (this.postName) {
+              case 'HouseCleaning':
+              case 'HouseRepair':
+                this.form.receive_id = val.staff_id;
+                this.formatData.receive_id = val.staff_name;
+                break;
+
             }
+            // for (let key of Object.keys(val)) {
+            //   this.form[key] = val[key];
+            // }
           }
         }
       },
@@ -736,11 +722,15 @@
         this.form = all.form;
         this.formatData = all.formatData;
         this.album = all.album;
-        this.staffConfig = {//员工搜索 配置
-          num: 3,
-          preFill: [],
-          keys: 'take_peoples',
-        };
+        if (this.postName === 'CollectTakeLook' || this.postName === 'RentTakeLook') {
+          this.staffConfig = {//员工搜索 配置
+            num: 3,
+            preFill: [],
+            keys: 'take_peoples',
+          };
+        } else {
+          this.staffConfig = null;
+        }
         this.form.primary = 69;
         this.form.take_peoples = [69];
         this.form = {

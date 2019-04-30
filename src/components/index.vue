@@ -139,17 +139,17 @@
     methods: {
       // 头部
       topTabsTag(url) {
-        let tabs = {};
-        tabs.tab = '3';
-        tabs.status = 0;
-        this.$store.dispatch('approval_tabs', tabs);
+        // let tabs = {};
+        // tabs.tab = '1';
+        // tabs.status = 0;
+        // this.$store.dispatch('approval_tabs', tabs);
         this.routerLink(url);
       },
       // 底部
       bottomTabsTag(val) {
         switch (val) {
           case '4':
-            this.routerLink('/toBeDoneList');
+            this.routerLink('/toBeDoneList', {path: 'index'});
             break;
           case '3':
             this.routerLink('/houseResource');

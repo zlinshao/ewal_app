@@ -71,7 +71,7 @@
           btn = 'no';
         }
         console.log(val);
-        this.getVillageDetail(val.rtl_detail_request_url, btn);
+        this.getVillageDetail(val.ctl_detail_request_url, btn);
       },
       popupModule(val) {
         if (!val) {
@@ -95,11 +95,11 @@
           } else {
             let params = {
               taskDefinitionKey: 'InputBulletinData-TODO01',
-              rootProcessInstanceId: this.allDetail.process_id,
+              rootProcessInstanceId: this.allDetail.root_id,
             };
             this.$httpZll.getNewTaskId(params).then(res => {
               if (!res.data.length) {
-                this.$prompt('未找到签约信息,请联系产品经理！');
+                this.$prompt('未找到签约信息！');
                 return;
               }
               this.allDetail.task_id = res.data[0].id;

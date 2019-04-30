@@ -52,6 +52,18 @@ class httpHs extends httpService {
       })
     })
   }
+
+  //部门列表
+  static getOrganization({parent_id,search}, status) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_hr}organization/organization`, {
+        parent_id,
+        search
+      }, status).then(res => {
+        resolve(res);
+      });
+    });
+  }
 }
 
 export default httpHs

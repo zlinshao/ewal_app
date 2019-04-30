@@ -145,6 +145,7 @@
         server: globalConfig.server_market,
         detail: '',
         mainHeight: '',
+        map: null
       }
     },
     mounted() {
@@ -155,8 +156,31 @@
     watch: {},
     computed: {},
     methods: {
+      handleInitialMap(position = [],name = '') {
+        let that = this;
+        this.map = new AMap.Map('map-container', {
+          resizeEnable: true,
+          center: position, //初始化地图中心点
+          zoom: 13
+        });
+        let infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(5, -20)});
+        var marker = new AMap.Marker({
+          position,
+          map: that.map
+        });
+        marker.content = name;
+        marker.on('click',markerClick);
+        marker.emit('click',{target: marker});
+        this.map.add(marker);
+        function markerClick(e) {
+          infoWindow.setContent(e.target.content);
+          infoWindow.open(that.map, e.target.getPosition());
+        }
+      },
       handleLookPics(detail) {
-        this.routerLink('/houseImage');
+        this.routerLink('/house_image',{
+          image: JSON.stringify(detail.album_photo)
+        });
       },
       handleGoContract() {
         this.routerLink('/houseContract',this.$route.query);
@@ -172,6 +196,12 @@
         this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`,{},'获取中...').then(res => {
           if (res.code === 200) {
             this.detail = res.data;
+            var location = [];
+            location[0] = this.detail.location && this.detail.location.longitude;
+            location[1] = this.detail.location && this.detail.location.latitude;
+            this.$nextTick(() => {
+              this.handleInitialMap(location,this.detail.house_name);
+            })
           } else {
             this.house_detail = '';
           }
@@ -318,7 +348,6 @@
             }
             #map-container {
               min-height: 200px;
-              background-color: #9B9B9B;
               border-radius: 10px;
               margin: .2rem 0;
             }

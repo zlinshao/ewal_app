@@ -123,12 +123,12 @@
         modules: [
           {
             id: '1',
-            icon: icon_wofaqide,
-            text: '我发起的',
-          }, {
-            id: '2',
             icon: icon_woshenpide,
             text: '我审批的',
+          }, {
+            id: '2',
+            icon: icon_wofaqide,
+            text: '我发起的',
           }, {
             id: '3',
             icon: icon_lishidaikan,
@@ -171,6 +171,7 @@
       })
     },
     activated() {
+      this.getToDoneType();
       this.onSearch();
     },
     watch: {
@@ -180,6 +181,18 @@
     },
     computed: {},
     methods: {
+      // 待办类型
+      getToDoneType() {
+        let query = this.$route.query;
+        switch (query.type) {
+          case 'nweCollect':
+
+            break;
+          case 'nweRent':
+
+            break;
+        }
+      },
       // 滚动加载
       scrollLoad(val) {
         if (!val) {
@@ -197,7 +210,7 @@
         this.toBeDoneList = [];
         this.getToBeDoneList(this.params);
       },
-      // 待办  历史带看
+      // 待办列表
       getToBeDoneList(val) {
         this.fullLoading = true;
         this.$httpZll.getToBeDoneApi(val).then(res => {
@@ -239,6 +252,14 @@
       tabsTag(val) {
         this.tabsModule = false;
         switch (val) {
+          case '1'://我发起的
+          case '2':// 我审批的
+            let tabs = {};
+            tabs.tab = val;
+            tabs.status = 0;
+            this.$store.dispatch('approval_tabs', tabs);
+            this.routerLink('/approvals');
+            break;
           case '3':// 历史带看
             this.$store.dispatch('done_tabs', '2');
             this.routerLink('/toBeDoneList');

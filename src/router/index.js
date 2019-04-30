@@ -23,6 +23,7 @@ import HouseImage from '@/components/pages/houseResource/house_image.vue';
 
 //合同管理
 import Contract from '@/components/pages/contract/index.vue';
+import ContractDetail from '@/components/pages/contract/contract-detail.vue';
 
 //问卷调查
 import Questionnaire from '@/components/pages/questionnaire/index.vue';
@@ -140,7 +141,7 @@ export default new Router({
       meta: {title: '房屋合同', index: 10}
     },
     {
-      path: '/houseImage',
+      path: '/house_image',
       name: '房屋照片',
       component: HouseImage,
       meta: {title: '房屋照片', index: 11}
@@ -150,6 +151,12 @@ export default new Router({
       name: '合同管理',
       component: Contract,
       meta: {title: '合同管理', index: 12}
+    },
+    {
+      path: '/contract_detail',
+      name: '合同详情',
+      component: ContractDetail,
+      meta: {title: '合同详情', index: 13}
     },
     {/*问卷调查*/
       path:'/questionnaire',
