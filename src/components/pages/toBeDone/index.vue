@@ -31,7 +31,15 @@
               <i><img :src="changeOperates[item.task_action]"></i>
               <span>{{item.task_title}}</span>
             </p>
-            <p v-else></p>
+            <p v-for="btn in item.outcome" v-if="item.outcome" @click="clickBtn(btn,item.task_id)">
+              <i><img :src="changeOperates[item.task_action]"></i>
+              <span>{{btn.title}}</span>
+              <!--<h1 v-for="(item,idx) in operates.outcomeOptions" class="btn" :class="item.route || ''"-->
+              <!--@click="clickBtn(operates.variableName, item)">-->
+              <!--<span class="writingMode">{{item.title}}</span>-->
+              <!--</h1>-->
+
+            </p>
           </div>
         </li>
         <li class="noMore" v-if="toBeDoneList.length === paging && toBeDoneList.length > 4">
@@ -160,6 +168,7 @@
         },
         toBeDoneList: [],
         detail_request_url: '',
+        variableName: '',
       }
     },
     created() {
@@ -181,6 +190,18 @@
     },
     computed: {},
     methods: {
+      // 变更 签署
+      clickBtn(action = {},task_id) {
+        let data = {}, postData = {};
+        postData.variables = [];
+        data.name = this.variableName;
+        data.value = action.action;
+        postData.variables.push(data);
+        postData.action = 'complete';
+        this.$httpZll.finishBeforeTask(task_id, postData).then(_ => {
+          this.onSearch();
+        });
+      },
       // 待办类型
       getToDoneType() {
         let query = this.$route.query;
@@ -189,7 +210,6 @@
 
             break;
           case 'nweRent':
-
             break;
         }
       },
@@ -218,6 +238,13 @@
           this.paging = res.total;
           let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome'];
           let data = this.groupHandlerListData(res.data, task);
+          for (let btn of data) {
+            if (btn.outcome) {
+              let outcome = JSON.parse(btn.outcome);
+              btn.outcome = outcome.outcomeOptions;
+              this.variableName = outcome.variableName;
+            }
+          }
           if (this.params.page === 1) {
             this.toBeDoneList = data;
           } else {
