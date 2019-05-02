@@ -1,6 +1,6 @@
 <template>
   <div id="house_property">
-    <div class="scroll_bar" :style="mainHeight">
+    <div class="scroll_bar" ref="mainContainer" :style="mainHeight">
       <div class="property-list">
         <h3 class="label">房屋配置</h3>
         <van-row>
@@ -138,11 +138,14 @@
           balcony: [],
           toilet: [],
         },
-        mainHeight: 0,
+        mainHeight: {
+          height: 0
+        },
       }
     },
     mounted() {
-      this.mainHeight = this.mainListHeight();
+      var top = this.$refs['mainContainer'].offsetTop;
+      this.mainHeight.height = window.innerHeight - top + 'px';
     },
     watch: {},
     computed: {},
