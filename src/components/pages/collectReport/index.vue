@@ -242,6 +242,8 @@
       return {
         slitherCss: {},
         mainWidth: {},
+
+        album: {},                          //图片
         form: {},
         formatData: {},                     //DOM显示数据
         showData: {
@@ -250,8 +252,6 @@
           dateType: '',                     //日期类型 默认date 时分datetime
           dateIdx: '',                      //日期字段下标 变化情况使用
         },
-        timeModule: false,                  //日期选择
-        album: {},                          //图片
         drawForm: [],                       //表单集合
         resetDrawing: {},                   //clone 重置使用
         drawSlither: {},
@@ -262,6 +262,7 @@
         electricalModule: false,            //家电选择
         electricalList: [],                 //家具列表
 
+        timeModule: false,                  //日期选择
         popupModule: false,                 //popup 模态框 下拉框 输入框
         popupStatus: '',                    //popup 模态框 属性名 匹配 显示
         noPickerModule: false,              //popup 模态框 只有输入框
@@ -990,7 +991,7 @@
         margin: 0 .3rem;
         overflow: hidden;
         @include radius(.06rem);
-        background-color: rgba(255, 255, 255, .9);
+        background-color: rgba(255, 255, 255, .88);
         .transition {
           @include transition(all .3s);
         }

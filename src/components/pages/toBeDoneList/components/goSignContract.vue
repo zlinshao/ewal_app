@@ -70,8 +70,7 @@
         } else {
           btn = 'no';
         }
-        console.log(val);
-        this.getVillageDetail(val.ctl_detail_request_url, btn);
+        this.getDetail(val.ctl_detail_request_url, btn);
       },
       popupModule(val) {
         if (!val) {
@@ -111,7 +110,7 @@
         })
       },
       // 获取任务详情
-      getVillageDetail(api, btn) {
+      getDetail(api, btn) {
         this.$httpZll.get(api).then(res => {
           let address = {};
           if (res.success) {

@@ -28,7 +28,7 @@
       <!--小火车-->
       <div class="smallTrain">
         <h1></h1>
-        <div :class="[item.class?item.class:'railroadCar']" v-for="item in trans">
+        <div :class="[item.class?item.class:'railroadCar']" v-for="item in trans" @click="routerLink('deliveryReceipt')">
           <i></i>
           <p class="p1">
             <b>{{item.num}}</b>

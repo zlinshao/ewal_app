@@ -17,7 +17,7 @@
         <!--未完成-->
         <div class="noFinish" v-if="tabs === '1'">
           <scroll-load :name="'flex-warp'" @getLoadMore="scrollLoad" :disabled="!fullLoading['load1']">
-            <li class="noFinishMain" v-for="(item,index) in finishList['list1']">
+            <li class="noFinishMain" v-for="(item,index) in finishList['list1']" @click="goOperates(item,'polishing')">
               <div :class="['main-'+index,listLength.includes(index)?'mainTransform':'']">
                 <p>发货的是卡了和卡拉恢复扩大分开了</p>
                 <div class="toBeDoneType">物品补给跟进</div>
@@ -45,7 +45,7 @@
         <div class="finish" v-if="tabs === '2'">
           <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading['load2']">
             <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'goSign')">
-              <div>
+              <div @click="clickBtn(item.task_id)">
                 <div class="finish1">
                   <h1>{{item.title}}</h1>
                   <span></span>
@@ -126,15 +126,18 @@
     </van-popup>
     <!--是否去签约-->
     <go-sign-contract :module="goSignModule" :detail="moduleDetail" @close="hiddenGoSign"></go-sign-contract>
+    <!--补齐-->
+    <Polishing :module="polishingModule" :detail="polishingDetail" @close="hiddenPolishing"></Polishing>
   </div>
 </template>
 
 <script>
   import GoSignContract from './components/goSignContract.vue';
+  import Polishing from './components/polishing.vue';
 
   export default {
     name: "index",
-    components: {GoSignContract},
+    components: {GoSignContract, Polishing},
     data() {
       return {
         //加载是否结束
@@ -297,6 +300,9 @@
         //是否去签约
         goSignModule: false,
         moduleDetail: {},
+        // 补齐
+        polishingModule: false,
+        polishingDetail: {},
         path: '',
       }
     },
@@ -323,6 +329,18 @@
     methods: {
       getQueryDetail() {
         let query = this.$route.query;
+      },
+      // 生成电子收据
+      clickBtn(task_id) {
+        let data = {}, postData = {};
+        postData.variables = [];
+        data.name = '';
+        data.value = '';
+        postData.variables.push(data);
+        postData.action = 'complete';
+        this.$httpZll.finishBeforeTask(task_id, postData).then(_ => {
+          this.onSearch();
+        });
       },
       // 已完成 / 未完成 切换
       changeTop(val) {
@@ -360,7 +378,7 @@
         this.$httpZll.getToBeDoneListApi(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
           this.total['total' + tab] = res.total || 0;
-          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome'];
+          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'rtl_detail_request_url', 'outcome'];
           let data = this.groupHandlerListData(res.data, task);
           if (params.page === 1) {
             this.finishList['list' + tab] = data;
@@ -386,6 +404,24 @@
             this.goSignModule = true;
             this.moduleDetail = val;
             break;
+          case 'polishing':
+            this.polishingModule = true;
+            this.polishingDetail = val;
+            break;
+        }
+      },
+      // 是否签约
+      hiddenGoSign(val) {
+        this.cancel();
+        if (val === 'again') {
+          this.scrollLoad(false);
+        }
+      },
+      // 补齐
+      hiddenPolishing(val) {
+        this.cancel();
+        if (val !== 'close') {
+
         }
       },
       // 下个任务
@@ -405,17 +441,11 @@
           // this.$emit('close');
         });
       },
-      // 是否签约
-      hiddenGoSign(val) {
-        this.cancel();
-        if (val === 'again') {
-          this.scrollLoad(false);
-        }
-      },
       // 取消
       cancel() {
         this.searchHigh = false;
         this.goSignModule = false;
+        this.polishingModule = false;
       },
       // 筛选条件
       checkChoose(val, key) {
