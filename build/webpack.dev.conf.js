@@ -10,7 +10,21 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
-const HOST = process.env.HOST
+let HOST = process.env.HOST
+// 添加以下 ===================
+// 获取本机局域网IP
+const interfaces = require('os').networkInterfaces()
+for (let devName in interfaces) {
+  interfaces[devName].map(item => {
+    if (
+      item.family === 'IPv4' &&
+      item.address !== '127.0.0.1' &&
+      !item.internal && !item.address.startsWith('172')
+    ) {
+      HOST = item.address
+    }
+  })
+}
 const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {

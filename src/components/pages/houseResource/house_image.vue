@@ -2,7 +2,7 @@
   <div id="house_image" class="scroll_bar" ref="mainContainer" :style="mainHeight">
     <div class="flex-center" v-for="item in image_list" :key="item.id">
       <div>
-        <img @click="handleGetBigImg(item)" :src="item.uri" alt="" v-if="!item.uri.endsWith('mp4')">
+        <img @click="handleGetBigImg(item)" :src="item.uri" alt="" v-if="item.info.mime.includes('image')">
         <video :src="item.uri" v-else controls webkit-playsinline="true" v-show="video_visible"></video>
         <b>{{ item.created_at || '/'}}</b>
       </div>
