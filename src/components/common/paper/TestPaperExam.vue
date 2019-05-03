@@ -1,7 +1,8 @@
 <template>
   <div id="test_paper_exam">
+
     <van-actionsheet v-model="action_sheet_visible">
-      <div class="action-sheet-container scroll_bar">
+      <div class="action-sheet-container">
         <div class="main-container ">
           <div class="banner-top">
             <div class="exam-banner">

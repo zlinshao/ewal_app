@@ -2,7 +2,7 @@
   <div id="test_paper">
     <van-actionsheet v-model="action_sheet_visible">
       <div class="action-sheet-container">
-        <div class="main-container scroll_bar">
+        <div class="main-container">
           <div class="banner-top">
             <div v-if="type==2" class="questionnaire-banner">
               <div class="banner-title">

@@ -121,6 +121,11 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+#test_paper_exam .demo {
+  height: 3rem;
+  padding: .3rem;
+  width: 100%;
+  background-color: gray; }
 #test_paper_exam .action-sheet-container {
   display: flex;
   flex-direction: column;
@@ -128,7 +133,7 @@
   #test_paper_exam .action-sheet-container .main-container {
     width: 100%;
     flex: 1;
-    background-color: #FFFFFF;
+    background-color: transparent;
     display: flex;
     align-items: flex-start;
     flex-direction: column; }

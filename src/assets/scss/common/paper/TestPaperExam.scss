@@ -5,6 +5,12 @@
 }
 
 #test_paper_exam {
+  .demo {
+    height: 3rem;
+    padding: .3rem;
+    width: 100%;
+    background-color: gray;
+  }
   .action-sheet-container {
     display: flex;
     flex-direction: column;
@@ -13,7 +19,7 @@
     .main-container {
       width: 100%;
       flex: 1;
-      background-color: #FFFFFF;
+      background-color: transparent;
       display: flex;
       align-items: flex-start;
       //justify-content: space-around;
