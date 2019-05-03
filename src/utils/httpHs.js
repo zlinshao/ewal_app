@@ -64,6 +64,15 @@ class httpHs extends httpService {
       });
     });
   }
+
+  //合同详情
+  static getContractDetail({contract_type,contract_id},status) {
+    return new Promise((resolve,reject) => {
+      this.get(market + `v1.0/market/contract/${contract_type}/${contract_id}`,{},status).then(res => {
+        resolve(res);
+      })
+    })
+  }
 }
 
 export default httpHs

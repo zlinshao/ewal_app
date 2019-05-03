@@ -162,7 +162,7 @@
     methods: {
       //合同详情
       handleGoDetail(item) {
-        this.routerLink('/contract_detail');
+        this.routerLink('/contract_detail',{contract_id: item.contract_id,contract_type: this.params.contract_type});
       },
       handleGetInfo(val,type) {
         console.log(val,type);
