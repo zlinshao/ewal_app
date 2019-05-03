@@ -1,0 +1,178 @@
+@import "../../common.scss";
+
+@mixin examImg($n) {
+  @include bgImage('../../../assets/image/exam/' + $n + '.png');
+}
+
+#test_paper_exam {
+  .action-sheet-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .main-container {
+      width: 100%;
+      flex: 1;
+      background-color: #FFFFFF;
+      display: flex;
+      align-items: flex-start;
+      //justify-content: space-around;
+      flex-direction: column;
+
+
+      .banner-top {
+        position: relative;
+        height: 3rem;
+        width: 100%;
+        border-bottom: 1px dotted #F2F2F2;
+        background:linear-gradient(45deg,rgba(69,112,253,1) 0%,rgba(4,170,196,1) 100%);
+        .exam-banner {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          .exam-banner-top {
+            width: 100%;
+            height: .7rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: .3rem;
+            .icon-tip {
+              width: .4rem;
+              height: .4rem;
+              @include examImg('peixunkaoshi@3x');
+            }
+            >:nth-child(2) {
+              font-size: .28rem;
+              font-family: PingFangHK-Regular;;
+              padding-left: .1rem;
+              color: #FFFFFF;
+            }
+          }
+          .exam-banner-middle {
+            padding-left: .8rem;
+            width: 100%;
+            height: .6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .exam-banner-middle-post {
+              font-size: .25rem;
+              padding: .01rem .05rem;
+              color: #FFFFFF;
+              font-family: PingFangHK-Light;
+              border: 1px solid #FFFFFF;
+              opacity:0.7038;
+            }
+            .exam-banner-middle-timestamp {
+              width: 2rem;
+              height: 80%;
+              background:rgba(255,255,255,1);
+              border-radius:100px 0px 0px 100px;
+              display: flex;
+              align-items: center;
+              justify-content: space-around;
+              .icon-clock {
+                width: .3rem;
+                height: .3rem;
+                @include examImg('kaoshishijian@3x');
+              }
+              .time-remain {
+                font-family: DIN-Medium;
+                color: #4570FD;
+                font-size: .3rem;
+              }
+            }
+          }
+          .exam-banner-bottom {
+            padding-left: .8rem;
+            padding-top: .7rem;
+            width: 100%;
+            height: .7rem;
+            .exam-banner-bottom-tip {
+              color: #40C3FE;
+              font-family: PingFangHK-Regular;
+              font-size: .25rem;
+            }
+          }
+        }
+      }
+
+      .exam-container {
+        color: #000000;
+        padding: .3rem .6rem 0;
+        .exam-single {
+          .single-title {
+            padding: .2rem 0;
+          }
+          .single-container {
+            .exam-single-item {
+              .single-item-stem {
+                padding-bottom: .2rem;
+              }
+            }
+          }
+        }
+        .exam-judge {
+          .exam-judge-item {
+            padding: .1rem 0;
+          }
+        }
+        .exam-short {
+          .exam-short-item {
+            .short-item-stem {
+              padding: .1rem 0;
+            }
+          }
+        }
+        .end-tip {
+          margin: .3rem 0;
+          width: 100%;
+          height: 3rem;
+          background-color: #F2F2F2;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          >span {
+            padding-bottom: .2rem;
+            color: #8F8F8F;
+            display: flex;
+            width: 100%;
+            margin: 0 auto;
+            justify-content: center;
+          }
+        }
+      }
+
+    }
+
+    .btn-container {
+      box-shadow: 0px -2px 14px 0px rgba(224, 224, 224, 0.3);
+      width: 100%;
+      height: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      .btn-cancel {
+        width: 40%;
+        height: .7rem;
+        @include examImg('quxiao');
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .btn-confirm {
+        color: #FFFFFF;
+        width: 40%;
+        height: .7rem;
+        @include examImg('queding');
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+  }
+}

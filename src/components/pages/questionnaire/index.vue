@@ -9,10 +9,10 @@
           <div class="searchInput">
             <div class="input">
               <div>
-                <input type="text" placeholder="请输入搜索内容" v-model="params.search" @keyup.enter="getQuestionnaireList">
+                <input type="text" placeholder="请输入搜索内容" v-model="params.search" @keyup.enter="getQuestionnaireList(true)">
                 <span v-if="params.title" @click="params.title = ''"></span>
               </div>
-              <p class="searchBtn" @click="getQuestionnaireList">搜索</p>
+              <p class="searchBtn" @click="getQuestionnaireList(true)">搜索</p>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@
                     <div class="item-bottom-left">
                       {{item.start_time}}
                     </div>
-                    <div @click="answer(item)" v-if="item.status==1" class="item-bottom-right">
+                    <div @click="answer(item)" v-if="item.status==1 && item.isAnswer!==2" class="item-bottom-right">
                       去回答>
                     </div>
                   </div>
@@ -141,6 +141,15 @@
         questionnaire_data:{},
       }
     },
+    watch: {
+      test_paper_visible: {
+        handler(val,oldVal) {
+          if(!val) {
+            this.getQuestionnaireList();
+          }
+        },
+      },
+    },
     methods: {
 
       answer(item) {
@@ -165,7 +174,10 @@
       },
 
       //获取问卷列表
-      getQuestionnaireList() {
+      getQuestionnaireList(isClearList = false) {
+        if(isClearList) {
+          this.params.page=1;
+        }
         let params = {
           ...this.params,
           //all: 1,
@@ -175,11 +187,11 @@
           this.fullLoading = false;
           this.paging = res.data.count;
           if (this.params.page === 1) {
-            this.questionnaireList = res.data.data;
-          } else {
-            for (let item of res.data.data) {
-              this.questionnaireList.push(item);
-            }
+            this.questionnaireList = [];
+          }
+          for (let item of res.data.data) {
+            item.isAnswer = item.enroll && item.enroll.status;
+            this.questionnaireList.push(item);
           }
         });
         /*this.$http.get(`${this.url}questionnaire`, params, 'prompt').then(res => {

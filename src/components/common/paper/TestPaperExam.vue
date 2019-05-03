@@ -1,25 +1,26 @@
 <template>
-  <div id="test_paper">
+  <div id="test_paper_exam">
     <van-actionsheet v-model="action_sheet_visible">
-      <div class="action-sheet-container">
-        <div class="main-container scroll_bar">
+      <div class="action-sheet-container scroll_bar">
+        <div class="main-container ">
           <div class="banner-top">
-            <div v-if="type==2" class="questionnaire-banner">
-              <div class="banner-title">
-                {{questionnaire_banner.title}}
+            <div class="exam-banner">
+              <div class="exam-banner-top">
+                <div class="icon-tip"></div>
+                <div>新员工培训考核考核考核</div>
               </div>
-              <div class="banner-user-info">
-                <div class="info-left">
-                  <img :src="questionnaire_banner.user_photo">
-                  <div :title="questionnaire_banner.user_name" class="user-name">{{questionnaire_banner.user_name}}
-                  </div>
+              <div class="exam-banner-middle">
+                <div class="exam-banner-middle-post">
+                  中级员工考核
                 </div>
-                <div class="info-right">{{questionnaire_banner.post}}</div>
+                <div class="exam-banner-middle-timestamp">
+                  <div class="icon-clock"></div>
+                  <div class="time-remain">1:11:11</div>
+                </div>
               </div>
-              <div class="banner-content">
-                {{questionnaire_banner.content}}
+              <div class="exam-banner-bottom">
+                <div class="exam-banner-bottom-tip">按总时长计时 按试卷顺序作答</div>
               </div>
-              <div class="banner-datetime">{{questionnaire_banner.datetime}}</div>
             </div>
           </div>
           <div class="exam-container">
@@ -94,7 +95,7 @@
         </div>
         <div class="btn-container">
           <div @click="cancelActionSheet" class="btn-cancel">取消</div>
-          <div @click="submitQuestionnaire" class="btn-confirm">提交</div>
+          <div @click="submitExam" class="btn-confirm">提交</div>
         </div>
       </div>
     </van-actionsheet>
@@ -103,9 +104,9 @@
 
 <script>
   import _ from 'lodash';
-
+  //考试试卷
   export default {
-    name: "TestPaper",
+    name: "TestPaperExam",
     data() {
       return {
         action_sheet_visible: false,
@@ -125,7 +126,7 @@
         },
 
         /*问卷调查banner数据*/
-        questionnaire_banner: {
+        exam_banner: {
           title: '',
           user_name: '',
           post: '',
@@ -143,7 +144,7 @@
         required: true,
         default: false,
       },
-      questionnaireData: {},//问卷详情里的数据
+      examData: {},//问卷详情里的数据
     },
     watch: {
       visible: {
@@ -158,11 +159,11 @@
         },
         immediate: true,
       },
-      questionnaireData: {
+      examData: {
         handler(val, oldVal) {
           if (val) {
             //问卷头部导航栏内容填充
-            this.questionnaire_banner = {
+            this.exam_banner = {
               title: val.name || '-',
               user_name: val.user.name,
               post: val.user.org[0].name,
@@ -171,11 +172,14 @@
               datetime: val.start_time || '-',
             };
 
-            //问卷题目遍历
-            _.forEach(val.question_set, (item, index) => {
-              /*if(item.category==1) {
-                this.exam_category_list.single.exam_list.push(item);
-              }*/
+            //考试题目遍历
+            _.forEach(val.question_set,(value,key)=> {
+              _.forEach(value,(subValue)=> {
+                  subValue.category = parseInt(key);
+              });
+            });
+            let questionSet = _.flattenDeep(_.values(val.question_set));
+            _.forEach(questionSet, (item, index) => {
               this.exam_total_score += item.score || 0;
               switch (item.category) {
                 case 1:
@@ -188,10 +192,9 @@
                   this.exam_category_list.short.exam_list.push(item);
               }
             });
-            console.log(this.exam_category_list);
+            //console.log(this.exam_category_list);
           }
         },
-        //immediate: true,
       },
     },
     methods: {
@@ -208,7 +211,7 @@
             exam_list: [],
           },//简答题
         };
-        this.questionnaire_banner = {
+        this.exam_banner = {
           title: '',
           user_name: '',
           post: '',
@@ -226,10 +229,10 @@
 
       },
 
-      submitQuestionnaire() {
+      submitExam() {
         this.$dialog.confirm({title: '确认提交吗?', message: '提交之后将无法重新作答'})
           .then(() => {
-            let id = this.questionnaireData.id;//问卷id
+            let id = this.examData.id;//问卷id
             let newArr = _.flatten([this.exam_category_list.single.exam_list, this.exam_category_list.judge.exam_list, this.exam_category_list.short.exam_list]);
             //判断是否有漏答题目
             for (let mItem of newArr) {
@@ -245,7 +248,7 @@
             let params = {
               id,answer
             };
-            this.$httpTj.submitQuestionnaire(params).then(res=> {
+            this.$httpTj.submitExam(params).then(res=> {
               if(res.code.endsWith('0')) {
                 this.action_sheet_visible = false;
               }
@@ -332,5 +335,5 @@
 </style>
 
 <style scoped lang="scss">
-  @import "../../../assets/scss/common/paper/TestPaper";
+  @import "../../../assets/scss/common/paper/TestPaperExam";
 </style>
