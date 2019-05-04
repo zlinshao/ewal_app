@@ -300,17 +300,22 @@ export default {
     };
     // 查看大图
     Vue.prototype.$bigPhoto = function (val, uri) {
-      console.log(val);
       let images = [];
-      for (let item of val) {
-        if (item.info && item.info.mime) {
-          if (item.info.mime.includes('image')) {
-            images.push(item.uri);
+      if (val instanceof Array) {
+        for (let item of val) {
+          if (item.info && item.info.mime) {
+            if (item.info.mime.includes('image')) {
+              images.push(item.uri);
+            }
+          } else {
+            if (item.mime.includes('image')) {
+              images.push(item.uri);
+            }
           }
-        } else {
-          if (item.mime.includes('image')) {
-            images.push(item.uri);
-          }
+        }
+      } else {
+        for (var key in val) {
+          images.push(val[key].uri);
         }
       }
       let index = images.indexOf(uri);

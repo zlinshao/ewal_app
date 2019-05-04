@@ -1,8 +1,8 @@
 <template>
   <div id="test_paper">
     <van-actionsheet v-model="action_sheet_visible">
-      <div class="action-sheet-container" :style="{height:screenHeight+'px'}">
-        <div class="main-container scroll_bar">
+      <div class="action-sheet-container">
+        <div class="main-container">
           <div class="banner-top">
             <div v-if="type==2" class="questionnaire-banner">
               <div class="banner-title">
@@ -219,8 +219,11 @@
       },
 
       cancelActionSheet() {
-        this.action_sheet_visible = false;
-        this.clearData();
+        this.$dialog.confirm({title: '确认取消吗?', message: '取消之后还可以重新作答'}).then(()=> {
+          this.action_sheet_visible = false;
+          this.clearData();
+        });
+
       },
 
       submitQuestionnaire() {
@@ -228,6 +231,13 @@
           .then(() => {
             let id = this.questionnaireData.id;//问卷id
             let newArr = _.flatten([this.exam_category_list.single.exam_list, this.exam_category_list.judge.exam_list, this.exam_category_list.short.exam_list]);
+            //判断是否有漏答题目
+            for (let mItem of newArr) {
+              if(!mItem.user_answer) {
+                this.$prompt('有漏答题目,请检查','warning');
+                return;
+              }
+            }
             let answer = _.map(newArr, (o) => {
               o.answer = o.user_answer;
               return o;
@@ -236,7 +246,9 @@
               id,answer
             };
             this.$httpTj.submitQuestionnaire(params).then(res=> {
-              debugger
+              if(res.code.endsWith('0')) {
+                this.action_sheet_visible = false;
+              }
               console.log(res);
             });
           });
@@ -302,6 +314,7 @@
 
   .van-popup.van-popup--bottom {
     border-radius: 0;
+    top: 0;
   }
 
   //问卷调查 或 考试 样式修改
