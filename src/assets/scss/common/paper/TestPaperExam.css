@@ -142,8 +142,12 @@
       height: 3rem;
       width: 100%;
       border-bottom: 1px dotted #F2F2F2;
-      background: linear-gradient(45deg, #4570fd 0%, #04aac4 100%); }
+      background: linear-gradient(45deg, #4570fd 0%, #04aac4 100%);
+      display: flex;
+      justify-content: center;
+      margin-bottom: .6rem; }
       #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner {
+        width: 100%;
         display: flex;
         align-items: center;
         flex-direction: column; }
@@ -204,6 +208,42 @@
             color: #40C3FE;
             font-family: PingFangHK-Regular;
             font-size: .25rem; }
+      #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip {
+        width: 90%;
+        height: .8rem;
+        background-color: #FFFFFF;
+        position: absolute;
+        bottom: -.4rem;
+        box-shadow: 0px 10px 15px 0px #d8dded;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around; }
+        #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip .bottom-tip-item {
+          width: 30%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center; }
+          #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip .bottom-tip-item .icon-left-time {
+            width: .45rem;
+            height: .45rem;
+            background: url("../../../assets/image/exam/zongshijian@3x.png") no-repeat scroll center;
+            background-size: 100% 100%; }
+          #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip .bottom-tip-item .icon-exam-count {
+            width: .45rem;
+            height: .45rem;
+            background: url("../../../assets/image/exam/tishu@3x.png") no-repeat scroll center;
+            background-size: 100% 100%; }
+          #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip .bottom-tip-item .icon-exam-score {
+            width: .45rem;
+            height: .45rem;
+            background: url("../../../assets/image/exam/zongfen@3x.png") no-repeat scroll center;
+            background-size: 100% 100%; }
+          #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip .bottom-tip-item .bottom-tip-content {
+            overflow: hidden;
+            font-family: PingFangHK-Regular;
+            color: #0B0B0B; }
     #test_paper_exam .action-sheet-container .main-container .exam-container {
       color: #000000;
       padding: .3rem .6rem 0; }
