@@ -115,7 +115,7 @@
           let address = {};
           if (res.success) {
             if (btn) {
-              this.$prompt('当前报备暂不能签约,请联系产品经理！');
+              this.$prompt('当前报备暂不能签约！');
             }
             this.allDetail.content = res.data.content;
             let community = res.data.content.community;

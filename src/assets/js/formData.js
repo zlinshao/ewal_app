@@ -91,7 +91,7 @@ hhhhhhhhhhhh = {
   "signatory_identity": "1",
   "customer_name": "发送",
   "customer_sex": "m",
-  "card_type": "412",
+  "card_type": "411",
   "card_id": "3213213123",
   "contact_way": "1",
   "contact_phone": "12321312",
@@ -668,10 +668,10 @@ defineCollectReport = {
     },
     {
       label: '证件类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
+      placeholder: '必填 已禁用',
+      disabled: 'disabled',
       keyName: 'card_type',
-      keyType: '',
+      keyType: 411,
       type: 'text',
       status: 'objInt',
       showForm: 'formatData',//picker 显示form 或 formatData
@@ -689,10 +689,10 @@ defineCollectReport = {
     },
     {
       label: '联系方式',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
+      placeholder: '必填 已禁用',
+      disabled: 'disabled',
       keyName: 'contact_way',
-      keyType: '1',
+      keyType: 1,
       type: 'text',
       status: 'objInt',
       showForm: 'formatData',//picker 显示form 或 formatData

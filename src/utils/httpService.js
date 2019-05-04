@@ -64,8 +64,8 @@ axios.interceptors.response.use(response => {
         }
         break;
       case 500:
-        console.log('服务器故障请联系产品经理');
-        $httpPrompt('服务器故障请联系产品经理');
+        console.log('服务器故障');
+        $httpPrompt('服务器故障');
         break;
       case 501:
         console.log('网络未实现');

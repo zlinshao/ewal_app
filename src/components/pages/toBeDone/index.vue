@@ -261,7 +261,6 @@
               }
               data.content = content;
               data.task_id = val.task_id;
-              console.log(data);
               this.$store.dispatch('task_detail', data);
             }
             resolve(true);

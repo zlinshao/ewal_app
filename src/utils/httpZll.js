@@ -288,7 +288,7 @@ class httpZll extends httpService {
   // 获取电子合同编号
   static getElectronicContract(data) {
     return new Promise((resolve, reject) => {
-      this.post(`${url_identity}fdd/number/take`, data, '', 'close').then((res) => {
+      this.post(`${url_identity}fdd/number/take`, data).then((res) => {
         if (res.code === '20000') {
           resolve(res);
         } else {
@@ -325,8 +325,6 @@ class httpZll extends httpService {
       this.get(`${url_identity}fdd/customer/verified`, data, '', 'close').then((res) => {
         if (res.code.endsWith('0')) {
           resolve(res);
-        } else {
-          $httpPrompt(res.msg);
         }
       })
     })

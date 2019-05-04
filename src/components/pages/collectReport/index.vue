@@ -44,6 +44,9 @@
                     :readonly="item.readonly"
                     :disabled="item.disabled"
                     :placeholder="item.placeholder">
+                    <div class="zl-confirmation" :class="[item.icon]" v-if="item.button">
+                      <i :class="item.icon" v-if="item.icon"></i>{{item.button}}
+                    </div>
                     <div class="unit" v-if="item.unit">{{item.unit}}</div>
                   </zl-input>
                   <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
@@ -171,7 +174,7 @@
                       @input="listenInput(item.keyName)"
                       :placeholder="item.placeholder">
                       <div class="zl-confirmation" :class="[item.icon]"
-                           v-if="item.button && item.icon" @click="confirmation(item.icon)">
+                           v-if="item.button" @click="confirmation(item.icon)">
                         <i :class="item.icon" v-if="item.icon"></i>
                         {{item.button}}
                       </div>
@@ -342,15 +345,6 @@
       }
     },
     methods: {
-      lookContract() {
-        dd.biz.util.openLink({
-          url: 'https://testapi.fadada.com:8443/api//viewdocs.action?app_id=401544&timestamp=20190303154831&v=2.0&msg_digest=QjlCQ0I4RTRDMkZDM0IwMkQ0MzdCQkMyRDI0Qjg2NTA0RDQ4NTlEQQ==&send_app_id=null&transaction_id=dfc88babbd582861b48a112dcdec17d89dc544a1',//要打开链接的地址
-          onSuccess(result) {
-          },
-          onFail(err) {
-          }
-        });
-      },
       // touch 左右切换
       tapStart(event) {
         for (let item of event.touches) {
@@ -554,6 +548,7 @@
               if (res) {
                 if (res.data.customer_id) {
                   this.form.signer = res.data;
+                  this.certified();
                 } else {
                   dd.biz.util.openLink({
                     url: res.data.data,//要打开链接的地址
@@ -569,6 +564,21 @@
           case 'bank':
 
             break;
+        }
+      },
+      // 已认证
+      certified() {
+        for (let slither of Object.keys(this.drawSlither)) {
+          for (let key of this.drawSlither[slither]) {
+            if (key.icon === 'identity') {
+              key.button = '已认证';
+              key.icon = '';
+            }
+            let data = ['customer_name', 'contact_phone', 'card_id'];
+            if (data.includes(key.keyName)) {
+              key.disabled = 'disabled';
+            }
+          }
         }
       },
       // 日期选择
@@ -856,8 +866,13 @@
               door[2] = door[2] ? door[2] : '';
               this.formatData[item] = door.join('');
               break;
-            case 'community':
+            case 'community'://小区
               this.formatData[item] = res[item].village_name;
+              break;
+            case 'signer'://认证
+              if (res[item]) {
+                this.certified();
+              }
               break;
             case 'house_type'://户型
               let house = this.jsonClone(res[item]);
