@@ -56,7 +56,7 @@
       let api = query.ctl_detail_request_url;
       this.flow_type = query.flow_type;
       this.allDetail.task_id = query.task_id;
-      this.allDetail.process_id = query.process_id;
+      this.allDetail.root_id = query.root_id;
       this.getVillageDetail(api);
       if (!query.outcome) return;
       this.taskAction = JSON.parse(query.outcome);
@@ -77,8 +77,8 @@
             this.$router.go(-1);
           } else {
             let params = {
-              taskDefinitionKey: 'CollectReport-TODO01',
-              rootProcessInstanceId: this.allDetail.process_id,
+              taskDefinitionKey: 'InputBulletinData',
+              rootProcessInstanceId: this.allDetail.root_id,
             };
             this.$httpZll.getNewTaskId(params).then(res => {
               this.allDetail.task_id = res.data[0].id;

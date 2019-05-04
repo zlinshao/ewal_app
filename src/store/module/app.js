@@ -11,6 +11,7 @@ const app = {
       department_name: '',
     },
     bulletinPreFill: {},
+    taskDetail: {},
     //审批切换
     approvalTab: {
       tab: '1',
@@ -26,6 +27,10 @@ const app = {
     // 报备草稿预填
     BULLETIN_DRAFT(state, view) {
       state.bulletinPreFill = view;
+    },
+    // 任务详情
+    TASK_DETAIL(state, view) {
+      state.taskDetail = view;
     },
     // 个人信息
     PERSONAL_STORAGE(state, view) {
@@ -69,6 +74,10 @@ const app = {
     // 报备草稿预填
     bulletin_draft({commit}, view) {
       commit('BULLETIN_DRAFT', view);
+    },
+    // 报备草稿预填
+    task_detail({commit}, view) {
+      commit('TASK_DETAIL', view);
     },
     // 审批切换
     approval_tabs({commit}, view) {

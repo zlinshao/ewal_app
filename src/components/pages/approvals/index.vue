@@ -26,11 +26,12 @@
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
           <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]">
             <div class="contentList">
-              <div class="listUp" :class="[leftShift ? 'leftShift' : '']"
+              <div class="listUp" :class="[task_ids.includes(item.task_id) ? 'leftShift' : '']"
                    @click="routerLinkDetail(item)">
                 <div class="listTitle">{{item.house_address}}</div>
                 <div class="listMiddle">
-                  <p>{{item.name}}</p>
+                  <p v-if="item.status.length">{{item.status[0]}}</p>
+                  <p v-else>{{item.name}}</p>
                   <div>
                     <b>
                       <img
@@ -50,11 +51,12 @@
                   </div>
                 </div>
                 <div class="approvalStatus publish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
-                <div class="moreOperate" @click.stop="leftShift = !leftShift"
-                     v-if="tabs.tab === '2' && tabs.status === 1"></div>
+                <div class="moreOperate" @click.stop="moreOperates(item.task_id)"
+                     v-if="tabs.tab === '2' && tabs.status !== 0"></div>
               </div>
               <div class="listDown">
-                <div v-for="item in moreOperate" :class="moreOperate.length>2?'':'lessThan2'">
+                <div v-for="item in moreOperate['more'+tabs.status]" @click="onMoreOperates(item.id)"
+                     :class="moreOperate['more'+tabs.status].length>2?'':'lessThan2'">
                   <i :class="['icon-'+item.id]"></i>
                   <span>{{item.text}}</span>
                 </div>
@@ -95,6 +97,7 @@
           load3: false,
           load4: false,
         },
+        // 头部切换
         approvalTerm: [
           {
             id: '1',
@@ -117,6 +120,7 @@
             icon: zanbuchuli,
           },
         ],
+        // 二级切换
         buttons: {
           tab1: [
             {
@@ -142,7 +146,7 @@
               value: 2,
             },
             {
-              text: '已撤销',
+              text: '待重发',
               value: 3,
             }
           ],
@@ -211,24 +215,43 @@
           paging4: 0,
         },// 显示
         // 更多操作
-        moreOperate: [
-          {
-            id: '1',
-            text: '合同预览',
-          },
-          {
-            id: '2',
-            text: '本地签署',
-          },
-          {
-            id: '3',
-            text: '客户手机签署',
-          },
-          {
-            id: '4',
-            text: '修改合同',
-          },
-        ],
+        moreOperate: {
+          more1: [
+            {
+              id: '1',
+              text: '合同预览',
+            },
+            {
+              id: '2',
+              text: '发送电子合同',
+            },
+          ],
+          more2: [
+            {
+              id: '1',
+              text: '合同预览',
+            },
+            {
+              id: '4',
+              text: '本地签署',
+            },
+            {
+              id: '5',
+              text: '客户手机签署',
+            },
+            {
+              id: '6',
+              text: '修改合同',
+            },
+          ],
+          more3: [
+            {
+              id: '7',
+              text: '重新提交',
+            },
+          ]
+        },
+        task_ids: [],
       }
     },
     mounted() {
@@ -252,6 +275,32 @@
       },
     },
     methods: {
+      // 更多操作
+      moreOperates(id) {
+        if (this.task_ids.includes(id)) {
+          let index = this.task_ids.indexOf(id);
+          this.task_ids.splice(index, 1);
+        } else {
+          this.task_ids.push(id);
+        }
+      },
+      onMoreOperates(id) {
+        switch (id) {
+          case '1':
+            break;
+          case '2':
+            break;
+          case '4':
+            break;
+          case '5':
+            break;
+          case '6':
+            break;
+          case '7':
+
+            break;
+        }
+      },
       // 数据列表
       onSearch(num) {
         let tab = String(num);
@@ -324,7 +373,7 @@
                   page: 1,
                   // taskOwner: '69',//登陆人
                   processDefinitionKey: 'MG-BulletinApproval',//市场部
-                  processInstanceName: 'Collect',//区分报备类型
+                  // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
               case 2:
@@ -332,7 +381,7 @@
                   page: 1,
                   // assignee: '69',//登陆人
                   taskDefinitionKey: 'SignEC',
-                  processInstanceName: 'Collect',//区分报备类型
+                  // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
               case 3:
@@ -340,7 +389,7 @@
                   page: 1,
                   cancelled: true,//已撤销
                   taskDefinitionKey: 'InputBulletinData',
-                  processInstanceName: 'Collect',//区分报备类型
+                  // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
             }
@@ -371,7 +420,7 @@
         }
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
-      // 接口请求
+      // 列表
       getApproval(url, params, tab) {
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
@@ -394,6 +443,7 @@
       },
       // 头部切换
       changeApproval(val) {
+        this.task_ids = [];
         let tab = val.id;
         let status = this.twoLevel['tab' + tab];
         this.tabs.tab = tab;
@@ -406,6 +456,7 @@
       },
       // 二级切换
       tabsTag(status) {
+        this.task_ids = [];
         let tab = this.tabs.tab;
         if (this.tabs.status === status) return;
         this.tabs.status = status;
@@ -598,13 +649,19 @@
                 @include approvalsImg('hetongyulan');
               }
               .icon-2 {
-                @include approvalsImg('bendiqianshu');
-              }
-              .icon-3 {
-                @include approvalsImg('kehushoujiqianshu');
+                @include approvalsImg('hetongyulan');
               }
               .icon-4 {
+                @include approvalsImg('bendiqianshu');
+              }
+              .icon-5 {
+                @include approvalsImg('kehushoujiqianshu');
+              }
+              .icon-6 {
                 @include approvalsImg('xiugaihetong');
+              }
+              .icon-7 {
+                @include approvalsImg('hetongyulan');
               }
               span {
                 white-space: nowrap;
@@ -613,7 +670,7 @@
             }
             .lessThan2 {
               width: 100%;
-              @include flex('justify-center');
+              padding-left: 30%;
             }
           }
         }

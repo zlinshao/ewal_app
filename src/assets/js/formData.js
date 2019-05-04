@@ -1251,6 +1251,7 @@ defineArticleReceipt = {
       status: 'objInt',
       showForm: 'formatData',//picker 显示form 或 formatData
       picker: 'picker1',
+      unit: '把',
       slot: '',
     },
     {
@@ -1277,12 +1278,58 @@ defineArticleReceipt = {
       picker: 'picker1',
       slot: '',
     },
+    {
+      label: '彩电',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'television',
+      keyType: [],
+      type: 'text',
+      status: 'arrs-0-0-0',
+      picker: 'picker1',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '上传',
+      picker: 'upload',
+      value: [
+        {
+          label: '损坏照片',
+          placeholder: '必填',
+          keyName: 'photo',
+        }
+      ]
+    },
   ],
   slither1: [
     {
-
+      label: '门锁类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'lock_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker1',
+      slot: '',
     },
-  ]
+  ],
+  slither2: [
+    {
+      label: '门锁类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'lock_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker1',
+      slot: '',
+    },
+  ],
 };
 // 费用交接
 defineCostReceipt = {};

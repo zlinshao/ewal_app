@@ -207,7 +207,7 @@ class httpZll extends httpService {
       tenantId: tenant,
       // assignee: '69',//登陆人
       order: 'desc',
-      taskDefinitionKeySuffix: 'TODO01',
+      taskDefinitionKeyIn: 'CollectTakeLook,InputBulletinData,SignEC',
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
     };
@@ -329,9 +329,9 @@ class httpZll extends httpService {
   }
 
   // 收房报备 修改
-  static putReviseReport(task_id, data) {
+  static putReviseReport(data) {
     return new Promise((resolve, reject) => {
-      this.put(`${market}v1.0/market/bulletin/${task_id}?to=collect`, data, 'prompt').then(res => {
+      this.put(`${market}v1.0/market/bulletin/${data.id}?to=collect`, data, 'prompt').then(res => {
         if (Number(res.code) === 200) {
           resolve(res);
           $httpPrompt(res.message, 'success');
@@ -351,7 +351,6 @@ class httpZll extends httpService {
         if (Number(res.code) === 200) {
           resolve(res);
         } else {
-          $httpPrompt(res.message);
           resolve(false);
         }
       });

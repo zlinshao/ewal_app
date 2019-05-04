@@ -95,7 +95,7 @@
       },
       popupModule(val) {
         if (!val) {
-          this.$emit('close','close');
+          this.$emit('close', 'close');
         } else {
           this.drawForm = [];
           for (let item of this.drawing) {
@@ -159,6 +159,9 @@
             this.postFormData.floor = Number(floor);
             this.postFormData.floors = Number(floors);
             this.formatData[key] = floor + ' / ' + floors;
+          } else {
+            this.postFormData[key] = index;
+            this.formatData[key] = value.join('');
           }
         } else {
           switch (picker.status) {

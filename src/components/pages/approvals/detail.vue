@@ -146,6 +146,7 @@
         endClientX: 0,
         slither: 0,
         allDetail: {},//详情
+        task_id: '',//详情
 
         mainHeight: '',
         operates: [
@@ -196,13 +197,17 @@
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let query = this.$route.query;
-      this.allDetail = query;
+      this.task_id = query.task_id;
       this.getOperates(query);
       this.handleData();
       this.approvalDetail(query.bm_detail_request_url);
     },
     watch: {},
-    computed: {},
+    computed: {
+      tabs() {
+        return this.$store.state.app.approvalTab;
+      }
+    },
     methods: {
       // 获取操作按钮
       getOperates(query) {
@@ -229,8 +234,8 @@
       iconButton(num) {
         switch (num) {
           case 1:
-            this.allDetail.revise = 'revise';
-            this.routerLink('/collectReport', this.allDetail);
+            this.$store.dispatch('bulletin_draft', this.allDetail);
+            this.routerLink('/collectReport', {revise: 'revise'});
             break;
           case 2:
             this.commentPopup = true;
@@ -254,7 +259,7 @@
             data.value = action.action;
             postData.variables.push(data);
             postData.action = 'complete';
-            this.$httpZll.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
+            this.$httpZll.finishBeforeTask(this.task_id, postData).then(_ => {
               this.$router.go(-1);
             });
             break;
@@ -328,8 +333,11 @@
         this.formatData = {};
         this.$httpZll.getApprovalDetail(url).then(res => {
           if (res) {
+            this.allDetail = this.jsonClone(res.data);
+            this.allDetail.task_id = this.task_id;
+            this.allDetail.variableName = this.operates.variableName;
             this.formatData = res.data.content;
-            this.handleDetail(res.data.content);
+            this.handleDetail(res.data.content)
           }
         })
       },
