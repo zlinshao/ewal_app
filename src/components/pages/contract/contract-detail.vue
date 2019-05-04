@@ -133,7 +133,7 @@
             height: 50pt;
             margin-bottom: .1rem;
             border-radius: .1rem;
-            box-shadow: 2px 2px 1px 1px #9B9B9B;
+            box-shadow: 2px 2px 1px 1px #F2F2F2;
             &:not(:last-child) {
               margin-right: 5pt;
             }
