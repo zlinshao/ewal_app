@@ -45,7 +45,8 @@
         <div class="finish" v-if="tabs === '2'">
           <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading['load2']">
             <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'goSign')">
-              <div @click="clickBtn(item.task_id)">
+              <!--@click="clickBtn(item.task_id)"-->
+              <div>
                 <div class="finish1">
                   <h1>{{item.title}}</h1>
                   <span></span>
@@ -427,7 +428,7 @@
       // 下个任务
       nextTask(id) {
         let params = {
-          taskDefinitionKey: 'InputBulletinData-TODO01',
+          taskDefinitionKey: 'InputBulletinData',
           rootProcessInstanceId: id,
         };
         this.$httpZll.getNewTaskId(params).then(res => {

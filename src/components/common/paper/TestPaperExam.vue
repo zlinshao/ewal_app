@@ -8,22 +8,40 @@
             <div class="exam-banner">
               <div class="exam-banner-top">
                 <div class="icon-tip"></div>
-                <div>新员工培训考核考核考核</div>
+                <div>{{examData.name}}</div>
               </div>
               <div class="exam-banner-middle">
                 <div class="exam-banner-middle-post">
-                  中级员工考核
+                  {{examData.bank && examData.bank.name}}
                 </div>
                 <div class="exam-banner-middle-timestamp">
                   <div class="icon-clock"></div>
-                  <div class="time-remain">1:11:11</div>
+                  <div class="time-remain"><count-down :datetime="examData.end_time"></count-down></div>
                 </div>
               </div>
               <div class="exam-banner-bottom">
                 <div class="exam-banner-bottom-tip">按总时长计时 按试卷顺序作答</div>
               </div>
             </div>
+            <div class="bottom-tip">
+              <div class="bottom-tip-item">
+                <div class="icon-left-time"></div>
+                <div class="bottom-tip-content">
+                  {{examData.duration}}分钟
+<!--                  <count-down :datetime="examData.start_time"></count-down>-->
+                </div>
+              </div>
+              <div class="bottom-tip-item">
+                <div class="icon-exam-count"></div>
+                <div class="bottom-tip-content">{{examData.question_count}}题</div>
+              </div>
+              <div class="bottom-tip-item">
+                <div class="icon-exam-score"></div>
+                <div class="bottom-tip-content">{{examData.score}}分</div>
+              </div>
+            </div>
           </div>
+
           <div class="exam-container">
             <div class="exam-single">
               <div class="single-title">一、单选题（共{{exam_category_list.single.exam_list.length}}题）</div>
@@ -105,9 +123,14 @@
 
 <script>
   import _ from 'lodash';
+
+  import CountDown from './CountDown';
   //考试试卷
   export default {
     name: "TestPaperExam",
+    components:{
+      CountDown,
+    },
     data() {
       return {
         action_sheet_visible: false,

@@ -93,7 +93,7 @@
             this.$emit('close', 'again');
           } else {
             let params = {
-              taskDefinitionKey: 'InputBulletinData-TODO01',
+              taskDefinitionKey: 'InputBulletinData',
               rootProcessInstanceId: this.allDetail.root_id,
             };
             this.$httpZll.getNewTaskId(params).then(res => {
@@ -102,8 +102,8 @@
                 return;
               }
               this.allDetail.task_id = res.data[0].id;
-              this.$store.dispatch('bulletin_draft', this.allDetail);
-              this.routerReplace('/collectReport');
+              this.$store.dispatch('task_detail', this.allDetail);
+              this.routerReplace(action.route);
               this.$emit('close');
             });
           }

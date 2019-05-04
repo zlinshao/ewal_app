@@ -112,6 +112,7 @@ export default {
         let obj = {};
         obj.name = item.name;
         obj.task_id = item.id;
+        obj.status = item.status || [];
         obj.root_id = item.rootProcessInstanceId;
         obj.process_id = item.processInstanceId;
         for (let key of item.variables) {

@@ -186,14 +186,14 @@
         </div>
       </div>
       <!--底部按钮-->
-      <div class="footer footerLeft" :class="{'footerStatic': keyUpStatus}" v-if="!allDetails.revise">
+      <div class="footer footerLeft" :class="{'footerStatic': keyUpStatus}" v-if="!queryData.revise">
         <div class="items-center">
           <span @click="saveReport(1)">草稿</span>
           <span @click="saveReport(2)" class="resetting">重置</span>
         </div>
       </div>
       <div class="footer footerRight" :class="{'footerStatic': keyUpStatus}">
-        <span @click="saveReport(3)" v-if="allDetails.revise">修改</span>
+        <span @click="saveReport(3)" v-if="queryData.revise">修改</span>
         <span @click="saveReport(0)" v-else>发布</span>
       </div>
       <!--正常 picker-->
@@ -288,9 +288,11 @@
         checksModule: false,            //复选 非房东费用
         checksList: [],
 
-        allDetails: {},
         electronicContractNumber: '',   //电子合同编号
         allReportNum: 0,//滑动列表数
+
+        queryData: {},
+        task_id: '',
       }
     },
     created() {
@@ -307,15 +309,21 @@
       this.slitherCss = this.mainListHeight(title);
       this.slitherCss.width = this.allReportNum + '00%';
       this.$prompt('正在加载...', 'send');
-      let query = this.$route.query;
+      this.resetting();
       let params = {};
-      this.allDetails = query;
+      let query = this.$route.query;
+      this.queryData = query;
       if (query.revise) {
-        this.getRevise(query.bm_detail_request_url);
+        this.getRevise();
+        this.task_id = this.bulletinDetail.task_id;
+      } else if (query.again) {
+        this.againSave(query.again);
+        this.task_id = this.taskDetail.task_id;
       } else {
         params.to = 'collect';
         params.type = '1';
         this.getDraft(params);
+        this.task_id = this.taskDetail.task_id;
       }
     },
     watch: {
@@ -331,6 +339,9 @@
       },
       bulletinDetail() {
         return this.$store.state.app.bulletinPreFill;
+      },
+      taskDetail() {
+        return this.$store.state.app.taskDetail;
       }
     },
     methods: {
@@ -700,6 +711,7 @@
       saveReport(val) {
         this.form.type = 1;
         this.form.is_draft = val;
+        this.form.task_id = this.task_id;
         // 重置 附属房东变化
         if (this.form.signatory_identity == 1) {
           this.resetChange('subsidiary_customer');
@@ -722,15 +734,15 @@
             break;
           case 2:// 重置
             this.resetting();
+            this.getPunchClockData();
             break;
           case 3:// 修改
             this.form.is_draft = 0;
-            this.form.task_id = this.allDetails.task_id;
-            this.$httpZll.putReviseReport(this.form.id, this.form).then(res => {
+            this.form.approved_level = this.bulletinDetail.variableName;
+            this.$httpZll.putReviseReport(this.form).then(res => {
               if (res) {
                 this.resetting();
-                this.routerReplace('/approvalDetail', this.allDetails);
-                this.$rouer.go(-1);
+                this.$router.go(-1);
               }
             });
             break;
@@ -752,33 +764,26 @@
         });
       },
       // 修改
-      getRevise(val) {
-        this.$httpZll.getApprovalDetail(val).then(data => {
-          let res = data.data;
-          this.form.spot_code = '';//唯一识别码
-          this.form.id = '';//草稿ID
-          this.form.process_id = res.process_id;//修改ID
-          this.handlePreFill(res.content);
-        });
+      getRevise() {
+        let res = this.bulletinDetail;
+        this.form.spot_code = '';//唯一识别码
+        this.form.process_id = res.process_id || '';//修改ID
+        this.handlePreFill(res.content);
+      },
+      // 重新发布
+      againSave(again) {
+        let res = this.bulletinDetail;
+        this.handlePreFill(res.content, again);
       },
       // 获取待办信息
       getPunchClockData() {
-        if (!Object.keys(this.bulletinDetail).length) return;
-        this.form.task_id = this.bulletinDetail.task_id;
-        let res = this.bulletinDetail.content;
+        if (!Object.keys(this.taskDetail).length) return;
+        let res = this.taskDetail.content;
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'community':
               this.formatData[item] = res[item].village_name;
-              break;
-            case 'property_fee':
-            case 'property_phone':
-              for (let key of res.add_data) {
-                if (item === key.name) {
-                  this.form[item] = key.value || this.form[item];
-                }
-              }
               break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item] || [1, 1, 1]);
@@ -807,7 +812,7 @@
         }
       },
       // 预填数据处理
-      handlePreFill(res) {
+      handlePreFill(res, again = '') {
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
@@ -914,6 +919,9 @@
             this.album[pic] = res.album[pic];
           }
         }
+        if (again) {
+          this.form.id = '';
+        }
       },
       // 初始化数据
       resetting() {
@@ -937,7 +945,6 @@
         this.form.bank = '上海浦东发展银行';
         this.form.account = '6225212583158743';
         this.form.account_name = '贾少君';
-        this.getPunchClockData();
       }
     },
   }

@@ -31,7 +31,7 @@
               <i><img :src="changeOperates[item.task_action]"></i>
               <span>{{item.task_title}}</span>
             </p>
-            <p v-for="btn in item.outcome" v-if="item.outcome" @click="clickBtn(btn,item.task_id)">
+            <p v-for="btn in item.outcome" v-if="item.outcome" @click="clickBtn(btn,item)">
               <i><img :src="changeOperates[item.task_action]"></i>
               <span>{{btn.title}}</span>
               <!--<h1 v-for="(item,idx) in operates.outcomeOptions" class="btn" :class="item.route || ''"-->
@@ -190,16 +190,93 @@
     },
     computed: {},
     methods: {
+      // 去打卡 去签约
+      goOperates(val) {
+        switch (val.task_action) {
+          case 'punchClock':
+            this.routerLink(val.task_action, val);
+            break;
+          case 'collectReport':
+            val.task_route = val.task_action;
+            this.taskDetail(val.ctl_detail_request_url, val).then(_ => {
+              if (val.bm_detail_request_url) {
+                this.detailRequest(val.bm_detail_request_url, val, 'again');
+              } else {
+                this.routerLink(val.task_route);
+              }
+            });
+            break;
+        }
+      },
       // 变更 签署
-      clickBtn(action = {},task_id) {
+      clickBtn(action = {}, item) {
         let data = {}, postData = {};
         postData.variables = [];
         data.name = this.variableName;
         data.value = action.action;
         postData.variables.push(data);
         postData.action = 'complete';
-        this.$httpZll.finishBeforeTask(task_id, postData).then(_ => {
-          this.onSearch();
+        this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
+          if (action.action === 'success') {
+            this.$prompt('签署成功！');
+            this.routerLink(action.route);
+          } else {
+            let params = {
+              taskDefinitionKey: 'InputBulletinData',
+              rootProcessInstanceId: item.root_id,
+            };
+            this.$httpZll.getNewTaskId(params).then(res => {
+              let query = {}, urls = {};
+              let task = res.data[0];
+              query.task_id = task.id;
+              query.task_route = action.route;
+              for (let v of task.variables) {
+                if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
+                  urls[v.name] = v.value || '';
+                }
+              }
+              if (urls.bm_detail_request_url) {
+                this.taskDetail(urls.ctl_detail_request_url, query).then(_ => {
+                  this.detailRequest(urls.bm_detail_request_url, query, 'again');
+                });
+              }
+            });
+          }
+        });
+      },
+      // 任务详情
+      taskDetail(url, val) {
+        return new Promise((resolve, reject) => {
+          this.$httpZll.get(url, {}, 'prompt').then(res => {
+            if (res.success) {
+              let data = {};
+              let content = res.data.content;
+              let arr = ['property_fee', 'property_phone'];
+              if (content.add_data) {
+                for (let item of content.add_data) {
+                  if (arr.includes(item.name)) {
+                    content[item.name] = item.value;
+                  }
+                }
+              }
+              data.content = content;
+              data.task_id = val.task_id;
+              this.$store.dispatch('task_detail', data);
+            }
+            resolve(true);
+          });
+        });
+      },
+      // 报备详情
+      detailRequest(url, val, again = '') {
+        this.$httpZll.get(url, {}, 'prompt').then(res => {
+          if (res.success) {
+            let data = {};
+            data.content = res.data.content;
+            data.task_id = val.task_id;
+            this.$store.dispatch('bulletin_draft', data);
+            this.routerLink(val.task_route, {again: again});
+          }
         });
       },
       // 待办类型
@@ -236,7 +313,7 @@
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           this.paging = res.total;
-          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome'];
+          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
           let data = this.groupHandlerListData(res.data, task);
           for (let btn of data) {
             if (btn.outcome) {
@@ -253,27 +330,6 @@
             }
           }
         })
-      },
-      // 动态按钮
-      goOperates(val) {
-        if (val.task_action !== 'punchClock') {
-          if (this.detail_request_url === val.ctl_detail_request_url) {
-            this.routerLink(val.task_action);
-            return;
-          }
-          this.detail_request_url = val.ctl_detail_request_url;
-          this.$httpZll.get(val.ctl_detail_request_url).then(res => {
-            if (res.success) {
-              let data = {};
-              data.content = res.data.content;
-              data.task_id = val.task_id;
-              this.$store.dispatch('bulletin_draft', data);
-              this.routerLink(val.task_action);
-            }
-          })
-        } else {
-          this.routerLink(val.task_action, val);
-        }
       },
       // 底部模态框 按钮
       tabsTag(val) {

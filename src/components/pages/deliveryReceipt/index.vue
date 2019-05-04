@@ -89,6 +89,13 @@
             </li>
           </ul>
         </div>
+        <footer :class="['footer'+allReportNum]">
+          <div class="commonBtn" :style="mainWidth" :class="['hover'+slither]">
+            <p class="btn reset">重置</p>
+            <p class="btn deliver">草稿</p>
+            <p class="btn">发布</p>
+          </div>
+        </footer>
       </div>
     </div>
     <!--正常 picker-->
@@ -278,6 +285,7 @@
       overflow-x: hidden;
       @include flex();
       .transition {
+        @include flex('bet-column');
         .slide {
           @include transition(all .3s);
           height: 100%;
@@ -288,7 +296,7 @@
       }
       .transition2 {
         .slide1 {
-          @include transform(translateX(50%));
+          @include transform(translateX(-50%));
         }
       }
       .transition3 {
@@ -312,6 +320,45 @@
       }
       ul {
         @include scroll;
+      }
+      footer {
+        .commonBtn {
+          padding: .3rem .1rem .1rem;
+          @include transition(all .3s);
+        }
+      }
+      .footer2 {
+        .commonBtn {
+          transform: translateX(100%);
+        }
+        .hover1 {
+          transform: translateX(0);
+        }
+      }
+      .footer3 {
+        .commonBtn {
+          transform: translateX(200%);
+        }
+        .hover1 {
+          transform: translateX(100%);
+        }
+        .hover2 {
+          transform: translateX(0);
+        }
+      }
+      .footer4 {
+        .commonBtn {
+          transform: translateX(300%);
+        }
+        .hover1 {
+          transform: translateX(200%);
+        }
+        .hover2 {
+          transform: translateX(100%);
+        }
+        .hover3 {
+          transform: translateX(0);
+        }
       }
     }
   }
