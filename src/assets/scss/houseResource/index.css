@@ -305,7 +305,7 @@
   display: -webkit-flex;
   justify-content: space-around;
   align-items: flex-end;
-  background: url("../../../assets/image/common/commonFooterTag.png") no-repeat scroll center;
+  background: url("../../../assets/image/common/commonfootertag.png") no-repeat scroll center;
   background-size: 100% 100%; }
   .commonFooterTag p {
     width: .6rem;

@@ -198,9 +198,9 @@
             break;
           case 'collectReport':
             val.task_route = val.task_action;
-            this.taskDetail(val.ctl_detail_request_url, val).then(_ => {
+            this.againTaskDetail(val.ctl_detail_request_url, val).then(_ => {
               if (val.bm_detail_request_url) {
-                this.detailRequest(val.bm_detail_request_url, val, 'again');
+                this.againDetailRequest(val.bm_detail_request_url, val, 'again');
               } else {
                 this.routerLink(val.task_route);
               }
@@ -236,46 +236,11 @@
                 }
               }
               if (urls.bm_detail_request_url) {
-                this.taskDetail(urls.ctl_detail_request_url, query).then(_ => {
-                  this.detailRequest(urls.bm_detail_request_url, query, 'again');
+                this.againTaskDetail(urls.ctl_detail_request_url, query).then(_ => {
+                  this.againDetailRequest(urls.bm_detail_request_url, query, 'again');
                 });
               }
             });
-          }
-        });
-      },
-      // 任务详情
-      taskDetail(url, val) {
-        return new Promise((resolve, reject) => {
-          this.$httpZll.get(url, {}, 'prompt').then(res => {
-            if (res.success) {
-              let data = {};
-              let content = res.data.content;
-              let arr = ['property_fee', 'property_phone'];
-              if (content.add_data) {
-                for (let item of content.add_data) {
-                  if (arr.includes(item.name)) {
-                    content[item.name] = item.value;
-                  }
-                }
-              }
-              data.content = content;
-              data.task_id = val.task_id;
-              this.$store.dispatch('task_detail', data);
-            }
-            resolve(true);
-          });
-        });
-      },
-      // 报备详情
-      detailRequest(url, val, again = '') {
-        this.$httpZll.get(url, {}, 'prompt').then(res => {
-          if (res.success) {
-            let data = {};
-            data.content = res.data.content;
-            data.task_id = val.task_id;
-            this.$store.dispatch('bulletin_draft', data);
-            this.routerLink(val.task_route, {again: again});
           }
         });
       },
@@ -287,6 +252,7 @@
 
             break;
           case 'nweRent':
+
             break;
         }
       },

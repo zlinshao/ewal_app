@@ -324,7 +324,7 @@ export default {
         images: images,
         startPosition: index,
         onClose() {
-          that.$store.dispatch('switch_video',true);
+          that.$store.dispatch('switch_video', true);
         }
       });
     };
@@ -332,7 +332,41 @@ export default {
     Vue.prototype.$prompt = function (msg, type) {
       this.myUtils.prompt(msg, type);
     };
-
+    // 任务详情
+    Vue.prototype.againTaskDetail = function (url, val) {
+      return new Promise((resolve, reject) => {
+        this.$httpZll.get(url, {}, 'prompt').then(res => {
+          if (res.success) {
+            let data = {};
+            let content = res.data.content;
+            let arr = ['property_fee', 'property_phone'];
+            if (content.add_data) {
+              for (let item of content.add_data) {
+                if (arr.includes(item.name)) {
+                  content[item.name] = item.value;
+                }
+              }
+            }
+            data.content = content;
+            data.task_id = val.task_id;
+            this.$store.dispatch('task_detail', data);
+          }
+          resolve(true);
+        });
+      });
+    };
+    // 报备详情
+    Vue.prototype.againDetailRequest = function (url, val, again = '') {
+      this.$httpZll.get(url, {}, 'prompt').then(res => {
+        if (res.success) {
+          let data = {};
+          data.content = res.data.content;
+          data.task_id = val.task_id;
+          this.$store.dispatch('bulletin_draft', data);
+          this.routerLink(val.task_action, {again: again});
+        }
+      });
+    };
     // 钉钉认证
     Vue.prototype.personalGet = function () {
       let that = this;
