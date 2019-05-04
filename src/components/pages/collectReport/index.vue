@@ -310,20 +310,17 @@
       this.slitherCss.width = this.allReportNum + '00%';
       this.$prompt('正在加载...', 'send');
       this.resetting();
-      let params = {};
       let query = this.$route.query;
       this.queryData = query;
       if (query.revise) {
-        this.getRevise();
         this.task_id = this.bulletinDetail.task_id;
+        this.getRevise();
       } else if (query.again) {
-        this.againSave(query.again);
         this.task_id = this.taskDetail.task_id;
+        this.againSave();
       } else {
-        params.to = 'collect';
-        params.type = '1';
-        this.getDraft(params);
         this.task_id = this.taskDetail.task_id;
+        this.getDraft();
       }
     },
     watch: {
@@ -345,6 +342,15 @@
       }
     },
     methods: {
+      lookContract() {
+        dd.biz.util.openLink({
+          url: 'https://testapi.fadada.com:8443/api//viewdocs.action?app_id=401544&timestamp=20190303154831&v=2.0&msg_digest=QjlCQ0I4RTRDMkZDM0IwMkQ0MzdCQkMyRDI0Qjg2NTA0RDQ4NTlEQQ==&send_app_id=null&transaction_id=dfc88babbd582861b48a112dcdec17d89dc544a1',//要打开链接的地址
+          onSuccess(result) {
+          },
+          onFail(err) {
+          }
+        });
+      },
       // touch 左右切换
       tapStart(event) {
         for (let item of event.touches) {
@@ -380,6 +386,8 @@
         };
         this.$httpZll.getElectronicContract(data).then(res => {
           this.electronicContractNumber = res.data.number || '';
+          this.form.contract_number = this.electronicContractNumber;
+
         });
       },
       // 获取银行名称
@@ -534,10 +542,29 @@
       //   }
       // },
       // 身份认证
+      // 认证
       confirmation(val) {
         switch (val) {
           case 'identity':
-
+            let data = {};
+            data.customer_name = this.form.customer_name;
+            data.idcard = this.form.card_id;
+            data.mobile = this.form.contact_phone;
+            this.$httpZll.customerIdentity(data).then(res => {
+              if (res) {
+                if (res.data.customer_id) {
+                  this.form.signer = res.data;
+                } else {
+                  dd.biz.util.openLink({
+                    url: res.data.data,//要打开链接的地址
+                    onSuccess(result) {
+                    },
+                    onFail(err) {
+                    }
+                  });
+                }
+              }
+            });
             break;
           case 'bank':
 
@@ -595,7 +622,7 @@
         if (val.pickerRead) return;//弹窗内 可输入
         this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
       },
-      // 确认选择
+      // 确认下拉选择
       onConfirm(form, show) {
         this.onCancel();
         if (form !== 'close') {
@@ -749,15 +776,19 @@
         }
       },
       // 草稿
-      getDraft(params) {
+      getDraft() {
+        let params = {};
+        params.to = 'collect';
+        params.type = '1';
+        params.task_id = this.task_id;
         this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
-            this.handlePreFill(hhhhhhhhhhhh);
+            // this.handlePreFill(hhhhhhhhhhhh);
             this.getPunchClockData();
           } else {
             let res = data.data;
             this.form.id = '';//草稿ID
-            this.form = hhhhhhhhhhhh;
+            // this.form = hhhhhhhhhhhh;
             this.handlePreFill(res);
           }
           this.electronicContract();
@@ -767,13 +798,15 @@
       getRevise() {
         let res = this.bulletinDetail;
         this.form.spot_code = '';//唯一识别码
+        this.form.id = '';
         this.form.process_id = res.process_id || '';//修改ID
         this.handlePreFill(res.content);
       },
       // 重新发布
-      againSave(again) {
+      againSave() {
         let res = this.bulletinDetail;
-        this.handlePreFill(res.content, again);
+        this.form.id = '';
+        this.handlePreFill(res.content);
       },
       // 获取待办信息
       getPunchClockData() {
@@ -812,7 +845,7 @@
         }
       },
       // 预填数据处理
-      handlePreFill(res, again = '') {
+      handlePreFill(res) {
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
@@ -919,9 +952,6 @@
             this.album[pic] = res.album[pic];
           }
         }
-        if (again) {
-          this.form.id = '';
-        }
       },
       // 初始化数据
       resetting() {
@@ -942,6 +972,7 @@
           item.num = this.form[item.key];
         }
         this.form.id = id || '';
+        this.form.signer = '';
         this.form.bank = '上海浦东发展银行';
         this.form.account = '6225212583158743';
         this.form.account_name = '贾少君';

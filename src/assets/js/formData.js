@@ -1066,16 +1066,6 @@ defineCollectReport = {
       slot: '',
     },
     {
-      label: '违约金',
-      placeholder: '必填 请输入',
-      keyName: 'penalty',
-      keyType: '',
-      type: 'number',
-      status: '',
-      prompts: 'n为年限，且金额不足一万按一万算',
-      slot: '',
-    },
-    {
       label: '可否装修',
       readonly: 'readonly',
       placeholder: '必填 请选择',
@@ -1107,7 +1097,7 @@ defineCollectReport = {
       keyType: '',
       type: 'text',
       status: 'objInt',
-      picker: 'pickerCon',
+      picker: 'picker',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },

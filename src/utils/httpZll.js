@@ -299,6 +299,39 @@ class httpZll extends httpService {
     })
   }
 
+  // 客户认证
+  static customerIdentity(data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_identity}fdd/customer/cert`, data, 'prompt').then((res) => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          $httpPrompt(res.msg);
+          this.getFDDUserId(data).then(user => {
+            resolve(user);
+          });
+        }
+      })
+    })
+  }
+
+  // 获取法大大 user_id
+  static getFDDUserId(params) {
+    let data = {};
+    data.name = params.customer_name;
+    data.idcard = params.idcard;
+    data.phone = params.mobile;
+    return new Promise((resolve, reject) => {
+      this.get(`${url_identity}fdd/customer/verified`, data, '', 'close').then((res) => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
   // 报备唯一标识码
   static bulletinCode = function (code) {
     return new Promise((resolve, reject) => {

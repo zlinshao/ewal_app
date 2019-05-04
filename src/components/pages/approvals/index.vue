@@ -55,10 +55,10 @@
                      v-if="tabs.tab === '2' && tabs.status !== 0"></div>
               </div>
               <div class="listDown">
-                <div v-for="item in moreOperate['more'+tabs.status]" @click="onMoreOperates(item.id)"
+                <div v-for="more in moreOperate['more'+tabs.status]" @click="onMoreOperates(item,more.id)"
                      :class="moreOperate['more'+tabs.status].length>2?'':'lessThan2'">
-                  <i :class="['icon-'+item.id]"></i>
-                  <span>{{item.text}}</span>
+                  <i :class="['icon-'+more.id]"></i>
+                  <span>{{more.text}}</span>
                 </div>
               </div>
             </div>
@@ -146,7 +146,7 @@
               value: 2,
             },
             {
-              text: '待重发',
+              text: '待重签',
               value: 3,
             }
           ],
@@ -284,7 +284,7 @@
           this.task_ids.push(id);
         }
       },
-      onMoreOperates(id) {
+      onMoreOperates(val, id) {
         switch (id) {
           case '1':
             break;
@@ -297,9 +297,50 @@
           case '6':
             break;
           case '7':
-
+            this.taskDetail(val.ctl_detail_request_url, val).then(_ => {
+              if (val.bm_detail_request_url) {
+                this.detailRequest(val.bm_detail_request_url, val, 'again');
+              } else {
+                this.routerLink(val.task_action);
+              }
+            });
             break;
         }
+      },
+      // 任务详情
+      taskDetail(url, val) {
+        return new Promise((resolve, reject) => {
+          this.$httpZll.get(url, {}, 'prompt').then(res => {
+            if (res.success) {
+              let data = {};
+              let content = res.data.content;
+              let arr = ['property_fee', 'property_phone'];
+              if (content.add_data) {
+                for (let item of content.add_data) {
+                  if (arr.includes(item.name)) {
+                    content[item.name] = item.value;
+                  }
+                }
+              }
+              data.content = content;
+              data.task_id = val.task_id;
+              this.$store.dispatch('task_detail', data);
+            }
+            resolve(true);
+          });
+        });
+      },
+      // 报备详情
+      detailRequest(url, val, again = '') {
+        this.$httpZll.get(url, {}, 'prompt').then(res => {
+          if (res.success) {
+            let data = {};
+            data.content = res.data.content;
+            data.task_id = val.task_id;
+            this.$store.dispatch('bulletin_draft', data);
+            this.routerLink(val.task_action, {again: again});
+          }
+        });
       },
       // 数据列表
       onSearch(num) {
@@ -387,8 +428,9 @@
               case 3:
                 this.params['params' + tab] = {
                   page: 1,
-                  cancelled: true,//已撤销
+                  cancelled: true,//待重签
                   taskDefinitionKey: 'InputBulletinData',
+                  active: true,
                   // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
@@ -430,7 +472,7 @@
           if (!twoLevel) {
             this.paging['paging' + tab] = res.total;
           }
-          let task = ['house_address', 'bm_detail_request_url', 'outcome'];
+          let task = ['task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome'];
           let data = this.groupHandlerListData(res.data, task);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;
