@@ -17,10 +17,11 @@ cache:
   - node_modules/
   - dist
 
-# build:
-#   stage:
-#     build
-#   script:
+build:
+  stage:
+    build
+  script:
+    - ls
 #   - cnpm install
 #   - cnpm run build
 
