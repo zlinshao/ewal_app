@@ -63,20 +63,27 @@
     mounted() {
       var top = this.$refs['mainContainer'].offsetTop;
       this.mainHeight.height = window.innerHeight - top + 'px';
-
-      this.$httpHs.getContractDetail(this.$route.query, '加载中...').then(res => {
-        if (res.code === 200) {
-          this.contract_detail = res.data;
-          console.log(this.contract_detail);
-        } else {
-          this.$prompt('获取详情失败');
-          return false;
-        }
-      })
+      this.ContractDetail();
     },
-    watch: {},
+    watch: {
+      $route(to) {
+        if (to.path === '/contract_detail') {
+          this.ContractDetail();
+        }
+      },
+    },
     computed: {},
     methods: {
+      ContractDetail() {
+        this.$httpHs.getContractDetail(this.$route.query, '加载中...').then(res => {
+          if (res.code === 200) {
+            this.contract_detail = res.data;
+          } else {
+            this.$prompt('获取详情失败');
+            return false;
+          }
+        })
+      },
       //查看大图
       handleLookBigPic(tmp,uri) {
         this.$bigPhoto(tmp,uri);
