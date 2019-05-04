@@ -1,0 +1,259 @@
+@font-face {
+  font-family: 'dingzitiblod';
+  src: url("/static/font/DIN-Bold.otf"); }
+@font-face {
+  font-family: 'dingziti';
+  src: url("/static/font/DIN-Light.otf"); }
+@font-face {
+  font-family: 'fangzhengjianti';
+  src: url("/static/font/fangzhengjianti.ttf"); }
+@font-face {
+  font-family: 'jingdianxingshu';
+  src: url("/static/font/JINGDIANXINGSHU.otf"); }
+.flex {
+  display: flex;
+  display: -webkit-flex; }
+
+.bet-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  justify-content: space-between; }
+
+.space-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  justify-content: center; }
+
+.items-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  align-items: center; }
+
+.flex-center {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: center; }
+
+.items-bet {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: space-between; }
+
+.items-center {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center; }
+
+.items-start {
+  display: flex;
+  display: -webkit-flex;
+  align-items: flex-start; }
+
+.items-end {
+  display: flex;
+  display: -webkit-flex;
+  align-items: flex-end; }
+
+.justify-center {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center; }
+
+.justify-around {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-around; }
+
+.items-around {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: space-around; }
+
+.justify-bet {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between; }
+
+.justify-start {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: flex-start; }
+
+.justify-end {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: flex-end; }
+
+.writingMode {
+  writing-mode: vertical-rl;
+  writing-mode: tb-rl; }
+
+.line-clamp1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1; }
+
+.line-clamp2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; }
+
+.line-clamp3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; }
+
+.scroll_bar {
+  overflow: auto;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden; }
+
+#test_paper_exam .demo {
+  height: 3rem;
+  padding: .3rem;
+  width: 100%;
+  background-color: gray; }
+#test_paper_exam .action-sheet-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  #test_paper_exam .action-sheet-container .main-container {
+    width: 100%;
+    flex: 1;
+    background-color: transparent;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column; }
+    #test_paper_exam .action-sheet-container .main-container .banner-top {
+      position: relative;
+      height: 3rem;
+      width: 100%;
+      border-bottom: 1px dotted #F2F2F2;
+      background: linear-gradient(45deg, #4570fd 0%, #04aac4 100%); }
+      #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner {
+        display: flex;
+        align-items: center;
+        flex-direction: column; }
+        #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-top {
+          width: 100%;
+          height: .7rem;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          padding-left: .3rem; }
+          #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-top .icon-tip {
+            width: .4rem;
+            height: .4rem;
+            background: url("../../../assets/image/exam/peixunkaoshi@3x.png") no-repeat scroll center;
+            background-size: 100% 100%; }
+          #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-top > :nth-child(2) {
+            font-size: .28rem;
+            font-family: PingFangHK-Regular;
+            padding-left: .1rem;
+            color: #FFFFFF; }
+        #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-middle {
+          padding-left: .8rem;
+          width: 100%;
+          height: .6rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between; }
+          #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-middle .exam-banner-middle-post {
+            font-size: .25rem;
+            padding: .01rem .05rem;
+            color: #FFFFFF;
+            font-family: PingFangHK-Light;
+            border: 1px solid #FFFFFF;
+            opacity: 0.7038; }
+          #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-middle .exam-banner-middle-timestamp {
+            width: 2rem;
+            height: 80%;
+            background: white;
+            border-radius: 100px 0px 0px 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around; }
+            #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-middle .exam-banner-middle-timestamp .icon-clock {
+              width: .3rem;
+              height: .3rem;
+              background: url("../../../assets/image/exam/kaoshishijian@3x.png") no-repeat scroll center;
+              background-size: 100% 100%; }
+            #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-middle .exam-banner-middle-timestamp .time-remain {
+              font-family: DIN-Medium;
+              color: #4570FD;
+              font-size: .3rem; }
+        #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-bottom {
+          padding-left: .8rem;
+          padding-top: .7rem;
+          width: 100%;
+          height: .7rem; }
+          #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-bottom .exam-banner-bottom-tip {
+            color: #40C3FE;
+            font-family: PingFangHK-Regular;
+            font-size: .25rem; }
+    #test_paper_exam .action-sheet-container .main-container .exam-container {
+      color: #000000;
+      padding: .3rem .6rem 0; }
+      #test_paper_exam .action-sheet-container .main-container .exam-container .exam-single .single-title {
+        padding: .2rem 0; }
+      #test_paper_exam .action-sheet-container .main-container .exam-container .exam-single .single-container .exam-single-item .single-item-stem {
+        padding-bottom: .2rem; }
+      #test_paper_exam .action-sheet-container .main-container .exam-container .exam-judge .exam-judge-item {
+        padding: .1rem 0; }
+      #test_paper_exam .action-sheet-container .main-container .exam-container .exam-short .exam-short-item .short-item-stem {
+        padding: .1rem 0; }
+      #test_paper_exam .action-sheet-container .main-container .exam-container .end-tip {
+        margin: .3rem 0;
+        width: 100%;
+        height: 3rem;
+        background-color: #F2F2F2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; }
+        #test_paper_exam .action-sheet-container .main-container .exam-container .end-tip > span {
+          padding-bottom: .2rem;
+          color: #8F8F8F;
+          display: flex;
+          width: 100%;
+          margin: 0 auto;
+          justify-content: center; }
+  #test_paper_exam .action-sheet-container .btn-container {
+    box-shadow: 0px -2px 14px 0px rgba(224, 224, 224, 0.3);
+    width: 100%;
+    height: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around; }
+    #test_paper_exam .action-sheet-container .btn-container .btn-cancel {
+      width: 40%;
+      height: .7rem;
+      background: url("../../../assets/image/exam/quxiao.png") no-repeat scroll center;
+      background-size: 100% 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+    #test_paper_exam .action-sheet-container .btn-container .btn-confirm {
+      color: #FFFFFF;
+      width: 40%;
+      height: .7rem;
+      background: url("../../../assets/image/exam/queding.png") no-repeat scroll center;
+      background-size: 100% 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+
+/*# sourceMappingURL=TestPaperExam.css.map */
