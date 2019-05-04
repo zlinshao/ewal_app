@@ -51,17 +51,18 @@
               最新考试
             </div>
             <div class="latest-exam-bottom">
-              <div v-for="item in 13" class="latest-exam-item">
+              <div v-for="item in latestExamList" class="latest-exam-item">
                 <div class="item-badge"></div>
 
                 <div class="item-center">
-                  <div class="latest-exam-tip1">新员工培训考试新员工培训考试 考考考考</div>
-                  <div class="latest-exam-tip2">高级员工考核</div>
-                  <div class="latest-exam-tip3">201-05-02 10:00</div>
-                  <div class="latest-exam-tip4"><span>120</span>分钟</div>
+                  <div class="latest-exam-tip1">{{item.name}}</div>
+                  <div class="latest-exam-tip2">{{item.bank.name}}</div>
+                  <div class="latest-exam-tip3">{{item.start_time}}</div>
+                  <div class="latest-exam-tip4"><span>{{item.duration}}</span>分钟</div>
                 </div>
 
-                <div class="item-badge-corner colorFED836">未开始</div>
+                <div v-if="item.status==0" class="item-badge-corner colorFED836">未开始</div>
+                <div v-if="item.status==1" class="item-badge-corner colorFF6C00">进行中</div>
 
               </div>
             </div>
@@ -131,7 +132,7 @@
                       <div v-if="item.status==0" class="item-middle-left__status status0">未开始</div>
                       <div v-if="item.status==1" class="item-middle-left__status status1">进行中</div>
                       <div v-if="item.status==2" class="item-middle-left__status status2">已结束</div>
-                      <div class="latest-exam-tip2">高级员工考核</div>
+                      <div class="latest-exam-tip2">{{item.bank.name}}</div>
                     </div>
                     <div class="item-middle-right"></div>
                   </div>

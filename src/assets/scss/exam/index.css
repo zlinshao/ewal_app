@@ -233,7 +233,7 @@
           display: flex;
           justify-content: center;
           flex-direction: column;
-          width: 39%;
+          width: 42%;
           flex: 0 0 auto;
           height: 100%;
           margin: 0.1rem;
@@ -298,7 +298,7 @@
             bottom: 0;
             height: .5rem;
             width: 1.4rem;
-            background: url("../../../assets/image/exam/鐭╁舰_copy12@3x.png") no-repeat scroll center;
+            background: url("../../../assets/image/exam/矩形_copy12@3x.png") no-repeat scroll center;
             background-size: 100% 100%;
             display: flex;
             display: -webkit-flex;
@@ -325,7 +325,7 @@
             width: .3rem;
             height: 2px;
             bottom: 0;
-            background: url("../../../assets/image/exam/鐭╁舰_copy11@2x.png") no-repeat scroll center;
+            background: url("../../../assets/image/exam/矩形_copy11@2x.png") no-repeat scroll center;
             background-size: 100% 100%; }
     #exam .exam-container .list-container .item {
       height: 2.4rem;
@@ -468,7 +468,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          background: url("../../../assets/image/exam/鐭╁舰_copy3@3x.png") no-repeat scroll center;
+          background: url("../../../assets/image/exam/矩形_copy3@3x.png") no-repeat scroll center;
           background-size: 100% 100%; }
       #exam .exam-container .list-container .item-no-authority .miss-exam {
         position: absolute;
