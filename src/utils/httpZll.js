@@ -273,11 +273,12 @@ class httpZll extends httpService {
   // 银行名称认证
   static getBankNameAttestation(params) {
     return new Promise((resolve, reject) => {
-      this.get(`${market}v1.0/market/helper/bank_name`, params, '', 'close').then((res) => {
+      this.get(`${market}v1.0/market/helper/bank_name`, params, 'prompt').then((res) => {
         if (Number(res.code) === 200) {
+          $httpPrompt(res.message);
           resolve(res);
         } else {
-          $httpPrompt(res.msg);
+          $httpPrompt(res.message);
           resolve(false);
         }
       })

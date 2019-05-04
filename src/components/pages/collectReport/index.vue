@@ -305,7 +305,6 @@
     activated() {
       this.slither = 0;
       this.allReportNum = Object.keys(this.resetDrawing).length;
-      this.getBankName();
       let title = this.$refs.title.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
       this.mainWidth = {minWidth: main, maxWidth: main};
@@ -383,16 +382,6 @@
           this.form.contract_number = this.electronicContractNumber;
 
         });
-      },
-      // 获取银行名称
-      getBankName() {
-        let params = {
-          card: '6225212583158743',
-          owner: '贾少君',
-        };
-        this.$httpZll.getBankNameAttestation(params).then(res => {
-
-        })
       },
       // 计算押金
       countPrice() {
@@ -562,7 +551,13 @@
             });
             break;
           case 'bank':
-
+            let params = {
+              card: this.form.account,
+              owner: this.form.account_name,
+            };
+            this.$httpZll.getBankNameAttestation(params).then(res => {
+              this.form.bank = res.data || '';
+            });
             break;
         }
       },
@@ -988,9 +983,9 @@
         }
         this.form.id = id || '';
         this.form.signer = '';
-        this.form.bank = '上海浦东发展银行';
-        this.form.account = '6225212583158743';
-        this.form.account_name = '贾少君';
+        // this.form.bank = '上海浦东发展银行';
+        // this.form.account = '6225212583158743';
+        // this.form.account_name = '贾少君';
       }
     },
   }
