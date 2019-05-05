@@ -115,8 +115,6 @@ export default {
         obj.status = item.status || [];
         obj.root_id = item.rootProcessInstanceId;
         obj.process_id = item.processInstanceId;
-        obj.contract_number = 'LJSFE010000158';
-        obj.contract_view_url = 'https://testapi.fadada.com:8443/api//viewContract.action?app_id=401544&v=2.0&timestamp=20190505195737&contract_id=LJSFE010000151&msg_digest=OUM5QUEyRDY5MUEzN0FFNDJFQjk3MzBGREEyRDRGNTE3OENBQ0VERg==';
         for (let key of item.variables) {
           if (task.includes(key.name)) {
             obj[key.name] = key.value;

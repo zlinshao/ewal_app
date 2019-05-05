@@ -350,12 +350,10 @@
           case '2':
             switch (status) {
               case 0:
+                this.urlApi = 'runtime/process-instances';
+                break;
               case 1:
-                if (status === 0) {
-                  this.urlApi = 'runtime/process-instances';
-                } else {
-                  this.urlApi = 'history/process-instances';
-                }
+                this.urlApi = 'history/process-instances';
                 break;
               case 2:
                 this.urlApi = 'runtime/tasks';
@@ -382,16 +380,13 @@
         this.apiHandle(tab, status);
         switch (tab) {
           case '1':
-            this.params['params' + tab] = {};
             this.params['params' + tab] = {
               page: 1,
               // assignee: '69',//登陆人
-              processDefinitionKey: 'MG-BulletinApproval',//市场部
+              taskDefinitionKeyIn: approvalSearch.approvals1.join(','),
               category: 'approval',
+              finished: Boolean(status)
             };
-            if (status === 1) {
-              this.params['params' + tab].finished = Boolean(status)
-            }
             break;
           case '2':
             switch (status) {
@@ -400,15 +395,16 @@
                 this.params['params' + tab] = {
                   page: 1,
                   // taskOwner: '69',//登陆人
-                  processDefinitionKey: 'MG-BulletinApproval',//市场部
+                  processDefinitionKey: 'MG-BulletinApproval',
                   // processInstanceName: 'Collect',//区分报备类型
+                  finished: Boolean(status),
                 };
                 break;
               case 2:
                 this.params['params' + tab] = {
                   page: 1,
                   // assignee: '69',//登陆人
-                  taskDefinitionKey: 'SignEC',
+                  taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
                   // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
@@ -416,7 +412,7 @@
                 this.params['params' + tab] = {
                   page: 1,
                   cancelled: true,//待重签
-                  taskDefinitionKey: 'InputBulletinData',
+                  taskDefinitionKeyIn: approvalSearch.approvals23.join(','),
                   active: true,
                   // processInstanceName: 'Collect',//区分报备类型
                 };
@@ -460,8 +456,9 @@
           if (!twoLevel) {
             this.paging['paging' + tab] = res.total;
           }
-          let task = ['bulletin_type', 'task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome', 'contract_number', 'contract_view_url'];
+          let task = ['bulletin_type', 'task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome', 'contract_number', 'contract_view_url', 'signer'];
           let data = this.groupHandlerListData(res.data, task);
+          console.log(data);
           this.outcomes(data, this.tabs);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;
@@ -704,13 +701,12 @@
             bottom: 0;
             right: 0;
             left: 40%;
-            padding: .2rem 0 .2rem .2rem;
+            padding: .2rem;
             @include flex('flex-center');
             background-color: #D8D8D8;
             flex-wrap: wrap;
             div {
               width: 50%;
-              padding-right: .15rem;
               @include flex('items-center');
               i {
                 min-width: .33rem;

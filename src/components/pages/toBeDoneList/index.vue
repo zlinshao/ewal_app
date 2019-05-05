@@ -19,8 +19,8 @@
           <scroll-load :name="'flex-warp'" @getLoadMore="scrollLoad" :disabled="!fullLoading['load1']">
             <li class="noFinishMain" v-for="(item,index) in finishList['list1']" @click="goOperates(item,'polishing')">
               <div :class="['main-'+index,listLength.includes(index)?'mainTransform':'']">
-                <p>发货的是卡了和卡拉恢复扩大分开了</p>
-                <div class="toBeDoneType">物品补给跟进</div>
+                <p>{{item.title}}</p>
+                <div class="toBeDoneType">{{item.name}}</div>
                 <div class="progress">
                   <div :style="{'height': '30%'}">
                     <span>30<b>%</b></span>
@@ -372,10 +372,22 @@
       },
       // 请求列表
       getFinishList(tab) {
+        let url = '', search = [];
+        for (let item of Object.keys(approvalSearch)) {
+          for (let val of approvalSearch[item]) {
+            search = search.concat(val);
+          }
+        }
+        search = this.myUtils.arrayWeight(search).join(',');
         this.fullLoading['load' + tab] = true;
         let params = this.params['params' + tab];
-        // let url = tab === '1' ? 'runtime/tasks' : 'history/tasks';
-        let url = 'runtime/tasks';
+        params.taskDefinitionKeyNotIn = search;
+        if (tab === '1') {
+          url = 'runtime/tasks'
+        } else {
+          url = 'history/tasks';
+          // params.finished = true;
+        }
         this.$httpZll.getToBeDoneListApi(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
           this.total['total' + tab] = res.total || 0;

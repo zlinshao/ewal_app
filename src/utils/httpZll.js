@@ -207,7 +207,7 @@ class httpZll extends httpService {
       tenantId: tenant,
       // assignee: '69',//登陆人
       order: 'desc',
-      taskDefinitionKeyIn: 'CollectTakeLook,InputBulletinData,SignEC',
+      taskDefinitionKeyIn: approvalSearch.toBeDone.join(','),
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
     };

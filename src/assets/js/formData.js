@@ -151,6 +151,14 @@ hhhhhhhhhhhh = {
   "spot_code": "s7d30"
 };
 
+// 审批搜索
+approvalSearch = {
+  toBeDone: ['CollectTakeLook', 'InputBulletinData', 'SignEC'],
+  approvals1: ['pqjl_approval','gkzx_approval'],
+  approvals22: ['SignEC'],
+  approvals23: ['InputBulletinData'],
+};
+
 // 收房报备
 defineCollectReport = {
   // 房屋信息
