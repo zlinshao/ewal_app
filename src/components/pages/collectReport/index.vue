@@ -56,7 +56,7 @@
                   <label class="labelTitle">{{item.label}}</label>
                   <div class="justify-around">
                     <div v-for="(key,index) in item.value">
-                      <h1 @click="electricalChoose()">
+                      <h1 @click="electricalModule = true">
                         <span :class="['electrical-' + (index + 1)]"></span>
                       </h1>
                       <p>{{form[key.key]}}</p>
@@ -312,6 +312,7 @@
       this.slitherCss.width = this.allReportNum + '00%';
       this.$prompt('正在加载...', 'send');
       this.resetting();
+      console.log(window.location.href);
       let query = this.$route.query;
       this.queryData = query;
       if (query.revise) {
@@ -702,10 +703,6 @@
           this.formatData = show;
         }
       },
-      // 选择 家电
-      electricalChoose() {
-        this.electricalModule = true;
-      },
       // 家电 确认选择
       closeElectrical(val) {
         if (val !== 'close') {
@@ -983,9 +980,9 @@
         }
         this.form.id = id || '';
         this.form.signer = '';
-        // this.form.bank = '上海浦东发展银行';
-        // this.form.account = '6225212583158743';
-        // this.form.account_name = '贾少君';
+
+        this.form.account = '6225212583158743';
+        this.form.account_name = '贾少君';
       }
     },
   }
