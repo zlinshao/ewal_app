@@ -287,6 +287,7 @@
               this.variableName = outcome.variableName;
             }
           }
+          console.log(data);
           if (this.params.page === 1) {
             this.toBeDoneList = data;
           } else {
