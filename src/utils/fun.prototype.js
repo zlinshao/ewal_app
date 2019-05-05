@@ -333,9 +333,10 @@ export default {
       this.myUtils.prompt(msg, type);
     };
     // 任务详情
-    Vue.prototype.againTaskDetail = function (url, val) {
+    Vue.prototype.againTaskDetail = function (val) {
       return new Promise((resolve, reject) => {
-        this.$httpZll.get(url, {}, 'prompt').then(res => {
+        console.log(val.url);
+        this.$httpZll.get(val.ctl_detail_request_url, {}, 'prompt').then(res => {
           if (res.success) {
             let data = {};
             let content = res.data.content;
@@ -356,8 +357,8 @@ export default {
       });
     };
     // 报备详情
-    Vue.prototype.againDetailRequest = function (url, val, again = '') {
-      this.$httpZll.get(url, {}, 'prompt').then(res => {
+    Vue.prototype.againDetailRequest = function (val, again = '') {
+      this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
         if (res.success) {
           let data = {};
           data.content = res.data.content;

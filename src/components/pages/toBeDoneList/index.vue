@@ -333,12 +333,12 @@
       },
       // 生成电子收据
       clickBtn(task_id) {
-        let data = {}, postData = {};
-        postData.variables = [];
-        data.name = '';
-        data.value = '';
-        postData.variables.push(data);
+        let postData = {};
         postData.action = 'complete';
+        postData.variables = [{
+          name: key,
+          value: action.action,
+        }];
         this.$httpZll.finishBeforeTask(task_id, postData).then(_ => {
           this.onSearch();
         });
@@ -425,23 +425,6 @@
 
         }
       },
-      // 下个任务
-      nextTask(id) {
-        let params = {
-          taskDefinitionKey: 'InputBulletinData',
-          rootProcessInstanceId: id,
-        };
-        this.$httpZll.getNewTaskId(params).then(res => {
-          // if (!res.data.length) {
-          //   this.$prompt('未找到签约信息,请联系产品经理！');
-          //   return;
-          // }
-          // this.allDetail.task_id = res.data[0].id;
-          // this.$store.dispatch('bulletin_draft', this.allDetail);
-          // this.routerReplace('/collectReport');
-          // this.$emit('close');
-        });
-      },
       // 取消
       cancel() {
         this.searchHigh = false;
@@ -457,7 +440,6 @@
           this.checkChooseCommon(val, this.highParams[key]);
         }
         this.highParams = Object.assign({}, this.highParams);
-        console.log(this.highParams)
       },
       // 搜索按钮
       searchBtn(val) {
@@ -469,7 +451,6 @@
             this.resetting();
             break;
           default:
-            // this.params['params'+this.tabs] = this.highParams;
             this.getFinishList(this.tabs);
             this.cancel();
             break;
@@ -487,10 +468,7 @@
       footerTag(val) {
         switch (val) {
           case 1:
-            this.routerReplace('/index');
-            if (this.path === 'index') {
-              this.$router.go(-1);
-            }
+            this.$router.go(-1);
             break;
         }
       },

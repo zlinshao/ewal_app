@@ -197,12 +197,11 @@
             this.routerLink(val.task_action, val);
             break;
           case 'collectReport':
-            val.task_route = val.task_action;
-            this.againTaskDetail(val.ctl_detail_request_url, val).then(_ => {
+            this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
-                this.againDetailRequest(val.bm_detail_request_url, val, 'again');
+                this.againDetailRequest(val, 'again');
               } else {
-                this.routerLink(val.task_route);
+                this.routerLink(val.task_action);
               }
             });
             break;
@@ -210,12 +209,12 @@
       },
       // 变更 签署
       clickBtn(action = {}, item) {
-        let data = {}, postData = {};
-        postData.variables = [];
-        data.name = this.variableName;
-        data.value = action.action;
-        postData.variables.push(data);
+        let postData = {};
         postData.action = 'complete';
+        postData.variables = [{
+          name: this.variableName,
+          value: action.action,
+        }];
         this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
           if (action.action === 'success') {
             this.$prompt('签署成功！');
@@ -226,18 +225,18 @@
               rootProcessInstanceId: item.root_id,
             };
             this.$httpZll.getNewTaskId(params).then(res => {
-              let query = {}, urls = {};
+              let query = {};
               let task = res.data[0];
               query.task_id = task.id;
-              query.task_route = action.route;
+              query.task_action = action.route;
               for (let v of task.variables) {
                 if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
-                  urls[v.name] = v.value || '';
+                  query[v.name] = v.value || '';
                 }
               }
               if (urls.bm_detail_request_url) {
-                this.againTaskDetail(urls.ctl_detail_request_url, query).then(_ => {
-                  this.againDetailRequest(urls.bm_detail_request_url, query, 'again');
+                this.againTaskDetail(query).then(_ => {
+                  this.againDetailRequest(query, 'again');
                 });
               }
             });

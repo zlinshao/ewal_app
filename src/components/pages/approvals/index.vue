@@ -56,8 +56,9 @@
               </div>
               <div class="listDown" v-if="item.outcome">
                 <div v-for="(more,index) in item.outcome.outcomeOptions"
-                     @click="onMoreOperates(more,item.outcome.variableName)">
-                  <i :class="['icon-'+(index+1)]"></i>
+                     :class="item.outcome.outcomeOptions.length>2?'':'listDown2'"
+                     @click="onMoreOperates(more,item.outcome.variableName,item)">
+                  <i :class="['icon-'+more.action]"></i>
                   <span>{{more.title}}</span>
                 </div>
               </div>
@@ -275,7 +276,6 @@
       },
     },
     methods: {
-
       // 更多操作
       moreOperates(id) {
         if (this.task_ids.includes(id)) {
@@ -285,38 +285,55 @@
           this.task_ids.push(id);
         }
       },
-      onMoreOperates(val, id) {
-        switch (id) {
-          case '1':
+      // 点击更多 操作
+      onMoreOperates(action, name, item) {
+        switch (action.action) {
+          case 'preview'://合同预览
             break;
-          case '2':
+          case 'again'://重新提交
+            item.task_action = action.route;
+            this.againSave(item);
             break;
-          case '4':
+          case 'modify'://合同修改
+            let postData = {};
+            postData.action = 'complete';
+            postData.variables = [{
+              name: name,
+              value: action.action,
+            }];
+            this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
+              let params = {
+                taskDefinitionKey: 'InputBulletinData',
+                rootProcessInstanceId: item.root_id,
+              };
+              this.$httpZll.getNewTaskId(params).then(res => {
+                let query = {};
+                let task = res.data[0];
+                query.task_id = task.id;
+                query.task_action = action.route;
+                for (let v of task.variables) {
+                  if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
+                    query[v.name] = v.value || '';
+                  }
+                }
+                this.againSave(query);
+              });
+            });
             break;
-          case '5':
+          case 'phone'://客户手机签署
             break;
-          case '6':
-            this.againSave(val);
+          case 'success'://本地签署
+            // this.againSave(val);
             break;
-          case '7':
-            this.againSave(val);
+          case 'contract'://发送电子合同
+            // this.againSave(val);
             break;
         }
       },
       // 重新提交
       againSave(val) {
-        // let btn = JSON.parse(val.outcome);
-        // let data = {};
-        // data.action = 'complete';
-        // data.variables = {};
-        // data.variables.name = btn.variableName;
-        // data.variables.val = 'success';
-        this.againTaskDetail(val.ctl_detail_request_url, val).then(_ => {
-          if (val.bm_detail_request_url) {
-            this.againDetailRequest(val.bm_detail_request_url, val, 'again');
-          } else {
-            this.routerLink(val.task_action);
-          }
+        this.againTaskDetail(val).then(_ => {
+          this.againDetailRequest(val, 'again');
         });
       },
       // 数据列表
@@ -451,12 +468,7 @@
           }
           let task = ['task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome'];
           let data = this.groupHandlerListData(res.data, task);
-          for (let item of data) {
-            if (item.outcome) {
-              item.outcome = JSON.parse(item.outcome);
-              console.log(item.outcome);
-            }
-          }
+          this.outcomes(data, this.tabs);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;
           } else {
@@ -465,6 +477,49 @@
             }
           }
         })
+      },
+      // 列表操作 按钮
+      outcomes(data, tabs) {
+        if (tabs.tab === '2') {
+          for (let item of data) {
+            if (tabs.status === 1) {
+              item.outcome = {
+                outcomeOptions: [{
+                  title: '合同预览',
+                  action: 'preview',
+                }, {
+                  title: '发送电子合同',
+                  action: 'contract',
+                }],
+              };
+            }
+            if (tabs.status === 2) {
+              if (item.outcome) {
+                let data = [
+                  {
+                    title: '合同预览',
+                    action: 'preview ',
+                  },
+                  {
+                    title: '客户手机签署',
+                    action: 'phone',
+                  },
+                ];
+                item.outcome = JSON.parse(item.outcome);
+                item.outcome.outcomeOptions = data.concat(item.outcome.outcomeOptions);
+              }
+            }
+            if (tabs.status === 3) {
+              item.outcome = {
+                outcomeOptions: [{
+                  title: '重新提交',
+                  action: 'again',
+                  route: item.task_action,
+                }],
+              };
+            }
+          }
+        }
       },
       // 头部切换
       changeApproval(val) {
@@ -693,7 +748,7 @@
                 font-size: .24rem;
               }
             }
-            .lessThan2 {
+            .listDown2 {
               width: 100%;
               padding-left: 30%;
             }

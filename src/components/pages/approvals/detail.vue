@@ -149,24 +149,7 @@
         task_id: '',//详情
 
         mainHeight: '',
-        operates: [
-          {
-            text: '取消',
-            type: 'back'
-          },
-          {
-            text: '拒绝',
-            type: 'refuse'
-          },
-          {
-            text: '暂缓',
-            type: 'postpone'
-          },
-          {
-            text: '确定',
-            type: 'publish'
-          },
-        ],
+        operates: [],
         drawSlither: {},
         formatData: {},
         videoSrc: '',//视频
@@ -253,12 +236,12 @@
           case'postpone':
             break;
           default:
-            let data = {}, postData = {};
-            postData.variables = [];
-            data.name = key;
-            data.value = action.action;
-            postData.variables.push(data);
+            let postData = {};
             postData.action = 'complete';
+            postData.variables = [{
+              name: key,
+              value: action.action,
+            }];
             this.$httpZll.finishBeforeTask(this.task_id, postData).then(_ => {
               this.$router.go(-1);
             });
