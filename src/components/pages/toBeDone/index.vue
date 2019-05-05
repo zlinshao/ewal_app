@@ -23,23 +23,23 @@
             <!--<label>密码 506231</label>-->
           </p>
           <div class="handleBtn">
-            <p v-for="btn in normalOperates" :class="btn.class">
+            <!--合同修改 / 签署-->
+            <div v-if="item.outcome" class="contract">
+              <p v-for="btn in item.outcome.outcomeOptions" @click="clickBtn(btn,item.outcome.variableName,item)">
+                <i><img :src="changeOperates[item.task_action]"></i>
+                <span>{{btn.title}}</span>
+              </p>
+            </div>
+            <!--转交/代签-->
+            <div v-for="btn in normalOperates" :class="btn.class" v-else>
               <i><img :src="btn.icon"></i>
               <span>{{btn.text}}</span>
-            </p>
-            <p @click="goOperates(item)" v-if="item.task_title" :class="item.task_action">
+            </div>
+            <!--去打卡 / 去签约-->
+            <div @click="goOperates(item)" v-if="item.task_title" :class="item.task_action">
               <i><img :src="changeOperates[item.task_action]"></i>
               <span>{{item.task_title}}</span>
-            </p>
-            <p v-for="btn in item.outcome" v-if="item.outcome" @click="clickBtn(btn,item)">
-              <i><img :src="changeOperates[item.task_action]"></i>
-              <span>{{btn.title}}</span>
-              <!--<h1 v-for="(item,idx) in operates.outcomeOptions" class="btn" :class="item.route || ''"-->
-              <!--@click="clickBtn(operates.variableName, item)">-->
-              <!--<span class="writingMode">{{item.title}}</span>-->
-              <!--</h1>-->
-
-            </p>
+            </div>
           </div>
         </li>
         <li class="noMore" v-if="toBeDoneList.length === paging && toBeDoneList.length > 4">
@@ -208,40 +208,47 @@
         }
       },
       // 变更 签署
-      clickBtn(action = {}, item) {
-        let postData = {};
-        postData.action = 'complete';
-        postData.variables = [{
-          name: this.variableName,
-          value: action.action,
-        }];
-        this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
-          if (action.action === 'success') {
-            this.$prompt('签署成功！');
-            this.routerLink(action.route);
-          } else {
-            let params = {
-              taskDefinitionKey: 'InputBulletinData',
-              rootProcessInstanceId: item.root_id,
-            };
-            this.$httpZll.getNewTaskId(params).then(res => {
-              let query = {};
-              let task = res.data[0];
-              query.task_id = task.id;
-              query.task_action = action.route;
-              for (let v of task.variables) {
-                if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
-                  query[v.name] = v.value || '';
-                }
-              }
-              if (urls.bm_detail_request_url) {
-                this.againTaskDetail(query).then(_ => {
-                  this.againDetailRequest(query, 'again');
+      clickBtn(action = {}, name = '', item) {
+        switch (action.action) {
+          case 'phone':
+
+            break;
+          default:
+            let postData = {};
+            postData.action = 'complete';
+            postData.variables = [{
+              name: name,
+              value: action.action,
+            }];
+            this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
+              if (action.action === 'success') {
+                this.$prompt('签署成功！');
+                this.routerLink(action.route);
+              } else {
+                let params = {
+                  taskDefinitionKey: 'InputBulletinData',
+                  rootProcessInstanceId: item.root_id,
+                };
+                this.$httpZll.getNewTaskId(params).then(res => {
+                  let query = {};
+                  let task = res.data[0];
+                  query.task_id = task.id;
+                  query.task_action = action.route;
+                  for (let v of task.variables) {
+                    if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
+                      query[v.name] = v.value || '';
+                    }
+                  }
+                  if (query.bm_detail_request_url) {
+                    this.againTaskDetail(query).then(_ => {
+                      this.againDetailRequest(query, 'again');
+                    });
+                  }
                 });
               }
             });
-          }
-        });
+            break
+        }
       },
       // 待办类型
       getToDoneType() {
@@ -282,12 +289,14 @@
           let data = this.groupHandlerListData(res.data, task);
           for (let btn of data) {
             if (btn.outcome) {
-              let outcome = JSON.parse(btn.outcome);
-              btn.outcome = outcome.outcomeOptions;
-              this.variableName = outcome.variableName;
+              let data = [{
+                title: '客户手机签署',
+                action: 'phone',
+              }];
+              btn.outcome = JSON.parse(btn.outcome);
+              btn.outcome.outcomeOptions = data.concat(btn.outcome.outcomeOptions);
             }
           }
-          console.log(data);
           if (this.params.page === 1) {
             this.toBeDoneList = data;
           } else {

@@ -138,7 +138,7 @@
       margin: .2rem 0; }
   #toBeDone .main ul li {
     padding: .3rem 0 .3rem .3rem;
-    margin: 0 0.3rem 0.16rem;
+    margin: 0 .3rem .16rem;
     -webkit-border-radius: 0.1rem;
     -moz-border-radius: 0.1rem;
     border-radius: 0.1rem;
@@ -193,15 +193,20 @@
       display: -webkit-flex;
       align-items: center;
       justify-content: space-around; }
-      #toBeDone .main ul li .handleBtn p {
+      #toBeDone .main ul li .handleBtn div {
         width: 100%;
         display: flex;
         display: -webkit-flex;
         align-items: center; }
-        #toBeDone .main ul li .handleBtn p i {
+        #toBeDone .main ul li .handleBtn div i {
           width: .33rem;
           height: .33rem;
           margin-right: .1rem; }
+      #toBeDone .main ul li .handleBtn .contract p {
+        margin-right: .3rem;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center; }
       #toBeDone .main ul li .handleBtn .deliver i, #toBeDone .main ul li .handleBtn .collectReport i {
         width: .4rem;
         height: .4rem; }

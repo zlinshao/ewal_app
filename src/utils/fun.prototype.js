@@ -335,7 +335,6 @@ export default {
     // 任务详情
     Vue.prototype.againTaskDetail = function (val) {
       return new Promise((resolve, reject) => {
-        console.log(val.url);
         this.$httpZll.get(val.ctl_detail_request_url, {}, 'prompt').then(res => {
           if (res.success) {
             let data = {};

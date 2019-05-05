@@ -18,7 +18,7 @@
     ul {
       li {
         padding: .3rem 0 .3rem .3rem;
-        margin: 0 .3rem .16rem ;
+        margin: 0 .3rem .16rem;
         @include radius(.1rem);
         background-color: #FFFFFF;
         .mainTitle {
@@ -58,13 +58,19 @@
         .handleBtn {
           padding: 0 .1rem;
           @include flex('items-around');
-          p {
+          div {
             width: 100%;
             @include flex('items-center');
             i {
               width: .33rem;
               height: .33rem;
               margin-right: .1rem;
+            }
+          }
+          .contract {
+            p {
+              margin-right: .3rem;
+              @include flex('items-center');
             }
           }
           .deliver, .collectReport {
