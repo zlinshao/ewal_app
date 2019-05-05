@@ -1,4 +1,4 @@
-import {ImagePreview} from 'vant';
+import {ImagePreview, Dialog} from 'vant';
 import PickerSlot from '../components/common/picker-slot.vue';
 import ZlInput from '../components/common/zl-input.vue';
 import PickerInput from '../components/common/picker-input.vue';
@@ -331,6 +331,29 @@ export default {
     // loading/Toast 提示信息
     Vue.prototype.$prompt = function (msg, type) {
       this.myUtils.prompt(msg, type);
+    };
+    // 确认弹出窗口
+    Vue.prototype.$dialog = function (title, content) {
+      return new Promise((resolve, reject) => {
+        Dialog.confirm({
+          title: title,
+          message: content
+        }).then(() => {
+          resolve(true);
+        }).catch(() => {
+          resolve(false);
+        });
+      })
+    };
+    // 钉钉超链接跳转
+    Vue.prototype.$ddSkip = function (url) {
+      dd.biz.util.openLink({
+        url: url,//要打开链接的地址
+        onSuccess(result) {
+        },
+        onFail(err) {
+        }
+      })
     };
     // 任务详情
     Vue.prototype.againTaskDetail = function (val) {

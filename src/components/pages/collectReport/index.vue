@@ -536,17 +536,11 @@
             data.mobile = this.form.contact_phone;
             this.$httpZll.customerIdentity(data).then(res => {
               if (res) {
-                if (res.data.customer_id) {
+                if (res.data.fadada_user_id) {
                   this.form.signer = res.data;
                   this.certified();
                 } else {
-                  dd.biz.util.openLink({
-                    url: res.data.data,//要打开链接的地址
-                    onSuccess(result) {
-                    },
-                    onFail(err) {
-                    }
-                  });
+                  this.$ddSkip(res.data.data);
                 }
               }
             });

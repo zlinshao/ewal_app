@@ -542,8 +542,8 @@ defineCollectReport = {
       keyName: 'lord_fill_date',
       keyType: '',
       type: 'text',
-      status: 'dateSlot',
-      picker: 'pickerArticle',
+      status: 'date',
+      picker: 'picker',
       slot: '',
     },
     {

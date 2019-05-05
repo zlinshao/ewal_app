@@ -69,6 +69,7 @@
           }
           .contract {
             p {
+              white-space: nowrap;
               margin-right: .3rem;
               @include flex('items-center');
             }

@@ -203,6 +203,7 @@
           height: .33rem;
           margin-right: .1rem; }
       #toBeDone .main ul li .handleBtn .contract p {
+        white-space: nowrap;
         margin-right: .3rem;
         display: flex;
         display: -webkit-flex;

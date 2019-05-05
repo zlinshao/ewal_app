@@ -255,6 +255,18 @@ class httpZll extends httpService {
     });
   }
 
+  // 本地签署电子合同
+  static localSignContract(url, data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_identity}fdd/contract/${url}`, data, 'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        }
+        $httpPrompt(res.msg);
+      });
+    });
+  }
+
   // 获取报备详情
   static getApprovalDetail(url) {
     return new Promise((resolve, reject) => {

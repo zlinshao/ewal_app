@@ -84,6 +84,7 @@
   import woshenpide from '../../../assets/image/approvals/woshenpide.png'
   import chaosongwode from '../../../assets/image/approvals/chaosongwode.png'
   import zanbuchuli from '../../../assets/image/approvals/zanbuchuli.png'
+  import {Dialog} from 'vant'
 
   export default {
     name: "index",
@@ -287,52 +288,89 @@
       },
       // 点击更多 操作
       onMoreOperates(action, name, item) {
+        let contract = '电子合同';
         switch (action.action) {
           case 'preview'://合同预览
+            this.$ddSkip(item.contract_view_url);
             break;
           case 'again'://重新提交
             item.task_action = action.route;
             this.againSave(item);
             break;
           case 'modify'://合同修改
-            let postData = {};
-            postData.action = 'complete';
-            postData.variables = [{
-              name: name,
-              value: action.action,
-            }];
-            this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
-              let params = {
-                taskDefinitionKey: 'InputBulletinData',
-                rootProcessInstanceId: item.root_id,
-              };
-              this.$httpZll.getNewTaskId(params).then(res => {
-                let query = {};
-                let task = res.data[0];
-                query.task_id = task.id;
-                query.task_action = action.route;
-                for (let v of task.variables) {
-                  if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
-                    query[v.name] = v.value || '';
-                  }
-                }
-                this.againSave(query);
-              });
+            this.$dialog('合同修改', '是否确认修改合同?').then(res => {
+              if (res) {
+                let postData = {};
+                postData.action = 'complete';
+                postData.variables = [{
+                  name: name,
+                  value: action.action,
+                }];
+                this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
+                  let params = {
+                    taskDefinitionKey: 'InputBulletinData',
+                    rootProcessInstanceId: item.root_id,
+                  };
+                  this.$httpZll.getNewTaskId(params).then(res => {
+                    let query = {};
+                    let task = res.data[0];
+                    query.task_id = task.id;
+                    query.task_action = action.route;
+                    for (let v of task.variables) {
+                      if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
+                        query[v.name] = v.value || '';
+                      }
+                    }
+                    this.againSave(query);
+                  });
+                });
+              }
             });
             break;
           case 'phone'://客户手机签署
+            this.$dialog(contract, '是否确认发送客户签署电子合同?').then(res => {
+              if (res) {
+
+              }
+            });
             break;
           case 'success'://本地签署
+            // 收房
+            let url = '', sign = {};
+            if (item.bulletin_type === 'bulletin_collect_basic') {
+              url = 'sign_collect';
+              sign = {
+                contract_id: item.contract_number,
+                customer_id: '7C0506F4DB7E047700D9CB3496767797',
+                index: 1,
+                type: 2,
+              };
+            }
+            this.$dialog(contract, '是否确认签署电子合同?').then(data => {
+              if (data) {
+                this.$httpZll.localSignContract(url, sign).then(res => {
+                  this.$ddSkip(res.data.data).then(status => {
+
+                  });
+                })
+              }
+            });
             // this.againSave(val);
             break;
           case 'contract'://发送电子合同
             // this.againSave(val);
+            this.$dialog(contract, '是否确认发送电子合同?').then(res => {
+              if (res) {
+
+              }
+            });
             break;
         }
       },
       // 重新提交
       againSave(val) {
         this.againTaskDetail(val).then(_ => {
+          console.log(val);
           this.againDetailRequest(val, 'again');
         });
       },
@@ -466,8 +504,10 @@
           if (!twoLevel) {
             this.paging['paging' + tab] = res.total;
           }
-          let task = ['task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome'];
+          let task = ['bulletin_type', 'task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome', 'contract_number', 'contract_view_url'];
           let data = this.groupHandlerListData(res.data, task);
+          data[0].contract_number = 'LJSFE010000162';
+          data[0].contract_view_url = 'https://testapi.fadada.com:8443/api//viewContract.action?app_id=401544&v=2.0&timestamp=20190505141929&contract_id=LJSFE010000162&msg_digest=MDNFNkY4NDdEQjIwOTQ4NzhDQjRBRUNGNUQ5RUJEMTQ2QkVBMTU0Mw==';
           this.outcomes(data, this.tabs);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;
@@ -498,7 +538,7 @@
                 let data = [
                   {
                     title: '合同预览',
-                    action: 'preview ',
+                    action: 'preview',
                   },
                   {
                     title: '客户手机签署',
@@ -725,23 +765,23 @@
                 height: .33rem;
                 margin-right: .1rem;
               }
-              .icon-1 {
+              .icon-preview {
                 @include approvalsImg('hetongyulan');
               }
-              .icon-2 {
-                @include approvalsImg('hetongyulan');
-              }
-              .icon-4 {
+              .icon-success {
                 @include approvalsImg('bendiqianshu');
               }
-              .icon-5 {
+              .icon-phone {
                 @include approvalsImg('kehushoujiqianshu');
               }
-              .icon-6 {
+              .icon-modify {
                 @include approvalsImg('xiugaihetong');
               }
-              .icon-7 {
-                @include approvalsImg('hetongyulan');
+              .icon-again {
+                @include approvalsImg('chongxintijiao');
+              }
+              .icon-contract {
+                @include approvalsImg('fasongdianzihetong');
               }
               span {
                 white-space: nowrap;
