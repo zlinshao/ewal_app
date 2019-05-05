@@ -287,8 +287,8 @@
         }
       },
       // 点击更多 操作
-      onMoreOperates(action, name, item) {
-        let contract = '电子合同';
+      onMoreOperates(action, name = '', item = {}) {
+        let params = {};
         switch (action.action) {
           case 'preview'://合同预览
             this.$ddSkip(item.contract_view_url);
@@ -298,68 +298,24 @@
             this.againSave(item);
             break;
           case 'modify'://合同修改
-            this.$dialog('合同修改', '是否确认修改合同?').then(res => {
-              if (res) {
-                let postData = {};
-                postData.action = 'complete';
-                postData.variables = [{
-                  name: name,
-                  value: action.action,
-                }];
-                this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
-                  let params = {
-                    taskDefinitionKey: 'InputBulletinData',
-                    rootProcessInstanceId: item.root_id,
-                  };
-                  this.$httpZll.getNewTaskId(params).then(res => {
-                    let query = {};
-                    let task = res.data[0];
-                    query.task_id = task.id;
-                    query.task_action = action.route;
-                    for (let v of task.variables) {
-                      if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
-                        query[v.name] = v.value || '';
-                      }
-                    }
-                    this.againSave(query);
-                  });
-                });
-              }
-            });
-            break;
-          case 'phone'://客户手机签署
-            this.$dialog(contract, '是否确认发送客户签署电子合同?').then(res => {
-              if (res) {
-
-              }
-            });
+            this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
-            // 收房
-            let url = '', sign = {};
-            if (item.bulletin_type === 'bulletin_collect_basic') {
-              url = 'sign_collect';
-              sign = {
-                contract_id: item.contract_number,
-                customer_id: '7C0506F4DB7E047700D9CB3496767797',
-                index: 1,
-                type: 2,
-              };
-            }
-            this.$dialog(contract, '是否确认签署电子合同?').then(data => {
-              if (data) {
-                this.$httpZll.localSignContract(url, sign).then(res => {
-                  this.$ddSkip(res.data.data).then(status => {
-
-                  });
-                })
-              }
-            });
-            // this.againSave(val);
+            params = {
+              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              index: 2,
+            };
+            this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
+            break;
+          case 'phone'://客户手机签署
+            params = {
+              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              index: 1,
+            };
+            this.$signPostApi(item, params, ['电子合同', '是否确认发送客户签署电子合同?']);
             break;
           case 'contract'://发送电子合同
-            // this.againSave(val);
-            this.$dialog(contract, '是否确认发送电子合同?').then(res => {
+            this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
               if (res) {
 
               }
@@ -370,7 +326,6 @@
       // 重新提交
       againSave(val) {
         this.againTaskDetail(val).then(_ => {
-          console.log(val);
           this.againDetailRequest(val, 'again');
         });
       },
@@ -496,6 +451,7 @@
       },
       // 列表
       getApproval(url, params, tab) {
+        this.task_ids = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
@@ -574,7 +530,6 @@
       },
       // 二级切换
       tabsTag(status) {
-        this.task_ids = [];
         let tab = this.tabs.tab;
         if (this.tabs.status === status) return;
         this.tabs.status = status;

@@ -115,8 +115,8 @@ export default {
         obj.status = item.status || [];
         obj.root_id = item.rootProcessInstanceId;
         obj.process_id = item.processInstanceId;
-        obj.contract_number = 'LJSFE010000162';
-        obj.contract_view_url = 'https://testapi.fadada.com:8443/api//viewContract.action?app_id=401544&v=2.0&timestamp=20190505141929&contract_id=LJSFE010000162&msg_digest=MDNFNkY4NDdEQjIwOTQ4NzhDQjRBRUNGNUQ5RUJEMTQ2QkVBMTU0Mw==';
+        obj.contract_number = 'LJSFE010000158';
+        obj.contract_view_url = 'https://testapi.fadada.com:8443/api//viewContract.action?app_id=401544&v=2.0&timestamp=20190505195737&contract_id=LJSFE010000151&msg_digest=OUM5QUEyRDY5MUEzN0FFNDJFQjk3MzBGREEyRDRGNTE3OENBQ0VERg==';
         for (let key of item.variables) {
           if (task.includes(key.name)) {
             obj[key.name] = key.value;
@@ -333,6 +333,75 @@ export default {
     // loading/Toast 提示信息
     Vue.prototype.$prompt = function (msg, type) {
       this.myUtils.prompt(msg, type);
+    };
+    // 签署电子合同
+    Vue.prototype.$signPostApi = function (item, params, title = []) {
+      let url = '', sign = {};
+      if (item.bulletin_type === 'bulletin_collect_basic') {
+        url = 'sign_collect';
+        sign = {
+          type: 1,
+          task_id: item.task_id,
+          contract_id: item.contract_number,
+        };
+      }
+      console.log(sign);
+      for (let key of Object.keys(params)) {
+        sign[key] = params[key]
+      }
+      this.$dialog(title[0], title[1]).then(data => {
+        if (data) {
+          this.$httpZll.localSignContract(url, sign).then(res => {
+            if (Number(sign.index) === 2) {
+              this.$ddSkip(res.data.data);
+            } else {
+              this.$prompt('发送成功!', 'success')
+            }
+          })
+        }
+      });
+    };
+    // 修改合同
+    Vue.prototype.$reviseContract = function (action = {}, name = '', item) {
+      console.log(action);
+      console.log(name);
+      this.$dialog('合同修改', '是否确认修改合同?').then(res => {
+        if (res) {
+          let postData = {};
+          postData.action = 'complete';
+          postData.variables = [{
+            name: name,
+            value: action.action,
+          }];
+          this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
+            if (action.action === 'success') {
+              this.$prompt('签署成功！');
+              this.routerLink(action.route);
+            } else {
+              let params = {
+                taskDefinitionKey: 'InputBulletinData',
+                rootProcessInstanceId: item.root_id,
+              };
+              this.$httpZll.getNewTaskId(params).then(res => {
+                let query = {};
+                let task = res.data[0];
+                query.task_id = task.id;
+                query.task_action = action.route;
+                for (let v of task.variables) {
+                  if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
+                    query[v.name] = v.value || '';
+                  }
+                }
+                if (query.bm_detail_request_url) {
+                  this.againTaskDetail(query).then(_ => {
+                    this.againDetailRequest(query, 'again');
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
     };
     // 确认弹出窗口
     Vue.prototype.$dialog = function (title, content) {

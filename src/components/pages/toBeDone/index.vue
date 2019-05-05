@@ -209,44 +209,24 @@
       },
       // 变更 签署
       clickBtn(action = {}, name = '', item) {
+        let params = {};
         switch (action.action) {
+          case 'success':
+            params = {
+              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              index: 2,
+            };
+            this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
+            break;
           case 'phone':
-
+            params = {
+              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              index: 1,
+            };
+            this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
             break;
           default:
-            let postData = {};
-            postData.action = 'complete';
-            postData.variables = [{
-              name: name,
-              value: action.action,
-            }];
-            this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
-              if (action.action === 'success') {
-                this.$prompt('签署成功！');
-                this.routerLink(action.route);
-              } else {
-                let params = {
-                  taskDefinitionKey: 'InputBulletinData',
-                  rootProcessInstanceId: item.root_id,
-                };
-                this.$httpZll.getNewTaskId(params).then(res => {
-                  let query = {};
-                  let task = res.data[0];
-                  query.task_id = task.id;
-                  query.task_action = action.route;
-                  for (let v of task.variables) {
-                    if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
-                      query[v.name] = v.value || '';
-                    }
-                  }
-                  if (query.bm_detail_request_url) {
-                    this.againTaskDetail(query).then(_ => {
-                      this.againDetailRequest(query, 'again');
-                    });
-                  }
-                });
-              }
-            });
+            this.$reviseContract(action, name, item);
             break
         }
       },
@@ -285,7 +265,7 @@
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           this.paging = res.total;
-          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
+          let task = ['bulletin_type', 'title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
           let data = this.groupHandlerListData(res.data, task);
           for (let btn of data) {
             if (btn.outcome) {
