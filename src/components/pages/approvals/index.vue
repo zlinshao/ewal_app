@@ -506,8 +506,6 @@
           }
           let task = ['bulletin_type', 'task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome', 'contract_number', 'contract_view_url'];
           let data = this.groupHandlerListData(res.data, task);
-          data[0].contract_number = 'LJSFE010000162';
-          data[0].contract_view_url = 'https://testapi.fadada.com:8443/api//viewContract.action?app_id=401544&v=2.0&timestamp=20190505141929&contract_id=LJSFE010000162&msg_digest=MDNFNkY4NDdEQjIwOTQ4NzhDQjRBRUNGNUQ5RUJEMTQ2QkVBMTU0Mw==';
           this.outcomes(data, this.tabs);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;
