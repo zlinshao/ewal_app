@@ -179,7 +179,7 @@
           margin-right: .2rem;
           width: .4rem;
           height: .4rem;
-          background: url("../../../assets/image/exam/changci@2x.png") no-repeat scroll center;
+          background: url("../../../assets/image/exam/wodekaoshi.png") no-repeat scroll center;
           background-size: 100% 100%; }
       #exam .exam-container .list-container .my-exam .my-exam-bottom {
         flex: 1;
@@ -204,7 +204,6 @@
               color: #8F8F8F; }
     #exam .exam-container .list-container .latest-exam {
       margin: .3rem 0;
-      height: 5.6rem;
       background: linear-gradient(180deg, white 0%, #f2f2f2 100%);
       display: flex;
       flex-direction: column; }
@@ -223,7 +222,6 @@
       #exam .exam-container .list-container .latest-exam .latest-exam-bottom {
         overflow: hidden;
         overflow-x: auto;
-        flex: 1;
         display: flex;
         align-items: center;
         justify-content: flex-start;
@@ -235,7 +233,7 @@
           flex-direction: column;
           width: 42%;
           flex: 0 0 auto;
-          height: 100%;
+          height: 4.6rem;
           margin: 0.1rem;
           background: white;
           box-shadow: 0px 10px 15px 0px #d8dded;
@@ -304,6 +302,10 @@
             display: -webkit-flex;
             align-items: center;
             justify-content: center; }
+      #exam .exam-container .list-container .latest-exam .no-exam-tip {
+        height: .7rem;
+        line-height: .7rem;
+        padding-left: .4rem; }
     #exam .exam-container .list-container .exam-tabbar {
       height: .7rem;
       background-color: #FFFFFF;
@@ -470,6 +472,17 @@
           justify-content: center;
           background: url("../../../assets/image/exam/矩形_copy3@3x.png") no-repeat scroll center;
           background-size: 100% 100%; }
+        #exam .exam-container .list-container .item-no-authority .item-bottom .item-exam-score {
+          color: #FE6725;
+          font-family: DIN-Medium;
+          padding-right: .1rem; }
+          #exam .exam-container .list-container .item-no-authority .item-bottom .item-exam-score > span:nth-child(1) {
+            font-size: .45rem;
+            font-family: DIN-Medium;
+            padding-right: .1rem; }
+          #exam .exam-container .list-container .item-no-authority .item-bottom .item-exam-score > span:nth-child(2) {
+            font-size: .4rem;
+            font-family: PingFangHK-Regular; }
       #exam .exam-container .list-container .item-no-authority .miss-exam {
         position: absolute;
         bottom: .2rem;

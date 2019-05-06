@@ -1,0 +1,69 @@
+@import "../../common";
+
+@mixin examImg($n) {
+  @include bgImage('../../../assets/image/exam/' + $n + '.png');
+}
+
+#paper_dialog {
+  @include flex('flex-center');
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, .4);
+  z-index: 10086;
+
+  .paper-dialog-inner {
+    width: 80%;
+    height: 60%;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+
+    .inner-top {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      flex: 1;
+      .inner-top-img {
+        width: 80%;
+        flex: 1;
+        @include examImg('tiaojiaochenggong@3x');
+      }
+      .inner-top-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 1.6rem;
+        .content1 {
+          font-size: .4rem;
+          height: 50%;
+          color: #8F8F8F;
+          font-family: PingFangHK-Regular;
+        }
+        .content2 {
+          height: 50%;
+          color: #3FC4FD;
+          font-family: PingFangHK-Regular;
+        }
+      }
+
+    }
+
+    .inner-bottom {
+      font-size: .35rem;
+      font-family: PingFangHK-Regular;
+      width: 100%;
+      height: 1.5rem;
+      @include flex('flex-center');
+      color: #4570FE;
+      //background-color: red;
+      border-top: 1px solid #F2F2F2;
+    }
+  }
+}
