@@ -201,18 +201,18 @@ class httpZll extends httpService {
   }
 
   // 获取 报备待办列表
-  static getToBeDoneApi(taskKey = {}, tenant = 'market') {
+  static getToBeDoneApi(val = {}) {
     let params = {
       size: 12,
-      tenantId: tenant,
+      tenantId: 'market',
       // assignee: '69',//登陆人
       order: 'desc',
-      taskDefinitionKeyIn: approvalSearch.toBeDone.join(','),
+      taskDefinitionKeyIn: '',
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
     };
-    for (let key of Object.keys(taskKey)) {
-      params[key] = taskKey[key]
+    for (let key of Object.keys(val)) {
+      params[key] = val[key]
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {

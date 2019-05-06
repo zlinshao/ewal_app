@@ -40,19 +40,26 @@
           {
             url: 'toBeDone',
             name: '收房',
-            type: 'nweCollect',
+            status: bulletinRouterStatus.newCollect,
             icon: ic_shoufang,
           },
           {
             url: 'toBeDone',
             name: '租房',
-            type: 'newRent',
+            status: {
+              bulletin: 'newRent',
+              to: 'rent',
+              type: '1',
+            },
             icon: ic_zufang,
           },
           {
-            url: 'toBeDone',
+            url: 'collectReport',
             name: '渠道费',
-            type: '',
+            status: {
+              bulletin: 'agency',
+              to: 'agency',
+            },
             icon: ic_qudao,
           },
           {
@@ -184,7 +191,8 @@
     },
     methods: {
       toBulletin(item) {
-        this.routerLink(item.url, {type: item.type});
+        this.$store.dispatch('bulletin_type', item.status);
+        this.routerLink(item.url);
       },
       getBasePoint() {
         let parent = this.$refs.parent;

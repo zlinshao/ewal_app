@@ -83,9 +83,9 @@
       </p>
       <div class="mainModule">
         <div class="module" :class="[' module'+(index+1)]" v-for="(item,index) in addShowList">
-          <div @click="routerLink(item.url)">
+          <div @click="createRouter(item)">
             <i></i>
-            <p>{{item.title}}</p>
+            <p>{{item.text}}</p>
           </div>
         </div>
       </div>
@@ -185,22 +185,18 @@
         showAddPopup: false,
         addShowList: [
           {
-            url: '/createdTask',
-            title: '收房带看',
-            icon: ''
+            id: 'CollectTakeLook',
+            text: '收房待看',
           }, {
-            url: '',
-            title: '租房带看',
-            icon: ''
+            id: 'RentTakeLook',
+            text: '租房待看',
           }, {
-            url: '',
-            title: '保洁任务',
-            icon: ''
+            id: 'HouseCleaning',
+            text: '保洁任务',
           }, {}, {
-            url: '',
-            title: '维修任务',
-            icon: ''
-          },
+            id: 'HouseRepair',
+            text: '维修任务',
+          }
         ],
         // 筛选
         searchHigh: false,
@@ -305,21 +301,26 @@
         // 补齐
         polishingModule: false,
         polishingDetail: {},
-        path: '',
       }
     },
     created() {
       this.resetting();
     },
     mounted() {
-      this.tabs === '1' ? this.getFinishList('2') : this.getFinishList('1');
+      if (this.tabs === '1') {
+        this.getQueryDetail('2');
+        this.getFinishList('2')
+      } else {
+        this.getQueryDetail('1');
+        this.getFinishList('1')
+      }
     },
     activated() {
       let listTop = this.$refs.listTop.offsetHeight;
       this.mainHeight = this.mainListHeight(listTop);
-      this.path = this.$route.query.path || '';
       let tab = this.tabs;
       this.close_(tab);
+      this.getQueryDetail(tab);
       this.getFinishList(tab);
     },
     watch: {},
@@ -329,8 +330,22 @@
       }
     },
     methods: {
-      getQueryDetail() {
+      // 新建带看
+      createRouter(val) {
+        if (val.id) {
+          this.routerLink('/createdTask', val);
+        }
+      },
+      getQueryDetail(tab) {
         let query = this.$route.query;
+        let search = [];
+        for (let item of Object.keys(approvalSearch)) {
+          for (let val of approvalSearch[item]) {
+            search = search.concat(val);
+          }
+        }
+        search = this.myUtils.arrayWeight(search).join(',');
+        this.params['params' + tab].taskDefinitionKeyNotIn = search;
       },
       // 生成电子收据
       clickBtn(task_id) {
@@ -373,26 +388,19 @@
       },
       // 请求列表
       getFinishList(tab) {
-        let url = '', search = [];
-        for (let item of Object.keys(approvalSearch)) {
-          for (let val of approvalSearch[item]) {
-            search = search.concat(val);
-          }
-        }
-        search = this.myUtils.arrayWeight(search).join(',');
+        let url = '';
         this.fullLoading['load' + tab] = true;
         let params = this.params['params' + tab];
-        params.taskDefinitionKeyNotIn = search;
         if (tab === '1') {
-          url = 'runtime/tasks'
+          url = 'runtime/tasks';
         } else {
           url = 'history/tasks';
-          // params.finished = true;
+          params.finished = true;
         }
         this.$httpZll.getToBeDoneListApi(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
           this.total['total' + tab] = res.total || 0;
-          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'rtl_detail_request_url', 'outcome'];
+          let task = ['bulletin_type', 'title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'rtl_detail_request_url', 'outcome'];
           let data = this.groupHandlerListData(res.data, task);
           if (params.page === 1) {
             this.finishList['list' + tab] = data;
@@ -414,6 +422,12 @@
       // 列表事件
       goOperates(val, type) {
         switch (type) {
+          case 'polishing':
+            this.goSignModule = true;
+            this.moduleDetail = val;
+            // this.polishingModule = true;
+            // this.polishingDetail = val;
+            break;
           case 'goSign':
             switch (val.taskDefinitionKey) {
               case 'CollectReceiptSign'://签署收据
@@ -423,12 +437,7 @@
 
                 break;
             }
-            this.goSignModule = true;
-            this.moduleDetail = val;
-            break;
-          case 'polishing':
-            this.polishingModule = true;
-            this.polishingDetail = val;
+
             break;
         }
       },
@@ -489,7 +498,10 @@
       footerTag(val) {
         switch (val) {
           case 1:
-            this.$router.go(-1);
+            this.routerReplace('/index');
+            break;
+          case 3:
+            this.routerReplace('/houseResource');
             break;
         }
       },

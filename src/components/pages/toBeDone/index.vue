@@ -59,11 +59,11 @@
         <span class="writingMode">新建</span>
       </p>
       <div class="mainModule">
-        <div class="module" :class="[' module'+(index+1)]" v-for="(item,index) in addShowList"
-             @click="routerLink(item.url)">
+        <div class="module" :class="['module'+(index+1)]" v-for="(item,index) in addShowList"
+             @click="routerLink(item.url, item)">
           <div>
             <i></i>
-            <p>{{item.title}}</p>
+            <p>{{item.text}}</p>
           </div>
         </div>
       </div>
@@ -155,17 +155,7 @@
         ],
         // 右侧栏
         showAddPopup: false,//新建待办任务
-        addShowList: [
-          {
-            url: '/createdTask',
-            title: '带看',
-            icon: ''
-          }, {
-            url: '',
-            title: '补充协议',
-            icon: ''
-          }
-        ],
+        addShowList: [],
 
         paging: 0,
         params: {
@@ -180,22 +170,60 @@
     created() {
     },
     mounted() {
-      this.$nextTick(function () {
+      this.$nextTick(_ => {
         let top = this.$refs.toBeDoneTop.offsetHeight;
         this.mainHeight = this.mainListHeight(top);
       })
     },
     activated() {
-      this.getToDoneType();
       this.onSearch();
+      this.popupOperate();
     },
     watch: {
       'params.title'(val) {
         this.params.title = val.replace(/\s+/g, '');
       },
     },
-    computed: {},
+    computed: {
+      // 报备类型
+      bulletin_type() {
+        return this.$store.state.app.bulletinTypes;
+      },
+    },
     methods: {
+      // 右侧弹窗操作
+      popupOperate() {
+        let type = this.bulletin_type.bulletin;
+        switch (type) {
+          case 'bulletin_collect_basic':
+            this.addShowList = [
+              {
+                url: '/createdTask',
+                id: 'CollectTakeLook',
+                text: '收房带看',
+              }, {
+                url: '',
+                text: '补充协议',
+              }
+            ];
+            break;
+          case 'newRent':
+            this.addShowList = [
+              {
+                url: '/createdTask',
+                id: 'RentTakeLook',
+                text: '租房带看',
+              }, {
+                url: '',
+                text: '补充协议',
+              }, {
+                url: '/collectReport',
+                text: '未收先租',
+              }
+            ];
+            break;
+        }
+      },
       // 去打卡 去签约
       goOperates(val) {
         switch (val.task_action) {
@@ -217,35 +245,23 @@
       clickBtn(action = {}, name = '', item) {
         let params = {};
         switch (action.action) {
-          case 'success':
+          case 'success'://本地签署
             params = {
               customer_id: '7C0506F4DB7E047700D9CB3496767797',
               index: 2,
             };
             this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
             break;
-          case 'phone':
+          case 'phone'://客户手机签署
             params = {
               customer_id: '7C0506F4DB7E047700D9CB3496767797',
               index: 1,
             };
             this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
             break;
-          default:
+          default://合同修改
             this.$reviseContract(action, name, item);
             break
-        }
-      },
-      // 待办类型
-      getToDoneType() {
-        let query = this.$route.query;
-        switch (query.type) {
-          case 'nweCollect':
-
-            break;
-          case 'nweRent':
-
-            break;
         }
       },
       // 滚动加载
@@ -268,10 +284,13 @@
       // 待办列表
       getToBeDoneList(val) {
         this.fullLoading = true;
+        let type = this.bulletin_type.bulletin;
+        let status = type === 'newCollect' ? 'toBeDoneCollect' : 'toBeDoneRent';
+        val.taskDefinitionKeyIn = approvalSearch[status].join(',');
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           this.paging = res.total;
-          let task = ['taskDefinitionKey', 'bulletin_type', 'title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
+          let task = ['bulletin_type', 'title', 'flow_type', 'taskDefinitionKey', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
           let data = this.groupHandlerListData(res.data, task);
           for (let btn of data) {
             if (btn.outcome) {

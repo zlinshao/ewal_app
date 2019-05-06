@@ -283,7 +283,7 @@
         // searchDepartModule: false,       //部门搜索
         searchConfig: {},
 
-        mainTop: ['房屋信息', '物品信息', '客户信息', '合同信息'],
+        mainTop: [],
         startClientX: 0,
         endClientX: 0,
         slither: 0,
@@ -295,14 +295,10 @@
         allReportNum: 0,//滑动列表数
 
         queryData: {},
-        task_id: '',
       }
     },
-    created() {
-      this.resetDrawing = this.jsonClone(defineCollectReport);
-      this.resetting();
-    },
     activated() {
+      this.bulletinType(this.bulletin_type);
       this.slither = 0;
       this.allReportNum = Object.keys(this.resetDrawing).length;
       let title = this.$refs.title.offsetHeight + 30;
@@ -311,7 +307,6 @@
       this.slitherCss = this.mainListHeight(title);
       this.slitherCss.width = this.allReportNum + '00%';
       this.$prompt('正在加载...', 'send');
-      this.resetting();
       let query = this.$route.query;
       this.queryData = query;
       if (query.revise) {
@@ -324,14 +319,20 @@
     },
     watch: {
       'form.month'(val) {
-        if (this.form.period_price_way_arr.length === 1) {
-          this.form.period_price_way_arr[0].period = val;
+        if (val) {
+          if (this.form.period_price_way_arr.length === 1) {
+            this.form.period_price_way_arr[0].period = val;
+          }
         }
-      }
+      },
     },
     computed: {
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
+      },
+      // 报备类型
+      bulletin_type() {
+        return this.$store.state.app.bulletinTypes;
       },
       bulletinDetail() {
         return this.$store.state.app.bulletinPreFill;
@@ -341,6 +342,24 @@
       }
     },
     methods: {
+      // 报备类型
+      bulletinType(type) {
+        switch (type.bulletin) {
+          case 'bulletin_collect_basic':
+            this.mainTop = ['房屋信息', '物品信息', '客户信息', '合同信息'];
+            this.resetDrawing = this.jsonClone(defineCollectReport);
+            break;
+          case 'newRent':
+            this.mainTop = ['租房报备'];
+            this.resetDrawing = this.jsonClone(defineRentReport);
+            break;
+          case 'agency':
+            this.mainTop = ['渠道费报备'];
+            this.resetDrawing = this.jsonClone(defineRentReport);
+            break;
+        }
+        this.resetting();
+      },
       // touch 左右切换
       tapStart(event) {
         for (let item of event.touches) {
@@ -737,6 +756,7 @@
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
+            console.log(this.taskDetail);
             this.form.task_id = this.taskDetail.task_id;
             this.form.process_instance_id = this.taskDetail.process_instance_id;
             this.form.spot_code = this.$refs.code.spot_code;
@@ -773,9 +793,12 @@
       // 草稿
       getDraft() {
         let params = {};
-        params.to = 'collect';
-        params.type = '1';
-        params.task_id = this.task_id;
+        params.task_id = this.taskDetail.task_id;
+        for (let val of Object.keys(this.bulletin_type)) {
+          if (val !== 'bulletin') {
+            params[val] = this.bulletin_type[val];
+          }
+        }
         this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
             // this.handlePreFill(hhhhhhhhhhhh);

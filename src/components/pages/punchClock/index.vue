@@ -171,7 +171,7 @@
       setInterval(this.startTime, 1000);
       let query = this.$route.query;
       let api = query.ctl_detail_request_url;
-      this.postForm = {};
+      this.close_();
       this.postForm.task_id = query.task_id;
       this.postForm.flow_type = query.flow_type;
       this.postForm.process_id = query.root_id;
@@ -217,6 +217,7 @@
           this.getLocation(this.villageInfo);
         })
       },
+      // 时间
       startTime() {
         let date = new Date();
         let year = date.getFullYear();

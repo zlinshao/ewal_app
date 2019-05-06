@@ -271,6 +271,7 @@
       iconButton(num) {
         switch (num) {
           case '1':
+            this.$store.dispatch('bulletin_type', {bulletin: this.allDetail.bulletin_type});
             this.$store.dispatch('bulletin_draft', this.allDetail);
             this.routerLink('/collectReport', {revise: 'revise'});
             break;

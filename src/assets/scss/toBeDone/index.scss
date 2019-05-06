@@ -188,6 +188,17 @@
           @include toBeDoneImg('buchongxieyi');
         }
       }
+      .module3 {
+        width: 2rem;
+        height: 2rem;
+        z-index: 1;
+        bottom: 4rem;
+        right: 1.2rem;
+        background-color: #9CE054;
+        i {
+          @include bgImage('../../../assets/image/toBeDoneList/zufangdaikan.png');
+        }
+      }
     }
     .popupBottom {
       height: 1.5rem;

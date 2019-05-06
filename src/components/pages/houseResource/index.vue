@@ -310,7 +310,7 @@
         if (val !== 'close') {
           this.params.org_user_id = [];
           this.params.is_org_user = type === 'staff' ? 2 : 1;
-          for (var item of val) {
+          for (let item of val) {
             this.params.org_user_id.push(item.id);
           }
           this.handleGetHouseResource();
@@ -391,7 +391,7 @@
       },
       handleCloseExpand() {
         this.offset_top = 0;
-        for (var item of this.filter_list) {
+        for (let item of this.filter_list) {
           item.active = false;
         }
       },
@@ -408,7 +408,7 @@
         this.$httpZll.get(this.server + 'v1.0/market/house',this.params,'加载中...').then(res => {
           this.fullLoading = false;
           if (res.code === 200) {
-            for (var item of res.data.data) {
+            for (let item of res.data.data) {
               this.house_list.push(item);
             }
             this.paging = res.data.all_count;
@@ -455,10 +455,10 @@
       footerTag(val) {
         switch (val) {
           case 1:
-            this.routerLink('/index');
+            this.routerReplace('/index');
             break;
           case 4:
-            this.routerLink('/toBeDoneList', {status: 'noFinish'});
+            this.routerReplace('/toBeDoneList');
             break;
         }
       },

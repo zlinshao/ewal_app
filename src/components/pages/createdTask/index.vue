@@ -121,10 +121,10 @@
         highList: [
           {
             id: 'CollectTakeLook',
-            text: '收房待办',
+            text: '收房待看',
           }, {
             id: 'RentTakeLook',
-            text: '租房待办',
+            text: '租房待看',
           }, {
             id: 'HouseCleaning',
             text: '保洁任务',
@@ -558,15 +558,14 @@
         searchHouseModule: false,
       }
     },
-    created() {
-      this.resetting();
-    },
     mounted() {
       let taskTop = this.$refs.taskTop.offsetHeight;
       let commonBtn = this.$refs.commonBtn.offsetHeight;
       this.mainHeight = this.mainListHeight((taskTop + commonBtn));
     },
     activated() {
+      let query = this.$route.query;
+      this.checkChoose(query);
     },
     watch: {},
     computed: {},
@@ -589,9 +588,9 @@
       },
       // 选择任务类型 show hidden
       checkChoose(item) {
-        this.postShowName = item.text;
-        this.postName = item.id;
-        this.changeTaskType = !this.changeTaskType;
+        this.postName = item.id || 'CollectTakeLook';
+        this.postShowName = item.text || '收房待办';
+        this.changeTaskType = false;
         this.resetting();
       },
       // 图片上传

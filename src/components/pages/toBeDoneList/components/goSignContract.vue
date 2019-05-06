@@ -101,8 +101,11 @@
                 this.$prompt('未找到签约信息！');
                 return;
               }
-              this.allDetail.task_id = res.data[0].id;
-
+              let data = res.data[0];
+              this.allDetail.task_id = data.id;
+              this.allDetail.process_instance_id = data.processInstanceId;
+              this.allDetail.root_process_instance_id = data.rootProcessInstanceId;
+              this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
               this.$store.dispatch('task_detail', this.allDetail);
               this.routerReplace(action.route);
               this.$emit('close');

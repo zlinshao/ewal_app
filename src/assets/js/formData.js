@@ -151,10 +151,19 @@ hhhhhhhhhhhh = {
   "spot_code": "s7d30"
 };
 
+bulletinRouterStatus = {
+  newCollect: {
+    bulletin: 'bulletin_collect_basic',
+    to: 'collect',
+    type: '1',
+  },
+};
+
 // 审批搜索
 approvalSearch = {
-  toBeDone: ['CollectTakeLook', 'InputBulletinData', 'SignEC'],
-  approvals1: ['pqjl_approval','gkzx_approval'],
+  toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC'],
+  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC'],
+  approvals1: ['pqjl_approval', 'gkzx_approval'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
 };
@@ -1219,6 +1228,254 @@ defineCollectReport = {
       // picker: 'searchDepart',
       picker: '',
       slot: '',
+    },
+  ],
+};
+
+// 租房报备
+defineRentReport = {
+  slither0: [
+    {
+      label: '房屋地址',// 标题
+      placeholder: '必填 请选择',// placeholder
+      // readonly: 'readonly',// 只读 picker必须有值
+      disabled: 'disabled',// 禁用
+      keyName: 'house_address',// 字段名
+      keyType: '',// 数据类型
+      type: 'text',// input 类型
+      // date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 arrs多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
+      status: '',
+      // picker: 'searchVillage',// 是否显示在弹窗内 不存在为正常输入框 值为picker正常选择 searchVillage 搜索小区
+      // showForm: 'formatData',//picker 显示form 或 formatData
+      // prompts: '',//红色提示信息
+      // pickerRead: 'no', // 在弹窗内是否为readonly// 1房屋信息 2物品信息 3合同信息 4客户信息
+      slot: '',// 预留字段
+    },
+    {
+      label: '小区地址',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'community',
+      keyType: '',
+      type: 'text',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '所属区域',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'position',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '产权地址',
+      placeholder: '必填 请输入',
+      keyName: 'property_address',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '产权人',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '门牌地址',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'door_address',
+      keyType: [],
+      type: 'text',
+      status: '',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+      moreArray: [
+        {
+          label: '栋',
+          placeholder: '必填',
+          type: 'text',
+          keyType: '',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '单元',
+          placeholder: '必填',
+          type: 'text',
+          keyType: '',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '门牌号',
+          placeholder: '必填',
+          type: 'text',
+          keyType: '',
+          status: '',
+          slot: '',
+        },
+      ],
+    },
+    {
+      label: '户型',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'house_type',
+      keyType: [],
+      type: 'text',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '面积',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'area',
+      keyType: '',
+      type: 'number',
+      status: '',
+      unit: '平米',
+      slot: '',
+    },
+    {
+      label: '装修',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'decorate',
+      keyType: '',
+      type: 'text',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '朝向',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'direction',
+      keyType: '',
+      type: 'text',
+      status: 'obj',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '楼层',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'floors',
+      keyType: [],
+      type: 'text',
+      status: 'arrs-3-0',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '物业费',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'property_fee',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '物业电话',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'property_phone',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '房屋类型',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'property_type',
+      keyType: '',
+      type: 'text',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '持有证件',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'holding_documents_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '产权证号',
+      placeholder: '必填 请输入',
+      keyName: 'property_right_card_number',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '丘权号',
+      placeholder: '必填 请输入',
+      keyName: 'qiu_quan_number',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '门锁类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'lock_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '其它问题',
+      placeholder: '请输入',
+      keyName: 'other_remark',
+      keyType: '',
+      type: 'textarea',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '上传',
+      picker: 'upload',
+      value: [
+        {
+          label: '房产证照片',
+          placeholder: '必填',
+          keyName: 'photo',
+        }, {
+          label: '房屋影像',
+          placeholder: '必填',
+          keyName: 'house_video',
+        }
+      ]
     },
   ],
 };

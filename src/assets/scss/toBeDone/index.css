@@ -323,6 +323,16 @@
       height: .7rem;
       background: url("../../../assets/image/toBeDone/buchongxieyi.png") no-repeat scroll center;
       background-size: 100% 100%; }
+  #toBeDone .showAddPopup .mainModule .module3 {
+    width: 2rem;
+    height: 2rem;
+    z-index: 1;
+    bottom: 4rem;
+    right: 1.2rem;
+    background-color: #9CE054; }
+    #toBeDone .showAddPopup .mainModule .module3 i {
+      background: url("../../../assets/image/toBeDoneList/zufangdaikan.png") no-repeat scroll center;
+      background-size: 100% 100%; }
   #toBeDone .showAddPopup .popupBottom {
     height: 1.5rem;
     background: url("../../../assets/image/toBeDone/xinjiandaikandibu.png") no-repeat scroll center;
