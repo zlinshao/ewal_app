@@ -89,6 +89,33 @@ class httpTj extends httpService {
     })
   }
 
+  //生成试卷
+  static generateExam(id,params) {
+    return new Promise((resolve,reject)=> {
+      this.get(`${url}train/exam/${id}/generate`,params,).then(res=> {
+        /*if(res.code.endsWith('0')) {
+          resolve(res);
+        }else {
+          $httpPrompt(res.msg);
+        }*/
+        resolve(res);
+      });
+    });
+  };
+
+  //提交考试 =》 用户作答接口
+  static submitExam(id,params) {
+    return new Promise((resolve,reject)=> {
+      this.put(`${url}train/exam/set/${id}`,params,'prompt').then(res=> {
+        if(res.code.endsWith('0')) {
+          resolve(res);
+        }else {
+          $httpPrompt(res.msg);
+        }
+      });
+    });
+  }
+
 }
 
 export default httpTj
