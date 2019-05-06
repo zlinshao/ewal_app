@@ -32,10 +32,11 @@
       // this.personalGet().then(res => {
       //   this.loading = !res;
       // });
-    },
-    mounted() {
       sessionStorage.setItem('windowHeight', String(window.innerHeight));
       sessionStorage.setItem('windowWidth', String(window.innerWidth));
+    },
+    mounted() {
+
     },
     activated() {
     },
@@ -98,7 +99,7 @@
         this.$httpZll.getAllDict().then(res => {
           let dict = res.data;
           dicties.decorate = dict[404];//装修
-          dicties.card_type = dict[409];//card_type
+          dicties.card_type = dict[409];//证件类型
           dicties.property_type = dict[410];//房屋类型
         })
       },

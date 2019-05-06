@@ -7,5 +7,5 @@ globalConfig = {
   server_identity:'http://test.e_contract.api.ewal.lejias.cn/',//身份认证
   server_done:'http://47.101.204.100:8080/',//小飞 接口
   domain: 'http://static.lejias.cn/',
-  token: '',
+  token: ''
 };

@@ -91,7 +91,7 @@ hhhhhhhhhhhh = {
   "signatory_identity": "1",
   "customer_name": "发送",
   "customer_sex": "m",
-  "card_type": "412",
+  "card_type": "411",
   "card_id": "3213213123",
   "contact_way": "1",
   "contact_phone": "12321312",
@@ -149,6 +149,14 @@ hhhhhhhhhhhh = {
   "type": 1,
   "is_draft": 0,
   "spot_code": "s7d30"
+};
+
+// 审批搜索
+approvalSearch = {
+  toBeDone: ['CollectTakeLook', 'InputBulletinData', 'SignEC'],
+  approvals1: ['pqjl_approval','gkzx_approval'],
+  approvals22: ['SignEC'],
+  approvals23: ['InputBulletinData'],
 };
 
 // 收房报备
@@ -542,8 +550,8 @@ defineCollectReport = {
       keyName: 'lord_fill_date',
       keyType: '',
       type: 'text',
-      status: 'dateSlot',
-      picker: 'pickerArticle',
+      status: 'date',
+      picker: 'picker',
       slot: '',
     },
     {
@@ -668,10 +676,10 @@ defineCollectReport = {
     },
     {
       label: '证件类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
+      placeholder: '必填 已禁用',
+      disabled: 'disabled',
       keyName: 'card_type',
-      keyType: '',
+      keyType: 411,
       type: 'text',
       status: 'objInt',
       showForm: 'formatData',//picker 显示form 或 formatData
@@ -689,10 +697,10 @@ defineCollectReport = {
     },
     {
       label: '联系方式',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
+      placeholder: '必填 已禁用',
+      disabled: 'disabled',
       keyName: 'contact_way',
-      keyType: '1',
+      keyType: 1,
       type: 'text',
       status: 'objInt',
       showForm: 'formatData',//picker 显示form 或 formatData
@@ -709,22 +717,11 @@ defineCollectReport = {
       slot: '',
     },
     {
-      label: '银行',
+      label: '卡号',
       placeholder: '必填 请输入',
-      keyName: 'bank',
+      keyName: 'account',
       keyType: '',
-      type: 'text',
-      status: '',
-      button: '银行卡识别',
-      icon: 'bank',
-      slot: '',
-    },
-    {
-      label: '支行',
-      placeholder: '请输入',
-      keyName: 'subbranch',
-      keyType: '',
-      type: 'text',
+      type: 'number',
       status: '',
       slot: '',
     },
@@ -734,15 +731,26 @@ defineCollectReport = {
       keyName: 'account_name',
       keyType: '',
       type: 'text',
+      button: '银行卡识别',
+      icon: 'bank',
       status: '',
       slot: '',
     },
     {
-      label: '卡号',
+      label: '银行',
       placeholder: '必填 请输入',
-      keyName: 'account',
+      keyName: 'bank',
       keyType: '',
-      type: 'number',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '支行',
+      placeholder: '请输入',
+      keyName: 'subbranch',
+      keyType: '',
+      type: 'text',
       status: '',
       slot: '',
     },
@@ -1066,16 +1074,6 @@ defineCollectReport = {
       slot: '',
     },
     {
-      label: '违约金',
-      placeholder: '必填 请输入',
-      keyName: 'penalty',
-      keyType: '',
-      type: 'number',
-      status: '',
-      prompts: 'n为年限，且金额不足一万按一万算',
-      slot: '',
-    },
-    {
       label: '可否装修',
       readonly: 'readonly',
       placeholder: '必填 请选择',
@@ -1107,7 +1105,7 @@ defineCollectReport = {
       keyType: '',
       type: 'text',
       status: 'objInt',
-      picker: 'pickerCon',
+      picker: 'picker',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },

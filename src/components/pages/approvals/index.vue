@@ -54,11 +54,12 @@
                 <div class="moreOperate" @click.stop="moreOperates(item.task_id)"
                      v-if="tabs.tab === '2' && tabs.status !== 0"></div>
               </div>
-              <div class="listDown">
-                <div v-for="item in moreOperate['more'+tabs.status]" @click="onMoreOperates(item.id)"
-                     :class="moreOperate['more'+tabs.status].length>2?'':'lessThan2'">
-                  <i :class="['icon-'+item.id]"></i>
-                  <span>{{item.text}}</span>
+              <div class="listDown" v-if="item.outcome">
+                <div v-for="(more,index) in item.outcome.outcomeOptions"
+                     :class="item.outcome.outcomeOptions.length>2?'':'listDown2'"
+                     @click="onMoreOperates(more,item.outcome.variableName,item)">
+                  <i :class="['icon-'+more.action]"></i>
+                  <span>{{more.title}}</span>
                 </div>
               </div>
             </div>
@@ -83,6 +84,7 @@
   import woshenpide from '../../../assets/image/approvals/woshenpide.png'
   import chaosongwode from '../../../assets/image/approvals/chaosongwode.png'
   import zanbuchuli from '../../../assets/image/approvals/zanbuchuli.png'
+  import {Dialog} from 'vant'
 
   export default {
     name: "index",
@@ -146,7 +148,7 @@
               value: 2,
             },
             {
-              text: '待重发',
+              text: '待重签',
               value: 3,
             }
           ],
@@ -284,22 +286,48 @@
           this.task_ids.push(id);
         }
       },
-      onMoreOperates(id) {
-        switch (id) {
-          case '1':
+      // 点击更多 操作
+      onMoreOperates(action, name = '', item = {}) {
+        let params = {};
+        switch (action.action) {
+          case 'preview'://合同预览
+            this.$ddSkip(item.contract_view_url);
             break;
-          case '2':
+          case 'again'://重新提交
+            item.task_action = action.route;
+            this.againSave(item);
             break;
-          case '4':
+          case 'modify'://合同修改
+            this.$reviseContract(action, name, item);
             break;
-          case '5':
+          case 'success'://本地签署
+            params = {
+              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              index: 2,
+            };
+            this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
             break;
-          case '6':
+          case 'phone'://客户手机签署
+            params = {
+              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              index: 1,
+            };
+            this.$signPostApi(item, params, ['电子合同', '是否确认发送客户签署电子合同?']);
             break;
-          case '7':
+          case 'contract'://发送电子合同
+            this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
+              if (res) {
 
+              }
+            });
             break;
         }
+      },
+      // 重新提交
+      againSave(val) {
+        this.againTaskDetail(val).then(_ => {
+          this.againDetailRequest(val, 'again');
+        });
       },
       // 数据列表
       onSearch(num) {
@@ -322,12 +350,10 @@
           case '2':
             switch (status) {
               case 0:
+                this.urlApi = 'runtime/process-instances';
+                break;
               case 1:
-                if (status === 0) {
-                  this.urlApi = 'runtime/process-instances';
-                } else {
-                  this.urlApi = 'history/process-instances';
-                }
+                this.urlApi = 'history/process-instances';
                 break;
               case 2:
                 this.urlApi = 'runtime/tasks';
@@ -354,16 +380,13 @@
         this.apiHandle(tab, status);
         switch (tab) {
           case '1':
-            this.params['params' + tab] = {};
             this.params['params' + tab] = {
               page: 1,
               // assignee: '69',//登陆人
-              processDefinitionKey: 'MG-BulletinApproval',//市场部
+              taskDefinitionKeyIn: approvalSearch.approvals1.join(','),
               category: 'approval',
+              finished: Boolean(status)
             };
-            if (status === 1) {
-              this.params['params' + tab].finished = Boolean(status)
-            }
             break;
           case '2':
             switch (status) {
@@ -372,23 +395,25 @@
                 this.params['params' + tab] = {
                   page: 1,
                   // taskOwner: '69',//登陆人
-                  processDefinitionKey: 'MG-BulletinApproval',//市场部
+                  processDefinitionKey: 'MG-BulletinApproval',
                   // processInstanceName: 'Collect',//区分报备类型
+                  finished: Boolean(status),
                 };
                 break;
               case 2:
                 this.params['params' + tab] = {
                   page: 1,
                   // assignee: '69',//登陆人
-                  taskDefinitionKey: 'SignEC',
+                  taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
                   // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
               case 3:
                 this.params['params' + tab] = {
                   page: 1,
-                  cancelled: true,//已撤销
-                  taskDefinitionKey: 'InputBulletinData',
+                  cancelled: true,//待重签
+                  taskDefinitionKeyIn: approvalSearch.approvals23.join(','),
+                  active: true,
                   // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
@@ -422,6 +447,7 @@
       },
       // 列表
       getApproval(url, params, tab) {
+        this.task_ids = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
@@ -430,8 +456,9 @@
           if (!twoLevel) {
             this.paging['paging' + tab] = res.total;
           }
-          let task = ['house_address', 'bm_detail_request_url', 'outcome'];
+          let task = ['bulletin_type', 'task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome', 'contract_number', 'contract_view_url', 'signer'];
           let data = this.groupHandlerListData(res.data, task);
+          this.outcomes(data, this.tabs);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;
           } else {
@@ -440,6 +467,49 @@
             }
           }
         })
+      },
+      // 列表操作 按钮
+      outcomes(data, tabs) {
+        if (tabs.tab === '2') {
+          for (let item of data) {
+            if (tabs.status === 1) {
+              item.outcome = {
+                outcomeOptions: [{
+                  title: '合同预览',
+                  action: 'preview',
+                }, {
+                  title: '发送电子合同',
+                  action: 'contract',
+                }],
+              };
+            }
+            if (tabs.status === 2) {
+              if (item.outcome) {
+                let data = [
+                  {
+                    title: '合同预览',
+                    action: 'preview',
+                  },
+                  {
+                    title: '客户手机签署',
+                    action: 'phone',
+                  },
+                ];
+                item.outcome = JSON.parse(item.outcome);
+                item.outcome.outcomeOptions = data.concat(item.outcome.outcomeOptions);
+              }
+            }
+            if (tabs.status === 3) {
+              item.outcome = {
+                outcomeOptions: [{
+                  title: '重新提交',
+                  action: 'again',
+                  route: item.task_action,
+                }],
+              };
+            }
+          }
+        }
       },
       // 头部切换
       changeApproval(val) {
@@ -456,7 +526,6 @@
       },
       // 二级切换
       tabsTag(status) {
-        this.task_ids = [];
         let tab = this.tabs.tab;
         if (this.tabs.status === status) return;
         this.tabs.status = status;
@@ -631,13 +700,12 @@
             bottom: 0;
             right: 0;
             left: 40%;
-            padding: .2rem 0 .2rem .2rem;
+            padding: .2rem;
             @include flex('flex-center');
             background-color: #D8D8D8;
             flex-wrap: wrap;
             div {
               width: 50%;
-              padding-right: .15rem;
               @include flex('items-center');
               i {
                 min-width: .33rem;
@@ -645,30 +713,30 @@
                 height: .33rem;
                 margin-right: .1rem;
               }
-              .icon-1 {
+              .icon-preview {
                 @include approvalsImg('hetongyulan');
               }
-              .icon-2 {
-                @include approvalsImg('hetongyulan');
-              }
-              .icon-4 {
+              .icon-success {
                 @include approvalsImg('bendiqianshu');
               }
-              .icon-5 {
+              .icon-phone {
                 @include approvalsImg('kehushoujiqianshu');
               }
-              .icon-6 {
+              .icon-modify {
                 @include approvalsImg('xiugaihetong');
               }
-              .icon-7 {
-                @include approvalsImg('hetongyulan');
+              .icon-again {
+                @include approvalsImg('chongxintijiao');
+              }
+              .icon-contract {
+                @include approvalsImg('fasongdianzihetong');
               }
               span {
                 white-space: nowrap;
                 font-size: .24rem;
               }
             }
-            .lessThan2 {
+            .listDown2 {
               width: 100%;
               padding-left: 30%;
             }

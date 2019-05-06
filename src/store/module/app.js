@@ -34,10 +34,10 @@ const app = {
     },
     // 个人信息
     PERSONAL_STORAGE(state, view) {
-      let p = JSON.parse(view);
-      state.personalDetail = p;
+      let personal = JSON.parse(view);
+      state.personalDetail = personal;
       for (let item of Object.keys(state.personal)) {
-        state.personal[item] = p[item];
+        state.personal[item] = personal[item];
       }
     },
     // 监听键盘弹出/收起
@@ -75,7 +75,7 @@ const app = {
     bulletin_draft({commit}, view) {
       commit('BULLETIN_DRAFT', view);
     },
-    // 报备草稿预填
+    // 任务 预填
     task_detail({commit}, view) {
       commit('TASK_DETAIL', view);
     },

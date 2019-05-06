@@ -207,7 +207,7 @@ class httpZll extends httpService {
       tenantId: tenant,
       // assignee: '69',//登陆人
       order: 'desc',
-      taskDefinitionKeyIn: 'CollectTakeLook,InputBulletinData,SignEC',
+      taskDefinitionKeyIn: approvalSearch.toBeDone.join(','),
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
     };
@@ -255,6 +255,18 @@ class httpZll extends httpService {
     });
   }
 
+  // 本地签署电子合同
+  static localSignContract(url, data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_identity}fdd/contract/${url}`, data, 'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        }
+        $httpPrompt(res.msg);
+      });
+    });
+  }
+
   // 获取报备详情
   static getApprovalDetail(url) {
     return new Promise((resolve, reject) => {
@@ -273,11 +285,12 @@ class httpZll extends httpService {
   // 银行名称认证
   static getBankNameAttestation(params) {
     return new Promise((resolve, reject) => {
-      this.get(`${market}v1.0/market/helper/bank_name`, params, '', 'close').then((res) => {
+      this.get(`${market}v1.0/market/helper/bank_name`, params, 'prompt').then((res) => {
         if (Number(res.code) === 200) {
+          $httpPrompt(res.message);
           resolve(res);
         } else {
-          $httpPrompt(res.msg);
+          $httpPrompt(res.message);
           resolve(false);
         }
       })
@@ -288,12 +301,43 @@ class httpZll extends httpService {
   // 获取电子合同编号
   static getElectronicContract(data) {
     return new Promise((resolve, reject) => {
-      this.post(`${url_identity}fdd/number/take`, data, '', 'close').then((res) => {
+      this.post(`${url_identity}fdd/number/take`, data).then((res) => {
         if (res.code === '20000') {
           resolve(res);
         } else {
           resolve(false);
           $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
+  // 客户认证
+  static customerIdentity(data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_identity}fdd/customer/cert`, data, 'prompt').then((res) => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          $httpPrompt(res.msg);
+          this.getFDDUserId(data).then(user => {
+            resolve(user);
+          });
+        }
+      })
+    })
+  }
+
+  // 获取法大大 user_id
+  static getFDDUserId(params) {
+    let data = {};
+    data.name = params.customer_name;
+    data.idcard = params.idcard;
+    data.phone = params.mobile;
+    return new Promise((resolve, reject) => {
+      this.get(`${url_identity}fdd/customer/verified`, data, '', 'close').then((res) => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
         }
       })
     })

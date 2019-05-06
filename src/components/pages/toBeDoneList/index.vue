@@ -19,8 +19,8 @@
           <scroll-load :name="'flex-warp'" @getLoadMore="scrollLoad" :disabled="!fullLoading['load1']">
             <li class="noFinishMain" v-for="(item,index) in finishList['list1']" @click="goOperates(item,'polishing')">
               <div :class="['main-'+index,listLength.includes(index)?'mainTransform':'']">
-                <p>发货的是卡了和卡拉恢复扩大分开了</p>
-                <div class="toBeDoneType">物品补给跟进</div>
+                <p>{{item.title}}</p>
+                <div class="toBeDoneType">{{item.name}}</div>
                 <div class="progress">
                   <div :style="{'height': '30%'}">
                     <span>30<b>%</b></span>
@@ -73,6 +73,7 @@
     <div class="commonFooterTag">
       <p v-for="item in 4" :class="['p-'+item]" @click="footerTag(item)"></p>
     </div>
+
     <!--右侧栏-->
     <div class="addToBeDone" @click="showAddPopup = true"></div>
     <van-popup v-model="showAddPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
@@ -127,7 +128,7 @@
     </van-popup>
     <!--是否去签约-->
     <go-sign-contract :module="goSignModule" :detail="moduleDetail" @close="hiddenGoSign"></go-sign-contract>
-    <!--补齐-->
+    <!--补齐物品报备-->
     <Polishing :module="polishingModule" :detail="polishingDetail" @close="hiddenPolishing"></Polishing>
   </div>
 </template>
@@ -333,12 +334,12 @@
       },
       // 生成电子收据
       clickBtn(task_id) {
-        let data = {}, postData = {};
-        postData.variables = [];
-        data.name = '';
-        data.value = '';
-        postData.variables.push(data);
+        let postData = {};
         postData.action = 'complete';
+        postData.variables = [{
+          name: key,
+          value: action.action,
+        }];
         this.$httpZll.finishBeforeTask(task_id, postData).then(_ => {
           this.onSearch();
         });
@@ -372,10 +373,22 @@
       },
       // 请求列表
       getFinishList(tab) {
+        let url = '', search = [];
+        for (let item of Object.keys(approvalSearch)) {
+          for (let val of approvalSearch[item]) {
+            search = search.concat(val);
+          }
+        }
+        search = this.myUtils.arrayWeight(search).join(',');
         this.fullLoading['load' + tab] = true;
         let params = this.params['params' + tab];
-        // let url = tab === '1' ? 'runtime/tasks' : 'history/tasks';
-        let url = 'runtime/tasks';
+        params.taskDefinitionKeyNotIn = search;
+        if (tab === '1') {
+          url = 'runtime/tasks'
+        } else {
+          url = 'history/tasks';
+          // params.finished = true;
+        }
         this.$httpZll.getToBeDoneListApi(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
           this.total['total' + tab] = res.total || 0;
@@ -402,6 +415,14 @@
       goOperates(val, type) {
         switch (type) {
           case 'goSign':
+            switch (val.taskDefinitionKey) {
+              case 'CollectReceiptSign'://签署收据
+
+                break;
+              case 'CompleteAsset'://补齐物品报备
+
+                break;
+            }
             this.goSignModule = true;
             this.moduleDetail = val;
             break;
@@ -425,23 +446,6 @@
 
         }
       },
-      // 下个任务
-      nextTask(id) {
-        let params = {
-          taskDefinitionKey: 'InputBulletinData',
-          rootProcessInstanceId: id,
-        };
-        this.$httpZll.getNewTaskId(params).then(res => {
-          // if (!res.data.length) {
-          //   this.$prompt('未找到签约信息,请联系产品经理！');
-          //   return;
-          // }
-          // this.allDetail.task_id = res.data[0].id;
-          // this.$store.dispatch('bulletin_draft', this.allDetail);
-          // this.routerReplace('/collectReport');
-          // this.$emit('close');
-        });
-      },
       // 取消
       cancel() {
         this.searchHigh = false;
@@ -457,7 +461,6 @@
           this.checkChooseCommon(val, this.highParams[key]);
         }
         this.highParams = Object.assign({}, this.highParams);
-        console.log(this.highParams)
       },
       // 搜索按钮
       searchBtn(val) {
@@ -469,7 +472,6 @@
             this.resetting();
             break;
           default:
-            // this.params['params'+this.tabs] = this.highParams;
             this.getFinishList(this.tabs);
             this.cancel();
             break;
@@ -487,10 +489,7 @@
       footerTag(val) {
         switch (val) {
           case 1:
-            this.routerReplace('/index');
-            if (this.path === 'index') {
-              this.$router.go(-1);
-            }
+            this.$router.go(-1);
             break;
         }
       },

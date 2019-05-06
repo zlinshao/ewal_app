@@ -66,12 +66,12 @@
     methods: {
       // 去签署
       actions(key = '', action = {}) {
-        let data = {}, postData = {};
-        postData.variables = [];
-        data.name = key;
-        data.value = action.action;
-        postData.variables.push(data);
+        let postData = {};
         postData.action = 'complete';
+        postData.variables = [{
+          name: key,
+          value: action.action,
+        }];
         this.$httpZll.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
           if (action.route === 'back') {
             this.$router.go(-1);

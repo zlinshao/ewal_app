@@ -82,12 +82,12 @@
     methods: {
       // 去签署
       actions(key = '', action = {}) {
-        let data = {}, postData = {};
-        postData.variables = [];
-        data.name = key;
-        data.value = action.action;
-        postData.variables.push(data);
+        let postData = {};
         postData.action = 'complete';
+        postData.variables = [{
+          name: key,
+          value: action.action,
+        }];
         this.$httpZll.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
           if (action.route === 'back') {
             this.$emit('close', 'again');
@@ -102,6 +102,7 @@
                 return;
               }
               this.allDetail.task_id = res.data[0].id;
+
               this.$store.dispatch('task_detail', this.allDetail);
               this.routerReplace(action.route);
               this.$emit('close');
@@ -115,9 +116,18 @@
           let address = {};
           if (res.success) {
             if (btn) {
-              this.$prompt('当前报备暂不能签约,请联系产品经理！');
+              this.$prompt('当前报备暂不能签约！');
             }
-            this.allDetail.content = res.data.content;
+            let content = res.data.content;
+            let arr = ['property_fee', 'property_phone'];
+            if (content.add_data) {
+              for (let item of content.add_data) {
+                if (arr.includes(item.name)) {
+                  content[item.name] = item.value;
+                }
+              }
+            }
+            this.allDetail.content = content;
             let community = res.data.content.community;
             address.location = [community.longitude, community.latitude];
             address.village_name = community.village_name;

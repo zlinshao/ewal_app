@@ -44,6 +44,9 @@
                     :readonly="item.readonly"
                     :disabled="item.disabled"
                     :placeholder="item.placeholder">
+                    <div class="zl-confirmation" :class="[item.icon]" v-if="item.button">
+                      <i :class="item.icon" v-if="item.icon"></i>{{item.button}}
+                    </div>
                     <div class="unit" v-if="item.unit">{{item.unit}}</div>
                   </zl-input>
                   <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
@@ -53,7 +56,7 @@
                   <label class="labelTitle">{{item.label}}</label>
                   <div class="justify-around">
                     <div v-for="(key,index) in item.value">
-                      <h1 @click="electricalChoose()">
+                      <h1 @click="electricalModule = true">
                         <span :class="['electrical-' + (index + 1)]"></span>
                       </h1>
                       <p>{{form[key.key]}}</p>
@@ -171,7 +174,7 @@
                       @input="listenInput(item.keyName)"
                       :placeholder="item.placeholder">
                       <div class="zl-confirmation" :class="[item.icon]"
-                           v-if="item.button && item.icon" @click="confirmation(item.icon)">
+                           v-if="item.button" @click="confirmation(item.icon)">
                         <i :class="item.icon" v-if="item.icon"></i>
                         {{item.button}}
                       </div>
@@ -302,7 +305,6 @@
     activated() {
       this.slither = 0;
       this.allReportNum = Object.keys(this.resetDrawing).length;
-      this.getBankName();
       let title = this.$refs.title.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
       this.mainWidth = {minWidth: main, maxWidth: main};
@@ -310,20 +312,14 @@
       this.slitherCss.width = this.allReportNum + '00%';
       this.$prompt('正在加载...', 'send');
       this.resetting();
-      let params = {};
       let query = this.$route.query;
       this.queryData = query;
       if (query.revise) {
         this.getRevise();
-        this.task_id = this.bulletinDetail.task_id;
       } else if (query.again) {
-        this.againSave(query.again);
-        this.task_id = this.taskDetail.task_id;
+        this.againSave();
       } else {
-        params.to = 'collect';
-        params.type = '1';
-        this.getDraft(params);
-        this.task_id = this.taskDetail.task_id;
+        this.getDraft();
       }
     },
     watch: {
@@ -380,17 +376,9 @@
         };
         this.$httpZll.getElectronicContract(data).then(res => {
           this.electronicContractNumber = res.data.number || '';
-        });
-      },
-      // 获取银行名称
-      getBankName() {
-        let params = {
-          card: '6225212583158743',
-          owner: '贾少君',
-        };
-        this.$httpZll.getBankNameAttestation(params).then(res => {
+          this.form.contract_number = this.electronicContractNumber;
 
-        })
+        });
       },
       // 计算押金
       countPrice() {
@@ -534,14 +522,49 @@
       //   }
       // },
       // 身份认证
+      // 认证
       confirmation(val) {
         switch (val) {
           case 'identity':
-
+            let data = {};
+            data.customer_name = this.form.customer_name;
+            data.idcard = this.form.card_id;
+            data.mobile = this.form.contact_phone;
+            this.$httpZll.customerIdentity(data).then(res => {
+              if (res) {
+                if (res.data.fadada_user_id) {
+                  this.form.signer = res.data;
+                  this.certified();
+                } else {
+                  this.$ddSkip(res.data.data);
+                }
+              }
+            });
             break;
           case 'bank':
-
+            let params = {
+              card: this.form.account,
+              owner: this.form.account_name,
+            };
+            this.$httpZll.getBankNameAttestation(params).then(res => {
+              this.form.bank = res.data || '';
+            });
             break;
+        }
+      },
+      // 已认证
+      certified() {
+        for (let slither of Object.keys(this.drawSlither)) {
+          for (let key of this.drawSlither[slither]) {
+            if (key.icon === 'identity') {
+              key.button = '已认证';
+              key.icon = '';
+            }
+            let data = ['customer_name', 'contact_phone', 'card_id'];
+            if (data.includes(key.keyName)) {
+              key.disabled = 'disabled';
+            }
+          }
         }
       },
       // 日期选择
@@ -595,7 +618,7 @@
         if (val.pickerRead) return;//弹窗内 可输入
         this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
       },
-      // 确认选择
+      // 确认下拉选择
       onConfirm(form, show) {
         this.onCancel();
         if (form !== 'close') {
@@ -670,10 +693,6 @@
           this.formatData = show;
         }
       },
-      // 选择 家电
-      electricalChoose() {
-        this.electricalModule = true;
-      },
       // 家电 确认选择
       closeElectrical(val) {
         if (val !== 'close') {
@@ -711,7 +730,6 @@
       saveReport(val) {
         this.form.type = 1;
         this.form.is_draft = val;
-        this.form.task_id = this.task_id;
         // 重置 附属房东变化
         if (this.form.signatory_identity == 1) {
           this.resetChange('subsidiary_customer');
@@ -719,6 +737,8 @@
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
+            this.form.task_id = this.taskDetail.task_id;
+            this.form.process_instance_id = this.taskDetail.process_instance_id;
             this.form.spot_code = this.$refs.code.spot_code;
             this.$httpZll.submitReport(this.form).then(res => {
               if (res) {
@@ -739,6 +759,8 @@
           case 3:// 修改
             this.form.is_draft = 0;
             this.form.approved_level = this.bulletinDetail.variableName;
+            this.form.task_id = this.bulletinDetail.task_id;
+            this.form.process_instance_id = this.bulletinDetail.process_instance_id;
             this.$httpZll.putReviseReport(this.form).then(res => {
               if (res) {
                 this.resetting();
@@ -749,15 +771,19 @@
         }
       },
       // 草稿
-      getDraft(params) {
+      getDraft() {
+        let params = {};
+        params.to = 'collect';
+        params.type = '1';
+        params.task_id = this.task_id;
         this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
-            this.handlePreFill(hhhhhhhhhhhh);
+            // this.handlePreFill(hhhhhhhhhhhh);
             this.getPunchClockData();
           } else {
             let res = data.data;
             this.form.id = '';//草稿ID
-            this.form = hhhhhhhhhhhh;
+            // this.form = hhhhhhhhhhhh;
             this.handlePreFill(res);
           }
           this.electronicContract();
@@ -767,13 +793,15 @@
       getRevise() {
         let res = this.bulletinDetail;
         this.form.spot_code = '';//唯一识别码
+        this.form.id = '';
         this.form.process_id = res.process_id || '';//修改ID
         this.handlePreFill(res.content);
       },
       // 重新发布
-      againSave(again) {
+      againSave() {
         let res = this.bulletinDetail;
-        this.handlePreFill(res.content, again);
+        this.form.id = '';
+        this.handlePreFill(res.content);
       },
       // 获取待办信息
       getPunchClockData() {
@@ -812,7 +840,7 @@
         }
       },
       // 预填数据处理
-      handlePreFill(res, again = '') {
+      handlePreFill(res) {
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
@@ -823,8 +851,13 @@
               door[2] = door[2] ? door[2] : '';
               this.formatData[item] = door.join('');
               break;
-            case 'community':
+            case 'community'://小区
               this.formatData[item] = res[item].village_name;
+              break;
+            case 'signer'://认证
+              if (res[item]) {
+                this.certified();
+              }
               break;
             case 'house_type'://户型
               let house = this.jsonClone(res[item]);
@@ -919,9 +952,6 @@
             this.album[pic] = res.album[pic];
           }
         }
-        if (again) {
-          this.form.id = '';
-        }
       },
       // 初始化数据
       resetting() {
@@ -942,7 +972,8 @@
           item.num = this.form[item.key];
         }
         this.form.id = id || '';
-        this.form.bank = '上海浦东发展银行';
+        this.form.signer = '';
+
         this.form.account = '6225212583158743';
         this.form.account_name = '贾少君';
       }

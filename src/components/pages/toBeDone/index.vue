@@ -23,23 +23,23 @@
             <!--<label>密码 506231</label>-->
           </p>
           <div class="handleBtn">
-            <p v-for="btn in normalOperates" :class="btn.class">
+            <!--合同修改 / 签署-->
+            <div v-if="item.outcome" class="contract">
+              <p v-for="btn in item.outcome.outcomeOptions" @click="clickBtn(btn,item.outcome.variableName,item)">
+                <i><img :src="changeOperates[btn.action]"></i>
+                <span>{{btn.title}}</span>
+              </p>
+            </div>
+            <!--转交/代签-->
+            <div v-for="btn in normalOperates" :class="btn.class" v-else>
               <i><img :src="btn.icon"></i>
               <span>{{btn.text}}</span>
-            </p>
-            <p @click="goOperates(item)" v-if="item.task_title" :class="item.task_action">
+            </div>
+            <!--去打卡 / 去签约-->
+            <div @click="goOperates(item)" v-if="item.task_title" :class="item.task_action">
               <i><img :src="changeOperates[item.task_action]"></i>
               <span>{{item.task_title}}</span>
-            </p>
-            <p v-for="btn in item.outcome" v-if="item.outcome" @click="clickBtn(btn,item)">
-              <i><img :src="changeOperates[item.task_action]"></i>
-              <span>{{btn.title}}</span>
-              <!--<h1 v-for="(item,idx) in operates.outcomeOptions" class="btn" :class="item.route || ''"-->
-              <!--@click="clickBtn(operates.variableName, item)">-->
-              <!--<span class="writingMode">{{item.title}}</span>-->
-              <!--</h1>-->
-
-            </p>
+            </div>
           </div>
         </li>
         <li class="noMore" v-if="toBeDoneList.length === paging && toBeDoneList.length > 4">
@@ -99,6 +99,9 @@
   import icon_woshenpide from '@/assets/image/toBeDone/woshenpide.png'
   import icon_lishidaikan from '@/assets/image/toBeDone/lishidaikan.png'
   import icon_hetongmoban from '@/assets/image/toBeDone/hetongmoban.png'
+  import icon_shoujiqianshu from '@/assets/image/approvals/detail/kehushoujiqianshu.png'
+  import icon_hetongxiugai from '@/assets/image/approvals/xiugaihetong.png'
+  import icon_bendiqianshu from '@/assets/image/approvals/detail/bendiqianshu.png'
 
   export default {
     name: "index",
@@ -125,6 +128,9 @@
         changeOperates: {
           punchClock: icon_qudaka,
           collectReport: icon_quqianyue,
+          phone: icon_shoujiqianshu,
+          success: icon_bendiqianshu,
+          modify: icon_hetongxiugai,
         },
         // 底部module
         tabsModule: false,//底部操作
@@ -197,87 +203,38 @@
             this.routerLink(val.task_action, val);
             break;
           case 'collectReport':
-            val.task_route = val.task_action;
-            this.taskDetail(val.ctl_detail_request_url, val).then(_ => {
+            this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
-                this.detailRequest(val.bm_detail_request_url, val, 'again');
+                this.againDetailRequest(val, 'again');
               } else {
-                this.routerLink(val.task_route);
+                this.routerLink(val.task_action);
               }
             });
             break;
         }
       },
       // 变更 签署
-      clickBtn(action = {}, item) {
-        let data = {}, postData = {};
-        postData.variables = [];
-        data.name = this.variableName;
-        data.value = action.action;
-        postData.variables.push(data);
-        postData.action = 'complete';
-        this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
-          if (action.action === 'success') {
-            this.$prompt('签署成功！');
-            this.routerLink(action.route);
-          } else {
-            let params = {
-              taskDefinitionKey: 'InputBulletinData',
-              rootProcessInstanceId: item.root_id,
+      clickBtn(action = {}, name = '', item) {
+        let params = {};
+        switch (action.action) {
+          case 'success':
+            params = {
+              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              index: 2,
             };
-            this.$httpZll.getNewTaskId(params).then(res => {
-              let query = {}, urls = {};
-              let task = res.data[0];
-              query.task_id = task.id;
-              query.task_route = action.route;
-              for (let v of task.variables) {
-                if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
-                  urls[v.name] = v.value || '';
-                }
-              }
-              if (urls.bm_detail_request_url) {
-                this.taskDetail(urls.ctl_detail_request_url, query).then(_ => {
-                  this.detailRequest(urls.bm_detail_request_url, query, 'again');
-                });
-              }
-            });
-          }
-        });
-      },
-      // 任务详情
-      taskDetail(url, val) {
-        return new Promise((resolve, reject) => {
-          this.$httpZll.get(url, {}, 'prompt').then(res => {
-            if (res.success) {
-              let data = {};
-              let content = res.data.content;
-              let arr = ['property_fee', 'property_phone'];
-              if (content.add_data) {
-                for (let item of content.add_data) {
-                  if (arr.includes(item.name)) {
-                    content[item.name] = item.value;
-                  }
-                }
-              }
-              data.content = content;
-              data.task_id = val.task_id;
-              this.$store.dispatch('task_detail', data);
-            }
-            resolve(true);
-          });
-        });
-      },
-      // 报备详情
-      detailRequest(url, val, again = '') {
-        this.$httpZll.get(url, {}, 'prompt').then(res => {
-          if (res.success) {
-            let data = {};
-            data.content = res.data.content;
-            data.task_id = val.task_id;
-            this.$store.dispatch('bulletin_draft', data);
-            this.routerLink(val.task_route, {again: again});
-          }
-        });
+            this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
+            break;
+          case 'phone':
+            params = {
+              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              index: 1,
+            };
+            this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
+            break;
+          default:
+            this.$reviseContract(action, name, item);
+            break
+        }
       },
       // 待办类型
       getToDoneType() {
@@ -287,6 +244,7 @@
 
             break;
           case 'nweRent':
+
             break;
         }
       },
@@ -313,13 +271,16 @@
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           this.paging = res.total;
-          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
+          let task = ['taskDefinitionKey', 'bulletin_type', 'title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
           let data = this.groupHandlerListData(res.data, task);
           for (let btn of data) {
             if (btn.outcome) {
-              let outcome = JSON.parse(btn.outcome);
-              btn.outcome = outcome.outcomeOptions;
-              this.variableName = outcome.variableName;
+              let data = [{
+                title: '客户手机签署',
+                action: 'phone',
+              }];
+              btn.outcome = JSON.parse(btn.outcome);
+              btn.outcome.outcomeOptions = data.concat(btn.outcome.outcomeOptions);
             }
           }
           if (this.params.page === 1) {
