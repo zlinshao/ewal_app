@@ -101,8 +101,10 @@
           this.searchList = res.data.data;
         })
       },
+      // 确认选择人员
       pickChoose(val) {
         if (this.config) {
+          // 人员多选
           let num = this.config.num;
           if (this.staffList.id.includes(val.id)) {
             this.$prompt('该员工已选择');
@@ -115,6 +117,7 @@
           this.staffOldValue.push(val);
           this.staffHandle();
         } else {
+          // 人员单选
           let data = {};
           data.staff_id = val.id || '';
           data.staff_name = val.name || '---';
@@ -128,10 +131,12 @@
           this.cancel(data, val);
         }
       },
+      // 多选删除
       deleteStaff(index) {
         this.staffOldValue.splice(index, 1);
         this.staffHandle();
       },
+      // 多选处理
       staffHandle() {
         let names = [];
         this.staffList.id = [];
@@ -145,10 +150,11 @@
         this.cancel(this.staffList, this.staffOldValue);
       },
       cancel(data, val) {
-        this.keywords = '';
         this.$emit('close', data, val);
+        this.keywords = '';
         this.staffOldValue = [];
       },
+      // 清空
       close_() {
         this.searchList = [];
         this.fullLoading = true;

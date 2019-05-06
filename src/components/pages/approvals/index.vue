@@ -458,7 +458,6 @@
           }
           let task = ['bulletin_type', 'task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome', 'contract_number', 'contract_view_url', 'signer'];
           let data = this.groupHandlerListData(res.data, task);
-          console.log(data);
           this.outcomes(data, this.tabs);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;

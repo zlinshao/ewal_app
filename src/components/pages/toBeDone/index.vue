@@ -26,7 +26,7 @@
             <!--合同修改 / 签署-->
             <div v-if="item.outcome" class="contract">
               <p v-for="btn in item.outcome.outcomeOptions" @click="clickBtn(btn,item.outcome.variableName,item)">
-                <i><img :src="changeOperates[item.task_action]"></i>
+                <i><img :src="changeOperates[btn.action]"></i>
                 <span>{{btn.title}}</span>
               </p>
             </div>
@@ -99,6 +99,9 @@
   import icon_woshenpide from '@/assets/image/toBeDone/woshenpide.png'
   import icon_lishidaikan from '@/assets/image/toBeDone/lishidaikan.png'
   import icon_hetongmoban from '@/assets/image/toBeDone/hetongmoban.png'
+  import icon_shoujiqianshu from '@/assets/image/approvals/detail/kehushoujiqianshu.png'
+  import icon_hetongxiugai from '@/assets/image/approvals/xiugaihetong.png'
+  import icon_bendiqianshu from '@/assets/image/approvals/detail/bendiqianshu.png'
 
   export default {
     name: "index",
@@ -125,6 +128,9 @@
         changeOperates: {
           punchClock: icon_qudaka,
           collectReport: icon_quqianyue,
+          phone: icon_shoujiqianshu,
+          success: icon_bendiqianshu,
+          modify: icon_hetongxiugai,
         },
         // 底部module
         tabsModule: false,//底部操作
@@ -265,7 +271,7 @@
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           this.paging = res.total;
-          let task = ['bulletin_type', 'title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
+          let task = ['taskDefinitionKey', 'bulletin_type', 'title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
           let data = this.groupHandlerListData(res.data, task);
           for (let btn of data) {
             if (btn.outcome) {

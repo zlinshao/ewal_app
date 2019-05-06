@@ -202,15 +202,15 @@
           width: .33rem;
           height: .33rem;
           margin-right: .1rem; }
+      #toBeDone .main ul li .handleBtn .contract p i, #toBeDone .main ul li .handleBtn .deliver p i, #toBeDone .main ul li .handleBtn .collectReport p i {
+        width: .4rem;
+        height: .4rem; }
       #toBeDone .main ul li .handleBtn .contract p {
         white-space: nowrap;
         margin-right: .3rem;
         display: flex;
         display: -webkit-flex;
         align-items: center; }
-      #toBeDone .main ul li .handleBtn .deliver i, #toBeDone .main ul li .handleBtn .collectReport i {
-        width: .4rem;
-        height: .4rem; }
       #toBeDone .main ul li .handleBtn .punchClock i {
         height: .4rem; }
   #toBeDone .main .noMore, #toBeDone .main .noData {

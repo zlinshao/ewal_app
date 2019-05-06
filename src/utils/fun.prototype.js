@@ -343,7 +343,6 @@ export default {
           contract_id: item.contract_number,
         };
       }
-      console.log(sign);
       for (let key of Object.keys(params)) {
         sign[key] = params[key]
       }
@@ -361,8 +360,6 @@ export default {
     };
     // 修改合同
     Vue.prototype.$reviseContract = function (action = {}, name = '', item) {
-      console.log(action);
-      console.log(name);
       this.$dialog('合同修改', '是否确认修改合同?').then(res => {
         if (res) {
           let postData = {};
@@ -384,6 +381,8 @@ export default {
                 let query = {};
                 let task = res.data[0];
                 query.task_id = task.id;
+                query.process_id = task.processInstanceId;
+                query.root_id = task.rootProcessInstanceId;
                 query.task_action = action.route;
                 for (let v of task.variables) {
                   if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
@@ -398,6 +397,45 @@ export default {
               });
             }
           });
+        }
+      });
+    };
+    // 任务详情
+    Vue.prototype.againTaskDetail = function (val) {
+      return new Promise((resolve, reject) => {
+        this.$httpZll.get(val.ctl_detail_request_url, {}, 'prompt').then(res => {
+          if (res.success) {
+            let data = {};
+            let content = res.data.content;
+            let arr = ['property_fee', 'property_phone'];
+            if (content.add_data) {
+              for (let item of content.add_data) {
+                if (arr.includes(item.name)) {
+                  content[item.name] = item.value;
+                }
+              }
+            }
+            data.content = content;
+            data.task_id = val.task_id;
+            data.process_instance_id = val.process_id;
+            data.root_process_instance_id = val.root_id;
+            this.$store.dispatch('task_detail', data);
+          }
+          resolve(true);
+        });
+      });
+    };
+    // 报备详情
+    Vue.prototype.againDetailRequest = function (val, again = '') {
+      console.log(val);
+      this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
+        if (res.success) {
+          let data = {};
+          data.content = res.data.content;
+          data.task_id = val.task_id;
+          data.process_instance_id = val.process_id;
+          this.$store.dispatch('bulletin_draft', data);
+          this.routerLink(val.task_action, {again: again});
         }
       });
     };
@@ -423,41 +461,6 @@ export default {
         onFail(err) {
         }
       })
-    };
-    // 任务详情
-    Vue.prototype.againTaskDetail = function (val) {
-      return new Promise((resolve, reject) => {
-        this.$httpZll.get(val.ctl_detail_request_url, {}, 'prompt').then(res => {
-          if (res.success) {
-            let data = {};
-            let content = res.data.content;
-            let arr = ['property_fee', 'property_phone'];
-            if (content.add_data) {
-              for (let item of content.add_data) {
-                if (arr.includes(item.name)) {
-                  content[item.name] = item.value;
-                }
-              }
-            }
-            data.content = content;
-            data.task_id = val.task_id;
-            this.$store.dispatch('task_detail', data);
-          }
-          resolve(true);
-        });
-      });
-    };
-    // 报备详情
-    Vue.prototype.againDetailRequest = function (val, again = '') {
-      this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
-        if (res.success) {
-          let data = {};
-          data.content = res.data.content;
-          data.task_id = val.task_id;
-          this.$store.dispatch('bulletin_draft', data);
-          this.routerLink(val.task_action, {again: again});
-        }
-      });
     };
     // 钉钉认证
     Vue.prototype.personalGet = function () {

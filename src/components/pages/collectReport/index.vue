@@ -312,17 +312,13 @@
       this.slitherCss.width = this.allReportNum + '00%';
       this.$prompt('正在加载...', 'send');
       this.resetting();
-      console.log(window.location.href);
       let query = this.$route.query;
       this.queryData = query;
       if (query.revise) {
-        this.task_id = this.bulletinDetail.task_id;
         this.getRevise();
       } else if (query.again) {
-        this.task_id = this.taskDetail.task_id;
         this.againSave();
       } else {
-        this.task_id = this.taskDetail.task_id;
         this.getDraft();
       }
     },
@@ -734,7 +730,6 @@
       saveReport(val) {
         this.form.type = 1;
         this.form.is_draft = val;
-        this.form.task_id = this.task_id;
         // 重置 附属房东变化
         if (this.form.signatory_identity == 1) {
           this.resetChange('subsidiary_customer');
@@ -742,6 +737,8 @@
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
+            this.form.task_id = this.taskDetail.task_id;
+            this.form.process_instance_id = this.taskDetail.process_instance_id;
             this.form.spot_code = this.$refs.code.spot_code;
             this.$httpZll.submitReport(this.form).then(res => {
               if (res) {
@@ -762,6 +759,8 @@
           case 3:// 修改
             this.form.is_draft = 0;
             this.form.approved_level = this.bulletinDetail.variableName;
+            this.form.task_id = this.bulletinDetail.task_id;
+            this.form.process_instance_id = this.bulletinDetail.process_instance_id;
             this.$httpZll.putReviseReport(this.form).then(res => {
               if (res) {
                 this.resetting();

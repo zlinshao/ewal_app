@@ -73,6 +73,7 @@
     <div class="commonFooterTag">
       <p v-for="item in 4" :class="['p-'+item]" @click="footerTag(item)"></p>
     </div>
+
     <!--右侧栏-->
     <div class="addToBeDone" @click="showAddPopup = true"></div>
     <van-popup v-model="showAddPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
@@ -127,7 +128,7 @@
     </van-popup>
     <!--是否去签约-->
     <go-sign-contract :module="goSignModule" :detail="moduleDetail" @close="hiddenGoSign"></go-sign-contract>
-    <!--补齐-->
+    <!--补齐物品报备-->
     <Polishing :module="polishingModule" :detail="polishingDetail" @close="hiddenPolishing"></Polishing>
   </div>
 </template>
@@ -414,6 +415,14 @@
       goOperates(val, type) {
         switch (type) {
           case 'goSign':
+            switch (val.taskDefinitionKey) {
+              case 'CollectReceiptSign'://签署收据
+
+                break;
+              case 'CompleteAsset'://补齐物品报备
+
+                break;
+            }
             this.goSignModule = true;
             this.moduleDetail = val;
             break;

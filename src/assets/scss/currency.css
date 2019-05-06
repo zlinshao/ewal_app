@@ -716,7 +716,8 @@
   display: -webkit-flex;
   justify-content: center;
   align-items: center;
-  background-color: black; }
+  background-color: black;
+  z-index: 100; }
   #videoId #video {
     position: absolute;
     left: 0;

@@ -67,17 +67,19 @@
               margin-right: .1rem;
             }
           }
+          .contract, .deliver, .collectReport {
+            p {
+              i {
+                width: .4rem;
+                height: .4rem;
+              }
+            }
+          }
           .contract {
             p {
               white-space: nowrap;
               margin-right: .3rem;
               @include flex('items-center');
-            }
-          }
-          .deliver, .collectReport {
-            i {
-              width: .4rem;
-              height: .4rem;
             }
           }
           .punchClock {
