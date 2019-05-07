@@ -280,7 +280,11 @@
               }
             }
             newArr = _.map(newArr, (o) => {
-              o.answer = o.user_answer;
+              if(o.category!==3) {
+                o.answer = [o.user_answer];
+              }else {
+                o.answer = o.user_answer;
+              }
               delete o.stem;
               delete o.user_answer;
               delete o.choice;
