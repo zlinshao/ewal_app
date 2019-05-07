@@ -258,6 +258,14 @@
       }
     },
     mounted() {
+      let query = this.$route.query;
+      if (query.tab) {
+        let tabs = {
+          tab: '1',
+          status: 0,
+        };
+        this.$store.dispatch('approval_tabs', tabs);
+      }
       for (let i = 1; i < 5; i++) {
         if (this.tabs.tab !== String(i)) {
           this.onSearch(i);
@@ -320,10 +328,13 @@
           case 'contract'://发送电子合同
             this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
               if (res) {
-                console.log(item);
-                // this.$httpZll.sendElectronicContract(data => {
-                //
-                // })
+                params = {
+                  fdd_user_id: user_id,
+                  is_number: 1,
+                };
+                this.$httpZll.sendElectronicContract(item.contract_number, params).then(data => {
+
+                })
               }
             });
             break;
