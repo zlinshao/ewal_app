@@ -122,6 +122,12 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
+
 #toBeDone {
   overflow: hidden;
   background: linear-gradient(180deg, white 0%, #f8f8f8 100%);
@@ -202,15 +208,15 @@
           width: .33rem;
           height: .33rem;
           margin-right: .1rem; }
+      #toBeDone .main ul li .handleBtn .contract p i, #toBeDone .main ul li .handleBtn .deliver p i, #toBeDone .main ul li .handleBtn .collectReport p i {
+        width: .4rem;
+        height: .4rem; }
       #toBeDone .main ul li .handleBtn .contract p {
         white-space: nowrap;
         margin-right: .3rem;
         display: flex;
         display: -webkit-flex;
         align-items: center; }
-      #toBeDone .main ul li .handleBtn .deliver i, #toBeDone .main ul li .handleBtn .collectReport i {
-        width: .4rem;
-        height: .4rem; }
       #toBeDone .main ul li .handleBtn .punchClock i {
         height: .4rem; }
   #toBeDone .main .noMore, #toBeDone .main .noData {
@@ -322,6 +328,16 @@
     #toBeDone .showAddPopup .mainModule .module2 i {
       height: .7rem;
       background: url("../../../assets/image/toBeDone/buchongxieyi.png") no-repeat scroll center;
+      background-size: 100% 100%; }
+  #toBeDone .showAddPopup .mainModule .module3 {
+    width: 2rem;
+    height: 2rem;
+    z-index: 1;
+    bottom: 4rem;
+    right: 1.2rem;
+    background-color: #9CE054; }
+    #toBeDone .showAddPopup .mainModule .module3 i {
+      background: url("../../../assets/image/toBeDoneList/zufangdaikan.png") no-repeat scroll center;
       background-size: 100% 100%; }
   #toBeDone .showAddPopup .popupBottom {
     height: 1.5rem;

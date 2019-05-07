@@ -81,8 +81,12 @@
               rootProcessInstanceId: this.allDetail.root_id,
             };
             this.$httpZll.getNewTaskId(params).then(res => {
-              this.allDetail.task_id = res.data[0].id;
-              this.$store.dispatch('bulletin_draft', this.allDetail);
+              let data = res.data[0];
+              this.allDetail.task_id = data.id;
+              this.allDetail.process_instance_id = data.processInstanceId;
+              this.allDetail.root_process_instance_id = data.rootProcessInstanceId;
+              this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
+              this.$store.dispatch('task_detail', this.allDetail);
               this.routerReplace('/collectReport');
             });
           }

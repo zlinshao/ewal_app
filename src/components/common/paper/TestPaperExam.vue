@@ -4,7 +4,7 @@
     <van-actionsheet v-model="action_sheet_visible">
       <div class="action-sheet-container">
         <div class="main-container ">
-          <div class="banner-top">
+          <div @click="paper_dialog_visible = true" class="banner-top">
             <div class="exam-banner">
               <div class="exam-banner-top">
                 <div class="icon-tip"></div>
@@ -16,7 +16,9 @@
                 </div>
                 <div class="exam-banner-middle-timestamp">
                   <div class="icon-clock"></div>
-                  <div class="time-remain"><count-down :datetime="examData.end_time"></count-down></div>
+                  <div class="time-remain">
+                    <count-down :datetime="examData.end_time"></count-down>
+                  </div>
                 </div>
               </div>
               <div class="exam-banner-bottom">
@@ -28,7 +30,7 @@
                 <div class="icon-left-time"></div>
                 <div class="bottom-tip-content">
                   {{examData.duration}}分钟
-<!--                  <count-down :datetime="examData.start_time"></count-down>-->
+                  <!--                  <count-down :datetime="examData.start_time"></count-down>-->
                 </div>
               </div>
               <div class="bottom-tip-item">
@@ -118,23 +120,32 @@
         </div>
       </div>
     </van-actionsheet>
+
+
+    <paper-dialog :visible.sync="paper_dialog_visible" :params="paper_dialog_params" @view="handlePaperDialogView" @close="handlePaperDialogClose"></paper-dialog>
   </div>
 </template>
 
 <script>
   import _ from 'lodash';
-
+  import PaperDialog from '../../common/paper/PaperDialog';
   import CountDown from './CountDown';
   //考试试卷
   export default {
     name: "TestPaperExam",
-    components:{
+    components: {
       CountDown,
+      PaperDialog,
     },
     data() {
       return {
-        action_sheet_visible: false,
+        paper_dialog_visible:false,
+        paper_dialog_params:{
+          score:null,//分数
+        },
 
+        url: globalConfig.server_hr,
+        action_sheet_visible: false,
 
         exam_total_score: 0,//总分值
         exam_category_list: {
@@ -186,7 +197,8 @@
       examData: {
         handler(val, oldVal) {
           if (val) {
-            //问卷头部导航栏内容填充
+            this.clearData();
+            //考试导航栏内容填充
             this.exam_banner = {
               title: val.name || '-',
               user_name: val.user.name,
@@ -197,9 +209,9 @@
             };
 
             //考试题目遍历
-            _.forEach(val.question_set,(value,key)=> {
-              _.forEach(value,(subValue)=> {
-                  subValue.category = parseInt(key);
+            _.forEach(val.question_set, (value, key) => {
+              _.forEach(value, (subValue) => {
+                subValue.category = parseInt(key);
               });
             });
             let questionSet = _.flattenDeep(_.values(val.question_set));
@@ -222,6 +234,7 @@
       },
     },
     methods: {
+
       //清除数据
       clearData() {
         this.exam_category_list = {
@@ -246,7 +259,7 @@
       },
 
       cancelActionSheet() {
-        this.$dialog.confirm({title: '确认取消吗?', message: '取消之后还可以重新作答'}).then(()=> {
+        this.$dialog.confirm({title: '确定要取消本次考试作答吗？', message: '若确定则此次考试的作答将不计入 本次考试题当中'}).then(() => {
           this.action_sheet_visible = false;
           this.clearData();
         });
@@ -256,31 +269,64 @@
       submitExam() {
         this.$dialog.confirm({title: '确认提交吗?', message: '提交之后将无法重新作答'})
           .then(() => {
-            let id = this.examData.id;//问卷id
+            let id = this.examData.id;//id
+            let exam_id = this.examData.exam_id;
             let newArr = _.flatten([this.exam_category_list.single.exam_list, this.exam_category_list.judge.exam_list, this.exam_category_list.short.exam_list]);
             //判断是否有漏答题目
             for (let mItem of newArr) {
-              if(!mItem.user_answer) {
-                this.$prompt('有漏答题目,请检查','warning');
+              if (!mItem.user_answer) {
+                this.$prompt('有漏答题目,请检查', 'warning');
                 return;
               }
             }
-            let answer = _.map(newArr, (o) => {
-              o.answer = o.user_answer;
+            newArr = _.map(newArr, (o) => {
+              if(o.category!==3) {
+                o.answer = [o.user_answer];
+              }else {
+                o.answer = o.user_answer;
+              }
+              delete o.stem;
+              delete o.user_answer;
+              delete o.choice;
+              delete o.score;
+              delete o.choice_count;
               return o;
             });
-            let params = {
-              id,answer
+
+            let answer = {
+              1: [],
+              2: [],
+              3: [],
             };
-            this.$httpTj.submitExam(params).then(res=> {
-              if(res.code.endsWith('0')) {
-                this.action_sheet_visible = false;
-              }
-              console.log(res);
+            _.map(newArr, (o) => {
+              answer[o.category].push(o);
             });
+
+            let params = {
+              answer
+            };
+            this.$httpTj.submitExam(exam_id, params).then(res => {
+              debugger
+              console.log(res);
+              if (res.code.endsWith('0')) {
+                this.paper_dialog_params.score = res.data.score;
+
+                this.paper_dialog_visible = true;
+                //this.action_sheet_visible = false;
+              }
+            });
+            /*this.$http.put(`${this.url}train/exam/set/${id}`, params).then(res => {
+              console.log(res);
+              debugger
+            });*/
           });
       },
-
+      handlePaperDialogView() {
+        alert('查看试卷');
+      },
+      handlePaperDialogClose() {
+        this.action_sheet_visible = false;
+      },
     },
   }
 </script>

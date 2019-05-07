@@ -213,6 +213,12 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
+
 .labelTitle {
   min-width: 2.4rem;
   max-width: 2.4rem;
@@ -716,7 +722,8 @@
   display: -webkit-flex;
   justify-content: center;
   align-items: center;
-  background-color: black; }
+  background-color: black;
+  z-index: 100; }
   #videoId #video {
     position: absolute;
     left: 0;

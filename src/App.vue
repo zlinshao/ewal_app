@@ -32,10 +32,11 @@
       // this.personalGet().then(res => {
       //   this.loading = !res;
       // });
-    },
-    mounted() {
       sessionStorage.setItem('windowHeight', String(window.innerHeight));
       sessionStorage.setItem('windowWidth', String(window.innerWidth));
+    },
+    mounted() {
+
     },
     activated() {
     },

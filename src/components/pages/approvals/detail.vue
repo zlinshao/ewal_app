@@ -2,16 +2,17 @@
   <div id="approvalDetail">
     <div class="detailTop" ref="top">
       <div>
-        <img src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1">
-        <span>张无忌</span>
-        <p>收房报备</p>
+        <img :src="allQuery.bulletin_staff_avatar" v-if="allQuery.bulletin_staff_avatar">
+        <img src="../../../assets/image/common/noHead.png" v-else>
+        <span>{{allQuery.bulletin_staff_name}}</span>
+        <p class="ellipsis">{{allQuery.bulletin_name}}</p>
       </div>
-      <p>
+      <p class="ellipsis">
         <i></i>
-        <span>当前消耗30分钟</span>
+        <span>耗时{{allQuery.duration}}分钟</span>
       </p>
-      <h1>
-        <i v-for="item in 3" :class="['icon-'+item]" @click="iconButton(item)"></i>
+      <h1 v-if="topOperates.length">
+        <i v-for="item in topOperates" :class="['icon-'+item.id]" @click="iconButton(item.id)"></i>
       </h1>
     </div>
     <div class="main" :style="mainHeight">
@@ -100,17 +101,41 @@
     <van-popup v-model="commentPopup" class="commentPopup">
       <h1>评论</h1>
       <div>
-        <div class="comment">
+        <div>
           <label>评论内容</label>
           <textarea placeholder="必填 请输入" v-model="commentForm.remark"></textarea>
         </div>
-        <div v-for="item in upload">
+        <div v-for="item in commentUpload">
           <label style="padding-top: .2rem">{{item.text}}</label>
           <Upload :file="item" :close="!commentPopup" @success="getImgData"></Upload>
         </div>
       </div>
       <div class="commonBtn">
         <p class="btn back" @click="cancel('comment')">取消</p>
+        <p class="btn ">确定</p>
+      </div>
+    </van-popup>
+
+    <!--转交-->
+    <van-popup v-model="deliverPopup" class="deliverPopup">
+      <h1>转交</h1>
+      <div>
+        <div class="deliver">
+          <label>转交人</label>
+          <input placeholder="必填 请输入" v-model="staff_name" readonly
+                 @focus="searchStaffModule = true"/>
+        </div>
+        <div>
+          <label>转交原因</label>
+          <textarea placeholder="必填 请输入" v-model="deliverForm.content"></textarea>
+        </div>
+        <div v-for="item in deliverUpload">
+          <label style="padding-top: .2rem">{{item.text}}</label>
+          <Upload :file="item" :close="!deliverPopup" @success="getImgData1"></Upload>
+        </div>
+      </div>
+      <div class="commonBtn">
+        <p class="btn back" @click="cancel('deliver')">取消</p>
         <p class="btn ">确定</p>
       </div>
     </van-popup>
@@ -133,12 +158,18 @@
         </div>
       </div>
     </van-popup>
+
+    <!--选择人员-->
+    <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
   </div>
 </template>
 
 <script>
+  import SearchStaff from '../../common/searchStaff.vue';
+
   export default {
     name: "detail",
+    components: {SearchStaff},
     data() {
       return {
         mainTop: ['房屋信息', '物品信息', '客户信息', '合同信息'],
@@ -146,7 +177,16 @@
         endClientX: 0,
         slither: 0,
         allDetail: {},//详情
+        allQuery: {},//所有参数
         task_id: '',//详情
+        process_instance_id: '',//详情
+
+        // 头部操作
+        topOperates: [
+          {id: '1'},
+          {id: '2'},
+          {id: '3'},
+        ],
 
         mainHeight: '',
         operates: [],
@@ -155,13 +195,14 @@
         videoSrc: '',//视频
         recordPopup: false,//历史流程
         commentPopup: false,//评论
+        deliverPopup: false,//转交
 
         commentForm: {
           remark: '',
           photo: [],
           house_video: [],
         },
-        upload: [
+        commentUpload: [
           {
             text: '图片',
             keyName: 'photo',
@@ -170,6 +211,20 @@
             keyName: 'house_video',
           }
         ],
+
+        staff_name: '',
+        deliverForm: {
+          staff_id: '',
+          content: '',
+          house_video: [],
+        },
+        deliverUpload: [
+          {
+            text: '房屋影像',
+            keyName: 'house_video',
+          }
+        ],
+        searchStaffModule: false,
       }
     },
     created() {
@@ -180,7 +235,9 @@
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let query = this.$route.query;
+      this.allQuery = query;
       this.task_id = query.task_id;
+      this.process_instance_id = query.process_id;
       this.getOperates(query);
       this.handleData();
       this.approvalDetail(query.bm_detail_request_url);
@@ -216,14 +273,24 @@
       // 头部操作按钮
       iconButton(num) {
         switch (num) {
-          case 1:
-            this.$store.dispatch('bulletin_draft', this.allDetail);
-            this.routerLink('/collectReport', {revise: 'revise'});
+          case '1':
+            this.bulletinRouter(this.allQuery.bulletin_type);
             break;
-          case 2:
+          case '2':
             this.commentPopup = true;
             break;
-          case 3:
+          case '3':
+            this.deliverPopup = true;
+            break;
+        }
+      },
+      // 报备类型跳转
+      bulletinRouter(type) {
+        this.$store.dispatch('bulletin_draft', this.allDetail);
+        switch (type) {
+          case 'bulletin_collect_basic':
+            this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
+            this.routerLink('/collectReport', {revise: 'revise'});
             break;
         }
       },
@@ -274,9 +341,20 @@
           }
         }
       },
+      // 员工搜索
+      getStaffInfo(val) {
+        this.searchStaffModule = false;
+        if (val !== 'close') {
+          this.staff_name = val.staff_name;
+          this.deliverForm.staff_id = val.staff_id;
+        }
+      },
       // 图片上传
       getImgData(val) {
         this.commentForm[val[0]] = val[1];
+      },
+      getImgData1(val) {
+        this.deliverForm[val[0]] = val[1];
       },
       // 视频播放
       videoPlay(event = '') {
@@ -318,13 +396,14 @@
           if (res) {
             this.allDetail = this.jsonClone(res.data);
             this.allDetail.task_id = this.task_id;
+            this.allDetail.process_instance_id = this.process_instance_id;
             this.allDetail.variableName = this.operates.variableName;
             this.formatData = res.data.content;
             this.handleDetail(res.data.content)
           }
         })
       },
-      // 转换文本显示
+      // id转换文本
       handleDetail(res) {
         for (let item of Object.keys(res)) {
           this.formatData[item] = res[item] || this.formatData[item];
@@ -438,6 +517,7 @@
       },
       // 取消
       cancel(val) {
+        this.searchStaffModule = false;
         switch (val) {
           case 'comment':
             this.commentForm.remark = '';
@@ -445,6 +525,9 @@
             break;
           case 'record':
             this.recordPopup = false;
+            break;
+          case 'deliver':
+            this.deliverPopup = false;
             break;
         }
       }
@@ -705,8 +788,8 @@
         }
       }
     }
-    /*评论弹窗*/
-    .commentPopup {
+    /*评论弹窗===转交弹窗*/
+    .commentPopup, .deliverPopup {
       padding: .42rem .3rem .3rem;
       @include radius(.1rem);
       @include flex('bet-column');
@@ -717,18 +800,14 @@
       > div {
         @include scroll;
         max-height: 6rem;
-        .comment {
-          padding-right: .36rem;
-          margin-bottom: .2rem;
-        }
         div {
           @include flex();
+          min-height: .88rem;
           label {
             min-width: 1.3rem;
             max-width: 1.3rem;
             text-align: right;
             margin-right: .3rem;
-            padding-top: .05rem;
             white-space: nowrap;
           }
           input {
@@ -737,6 +816,10 @@
           textarea {
             border: none;
           }
+        }
+        .deliver {
+          @include flex('items-center');
+          margin-bottom: .24rem;
         }
       }
       .commonBtn {

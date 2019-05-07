@@ -283,7 +283,7 @@
         // searchDepartModule: false,       //部门搜索
         searchConfig: {},
 
-        mainTop: ['房屋信息', '物品信息', '客户信息', '合同信息'],
+        mainTop: [],
         startClientX: 0,
         endClientX: 0,
         slither: 0,
@@ -295,14 +295,10 @@
         allReportNum: 0,//滑动列表数
 
         queryData: {},
-        task_id: '',
       }
     },
-    created() {
-      this.resetDrawing = this.jsonClone(defineCollectReport);
-      this.resetting();
-    },
     activated() {
+      this.bulletin_types(this.bulletinType);
       this.slither = 0;
       this.allReportNum = Object.keys(this.resetDrawing).length;
       let title = this.$refs.title.offsetHeight + 30;
@@ -311,31 +307,32 @@
       this.slitherCss = this.mainListHeight(title);
       this.slitherCss.width = this.allReportNum + '00%';
       this.$prompt('正在加载...', 'send');
-      this.resetting();
-      console.log(window.location.href);
       let query = this.$route.query;
       this.queryData = query;
       if (query.revise) {
-        this.task_id = this.bulletinDetail.task_id;
         this.getRevise();
       } else if (query.again) {
-        this.task_id = this.taskDetail.task_id;
         this.againSave();
       } else {
-        this.task_id = this.taskDetail.task_id;
         this.getDraft();
       }
     },
     watch: {
       'form.month'(val) {
-        if (this.form.period_price_way_arr.length === 1) {
-          this.form.period_price_way_arr[0].period = val;
+        if (val) {
+          if (this.form.period_price_way_arr.length === 1) {
+            this.form.period_price_way_arr[0].period = val;
+          }
         }
-      }
+      },
     },
     computed: {
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
+      },
+      // 报备类型
+      bulletinType() {
+        return this.$store.state.app.bulletinTypes;
       },
       bulletinDetail() {
         return this.$store.state.app.bulletinPreFill;
@@ -345,6 +342,24 @@
       }
     },
     methods: {
+      // 报备类型
+      bulletin_types(type) {
+        switch (type.bulletin) {
+          case 'bulletin_collect_basic':
+            this.mainTop = ['房屋信息', '物品信息', '客户信息', '合同信息'];
+            this.resetDrawing = this.jsonClone(defineCollectReport);
+            break;
+          case 'bulletin_rent_basic':
+            this.mainTop = ['租房报备'];
+            this.resetDrawing = this.jsonClone(defineRentReport);
+            break;
+          case 'agency':
+            this.mainTop = ['渠道费报备'];
+            this.resetDrawing = this.jsonClone(defineRentReport);
+            break;
+        }
+        this.resetting();
+      },
       // touch 左右切换
       tapStart(event) {
         for (let item of event.touches) {
@@ -376,7 +391,6 @@
         let data = {
           city_id: this.form.community.city,
           version: '1.1',
-          ticket: this.$refs.code.spot_code,
         };
         this.$httpZll.getElectronicContract(data).then(res => {
           this.electronicContractNumber = res.data.number || '';
@@ -732,9 +746,11 @@
       },
       // 发布
       saveReport(val) {
-        this.form.type = 1;
         this.form.is_draft = val;
-        this.form.task_id = this.task_id;
+        let bulletin = this.bulletinType;
+        if (bulletin.type) {
+          this.form.type = bulletin.type;
+        }
         // 重置 附属房东变化
         if (this.form.signatory_identity == 1) {
           this.resetChange('subsidiary_customer');
@@ -742,8 +758,10 @@
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
+            this.form.task_id = this.taskDetail.task_id;
+            this.form.process_instance_id = this.taskDetail.process_instance_id;
             this.form.spot_code = this.$refs.code.spot_code;
-            this.$httpZll.submitReport(this.form).then(res => {
+            this.$httpZll.submitReport(this.form, bulletin.to).then(res => {
               if (res) {
                 if (val === 1) {
                   this.form.id = res.data.id;
@@ -762,7 +780,9 @@
           case 3:// 修改
             this.form.is_draft = 0;
             this.form.approved_level = this.bulletinDetail.variableName;
-            this.$httpZll.putReviseReport(this.form).then(res => {
+            this.form.task_id = this.bulletinDetail.task_id;
+            this.form.process_instance_id = this.bulletinDetail.process_instance_id;
+            this.$httpZll.putReviseReport(this.form, bulletin.to).then(res => {
               if (res) {
                 this.resetting();
                 this.$router.go(-1);
@@ -774,9 +794,12 @@
       // 草稿
       getDraft() {
         let params = {};
-        params.to = 'collect';
-        params.type = '1';
-        params.task_id = this.task_id;
+        params.task_id = this.taskDetail.task_id;
+        for (let val of Object.keys(this.bulletinType)) {
+          if (val !== 'bulletin') {
+            params[val] = this.bulletinType[val];
+          }
+        }
         this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
             // this.handlePreFill(hhhhhhhhhhhh);

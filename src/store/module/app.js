@@ -10,6 +10,7 @@ const app = {
       department_id: '',
       department_name: '',
     },
+    bulletinTypes: '',
     bulletinPreFill: {},
     taskDetail: {},
     //审批切换
@@ -24,6 +25,10 @@ const app = {
   getter: {},
   // 函数声明
   mutations: {
+    // 报备类型
+    BULLETIN_TYPE(state, view) {
+      state.bulletinTypes = view;
+    },
     // 报备草稿预填
     BULLETIN_DRAFT(state, view) {
       state.bulletinPreFill = view;
@@ -34,10 +39,10 @@ const app = {
     },
     // 个人信息
     PERSONAL_STORAGE(state, view) {
-      let p = JSON.parse(view);
-      state.personalDetail = p;
+      let personal = JSON.parse(view);
+      state.personalDetail = personal;
       for (let item of Object.keys(state.personal)) {
-        state.personal[item] = p[item];
+        state.personal[item] = personal[item];
       }
     },
     // 监听键盘弹出/收起
@@ -71,11 +76,15 @@ const app = {
     key_up_status({commit}, view) {
       commit('KEY_UP_STATUS', view);
     },
+    // 报备类型
+    bulletin_type({commit}, view) {
+      commit('BULLETIN_TYPE', view);
+    },
     // 报备草稿预填
     bulletin_draft({commit}, view) {
       commit('BULLETIN_DRAFT', view);
     },
-    // 报备草稿预填
+    // 任务 预填
     task_detail({commit}, view) {
       commit('TASK_DETAIL', view);
     },
