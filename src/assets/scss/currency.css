@@ -213,6 +213,12 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
+
 .labelTitle {
   min-width: 2.4rem;
   max-width: 2.4rem;

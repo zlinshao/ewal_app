@@ -122,11 +122,17 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
+
 #toBeDone {
   overflow: hidden;
   background: linear-gradient(180deg, white 0%, #f8f8f8 100%);
-  /*bottom 操作*/
-  /*右侧 popup*/ }
+  /*bottom 鎿嶄綔*/
+  /*鍙充晶 popup*/ }
   #toBeDone .toBeDoneTop {
     padding: 0 .3rem;
     border-top: .1rem solid #F4F4F4;

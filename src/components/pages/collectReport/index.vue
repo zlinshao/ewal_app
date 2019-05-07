@@ -298,7 +298,7 @@
       }
     },
     activated() {
-      this.bulletinType(this.bulletin_type);
+      this.bulletin_types(this.bulletinType);
       this.slither = 0;
       this.allReportNum = Object.keys(this.resetDrawing).length;
       let title = this.$refs.title.offsetHeight + 30;
@@ -331,7 +331,7 @@
         return this.$store.state.app.key_up_status;
       },
       // 报备类型
-      bulletin_type() {
+      bulletinType() {
         return this.$store.state.app.bulletinTypes;
       },
       bulletinDetail() {
@@ -343,13 +343,13 @@
     },
     methods: {
       // 报备类型
-      bulletinType(type) {
+      bulletin_types(type) {
         switch (type.bulletin) {
           case 'bulletin_collect_basic':
             this.mainTop = ['房屋信息', '物品信息', '客户信息', '合同信息'];
             this.resetDrawing = this.jsonClone(defineCollectReport);
             break;
-          case 'newRent':
+          case 'bulletin_rent_basic':
             this.mainTop = ['租房报备'];
             this.resetDrawing = this.jsonClone(defineRentReport);
             break;
@@ -391,7 +391,6 @@
         let data = {
           city_id: this.form.community.city,
           version: '1.1',
-          ticket: this.$refs.code.spot_code,
         };
         this.$httpZll.getElectronicContract(data).then(res => {
           this.electronicContractNumber = res.data.number || '';
@@ -747,8 +746,11 @@
       },
       // 发布
       saveReport(val) {
-        this.form.type = 1;
         this.form.is_draft = val;
+        let bulletin = this.bulletinType;
+        if (bulletin.type) {
+          this.form.type = bulletin.type;
+        }
         // 重置 附属房东变化
         if (this.form.signatory_identity == 1) {
           this.resetChange('subsidiary_customer');
@@ -756,11 +758,10 @@
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
-            console.log(this.taskDetail);
             this.form.task_id = this.taskDetail.task_id;
             this.form.process_instance_id = this.taskDetail.process_instance_id;
             this.form.spot_code = this.$refs.code.spot_code;
-            this.$httpZll.submitReport(this.form).then(res => {
+            this.$httpZll.submitReport(this.form, bulletin.to).then(res => {
               if (res) {
                 if (val === 1) {
                   this.form.id = res.data.id;
@@ -781,7 +782,7 @@
             this.form.approved_level = this.bulletinDetail.variableName;
             this.form.task_id = this.bulletinDetail.task_id;
             this.form.process_instance_id = this.bulletinDetail.process_instance_id;
-            this.$httpZll.putReviseReport(this.form).then(res => {
+            this.$httpZll.putReviseReport(this.form, bulletin.to).then(res => {
               if (res) {
                 this.resetting();
                 this.$router.go(-1);
@@ -794,9 +795,9 @@
       getDraft() {
         let params = {};
         params.task_id = this.taskDetail.task_id;
-        for (let val of Object.keys(this.bulletin_type)) {
+        for (let val of Object.keys(this.bulletinType)) {
           if (val !== 'bulletin') {
-            params[val] = this.bulletin_type[val];
+            params[val] = this.bulletinType[val];
           }
         }
         this.$httpZll.getBulletinDraft(params).then(data => {

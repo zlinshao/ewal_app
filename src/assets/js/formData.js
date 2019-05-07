@@ -1,5 +1,5 @@
 hhhhhhhhhhhh = {
-  "house_address": "太平北路122号12-33-44",
+  "house_address": "",
   "community": {
     "id": "446",
     "area": "320102",
@@ -43,10 +43,10 @@ hhhhhhhhhhhh = {
     "property_fee_list": ""
   },
   "position": "2",
-  "property_address": "1312",
-  "property_owner": "321312",
+  "property_address": "发发大水发射点",
+  "property_owner": "放大撒地方",
   "door_address": ["12", "33", "44"],
-  "house_type": ["2", "2", "2"],
+  "house_type": ["1", "1", "1"],
   "area": "122",
   "decorate": {"id": "405", "name": "毛坯"},
   "direction": {"id": "1", "name": "东"},
@@ -89,12 +89,12 @@ hhhhhhhhhhhh = {
   "dining_table": "1",
   "chair": "1",
   "signatory_identity": "1",
-  "customer_name": "发送",
+  "customer_name": "张琳琳",
   "customer_sex": "m",
   "card_type": "411",
-  "card_id": "3213213123",
+  "card_id": "320321198904010033",
   "contact_way": "1",
-  "contact_phone": "12321312",
+  "contact_phone": "18052001167",
   "bank": "上海浦东发展银行",
   "subbranch": "fgdsgdsf",
   "account_name": "贾少君",
@@ -110,8 +110,8 @@ hhhhhhhhhhhh = {
   }],
   "id_card_photo": [4226871, 4226872],
   "bank_card_photo": [4226873, 4226874, 4226875, 4226876],
-  "is_electronic_contract": "0",
-  "contract_number": "LJSF332211223",
+  "is_electronic_contract": "1",
+  "contract_number": "",
   "sign_date": "2019-04-30",
   "month": "12",
   "day": "3",
@@ -151,11 +151,17 @@ hhhhhhhhhhhh = {
   "spot_code": "s7d30"
 };
 
+// 报备类型
 bulletinRouterStatus = {
   newCollect: {
     bulletin: 'bulletin_collect_basic',
     to: 'collect',
-    type: '1',
+    type: 1,
+  },
+  newRent: {
+    bulletin: 'bulletin_rent_basic',
+    to: 'rent',
+    type: 1,
   },
 };
 

@@ -121,6 +121,12 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
+
 #index .index {
   overflow: hidden;
   background: url("../assets/image/home/home_bg.png") no-repeat scroll center;

@@ -34,10 +34,11 @@
                   <p v-else>{{item.name}}</p>
                   <div>
                     <b>
-                      <img
-                        src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1">
+                      <img :src="item.bulletin_staff_avatar" v-if="item.bulletin_staff_avatar">
+                      <img src="../../../assets/image/common/noHead.png" v-else>
                     </b>
-                    <span>发动机</span>
+                    <span v-if="item.bulletin_staff_name">{{item.bulletin_staff_name}}</span>
+                    <span v-else>---</span>
                   </div>
                 </div>
                 <div class="listBottom">
@@ -47,7 +48,7 @@
                   </div>
                   <div>
                     <i class="icon-2"></i>
-                    <span>以等待18分钟</span>
+                    <span>以等待{{item.duration}}分钟</span>
                   </div>
                 </div>
                 <div class="approvalStatus publish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
@@ -55,7 +56,7 @@
                      v-if="tabs.tab === '2' && tabs.status !== 0"></div>
               </div>
               <div class="listDown" v-if="item.outcome">
-                <div v-for="(more,index) in item.outcome.outcomeOptions"
+                <div v-for="more in item.outcome.outcomeOptions"
                      :class="item.outcome.outcomeOptions.length>2?'':'listDown2'"
                      @click="onMoreOperates(more,item.outcome.variableName,item)">
                   <i :class="['icon-'+more.action]"></i>
@@ -277,7 +278,7 @@
       },
     },
     methods: {
-      // 更多操作
+      // 显示 更多操作
       moreOperates(id) {
         if (this.task_ids.includes(id)) {
           let index = this.task_ids.indexOf(id);
@@ -288,7 +289,9 @@
       },
       // 点击更多 操作
       onMoreOperates(action, name = '', item = {}) {
-        let params = {};
+        let params = {}, user_id = '';
+        user_id = item.signer.fadada_user_id || '';
+        this.$store.dispatch('bulletin_type', {bulletin: item.bulletin_type});
         switch (action.action) {
           case 'preview'://合同预览
             this.$ddSkip(item.contract_view_url);
@@ -302,14 +305,14 @@
             break;
           case 'success'://本地签署
             params = {
-              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              customer_id: user_id,
               index: 2,
             };
             this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
             break;
           case 'phone'://客户手机签署
             params = {
-              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              customer_id: user_id,
               index: 1,
             };
             this.$signPostApi(item, params, ['电子合同', '是否确认发送客户签署电子合同?']);
@@ -317,7 +320,10 @@
           case 'contract'://发送电子合同
             this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
               if (res) {
-
+                console.log(item);
+                // this.$httpZll.sendElectronicContract(data => {
+                //
+                // })
               }
             });
             break;
@@ -338,8 +344,9 @@
         this.paramsHandle(tab, status);
       },
       // 报备详情
-      routerLinkDetail(val) {
-        this.routerLink('/approvalDetail', val);
+      routerLinkDetail(item) {
+        this.$store.dispatch('bulletin_type', {bulletin: item.bulletin_type});
+        this.routerLink('/approvalDetail', item);
       },
       // 接口配置
       apiHandle(tab, status) {
@@ -456,8 +463,7 @@
           if (!twoLevel) {
             this.paging['paging' + tab] = res.total;
           }
-          let task = ['bulletin_type', 'task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome', 'contract_number', 'contract_view_url', 'signer'];
-          let data = this.groupHandlerListData(res.data, task);
+          let data = this.groupHandlerListData(res.data);
           this.outcomes(data, this.tabs);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;
@@ -468,7 +474,7 @@
           }
         })
       },
-      // 列表操作 按钮
+      // 操作按钮处理
       outcomes(data, tabs) {
         if (tabs.tab === '2') {
           for (let item of data) {

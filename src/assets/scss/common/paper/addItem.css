@@ -121,6 +121,12 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
+
 #add_item .action-sheet-container {
   display: flex;
   flex-direction: column;

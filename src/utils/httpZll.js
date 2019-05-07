@@ -261,10 +261,26 @@ class httpZll extends httpService {
       this.post(`${url_identity}fdd/contract/${url}`, data, 'prompt').then(res => {
         if (res.code.endsWith('0')) {
           resolve(res);
+        }else{
+          resolve(false);
         }
         $httpPrompt(res.msg);
       });
     });
+  }
+
+  // 发送电子合同
+  static sendElectronicContract(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_identity}fdd/contract/send`, params, 'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        }else{
+          resolve(false);
+        }
+        $httpPrompt(res.msg);
+      })
+    })
   }
 
   // 获取报备详情
@@ -358,9 +374,9 @@ class httpZll extends httpService {
   };
 
   // 收房报备 发布
-  static submitReport(data) {
+  static submitReport(data, to) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/bulletin?to=collect`, data, 'prompt').then(res => {
+      this.post(`${market}v1.0/market/bulletin?to=${to}`, data, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
           $httpPrompt(res.message, 'success');
@@ -373,9 +389,9 @@ class httpZll extends httpService {
   }
 
   // 收房报备 修改
-  static putReviseReport(data) {
+  static putReviseReport(data, to) {
     return new Promise((resolve, reject) => {
-      this.put(`${market}v1.0/market/bulletin/${data.id}?to=collect`, data, 'prompt').then(res => {
+      this.put(`${market}v1.0/market/bulletin/${data.id}?to=${to}`, data, 'prompt').then(res => {
         if (Number(res.code) === 200) {
           resolve(res);
           $httpPrompt(res.message, 'success');

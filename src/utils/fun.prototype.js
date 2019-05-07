@@ -105,21 +105,24 @@ export default {
         }
       }
     };
-    // 去打卡数据重组
-    Vue.prototype.groupHandlerListData = function (data, task = ['title']) {
+    // 列表 数据重组
+    Vue.prototype.groupHandlerListData = function (data) {
       let arr = [];
       for (let item of data) {
         let obj = {};
-        obj.name = item.name;
-        obj.task_id = item.id;
-        obj.status = item.status || [];
-        obj.root_id = item.rootProcessInstanceId;
-        obj.process_id = item.processInstanceId;
         for (let key of item.variables) {
-          if (task.includes(key.name)) {
-            obj[key.name] = key.value;
+          obj[key.name] = key.value;
+          if (key.name === 'signer') {
+            obj.signer = JSON.parse(key.value) || {};
           }
         }
+        obj.name = item.name;
+        obj.task_id = item.id;
+        obj.duration = item.duration;
+        obj.status = item.status || [];
+        obj.root_id = item.rootProcessInstanceId;
+        obj.taskDefinitionKey = item.taskDefinitionKey;
+        obj.process_id = item.processInstanceId;
         arr.push(obj);
       }
       return arr;
@@ -314,7 +317,7 @@ export default {
           }
         }
       } else {
-        for (var key in val) {
+        for (let key of Object.keys(val)) {
           images.push(val[key].uri);
         }
       }

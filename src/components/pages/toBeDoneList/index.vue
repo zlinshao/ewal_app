@@ -17,7 +17,7 @@
         <!--未完成-->
         <div class="noFinish" v-if="tabs === '1'">
           <scroll-load :name="'flex-warp'" @getLoadMore="scrollLoad" :disabled="!fullLoading['load1']">
-            <li class="noFinishMain" v-for="(item,index) in finishList['list1']" @click="goOperates(item,'polishing')">
+            <li class="noFinishMain" v-for="(item,index) in finishList['list1']" @click="goOperates(item,'noFinish')">
               <div :class="['main-'+index,listLength.includes(index)?'mainTransform':'']">
                 <p>{{item.title}}</p>
                 <div class="toBeDoneType">{{item.name}}</div>
@@ -44,7 +44,7 @@
         <!--已完成-->
         <div class="finish" v-if="tabs === '2'">
           <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading['load2']">
-            <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'goSign')">
+            <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'finish')">
               <!--@click="clickBtn(item.task_id)"-->
               <div>
                 <div class="finish1">
@@ -126,20 +126,20 @@
         </p>
       </div>
     </van-popup>
-    <!--是否去签约-->
-    <go-sign-contract :module="goSignModule" :detail="moduleDetail" @close="hiddenGoSign"></go-sign-contract>
-    <!--补齐物品报备-->
-    <Polishing :module="polishingModule" :detail="polishingDetail" @close="hiddenPolishing"></Polishing>
+    <!--未完成-->
+    <no-finish :module="noFinishModule" :detail="noModuleDetail" @close="noFinisHidden"></no-finish>
+    <!--已完成-->
+    <finish :module="finishModule" :detail="moduleDetail" @close="finisHidden"></finish>
   </div>
 </template>
 
 <script>
-  import GoSignContract from './components/goSignContract.vue';
-  import Polishing from './components/polishing.vue';
+  import NoFinish from './components/noFinish.vue';
+  import Finish from './components/finish.vue';
 
   export default {
     name: "index",
-    components: {GoSignContract, Polishing},
+    components: {NoFinish, Finish},
     data() {
       return {
         //加载是否结束
@@ -295,33 +295,31 @@
             },
           ]
         },
-        //是否去签约
-        goSignModule: false,
+
+
+        // 未完成
+        noFinishModule: false,
+        noModuleDetail: {},
+        //已完成
+        finishModule: false,
         moduleDetail: {},
-        // 补齐
-        polishingModule: false,
-        polishingDetail: {},
       }
     },
     created() {
       this.resetting();
     },
     mounted() {
-      if (this.tabs === '1') {
-        this.getQueryDetail('2');
-        this.getFinishList('2')
-      } else {
-        this.getQueryDetail('1');
-        this.getFinishList('1')
-      }
+
     },
     activated() {
       let listTop = this.$refs.listTop.offsetHeight;
       this.mainHeight = this.mainListHeight(listTop);
       let tab = this.tabs;
       this.close_(tab);
-      this.getQueryDetail(tab);
-      this.getFinishList(tab);
+      this.getQueryDetail('1');
+      this.getQueryDetail('2');
+      this.getFinishList('1');
+      this.getFinishList('2');
     },
     watch: {},
     computed: {
@@ -395,13 +393,12 @@
           url = 'runtime/tasks';
         } else {
           url = 'history/tasks';
-          params.finished = true;
+          // params.finished = true;
         }
         this.$httpZll.getToBeDoneListApi(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
           this.total['total' + tab] = res.total || 0;
-          let task = ['bulletin_type', 'title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'rtl_detail_request_url', 'outcome'];
-          let data = this.groupHandlerListData(res.data, task);
+          let data = this.groupHandlerListData(res.data);
           if (params.page === 1) {
             this.finishList['list' + tab] = data;
           } else {
@@ -422,44 +419,34 @@
       // 列表事件
       goOperates(val, type) {
         switch (type) {
-          case 'polishing':
-            this.goSignModule = true;
-            this.moduleDetail = val;
-            // this.polishingModule = true;
-            // this.polishingDetail = val;
+          case 'noFinish':
+            this.noFinishModule = true;
+            this.noModuleDetail = val;
             break;
-          case 'goSign':
-            switch (val.taskDefinitionKey) {
-              case 'CollectReceiptSign'://签署收据
-
-                break;
-              case 'CompleteAsset'://补齐物品报备
-
-                break;
-            }
-
+          case 'finish':
+            this.finishModule = true;
+            this.moduleDetail = val;
             break;
         }
       },
-      // 是否签约
-      hiddenGoSign(val) {
+      // 未完成 模态框
+      noFinisHidden(val) {
         this.cancel();
         if (val === 'again') {
           this.scrollLoad(false);
         }
       },
-      // 补齐
-      hiddenPolishing(val) {
+      // 已完成 模态框
+      finisHidden(val) {
         this.cancel();
         if (val !== 'close') {
-
         }
       },
       // 取消
       cancel() {
         this.searchHigh = false;
-        this.goSignModule = false;
-        this.polishingModule = false;
+        this.noFinishModule = false;
+        this.finishModule = false;
       },
       // 筛选条件
       checkChoose(val, key) {

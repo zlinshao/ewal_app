@@ -2,13 +2,14 @@
   <div id="approvalDetail">
     <div class="detailTop" ref="top">
       <div>
-        <img src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1">
-        <span>张无忌</span>
-        <p>收房报备</p>
+        <img :src="allQuery.bulletin_staff_avatar" v-if="allQuery.bulletin_staff_avatar">
+        <img src="../../../assets/image/common/noHead.png" v-else>
+        <span>{{allQuery.bulletin_staff_name}}</span>
+        <p class="ellipsis">{{allQuery.bulletin_name}}</p>
       </div>
-      <p>
+      <p class="ellipsis">
         <i></i>
-        <span>当前消耗30分钟</span>
+        <span>耗时{{allQuery.duration}}分钟</span>
       </p>
       <h1 v-if="topOperates.length">
         <i v-for="item in topOperates" :class="['icon-'+item.id]" @click="iconButton(item.id)"></i>
@@ -100,7 +101,7 @@
     <van-popup v-model="commentPopup" class="commentPopup">
       <h1>评论</h1>
       <div>
-        <div class="comment">
+        <div>
           <label>评论内容</label>
           <textarea placeholder="必填 请输入" v-model="commentForm.remark"></textarea>
         </div>
@@ -124,7 +125,7 @@
           <input placeholder="必填 请输入" v-model="staff_name" readonly
                  @focus="searchStaffModule = true"/>
         </div>
-        <div class="deliver">
+        <div>
           <label>转交原因</label>
           <textarea placeholder="必填 请输入" v-model="deliverForm.content"></textarea>
         </div>
@@ -176,6 +177,7 @@
         endClientX: 0,
         slither: 0,
         allDetail: {},//详情
+        allQuery: {},//所有参数
         task_id: '',//详情
         process_instance_id: '',//详情
 
@@ -233,6 +235,7 @@
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let query = this.$route.query;
+      this.allQuery = query;
       this.task_id = query.task_id;
       this.process_instance_id = query.process_id;
       this.getOperates(query);
@@ -271,15 +274,23 @@
       iconButton(num) {
         switch (num) {
           case '1':
-            this.$store.dispatch('bulletin_type', {bulletin: this.allDetail.bulletin_type});
-            this.$store.dispatch('bulletin_draft', this.allDetail);
-            this.routerLink('/collectReport', {revise: 'revise'});
+            this.bulletinRouter(this.allQuery.bulletin_type);
             break;
           case '2':
             this.commentPopup = true;
             break;
           case '3':
             this.deliverPopup = true;
+            break;
+        }
+      },
+      // 报备类型跳转
+      bulletinRouter(type) {
+        this.$store.dispatch('bulletin_draft', this.allDetail);
+        switch (type) {
+          case 'bulletin_collect_basic':
+            this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
+            this.routerLink('/collectReport', {revise: 'revise'});
             break;
         }
       },
@@ -789,13 +800,6 @@
       > div {
         @include scroll;
         max-height: 6rem;
-        .comment, .deliver {
-          padding-right: .36rem;
-          margin-bottom: .2rem;
-        }
-        .deliver {
-          @include flex('items-center');
-        }
         div {
           @include flex();
           min-height: .88rem;
@@ -812,6 +816,10 @@
           textarea {
             border: none;
           }
+        }
+        .deliver {
+          @include flex('items-center');
+          margin-bottom: .24rem;
         }
       }
       .commonBtn {

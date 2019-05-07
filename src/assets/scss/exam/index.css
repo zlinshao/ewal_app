@@ -122,6 +122,12 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
+
 #exam .color212121 {
   color: #212121; }
 #exam .color4570FE {

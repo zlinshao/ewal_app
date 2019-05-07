@@ -207,7 +207,7 @@
               }
             ];
             break;
-          case 'newRent':
+            case 'bulletin_rent_basic':
             this.addShowList = [
               {
                 url: '/createdTask',
@@ -285,13 +285,12 @@
       getToBeDoneList(val) {
         this.fullLoading = true;
         let type = this.bulletin_type.bulletin;
-        let status = type === 'newCollect' ? 'toBeDoneCollect' : 'toBeDoneRent';
+        let status = type === 'bulletin_collect_basic' ? 'toBeDoneCollect' : 'toBeDoneRent';
         val.taskDefinitionKeyIn = approvalSearch[status].join(',');
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           this.paging = res.total;
-          let task = ['bulletin_type', 'title', 'flow_type', 'taskDefinitionKey', 'task_title', 'task_action', 'ctl_detail_request_url', 'outcome', 'bm_detail_request_url'];
-          let data = this.groupHandlerListData(res.data, task);
+          let data = this.groupHandlerListData(res.data);
           for (let btn of data) {
             if (btn.outcome) {
               let data = [{

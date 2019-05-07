@@ -46,11 +46,7 @@
           {
             url: 'toBeDone',
             name: '租房',
-            status: {
-              bulletin: 'newRent',
-              to: 'rent',
-              type: '1',
-            },
+            status: bulletinRouterStatus.newRent,
             icon: ic_zufang,
           },
           {
