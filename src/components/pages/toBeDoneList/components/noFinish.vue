@@ -4,7 +4,7 @@
                position="right" :overlay="true" class="popupModule">
       <div class="moduleTop">
         <h1>
-          {{taskDefinitionKey[allDetail.taskDefinitionKey]}}
+          {{taskDefinitionKey[allQuery.taskDefinitionKey]}}
         </h1>
         <h2>
           <span class="numberFont">54<b>%</b></span>
@@ -12,7 +12,17 @@
         </h2>
       </div>
       <div class="moduleMain">
-
+        <div class="main">
+          <div>
+            <label></label>
+            <span></span>
+          </div>
+        </div>
+        <div class="commonBtn">
+          <p :class="['btn ' + item.type || '']" v-for="item of buttons">
+            {{item.label}}
+          </p>
+        </div>
       </div>
     </van-popup>
   </div>
@@ -25,13 +35,28 @@
     data() {
       return {
         popupModule: false,
+        allQuery: {},
         allDetail: {},
+        buttons: [
+          {
+            label: '转交',
+            type: 'deliver'
+          },
+          {
+            label: '增加跟进记录',
+            type: 'confirm'
+          },
+        ],
         moduleType: '',//弹窗类型
         taskDefinitionKey: {
           CompleteData: '业务员补齐资料',
           CompleteAsset: '补齐物品报备',
           InputHandoverOrder: '填写交接信息',
           CollectReceiptSign: '签署收据'
+        },
+        showForm: {
+          house_address: '房屋地址',
+          house_address: '结束时间',
         }
       }
     },
@@ -44,7 +69,7 @@
         this.popupModule = val;
       },
       detail(val) {
-        this.allDetail = val;
+        this.allQuery = val;
         this.getDetail(val.bm_detail_request_url);
       },
       popupModule(val) {
@@ -59,7 +84,7 @@
       getDetail(api) {
         this.$httpZll.get(api, {}, 'prompt').then(res => {
           if (res.success) {
-            console.log(res.data);
+            this.allDetail = res.data;
           }
         })
       },
@@ -90,6 +115,7 @@
       align-items: flex-end;
       h1 {
         color: #FFFFFF;
+        margin-right: .1rem;
       }
       h2 {
         position: relative;
@@ -120,8 +146,19 @@
     }
     .moduleMain {
       height: 100%;
+      padding-top: .2rem;
+      @include flex('bet-column');
       background-color: #FFFFFF;
       @include radius(.2rem .2rem 0 0);
+      .main {
+        height: 100%;
+      }
+      .commonBtn {
+        padding: .3rem;
+        .confirm {
+          padding: .2rem;
+        }
+      }
     }
   }
 </style>

@@ -341,7 +341,7 @@ export default {
       if (item.bulletin_type === 'bulletin_collect_basic') {
         url = 'sign_collect';
         sign = {
-          type: 1,
+          index: 1,
           task_id: item.task_id,
           contract_id: item.contract_number,
         };
