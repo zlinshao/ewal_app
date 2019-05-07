@@ -418,7 +418,7 @@
               placeholder: '必填 请选择',
               readonly: 'readonly',
               keyName: 'house_id',
-              keyType: '',
+              keyType: [],
               type: 'text',
               picker: 'searchHouse',
               showForm: 'formatData',//picker 显示form 或 formatData
@@ -574,7 +574,7 @@
       getHouse(val) {
         this.onCancel();
         if (val) {
-          this.form.house_id = val.id;
+          this.form.house_id = [val.id];
           this.formatData.house_id = val.name;
         }
       },

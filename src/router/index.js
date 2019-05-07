@@ -7,6 +7,7 @@ import HomePage from '@/components/index.vue'
 import CollectReport from '@/components/pages/collectReport/index.vue'//收房
 import ToBeDone from '@/components/pages/toBeDone/index.vue'//市场部待办
 import ToBeDoneList from '@/components/pages/toBeDoneList/index.vue'//所有待办
+import DatumRecord from '@/components/pages/toBeDoneList/addRecord/datumRecord.vue'//增加资料跟进记录
 import PunchClock from '@/components/pages/punchClock/index.vue'//待办
 // import GoSignContract from '@/components/pages/punchClock/finish.vue'//去签署
 import DeliveryReceipt from '@/components/pages/deliveryReceipt/index.vue'//交接
@@ -100,6 +101,12 @@ export default new Router({
       name: '收房交接',
       component: DeliveryReceipt,
       meta: {title: '收房交接', index: 6},
+    },
+    {
+      path: '/datumRecord',
+      name: '增加资料跟进记录',
+      component: DatumRecord,
+      meta: {title: '增加资料跟进记录', index: 4},
     },
     {
       path: '/toBeDone',

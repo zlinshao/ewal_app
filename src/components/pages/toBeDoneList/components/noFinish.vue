@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="commonBtn">
-          <p :class="['btn ' + item.type || '']" v-for="item of buttons">
+          <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="addRecord('/datumRecord')">
             {{item.label}}
           </p>
         </div>
@@ -54,10 +54,7 @@
           InputHandoverOrder: '填写交接信息',
           CollectReceiptSign: '签署收据'
         },
-        showForm: {
-          house_address: '房屋地址',
-          house_address: '结束时间',
-        }
+        showForm: {}
       }
     },
     mounted() {
@@ -87,6 +84,9 @@
             this.allDetail = res.data;
           }
         })
+      },
+      addRecord(url) {
+        this.routerLink(url);
       },
     },
   }

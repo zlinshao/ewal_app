@@ -28,8 +28,8 @@
                 </div>
                 <div class="surplus">剩余</div>
                 <div>
-                  <span class="unit">24<b>h</b></span>
-                  <span class="unit">45<b>m</b></span>
+                  <span class="unit">{{item.surplus_hours}}<b>h</b></span>
+                  <span class="unit">{{item.surplus_minutes}}<b>m</b></span>
                 </div>
               </div>
             </li>
@@ -295,8 +295,6 @@
             },
           ]
         },
-
-
         // 未完成
         noFinishModule: false,
         noModuleDetail: {},
