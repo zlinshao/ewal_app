@@ -154,7 +154,7 @@
               </div>
               <div class="bottom flex">
                 <a></a>
-                <h3>已空置15天</h3>
+                <h3>{{ item.house_status_content }}</h3>
                 <span>{{ item.suggest_price }}</span>
               </div>
             </div>
