@@ -113,17 +113,17 @@
             label: '阳台',
             key: 'balcony',
             value: [
-              {id: 1, label: '吸顶灯', key: '',val: 0},
-              {id: 2, label: '晾衣架', key: '',val: 0},
+              {id: 1, label: '吸顶灯', key: 'balcony_light_num',val: 0},
+              {id: 2, label: '晾衣架', key: 'balcony_has_hanger',val: 0},
             ]
           },
           {
             label: '卫生间',
             key: 'toilet',
             value: [
-              {id: 1, label: '吸顶灯', key: 'kitchen_has_gas',val: 0},
-              {id: 2, label: '热水器', key: 'kitchen_faucet_num',val: 0},
-              {id: 3, label: '浴霸', key: 'kitchen_cabinet_num',val: 0},
+              {id: 1, label: '吸顶灯', key: 'toilet_light_num',val: 0},
+              {id: 2, label: '热水器', key: 'toilet_has_heater',val: 0},
+              {id: 3, label: '浴霸', key: 'toilet_has_yuba',val: 0},
             ]
           }
         ],
