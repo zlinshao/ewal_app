@@ -173,7 +173,7 @@
           },
           {
             label: '街道地址',
-            placeholder: '必填 请输入',
+            placeholder: '已禁用',
             keyName: 'address',
             disabled: 'disabled',
             keyType: '',

@@ -13,9 +13,48 @@
       </div>
       <div class="moduleMain">
         <div class="main">
-          <div>
-            <label></label>
-            <span></span>
+          <div class="detail">
+            <div v-for="item in 5">
+              <label>发生纠纷</label><span>发货的款式法律发的还是卡发生的卡拉</span>
+            </div>
+          </div>
+          <div class="record">
+            <h1>2019-03-12 12:40</h1>
+            <div>
+              <h2>
+                <label>房产证照片</label>
+                <span>
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                </span>
+              </h2>
+              <h2>
+                <label>房产证照片</label>
+                <span>
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                </span>
+              </h2>
+              <h2>
+                <label>房产证照片</label>
+                <span>
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
+                </span>
+              </h2>
+            </div>
           </div>
         </div>
         <div class="commonBtn">
@@ -54,7 +93,8 @@
           InputHandoverOrder: '填写交接信息',
           CollectReceiptSign: '签署收据'
         },
-        showForm: {}
+        showForm: {},
+        params: {},
       }
     },
     mounted() {
@@ -67,7 +107,14 @@
       },
       detail(val) {
         this.allQuery = val;
-        this.getDetail(val.bm_detail_request_url);
+        console.log(val);
+        this.params = {
+          bulletin_staff_id: val.bulletin_staff_id,
+          house_name: val.house_address,
+          task_id: val.task_id,
+          contract_id: val.v3_contract_id,
+        };
+        // this.getDetail(val.bm_detail_request_url);
       },
       popupModule(val) {
         if (!val) {
@@ -105,8 +152,8 @@
       right: 0;
       left: 1.8rem;
       height: 100%;
-      @include radius(.2rem 0 0 .2rem);
       background-color: #4570FE;
+      @include radius(.2rem 0 0 .2rem);
       @include flex('bet-column');
     }
     .moduleTop {
@@ -151,8 +198,50 @@
       @include flex('bet-column');
       background-color: #FFFFFF;
       @include radius(.2rem .2rem 0 0);
+      label {
+        white-space: nowrap;
+        color: #9B9B9B;
+        margin-right: .2rem;
+      }
       .main {
         height: 100%;
+        @include scroll;
+        .detail {
+          padding: .3rem .6rem;
+          div {
+            @include flex();
+            margin-bottom: .2rem;
+            span {
+              line-height: .36rem;
+            }
+          }
+        }
+        .record {
+          margin-top: 1rem;
+          padding: 0 .3rem;
+          h1 {
+            color: #001A6E;
+            padding: 0 0 .1rem .06rem;
+          }
+          div {
+            background-color: #F8F8F8;
+            @include radius(.1rem);
+            h2 {
+              padding: .2rem .1rem;
+              @include flex('items-center');
+              span {
+                @include flex('items-center');
+                flex-wrap: wrap;
+                img {
+                  margin: .1rem .1rem 0 0;
+                  width: .8rem;
+                  height: .8rem;
+                  @include radius(.1rem);
+                }
+              }
+            }
+          }
+        }
       }
       .commonBtn {
         padding: .3rem;

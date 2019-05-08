@@ -106,7 +106,7 @@ export default new Router({
       path: '/datumRecord',
       name: '增加资料跟进记录',
       component: DatumRecord,
-      meta: {title: '增加资料跟进记录', index: 4},
+      meta: {title: '增加资料跟进记录', index: 3},
     },
     {
       path: '/toBeDone',

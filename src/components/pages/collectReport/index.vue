@@ -760,6 +760,7 @@
           case 1:// 草稿
             this.form.task_id = this.taskDetail.task_id;
             this.form.process_instance_id = this.taskDetail.process_instance_id;
+            // this.form.spot_code = this.$refs.code.spot_code;
             this.form.spot_code = this.$refs.code.spot_code;
             this.$httpZll.submitReport(this.form, bulletin.to).then(res => {
               if (res) {
@@ -826,6 +827,7 @@
         let res = this.bulletinDetail;
         this.form.id = '';
         this.handlePreFill(res.content);
+        this.electronicContract();
       },
       // 获取待办信息
       getPunchClockData() {
@@ -1026,7 +1028,7 @@
       bottom: 0;
       transition: background .3s;
       .bulletinTitle {
-        padding: .1rem .3rem 0;
+        padding: .1rem .36rem 0;
         height: 1.2rem;
         @include flex('items-bet');
         label {
@@ -1035,16 +1037,17 @@
           font-family: 'fangzhengjianti';
         }
         p {
-          width: 30%;
           i {
             display: inline-block;
             width: .2rem;
             height: .2rem;
-            margin-right: .2rem;
+            margin-left: .16rem;
             @include radius(50%);
             background-color: #FFFFFF;
           }
           i.hover {
+            width: .33rem;
+            @include radius(1rem);
             background-color: #4570FE;
           }
         }

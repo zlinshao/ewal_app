@@ -108,7 +108,7 @@
     activated() {
       let params = {
         type: 1,
-        id: 44202,
+        id: 44206,
       };
       this.$httpZll.getPolishingDetail(params).then(res => {
         if (res) {
@@ -135,8 +135,9 @@
       },
       // 提交
       submit() {
-        this.form.bulletin_staff_id = [];
+        this.form.bulletin_staff_id = {};
         this.picChanges();
+        console.log(this.form);
       },
       // 上传图片
       getImgData(val) {

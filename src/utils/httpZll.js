@@ -288,10 +288,9 @@ class httpZll extends httpService {
   // 补齐资料详情
   static getPolishingDetail(params) {
     return new Promise((resolve, reject) => {
-      this.get(`v1.0/market/contract/album/${params.type}/${params.id}`, 'prompt').then(res => {
-        if (res.code.endsWith('0')) {
+      this.get(`${market}v1.0/market/contract/album/${params.type}/${params.id}`,{}).then(res => {
+        if (res.success) {
           resolve(res);
-          $httpPrompt(res.msg, 'success');
         } else {
           resolve(false);
           $httpPrompt(res.msg);
