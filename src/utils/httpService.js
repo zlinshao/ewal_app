@@ -112,6 +112,7 @@ class Axios {
           return;
         }
         if (!close) {
+          console.log('close');
           $httpPrompt('', 'close');
         }
         resolve(response.data);
