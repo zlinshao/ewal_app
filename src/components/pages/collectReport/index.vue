@@ -827,7 +827,6 @@
         let res = this.bulletinDetail;
         this.form.id = '';
         this.handlePreFill(res.content);
-        this.electronicContract();
       },
       // 获取待办信息
       getPunchClockData() {

@@ -290,8 +290,7 @@
       // 点击更多 操作
       onMoreOperates(action, name = '', item = {}) {
         let params = {}, user_id = '';
-        // user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
-        user_id = '7C0506F4DB7E047700D9CB3496767797';
+        user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
         switch (action.action) {
           case 'preview'://合同预览
             this.$ddSkip(item.contract_view_url);

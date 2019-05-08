@@ -107,12 +107,15 @@
       },
       detail(val) {
         this.allQuery = val;
-        console.log(val);
+        let contract_id = '';
+        if (val.ewal_contract) {
+          contract_id = JSON.parse(val.ewal_contract).v3_contract_id;
+        }
         this.params = {
           bulletin_staff_id: val.bulletin_staff_id,
           house_name: val.house_address,
           task_id: val.task_id,
-          contract_id: val.v3_contract_id,
+          contract_id: contract_id,
         };
         // this.getDetail(val.bm_detail_request_url);
       },
@@ -134,7 +137,7 @@
         })
       },
       addRecord(url) {
-        this.routerLink(url);
+        this.routerLink(url, this.params);
       },
     },
   }

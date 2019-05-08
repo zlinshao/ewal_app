@@ -243,19 +243,22 @@
       },
       // 变更 签署
       clickBtn(action = {}, name = '', item) {
-        let params = {};
+        let params = {}, user_id = '';
+        user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
         switch (action.action) {
           case 'success'://本地签署
             params = {
-              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              customer_id: user_id,
               type: 2,
+              index: 1,
             };
             this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
             break;
           case 'phone'://客户手机签署
             params = {
-              customer_id: '7C0506F4DB7E047700D9CB3496767797',
+              customer_id: user_id,
               type: 1,
+              index: 1,
             };
             this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
             break;

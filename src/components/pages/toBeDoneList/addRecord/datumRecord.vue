@@ -106,21 +106,26 @@
     mounted() {
     },
     activated() {
-      let params = {
-        type: 1,
-        id: 44206,
-      };
-      this.$httpZll.getPolishingDetail(params).then(res => {
-        if (res) {
-          this.photos(res.data);
-        } else {
-          this.photos([]);
-        }
-      });
+      let query = this.$route.query;
+      console.log(query);
+      this.albumDetail();
     },
     watch: {},
     computed: {},
     methods: {
+      albumDetail() {
+        let params = {
+          type: 1,
+          id: 44206,
+        };
+        this.$httpZll.getPolishingDetail(params).then(res => {
+          if (res) {
+            this.photos(res.data);
+          } else {
+            this.photos([]);
+          }
+        });
+      },
       // 生成图片字段
       photos(data) {
         for (let pic of this.upload) {
@@ -128,7 +133,7 @@
           this.changePhoto[pic.keyName] = data[pic.keyName] || [];
           if (this.oldPhoto[pic.keyName].length) {
             this.$httpZll.getUploadUrl(this.oldPhoto[pic.keyName], 'close').then(res => {
-              this.$set(this.album,pic.keyName,res.data);
+              this.$set(this.album, pic.keyName, res.data);
             })
           }
         }
