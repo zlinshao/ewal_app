@@ -107,7 +107,10 @@
     },
     activated() {
       let query = this.$route.query;
-      console.log(query);
+      for (let key of Object.keys(query)) {
+        this.form[key] = query[key];
+      }
+      console.log(this.form);
       this.albumDetail();
     },
     watch: {},
