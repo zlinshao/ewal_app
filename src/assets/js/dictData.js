@@ -38,7 +38,7 @@ dicties = {
   // 窗帘情况
   curtain: dictArticle,
   // 家电是否齐全
-  is_fill: zeroAndOne,
+  is_fill: {1: '齐全', 0: '不齐全'},
   // 房东是否补齐
   is_lord_fill: zeroAndOne,
   // 是否有暖气

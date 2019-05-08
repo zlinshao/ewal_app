@@ -20,7 +20,7 @@
           </div>
           <div class="commonBtn">
             <p class="btn back">取消</p>
-            <p class="btn">确定</p>
+            <p class="btn" @click="submit">确定</p>
           </div>
         </div>
       </div>
@@ -33,28 +33,131 @@
     name: "datum",
     data() {
       return {
-        upload: [],
-        album: {},
+        album: {},//图片预填
+        oldPhoto: {},
+        changePhoto: {},
+        form: {
+          task_id: '',
+          house_name: '',
+          contract_id: '',
+          bulletin_staff_id: {},
+        },
+        upload: [
+          {
+            label: '证件照片',
+            placeholder: '必填',
+            keyName: 'identity_photo',
+          }, {
+            label: '银行卡照片',
+            placeholder: '必填',
+            keyName: 'bank_photo',
+          }, {
+            label: '合同照片',
+            placeholder: '必填',
+            keyName: 'photo',
+          }, {
+            label: '水表照片',
+            placeholder: '必填',
+            keyName: 'water_photo',
+          }, {
+            label: '电表照片',
+            placeholder: '必填',
+            keyName: 'electricity_photo',
+          }, {
+            label: '气表照片',
+            placeholder: '必填',
+            keyName: 'gas_photo',
+          }, {
+            label: '交接单照片',
+            placeholder: '必填',
+            keyName: 'checkin_photo',
+          }, {
+            label: '委托书照片',
+            placeholder: '必填',
+            keyName: 'auth_photo',
+          }, {
+            label: '押金照片',
+            placeholder: '必填',
+            keyName: 'deposit_photo',
+          }, {
+            label: '承诺书照片',
+            placeholder: '必填',
+            keyName: 'promise',
+          }, {
+            label: '房产证',
+            placeholder: '必填',
+            keyName: 'property_photo',
+          }, {
+            label: '水卡',
+            placeholder: '必填',
+            keyName: 'water_card_photo',
+          }, {
+            label: '电卡',
+            placeholder: '必填',
+            keyName: 'electricity_card_photo',
+          }, {
+            label: '气卡',
+            placeholder: '必填',
+            keyName: 'gas_card_photo',
+          },
+        ],
       }
     },
     mounted() {
     },
     activated() {
-      let data = this.jsonClone(defineCollectReport);
-      for (let item of Object.keys(data)) {
-        for (let key of data[item]) {
-          if (key.picker === 'upload') {
-            this.upload = this.upload.concat(key.value);
-          }
+      let params = {
+        type: 1,
+        id: 44202,
+      };
+      this.$httpZll.getPolishingDetail(params).then(res => {
+        if (res) {
+          this.photos(res.data);
+        } else {
+          this.photos([]);
         }
-      }
+      });
     },
     watch: {},
     computed: {},
     methods: {
-      getImgData(val) {
-
+      // 生成图片字段
+      photos(data) {
+        for (let pic of this.upload) {
+          this.oldPhoto[pic.keyName] = data[pic.keyName] || [];
+          this.changePhoto[pic.keyName] = data[pic.keyName] || [];
+          if (this.oldPhoto[pic.keyName].length) {
+            this.$httpZll.getUploadUrl(this.oldPhoto[pic.keyName], 'close').then(res => {
+              this.$set(this.album,pic.keyName,res.data);
+            })
+          }
+        }
       },
+      // 提交
+      submit() {
+        this.form.bulletin_staff_id = [];
+        this.picChanges();
+      },
+      // 上传图片
+      getImgData(val) {
+        this.changePhoto[val[0]] = val[1];
+      },
+      // 图片上传改动字段
+      picChanges() {
+        for (let key of Object.keys(this.changePhoto)) {
+          if (this.oldPhoto[key].length !== this.changePhoto[key].length) {
+            this.form.bulletin_staff_id[key] = this.changePhoto[key];
+          } else {
+            if (this.changePhoto[key].length) {
+              for (let val of this.changePhoto[key]) {
+                if (!this.oldPhoto[key].includes(val)) {
+                  this.form.bulletin_staff_id[key] = this.changePhoto[key];
+                }
+              }
+            }
+          }
+        }
+      }
     },
   }
 </script>

@@ -103,7 +103,7 @@ class httpZll extends httpService {
   // 小区搜索
   static searchVillageList(params) {
     return new Promise((resolve, reject) => {
-      this.get(`${market}v1.0/market/community`, params, 'prompt').then(res => {
+      this.get(`${market}v1.0/market/community/pattern`, params, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
         } else {
@@ -261,7 +261,7 @@ class httpZll extends httpService {
       this.post(`${url_identity}fdd/contract/${url}`, data, 'prompt').then(res => {
         if (res.code.endsWith('0')) {
           resolve(res);
-          $httpPrompt(res.msg,'success');
+          $httpPrompt(res.msg, 'success');
         } else {
           resolve(false);
           $httpPrompt(res.msg);
@@ -276,7 +276,21 @@ class httpZll extends httpService {
       this.get(`${url_identity}fdd/contract/send/${number}`, params, 'prompt').then(res => {
         if (res.code.endsWith('0')) {
           resolve(res);
-          $httpPrompt(res.msg,'success');
+          $httpPrompt(res.msg, 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
+  // 补齐资料详情
+  static getPolishingDetail(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/contract/album/${params.type}/${params.id}`, {}, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
         } else {
           resolve(false);
           $httpPrompt(res.msg);

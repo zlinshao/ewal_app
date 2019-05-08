@@ -258,14 +258,6 @@
       }
     },
     mounted() {
-      let query = this.$route.query;
-      if (query.tab) {
-        let tabs = {
-          tab: '1',
-          status: 0,
-        };
-        this.$store.dispatch('approval_tabs', tabs);
-      }
       for (let i = 1; i < 5; i++) {
         if (this.tabs.tab !== String(i)) {
           this.onSearch(i);
@@ -299,7 +291,7 @@
       onMoreOperates(action, name = '', item = {}) {
         let params = {}, user_id = '';
         user_id = item.signer.fadada_user_id || '';
-        this.$store.dispatch('bulletin_type', {bulletin: item.bulletin_type});
+        this.handleBulletinType(item);
         switch (action.action) {
           case 'preview'://合同预览
             this.$ddSkip(item.contract_view_url);
@@ -337,6 +329,14 @@
                 })
               }
             });
+            break;
+        }
+      },
+      // 报备类型
+      handleBulletinType(item) {
+        switch (item.bulletin_type) {
+          case 'bulletin_collect_basic':
+            this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
             break;
         }
       },

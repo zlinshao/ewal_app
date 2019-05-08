@@ -511,7 +511,7 @@ defineCollectReport = {
       slot: '',
     },
     {
-      label: '家电是否补齐',
+      label: '家电是否齐全',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'is_fill',
@@ -868,7 +868,6 @@ defineCollectReport = {
           keyName: 'id_card_photo',
         }, {
           label: '银行卡照片',
-          placeholder: '必填',
           keyName: 'bank_card_photo',
         }
       ]

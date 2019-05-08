@@ -89,6 +89,7 @@
               this.progress[item.id] = 0;
             }
           }
+          console.log(this.showFile);
           this.$emit('success', [this.file.keyName, this.ids, true]);
         },
         deep: true,

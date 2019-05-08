@@ -79,6 +79,7 @@
     methods: {
       // 获取任务详情
       getDetail(api) {
+        if (!api) return;
         this.$httpZll.get(api, {}, 'prompt').then(res => {
           if (res.success) {
             this.allDetail = res.data;
