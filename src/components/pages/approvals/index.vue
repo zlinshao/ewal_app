@@ -291,28 +291,31 @@
       onMoreOperates(action, name = '', item = {}) {
         let params = {}, user_id = '';
         user_id = item.signer.fadada_user_id || '';
-        this.handleBulletinType(item);
         switch (action.action) {
           case 'preview'://合同预览
             this.$ddSkip(item.contract_view_url);
             break;
           case 'again'://重新提交
+            this.handleBulletinType(item);
             item.task_action = action.route;
             this.againSave(item);
             break;
           case 'modify'://合同修改
+            this.handleBulletinType(item);
             this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
             params = {
               customer_id: user_id,
-              index: 2,
+              type: 2,
+              index: 1,
             };
             this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
             break;
           case 'phone'://客户手机签署
             params = {
               customer_id: user_id,
+              type: 1,
               index: 1,
             };
             this.$signPostApi(item, params, ['电子合同', '是否确认发送客户签署电子合同?']);

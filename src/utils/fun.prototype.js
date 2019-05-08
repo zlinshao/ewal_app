@@ -341,7 +341,6 @@ export default {
       if (item.bulletin_type === 'bulletin_collect_basic') {
         url = 'sign_collect';
         sign = {
-          index: 1,
           task_id: item.task_id,
           contract_id: item.contract_number,
         };
@@ -352,10 +351,10 @@ export default {
       this.$dialog(title[0], title[1]).then(data => {
         if (data) {
           this.$httpZll.localSignContract(url, sign).then(res => {
-            if (Number(sign.index) === 2) {
+            if (Number(sign.type) === 2) {
               this.$ddSkip(res.data.data);
             } else {
-              this.$prompt('发送成功!', 'success')
+              this.$prompt('发送成功!', 'success');
             }
           })
         }
