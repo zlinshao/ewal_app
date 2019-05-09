@@ -221,6 +221,21 @@ class httpZll extends httpService {
     });
   }
 
+  // 任务跟进详情
+  // v1.0/market/task-follow-up/list?task_id
+  static followRecordList(id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/task-follow-up/list?task_id=${id}`, {}, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        }else{
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+      });
+    });
+  }
+
   // 完成当前任务
   static finishBeforeTask(id, data) {
     return new Promise((resolve, reject) => {
@@ -288,12 +303,27 @@ class httpZll extends httpService {
   // 补齐资料详情
   static getPolishingDetail(params) {
     return new Promise((resolve, reject) => {
-      this.get(`${market}v1.0/market/contract/album/${params.type}/${params.id}`,{}).then(res => {
+      this.get(`${market}v1.0/market/contract/album/${params.type}/${params.id}`, {}).then(res => {
         if (res.success) {
           resolve(res);
         } else {
           resolve(false);
           $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
+  // 补齐资料报备
+  static setPolishingBulletin(task_id = '', params) {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/task-follow-up?task_id=${task_id}`, params, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+          $httpPrompt(res.message, 'success');
+        } else {
+          $httpPrompt(res.message);
+          resolve(false);
         }
       })
     })

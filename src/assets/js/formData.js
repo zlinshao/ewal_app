@@ -62,16 +62,16 @@ hhhhhhhhhhhh = {
   "other_remark": "fdsfda",
   "photo": [4226867, 4226868, 4226869],
   "house_video": [4226870],
-  "bed": "1",
+  "bed": "3",
   "bed_remark": "fdfdsafasd",
-  "wardrobe": "1",
+  "wardrobe": "2",
   "wardrobe_remark": "fdsfas",
-  "curtain": "1",
+  "curtain": "3",
   "curtain_remark": "dfsfsdaf",
   "is_elevator": "0",
   "is_clean": "0",
-  "is_fill": "0",
-  "is_lord_fill": "0",
+  "is_fill": "1",
+  "is_lord_fill": "1",
   "has_heater": "0",
   "has_gas": "0",
   "lord_fill_date": "2019-04-30",
@@ -165,10 +165,10 @@ bulletinRouterStatus = {
   },
 };
 
-// 审批搜索
+// 审批筛选
 approvalSearch = {
-  toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC'],
-  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC'],
+  toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC','CollectReceiptSign'],
+  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC','CollectReceiptSign'],
   approvals1: ['pqjl_approval', 'gkzx_approval'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
@@ -487,6 +487,18 @@ defineCollectReport = {
       slot: '',
     },
     {
+      label: '家电是否齐全',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'is_fill',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'pickerArticle',
+      slot: '',
+    },
+    {
       label: '是否有电梯',
       placeholder: '必填 请选择',
       readonly: 'readonly',
@@ -503,18 +515,6 @@ defineCollectReport = {
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'is_clean',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'pickerArticle',
-      slot: '',
-    },
-    {
-      label: '家电是否齐全',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'is_fill',
       keyType: '',
       type: 'text',
       status: 'objInt',

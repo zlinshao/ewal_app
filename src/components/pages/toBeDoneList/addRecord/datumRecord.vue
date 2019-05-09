@@ -1,9 +1,13 @@
 <template>
   <div id="datumRecord" :style="mainListHeight()">
     <div class="up">
-      <div v-for="item in 5">
-        <label>粉红色的卡</label>
-        <span>符合开始大量后来</span>
+      <div v-for="item in Object.keys(showFormat)">
+        <label>{{showFormat[item]}}</label>
+        <span class="remaining_time" v-if="item === 'remaining_time'">
+          <span class="unit">{{followRecord.due_date_hours}}<b>h</b></span>
+          <span class="unit">{{followRecord.due_date_minutes}}<b>m</b></span>
+        </span>
+        <span v-else>{{followRecord[item]}}</span>
       </div>
     </div>
     <div class="down">
@@ -15,7 +19,7 @@
               <span>发货的款式饭卡了</span>
             </div>
             <div v-for="pic in upload" class="flex">
-              <Upload :file="pic" :getImg="album[pic.keyName]" @success="getImgData"></Upload>
+              <Upload :file="pic" :getImg="album[pic.keyName]" :close="!picStatus" @success="getImgData"></Upload>
             </div>
           </div>
           <div class="commonBtn">
@@ -33,14 +37,23 @@
     name: "datum",
     data() {
       return {
+        picStatus: false,
         album: {},//图片预填
         oldPhoto: {},
         changePhoto: {},
+        showFormat: {
+          house_address: '房屋地址',
+          to_do_content: '待办内容',
+          due_date: '结束时间',
+          remaining_time: '剩余时间',
+          bulletin_staff_name: '跟进人',
+        },
         form: {
           task_id: '',
           house_name: '',
           contract_id: '',
-          bulletin_staff_id: {},
+          bulletin_staff_id: '',
+          complete_content: {},
         },
         upload: [
           {
@@ -106,20 +119,24 @@
     mounted() {
     },
     activated() {
+      this.picStatus = false;
       let query = this.$route.query;
       for (let key of Object.keys(query)) {
         this.form[key] = query[key];
       }
-      console.log(this.form);
-      this.albumDetail();
+      this.albumDetail(query);
     },
     watch: {},
-    computed: {},
+    computed: {
+      followRecord() {
+        return this.$store.state.app.followRecord;
+      }
+    },
     methods: {
-      albumDetail() {
+      albumDetail(query) {
         let params = {
           type: 1,
-          id: 44206,
+          id: query.contract_id,
         };
         this.$httpZll.getPolishingDetail(params).then(res => {
           if (res) {
@@ -143,30 +160,38 @@
       },
       // 提交
       submit() {
-        this.form.bulletin_staff_id = {};
-        this.picChanges();
-        console.log(this.form);
+        this.form.complete_content = this.changePhoto;
+        // this.picChanges();
+        this.$httpZll.setPolishingBulletin(this.form.task_id, this.form).then(res => {
+          if (res) {
+            this.close_();
+            this.$router.go(-1);
+          }
+        })
       },
       // 上传图片
       getImgData(val) {
         this.changePhoto[val[0]] = val[1];
       },
       // 图片上传改动字段
-      picChanges() {
-        for (let key of Object.keys(this.changePhoto)) {
-          if (this.oldPhoto[key].length !== this.changePhoto[key].length) {
-            this.form.bulletin_staff_id[key] = this.changePhoto[key];
-          } else {
-            if (this.changePhoto[key].length) {
-              for (let val of this.changePhoto[key]) {
-                if (!this.oldPhoto[key].includes(val)) {
-                  this.form.bulletin_staff_id[key] = this.changePhoto[key];
-                }
-              }
-            }
-          }
-        }
-      }
+      // picChanges() {
+      //   for (let key of Object.keys(this.changePhoto)) {
+      //     if (this.oldPhoto[key].length !== this.changePhoto[key].length) {
+      //       this.form.complete_content[key] = this.changePhoto[key];
+      //     } else {
+      //       if (this.changePhoto[key].length) {
+      //         for (let val of this.changePhoto[key]) {
+      //           if (!this.oldPhoto[key].includes(String(val))) {
+      //             this.form.complete_content[key] = this.changePhoto[key];
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // },
+      close_() {
+        this.picStatus = true;
+      },
     },
   }
 </script>
@@ -187,6 +212,20 @@
       div {
         @include flex('items-center');
         min-height: .66rem;
+        label {
+          width: 1.2rem;
+        }
+        .unit {
+          position: relative;
+          margin-right: .3rem;
+          @include numberFont('blod');
+          b {
+            font-size: .25rem;
+            position: absolute;
+            top: -.1rem;
+            right: -.2rem;
+          }
+        }
       }
     }
     .down {
@@ -216,7 +255,6 @@
               label {
                 min-width: 2.2rem;
                 max-width: 2.2rem;
-
               }
             }
           }

@@ -113,10 +113,7 @@
         let data = {};
         data.id = val.id;
         data.name = val.village_name;
-        this.params = {
-          name: '',
-          city: [],
-        };
+        this.params.name = '';
         this.searchList = [];
         this.$emit('close', data, val);
       },

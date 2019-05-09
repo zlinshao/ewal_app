@@ -95,7 +95,10 @@ class myUtils {
     if (type === 'date') {
       return year + '-' + mm + '-' + dd;
     }
-    return year + '-' + mm + '-' + dd + ' ' + hh + ':' + md;
+    if (type === 'datetime') {
+      return year + '-' + mm + '-' + dd + ' ' + hh + ':' + md;
+    }
+    return year + '-' + mm + '-' + dd + ' ' + hh + ':' + md + ':' + ss;
   };
 
   // 数组去重
@@ -117,11 +120,11 @@ class myUtils {
   }
 
   // 计算时间差
-  static timeDifference(now) {//di作为一个变量传进来
+  static timeDifference(di) {//di作为一个变量传进来
     //如果时间格式是正确的，那下面这一步转化时间格式就可以不用了
-    let dateBegin = new Date(now.replace(/-/g, "/"));//将-转化为/，使用new Date
+    let dateBegin = new Date(di);//将-转化为/，使用new Date
     let dateEnd = new Date();//获取当前时间
-    let dateDiff = dateEnd.getTime() - dateBegin.getTime();//时间差的毫秒数
+    let dateDiff = -(dateEnd.getTime() - dateBegin.getTime());//时间差的毫秒数
     let hours = Math.floor(dateDiff / (3600 * 1000));
     let leave = dateDiff % (3600 * 1000);//计算小时数后剩余的毫秒数
     let minutes = Math.floor(leave / (60 * 1000));//计算相差分钟数

@@ -207,7 +207,7 @@
               }
             ];
             break;
-            case 'bulletin_rent_basic':
+          case 'bulletin_rent_basic':
             this.addShowList = [
               {
                 url: '/createdTask',
@@ -243,29 +243,37 @@
       },
       // 变更 签署
       clickBtn(action = {}, name = '', item) {
-        let params = {}, user_id = '';
+        console.log(item);
+        let user_id = '';
         user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
         switch (action.action) {
           case 'success'://本地签署
-            params = {
-              customer_id: user_id,
-              type: 2,
-              index: 1,
-            };
-            this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
+            this.handlerSign(item, user_id, 2);
             break;
           case 'phone'://客户手机签署
-            params = {
-              customer_id: user_id,
-              type: 1,
-              index: 1,
-            };
-            this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
+            this.handlerSign(item, user_id, 1);
             break;
           default://合同修改
             this.$reviseContract(action, name, item);
             break
         }
+      },
+      // 签署
+      handlerSign(item, user_id, type) {
+        let title = [];
+        let params = {
+          customer_id: user_id,
+          type: type,
+          index: 0,
+        };
+        if (item.taskDefinitionKey === 'CollectReceiptSign') {
+          params.index = 2;
+          title = ['收据', '是否确认签署收据?'];
+        } else {
+          params.index = 1;
+          title = ['电子合同', '是否确认签署电子合同?'];
+        }
+        this.$signPostApi(item, params, title);
       },
       // 滚动加载
       scrollLoad(val) {
@@ -294,16 +302,7 @@
           this.fullLoading = false;
           this.paging = res.total;
           let data = this.groupHandlerListData(res.data);
-          for (let btn of data) {
-            if (btn.outcome) {
-              let data = [{
-                title: '客户手机签署',
-                action: 'phone',
-              }];
-              btn.outcome = JSON.parse(btn.outcome);
-              btn.outcome.outcomeOptions = data.concat(btn.outcome.outcomeOptions);
-            }
-          }
+          this.handlerOperates(data);
           if (this.params.page === 1) {
             this.toBeDoneList = data;
           } else {
@@ -312,6 +311,33 @@
             }
           }
         })
+      },
+      handlerOperates(data) {
+        for (let btn of data) {
+          if (btn.outcome) {
+            let data = [{
+              title: '客户手机签署',
+              action: 'phone',
+            }];
+            btn.outcome = JSON.parse(btn.outcome);
+            btn.outcome.outcomeOptions = data.concat(btn.outcome.outcomeOptions);
+          } else {
+            if (btn.taskDefinitionKey === 'CollectReceiptSign') {
+              btn.outcome = {
+                outcomeOptions: [
+                  {
+                    title: '客户手机签署',
+                    action: 'phone',
+                  },
+                  {
+                    title: '本地签署',
+                    action: 'success',
+                  }
+                ]
+              };
+            }
+          }
+        }
       },
       // 底部模态框 按钮
       tabsTag(val) {

@@ -80,13 +80,15 @@
           this.showFile = [];
           this.progress = {};
           if (val.length > 0) {
+            let index = 0;
             for (let item of val) {
               this.ids.push(Number(item.id));
               if (item.info) {
                 item.mime = item.info.mime;
               }
               this.showFile.push(item);
-              this.progress[item.id] = 0;
+              this.progress['progress' + this.file.keyName + index] = 0;
+              index++;
             }
           }
           this.$emit('success', [this.file.keyName, this.ids, true]);

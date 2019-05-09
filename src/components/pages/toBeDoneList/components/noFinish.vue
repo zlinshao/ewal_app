@@ -14,51 +14,30 @@
       <div class="moduleMain">
         <div class="main">
           <div class="detail">
-            <div v-for="item in 5">
-              <label>发生纠纷</label><span>发货的款式法律发的还是卡发生的卡拉</span>
+            <div v-for="item in Object.keys(showFormat)">
+              <label>{{showFormat[item]}}</label>
+              <span v-if="item === 'remaining_time'">
+                <span class="unit">{{allQuery.due_date_hours}}<b>h</b></span>
+                <span class="unit">{{allQuery.due_date_minutes}}<b>m</b></span>
+              </span>
+              <span v-else>{{allQuery[item] || ''}}</span>
             </div>
           </div>
-          <div class="record">
-            <h1>2019-03-12 12:40</h1>
+          <div class="record" v-for="item in recordList">
+            <h1>{{item.created_at}}</h1>
             <div>
-              <h2>
-                <label>房产证照片</label>
-                <span>
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                </span>
-              </h2>
-              <h2>
-                <label>房产证照片</label>
-                <span>
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                </span>
-              </h2>
-              <h2>
-                <label>房产证照片</label>
-                <span>
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                  <img src="http://pic37.nipic.com/20140113/8800276_184927469000_2.png">
-                </span>
+              <h2 v-for="pic in Object.keys(item.file)">
+                <label>{{uploadCollect[pic]}}</label>
+                <i><img v-for="p in item.file[pic]" :src="p.uri"></i>
+                <!--<span>-->
+                <!--<b>空调/缺2台</b><b>补充2台</b>-->
+                <!--</span>-->
               </h2>
             </div>
           </div>
         </div>
         <div class="commonBtn">
-          <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="addRecord('/datumRecord')">
+          <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="addRecord()">
             {{item.label}}
           </p>
         </div>
@@ -74,8 +53,15 @@
     data() {
       return {
         popupModule: false,
-        allQuery: {},
-        allDetail: {},
+        allQuery: {},//父组件传值
+        recordList: [],//跟进记录
+        showFormat: {
+          house_address: '房屋地址',
+          to_do_content: '待办内容',
+          due_date: '结束时间',
+          remaining_time: '剩余时间',
+          bulletin_staff_name: '跟进人',
+        },
         buttons: [
           {
             label: '转交',
@@ -90,11 +76,32 @@
         taskDefinitionKey: {
           CompleteData: '业务员补齐资料',
           CompleteAsset: '补齐物品报备',
-          InputHandoverOrder: '填写交接信息',
-          CollectReceiptSign: '签署收据'
         },
         showForm: {},
         params: {},
+        // 收房
+        uploadCollect: {
+          auth_photo: "委托书照片",
+          promise: "承诺书照片",
+          property_photo: "房产证",
+          water_card_photo: "水卡",
+          electricity_card_photo: "电卡",
+          gas_card_photo: "气卡",
+        },
+        // 租房
+        uploadRent: {
+          certificate_photo: "截图凭证",
+        },
+        commonPic: {
+          identity_photo: "证件照片",
+          photo: "合同照片",
+          bank_photo: "银行卡照片",
+          checkin_photo: "交接单照片",
+          deposit_photo: "押金照片",
+          electricity_photo: "电表照片",
+          gas_photo: "气表照片",
+          water_photo: "水表照片",
+        }
       }
     },
     mounted() {
@@ -111,13 +118,17 @@
         if (val.ewal_contract) {
           contract_id = JSON.parse(val.ewal_contract).v3_contract_id;
         }
+        if (val.due_date) {
+          this.allQuery.due_date = this.myUtils.formatDate(new Date(val.due_date), 'datetime');
+        }
         this.params = {
           bulletin_staff_id: val.bulletin_staff_id,
           house_name: val.house_address,
           task_id: val.task_id,
           contract_id: contract_id,
         };
-        // this.getDetail(val.bm_detail_request_url);
+        this.uploadCollect = Object.assign({}, this.uploadCollect, this.commonPic);
+        this.getRecordList(val.task_id);
       },
       popupModule(val) {
         if (!val) {
@@ -127,17 +138,18 @@
     },
     computed: {},
     methods: {
-      // 获取任务详情
-      getDetail(api) {
-        if (!api) return;
-        this.$httpZll.get(api, {}, 'prompt').then(res => {
-          if (res.success) {
-            this.allDetail = res.data;
+      // 跟进列表
+      getRecordList(id) {
+        this.$httpZll.followRecordList(id).then(res => {
+          if (res) {
+            this.recordList = res.data;
           }
         })
       },
-      addRecord(url) {
-        this.routerLink(url, this.params);
+      // 跟进记录
+      addRecord() {
+        this.$store.dispatch('follow_record', this.allQuery);
+        this.routerLink('/datumRecord', this.params);
       },
     },
   }
@@ -214,13 +226,27 @@
           div {
             @include flex();
             margin-bottom: .2rem;
+            label {
+              width: 1.3rem;
+            }
             span {
               line-height: .36rem;
             }
           }
+          .unit {
+            position: relative;
+            margin-right: .3rem;
+            @include numberFont('blod');
+            b {
+              font-size: .25rem;
+              position: absolute;
+              top: -.1rem;
+              right: -.2rem;
+            }
+          }
         }
         .record {
-          margin-top: 1rem;
+          margin-top: .6rem;
           padding: 0 .3rem;
           h1 {
             color: #001A6E;
@@ -232,7 +258,7 @@
             h2 {
               padding: .2rem .1rem;
               @include flex('items-center');
-              span {
+              i {
                 @include flex('items-center');
                 flex-wrap: wrap;
                 img {
@@ -241,6 +267,10 @@
                   height: .8rem;
                   @include radius(.1rem);
                 }
+              }
+              span {
+                width: 100%;
+                @include flex('items-bet');
               }
             }
           }

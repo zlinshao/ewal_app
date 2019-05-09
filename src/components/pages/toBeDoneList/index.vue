@@ -28,8 +28,8 @@
                 </div>
                 <div class="surplus">剩余</div>
                 <div>
-                  <span class="unit">{{item.surplus_hours}}<b>h</b></span>
-                  <span class="unit">{{item.surplus_minutes}}<b>m</b></span>
+                  <span class="unit">{{item.due_date_hours}}<b>h</b></span>
+                  <span class="unit">{{item.due_date_minutes}}<b>m</b></span>
                 </div>
               </div>
             </li>

@@ -305,20 +305,10 @@
             this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
-            params = {
-              customer_id: user_id,
-              type: 2,
-              index: 1,
-            };
-            this.$signPostApi(item, params, ['电子合同', '是否确认签署电子合同?']);
+            this.handlerSign(item, user_id, 2);
             break;
           case 'phone'://客户手机签署
-            params = {
-              customer_id: user_id,
-              type: 1,
-              index: 1,
-            };
-            this.$signPostApi(item, params, ['电子合同', '是否确认发送客户签署电子合同?']);
+            this.handlerSign(item, user_id, 1);
             break;
           case 'contract'://发送电子合同
             this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
@@ -334,6 +324,17 @@
             });
             break;
         }
+      },
+      // 签署
+      handlerSign(item, user_id, type) {
+        let title = ['电子合同',''];
+        let params = {
+          customer_id: user_id,
+          type: type,
+          index: 1,
+        };
+        title[1] = type === 2 ? '是否确认签署电子合同?': '是否确认发送客户签署电子合同?';
+        this.$signPostApi(item, params, title);
       },
       // 报备类型
       handleBulletinType(item) {

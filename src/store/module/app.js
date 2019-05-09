@@ -20,6 +20,7 @@ const app = {
     },
     // 待办任务切换
     doneTab: '1',
+    followRecord: {},//跟进记录
   },
   // 计算属性
   getter: {},
@@ -58,9 +59,13 @@ const app = {
       state.doneTab = view;
     },
     // 开关video
-    SWITCH_VIDEO(state,status) {
+    SWITCH_VIDEO(state, status) {
       state.video_visible = status;
-    }
+    },
+    // 跟进记录
+    FOLLOW_RECORD(state, status) {
+      state.followRecord = status;
+    },
   },
   // 执行函数
   actions: {
@@ -97,9 +102,13 @@ const app = {
       commit('DONE_TABS', view);
     },
     // 开关video
-    switch_video({commit},status) {
-      commit('SWITCH_VIDEO',status);
-    }
+    switch_video({commit}, status) {
+      commit('SWITCH_VIDEO', status);
+    },
+    // 跟进记录
+    follow_record({commit}, status) {
+      commit('FOLLOW_RECORD', status);
+    },
   }
 };
 

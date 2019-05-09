@@ -115,6 +115,11 @@ export default {
           if (key.name === 'signer') {
             obj.signer = JSON.parse(key.value) || {};
           }
+          if (key.name === 'due_date') {
+            let date = this.myUtils.timeDifference(key.value);
+            obj.due_date_hours = date.hours;
+            obj.due_date_minutes = date.minutes;
+          }
         }
         obj.name = item.name;
         obj.task_id = item.id;
@@ -429,7 +434,6 @@ export default {
     };
     // 报备详情
     Vue.prototype.againDetailRequest = function (val, again = '') {
-      console.log(val);
       this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
         if (res.success) {
           let data = {};
