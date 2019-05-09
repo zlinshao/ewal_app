@@ -128,6 +128,7 @@
           contract_id: contract_id,
         };
         this.uploadCollect = Object.assign({}, this.uploadCollect, this.commonPic);
+        this.recordList = [];
         this.getRecordList(val.task_id);
       },
       popupModule(val) {

@@ -181,7 +181,7 @@
           } else {
             if (this.changePhoto[key].length) {
               for (let val of this.changePhoto[key]) {
-                if (!this.oldPhoto[key].includes(String(val))) {
+                if (!this.oldPhoto[key].includes(val)) {
                   this.form.complete_content[key] = this.changePhoto[key];
                 }
               }
@@ -190,6 +190,8 @@
         }
       },
       close_() {
+        this.oldPhoto = [];
+        this.changePhoto = [];
         this.picStatus = true;
       },
     },
