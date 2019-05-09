@@ -160,8 +160,8 @@
       },
       // 提交
       submit() {
-        this.form.complete_content = this.changePhoto;
-        // this.picChanges();
+        this.form.complete_content = {};
+        this.picChanges();
         this.$httpZll.setPolishingBulletin(this.form.task_id, this.form).then(res => {
           if (res) {
             this.close_();
@@ -174,21 +174,21 @@
         this.changePhoto[val[0]] = val[1];
       },
       // 图片上传改动字段
-      // picChanges() {
-      //   for (let key of Object.keys(this.changePhoto)) {
-      //     if (this.oldPhoto[key].length !== this.changePhoto[key].length) {
-      //       this.form.complete_content[key] = this.changePhoto[key];
-      //     } else {
-      //       if (this.changePhoto[key].length) {
-      //         for (let val of this.changePhoto[key]) {
-      //           if (!this.oldPhoto[key].includes(String(val))) {
-      //             this.form.complete_content[key] = this.changePhoto[key];
-      //           }
-      //         }
-      //       }
-      //     }
-      //   }
-      // },
+      picChanges() {
+        for (let key of Object.keys(this.changePhoto)) {
+          if (this.oldPhoto[key].length !== this.changePhoto[key].length) {
+            this.form.complete_content[key] = this.changePhoto[key];
+          } else {
+            if (this.changePhoto[key].length) {
+              for (let val of this.changePhoto[key]) {
+                if (!this.oldPhoto[key].includes(String(val))) {
+                  this.form.complete_content[key] = this.changePhoto[key];
+                }
+              }
+            }
+          }
+        }
+      },
       close_() {
         this.picStatus = true;
       },
