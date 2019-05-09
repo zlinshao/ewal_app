@@ -183,9 +183,9 @@
       // 确定打卡
       finishPunchClock() {
         this.postForm.variables = this.jsonClone(this.form);
-        this.form.variables.property_phone = '18052001167';
-        this.form.variables.remark = '发的啥开发圣诞快乐';
-        this.form.variables.look_photo = [4227577, 4227578, 4227579];
+        this.postForm.variables.property_phone = '182052501756';
+        this.postForm.variables.remark = '发的啥开发圣诞快乐';
+        this.postForm.variables.look_photo = [4227577, 4227578, 4227579];
         this.$httpZll.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
             this.close_();
