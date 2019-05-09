@@ -16,7 +16,7 @@
           <div class="forms">
             <div class="detail">
               <label>房屋地址</label>
-              <span>发货的款式饭卡了</span>
+              <span>{{followRecord.house_address || ''}}</span>
             </div>
             <div v-for="pic in upload" class="flex">
               <Upload :file="pic" :getImg="album[pic.keyName]" :close="!picStatus" @success="getImgData"></Upload>
