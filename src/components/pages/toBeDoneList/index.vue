@@ -418,8 +418,17 @@
       goOperates(val, type) {
         switch (type) {
           case 'noFinish':
-            this.noFinishModule = true;
-            this.noModuleDetail = val;
+            switch (val.taskDefinitionKey) {
+              case 'CompleteData':
+              case 'CompleteAsset':
+                this.noFinishModule = true;
+                this.noModuleDetail = val;
+                break;
+              case 'InputHandoverOrder'://交接单
+                this.$store.dispatch('all_detail', val);
+                this.routerLink('/deliveryReceipt');
+                break;
+            }
             break;
           case 'finish':
             this.finishModule = true;

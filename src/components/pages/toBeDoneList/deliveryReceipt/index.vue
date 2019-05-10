@@ -243,10 +243,10 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../../assets/scss/common.scss";
+  @import "../../../../assets/scss/common.scss";
 
   @mixin deliveryImg($n) {
-    @include bgImage('../../../assets/image/deliveryReceipt/'+$n+'.png');
+    @include bgImage('../../../../assets/image/deliveryReceipt/'+$n+'.png');
   }
 
   #deliveryReceipt {
@@ -283,6 +283,7 @@
       padding: .24rem 0;
       background-color: #FFFFFF;
       overflow-x: hidden;
+      @include radius(.1rem);
       @include flex();
       .transition {
         @include flex('bet-column');

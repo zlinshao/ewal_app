@@ -4,7 +4,7 @@
                position="right" :overlay="true" class="popupModule">
       <div class="moduleTop">
         <h1>
-          {{taskDefinitionKey[allQuery.taskDefinitionKey]}}
+          {{taskDefinitionKey[allDetail.taskDefinitionKey]}}
         </h1>
         <h2>
           <span class="numberFont">54<b>%</b></span>
@@ -17,10 +17,10 @@
             <div v-for="item in Object.keys(showFormat)">
               <label>{{showFormat[item]}}</label>
               <span v-if="item === 'remaining_time'">
-                <span class="unit">{{allQuery.due_date_hours}}<b>h</b></span>
-                <span class="unit">{{allQuery.due_date_minutes}}<b>m</b></span>
+                <span class="unit">{{allDetail.due_date_hours}}<b>h</b></span>
+                <span class="unit">{{allDetail.due_date_minutes}}<b>m</b></span>
               </span>
-              <span v-else>{{allQuery[item] || ''}}</span>
+              <span v-else>{{allDetail[item] || ''}}</span>
             </div>
           </div>
           <div class="record" v-for="item in recordList">
@@ -28,7 +28,7 @@
             <div>
               <h2 v-for="pic in Object.keys(item.file)">
                 <label>{{uploadCollect[pic]}}</label>
-                <i><img v-for="p in item.file[pic]" :src="p.uri"></i>
+                <i><img v-for="p in item.file[pic]" :src="p.uri" @click="$bigPhoto(item.file[pic],p.uri)"></i>
                 <!--<span>-->
                 <!--<b>空调/缺2台</b><b>补充2台</b>-->
                 <!--</span>-->
@@ -53,7 +53,7 @@
     data() {
       return {
         popupModule: false,
-        allQuery: {},//父组件传值
+        allDetail: {},//父组件传值
         recordList: [],//跟进记录
         showFormat: {
           house_address: '房屋地址',
@@ -113,13 +113,13 @@
         this.popupModule = val;
       },
       detail(val) {
-        this.allQuery = val;
+        this.allDetail = val;
         let contract_id = '';
         if (val.ewal_contract) {
           contract_id = JSON.parse(val.ewal_contract).v3_contract_id;
         }
         if (val.due_date) {
-          this.allQuery.due_date = this.myUtils.formatDate(new Date(val.due_date), 'datetime');
+          this.allDetail.due_date = this.myUtils.formatDate(new Date(val.due_date), 'datetime');
         }
         this.params = {
           bulletin_staff_id: val.bulletin_staff_id,
@@ -149,7 +149,7 @@
       },
       // 跟进记录
       addRecord() {
-        this.$store.dispatch('follow_record', this.allQuery);
+        this.$store.dispatch('all_detail', this.allDetail);
         this.routerLink('/datumRecord', this.params);
       },
     },
@@ -218,6 +218,7 @@
         white-space: nowrap;
         color: #9B9B9B;
         margin-right: .2rem;
+        text-align: right;
       }
       .main {
         height: 100%;
@@ -228,7 +229,8 @@
             @include flex();
             margin-bottom: .2rem;
             label {
-              width: 1.3rem;
+              min-width: 1.3rem;
+              max-width: 1.3rem;
             }
             span {
               line-height: .36rem;
@@ -259,6 +261,10 @@
             h2 {
               padding: .2rem .1rem;
               @include flex('items-center');
+              label {
+                min-width: 1.6rem;
+                max-width: 1.6rem;
+              }
               i {
                 @include flex('items-center');
                 flex-wrap: wrap;

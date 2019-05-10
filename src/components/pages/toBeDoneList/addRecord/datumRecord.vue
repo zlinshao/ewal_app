@@ -23,7 +23,7 @@
             </div>
           </div>
           <div class="commonBtn">
-            <p class="btn back">取消</p>
+            <p class="btn back" @click="$router.go(-1)">取消</p>
             <p class="btn" @click="submit">确定</p>
           </div>
         </div>
@@ -129,7 +129,7 @@
     watch: {},
     computed: {
       followRecord() {
-        return this.$store.state.app.followRecord;
+        return this.$store.state.app.allDetail;
       }
     },
     methods: {
@@ -181,7 +181,7 @@
           } else {
             if (this.changePhoto[key].length) {
               for (let val of this.changePhoto[key]) {
-                if (!this.oldPhoto[key].includes(val)) {
+                if ((!this.oldPhoto[key].includes(Number(val))) && (!this.oldPhoto[key].includes(String(val)))) {
                   this.form.complete_content[key] = this.changePhoto[key];
                 }
               }
@@ -215,7 +215,8 @@
         @include flex('items-center');
         min-height: .66rem;
         label {
-          width: 1.2rem;
+          min-width: 1.2rem;
+          max-width: 1.2rem;
         }
         .unit {
           position: relative;

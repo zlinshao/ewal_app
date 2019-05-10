@@ -20,7 +20,7 @@ const app = {
     },
     // 待办任务切换
     doneTab: '1',
-    followRecord: {},//跟进记录
+    allDetail: {},//详情
   },
   // 计算属性
   getter: {},
@@ -63,8 +63,8 @@ const app = {
       state.video_visible = status;
     },
     // 跟进记录
-    FOLLOW_RECORD(state, status) {
-      state.followRecord = status;
+    ALL_DETAIL(state, status) {
+      state.allDetail = status;
     },
   },
   // 执行函数
@@ -106,8 +106,8 @@ const app = {
       commit('SWITCH_VIDEO', status);
     },
     // 跟进记录
-    follow_record({commit}, status) {
-      commit('FOLLOW_RECORD', status);
+    all_detail({commit}, status) {
+      commit('ALL_DETAIL', status);
     },
   }
 };

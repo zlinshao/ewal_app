@@ -10,7 +10,7 @@ import ToBeDoneList from '@/components/pages/toBeDoneList/index.vue'//所有待�
 import DatumRecord from '@/components/pages/toBeDoneList/addRecord/datumRecord.vue'//增加资料跟进记录
 import PunchClock from '@/components/pages/punchClock/index.vue'//待办
 // import GoSignContract from '@/components/pages/punchClock/finish.vue'//去签署
-import DeliveryReceipt from '@/components/pages/deliveryReceipt/index.vue'//交接
+import DeliveryReceipt from '@/components/pages/toBeDoneList/deliveryReceipt/index.vue'//交接单
 import Approvals from '@/components/pages/approvals/index.vue'//审批
 import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
 import CreatedTask from '@/components/pages/createdTask/index.vue'//新建 带看任务

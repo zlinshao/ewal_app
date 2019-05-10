@@ -2,14 +2,14 @@
   <div id="approvalDetail">
     <div class="detailTop" ref="top">
       <div>
-        <img :src="allQuery.bulletin_staff_avatar" v-if="allQuery.bulletin_staff_avatar">
+        <img :src="allDetail.bulletin_staff_avatar" v-if="allDetail.bulletin_staff_avatar">
         <img src="../../../assets/image/common/noHead.png" v-else>
-        <span>{{allQuery.bulletin_staff_name}}</span>
-        <p class="ellipsis">{{allQuery.bulletin_name}}</p>
+        <span>{{allDetail.bulletin_staff_name}}</span>
+        <p class="ellipsis">{{allDetail.bulletin_name}}</p>
       </div>
       <p class="ellipsis">
         <i></i>
-        <span>耗时{{allQuery.duration}}分钟</span>
+        <span>耗时{{allDetail.duration}}分钟</span>
       </p>
       <h1 v-if="topOperates.length">
         <i v-for="item in topOperates" :class="['icon-'+item.id]" @click="iconButton(item.id)"></i>
@@ -177,7 +177,7 @@
         endClientX: 0,
         slither: 0,
         allDetail: {},//详情
-        allQuery: {},//所有参数
+        allDetail: {},//所有参数
         task_id: '',//详情
         process_instance_id: '',//详情
 
@@ -235,7 +235,7 @@
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let query = this.$route.query;
-      this.allQuery = query;
+      this.allDetail = query;
       this.task_id = query.task_id;
       this.process_instance_id = query.process_id;
       this.getOperates(query);
@@ -274,7 +274,7 @@
       iconButton(num) {
         switch (num) {
           case '1':
-            this.bulletinRouter(this.allQuery.bulletin_type);
+            this.bulletinRouter(this.allDetail.bulletin_type);
             break;
           case '2':
             this.commentPopup = true;

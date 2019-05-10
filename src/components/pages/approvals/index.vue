@@ -293,6 +293,10 @@
         user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
         switch (action.action) {
           case 'preview'://合同预览
+            if (!item.contract_view_url) {
+              this.$prompt('合同地址不存在！');
+              return;
+            }
             this.$ddSkip(item.contract_view_url);
             break;
           case 'again'://重新提交
@@ -327,13 +331,13 @@
       },
       // 签署
       handlerSign(item, user_id, type) {
-        let title = ['电子合同',''];
+        let title = ['电子合同', ''];
         let params = {
           customer_id: user_id,
           type: type,
           index: 1,
         };
-        title[1] = type === 2 ? '是否确认签署电子合同?': '是否确认发送客户签署电子合同?';
+        title[1] = type === 2 ? '是否确认签署电子合同?' : '是否确认发送客户签署电子合同?';
         this.$signPostApi(item, params, title);
       },
       // 报备类型
