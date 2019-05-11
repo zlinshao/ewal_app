@@ -320,9 +320,8 @@
     watch: {
       'form.month'(val) {
         if (val) {
-          if (this.form.period_price_way_arr.length === 1) {
-            this.form.period_price_way_arr[0].period = val;
-          }
+          this.form.period_price_way_arr[0].period = val;
+
         }
       },
     },
@@ -453,7 +452,7 @@
           }
           let date = new Date(item.begin_date);
           if (item.begin_date) {
-            item.end_date = this.myUtils.formatAddRem('dd', period, date);
+            item.end_date = this.myUtils.formatAddRem('mm', period, date);
           }
           for (let item of Object.keys(value[0])) {
             if (item !== 'pay_way') {
@@ -584,6 +583,7 @@
             }
           }
         }
+        this.form = Object.assign({}, this.form);
       },
       // 日期选择
       chooseTime(val, date) {

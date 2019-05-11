@@ -342,6 +342,7 @@ export default {
     };
     // 签署电子合同
     Vue.prototype.$signPostApi = function (item, params, title = []) {
+      console.log(item);
       let url = '', sign = {};
       if (item.bulletin_type === 'bulletin_collect_basic') {
         url = 'sign_collect';

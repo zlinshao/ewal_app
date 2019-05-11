@@ -14,11 +14,19 @@
       <div class="moduleMain">
         <div class="main">
           <div class="detail">
-            <div v-for="item in Object.keys(showFormat)">
+            <div v-for="item in Object.keys(showFormat)" v-if="allDetail[item] || item === 'remaining_time'">
               <label>{{showFormat[item]}}</label>
               <span v-if="item === 'remaining_time'">
                 <span class="unit">{{allDetail.due_date_hours}}<b>h</b></span>
                 <span class="unit">{{allDetail.due_date_minutes}}<b>m</b></span>
+              </span>
+              <span v-else-if="item === 'house_goods'">
+                <b v-if="allDetail[item]">
+                  <span v-for="house in Object.keys(allDetail[item])" style="display: block;">
+                    <span v-if="house !== 'is_fill'">缺少{{makeGoods[house]}}{{allDetail[item][house]}}个</span>
+                    <span v-else>家电补不齐全</span>
+                  </span>
+                </b>
               </span>
               <span v-else>{{allDetail[item] || ''}}</span>
             </div>
@@ -28,7 +36,9 @@
             <div>
               <h2 v-for="pic in Object.keys(item.file)">
                 <label>{{uploadCollect[pic]}}</label>
-                <i><img v-for="p in item.file[pic]" :src="p.uri" @click="$bigPhoto(item.file[pic],p.uri)"></i>
+                <i>
+                  <img v-for="p in item.file[pic]" :src="p.uri" @click="$bigPhoto(item.file[pic],p.uri)">
+                </i>
                 <!--<span>-->
                 <!--<b>空调/缺2台</b><b>补充2台</b>-->
                 <!--</span>-->
@@ -57,10 +67,16 @@
         recordList: [],//跟进记录
         showFormat: {
           house_address: '房屋地址',
-          to_do_content: '待办内容',
+          house_goods: '待办内容',
           due_date: '结束时间',
           remaining_time: '剩余时间',
           bulletin_staff_name: '跟进人',
+        },
+        makeGoods: {
+          bed: '床和床垫',
+          wardrobe: '衣柜',
+          curtain: '窗帘',
+          is_fill: '家电是否齐全'
         },
         buttons: [
           {
@@ -113,6 +129,13 @@
         this.popupModule = val;
       },
       detail(val) {
+        if (val.house_goods && typeof val.house_goods === 'string') {
+          if (val.taskDefinitionKey === 'CompleteAsset') {
+            val.house_goods = JSON.parse(val.house_goods);
+          } else {
+            val.house_goods = ''
+          }
+        }
         this.allDetail = val;
         let contract_id = '';
         if (val.ewal_contract) {

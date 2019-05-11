@@ -117,7 +117,6 @@
         handler(val, oldVal) {
           this.pickerConfig = this.jsonClone(val);
         },
-        immediate: true,
         deep: true,
       },
     },

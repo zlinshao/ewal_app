@@ -124,7 +124,7 @@ hhhhhhhhhhhh = {
     "period": "12",
     "pay_way": "1",
     "end_date": "2019-05-25",
-    "begin_date": "2019-05-13",
+    "begin_date": "2020-05-13",
     "month_unit_price": "1222"
   }],
   "deposit": 1222,
@@ -168,7 +168,7 @@ bulletinRouterStatus = {
 // 审批筛选
 approvalSearch = {
   toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC','CollectReceiptSign'],
-  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC','CollectReceiptSign'],
+  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC','RentReceiptSign'],
   approvals1: ['pqjl_approval', 'gkzx_approval'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],

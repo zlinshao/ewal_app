@@ -316,8 +316,10 @@
       this.close_(tab);
       this.getQueryDetail('1');
       this.getQueryDetail('2');
-      this.getFinishList('1');
-      this.getFinishList('2');
+      this.getFinishList(tab);
+      if (tab === '2') {
+        this.getFinishList('1');
+      }
     },
     watch: {},
     computed: {
@@ -361,6 +363,9 @@
         if (this.tabs === val) return;
         this.resetting();
         this.$store.dispatch('done_tabs', val);
+        if (!this.finishList['list' + val].length) {
+          this.getFinishList(val);
+        }
         // this.finishList['list' + val] = [];
         // this.params['params' + val].page = 1;
         // this.getFinishList(val);
@@ -383,7 +388,7 @@
         this.getFinishList(this.tabs);
       },
       // 请求列表
-      getFinishList(tab) {
+      getFinishList(tab, close = '') {
         let url = '';
         this.fullLoading['load' + tab] = true;
         let params = this.params['params' + tab];
@@ -393,7 +398,7 @@
           url = 'history/tasks';
           // params.finished = true;
         }
-        this.$httpZll.getToBeDoneListApi(url, params).then(res => {
+        this.$httpZll.getToBeDoneListApi(url, params, close).then(res => {
           this.fullLoading['load' + tab] = false;
           this.total['total' + tab] = res.total || 0;
           let data = this.groupHandlerListData(res.data);

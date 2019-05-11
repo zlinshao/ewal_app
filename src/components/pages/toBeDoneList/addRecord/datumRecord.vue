@@ -1,11 +1,18 @@
 <template>
   <div id="datumRecord" :style="mainListHeight()">
     <div class="up">
-      <div v-for="item in Object.keys(showFormat)">
+      <div v-for="item in Object.keys(showFormat)" v-if="followRecord[item] || item === 'remaining_time'">
         <label>{{showFormat[item]}}</label>
         <span class="remaining_time" v-if="item === 'remaining_time'">
           <span class="unit">{{followRecord.due_date_hours}}<b>h</b></span>
           <span class="unit">{{followRecord.due_date_minutes}}<b>m</b></span>
+        </span>
+        <span class="house_goods" v-else-if="item === 'house_goods'">
+          <b v-if="followRecord[item]">
+            <span v-for="house in Object.keys(followRecord[item])" style="display: block;">
+              <b>{{house==='is_fill'?'':'缺少'}}</b>{{makeGoods[house]}}{{followRecord[item][house]}}个
+            </span>
+          </b>
         </span>
         <span v-else>{{followRecord[item]}}</span>
       </div>
@@ -14,16 +21,49 @@
       <div class="content">
         <div>
           <div class="forms">
-            <div class="detail">
+            <div class="detail" :class="followRecord.taskDefinitionKey">
               <label>房屋地址</label>
               <span>{{followRecord.house_address || ''}}</span>
             </div>
-            <div v-for="pic in upload" class="flex">
-              <Upload :file="pic" :getImg="album[pic.keyName]" :close="!picStatus" @success="getImgData"></Upload>
+            <div v-if="followRecord.taskDefinitionKey === 'CompleteData'">
+              <div v-for="pic in upload" class="flex">
+                <Upload :file="pic" :getImg="album[pic.keyName]" :close="!picStatus" @success="getImgData"></Upload>
+              </div>
+            </div>
+            <div class="goods" v-else>
+              <div class="flex">
+                <label>补齐物品</label>
+                <div class="polishing">
+                  <h1 class="items-center" v-for="item in Object.keys(followRecord.house_goods)"
+                      :class="{'choose': chooseText.includes(item)}" v-if="item !== 'is_fill'">
+                    <b>{{makeGoods[item]}}/缺{{followRecord.house_goods[item]}}个</b>
+                    <i class='checkbox' @click="choosePolishing(item)"><b></b></i>
+                    <b style="white-space: nowrap" @click="choosePolishing(item)">补充</b>
+                    <span class="num items-center">
+                  <b @click="removeAdd('rem',item,followRecord.house_goods[item])">-</b>
+                  <span>{{goods[item]}}</span>
+                  <b class="add" @click="removeAdd('add',item,followRecord.house_goods[item])">+</b>
+                  </span>
+                  </h1>
+                  <h2 class="items-center" :class="{'choose': chooseText.includes(item)}" v-else>
+                    <b>家电不齐全</b>
+                    <span class="items-center" @click="choosePolishing(item)">
+                      <i class='checkbox'><b></b></i>
+                      {{chooseText.includes(item)?'已补齐':'未补齐'}}
+                    </span>
+                  </h2>
+                </div>
+              </div>
+              <div class="goodsPic">
+                <div v-for="pic in goodsUpload" class="flex">
+                  <label>{{pic.text}}</label>
+                  <Upload :file="pic" :getImg="album[pic.keyName]" :close="!picStatus" @success="getImgData"></Upload>
+                </div>
+              </div>
             </div>
           </div>
           <div class="commonBtn">
-            <p class="btn back" @click="$router.go(-1)">取消</p>
+            <p class="btn back" @click="close_()">取消</p>
             <p class="btn" @click="submit">确定</p>
           </div>
         </div>
@@ -43,18 +83,20 @@
         changePhoto: {},
         showFormat: {
           house_address: '房屋地址',
-          to_do_content: '待办内容',
+          house_goods: '待办内容',
           due_date: '结束时间',
           remaining_time: '剩余时间',
           bulletin_staff_name: '跟进人',
         },
-        form: {
-          task_id: '',
-          house_name: '',
-          contract_id: '',
-          bulletin_staff_id: '',
-          complete_content: {},
+        makeGoods: {
+          bed: '床和床垫',
+          wardrobe: '衣柜',
+          curtain: '窗帘',
+          is_fill: '家电不齐全',
         },
+        form: {},//资料补齐
+        goods: {},//物品补齐
+        chooseText: [],//物品补齐多选
         upload: [
           {
             label: '证件照片',
@@ -114,17 +156,30 @@
             keyName: 'gas_card_photo',
           },
         ],
+        // 物品照片
+        goodsUpload: [
+          {
+            text: '物品照片',
+            placeholder: '必填',
+            keyName: 'goods_photo',
+          },
+        ],
       }
     },
     mounted() {
     },
     activated() {
-      this.picStatus = false;
+      this.close_();
+      let record = this.followRecord.taskDefinitionKey;
       let query = this.$route.query;
       for (let key of Object.keys(query)) {
         this.form[key] = query[key];
       }
-      this.albumDetail(query);
+      if (record === 'CompleteAsset') {
+
+      } else {
+        this.albumDetail(query);
+      }
     },
     watch: {},
     computed: {
@@ -133,6 +188,45 @@
       }
     },
     methods: {
+      // 提交
+      submit() {
+        this.form.complete_content = {};
+        let key = this.followRecord.taskDefinitionKey;
+        if (key === 'CompleteAsset') {
+          this.form.complete_content = this.goods;
+        } else {
+          this.picChanges();
+          this.$httpZll.setPolishingBulletin(this.form.task_id, this.form).then(res => {
+            if (res) {
+              this.$router.go(-1);
+            }
+          })
+        }
+      },
+      // 选择补齐
+      choosePolishing(item) {
+        if (this.chooseText.includes(item)) {
+          this.chooseText.splice(this.chooseText.indexOf(item), 1);
+          if (item === 'is_fill') {
+            this.goods[item] = 0;
+          }
+        } else {
+          this.chooseText.push(item);
+          if (item === 'is_fill') {
+            this.goods[item] = 1;
+          }
+        }
+      },
+      // 补齐数量
+      removeAdd(type, item, value) {
+        if (!this.chooseText.includes(item)) return;
+        if (type === 'add') {
+          if (this.goods[item] < value) this.goods[item]++;
+        } else {
+          if (0 < this.goods[item]) this.goods[item]--;
+        }
+      },
+      // 获取图片
       albumDetail(query) {
         let params = {
           type: 1,
@@ -158,20 +252,13 @@
           }
         }
       },
-      // 提交
-      submit() {
-        this.form.complete_content = {};
-        this.picChanges();
-        this.$httpZll.setPolishingBulletin(this.form.task_id, this.form).then(res => {
-          if (res) {
-            this.close_();
-            this.$router.go(-1);
-          }
-        })
-      },
       // 上传图片
       getImgData(val) {
-        this.changePhoto[val[0]] = val[1];
+        if (this.followRecord.taskDefinitionKey === 'CompleteAsset') {
+          this.goods[val[0]] = val[1];
+        } else {
+          this.changePhoto[val[0]] = val[1];
+        }
       },
       // 图片上传改动字段
       picChanges() {
@@ -190,9 +277,29 @@
         }
       },
       close_() {
+        this.picStatus = true;
+        setTimeout(_ => {
+          this.picStatus = false;
+        }, 0);
+        this.album = {};
         this.oldPhoto = [];
         this.changePhoto = [];
-        this.picStatus = true;
+        this.chooseText = [];
+        this.form = {
+          task_id: '',
+          house_name: '',
+          contract_id: '',
+          bulletin_staff_id: '',
+          complete_content: {},
+        };
+        this.goods = {
+          contract_id: '',
+          bed: 0,
+          wardrobe: 0,
+          curtain: 0,
+          is_fill: 0,
+          goods_photo: [],
+        };
       },
     },
   }
@@ -205,18 +312,22 @@
     label {
       color: #9B9B9B;
       text-align: right;
-      margin-right: .3rem;
+      margin-right: .2rem;
+      white-space: nowrap;
     }
     @include flex('bet-column');
     .up {
       background-color: #F8F8F8;
       padding: .45rem 0 1.2rem 1.2rem;
       div {
-        @include flex('items-center');
-        min-height: .66rem;
+        @include flex();
+        padding: .15rem 0;
         label {
           min-width: 1.2rem;
           max-width: 1.2rem;
+        }
+        .house_goods {
+          line-height: .36rem;
         }
         .unit {
           position: relative;
@@ -247,17 +358,89 @@
         background-color: #FFFFFF;
         > div {
           height: 100%;
-          padding: .6rem .2rem;
+          padding: .1rem .2rem .6rem;
           @include flex('bet-column');
           .forms {
             height: 100%;
             @include scroll;
             .detail {
-              @include flex('items-center');
-              height: .88rem;
-              label {
+              @include flex();
+              padding: .4rem 0;
+              .CompleteAsset {
                 min-width: 2.2rem;
                 max-width: 2.2rem;
+              }
+            }
+            /*物品补齐*/
+            .goods {
+              label {
+                padding-top: .03rem;
+              }
+              .goodsPic {
+                label {
+                  padding-top: .2rem;
+                }
+              }
+              .polishing {
+                .choose {
+                  color: #000;
+                  .checkbox {
+                    border-color: #4570FE;
+                    b {
+                      background-color: #4570FE;
+                    }
+                  }
+                  .num {
+                    background-color: #F2F2F2;
+                    b {
+                      background-color: #DFDFE0;
+                    }
+                  }
+                }
+                h1, h2 {
+                  .checkbox {
+                    min-width: .4rem;
+                    max-width: .4rem;
+                    min-height: .4rem;
+                    max-height: .4rem;
+                    margin: 0 .1rem 0 .2rem;
+                    @include radius(50%);
+                    @include flex('flex-center');
+                    border: 1px solid #D2D2D2;
+                    b {
+                      width: .2rem;
+                      height: .2rem;
+                      @include radius(50%);
+                    }
+                  }
+                }
+                h1 {
+                  margin-bottom: .36rem;
+                  color: #D2D2D2;
+                  .num {
+                    @include radius(1rem);
+                    background-color: #F8F8F8;
+                    line-height: .4rem;
+                    margin: 0 .06rem;
+                    span {
+                      padding: 0 .15rem;
+                    }
+                    b {
+                      width: .4rem;
+                      height: .4rem;
+                      @include flex('flex-center');
+                      @include radius(50%);
+                      background-color: #F0F0F0;
+                    }
+                    .add {
+                      font-size: .35rem;
+                    }
+                  }
+                }
+                h2 {
+                  margin-bottom: .36rem;
+                  color: #D2D2D2;
+                }
               }
             }
           }

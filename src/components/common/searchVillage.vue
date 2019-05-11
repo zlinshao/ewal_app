@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="commonBtn searchFoot">
-          <p class="btn" @click="routerLink('/createdVillage')">新增小区</p>
+          <p class="btn" @click="routerReplace('/createdVillage')">新增小区</p>
         </div>
       </div>
     </van-popup>
