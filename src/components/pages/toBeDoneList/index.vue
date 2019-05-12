@@ -152,10 +152,10 @@
         finishTop: [
           {
             id: '1',
-            text: "未完成"
+            text: '未完成'
           }, {
             id: '2',
-            text: "已完成"
+            text: '已完成'
           },
         ],
         // 列表
@@ -335,7 +335,6 @@
         }
       },
       getQueryDetail(tab) {
-        let query = this.$route.query;
         let search = [];
         for (let item of Object.keys(approvalSearch)) {
           for (let val of approvalSearch[item]) {

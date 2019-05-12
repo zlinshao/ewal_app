@@ -283,6 +283,7 @@
           if (this.fullLoading) return;
           if (this.toBeDoneList.length === this.paging) return;
           this.params.page++;
+          console.log(12);
           this.getToBeDoneList(this.params);
         }
       },
@@ -344,14 +345,14 @@
         this.tabsModule = false;
         switch (val) {
           case '1'://我发起的
-          case '2':// 我审批的
+          case '2'://我审批的
             let tabs = {};
             tabs.tab = val;
             tabs.status = 0;
             this.$store.dispatch('approval_tabs', tabs);
             this.routerLink('/approvals');
             break;
-          case '3':// 历史带看
+          case '3'://历史带看
             this.$store.dispatch('done_tabs', '2');
             this.routerLink('/toBeDoneList');
             break;
