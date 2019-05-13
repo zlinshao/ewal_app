@@ -268,7 +268,7 @@
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
       this.mainHeight = this.mainListHeight((approvalTop + mainTop));
-      this.onSearch(this.tabs.tab);
+      // this.onSearch(this.tabs.tab);
     },
     watch: {},
     computed: {
@@ -402,7 +402,7 @@
         }
       },
       // params 配置
-      paramsHandle(tab, status) {
+      paramsHandle(tab, status, req) {
         this.apiHandle(tab, status);
         switch (tab) {
           case '1':
@@ -454,13 +454,14 @@
             };
             break;
         }
+        if (req) return;
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 滚动加载
       scrollLoad(val) {
         let tab = this.tabs.tab;
         let status = this.tabs.status;
-        this.apiHandle(tab, status);
+        this.paramsHandle(tab, status, 'break');
         if (!val) {
           this.params['params' + tab].page = 1;
         } else {
@@ -547,6 +548,7 @@
         if (tab === '4') {
           this.urlApi = 'runtime/process-instances';
         }
+        this.approvalList['list' + tab]['data' + status] = [];
         this.paramsHandle(tab, status);
       },
       // 二级切换

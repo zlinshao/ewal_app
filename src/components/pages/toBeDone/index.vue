@@ -176,7 +176,7 @@
       })
     },
     activated() {
-      this.onSearch();
+      // this.onSearch();
       this.popupOperate();
     },
     watch: {
@@ -283,7 +283,6 @@
           if (this.fullLoading) return;
           if (this.toBeDoneList.length === this.paging) return;
           this.params.page++;
-          console.log(12);
           this.getToBeDoneList(this.params);
         }
       },
@@ -313,6 +312,7 @@
           }
         })
       },
+      // 更多操作按钮
       handlerOperates(data) {
         for (let btn of data) {
           if (btn.outcome) {
@@ -334,7 +334,7 @@
                     title: '本地签署',
                     action: 'success',
                   }
-                ]
+                ],
               };
             }
           }

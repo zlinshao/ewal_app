@@ -45,7 +45,6 @@
         <div class="finish" v-if="tabs === '2'">
           <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading['load2']">
             <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'finish')">
-              <!--@click="clickBtn(item.task_id)"-->
               <div>
                 <div class="finish1">
                   <h1>{{item.title}}</h1>
@@ -316,7 +315,6 @@
       this.close_(tab);
       this.getQueryDetail('1');
       this.getQueryDetail('2');
-      this.getFinishList(tab);
       if (tab === '2') {
         this.getFinishList('1');
       }
@@ -343,18 +341,6 @@
         }
         search = this.myUtils.arrayWeight(search).join(',');
         this.params['params' + tab].taskDefinitionKeyNotIn = search;
-      },
-      // 生成电子收据
-      clickBtn(task_id) {
-        let postData = {};
-        postData.action = 'complete';
-        postData.variables = [{
-          name: key,
-          value: action.action,
-        }];
-        this.$httpZll.finishBeforeTask(task_id, postData).then(_ => {
-          this.onSearch();
-        });
       },
       // 已完成 / 未完成 切换
       changeTop(val) {
