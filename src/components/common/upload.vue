@@ -52,7 +52,6 @@
 <script>
   import * as qiniu from 'qiniu-js'
   import {md5} from '../../../static/js/MD5.js'
-  import {ImagePreview} from 'vant';
 
   export default {
     name: "upload",
