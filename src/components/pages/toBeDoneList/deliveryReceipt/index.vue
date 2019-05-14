@@ -9,7 +9,7 @@
       <h1></h1>
     </div>
     <div class="mainTouch" ref="main" @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
-      <div :style="slitherCss" class="transition" :class="['transition'+allReportNum]">
+      <div :style="slitherCss" class="transition" :class="['transition' + allReportNum]">
         <div class="slide justify-around" :class="['slide' + slither]">
           <ul :style="mainWidth" v-for="slither in Object.keys(drawSlither)">
             <!--显示formatData -->
@@ -105,12 +105,17 @@
     <!--有input picker-->
     <picker-slot :module="popupModule" :pickers="pickers" :drawing="drawForm" :postData="form" :formData="formatData"
                  :popup="popupStatus" @close="onConfirm"></picker-slot>
+    <!--分类选择-->
+    <delivery-picker :module="deliveryModule" :pickers="pickers" :form="form" :formData="formatData"></delivery-picker>
   </div>
 </template>
 
 <script>
+  import DeliveryPicker from './deliveryPicker.vue'
+
   export default {
     name: "index",
+    components: {DeliveryPicker},
     data() {
       return {
         startClientX: 0,
@@ -119,6 +124,7 @@
         allReportNum: 0,
         popupStatus: '',
         pickerModule: false,
+        deliveryModule: false,
         popupModule: false,
         timeModule: false,
         pickers: {
@@ -202,12 +208,7 @@
           return;
         }
         this.popupStatus = val.picker;
-        if (val.picker === 'picker') {
-          this.pickerModule = true;
-        } else {
-          this.popupModule = true;
-        }
-        if (val.pickerRead) return;//弹窗内 可输入
+        this.deliveryModule = true;
         this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
       },
       // 确认选择

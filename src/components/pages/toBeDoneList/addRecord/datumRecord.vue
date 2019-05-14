@@ -63,7 +63,7 @@
             </div>
           </div>
           <div class="commonBtn">
-            <p class="btn back" @click="close_()">取消</p>
+            <p class="btn back" @click="close_();$router.go(-1)">取消</p>
             <p class="btn" @click="submit">确定</p>
           </div>
         </div>
@@ -96,6 +96,7 @@
         },
         form: {},//资料补齐
         goods: {},//物品补齐
+        oldGoods: {},//物品补齐
         chooseText: [],//物品补齐多选
         upload: [
           {
@@ -161,7 +162,7 @@
           {
             text: '物品照片',
             placeholder: '必填',
-            keyName: 'goods_photo',
+            keyName: 'house_goods',
           },
         ],
       }
@@ -176,7 +177,9 @@
         this.form[key] = query[key];
       }
       if (record === 'CompleteAsset') {
-
+        this.form.album = {
+          house_goods: [],
+        };
       } else {
         this.albumDetail(query);
       }
@@ -191,17 +194,19 @@
       // 提交
       submit() {
         this.form.complete_content = {};
+        let api = '';
         let key = this.followRecord.taskDefinitionKey;
         if (key === 'CompleteAsset') {
-          this.form.complete_content = this.goods;
+          this.goodsChange();
+          api = '/goods';
         } else {
           this.picChanges();
-          this.$httpZll.setPolishingBulletin(this.form.task_id, this.form).then(res => {
-            if (res) {
-              this.$router.go(-1);
-            }
-          })
         }
+        this.$httpZll.setPolishingBulletin(this.form.task_id, this.form, api).then(res => {
+          if (res) {
+            this.$router.go(-1);
+          }
+        })
       },
       // 选择补齐
       choosePolishing(item) {
@@ -255,12 +260,12 @@
       // 上传图片
       getImgData(val) {
         if (this.followRecord.taskDefinitionKey === 'CompleteAsset') {
-          this.goods[val[0]] = val[1];
+          this.form.album[val[0]] = val[1];
         } else {
           this.changePhoto[val[0]] = val[1];
         }
       },
-      // 图片上传改动字段
+      // 资料补齐 改动字段
       picChanges() {
         for (let key of Object.keys(this.changePhoto)) {
           if (this.oldPhoto[key].length !== this.changePhoto[key].length) {
@@ -276,11 +281,20 @@
           }
         }
       },
+      // 物品补齐 改动字段
+      goodsChange() {
+        for (let key of Object.keys(this.goods)) {
+          if (this.goods[key] !== this.oldGoods[key]) {
+            this.form.complete_content[key] = this.goods[key];
+          }
+        }
+      },
+      // 清空
       close_() {
         this.picStatus = true;
         setTimeout(_ => {
           this.picStatus = false;
-        }, 0);
+        }, 100);
         this.album = {};
         this.oldPhoto = [];
         this.changePhoto = [];
@@ -293,13 +307,12 @@
           complete_content: {},
         };
         this.goods = {
-          contract_id: '',
           bed: 0,
           wardrobe: 0,
           curtain: 0,
           is_fill: 0,
-          goods_photo: [],
         };
+        this.oldGoods = this.jsonClone(this.goods);
       },
     },
   }
@@ -315,24 +328,31 @@
       margin-right: .2rem;
       white-space: nowrap;
     }
+
     @include flex('bet-column');
+
     .up {
       background-color: #F8F8F8;
       padding: .45rem 0 1.2rem 1.2rem;
+
       div {
         @include flex();
         padding: .15rem 0;
+
         label {
           min-width: 1.2rem;
           max-width: 1.2rem;
         }
+
         .house_goods {
           line-height: .36rem;
         }
+
         .unit {
           position: relative;
           margin-right: .3rem;
           @include numberFont('blod');
+
           b {
             font-size: .25rem;
             position: absolute;
@@ -342,10 +362,12 @@
         }
       }
     }
+
     .down {
       position: relative;
       height: 100%;
       background-color: #4570FE;
+
       .content {
         position: absolute;
         top: -.6rem;
@@ -356,47 +378,59 @@
         @include boxShaw(0 -4px 10px 0px rgba(69, 112, 254, 0.1));
         @include radius(.2rem);
         background-color: #FFFFFF;
+
         > div {
           height: 100%;
           padding: .1rem .2rem .6rem;
           @include flex('bet-column');
+
           .forms {
             height: 100%;
             @include scroll;
+
             .detail {
               @include flex();
               padding: .4rem 0;
+
               .CompleteAsset {
                 min-width: 2.2rem;
                 max-width: 2.2rem;
               }
             }
+
             /*物品补齐*/
             .goods {
               label {
                 padding-top: .03rem;
               }
+
               .goodsPic {
                 label {
                   padding-top: .2rem;
                 }
               }
+
               .polishing {
                 .choose {
                   color: #000;
+
                   .checkbox {
                     border-color: #4570FE;
+
                     b {
                       background-color: #4570FE;
                     }
                   }
+
                   .num {
                     background-color: #F2F2F2;
+
                     b {
                       background-color: #DFDFE0;
                     }
                   }
                 }
+
                 h1, h2 {
                   .checkbox {
                     min-width: .4rem;
@@ -407,6 +441,7 @@
                     @include radius(50%);
                     @include flex('flex-center');
                     border: 1px solid #D2D2D2;
+
                     b {
                       width: .2rem;
                       height: .2rem;
@@ -414,17 +449,21 @@
                     }
                   }
                 }
+
                 h1 {
                   margin-bottom: .36rem;
                   color: #D2D2D2;
+
                   .num {
                     @include radius(1rem);
                     background-color: #F8F8F8;
                     line-height: .4rem;
                     margin: 0 .06rem;
+
                     span {
                       padding: 0 .15rem;
                     }
+
                     b {
                       width: .4rem;
                       height: .4rem;
@@ -432,11 +471,13 @@
                       @include radius(50%);
                       background-color: #F0F0F0;
                     }
+
                     .add {
                       font-size: .35rem;
                     }
                   }
                 }
+
                 h2 {
                   margin-bottom: .36rem;
                   color: #D2D2D2;
@@ -444,6 +485,7 @@
               }
             }
           }
+
           .commonBtn {
             padding-top: .3rem;
           }

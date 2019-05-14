@@ -315,9 +315,9 @@ class httpZll extends httpService {
   }
 
   // 补齐资料报备
-  static setPolishingBulletin(task_id = '', params) {
+  static setPolishingBulletin(task_id = '', params, api = '') {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/task-follow-up?task_id=${task_id}`, params, 'prompt').then(res => {
+      this.post(`${market}v1.0/market/task-follow-up${api}?task_id=${task_id}`, params, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
           $httpPrompt(res.message, 'success');

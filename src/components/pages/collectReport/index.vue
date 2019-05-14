@@ -768,7 +768,7 @@
                   this.form.id = res.data.id;
                 } else {
                   this.resetting();
-                  this.$store.dispatch('approval_tabs', {tab: '2', status: false});
+                  this.$store.dispatch('approval_tabs', {tab: '2', status: 0});
                   this.routerReplace('/approvals');
                 }
               }

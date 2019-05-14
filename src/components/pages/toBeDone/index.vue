@@ -108,7 +108,7 @@
     data() {
       return {
         mainHeight: '',
-        fullLoading: false,
+        fullLoading: true,
         //正常操作 按钮
         operates: {},//状态变更操作
         normalOperates: [

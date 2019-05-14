@@ -22,17 +22,17 @@
         </div>
         <!--进图条-->
         <div class="progress" :id="'progress' + file.keyName + index"
-             v-if="!item.uri.includes('http')">
+             v-if="!item.uri.includes(domain)">
           {{progress['progress' + file.keyName + index]}}
         </div>
         <!--删除按钮-->
         <div class="remove flex" @click="removeFile(index)">
-          <img src="../../assets/image/file/closeBtn.png">
+          <img src="../../assets/image/file/closeBtn.png" alt="">
         </div>
       </div>
       <!--上传按钮-->
       <label class="uploadPic" :key="file.keyName" :style="uploadCss" :for="file.keyName" @change="uploadPic($event)">
-        <img src="../../assets/image/file/upload.png">
+        <img src="../../assets/image/file/upload.png" alt="">
         <input type="file" :id="file.keyName" hidden multiple>
       </label>
     </transition-group>
@@ -42,7 +42,7 @@
       <video id="video" :src="videoSrc" muted controls autoplay></video>
       <div class="items-center close">
         <span class="flex-center" @click="videoPlay()">
-          <img src="../../assets/image/file/closeBtn.png">
+          <img src="../../assets/image/file/closeBtn.png" alt="">
         </span>
       </div>
     </div>
@@ -59,6 +59,7 @@
     props: ['file', 'getImg', 'close'],
     data() {
       return {
+        domain: globalConfig.domain,
         subscription: {},
         token: '',//上传凭证
         ids: [],
@@ -107,7 +108,7 @@
     methods: {
       // 视频播放
       videoPlay(event = '') {
-        if (event && event.target.alt.includes('http')) {
+        if (event && event.target.alt.includes(this.domain)) {
           this.videoSrc = event.target.alt;
         } else {
           this.videoSrc = '';
@@ -161,6 +162,8 @@
             alert('文件最大小不得超过100MB');
             return;
           }
+          let pro = 'progress' + that.file.keyName + (Object.keys(that.progress).length);
+          that.progress[pro] = '0%';
           let key = "lejia" + md5(fileName + new Date().getTime()).toLowerCase() + "." + fileName.split(".")[1];
           reader.readAsDataURL(file);
           new Promise((resolve, reject) => {
@@ -214,18 +217,16 @@
                 // maxHeight: 618
               };
               qiniu.compressImage(file, options).then(data => {
-                that.uploadProgress(data.dist, key, that.token, putExtra, config, fileType, that);
+                that.uploadProgress(data.dist, key, that.token, putExtra, config, fileType, that, pro);
               });
             } else {
-              that.uploadProgress(file, key, that.token, putExtra, config, fileType, that);
+              that.uploadProgress(file, key, that.token, putExtra, config, fileType, that, pro);
             }
           });
         }
       },
       // 上传文件
-      uploadProgress(file, key, token, putExtra, config, fileType, that) {
-        let pro = 'progress' + that.file.keyName + (Object.keys(that.progress).length);
-        that.progress[pro] = '0%';
+      uploadProgress(file, key, token, putExtra, config, fileType, that, pro) {
         let observable = qiniu.upload(file, key, token, putExtra, config);
         this.subscription[pro] = observable.subscribe({
           next(res) {
@@ -237,7 +238,7 @@
           },
           complete(res) {
             let data = {};
-            data.url = globalConfig.domain + res.key;
+            data.url = that.domain + res.key;
             data.name = res.key;
             data.raw_name = res.key;
             data.type = fileType;
