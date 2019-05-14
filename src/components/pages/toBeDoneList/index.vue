@@ -143,8 +143,8 @@
       return {
         //加载是否结束
         fullLoading: {
-          load1: false,
-          load2: false,
+          load1: true,
+          load2: true,
         },
         mainHeight: '',// 滚动 部分高度
         listLength: [],//中间上移 index
@@ -357,6 +357,10 @@
       },
       // 清空 列表
       close_(tab) {
+        this.fullLoading = {
+          load1: true,
+          load2: true,
+        };
         this.params['params' + tab].page = 1;
         this.finishList['list' + tab] = [];
       },

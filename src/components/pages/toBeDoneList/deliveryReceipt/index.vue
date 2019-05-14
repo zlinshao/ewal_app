@@ -93,11 +93,13 @@
           <div class="commonBtn" :style="mainWidth" :class="['hover'+slither]">
             <p class="btn reset">重置</p>
             <p class="btn deliver">草稿</p>
-            <p class="btn">发布</p>
+            <p class="btn" @click="saveReport">发布</p>
           </div>
         </footer>
       </div>
     </div>
+    <!--日期-->
+    <choose-time :module="timeModule" :formatData="formatData" @close="onCancel" @onDate="onConTime"></choose-time>
     <!--正常 picker-->
     <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
     <!--有input picker-->
@@ -118,6 +120,7 @@
         popupStatus: '',
         pickerModule: false,
         popupModule: false,
+        timeModule: false,
         pickers: {
           title: '',                        //picker标题
           type: '',                         //字典类型
@@ -215,6 +218,19 @@
           this.formatData = show;
         }
       },
+      // 日期选择
+      chooseTime(val, date) {
+        this.timeModule = true;
+        this.formatData.dateKey = val.keyName;
+        this.formatData.dateVal = date;
+      },
+      // 确认时间
+      onConTime(val) {
+        this.form[val.dateKey] = val.dateVal;
+        this.onCancel();
+        if (val.dateKey === 'begin_date') this.contractEnd(val.dateVal);
+        if (val.dateKey === 'pay_first_date') this.countChangeDate('period_price_way_arr');
+      },
       // close Module
       onCancel() {
         this.timeModule = false;
@@ -224,6 +240,9 @@
       // 图片
       getImgData(val) {
 
+      },
+      saveReport() {
+        console.log(this.form);
       },
       resetting() {
         let allForm = [];
@@ -251,26 +270,31 @@
 
   #deliveryReceipt {
     background-color: #F8F8F8;
+
     .top {
       padding: 0 .5rem;
       background-color: #4570FE;
       height: 2.2rem;
       @include flex('justify-bet');
+
       div {
         @include flex();
         flex-wrap: wrap;
+
         p {
           margin-right: .15rem;
           width: 1.5rem;
           height: .6rem;
           background-color: #448aff;
         }
+
         h2 {
           @include transform(translateY(-.3rem));
           width: 100%;
           color: #FFFFFF;
         }
       }
+
       h1 {
         @include flex('flex-center');
         width: .7rem;
@@ -278,6 +302,7 @@
         background-color: #CF2E33;
       }
     }
+
     .mainTouch {
       margin: -.6rem .3rem 0;
       padding: .24rem 0;
@@ -285,78 +310,98 @@
       overflow-x: hidden;
       @include radius(.1rem);
       @include flex();
+
       .transition {
         @include flex('bet-column');
+
         .slide {
           @include transition(all .3s);
           height: 100%;
         }
+
         .slide0 {
           @include transform(translateX(0));
         }
       }
+
       .transition2 {
         .slide1 {
           @include transform(translateX(-50%));
         }
       }
+
       .transition3 {
         .slide1 {
           @include transform(translateX(-33.33%));
         }
+
         .slide2 {
           @include transform(translateX(-66.33%));
         }
       }
+
       .transition4 {
         .slide1 {
           @include transform(translateX(-25%));
         }
+
         .slide2 {
           @include transform(translateX(-50%));
         }
+
         .slide3 {
           @include transform(translateX(-75%));
         }
       }
+
       ul {
         @include scroll;
       }
+
       footer {
         .commonBtn {
           padding: .3rem .1rem .1rem;
           @include transition(all .3s);
         }
       }
+
       .footer2 {
         .commonBtn {
           transform: translateX(100%);
         }
+
         .hover1 {
           transform: translateX(0);
         }
       }
+
       .footer3 {
         .commonBtn {
           transform: translateX(200%);
         }
+
         .hover1 {
           transform: translateX(100%);
         }
+
         .hover2 {
           transform: translateX(0);
         }
       }
+
       .footer4 {
         .commonBtn {
           transform: translateX(300%);
         }
+
         .hover1 {
           transform: translateX(200%);
         }
+
         .hover2 {
           transform: translateX(100%);
         }
+
         .hover3 {
           transform: translateX(0);
         }
