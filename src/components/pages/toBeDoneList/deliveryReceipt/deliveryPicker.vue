@@ -63,39 +63,12 @@
         let parentKey = picker.parentKey;
         let idx = picker.index;
         let key = picker.keyName;
-        if (parentKey) {
-          this.forms[parentKey][idx][key] = picker.ids[index];
-          this.formatData[parentKey][idx][key] = value;
-        } else {
-          if (picker.status.includes('arrs')) {
-            if (key === 'house_type') {
-              index[0] = index[0] + 1;
-              this.forms[key] = index;
-              this.formatData[key] = value.join('');
-            } else {
-              this.forms[key] = index;
-              this.formatData[key] = value.join('');
-            }
-          } else {
-            switch (picker.status) {
-              case 'obj':
-                this.forms[key].id = picker.ids[index];
-                this.forms[key].name = value;
-                this.formatData[key] = value;
-                break;
-              case 'arr':
-                this.forms[key] = index;
-                break;
-              case 'objInt':
-                this.forms[key] = picker.ids[index];
-                this.formatData[key] = value;
-                break;
-            }
-          }
-        }
-        let form = this.forms;
-        let formatData = this.formatData;
-        this.$emit('close', form, formatData);
+        console.log(picker);
+        console.log(value);
+        console.log(index);
+        // let form = this.forms;
+        // let formatData = this.formatData;
+        // this.$emit('close', form, formatData);
       },
     },
   }

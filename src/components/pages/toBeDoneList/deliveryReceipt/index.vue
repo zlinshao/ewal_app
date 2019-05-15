@@ -13,80 +13,102 @@
         <div class="slide justify-around" :class="['slide' + slither]">
           <ul :style="mainWidth" v-for="slither in Object.keys(drawSlither)">
             <!--显示formatData -->
-            <li v-if="item.showForm === 'formatData'" v-for="(item,index) in drawSlither[slither]">
+            <!--家电家具-->
+            <li v-if="item.status === 'child'" v-for="(item,index) in drawSlither[slither]">
               <!--select 下拉选择-->
-              <div v-if="(item.picker && item.readonly) || item.disabled">
-                <zl-input
-                  v-model="formatData[item.keyName]"
-                  @focus="choosePicker(item,form[item.keyName])"
-                  :key="index"
-                  :type="item.type"
-                  :label="item.label"
-                  :readonly="item.readonly"
-                  :disabled="item.disabled"
-                  :placeholder="item.placeholder">
-                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                </zl-input>
-                <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
+              <div v-for="child in item.children">
+                <div v-if="child.type">
+                  <div v-if="child.showForm === 'formatData'">
+                    <zl-input
+                      v-model="formatData[slither][child.keyName]"
+                      @focus="choosePicker(item,slither,child)"
+                      :key="index"
+                      :type="child.type"
+                      :label="child.label"
+                      :readonly="child.readonly"
+                      :disabled="child.disabled"
+                      :placeholder="child.placeholder">
+                      <div class="zl-button" v-if="child.button">{{child.button}}</div>
+                      <div class="unit" v-if="child.unit">{{child.unit}}</div>
+                    </zl-input>
+                  </div>
+                  <div v-else>
+                    <div class="items-center">
+                      <zl-input
+                        v-model="form[slither][child.keyName]"
+                        :key="index"
+                        :type="child.type"
+                        :label="child.label"
+                        @input="listenInput(slither,item.keyName)"
+                        :placeholder="child.placeholder">
+                        <div class="zl-button" v-if="child.button">{{child.button}}</div>
+                        <div class="unit" v-if="child.unit">{{child.unit}}</div>
+                      </zl-input>
+                    </div>
+                  </div>
+                  <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
+                </div>
+                <div v-else>
+                  <Upload :file="child" :getImg="album[child.keyName]" @success="getImgDataObj"></Upload>
+                </div>
               </div>
             </li>
             <!--显示form -->
-            <li v-else>
-              <!--select 下拉选择-->
-              <div v-if="(item.picker && item.readonly) || item.disabled">
-                <zl-input
-                  :key="index"
-                  v-model="form[item.keyName]"
-                  @focus="choosePicker(item,form[item.keyName])"
-                  :type="item.type"
-                  :label="item.label"
-                  :readonly="item.readonly"
-                  :disabled="item.disabled"
-                  :placeholder="item.placeholder">
-                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                </zl-input>
-              </div>
-              <!--上传-->
-              <div v-else-if="item.picker === 'upload' && item.value" class="uploadForm">
-                <div v-for="upload in item.value" class="flex">
-                  <Upload :file="upload" :getImg="album[upload.keyName]" @success="getImgData"></Upload>
-                </div>
-              </div>
-              <!--普通输入框-->
-              <div v-else>
-                <div class="items-center" v-if="item.keyName && item.moreString">
-                  <label class="labelTitle">{{item.label}}</label>
-                  <zl-input
-                    v-if="item.moreString"
-                    v-for="(string,num) in item.moreString"
-                    :key="num"
-                    v-model="form[string.keyName]"
-                    :type="string.type"
-                    :label="string.label"
-                    @input="listenInput(string.keyName)"
-                    :placeholder="string.placeholder">
-                    <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                    <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                  </zl-input>
-                </div>
-                <div v-if="item.keyName && !item.moreString">
-                  <zl-input
-                    v-if="!item.hidden"
-                    :key="index"
-                    v-model="form[item.keyName]"
-                    :type="item.type"
-                    :label="item.label"
-                    @input="listenInput(item.keyName)"
-                    :placeholder="item.placeholder">
-                    <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                    <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                  </zl-input>
-                </div>
-                <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
-              </div>
-            </li>
+            <!--            <li v-else>-->
+            <!--              &lt;!&ndash;select 下拉选择&ndash;&gt;-->
+            <!--              <div v-if="(item.picker && item.readonly) || item.disabled">-->
+            <!--                <zl-input-->
+            <!--                  :key="index"-->
+            <!--                  v-model="form[item.keyName]"-->
+            <!--                  @focus="choosePicker(item,form[item.keyName])"-->
+            <!--                  :type="item.type"-->
+            <!--                  :label="item.label"-->
+            <!--                  :readonly="item.readonly"-->
+            <!--                  :disabled="item.disabled"-->
+            <!--                  :placeholder="item.placeholder">-->
+            <!--                  <div class="zl-button" v-if="item.button">{{item.button}}</div>-->
+            <!--                  <div class="unit" v-if="item.unit">{{item.unit}}</div>-->
+            <!--                </zl-input>-->
+            <!--              </div>-->
+            <!--              &lt;!&ndash;上传&ndash;&gt;-->
+            <!--              <div v-else-if="item.picker === 'upload' && item.value" class="uploadForm">-->
+            <!--                <div v-for="upload in item.value" class="flex">-->
+            <!--                  <Upload :file="upload" :getImg="album[upload.keyName]" @success="getImgData"></Upload>-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--              &lt;!&ndash;普通输入框&ndash;&gt;-->
+            <!--              <div v-else>-->
+            <!--                <div class="items-center" v-if="item.keyName && item.moreString">-->
+            <!--                  <label class="labelTitle">{{item.label}}</label>-->
+            <!--                  <zl-input-->
+            <!--                    v-if="item.moreString"-->
+            <!--                    v-for="(string,num) in item.moreString"-->
+            <!--                    :key="num"-->
+            <!--                    v-model="form[string.keyName]"-->
+            <!--                    :type="string.type"-->
+            <!--                    :label="string.label"-->
+            <!--                    @input="listenInput(string.keyName)"-->
+            <!--                    :placeholder="string.placeholder">-->
+            <!--                    <div class="zl-button" v-if="item.button">{{item.button}}</div>-->
+            <!--                    <div class="unit" v-if="item.unit">{{item.unit}}</div>-->
+            <!--                  </zl-input>-->
+            <!--                </div>-->
+            <!--                <div v-if="item.keyName && !item.moreString">-->
+            <!--                  <zl-input-->
+            <!--                    v-if="!item.hidden"-->
+            <!--                    :key="index"-->
+            <!--                    v-model="form[item.keyName]"-->
+            <!--                    :type="item.type"-->
+            <!--                    :label="item.label"-->
+            <!--                    @input="listenInput(item.keyName)"-->
+            <!--                    :placeholder="item.placeholder">-->
+            <!--                    <div class="zl-button" v-if="item.button">{{item.button}}</div>-->
+            <!--                    <div class="unit" v-if="item.unit">{{item.unit}}</div>-->
+            <!--                  </zl-input>-->
+            <!--                </div>-->
+            <!--                <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>-->
+            <!--              </div>-->
+            <!--            </li>-->
           </ul>
         </div>
         <footer :class="['footer'+allReportNum]">
@@ -131,6 +153,7 @@
           title: '',                        //picker标题
           type: '',                         //字典类型
           keyName: '',                      //字段名
+          childKey: '',                     //字段名
           parentKey: '',                    //父级 字段名 变化有picker
           columns: [],                      //下拉框选择文本列表
           ids: [],                          //当前字典所有id
@@ -150,7 +173,9 @@
         },
         drawForm: [],                       //表单集合
         resetDrawing: {},                   //clone 重置使用
-        drawSlither: {}
+        drawSlither: {},
+
+        childPhoto: [],
       }
     },
     created() {
@@ -170,6 +195,11 @@
     watch: {},
     computed: {},
     methods: {
+      getParentKey(slither, key) {
+        this.childPhoto[0] = slither;
+        this.childPhoto[1] = key;
+        console.log(this.childPhoto);
+      },
       // touch 左右切换
       tapStart(event) {
         for (let item of event.touches) {
@@ -201,15 +231,29 @@
 
       },
       // 下拉选择
-      choosePicker(val, value, num = '', parentKey = '') {
+      choosePicker(val, parentKey, child) {
+        console.log(val);
         // show date
         if (val.status === 'date') {
-          this.chooseTime(val, value);
+          // this.chooseTime(val, value);
           return;
         }
-        this.popupStatus = val.picker;
+        // this.popupStatus = val.picker;
+        let dict = dicties[val.keyName];
+        for (let item of Object.keys(dict)) {
+          let obj = {values: []}, ids = {values: []};
+          for (let val of Object.keys(dict[item])) {
+            obj.values.push(dict[item][val]);
+            ids.values.push(val);
+          }
+          this.pickers.columns.push(obj);
+          this.pickers.ids.push(ids);
+        }
+        this.pickers.title = child.label;
+        this.pickers.parentKey = parentKey;
+        this.pickers.keyName = parentKey;
         this.deliveryModule = true;
-        this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+        // this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
       },
       // 确认选择
       onConfirm(form, show) {
@@ -239,24 +283,32 @@
         this.popupModule = false;
       },
       // 图片
-      getImgData(val) {
-
+      getImgDataObj(val, file) {
+        let key = file.slither;
+        this.form[key[0]][key[1]][val[0]] = val[1];
       },
       saveReport() {
         console.log(this.form);
       },
       resetting() {
-        let allForm = [];
-        let id = this.form.id;
         this.drawSlither = this.jsonClone(this.resetDrawing);
         for (let item of Object.keys(this.drawSlither)) {
-          allForm = allForm.concat(this.drawSlither[item]);
+          for (let key of this.drawSlither[item]) {
+            if (key.status === 'child') {
+              this.form[item] = {};
+              this.formatData[item] = {};
+              this.form[item][key.keyName] = key.keyType;
+              this.formatData[item][key.keyName] = key.keyType;
+              for (let val of key.children) {
+                this.form[item][key.keyName][val.keyName] = val.keyType;
+                this.formatData[item][key.keyName][val.keyName] = val.keyType;
+              }
+            } else {
+              this.form[key.keyName] = key.keyType;
+              this.formatData[key.keyName] = key.keyType;
+            }
+          }
         }
-        this.drawForm = allForm;
-        let all = this.initFormData(allForm, this.showData);
-        this.form = all.form;
-        this.formatData = all.formatData;
-        this.album = all.album;
       },
     },
   }

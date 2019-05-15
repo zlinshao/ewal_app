@@ -11,11 +11,10 @@
         <div class="mainRadius" :class="['mainRadius'+allReportNum]" ref="main"
              @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
           <div class="justify-around transition" :class="['slide' + slither]" :style="[slitherCss]">
-            <div class="main" :style="[mainWidth]" v-for="(slither,i) in Object.keys(drawSlither)">
+            <div class="main" :style="[mainWidth]" v-for="slither in Object.keys(drawSlither)">
               <!--显示formatData -->
               <div v-if="item.showForm === 'formatData'" v-for="(item,index) in drawSlither[slither]">
                 <!--select 下拉选择-->
-                <div v-if="(item.picker && item.readonly) || item.disabled">
                   <zl-input
                     v-model="formatData[item.keyName]"
                     @focus="choosePicker(item,form[item.keyName])"
@@ -29,7 +28,6 @@
                     <div class="unit" v-if="item.unit">{{item.unit}}</div>
                   </zl-input>
                   <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
-                </div>
               </div>
               <!--显示form -->
               <div v-else>
@@ -635,6 +633,7 @@
         }
         if (val.pickerRead) return;//弹窗内 可输入
         this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+        console.log(pickers);
       },
       // 确认下拉选择
       onConfirm(form, show) {

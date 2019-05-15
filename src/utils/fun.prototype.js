@@ -304,6 +304,7 @@ export default {
           }
         }
       }
+      console.log(pickers)
       return pickers;
     };
     // 查看大图

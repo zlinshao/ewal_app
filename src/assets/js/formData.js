@@ -167,8 +167,8 @@ bulletinRouterStatus = {
 
 // 审批筛选
 approvalSearch = {
-  toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC','CollectReceiptSign'],
-  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC','RentReceiptSign'],
+  toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC', 'CollectReceiptSign'],
+  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentReceiptSign'],
   approvals1: ['pqjl_approval', 'gkzx_approval'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
@@ -1488,108 +1488,111 @@ defineRentReport = {
 // 收房交接单
 // 物品交接
 defineArticleReceipt = {
-  slither0: [
+  hall_goods: [
     {
-      label: '门锁类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'lock_type',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
-      slot: '',
-    },
-    {
-      label: '钥匙',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'key_arr',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
-      unit: '把',
-      slot: '',
-    },
-    {
-      label: '纱窗',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'shachuang',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
-      slot: '',
-    },
-    {
-      label: '天然气',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'has_gas',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
-      slot: '',
-    },
-    {
-      label: '彩电',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'television',
-      keyType: [],
-      type: 'text',
-      status: 'arrs-0-0-0',
-      picker: 'picker1',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '上传',
-      picker: 'upload',
-      value: [
+      keyName: 'gate_lock',
+      keyType: {},
+      status: 'child',
+      children: [
+        {
+          label: '门锁类型',// 标题
+          placeholder: '必填 请选择',// placeholder
+          readonly: 'readonly',// 只读 picker必须有值
+          keyName: 'type',// 字段名
+          keyType: '',// 数据类型
+          type: 'text',// input 类型
+          status: '',
+          showForm: 'formatData',
+          picker: 'picker',
+          slot: '',
+        },
+        {
+          label: '密码',
+          placeholder: '必填 请输入',
+          keyName: 'password',
+          keyType: '',
+          type: 'text',
+          status: '',
+          slot: '',
+        },
         {
           label: '损坏照片',
           placeholder: '必填',
-          keyName: 'photo',
-        }
-      ]
+          keyName: 'gate_lock',
+          keyType: [],
+          slither: ['hall_goods','gate_lock'],
+          status: 'upload',
+          slot: '',
+        },
+        {
+          label: '备注',
+          placeholder: '请输入',
+          keyName: 'remark',
+          keyType: '',
+          type: 'textarea',
+          status: '',
+          slot: '',
+        },
+      ],
+    },
+    {
+      label: '产权证号',
+      placeholder: '必填 请输入',
+      keyName: 'property_right_card_number',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
     },
   ],
-  // slither1: [
-  //   {
-  //     label: '门锁类型',
-  //     placeholder: '必填 请选择',
-  //     readonly: 'readonly',
-  //     keyName: 'lock_type',
-  //     keyType: '',
-  //     type: 'text',
-  //     status: 'objInt',
-  //     showForm: 'formatData',//picker 显示form 或 formatData
-  //     picker: 'picker1',
-  //     slot: '',
-  //   },
-  // ],
-  // slither2: [
-  //   {
-  //     label: '门锁类型',
-  //     placeholder: '必填 请选择',
-  //     readonly: 'readonly',
-  //     keyName: 'lock_type',
-  //     keyType: '',
-  //     type: 'text',
-  //     status: 'objInt',
-  //     showForm: 'formatData',//picker 显示form 或 formatData
-  //     picker: 'picker1',
-  //     slot: '',
-  //   },
-  // ],
+  kitchen_balcony_bathroom: [
+    {
+      keyName: 'gas_stove',
+      keyType: {},
+      status: 'child',
+      children: [
+        {
+          label: '燃气灶',// 标题
+          placeholder: '必填 请选择',// placeholder
+          readonly: 'readonly',// 只读 picker必须有值
+          keyName: 'type',// 字段名
+          keyType: '',// 数据类型
+          type: 'text',// input 类型
+          status: '',
+          showForm: 'formatData',
+          picker: 'picker',
+          slot: '',
+        },
+        {
+          label: '损坏照片',
+          placeholder: '必填',
+          keyName: 'gas_stove',
+          keyType: [],
+          slither: ['kitchen_balcony_bathroom','gas_stove'],
+          status: 'upload',
+          slot: '',
+        },
+        {
+          label: '备注',
+          placeholder: '请输入',
+          keyName: 'remark',
+          keyType: '',
+          type: 'textarea',
+          status: '',
+          slot: '',
+        },
+      ],
+    },
+    {
+      label: '产权证号',
+      placeholder: '必填 请输入',
+      keyName: 'property_right_card_number',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+  ],
 };
 // 费用交接
 defineCostReceipt = {};

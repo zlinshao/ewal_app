@@ -92,7 +92,7 @@
               index++;
             }
           }
-          this.$emit('success', [this.file.keyName, this.ids, true]);
+          this.$emit('success', [this.file.keyName, this.ids, true], this.file);
         },
         deep: true,
       },
@@ -101,7 +101,7 @@
         this.ids = [];
         this.showFile = [];
         this.progress = {};
-        this.$emit('success', [this.file.keyName, this.ids, true]);
+        this.$emit('success', [this.file.keyName, this.ids, true], this.file);
       }
     },
     computed: {},
@@ -130,7 +130,7 @@
         }
         this.progress = newPro;
         let status = this.ids.length === this.showFile.length;
-        this.$emit('success', [this.file.keyName, this.ids, status]);
+        this.$emit('success', [this.file.keyName, this.ids, status], this.file);
       },
       // 获取token
       uploadPic(event) {
@@ -247,7 +247,7 @@
               if (res.code === "110100") {
                 that.ids.push(Number(res.data.id));
                 let status = that.ids.length === that.showFile.length;
-                that.$emit('success', [that.file.keyName, that.ids, status]);
+                that.$emit('success', [that.file.keyName, that.ids, status], that.file);
               }
             })
           }
