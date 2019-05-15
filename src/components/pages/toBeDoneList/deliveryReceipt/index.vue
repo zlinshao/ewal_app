@@ -16,11 +16,25 @@
             <!--家电家具-->
             <li v-if="item.status === 'child'" v-for="(item,index) in drawSlither[slither]">
               <!--select 下拉选择-->
+              <div v-if="item.showForm === 'formatData'">
+                <zl-input
+                  v-model="formatData[slither][item.keyName]"
+                  @focus="choosePicker(item,slither,item)"
+                  :key="index"
+                  :type="item.type"
+                  :label="item.label"
+                  :readonly="item.readonly"
+                  :disabled="item.disabled"
+                  :placeholder="item.placeholder">
+                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
+                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                </zl-input>
+              </div>
               <div v-for="child in item.children">
                 <div v-if="child.type">
                   <div v-if="child.showForm === 'formatData'">
                     <zl-input
-                      v-model="formatData[slither][child.keyName]"
+                      v-model="formatData[slither][item.keyName]"
                       @focus="choosePicker(item,slither,child)"
                       :key="index"
                       :type="child.type"
@@ -32,25 +46,56 @@
                       <div class="unit" v-if="child.unit">{{child.unit}}</div>
                     </zl-input>
                   </div>
-                  <div v-else>
-                    <div class="items-center">
-                      <zl-input
-                        v-model="form[slither][child.keyName]"
-                        :key="index"
-                        :type="child.type"
-                        :label="child.label"
-                        @input="listenInput(slither,item.keyName)"
-                        :placeholder="child.placeholder">
-                        <div class="zl-button" v-if="child.button">{{child.button}}</div>
-                        <div class="unit" v-if="child.unit">{{child.unit}}</div>
-                      </zl-input>
-                    </div>
+                  <div class="items-center" v-else>
+                    <zl-input
+                      v-model="form[slither][item.keyName][child.keyName]"
+                      :key="index"
+                      :type="child.type"
+                      :label="child.label"
+                      @input="listenInput(slither,item.keyName)"
+                      :placeholder="child.placeholder">
+                      <div class="zl-button" v-if="child.button">{{child.button}}</div>
+                      <div class="unit" v-if="child.unit">{{child.unit}}</div>
+                    </zl-input>
                   </div>
                   <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
                 </div>
                 <div v-else>
                   <Upload :file="child" :getImg="album[child.keyName]" @success="getImgDataObj"></Upload>
                 </div>
+              </div>
+            </li>
+            <li v-else>
+              <!--显示formatData -->
+              <div v-if="item.showForm === 'formatData'">
+                <!--select 下拉选择-->
+                <zl-input
+                  v-model="formatData[item.keyName]"
+                  @focus="choosePicker(item, form[item.keyName])"
+                  :key="index"
+                  :type="item.type"
+                  :label="item.label"
+                  :readonly="item.readonly"
+                  :disabled="item.disabled"
+                  :placeholder="item.placeholder">
+                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
+                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                </zl-input>
+                <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
+              </div>
+              <!--普通输入框-->
+              <div v-else>
+                <zl-input
+                  v-if="!item.hidden"
+                  :key="index"
+                  v-model="form[item.keyName]"
+                  :type="item.type"
+                  :label="item.label"
+                  @input="listenInput(item.keyName)"
+                  :placeholder="item.placeholder">
+                  <div v-if="item.button">{{item.button}}</div>
+                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                </zl-input>
               </div>
             </li>
             <!--显示form -->
@@ -128,7 +173,8 @@
     <picker-slot :module="popupModule" :pickers="pickers" :drawing="drawForm" :postData="form" :formData="formatData"
                  :popup="popupStatus" @close="onConfirm"></picker-slot>
     <!--分类选择-->
-    <delivery-picker :module="deliveryModule" :pickers="pickers" :form="form" :formData="formatData"></delivery-picker>
+    <delivery-picker :module="deliveryModule" :pickers="pickers" :form="form" :formData="formatData"
+                     @close="onConfirm"></delivery-picker>
   </div>
 </template>
 
@@ -149,16 +195,7 @@
         deliveryModule: false,
         popupModule: false,
         timeModule: false,
-        pickers: {
-          title: '',                        //picker标题
-          type: '',                         //字典类型
-          keyName: '',                      //字段名
-          childKey: '',                     //字段名
-          parentKey: '',                    //父级 字段名 变化有picker
-          columns: [],                      //下拉框选择文本列表
-          ids: [],                          //当前字典所有id
-          index: '',                        //变化下标
-        },
+        pickers: {},
         slitherCss: {},
         mainWidth: {},
 
@@ -185,6 +222,7 @@
     mounted() {
     },
     activated() {
+      this.closePickers();
       this.allReportNum = Object.keys(this.drawSlither).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
@@ -195,11 +233,6 @@
     watch: {},
     computed: {},
     methods: {
-      getParentKey(slither, key) {
-        this.childPhoto[0] = slither;
-        this.childPhoto[1] = key;
-        console.log(this.childPhoto);
-      },
       // touch 左右切换
       tapStart(event) {
         for (let item of event.touches) {
@@ -231,15 +264,16 @@
 
       },
       // 下拉选择
-      choosePicker(val, parentKey, child) {
-        console.log(val);
+      choosePicker(item, parentKey, child) {
         // show date
-        if (val.status === 'date') {
+        if (item.status === 'date') {
           // this.chooseTime(val, value);
           return;
         }
         // this.popupStatus = val.picker;
-        let dict = dicties[val.keyName];
+        let dict = dicties[item.keyName];
+        this.pickers.columns = [];
+        this.pickers.ids = [];
         for (let item of Object.keys(dict)) {
           let obj = {values: []}, ids = {values: []};
           for (let val of Object.keys(dict[item])) {
@@ -251,9 +285,21 @@
         }
         this.pickers.title = child.label;
         this.pickers.parentKey = parentKey;
-        this.pickers.keyName = parentKey;
+        this.pickers.keyName = item.keyName;
+        this.pickers.childKeys = item.childKeys;
         this.deliveryModule = true;
-        // this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+      },
+      closePickers() {
+        this.pickers = {
+          title: '',                        //picker标题
+          type: '',                         //字典类型
+          keyName: '',                      //字段名
+          childKeys: [],                    //字段名
+          parentKey: '',                    //父级 字段名 变化有picker
+          columns: [],                      //下拉框选择文本列表
+          ids: [],                          //当前字典所有id
+          index: '',                        //变化下标
+        }
       },
       // 确认选择
       onConfirm(form, show) {
@@ -261,6 +307,9 @@
         if (form !== 'close') {
           this.form = form;
           this.formatData = show;
+          setTimeout(_ => {
+            this.closePickers();
+          }, 500);
         }
       },
       // 日期选择
@@ -273,19 +322,18 @@
       onConTime(val) {
         this.form[val.dateKey] = val.dateVal;
         this.onCancel();
-        if (val.dateKey === 'begin_date') this.contractEnd(val.dateVal);
-        if (val.dateKey === 'pay_first_date') this.countChangeDate('period_price_way_arr');
       },
       // close Module
       onCancel() {
         this.timeModule = false;
         this.pickerModule = false;
         this.popupModule = false;
+        this.deliveryModule = false;
       },
       // 图片
       getImgDataObj(val, file) {
         let key = file.slither;
-        this.form[key[0]][key[1]][val[0]] = val[1];
+        this.form[key][file.keyName]['photo'] = val[1];
       },
       saveReport() {
         console.log(this.form);
@@ -293,15 +341,21 @@
       resetting() {
         this.drawSlither = this.jsonClone(this.resetDrawing);
         for (let item of Object.keys(this.drawSlither)) {
+          this.form[item] = {};
+          this.formatData[item] = {};
           for (let key of this.drawSlither[item]) {
             if (key.status === 'child') {
-              this.form[item] = {};
-              this.formatData[item] = {};
               this.form[item][key.keyName] = key.keyType;
-              this.formatData[item][key.keyName] = key.keyType;
+              this.formatData[item][key.keyName] = '';
+              for (let child of key.childKeys) {
+                this.form[item][key.keyName][child] = '';
+              }
               for (let val of key.children) {
-                this.form[item][key.keyName][val.keyName] = val.keyType;
-                this.formatData[item][key.keyName][val.keyName] = val.keyType;
+                if (val.status === 'upload') {
+                  this.form[item][key.keyName]['photo'] = val.keyType;
+                } else {
+                  this.form[item][key.keyName][val.keyName] = val.keyType;
+                }
               }
             } else {
               this.form[key.keyName] = key.keyType;

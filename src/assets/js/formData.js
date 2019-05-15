@@ -1490,22 +1490,49 @@ defineRentReport = {
 defineArticleReceipt = {
   hall_goods: [
     {
-      keyName: 'gate_lock',
+      label: '彩电',// 标题
+      placeholder: '必填 请选择',
+      readonly: 'readonly',// 只读 picker必须有值
+      keyName: 'tv',
       keyType: {},
+      type: 'text',// input 类型
       status: 'child',
+      picker: 'picker',
+      showForm: 'formatData',
+      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
       children: [
         {
-          label: '门锁类型',// 标题
-          placeholder: '必填 请选择',// placeholder
-          readonly: 'readonly',// 只读 picker必须有值
-          keyName: 'type',// 字段名
-          keyType: '',// 数据类型
-          type: 'text',// input 类型
-          status: '',
-          showForm: 'formatData',
-          picker: 'picker',
+          label: '损坏照片',
+          placeholder: '必填',
+          keyName: 'tv',
+          keyType: [],
+          slither: 'hall_goods',
+          status: 'upload',
           slot: '',
         },
+        {
+          label: '备注',
+          placeholder: '请输入',
+          keyName: 'remark',
+          keyType: '',
+          type: 'text',
+          status: '',
+          slot: '',
+        },
+      ],
+    },
+    {
+      label: '门锁类型',// 标题
+      placeholder: '必填 请选择',
+      readonly: 'readonly',// 只读 picker必须有值
+      keyName: 'gate_lock',
+      keyType: {},
+      type: 'text',// input 类型
+      status: 'child',
+      picker: 'picker',
+      showForm: 'formatData',
+      childKeys: ['type', 'is_bad', 'bad_number'],
+      children: [
         {
           label: '密码',
           placeholder: '必填 请输入',
@@ -1520,7 +1547,7 @@ defineArticleReceipt = {
           placeholder: '必填',
           keyName: 'gate_lock',
           keyType: [],
-          slither: ['hall_goods','gate_lock'],
+          slither: 'hall_goods',
           status: 'upload',
           slot: '',
         },
@@ -1529,7 +1556,39 @@ defineArticleReceipt = {
           placeholder: '请输入',
           keyName: 'remark',
           keyType: '',
-          type: 'textarea',
+          type: 'text',
+          status: '',
+          slot: '',
+        },
+      ],
+    },
+    {
+      label: '钥匙',// 标题
+      placeholder: '必填 请选择',
+      readonly: 'readonly',// 只读 picker必须有值
+      keyName: 'key',
+      keyType: {},
+      type: 'text',// input 类型
+      status: 'child',
+      picker: 'picker',
+      showForm: 'formatData',
+      childKeys: ['number', 'is_bad', 'bad_number'],
+      children: [
+        {
+          label: '损坏照片',
+          placeholder: '必填',
+          keyName: 'key',
+          keyType: [],
+          slither: 'hall_goods',
+          status: 'upload',
+          slot: '',
+        },
+        {
+          label: '备注',
+          placeholder: '请输入',
+          keyName: 'remark',
+          keyType: '',
+          type: 'text',
           status: '',
           slot: '',
         },
@@ -1546,43 +1605,6 @@ defineArticleReceipt = {
     },
   ],
   kitchen_balcony_bathroom: [
-    {
-      keyName: 'gas_stove',
-      keyType: {},
-      status: 'child',
-      children: [
-        {
-          label: '燃气灶',// 标题
-          placeholder: '必填 请选择',// placeholder
-          readonly: 'readonly',// 只读 picker必须有值
-          keyName: 'type',// 字段名
-          keyType: '',// 数据类型
-          type: 'text',// input 类型
-          status: '',
-          showForm: 'formatData',
-          picker: 'picker',
-          slot: '',
-        },
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'gas_stove',
-          keyType: [],
-          slither: ['kitchen_balcony_bathroom','gas_stove'],
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'textarea',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
     {
       label: '产权证号',
       placeholder: '必填 请输入',
