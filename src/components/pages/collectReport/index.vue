@@ -633,7 +633,6 @@
         }
         if (val.pickerRead) return;//弹窗内 可输入
         this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
-        console.log(pickers);
       },
       // 确认下拉选择
       onConfirm(form, show) {

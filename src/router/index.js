@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Redirect from '@/components/redirect.vue'
 import HomePage from '@/components/index.vue'
+import CloseDD from '@/components/closeDD.vue'
 
 // 收房合同
 import CollectReport from '@/components/pages/collectReport/index.vue'//收房
@@ -43,6 +44,13 @@ export default new Router({
       hidden: false,
       component: Redirect,
       meta: {title: '验证中', index: 0},
+    },
+    {
+      path: '/closeDD',
+      name: '正在跳转...',
+      hidden: false,
+      component: CloseDD,
+      meta: {title: '正在跳转...', index: 0},
     },
     {
       path: '/index',

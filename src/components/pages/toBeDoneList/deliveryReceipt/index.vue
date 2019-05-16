@@ -12,14 +12,12 @@
       <div :style="slitherCss" class="transition" :class="['transition' + allReportNum]">
         <div class="slide justify-around" :class="['slide' + slither]">
           <ul :style="mainWidth" v-for="slither in Object.keys(drawSlither)">
-            <!--显示formatData -->
-            <!--家电家具-->
             <li v-if="item.status === 'child'" v-for="(item,index) in drawSlither[slither]">
               <!--select 下拉选择-->
               <div v-if="item.showForm === 'formatData'">
                 <zl-input
                   v-model="formatData[slither][item.keyName]"
-                  @focus="choosePicker(item,slither,item)"
+                  @focus="choosePicker(item,form[slither][item.keyName],slither,item)"
                   :key="index"
                   :type="item.type"
                   :label="item.label"
@@ -30,12 +28,23 @@
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
                 </zl-input>
               </div>
+              <div v-else>
+                <zl-input
+                  v-model="form[slither][item.keyName]"
+                  :key="index"
+                  :type="item.type"
+                  :label="item.label"
+                  :placeholder="item.placeholder">
+                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
+                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                </zl-input>
+              </div>
               <div v-for="child in item.children">
                 <div v-if="child.type">
                   <div v-if="child.showForm === 'formatData'">
                     <zl-input
                       v-model="formatData[slither][item.keyName]"
-                      @focus="choosePicker(item,slither,child)"
+                      @focus="choosePicker(item,form[slither][item.keyName][child.keyName],slither,child)"
                       :key="index"
                       :type="child.type"
                       :label="child.label"
@@ -98,66 +107,10 @@
                 </zl-input>
               </div>
             </li>
-            <!--显示form -->
-            <!--            <li v-else>-->
-            <!--              &lt;!&ndash;select 下拉选择&ndash;&gt;-->
-            <!--              <div v-if="(item.picker && item.readonly) || item.disabled">-->
-            <!--                <zl-input-->
-            <!--                  :key="index"-->
-            <!--                  v-model="form[item.keyName]"-->
-            <!--                  @focus="choosePicker(item,form[item.keyName])"-->
-            <!--                  :type="item.type"-->
-            <!--                  :label="item.label"-->
-            <!--                  :readonly="item.readonly"-->
-            <!--                  :disabled="item.disabled"-->
-            <!--                  :placeholder="item.placeholder">-->
-            <!--                  <div class="zl-button" v-if="item.button">{{item.button}}</div>-->
-            <!--                  <div class="unit" v-if="item.unit">{{item.unit}}</div>-->
-            <!--                </zl-input>-->
-            <!--              </div>-->
-            <!--              &lt;!&ndash;上传&ndash;&gt;-->
-            <!--              <div v-else-if="item.picker === 'upload' && item.value" class="uploadForm">-->
-            <!--                <div v-for="upload in item.value" class="flex">-->
-            <!--                  <Upload :file="upload" :getImg="album[upload.keyName]" @success="getImgData"></Upload>-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--              &lt;!&ndash;普通输入框&ndash;&gt;-->
-            <!--              <div v-else>-->
-            <!--                <div class="items-center" v-if="item.keyName && item.moreString">-->
-            <!--                  <label class="labelTitle">{{item.label}}</label>-->
-            <!--                  <zl-input-->
-            <!--                    v-if="item.moreString"-->
-            <!--                    v-for="(string,num) in item.moreString"-->
-            <!--                    :key="num"-->
-            <!--                    v-model="form[string.keyName]"-->
-            <!--                    :type="string.type"-->
-            <!--                    :label="string.label"-->
-            <!--                    @input="listenInput(string.keyName)"-->
-            <!--                    :placeholder="string.placeholder">-->
-            <!--                    <div class="zl-button" v-if="item.button">{{item.button}}</div>-->
-            <!--                    <div class="unit" v-if="item.unit">{{item.unit}}</div>-->
-            <!--                  </zl-input>-->
-            <!--                </div>-->
-            <!--                <div v-if="item.keyName && !item.moreString">-->
-            <!--                  <zl-input-->
-            <!--                    v-if="!item.hidden"-->
-            <!--                    :key="index"-->
-            <!--                    v-model="form[item.keyName]"-->
-            <!--                    :type="item.type"-->
-            <!--                    :label="item.label"-->
-            <!--                    @input="listenInput(item.keyName)"-->
-            <!--                    :placeholder="item.placeholder">-->
-            <!--                    <div class="zl-button" v-if="item.button">{{item.button}}</div>-->
-            <!--                    <div class="unit" v-if="item.unit">{{item.unit}}</div>-->
-            <!--                  </zl-input>-->
-            <!--                </div>-->
-            <!--                <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>-->
-            <!--              </div>-->
-            <!--            </li>-->
           </ul>
         </div>
-        <footer :class="['footer'+allReportNum]">
-          <div class="commonBtn" :style="mainWidth" :class="['hover'+slither]">
+        <footer>
+          <div class="commonBtn" :style="mainWidth">
             <p class="btn reset">重置</p>
             <p class="btn deliver">草稿</p>
             <p class="btn" @click="saveReport">发布</p>
@@ -264,30 +217,32 @@
 
       },
       // 下拉选择
-      choosePicker(item, parentKey, child) {
-        // show date
-        if (item.status === 'date') {
-          // this.chooseTime(val, value);
-          return;
-        }
-        // this.popupStatus = val.picker;
-        let dict = dicties[item.keyName];
-        this.pickers.columns = [];
-        this.pickers.ids = [];
-        for (let item of Object.keys(dict)) {
-          let obj = {values: []}, ids = {values: []};
-          for (let val of Object.keys(dict[item])) {
-            obj.values.push(dict[item][val]);
-            ids.values.push(val);
+      choosePicker(item, value = '', parentKey = '', child) {
+        // this.popupStatus = item.picker;
+        if (item.status === 'child') {
+          let dict = dicties[item.keyName];
+          this.pickers.columns = [];
+          this.pickers.ids = [];
+          for (let item of Object.keys(dict)) {
+            let obj = {values: []}, ids = {values: []};
+            for (let val of Object.keys(dict[item])) {
+              obj.values.push(dict[item][val]);
+              ids.values.push(val);
+            }
+            this.pickers.columns.push(obj);
+            this.pickers.ids.push(ids);
           }
-          this.pickers.columns.push(obj);
-          this.pickers.ids.push(ids);
+          this.pickers.title = child.label;
+          this.pickers.parentKey = parentKey;
+          this.pickers.keyName = item.keyName;
+          this.pickers.childKeys = item.childKeys;
+          this.deliveryModule = true;
+        } else if (item.status === 'date') {
+          this.chooseTime(item, value);
+        } else {
+          this.pickerModule = true;
+          this.pickers = this.inputSelect(this.pickers, item, value, parentKey);
         }
-        this.pickers.title = child.label;
-        this.pickers.parentKey = parentKey;
-        this.pickers.keyName = item.keyName;
-        this.pickers.childKeys = item.childKeys;
-        this.deliveryModule = true;
       },
       closePickers() {
         this.pickers = {
@@ -307,10 +262,8 @@
         if (form !== 'close') {
           this.form = form;
           this.formatData = show;
-          setTimeout(_ => {
-            this.closePickers();
-          }, 500);
         }
+        this.closePickers();
       },
       // 日期选择
       chooseTime(val, date) {
@@ -347,14 +300,16 @@
             if (key.status === 'child') {
               this.form[item][key.keyName] = key.keyType;
               this.formatData[item][key.keyName] = '';
-              for (let child of key.childKeys) {
-                this.form[item][key.keyName][child] = '';
-              }
-              for (let val of key.children) {
-                if (val.status === 'upload') {
-                  this.form[item][key.keyName]['photo'] = val.keyType;
-                } else {
-                  this.form[item][key.keyName][val.keyName] = val.keyType;
+              if (key.childKeys || key.children) {
+                for (let child of key.childKeys) {
+                  this.form[item][key.keyName][child] = '';
+                }
+                for (let val of key.children) {
+                  if (val.status === 'upload') {
+                    this.form[item][key.keyName]['photo'] = val.keyType;
+                  } else {
+                    this.form[item][key.keyName][val.keyName] = val.keyType;
+                  }
                 }
               }
             } else {
@@ -462,6 +417,7 @@
       }
 
       ul {
+        height: 100%;
         @include scroll;
       }
 
@@ -469,48 +425,6 @@
         .commonBtn {
           padding: .3rem .1rem .1rem;
           @include transition(all .3s);
-        }
-      }
-
-      .footer2 {
-        .commonBtn {
-          transform: translateX(100%);
-        }
-
-        .hover1 {
-          transform: translateX(0);
-        }
-      }
-
-      .footer3 {
-        .commonBtn {
-          transform: translateX(200%);
-        }
-
-        .hover1 {
-          transform: translateX(100%);
-        }
-
-        .hover2 {
-          transform: translateX(0);
-        }
-      }
-
-      .footer4 {
-        .commonBtn {
-          transform: translateX(300%);
-        }
-
-        .hover1 {
-          transform: translateX(200%);
-        }
-
-        .hover2 {
-          transform: translateX(100%);
-        }
-
-        .hover3 {
-          transform: translateX(0);
         }
       }
     }
