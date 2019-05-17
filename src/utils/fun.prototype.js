@@ -533,6 +533,9 @@ export default {
             case 'toBeDone':
               that.routerReplace(route);
               break;
+            case '/toBeDone':
+              that.routerLink(route);
+              break;
             case '':
               break;
           }
