@@ -5,7 +5,7 @@
       <div class="indexTop">
         <div>
           <p v-for="(item,index) in indexTop" :class="['p'+(index+1)]" @click="topTabsTag(item.url)">
-            <img :src="item.icon">
+            <img :src="item.icon" alt="">
           </p>
         </div>
       </div>
@@ -39,7 +39,7 @@
     </div>
     <div class="indexBottom">
       <p v-for="item in indexBottom" @click="bottomTabsTag(item.id)">
-        <img :src="item.icon">
+        <img :src="item.icon" alt="">
       </p>
     </div>
     <!--<audio src="../assets/image/circlePanel/kaka.mp3" preload="auto"/>-->
@@ -139,10 +139,6 @@
     methods: {
       // 头部
       topTabsTag(url) {
-        // let tabs = {};
-        // tabs.tab = '1';
-        // tabs.status = 0;
-        // this.$store.dispatch('approval_tabs', tabs);
         this.routerLink(url);
       },
       // 底部

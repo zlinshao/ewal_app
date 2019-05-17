@@ -95,10 +95,10 @@
         mainHeight: '',
         //加载是否结束
         fullLoading: {
-          load1: false,
-          load2: false,
-          load3: false,
-          load4: false,
+          load1: true,
+          load2: true,
+          load3: true,
+          load4: true,
         },
         // 头部切换
         approvalTerm: [
@@ -258,17 +258,12 @@
       }
     },
     mounted() {
-      for (let i = 1; i < 5; i++) {
-        if (this.tabs.tab !== String(i)) {
-          this.onSearch(i);
-        }
-      }
+      console.log(this.tabs);
     },
     activated() {
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
       this.mainHeight = this.mainListHeight((approvalTop + mainTop));
-      // this.onSearch(this.tabs.tab);
     },
     watch: {},
     computed: {
@@ -345,6 +340,8 @@
         switch (item.bulletin_type) {
           case 'bulletin_collect_basic':
             this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
+            break;
+          case '':
             break;
         }
       },
@@ -492,7 +489,7 @@
               this.approvalList['list' + tab]['data' + twoLevel].push(item);
             }
           }
-        })
+        });
       },
       // 操作按钮处理
       outcomes(data, tabs) {
@@ -575,26 +572,33 @@
     .approvalTop {
       background: #E6F4F9;
       border-top: .16rem solid #F8F8F8;
+
       .top1 {
         padding-left: .3rem;
         @include flex();
+
         p {
           margin-top: -.06rem;
           width: 1.4rem;
           height: .5rem;
         }
+
         .p1 {
           @include approvalsImg('yewulei');
         }
+
         .p2 {
           @include approvalsImg('xingzhenglei');
         }
       }
+
       ul {
         padding: .3rem .2rem;
+
         li {
           @include flex('flex-center');
           flex-direction: column;
+
           p {
             width: 1rem;
             height: 1rem;
@@ -603,12 +607,15 @@
         }
       }
     }
+
     .main {
       .mainTop {
         padding: .2rem .36rem;
+
         p {
           position: relative;
           margin-right: .36rem;
+
           span {
             position: absolute;
             top: -.15rem;
@@ -623,34 +630,42 @@
             background-color: #F4511E;
           }
         }
+
         i {
           width: .5rem;
           height: .5rem;
           @include bgImage('../../../assets/image/common/searchblue.png');
         }
       }
+
       .mainContent {
         background: #f8f8f8;
+
         .contentList {
           position: relative;
           margin: .2rem .3rem;
           @include radius(.06rem);
           overflow: hidden;
+
           .leftShift {
             transform: translateX(-60%);
           }
+
           .listUp {
             position: relative;
             z-index: 2;
             padding: .3rem;
             background-color: #FFFFFF;
             @include transition(transform .3s);
+
             .listTitle {
               @include ellipsis;
             }
+
             .listMiddle {
               margin: .12rem 0 .48rem;
               @include flex('items-bet');
+
               p {
                 font-size: .26rem;
                 padding: .12rem .2rem;
@@ -658,15 +673,19 @@
                 color: #4570FE;
                 background-color: rgba(69, 112, 254, .1);
               }
+
               div {
                 @include flex('items-center');
+
                 b {
                   width: .54rem;
                   height: .54rem;
+
                   img {
                     @include radius(50%);
                   }
                 }
+
                 span {
                   margin-left: .12rem;
                   font-size: .28rem;
@@ -674,28 +693,35 @@
                 }
               }
             }
+
             .listBottom {
               @include flex('items-around');
+
               div {
                 width: 100%;
                 @include flex('items-center');
+
                 i {
                   width: .4rem;
                   height: .4rem;
                   margin-right: .1rem;
                   background-color: #CF2E33;
+
                   img {
                     @include radius(50%);
                   }
                 }
+
                 .icon-1 {
                   @include approvalsImg('daishenhe');
                 }
+
                 .icon-2 {
                   @include approvalsImg('yidenghou');
                 }
               }
             }
+
             .moreOperate {
               position: absolute;
               top: 0;
@@ -706,6 +732,7 @@
               background-size: 114% 100%;
               background-position: center left;
             }
+
             .approvalStatus {
               position: absolute;
               right: 0;
@@ -713,13 +740,16 @@
               width: 1.3rem;
               height: 1.3rem;
             }
+
             .publish {
               @include approvalsImg('yitongguo');
             }
+
             .reject {
               @include approvalsImg('yijujue');
             }
           }
+
           .listDown {
             position: absolute;
             z-index: 1;
@@ -731,38 +761,48 @@
             @include flex('flex-center');
             background-color: #D8D8D8;
             flex-wrap: wrap;
+
             div {
               width: 50%;
               @include flex('items-center');
+
               i {
                 min-width: .33rem;
                 max-width: .33rem;
                 height: .33rem;
                 margin-right: .1rem;
               }
+
               .icon-preview {
                 @include approvalsImg('hetongyulan');
               }
+
               .icon-success {
                 @include approvalsImg('bendiqianshu');
               }
+
               .icon-phone {
                 @include approvalsImg('kehushoujiqianshu');
               }
+
               .icon-modify {
                 @include approvalsImg('xiugaihetong');
               }
+
               .icon-again {
                 @include approvalsImg('chongxintijiao');
               }
+
               .icon-contract {
                 @include approvalsImg('fasongdianzihetong');
               }
+
               span {
                 white-space: nowrap;
                 font-size: .24rem;
               }
             }
+
             .listDown2 {
               width: 100%;
               padding-left: 30%;
@@ -770,15 +810,18 @@
           }
         }
       }
+
       .noMore, .noData {
         @include flex('flex-center');
         width: 100%;
         padding: .2rem 0;
       }
+
       .noData {
         height: 8rem;
       }
     }
+
     .hover {
       color: #4570FE;
     }

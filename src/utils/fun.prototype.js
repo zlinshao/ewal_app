@@ -461,6 +461,7 @@ export default {
     };
     // 钉钉超链接跳转
     Vue.prototype.$ddSkip = function (url) {
+      let that = this;
       dd.biz.util.openLink({
         url: url,//要打开链接的地址
         onSuccess(result) {
@@ -523,7 +524,13 @@ export default {
     };
     // 关闭钉钉
     Vue.prototype.closeDD = function () {
-      dd.biz.navigation.close({});
+      let that = this;
+      dd.biz.navigation.close({
+        onSuccess(result) {
+        },
+        onFail(err) {
+        }
+      });
     };
   }
 }

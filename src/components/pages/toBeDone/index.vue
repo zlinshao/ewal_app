@@ -16,7 +16,7 @@
         <li v-for="item in toBeDoneList">
           <div class="mainTitle">
             <label>{{item.title}}</label>
-            <p><i></i></p>
+            <p @click="routerLink('/closeDD')"><i></i></p>
           </div>
           <p class="statusBtn">
             <span>{{item.name}}</span>
@@ -26,18 +26,18 @@
             <!--合同修改 / 签署-->
             <div v-if="item.outcome" class="contract">
               <p v-for="btn in item.outcome.outcomeOptions" @click="clickBtn(btn,item.outcome.variableName,item)">
-                <i><img :src="changeOperates[btn.action]"></i>
+                <i><img :src="changeOperates[btn.action]" alt=""></i>
                 <span>{{btn.title}}</span>
               </p>
             </div>
             <!--转交/代签-->
             <div v-for="btn in normalOperates" :class="btn.class" v-else>
-              <i><img :src="btn.icon"></i>
+              <i><img :src="btn.icon" alt=""></i>
               <span>{{btn.text}}</span>
             </div>
             <!--去打卡 / 去签约-->
             <div @click="goOperates(item)" v-if="item.task_title" :class="item.task_action">
-              <i><img :src="changeOperates[item.task_action]"></i>
+              <i><img :src="changeOperates[item.task_action]" alt=""></i>
               <span>{{item.task_title}}</span>
             </div>
           </div>
@@ -82,7 +82,7 @@
                :overlay="true" class="tabsModule">
       <div class="modules">
         <div v-for="item in modules" @click="tabsTag(item.id)">
-          <i><img :src="item.icon"></i>
+          <i><img :src="item.icon" alt=""></i>
           <span class="writingMode">{{item.text}}</span>
         </div>
       </div>
@@ -108,7 +108,7 @@
     data() {
       return {
         mainHeight: '',
-        fullLoading: false,
+        fullLoading: true,
         //正常操作 按钮
         operates: {},//状态变更操作
         normalOperates: [
@@ -176,7 +176,6 @@
       })
     },
     activated() {
-      // this.onSearch();
       this.popupOperate();
     },
     watch: {

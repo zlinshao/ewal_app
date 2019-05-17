@@ -4,21 +4,83 @@
       <div>
         <p></p>
         <p></p>
-        <h2>客厅</h2>
+        <h2>{{mainTop[slither]}}</h2>
       </div>
       <h1></h1>
     </div>
     <div class="mainTouch" ref="main" @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
-      <div :style="slitherCss" class="transition" :class="['transition'+allReportNum]">
+      <div :style="slitherCss" class="transition" :class="['transition' + allReportNum]">
         <div class="slide justify-around" :class="['slide' + slither]">
           <ul :style="mainWidth" v-for="slither in Object.keys(drawSlither)">
-            <!--显示formatData -->
-            <li v-if="item.showForm === 'formatData'" v-for="(item,index) in drawSlither[slither]">
+            <li v-if="item.status === 'child'" v-for="(item,index) in drawSlither[slither]">
               <!--select 下拉选择-->
-              <div v-if="(item.picker && item.readonly) || item.disabled">
+              <div v-if="item.showForm === 'formatData'">
+                <zl-input
+                  v-model="formatData[slither][item.keyName]"
+                  @focus="choosePicker(item,form[slither][item.keyName],slither,item)"
+                  :key="index"
+                  :type="item.type"
+                  :label="item.label"
+                  :readonly="item.readonly"
+                  :disabled="item.disabled"
+                  :placeholder="item.placeholder">
+                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
+                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                </zl-input>
+              </div>
+              <div v-else>
+                <zl-input
+                  v-model="form[slither][item.keyName]"
+                  :key="index"
+                  :type="item.type"
+                  :label="item.label"
+                  :placeholder="item.placeholder">
+                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
+                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                </zl-input>
+              </div>
+              <div v-for="child in item.children">
+                <div v-if="child.type">
+                  <div v-if="child.showForm === 'formatData'">
+                    <zl-input
+                      v-model="formatData[slither][item.keyName]"
+                      @focus="choosePicker(item,form[slither][item.keyName][child.keyName],slither,child)"
+                      :key="index"
+                      :type="child.type"
+                      :label="child.label"
+                      :readonly="child.readonly"
+                      :disabled="child.disabled"
+                      :placeholder="child.placeholder">
+                      <div class="zl-button" v-if="child.button">{{child.button}}</div>
+                      <div class="unit" v-if="child.unit">{{child.unit}}</div>
+                    </zl-input>
+                  </div>
+                  <div class="items-center" v-else>
+                    <zl-input
+                      v-model="form[slither][item.keyName][child.keyName]"
+                      :key="index"
+                      :type="child.type"
+                      :label="child.label"
+                      @input="listenInput(slither,item.keyName)"
+                      :placeholder="child.placeholder">
+                      <div class="zl-button" v-if="child.button">{{child.button}}</div>
+                      <div class="unit" v-if="child.unit">{{child.unit}}</div>
+                    </zl-input>
+                  </div>
+                  <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
+                </div>
+                <div v-else>
+                  <Upload :file="child" :getImg="album[child.keyName]" @success="getImgDataObj"></Upload>
+                </div>
+              </div>
+            </li>
+            <li v-else>
+              <!--显示formatData -->
+              <div v-if="item.showForm === 'formatData'">
+                <!--select 下拉选择-->
                 <zl-input
                   v-model="formatData[item.keyName]"
-                  @focus="choosePicker(item,form[item.keyName])"
+                  @focus="choosePicker(item, form[item.keyName])"
                   :key="index"
                   :type="item.type"
                   :label="item.label"
@@ -29,104 +91,68 @@
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
                 </zl-input>
                 <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
-              </div>
-            </li>
-            <!--显示form -->
-            <li v-else>
-              <!--select 下拉选择-->
-              <div v-if="(item.picker && item.readonly) || item.disabled">
-                <zl-input
-                  :key="index"
-                  v-model="form[item.keyName]"
-                  @focus="choosePicker(item,form[item.keyName])"
-                  :type="item.type"
-                  :label="item.label"
-                  :readonly="item.readonly"
-                  :disabled="item.disabled"
-                  :placeholder="item.placeholder">
-                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                </zl-input>
-              </div>
-              <!--上传-->
-              <div v-else-if="item.picker === 'upload' && item.value" class="uploadForm">
-                <div v-for="upload in item.value" class="flex">
-                  <Upload :file="upload" :getImg="album[upload.keyName]" @success="getImgData"></Upload>
-                </div>
               </div>
               <!--普通输入框-->
               <div v-else>
-                <div class="items-center" v-if="item.keyName && item.moreString">
-                  <label class="labelTitle">{{item.label}}</label>
-                  <zl-input
-                    v-if="item.moreString"
-                    v-for="(string,num) in item.moreString"
-                    :key="num"
-                    v-model="form[string.keyName]"
-                    :type="string.type"
-                    :label="string.label"
-                    @input="listenInput(string.keyName)"
-                    :placeholder="string.placeholder">
-                    <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                    <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                  </zl-input>
-                </div>
-                <div v-if="item.keyName && !item.moreString">
-                  <zl-input
-                    v-if="!item.hidden"
-                    :key="index"
-                    v-model="form[item.keyName]"
-                    :type="item.type"
-                    :label="item.label"
-                    @input="listenInput(item.keyName)"
-                    :placeholder="item.placeholder">
-                    <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                    <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                  </zl-input>
-                </div>
-                <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
+                <zl-input
+                  v-if="!item.hidden"
+                  :key="index"
+                  v-model="form[item.keyName]"
+                  :type="item.type"
+                  :label="item.label"
+                  @input="listenInput(item.keyName)"
+                  :placeholder="item.placeholder">
+                  <div v-if="item.button">{{item.button}}</div>
+                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                </zl-input>
               </div>
             </li>
           </ul>
         </div>
-        <footer :class="['footer'+allReportNum]">
-          <div class="commonBtn" :style="mainWidth" :class="['hover'+slither]">
-            <p class="btn reset">重置</p>
-            <p class="btn deliver">草稿</p>
-            <p class="btn">发布</p>
+        <footer>
+          <div class="commonBtn" :style="mainWidth">
+            <p class="btn reset" @click="saveReport(2)">重置</p>
+            <p class="btn deliver" @click="saveReport(1)">草稿</p>
+            <p class="btn" @click="saveReport(0)">发布</p>
           </div>
         </footer>
       </div>
     </div>
+    <div class="changeTag justify-center">
+      <i v-for="(item,index) in allReportNum" :class="{'hover': slither === index}" @click="changeTag(index)"></i>
+    </div>
+    <!--日期-->
+    <choose-time :module="timeModule" :formatData="formatData" @close="onCancel" @onDate="onConTime"></choose-time>
     <!--正常 picker-->
     <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
     <!--有input picker-->
     <picker-slot :module="popupModule" :pickers="pickers" :drawing="drawForm" :postData="form" :formData="formatData"
                  :popup="popupStatus" @close="onConfirm"></picker-slot>
+    <!--分类选择-->
+    <delivery-picker :module="deliveryModule" :pickers="pickers" :form="form" :formData="formatData"
+                     @close="onConfirm"></delivery-picker>
   </div>
 </template>
 
 <script>
+  import DeliveryPicker from './deliveryPicker.vue'
+
   export default {
     name: "index",
+    components: {DeliveryPicker},
     data() {
       return {
+        mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧'],
         startClientX: 0,
         endClientX: 0,
         slither: 0,
         allReportNum: 0,
         popupStatus: '',
         pickerModule: false,
+        deliveryModule: false,
         popupModule: false,
-        pickers: {
-          title: '',                        //picker标题
-          type: '',                         //字典类型
-          keyName: '',                      //字段名
-          parentKey: '',                    //父级 字段名 变化有picker
-          columns: [],                      //下拉框选择文本列表
-          ids: [],                          //当前字典所有id
-          index: '',                        //变化下标
-        },
+        timeModule: false,
+        pickers: {},
         slitherCss: {},
         mainWidth: {},
 
@@ -140,17 +166,17 @@
           dateIdx: '',                      //日期字段下标 变化情况使用
         },
         drawForm: [],                       //表单集合
-        resetDrawing: {},                   //clone 重置使用
-        drawSlither: {}
+        drawSlither: {},
+
+        childPhoto: [],
       }
     },
     created() {
-      this.resetDrawing = this.jsonClone(defineArticleReceipt);
-      this.resetting();
     },
     mounted() {
     },
     activated() {
+      this.resetting();
       this.allReportNum = Object.keys(this.drawSlither).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
@@ -161,6 +187,9 @@
     watch: {},
     computed: {},
     methods: {
+      changeTag(index) {
+        this.slither = index;
+      },
       // touch 左右切换
       tapStart(event) {
         for (let item of event.touches) {
@@ -192,20 +221,44 @@
 
       },
       // 下拉选择
-      choosePicker(val, value, num = '', parentKey = '') {
-        // show date
-        if (val.status === 'date') {
-          this.chooseTime(val, value);
-          return;
-        }
-        this.popupStatus = val.picker;
-        if (val.picker === 'picker') {
-          this.pickerModule = true;
+      choosePicker(item, value = '', parentKey = '', child) {
+        // this.popupStatus = item.picker;
+        if (item.status === 'child') {
+          let dict = dicties[item.keyName];
+          this.pickers.columns = [];
+          this.pickers.ids = [];
+          for (let item of Object.keys(dict)) {
+            let obj = {values: []}, ids = {values: []};
+            for (let val of Object.keys(dict[item])) {
+              obj.values.push(dict[item][val]);
+              ids.values.push(val);
+            }
+            this.pickers.columns.push(obj);
+            this.pickers.ids.push(ids);
+          }
+          this.pickers.title = child.label;
+          this.pickers.parentKey = parentKey;
+          this.pickers.keyName = item.keyName;
+          this.pickers.childKeys = item.childKeys;
+          this.deliveryModule = true;
+        } else if (item.status === 'date') {
+          this.chooseTime(item, value);
         } else {
-          this.popupModule = true;
+          this.pickerModule = true;
+          this.pickers = this.inputSelect(this.pickers, item, value, parentKey);
         }
-        if (val.pickerRead) return;//弹窗内 可输入
-        this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+      },
+      closePickers() {
+        this.pickers = {
+          title: '',                        //picker标题
+          type: '',                         //字典类型
+          keyName: '',                      //字段名
+          childKeys: [],                    //字段名
+          parentKey: '',                    //父级 字段名 变化有picker
+          columns: [],                      //下拉框选择文本列表
+          ids: [],                          //当前字典所有id
+          index: '',                        //变化下标
+        }
       },
       // 确认选择
       onConfirm(form, show) {
@@ -214,29 +267,70 @@
           this.form = form;
           this.formatData = show;
         }
+        this.closePickers();
+      },
+      // 日期选择
+      chooseTime(val, date) {
+        this.timeModule = true;
+        this.formatData.dateKey = val.keyName;
+        this.formatData.dateVal = date;
+      },
+      // 确认时间
+      onConTime(val) {
+        this.form[val.dateKey] = val.dateVal;
+        this.onCancel();
       },
       // close Module
       onCancel() {
         this.timeModule = false;
         this.pickerModule = false;
         this.popupModule = false;
+        this.deliveryModule = false;
       },
       // 图片
-      getImgData(val) {
-
+      getImgDataObj(val, file) {
+        let key = file.slither;
+        this.form[key][file.keyName]['photo'] = val[1];
+      },
+      saveReport(val) {
+        switch (val) {
+          case 0:
+            break;
+          case 1:
+            break;
+          case 2:
+            this.resetting();
+            break;
+        }
+        console.log(this.form);
       },
       resetting() {
-        let allForm = [];
-        let id = this.form.id;
-        this.drawSlither = this.jsonClone(this.resetDrawing);
+        this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
-          allForm = allForm.concat(this.drawSlither[item]);
+          this.form[item] = {};
+          this.formatData[item] = {};
+          for (let key of this.drawSlither[item]) {
+            if (key.status === 'child') {
+              this.form[item][key.keyName] = key.keyType;
+              this.formatData[item][key.keyName] = '';
+              if (key.childKeys || key.children) {
+                for (let child of key.childKeys) {
+                  this.form[item][key.keyName][child] = '';
+                }
+                for (let val of key.children) {
+                  if (val.status === 'upload') {
+                    this.form[item][key.keyName]['photo'] = val.keyType;
+                  } else {
+                    this.form[item][key.keyName][val.keyName] = val.keyType;
+                  }
+                }
+              }
+            } else {
+              this.form[key.keyName] = key.keyType;
+              this.formatData[key.keyName] = key.keyType;
+            }
+          }
         }
-        this.drawForm = allForm;
-        let all = this.initFormData(allForm, this.showData);
-        this.form = all.form;
-        this.formatData = all.formatData;
-        this.album = all.album;
       },
     },
   }
@@ -251,26 +345,31 @@
 
   #deliveryReceipt {
     background-color: #F8F8F8;
+
     .top {
       padding: 0 .5rem;
       background-color: #4570FE;
       height: 2.2rem;
       @include flex('justify-bet');
+
       div {
         @include flex();
         flex-wrap: wrap;
+
         p {
           margin-right: .15rem;
           width: 1.5rem;
           height: .6rem;
           background-color: #448aff;
         }
+
         h2 {
           @include transform(translateY(-.3rem));
           width: 100%;
           color: #FFFFFF;
         }
       }
+
       h1 {
         @include flex('flex-center');
         width: .7rem;
@@ -278,6 +377,7 @@
         background-color: #CF2E33;
       }
     }
+
     .mainTouch {
       margin: -.6rem .3rem 0;
       padding: .24rem 0;
@@ -285,81 +385,82 @@
       overflow-x: hidden;
       @include radius(.1rem);
       @include flex();
+
       .transition {
         @include flex('bet-column');
+
         .slide {
           @include transition(all .3s);
           height: 100%;
         }
+
         .slide0 {
           @include transform(translateX(0));
         }
       }
+
       .transition2 {
         .slide1 {
           @include transform(translateX(-50%));
         }
       }
+
       .transition3 {
         .slide1 {
           @include transform(translateX(-33.33%));
         }
+
         .slide2 {
           @include transform(translateX(-66.33%));
         }
       }
+
       .transition4 {
         .slide1 {
           @include transform(translateX(-25%));
         }
+
         .slide2 {
           @include transform(translateX(-50%));
         }
+
         .slide3 {
           @include transform(translateX(-75%));
         }
       }
+
       ul {
+        height: 100%;
         @include scroll;
+
+        li + li {
+          border-top: 1px dashed #C6CAD8;
+        }
       }
+
       footer {
+        border-top: 1px solid #F2F2F2;
+
         .commonBtn {
           padding: .3rem .1rem .1rem;
           @include transition(all .3s);
         }
       }
-      .footer2 {
-        .commonBtn {
-          transform: translateX(100%);
-        }
-        .hover1 {
-          transform: translateX(0);
-        }
+    }
+
+    .changeTag {
+      i {
+        width: .2rem;
+        height: .2rem;
+        background: rgba(69, 112, 254, .3);
+        @include radius(50%);
+        margin: .2rem .1rem 0;
       }
-      .footer3 {
-        .commonBtn {
-          transform: translateX(200%);
-        }
-        .hover1 {
-          transform: translateX(100%);
-        }
-        .hover2 {
-          transform: translateX(0);
-        }
-      }
-      .footer4 {
-        .commonBtn {
-          transform: translateX(300%);
-        }
-        .hover1 {
-          transform: translateX(200%);
-        }
-        .hover2 {
-          transform: translateX(100%);
-        }
-        .hover3 {
-          transform: translateX(0);
-        }
+
+      .hover {
+        width: .3rem;
+        @include radius(1rem);
+        background: rgba(69, 112, 254, 1);
       }
     }
   }
