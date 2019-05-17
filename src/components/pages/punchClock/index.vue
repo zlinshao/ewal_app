@@ -171,7 +171,7 @@
       setInterval(this.startTime, 1000);
       let query = this.$route.query;
       let api = query.ctl_detail_request_url;
-      this.postForm = {};
+      this.close_();
       this.postForm.task_id = query.task_id;
       this.postForm.flow_type = query.flow_type;
       this.postForm.process_id = query.root_id;
@@ -183,6 +183,9 @@
       // 确定打卡
       finishPunchClock() {
         this.postForm.variables = this.jsonClone(this.form);
+        this.postForm.variables.property_phone = '182052501756';
+        this.postForm.variables.remark = '发的啥开发圣诞快乐';
+        this.postForm.variables.look_photo = [4227577, 4227578, 4227579];
         this.$httpZll.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
             this.close_();
@@ -217,6 +220,7 @@
           this.getLocation(this.villageInfo);
         })
       },
+      // 时间
       startTime() {
         let date = new Date();
         let year = date.getFullYear();

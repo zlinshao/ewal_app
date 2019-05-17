@@ -1,16 +1,16 @@
 @charset "UTF-8";
 @font-face {
   font-family: 'dingzitiblod';
-  src: url("/static/font/DIN-Bold.otf"); }
+  src: url("http://static.lejias.cn/lejia030d68d3219081dac300f4fe7d70ee4a.otf"); }
 @font-face {
   font-family: 'dingziti';
-  src: url("/static/font/DIN-Light.otf"); }
+  src: url("http://static.lejias.cn/lejia7e25abfb1fff435a674925ec3354693a.otf"); }
 @font-face {
   font-family: 'fangzhengjianti';
-  src: url("/static/font/fangzhengjianti.ttf"); }
+  src: url("http://static.lejias.cn/lejia0cd2cb2d2b9ab930c7e4748708cb75c3.ttf"); }
 @font-face {
   font-family: 'jingdianxingshu';
-  src: url("/static/font/JINGDIANXINGSHU.otf"); }
+  src: url("http://static.lejias.cn/lejia8e27268f1d507f9ea63b4bfd47a06404.otf"); }
 .flex {
   display: flex;
   display: -webkit-flex; }
@@ -122,6 +122,12 @@
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
+
 #toBeDone {
   overflow: hidden;
   background: linear-gradient(180deg, white 0%, #f8f8f8 100%);
@@ -138,7 +144,7 @@
       margin: .2rem 0; }
   #toBeDone .main ul li {
     padding: .3rem 0 .3rem .3rem;
-    margin: 0 0.3rem 0.16rem;
+    margin: 0 .3rem .16rem;
     -webkit-border-radius: 0.1rem;
     -moz-border-radius: 0.1rem;
     border-radius: 0.1rem;
@@ -193,18 +199,24 @@
       display: -webkit-flex;
       align-items: center;
       justify-content: space-around; }
-      #toBeDone .main ul li .handleBtn p {
+      #toBeDone .main ul li .handleBtn div {
         width: 100%;
         display: flex;
         display: -webkit-flex;
         align-items: center; }
-        #toBeDone .main ul li .handleBtn p i {
+        #toBeDone .main ul li .handleBtn div i {
           width: .33rem;
           height: .33rem;
           margin-right: .1rem; }
-      #toBeDone .main ul li .handleBtn .deliver i, #toBeDone .main ul li .handleBtn .collectReport i {
+      #toBeDone .main ul li .handleBtn .contract p i, #toBeDone .main ul li .handleBtn .deliver p i, #toBeDone .main ul li .handleBtn .collectReport p i {
         width: .4rem;
         height: .4rem; }
+      #toBeDone .main ul li .handleBtn .contract p {
+        white-space: nowrap;
+        margin-right: .3rem;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center; }
       #toBeDone .main ul li .handleBtn .punchClock i {
         height: .4rem; }
   #toBeDone .main .noMore, #toBeDone .main .noData {
@@ -316,6 +328,16 @@
     #toBeDone .showAddPopup .mainModule .module2 i {
       height: .7rem;
       background: url("../../../assets/image/toBeDone/buchongxieyi.png") no-repeat scroll center;
+      background-size: 100% 100%; }
+  #toBeDone .showAddPopup .mainModule .module3 {
+    width: 2rem;
+    height: 2rem;
+    z-index: 1;
+    bottom: 4rem;
+    right: 1.2rem;
+    background-color: #9CE054; }
+    #toBeDone .showAddPopup .mainModule .module3 i {
+      background: url("../../../assets/image/toBeDoneList/zufangdaikan.png") no-repeat scroll center;
       background-size: 100% 100%; }
   #toBeDone .showAddPopup .popupBottom {
     height: 1.5rem;

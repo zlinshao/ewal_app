@@ -1,5 +1,5 @@
 hhhhhhhhhhhh = {
-  "house_address": "太平北路122号12-33-44",
+  "house_address": "",
   "community": {
     "id": "446",
     "area": "320102",
@@ -43,10 +43,10 @@ hhhhhhhhhhhh = {
     "property_fee_list": ""
   },
   "position": "2",
-  "property_address": "1312",
-  "property_owner": "321312",
+  "property_address": "发发大水发射点",
+  "property_owner": "放大撒地方",
   "door_address": ["12", "33", "44"],
-  "house_type": ["2", "2", "2"],
+  "house_type": ["1", "1", "1"],
   "area": "122",
   "decorate": {"id": "405", "name": "毛坯"},
   "direction": {"id": "1", "name": "东"},
@@ -62,16 +62,16 @@ hhhhhhhhhhhh = {
   "other_remark": "fdsfda",
   "photo": [4226867, 4226868, 4226869],
   "house_video": [4226870],
-  "bed": "1",
+  "bed": "3",
   "bed_remark": "fdfdsafasd",
-  "wardrobe": "1",
+  "wardrobe": "2",
   "wardrobe_remark": "fdsfas",
-  "curtain": "1",
+  "curtain": "3",
   "curtain_remark": "dfsfsdaf",
   "is_elevator": "0",
   "is_clean": "0",
-  "is_fill": "0",
-  "is_lord_fill": "0",
+  "is_fill": "1",
+  "is_lord_fill": "1",
   "has_heater": "0",
   "has_gas": "0",
   "lord_fill_date": "2019-04-30",
@@ -89,12 +89,12 @@ hhhhhhhhhhhh = {
   "dining_table": "1",
   "chair": "1",
   "signatory_identity": "1",
-  "customer_name": "发送",
+  "customer_name": "张琳琳",
   "customer_sex": "m",
   "card_type": "411",
-  "card_id": "3213213123",
+  "card_id": "320321198904010033",
   "contact_way": "1",
-  "contact_phone": "12321312",
+  "contact_phone": "18052001167",
   "bank": "上海浦东发展银行",
   "subbranch": "fgdsgdsf",
   "account_name": "贾少君",
@@ -110,8 +110,8 @@ hhhhhhhhhhhh = {
   }],
   "id_card_photo": [4226871, 4226872],
   "bank_card_photo": [4226873, 4226874, 4226875, 4226876],
-  "is_electronic_contract": "0",
-  "contract_number": "LJSF332211223",
+  "is_electronic_contract": "1",
+  "contract_number": "",
   "sign_date": "2019-04-30",
   "month": "12",
   "day": "3",
@@ -124,7 +124,7 @@ hhhhhhhhhhhh = {
     "period": "12",
     "pay_way": "1",
     "end_date": "2019-05-25",
-    "begin_date": "2019-05-13",
+    "begin_date": "2020-05-13",
     "month_unit_price": "1222"
   }],
   "deposit": 1222,
@@ -149,6 +149,29 @@ hhhhhhhhhhhh = {
   "type": 1,
   "is_draft": 0,
   "spot_code": "s7d30"
+};
+
+// 报备类型
+bulletinRouterStatus = {
+  newCollect: {
+    bulletin: 'bulletin_collect_basic',
+    to: 'collect',
+    type: 1,
+  },
+  newRent: {
+    bulletin: 'bulletin_rent_basic',
+    to: 'rent',
+    type: 1,
+  },
+};
+
+// 审批筛选
+approvalSearch = {
+  toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC', 'CollectReceiptSign'],
+  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentReceiptSign'],
+  approvals1: ['pqjl_approval', 'gkzx_approval'],
+  approvals22: ['SignEC'],
+  approvals23: ['InputBulletinData'],
 };
 
 // 收房报备
@@ -464,6 +487,18 @@ defineCollectReport = {
       slot: '',
     },
     {
+      label: '家电是否齐全',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'is_fill',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'pickerArticle',
+      slot: '',
+    },
+    {
       label: '是否有电梯',
       placeholder: '必填 请选择',
       readonly: 'readonly',
@@ -480,18 +515,6 @@ defineCollectReport = {
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'is_clean',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'pickerArticle',
-      slot: '',
-    },
-    {
-      label: '家电是否补齐',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'is_fill',
       keyType: '',
       type: 'text',
       status: 'objInt',
@@ -542,8 +565,8 @@ defineCollectReport = {
       keyName: 'lord_fill_date',
       keyType: '',
       type: 'text',
-      status: 'dateSlot',
-      picker: 'pickerArticle',
+      status: 'date',
+      picker: 'picker',
       slot: '',
     },
     {
@@ -845,7 +868,6 @@ defineCollectReport = {
           keyName: 'id_card_photo',
         }, {
           label: '银行卡照片',
-          placeholder: '必填',
           keyName: 'bank_card_photo',
         }
       ]
@@ -1215,10 +1237,215 @@ defineCollectReport = {
   ],
 };
 
-// 收房交接单
-// 物品交接
-defineArticleReceipt = {
+// 租房报备
+defineRentReport = {
   slither0: [
+    {
+      label: '房屋地址',// 标题
+      placeholder: '必填 请选择',// placeholder
+      // readonly: 'readonly',// 只读 picker必须有值
+      disabled: 'disabled',// 禁用
+      keyName: 'house_address',// 字段名
+      keyType: '',// 数据类型
+      type: 'text',// input 类型
+      // date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 arrs多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
+      status: '',
+      // picker: 'searchVillage',// 是否显示在弹窗内 不存在为正常输入框 值为picker正常选择 searchVillage 搜索小区
+      // showForm: 'formatData',//picker 显示form 或 formatData
+      // prompts: '',//红色提示信息
+      // pickerRead: 'no', // 在弹窗内是否为readonly// 1房屋信息 2物品信息 3合同信息 4客户信息
+      slot: '',// 预留字段
+    },
+    {
+      label: '小区地址',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'community',
+      keyType: '',
+      type: 'text',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '所属区域',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'position',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '产权地址',
+      placeholder: '必填 请输入',
+      keyName: 'property_address',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '产权人',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '门牌地址',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'door_address',
+      keyType: [],
+      type: 'text',
+      status: '',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+      moreArray: [
+        {
+          label: '栋',
+          placeholder: '必填',
+          type: 'text',
+          keyType: '',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '单元',
+          placeholder: '必填',
+          type: 'text',
+          keyType: '',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '门牌号',
+          placeholder: '必填',
+          type: 'text',
+          keyType: '',
+          status: '',
+          slot: '',
+        },
+      ],
+    },
+    {
+      label: '户型',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'house_type',
+      keyType: [],
+      type: 'text',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '面积',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'area',
+      keyType: '',
+      type: 'number',
+      status: '',
+      unit: '平米',
+      slot: '',
+    },
+    {
+      label: '装修',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'decorate',
+      keyType: '',
+      type: 'text',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '朝向',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'direction',
+      keyType: '',
+      type: 'text',
+      status: 'obj',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '楼层',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'floors',
+      keyType: [],
+      type: 'text',
+      status: 'arrs-3-0',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '物业费',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'property_fee',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '物业电话',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'property_phone',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '房屋类型',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'property_type',
+      keyType: '',
+      type: 'text',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '持有证件',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'holding_documents_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '产权证号',
+      placeholder: '必填 请输入',
+      keyName: 'property_right_card_number',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '丘权号',
+      placeholder: '必填 请输入',
+      keyName: 'qiu_quan_number',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
     {
       label: '门锁类型',
       placeholder: '必填 请选择',
@@ -1228,56 +1455,16 @@ defineArticleReceipt = {
       type: 'text',
       status: 'objInt',
       showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
+      picker: 'picker',
       slot: '',
     },
     {
-      label: '钥匙',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'key_arr',
+      label: '其它问题',
+      placeholder: '请输入',
+      keyName: 'other_remark',
       keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
-      unit: '把',
-      slot: '',
-    },
-    {
-      label: '纱窗',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'shachuang',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
-      slot: '',
-    },
-    {
-      label: '天然气',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'has_gas',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
-      slot: '',
-    },
-    {
-      label: '彩电',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'television',
-      keyType: [],
-      type: 'text',
-      status: 'arrs-0-0-0',
-      picker: 'picker1',
-      showForm: 'formatData',//picker 显示form 或 formatData
+      type: 'textarea',
+      status: '',
       slot: '',
     },
     {
@@ -1285,41 +1472,187 @@ defineArticleReceipt = {
       picker: 'upload',
       value: [
         {
-          label: '损坏照片',
+          label: '房产证照片',
           placeholder: '必填',
           keyName: 'photo',
+        }, {
+          label: '房屋影像',
+          placeholder: '必填',
+          keyName: 'house_video',
         }
       ]
     },
   ],
-  slither1: [
-    {
-      label: '门锁类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'lock_type',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
-      slot: '',
-    },
-  ],
-  slither2: [
-    {
-      label: '门锁类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'lock_type',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker1',
-      slot: '',
-    },
-  ],
 };
+
+// 收房交接单
+// 物品交接
+const childKeysTypeBad = ['type', 'is_bad', 'bad_number'];
+const childKeysTypeNum = ['type', 'number', 'is_bad', 'bad_number'];
+const childKeysHaveBad = ['is_have', 'is_bad', 'bad_number'];
+
+defineArticleReceipt = {
+  // 客厅
+  hall_goods: handlerHallGoods('hall_goods'),
+  // 厨房/阳台/卫生间
+  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom'),
+  // 主卧
+  master_bedroom: handlerBedroom('master_bedroom'),
+  // 次卧
+  bedroom: handlerBedroom('bedroom'),
+};
+
+// 客厅
+function handlerHallGoods(value) {
+  return [
+    deliveryMorePickersBrand('彩电', value, 'tv', childKeysTypeNum),
+    deliveryMorePickers('门锁类型', value, 'gate_lock', childKeysTypeBad),
+    deliveryMorePickers('钥匙', value, 'key', childKeysTypeBad),
+    deliveryMorePickers('窗户', value, 'screen_window', childKeysTypeBad),
+    deliveryMorePickers('遥控器', value, 'remote_control', childKeysHaveBad),
+    deliveryMorePickers('沙发', value, 'sofa', childKeysTypeNum),
+    deliveryMorePickers('茶几', value, 'tea_table'),
+    deliveryMorePickers('冰箱', value, 'refrigerator', childKeysTypeNum),
+    deliveryMorePickers('椅子', value, 'chair'),
+    deliveryMorePickers('餐桌', value, 'dining_table', childKeysTypeNum),
+    deliveryMorePickers('客厅灯', value, 'light', childKeysTypeNum),
+    deliveryMorePickersRemark('客厅备注'),
+  ]
+}
+
+// 厨房/阳台/卫生间
+function handlerKitchenBalconyBathroom(value) {
+  return [
+    deliveryMorePickers('热水器', value, 'water_heater', childKeysTypeNum),
+    deliveryMorePickers('浴霸', value, 'bath_heater', childKeysTypeNum),
+    deliveryMorePickersBrand('洗衣机', value, 'washer', childKeysTypeNum),
+    deliveryMorePickers('燃气灶', value, 'gas_stove', childKeysTypeNum),
+    deliveryMorePickers('橱柜', value, 'sideboard'),
+    deliveryMorePickers('洗菜池', value, 'washing_pool'),
+    deliveryMorePickers('水龙头', value, 'faucet'),
+    deliveryMorePickers('微波炉', value, 'microwave_oven'),
+    deliveryMorePickers('厨房灯', value, 'kitchen_light'),
+    deliveryMorePickers('阳台灯', value, 'balcony_light'),
+    deliveryMorePickers('卫生间灯', value, 'bathroom_light'),
+    deliveryMorePickers('浴霸灯', value, 'bath_heater_light'),
+    deliveryMorePickers('洗面池', value, 'wash_basin'),
+    deliveryMorePickers('马桶盖', value, 'toilet_lid'),
+    deliveryMorePickers('晾衣架', value, 'drying_rack'),
+    deliveryMorePickers('晾衣架', value, 'drying_rack'),
+    deliveryMorePickersRemark('厨房/阳台/卫生间备注'),
+  ]
+}
+
+// 主卧次卧
+function handlerBedroom(value) {
+  return [
+    deliveryMorePickers('床', value, 'delivery_bed'),
+    deliveryMorePickers('床垫', value, 'mattress'),
+    deliveryMorePickers('窗帘', value, 'delivery_curtain'),
+    deliveryMorePickers('空调', value, 'air_conditioning', childKeysTypeNum),
+    deliveryMorePickers('吸顶灯', value, 'light', childKeysTypeNum),
+    deliveryMorePickers('电视', value, 'tv', childKeysTypeNum),
+    deliveryMorePickers('电视遥控器', value, 'tv_remote_control'),
+    deliveryMorePickers('门锁钥匙', value, 'door_lock_key'),
+    deliveryMorePickers('书桌', value, 'desk'),
+    deliveryMorePickers('椅子', value, 'chair'),
+    deliveryMorePickersRemark('卧室备注'),
+  ]
+}
+
+// 默认
+function deliveryMorePickers(name, parent, key, childKeys = ['number', 'is_bad', 'bad_number']) {
+  return {
+    label: name,// 标题
+    placeholder: '必填 请选择',
+    readonly: 'readonly',// 只读 picker必须有值
+    keyName: key,
+    keyType: {},
+    type: 'text',// input 类型
+    status: 'child',
+    picker: 'picker',
+    showForm: 'formatData',
+    childKeys: childKeys,
+    children: [
+      {
+        label: '损坏照片',
+        placeholder: '必填',
+        keyName: key,
+        keyType: [],
+        slither: parent,
+        status: 'upload',
+        slot: '',
+      },
+      {
+        label: '备注',
+        placeholder: '请输入',
+        keyName: 'remark',
+        keyType: '',
+        type: 'text',
+        status: '',
+        slot: '',
+      },
+    ],
+  }
+}
+
+// 品牌
+function deliveryMorePickersBrand(name, parent, key, childKeys = ['number', 'is_bad', 'bad_number']) {
+  return {
+    label: name,// 标题
+    placeholder: '必填 请选择',
+    readonly: 'readonly',// 只读 picker必须有值
+    keyName: key,
+    keyType: {},
+    type: 'text',// input 类型
+    status: 'child',
+    picker: 'picker',
+    showForm: 'formatData',
+    childKeys: childKeys,
+    children: [
+      {
+        label: '损坏照片',
+        placeholder: '必填',
+        keyName: key,
+        keyType: [],
+        slither: parent,
+        status: 'upload',
+        slot: '',
+      },
+      {
+        label: '品牌',
+        placeholder: '请输入',
+        keyName: 'brand',
+        keyType: '',
+        type: 'text',
+        status: '',
+        slot: '',
+      },
+      {
+        label: '备注',
+        placeholder: '请输入',
+        keyName: 'remark',
+        keyType: '',
+        type: 'text',
+        status: '',
+        slot: '',
+      },
+    ],
+  }
+}
+
+// 备注
+function deliveryMorePickersRemark(name) {
+  return {
+    label: name,
+    placeholder: '请输入',
+    keyName: 'remark',
+    keyType: '',
+    type: 'textarea',
+    status: 'child',
+    slot: '',
+  }
+}
+
 // 费用交接
 defineCostReceipt = {};

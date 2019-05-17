@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="commonBtn searchFoot">
-          <p class="btn" @click="routerLink('/createdVillage')">新增小区</p>
+          <p class="btn" @click="routerReplace('/createdVillage')">新增小区</p>
         </div>
       </div>
     </van-popup>
@@ -113,10 +113,7 @@
         let data = {};
         data.id = val.id;
         data.name = val.village_name;
-        this.params = {
-          name: '',
-          city: [],
-        };
+        this.params.name = '';
         this.searchList = [];
         this.$emit('close', data, val);
       },

@@ -134,3 +134,7 @@
 .scroll_bar {
   @include scroll;
 }
+
+.ellipsis {
+  @include ellipsis;
+}

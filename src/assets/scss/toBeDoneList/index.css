@@ -1,15 +1,15 @@
 @font-face {
   font-family: 'dingzitiblod';
-  src: url("/static/font/DIN-Bold.otf"); }
+  src: url("http://static.lejias.cn/lejia030d68d3219081dac300f4fe7d70ee4a.otf"); }
 @font-face {
   font-family: 'dingziti';
-  src: url("/static/font/DIN-Light.otf"); }
+  src: url("http://static.lejias.cn/lejia7e25abfb1fff435a674925ec3354693a.otf"); }
 @font-face {
   font-family: 'fangzhengjianti';
-  src: url("/static/font/fangzhengjianti.ttf"); }
+  src: url("http://static.lejias.cn/lejia0cd2cb2d2b9ab930c7e4748708cb75c3.ttf"); }
 @font-face {
   font-family: 'jingdianxingshu';
-  src: url("/static/font/JINGDIANXINGSHU.otf"); }
+  src: url("http://static.lejias.cn/lejia8e27268f1d507f9ea63b4bfd47a06404.otf"); }
 .flex {
   display: flex;
   display: -webkit-flex; }
@@ -120,6 +120,12 @@
   overflow-scrolling: touch;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden; }
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
 
 #toBeDoneList {
   background-color: #E6F4F9; }

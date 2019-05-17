@@ -103,7 +103,7 @@ class httpZll extends httpService {
   // 小区搜索
   static searchVillageList(params) {
     return new Promise((resolve, reject) => {
-      this.get(`${market}v1.0/market/community`, params, 'prompt').then(res => {
+      this.get(`${market}v1.0/market/community/pattern`, params, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
         } else {
@@ -185,7 +185,7 @@ class httpZll extends httpService {
   }
 
   // 获取 所有待办列表
-  static getToBeDoneListApi(url, data) {
+  static getToBeDoneListApi(url, data, close) {
     let params = {
       size: 12,
       // assignee: '69',//登陆人
@@ -194,29 +194,44 @@ class httpZll extends httpService {
       params[key] = data[key]
     }
     return new Promise((resolve, reject) => {
-      this.get(`${url_done}${url}`, params, 'prompt').then(res => {
+      this.get(`${url_done}${url}`, params, 'prompt', close).then(res => {
         resolve(res);
       });
     });
   }
 
   // 获取 报备待办列表
-  static getToBeDoneApi(taskKey = {}, tenant = 'market') {
+  static getToBeDoneApi(val = {}) {
     let params = {
       size: 12,
-      tenantId: tenant,
+      tenantId: 'market',
       // assignee: '69',//登陆人
       order: 'desc',
-      taskDefinitionKeyIn: 'CollectTakeLook,InputBulletinData,SignEC',
+      taskDefinitionKeyIn: '',
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
     };
-    for (let key of Object.keys(taskKey)) {
-      params[key] = taskKey[key]
+    for (let key of Object.keys(val)) {
+      params[key] = val[key]
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
         resolve(res);
+      });
+    });
+  }
+
+  // 任务跟进详情
+  // v1.0/market/task-follow-up/list?task_id
+  static followRecordList(id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/task-follow-up/list?task_id=${id}`, {}, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
       });
     });
   }
@@ -253,6 +268,65 @@ class httpZll extends httpService {
         resolve(res);
       });
     });
+  }
+
+  // 本地签署电子合同
+  static localSignContract(url, data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_identity}fdd/contract/${url}`, data, 'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+          $httpPrompt(res.msg, 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.msg);
+        }
+      });
+    });
+  }
+
+  // 发送电子合同
+  static sendElectronicContract(number, params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_identity}fdd/contract/send/${number}`, params, 'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+          $httpPrompt(res.msg, 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
+  // 补齐资料详情
+  static getPolishingDetail(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/contract/album/${params.type}/${params.id}`, {}).then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
+  // 补齐资料报备
+  static setPolishingBulletin(task_id = '', params, api = '') {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/task-follow-up${api}?task_id=${task_id}`, params, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+          $httpPrompt(res.message, 'success');
+        } else {
+          $httpPrompt(res.message);
+          resolve(false);
+        }
+      })
+    })
   }
 
   // 获取报备详情
@@ -346,9 +420,9 @@ class httpZll extends httpService {
   };
 
   // 收房报备 发布
-  static submitReport(data) {
+  static submitReport(data, to) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/bulletin?to=collect`, data, 'prompt').then(res => {
+      this.post(`${market}v1.0/market/bulletin?to=${to}`, data, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
           $httpPrompt(res.message, 'success');
@@ -361,9 +435,9 @@ class httpZll extends httpService {
   }
 
   // 收房报备 修改
-  static putReviseReport(data) {
+  static putReviseReport(data, to) {
     return new Promise((resolve, reject) => {
-      this.put(`${market}v1.0/market/bulletin/${data.id}?to=collect`, data, 'prompt').then(res => {
+      this.put(`${market}v1.0/market/bulletin/${data.id}?to=${to}`, data, 'prompt').then(res => {
         if (Number(res.code) === 200) {
           resolve(res);
           $httpPrompt(res.message, 'success');

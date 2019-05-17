@@ -10,6 +10,7 @@ const app = {
       department_id: '',
       department_name: '',
     },
+    bulletinTypes: '',
     bulletinPreFill: {},
     taskDetail: {},
     //审批切换
@@ -19,11 +20,17 @@ const app = {
     },
     // 待办任务切换
     doneTab: '1',
+    allDetail: {},//详情
+    signRouters: '',//签署路由
   },
   // 计算属性
   getter: {},
   // 函数声明
   mutations: {
+    // 报备类型
+    BULLETIN_TYPE(state, view) {
+      state.bulletinTypes = view;
+    },
     // 报备草稿预填
     BULLETIN_DRAFT(state, view) {
       state.bulletinPreFill = view;
@@ -34,10 +41,10 @@ const app = {
     },
     // 个人信息
     PERSONAL_STORAGE(state, view) {
-      let p = JSON.parse(view);
-      state.personalDetail = p;
+      let personal = JSON.parse(view);
+      state.personalDetail = personal;
       for (let item of Object.keys(state.personal)) {
-        state.personal[item] = p[item];
+        state.personal[item] = personal[item];
       }
     },
     // 监听键盘弹出/收起
@@ -53,9 +60,13 @@ const app = {
       state.doneTab = view;
     },
     // 开关video
-    SWITCH_VIDEO(state,status) {
+    SWITCH_VIDEO(state, status) {
       state.video_visible = status;
-    }
+    },
+    // 跟进记录
+    ALL_DETAIL(state, status) {
+      state.allDetail = status;
+    },
   },
   // 执行函数
   actions: {
@@ -71,11 +82,15 @@ const app = {
     key_up_status({commit}, view) {
       commit('KEY_UP_STATUS', view);
     },
+    // 报备类型
+    bulletin_type({commit}, view) {
+      commit('BULLETIN_TYPE', view);
+    },
     // 报备草稿预填
     bulletin_draft({commit}, view) {
       commit('BULLETIN_DRAFT', view);
     },
-    // 报备草稿预填
+    // 任务 预填
     task_detail({commit}, view) {
       commit('TASK_DETAIL', view);
     },
@@ -88,9 +103,17 @@ const app = {
       commit('DONE_TABS', view);
     },
     // 开关video
-    switch_video({commit},status) {
-      commit('SWITCH_VIDEO',status);
-    }
+    switch_video({commit}, status) {
+      commit('SWITCH_VIDEO', status);
+    },
+    // 跟进记录
+    all_detail({commit}, status) {
+      commit('ALL_DETAIL', status);
+    },
+    // 签署路由
+    sign_routers({commit}, status) {
+      commit('SIGN_ROUTERS', status);
+    },
   }
 };
 

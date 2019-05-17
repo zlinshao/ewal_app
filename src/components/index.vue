@@ -5,7 +5,7 @@
       <div class="indexTop">
         <div>
           <p v-for="(item,index) in indexTop" :class="['p'+(index+1)]" @click="topTabsTag(item.url)">
-            <img :src="item.icon">
+            <img :src="item.icon" alt="">
           </p>
         </div>
       </div>
@@ -28,7 +28,7 @@
       <!--小火车-->
       <div class="smallTrain">
         <h1></h1>
-        <div :class="[item.class?item.class:'railroadCar']" v-for="item in trans" @click="routerLink('deliveryReceipt')">
+        <div :class="[item.class?item.class:'railroadCar']" v-for="item in trans">
           <i></i>
           <p class="p1">
             <b>{{item.num}}</b>
@@ -39,7 +39,7 @@
     </div>
     <div class="indexBottom">
       <p v-for="item in indexBottom" @click="bottomTabsTag(item.id)">
-        <img :src="item.icon">
+        <img :src="item.icon" alt="">
       </p>
     </div>
     <!--<audio src="../assets/image/circlePanel/kaka.mp3" preload="auto"/>-->
@@ -139,17 +139,13 @@
     methods: {
       // 头部
       topTabsTag(url) {
-        // let tabs = {};
-        // tabs.tab = '1';
-        // tabs.status = 0;
-        // this.$store.dispatch('approval_tabs', tabs);
         this.routerLink(url);
       },
       // 底部
       bottomTabsTag(val) {
         switch (val) {
           case '4':
-            this.routerLink('/toBeDoneList', {path: 'index'});
+            this.routerLink('/toBeDoneList');
             break;
           case '3':
             this.routerLink('/houseResource');

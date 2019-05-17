@@ -34,10 +34,11 @@
                   <p v-else>{{item.name}}</p>
                   <div>
                     <b>
-                      <img
-                        src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1">
+                      <img :src="item.bulletin_staff_avatar" v-if="item.bulletin_staff_avatar">
+                      <img src="../../../assets/image/common/noHead.png" v-else>
                     </b>
-                    <span>发动机</span>
+                    <span v-if="item.bulletin_staff_name">{{item.bulletin_staff_name}}</span>
+                    <span v-else>---</span>
                   </div>
                 </div>
                 <div class="listBottom">
@@ -47,7 +48,7 @@
                   </div>
                   <div>
                     <i class="icon-2"></i>
-                    <span>以等待18分钟</span>
+                    <span>以等待{{item.duration}}分钟</span>
                   </div>
                 </div>
                 <div class="approvalStatus publish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
@@ -55,9 +56,10 @@
                      v-if="tabs.tab === '2' && tabs.status !== 0"></div>
               </div>
               <div class="listDown" v-if="item.outcome">
-                <div v-for="(more,index) in item.outcome.outcomeOptions"
-                     @click="onMoreOperates(more,item.outcome.variableName)">
-                  <i :class="['icon-'+(index+1)]"></i>
+                <div v-for="more in item.outcome.outcomeOptions"
+                     :class="item.outcome.outcomeOptions.length>2?'':'listDown2'"
+                     @click="onMoreOperates(more,item.outcome.variableName,item)">
+                  <i :class="['icon-'+more.action]"></i>
                   <span>{{more.title}}</span>
                 </div>
               </div>
@@ -83,6 +85,7 @@
   import woshenpide from '../../../assets/image/approvals/woshenpide.png'
   import chaosongwode from '../../../assets/image/approvals/chaosongwode.png'
   import zanbuchuli from '../../../assets/image/approvals/zanbuchuli.png'
+  import {Dialog} from 'vant'
 
   export default {
     name: "index",
@@ -92,10 +95,10 @@
         mainHeight: '',
         //加载是否结束
         fullLoading: {
-          load1: false,
-          load2: false,
-          load3: false,
-          load4: false,
+          load1: true,
+          load2: true,
+          load3: true,
+          load4: true,
         },
         // 头部切换
         approvalTerm: [
@@ -255,17 +258,12 @@
       }
     },
     mounted() {
-      for (let i = 1; i < 5; i++) {
-        if (this.tabs.tab !== String(i)) {
-          this.onSearch(i);
-        }
-      }
+      console.log(this.tabs);
     },
     activated() {
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
       this.mainHeight = this.mainListHeight((approvalTop + mainTop));
-      this.onSearch(this.tabs.tab);
     },
     watch: {},
     computed: {
@@ -275,8 +273,7 @@
       },
     },
     methods: {
-
-      // 更多操作
+      // 显示 更多操作
       moreOperates(id) {
         if (this.task_ids.includes(id)) {
           let index = this.task_ids.indexOf(id);
@@ -285,38 +282,73 @@
           this.task_ids.push(id);
         }
       },
-      onMoreOperates(val, id) {
-        switch (id) {
-          case '1':
+      // 点击更多 操作
+      onMoreOperates(action, name = '', item = {}) {
+        let params = {}, user_id = '';
+        user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
+        switch (action.action) {
+          case 'preview'://合同预览
+            if (!item.contract_view_url) {
+              this.$prompt('合同地址不存在！');
+              return;
+            }
+            this.$ddSkip(item.contract_view_url);
             break;
-          case '2':
+          case 'again'://重新提交
+            this.handleBulletinType(item);
+            item.task_action = action.route;
+            this.againSave(item);
             break;
-          case '4':
+          case 'modify'://合同修改
+            this.handleBulletinType(item);
+            this.$reviseContract(action, name, item);
             break;
-          case '5':
+          case 'success'://本地签署
+            this.handlerSign(item, user_id, 2);
             break;
-          case '6':
-            this.againSave(val);
+          case 'phone'://客户手机签署
+            this.handlerSign(item, user_id, 1);
             break;
-          case '7':
-            this.againSave(val);
+          case 'contract'://发送电子合同
+            this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
+              if (res) {
+                params = {
+                  fdd_user_id: user_id,
+                  is_number: 1,
+                };
+                this.$httpZll.sendElectronicContract(item.contract_number, params).then(data => {
+
+                })
+              }
+            });
+            break;
+        }
+      },
+      // 签署
+      handlerSign(item, user_id, type) {
+        let title = ['电子合同', ''];
+        let params = {
+          customer_id: user_id,
+          type: type,
+          index: 1,
+        };
+        title[1] = type === 2 ? '是否确认签署电子合同?' : '是否确认发送客户签署电子合同?';
+        this.$signPostApi(item, params, title);
+      },
+      // 报备类型
+      handleBulletinType(item) {
+        switch (item.bulletin_type) {
+          case 'bulletin_collect_basic':
+            this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
+            break;
+          case '':
             break;
         }
       },
       // 重新提交
       againSave(val) {
-        // let btn = JSON.parse(val.outcome);
-        // let data = {};
-        // data.action = 'complete';
-        // data.variables = {};
-        // data.variables.name = btn.variableName;
-        // data.variables.val = 'success';
-        this.againTaskDetail(val.ctl_detail_request_url, val).then(_ => {
-          if (val.bm_detail_request_url) {
-            this.againDetailRequest(val.bm_detail_request_url, val, 'again');
-          } else {
-            this.routerLink(val.task_action);
-          }
+        this.againTaskDetail(val).then(_ => {
+          this.againDetailRequest(val, 'again');
         });
       },
       // 数据列表
@@ -328,8 +360,9 @@
         this.paramsHandle(tab, status);
       },
       // 报备详情
-      routerLinkDetail(val) {
-        this.routerLink('/approvalDetail', val);
+      routerLinkDetail(item) {
+        this.$store.dispatch('bulletin_type', {bulletin: item.bulletin_type});
+        this.routerLink('/approvalDetail', item);
       },
       // 接口配置
       apiHandle(tab, status) {
@@ -340,12 +373,10 @@
           case '2':
             switch (status) {
               case 0:
+                this.urlApi = 'runtime/process-instances';
+                break;
               case 1:
-                if (status === 0) {
-                  this.urlApi = 'runtime/process-instances';
-                } else {
-                  this.urlApi = 'history/process-instances';
-                }
+                this.urlApi = 'history/process-instances';
                 break;
               case 2:
                 this.urlApi = 'runtime/tasks';
@@ -368,20 +399,17 @@
         }
       },
       // params 配置
-      paramsHandle(tab, status) {
+      paramsHandle(tab, status, req) {
         this.apiHandle(tab, status);
         switch (tab) {
           case '1':
-            this.params['params' + tab] = {};
             this.params['params' + tab] = {
               page: 1,
               // assignee: '69',//登陆人
-              processDefinitionKey: 'MG-BulletinApproval',//市场部
+              taskDefinitionKeyIn: approvalSearch.approvals1.join(','),
               category: 'approval',
+              finished: Boolean(status)
             };
-            if (status === 1) {
-              this.params['params' + tab].finished = Boolean(status)
-            }
             break;
           case '2':
             switch (status) {
@@ -390,15 +418,16 @@
                 this.params['params' + tab] = {
                   page: 1,
                   // taskOwner: '69',//登陆人
-                  processDefinitionKey: 'MG-BulletinApproval',//市场部
+                  processDefinitionKey: 'MG-BulletinApproval',
                   // processInstanceName: 'Collect',//区分报备类型
+                  finished: Boolean(status),
                 };
                 break;
               case 2:
                 this.params['params' + tab] = {
                   page: 1,
                   // assignee: '69',//登陆人
-                  taskDefinitionKey: 'SignEC',
+                  taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
                   // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
@@ -406,7 +435,7 @@
                 this.params['params' + tab] = {
                   page: 1,
                   cancelled: true,//待重签
-                  taskDefinitionKey: 'InputBulletinData',
+                  taskDefinitionKeyIn: approvalSearch.approvals23.join(','),
                   active: true,
                   // processInstanceName: 'Collect',//区分报备类型
                 };
@@ -422,13 +451,14 @@
             };
             break;
         }
+        if (req) return;
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 滚动加载
       scrollLoad(val) {
         let tab = this.tabs.tab;
         let status = this.tabs.status;
-        this.apiHandle(tab, status);
+        this.paramsHandle(tab, status, 'break');
         if (!val) {
           this.params['params' + tab].page = 1;
         } else {
@@ -441,6 +471,7 @@
       },
       // 列表
       getApproval(url, params, tab) {
+        this.task_ids = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
@@ -449,14 +480,8 @@
           if (!twoLevel) {
             this.paging['paging' + tab] = res.total;
           }
-          let task = ['task_action', 'house_address', 'ctl_detail_request_url', 'bm_detail_request_url', 'outcome'];
-          let data = this.groupHandlerListData(res.data, task);
-          for (let item of data) {
-            if (item.outcome) {
-              item.outcome = JSON.parse(item.outcome);
-              console.log(item.outcome);
-            }
-          }
+          let data = this.groupHandlerListData(res.data);
+          this.outcomes(data, this.tabs);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;
           } else {
@@ -464,7 +489,50 @@
               this.approvalList['list' + tab]['data' + twoLevel].push(item);
             }
           }
-        })
+        });
+      },
+      // 操作按钮处理
+      outcomes(data, tabs) {
+        if (tabs.tab === '2') {
+          for (let item of data) {
+            if (tabs.status === 1) {
+              item.outcome = {
+                outcomeOptions: [{
+                  title: '合同预览',
+                  action: 'preview',
+                }, {
+                  title: '发送电子合同',
+                  action: 'contract',
+                }],
+              };
+            }
+            if (tabs.status === 2) {
+              if (item.outcome) {
+                let data = [
+                  {
+                    title: '合同预览',
+                    action: 'preview',
+                  },
+                  {
+                    title: '客户手机签署',
+                    action: 'phone',
+                  },
+                ];
+                item.outcome = JSON.parse(item.outcome);
+                item.outcome.outcomeOptions = data.concat(item.outcome.outcomeOptions);
+              }
+            }
+            if (tabs.status === 3) {
+              item.outcome = {
+                outcomeOptions: [{
+                  title: '重新提交',
+                  action: 'again',
+                  route: item.task_action,
+                }],
+              };
+            }
+          }
+        }
       },
       // 头部切换
       changeApproval(val) {
@@ -477,11 +545,11 @@
         if (tab === '4') {
           this.urlApi = 'runtime/process-instances';
         }
+        this.approvalList['list' + tab]['data' + status] = [];
         this.paramsHandle(tab, status);
       },
       // 二级切换
       tabsTag(status) {
-        this.task_ids = [];
         let tab = this.tabs.tab;
         if (this.tabs.status === status) return;
         this.tabs.status = status;
@@ -504,26 +572,33 @@
     .approvalTop {
       background: #E6F4F9;
       border-top: .16rem solid #F8F8F8;
+
       .top1 {
         padding-left: .3rem;
         @include flex();
+
         p {
           margin-top: -.06rem;
           width: 1.4rem;
           height: .5rem;
         }
+
         .p1 {
           @include approvalsImg('yewulei');
         }
+
         .p2 {
           @include approvalsImg('xingzhenglei');
         }
       }
+
       ul {
         padding: .3rem .2rem;
+
         li {
           @include flex('flex-center');
           flex-direction: column;
+
           p {
             width: 1rem;
             height: 1rem;
@@ -532,12 +607,15 @@
         }
       }
     }
+
     .main {
       .mainTop {
         padding: .2rem .36rem;
+
         p {
           position: relative;
           margin-right: .36rem;
+
           span {
             position: absolute;
             top: -.15rem;
@@ -552,34 +630,42 @@
             background-color: #F4511E;
           }
         }
+
         i {
           width: .5rem;
           height: .5rem;
           @include bgImage('../../../assets/image/common/searchblue.png');
         }
       }
+
       .mainContent {
         background: #f8f8f8;
+
         .contentList {
           position: relative;
           margin: .2rem .3rem;
           @include radius(.06rem);
           overflow: hidden;
+
           .leftShift {
             transform: translateX(-60%);
           }
+
           .listUp {
             position: relative;
             z-index: 2;
             padding: .3rem;
             background-color: #FFFFFF;
             @include transition(transform .3s);
+
             .listTitle {
               @include ellipsis;
             }
+
             .listMiddle {
               margin: .12rem 0 .48rem;
               @include flex('items-bet');
+
               p {
                 font-size: .26rem;
                 padding: .12rem .2rem;
@@ -587,15 +673,19 @@
                 color: #4570FE;
                 background-color: rgba(69, 112, 254, .1);
               }
+
               div {
                 @include flex('items-center');
+
                 b {
                   width: .54rem;
                   height: .54rem;
+
                   img {
                     @include radius(50%);
                   }
                 }
+
                 span {
                   margin-left: .12rem;
                   font-size: .28rem;
@@ -603,28 +693,35 @@
                 }
               }
             }
+
             .listBottom {
               @include flex('items-around');
+
               div {
                 width: 100%;
                 @include flex('items-center');
+
                 i {
                   width: .4rem;
                   height: .4rem;
                   margin-right: .1rem;
                   background-color: #CF2E33;
+
                   img {
                     @include radius(50%);
                   }
                 }
+
                 .icon-1 {
                   @include approvalsImg('daishenhe');
                 }
+
                 .icon-2 {
                   @include approvalsImg('yidenghou');
                 }
               }
             }
+
             .moreOperate {
               position: absolute;
               top: 0;
@@ -635,6 +732,7 @@
               background-size: 114% 100%;
               background-position: center left;
             }
+
             .approvalStatus {
               position: absolute;
               right: 0;
@@ -642,13 +740,16 @@
               width: 1.3rem;
               height: 1.3rem;
             }
+
             .publish {
               @include approvalsImg('yitongguo');
             }
+
             .reject {
               @include approvalsImg('yijujue');
             }
           }
+
           .listDown {
             position: absolute;
             z-index: 1;
@@ -656,59 +757,71 @@
             bottom: 0;
             right: 0;
             left: 40%;
-            padding: .2rem 0 .2rem .2rem;
+            padding: .2rem;
             @include flex('flex-center');
             background-color: #D8D8D8;
             flex-wrap: wrap;
+
             div {
               width: 50%;
-              padding-right: .15rem;
               @include flex('items-center');
+
               i {
                 min-width: .33rem;
                 max-width: .33rem;
                 height: .33rem;
                 margin-right: .1rem;
               }
-              .icon-1 {
+
+              .icon-preview {
                 @include approvalsImg('hetongyulan');
               }
-              .icon-2 {
-                @include approvalsImg('hetongyulan');
-              }
-              .icon-4 {
+
+              .icon-success {
                 @include approvalsImg('bendiqianshu');
               }
-              .icon-5 {
+
+              .icon-phone {
                 @include approvalsImg('kehushoujiqianshu');
               }
-              .icon-6 {
+
+              .icon-modify {
                 @include approvalsImg('xiugaihetong');
               }
-              .icon-7 {
-                @include approvalsImg('hetongyulan');
+
+              .icon-again {
+                @include approvalsImg('chongxintijiao');
               }
+
+              .icon-contract {
+                @include approvalsImg('fasongdianzihetong');
+              }
+
               span {
                 white-space: nowrap;
                 font-size: .24rem;
               }
             }
-            .lessThan2 {
+
+            .listDown2 {
               width: 100%;
               padding-left: 30%;
             }
           }
         }
       }
+
       .noMore, .noData {
         @include flex('flex-center');
         width: 100%;
         padding: .2rem 0;
       }
+
       .noData {
         height: 8rem;
       }
     }
+
     .hover {
       color: #4570FE;
     }

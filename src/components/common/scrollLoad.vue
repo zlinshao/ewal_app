@@ -22,6 +22,7 @@
     mounted() {
     },
     activated() {
+      this.onRefresh();
     },
     watch: {
       disabled(val) {

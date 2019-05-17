@@ -2,14 +2,16 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Redirect from '@/components/redirect.vue'
 import HomePage from '@/components/index.vue'
+import CloseDD from '@/components/closeDD.vue'
 
 // 收房合同
 import CollectReport from '@/components/pages/collectReport/index.vue'//收房
 import ToBeDone from '@/components/pages/toBeDone/index.vue'//市场部待办
 import ToBeDoneList from '@/components/pages/toBeDoneList/index.vue'//所有待办
+import DatumRecord from '@/components/pages/toBeDoneList/addRecord/datumRecord.vue'//增加资料跟进记录
 import PunchClock from '@/components/pages/punchClock/index.vue'//待办
-// import GoSignContract from '@/components/pages/punchClock/goSignContract.vue'//去签署
-import DeliveryReceipt from '@/components/pages/deliveryReceipt/index.vue'//交接
+// import GoSignContract from '@/components/pages/punchClock/finish.vue'//去签署
+import DeliveryReceipt from '@/components/pages/toBeDoneList/deliveryReceipt/index.vue'//交接单
 import Approvals from '@/components/pages/approvals/index.vue'//审批
 import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
 import CreatedTask from '@/components/pages/createdTask/index.vue'//新建 带看任务
@@ -42,6 +44,13 @@ export default new Router({
       hidden: false,
       component: Redirect,
       meta: {title: '验证中', index: 0},
+    },
+    {
+      path: '/closeDD',
+      name: '正在跳转...',
+      hidden: false,
+      component: CloseDD,
+      meta: {title: '正在跳转...', index: 0},
     },
     {
       path: '/index',
@@ -100,6 +109,12 @@ export default new Router({
       name: '收房交接',
       component: DeliveryReceipt,
       meta: {title: '收房交接', index: 6},
+    },
+    {
+      path: '/datumRecord',
+      name: '增加资料跟进记录',
+      component: DatumRecord,
+      meta: {title: '增加资料跟进记录', index: 3},
     },
     {
       path: '/toBeDone',

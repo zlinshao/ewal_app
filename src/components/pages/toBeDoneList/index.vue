@@ -17,10 +17,10 @@
         <!--未完成-->
         <div class="noFinish" v-if="tabs === '1'">
           <scroll-load :name="'flex-warp'" @getLoadMore="scrollLoad" :disabled="!fullLoading['load1']">
-            <li class="noFinishMain" v-for="(item,index) in finishList['list1']" @click="goOperates(item,'polishing')">
+            <li class="noFinishMain" v-for="(item,index) in finishList['list1']" @click="goOperates(item,'noFinish')">
               <div :class="['main-'+index,listLength.includes(index)?'mainTransform':'']">
-                <p>发货的是卡了和卡拉恢复扩大分开了</p>
-                <div class="toBeDoneType">物品补给跟进</div>
+                <p>{{item.title}}</p>
+                <div class="toBeDoneType">{{item.name}}</div>
                 <div class="progress">
                   <div :style="{'height': '30%'}">
                     <span>30<b>%</b></span>
@@ -28,8 +28,8 @@
                 </div>
                 <div class="surplus">剩余</div>
                 <div>
-                  <span class="unit">24<b>h</b></span>
-                  <span class="unit">45<b>m</b></span>
+                  <span class="unit">{{item.due_date_hours}}<b>h</b></span>
+                  <span class="unit">{{item.due_date_minutes}}<b>m</b></span>
                 </div>
               </div>
             </li>
@@ -44,8 +44,7 @@
         <!--已完成-->
         <div class="finish" v-if="tabs === '2'">
           <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading['load2']">
-            <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'goSign')">
-              <!--@click="clickBtn(item.task_id)"-->
+            <li class="finishMain" v-for="item in finishList['list2']" @click="goOperates(item,'finish')">
               <div>
                 <div class="finish1">
                   <h1>{{item.title}}</h1>
@@ -73,6 +72,7 @@
     <div class="commonFooterTag">
       <p v-for="item in 4" :class="['p-'+item]" @click="footerTag(item)"></p>
     </div>
+
     <!--右侧栏-->
     <div class="addToBeDone" @click="showAddPopup = true"></div>
     <van-popup v-model="showAddPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
@@ -82,9 +82,9 @@
       </p>
       <div class="mainModule">
         <div class="module" :class="[' module'+(index+1)]" v-for="(item,index) in addShowList">
-          <div @click="routerLink(item.url)">
+          <div @click="createRouter(item)">
             <i></i>
-            <p>{{item.title}}</p>
+            <p>{{item.text}}</p>
           </div>
         </div>
       </div>
@@ -125,36 +125,36 @@
         </p>
       </div>
     </van-popup>
-    <!--是否去签约-->
-    <go-sign-contract :module="goSignModule" :detail="moduleDetail" @close="hiddenGoSign"></go-sign-contract>
-    <!--补齐-->
-    <Polishing :module="polishingModule" :detail="polishingDetail" @close="hiddenPolishing"></Polishing>
+    <!--未完成-->
+    <no-finish :module="noFinishModule" :detail="noModuleDetail" @close="noFinisHidden"></no-finish>
+    <!--已完成-->
+    <finish :module="finishModule" :detail="moduleDetail" @close="finisHidden"></finish>
   </div>
 </template>
 
 <script>
-  import GoSignContract from './components/goSignContract.vue';
-  import Polishing from './components/polishing.vue';
+  import NoFinish from './components/noFinish.vue';
+  import Finish from './components/finish.vue';
 
   export default {
     name: "index",
-    components: {GoSignContract, Polishing},
+    components: {NoFinish, Finish},
     data() {
       return {
         //加载是否结束
         fullLoading: {
-          load1: false,
-          load2: false,
+          load1: true,
+          load2: true,
         },
         mainHeight: '',// 滚动 部分高度
         listLength: [],//中间上移 index
         finishTop: [
           {
             id: '1',
-            text: "未完成"
+            text: '未完成'
           }, {
             id: '2',
-            text: "已完成"
+            text: '已完成'
           },
         ],
         // 列表
@@ -184,22 +184,18 @@
         showAddPopup: false,
         addShowList: [
           {
-            url: '/createdTask',
-            title: '收房带看',
-            icon: ''
+            id: 'CollectTakeLook',
+            text: '收房待看',
           }, {
-            url: '',
-            title: '租房带看',
-            icon: ''
+            id: 'RentTakeLook',
+            text: '租房待看',
           }, {
-            url: '',
-            title: '保洁任务',
-            icon: ''
+            id: 'HouseCleaning',
+            text: '保洁任务',
           }, {}, {
-            url: '',
-            title: '维修任务',
-            icon: ''
-          },
+            id: 'HouseRepair',
+            text: '维修任务',
+          }
         ],
         // 筛选
         searchHigh: false,
@@ -298,28 +294,30 @@
             },
           ]
         },
-        //是否去签约
-        goSignModule: false,
+        // 未完成
+        noFinishModule: false,
+        noModuleDetail: {},
+        //已完成
+        finishModule: false,
         moduleDetail: {},
-        // 补齐
-        polishingModule: false,
-        polishingDetail: {},
-        path: '',
       }
     },
     created() {
       this.resetting();
     },
     mounted() {
-      this.tabs === '1' ? this.getFinishList('2') : this.getFinishList('1');
+
     },
     activated() {
       let listTop = this.$refs.listTop.offsetHeight;
       this.mainHeight = this.mainListHeight(listTop);
-      this.path = this.$route.query.path || '';
       let tab = this.tabs;
       this.close_(tab);
-      this.getFinishList(tab);
+      this.getQueryDetail('1');
+      this.getQueryDetail('2');
+      if (tab === '2') {
+        this.getFinishList('1');
+      }
     },
     watch: {},
     computed: {
@@ -328,20 +326,21 @@
       }
     },
     methods: {
-      getQueryDetail() {
-        let query = this.$route.query;
+      // 新建带看
+      createRouter(val) {
+        if (val.id) {
+          this.routerLink('/createdTask', val);
+        }
       },
-      // 生成电子收据
-      clickBtn(task_id) {
-        let data = {}, postData = {};
-        postData.variables = [];
-        data.name = '';
-        data.value = '';
-        postData.variables.push(data);
-        postData.action = 'complete';
-        this.$httpZll.finishBeforeTask(task_id, postData).then(_ => {
-          this.onSearch();
-        });
+      getQueryDetail(tab) {
+        let search = [];
+        for (let item of Object.keys(approvalSearch)) {
+          for (let val of approvalSearch[item]) {
+            search = search.concat(val);
+          }
+        }
+        search = this.myUtils.arrayWeight(search).join(',');
+        this.params['params' + tab].taskDefinitionKeyNotIn = search;
       },
       // 已完成 / 未完成 切换
       changeTop(val) {
@@ -349,12 +348,19 @@
         if (this.tabs === val) return;
         this.resetting();
         this.$store.dispatch('done_tabs', val);
+        if (!this.finishList['list' + val].length) {
+          this.getFinishList(val);
+        }
         // this.finishList['list' + val] = [];
         // this.params['params' + val].page = 1;
         // this.getFinishList(val);
       },
       // 清空 列表
       close_(tab) {
+        this.fullLoading = {
+          load1: true,
+          load2: true,
+        };
         this.params['params' + tab].page = 1;
         this.finishList['list' + tab] = [];
       },
@@ -371,16 +377,20 @@
         this.getFinishList(this.tabs);
       },
       // 请求列表
-      getFinishList(tab) {
+      getFinishList(tab, close = '') {
+        let url = '';
         this.fullLoading['load' + tab] = true;
         let params = this.params['params' + tab];
-        // let url = tab === '1' ? 'runtime/tasks' : 'history/tasks';
-        let url = 'runtime/tasks';
-        this.$httpZll.getToBeDoneListApi(url, params).then(res => {
+        if (tab === '1') {
+          url = 'runtime/tasks';
+        } else {
+          url = 'history/tasks';
+          // params.finished = true;
+        }
+        this.$httpZll.getToBeDoneListApi(url, params, close).then(res => {
           this.fullLoading['load' + tab] = false;
           this.total['total' + tab] = res.total || 0;
-          let task = ['title', 'flow_type', 'task_title', 'task_action', 'ctl_detail_request_url', 'rtl_detail_request_url', 'outcome'];
-          let data = this.groupHandlerListData(res.data, task);
+          let data = this.groupHandlerListData(res.data);
           if (params.page === 1) {
             this.finishList['list' + tab] = data;
           } else {
@@ -401,52 +411,43 @@
       // 列表事件
       goOperates(val, type) {
         switch (type) {
-          case 'goSign':
-            this.goSignModule = true;
-            this.moduleDetail = val;
+          case 'noFinish':
+            switch (val.taskDefinitionKey) {
+              case 'CompleteData':
+              case 'CompleteAsset':
+                this.noFinishModule = true;
+                this.noModuleDetail = val;
+                break;
+              case 'InputHandoverOrder'://交接单
+                this.$store.dispatch('all_detail', val);
+                this.routerLink('/deliveryReceipt');
+                break;
+            }
             break;
-          case 'polishing':
-            this.polishingModule = true;
-            this.polishingDetail = val;
+          case 'finish':
+            this.finishModule = true;
+            this.moduleDetail = val;
             break;
         }
       },
-      // 是否签约
-      hiddenGoSign(val) {
+      // 未完成 模态框
+      noFinisHidden(val) {
         this.cancel();
         if (val === 'again') {
           this.scrollLoad(false);
         }
       },
-      // 补齐
-      hiddenPolishing(val) {
+      // 已完成 模态框
+      finisHidden(val) {
         this.cancel();
         if (val !== 'close') {
-
         }
-      },
-      // 下个任务
-      nextTask(id) {
-        let params = {
-          taskDefinitionKey: 'InputBulletinData',
-          rootProcessInstanceId: id,
-        };
-        this.$httpZll.getNewTaskId(params).then(res => {
-          // if (!res.data.length) {
-          //   this.$prompt('未找到签约信息,请联系产品经理！');
-          //   return;
-          // }
-          // this.allDetail.task_id = res.data[0].id;
-          // this.$store.dispatch('bulletin_draft', this.allDetail);
-          // this.routerReplace('/collectReport');
-          // this.$emit('close');
-        });
       },
       // 取消
       cancel() {
         this.searchHigh = false;
-        this.goSignModule = false;
-        this.polishingModule = false;
+        this.noFinishModule = false;
+        this.finishModule = false;
       },
       // 筛选条件
       checkChoose(val, key) {
@@ -457,7 +458,6 @@
           this.checkChooseCommon(val, this.highParams[key]);
         }
         this.highParams = Object.assign({}, this.highParams);
-        console.log(this.highParams)
       },
       // 搜索按钮
       searchBtn(val) {
@@ -469,7 +469,6 @@
             this.resetting();
             break;
           default:
-            // this.params['params'+this.tabs] = this.highParams;
             this.getFinishList(this.tabs);
             this.cancel();
             break;
@@ -488,9 +487,9 @@
         switch (val) {
           case 1:
             this.routerReplace('/index');
-            if (this.path === 'index') {
-              this.$router.go(-1);
-            }
+            break;
+          case 3:
+            this.routerReplace('/houseResource');
             break;
         }
       },

@@ -2,6 +2,16 @@ const dictArticle = {1: '齐全', 2: '缺一', 3: '缺两', 4: '缺三', 5: '缺
 const zeroAndOne = {1: '补齐', 0: '不补齐'};
 const haveAndNoHave = {1: '有', 0: '没有'};
 const oneYesZeroNo = {1: '是', 0: '否'};
+const valueNumber = {
+  value_0: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+  value_1: {0: '无损坏', 1: '损坏'},
+  value_2: {0: ''},
+};
+const valueHave = {
+  value_0: {0: '没有', 1: '有'},
+  value_1: {0: '无损坏', 1: '损坏'},
+  value_2: {0: ''},
+};
 
 dicties = {
   // 省
@@ -38,7 +48,7 @@ dicties = {
   // 窗帘情况
   curtain: dictArticle,
   // 家电是否齐全
-  is_fill: zeroAndOne,
+  is_fill: {1: '齐全', 0: '不齐全'},
   // 房东是否补齐
   is_lord_fill: zeroAndOne,
   // 是否有暖气
@@ -83,20 +93,145 @@ dicties = {
   cleaning_type: {1: '自己保洁', 2: '第三方保洁'},
   // 维修类型
   repair_type: {1: '自己维修', 2: '第三方维修'},
+  // 交接单 字典
+  // 门锁类型
+  gate_lock: {
+    value_0: {1: '普通锁', 2: '密码锁', 3: '指纹锁'},
+    value_1: {0: '无损坏', 1: '损坏'},
+    value_2: {0: ''},
+  },
   // 钥匙
-  key_arr: [0, 1, 2, 3, 4, 5, 6],
-  // 纱窗
-  shachuang: {1: '合金', 2: '塑钢', 3: '层铁窗', 4: '纱窗'},
-  // 客厅灯
-  drawing_light: {
-    value_0: ['损坏', '无损'],
-    value_1: ['1台', '2台', '3台', '4台', '5台', '6台', '7台'],
-    value_2: ['共1台', '共2台', '共3台', '共4台', '共5台', '共6台', '共7台'],
+  key: {
+    value_0: {1: '1把', 2: '2把', 3: '3把', 4: '4把', 5: '5把'},
+    value_1: {0: '无损坏', 1: '损坏'},
+    value_2: {0: ''},
   },
   // 彩电
-  television: {
-    value_0: ['损坏', '无损'],
-    value_1: ['1台', '2台', '3台', '4台', '5台', '6台', '7台'],
-    value_2: ['共1台', '共2台', '共3台', '共4台', '共5台', '共6台', '共7台'],
+  tv: {
+    value_0: {1: '普通电视', 2: '智能电视', 3: '投影', 4: '4K超高清曲面', 5: 'OLED电视HDR'},
+    value_1: {1: '1台', 2: '2台', 3: '3台', 4: '4台', 5: '5台'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 窗户
+  screen_window: {
+    value_0: {1: '铝合金', 2: '塑钢', 3: '铁窗', 4: '纱窗'},
+    value_1: {0: '无损坏', 1: '损坏'},
+    value_2: {0: ''},
+  },
+  // 遥控器
+  remote_control: valueHave,
+  // 沙发
+  sofa: {
+    value_0: {1: '皮质沙发', 2: '布艺沙发', 3: '木质沙发'},
+    value_1: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 茶几
+  tea_table: valueNumber,
+  // 冰箱
+  refrigerator: {
+    value_0: {1: '单门冰箱', 2: '双门冰箱', 3: '三门冰箱', 4: '双开门冰箱', 5: '十字对开门冰箱', 6: '多门冰箱'},
+    value_1: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 椅子
+  chair: {
+    value_0: {1: '1把', 2: '2把', 3: '3把', 4: '4把', 5: '5把'},
+    value_1: {0: '无损坏', 1: '损坏'},
+    value_2: {0: ''},
+  },
+  // 餐桌
+  dining_table: {
+    value_0: {1: '木制餐桌', 2: '大理石餐桌', 3: '玻璃餐桌'},
+    value_1: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 客厅灯
+  light: {
+    value_0: {1: '吸顶灯', 2: 'LED灯', 3: '节能灯'},
+    value_1: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 热水器
+  water_heater: {
+    value_0: {1: '电热水器', 2: '燃气热水器', 3: '太阳能热水器', 4: '其他'},
+    value_1: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 浴霸
+  bath_heater: {
+    value_0: {1: '风暖型浴霸', 2: '灯暖型浴霸', 3: '灯风双暖型浴霸', 4: '智能浴霸', 5: '壁挂浴霸', 6: '凉霸', 7: '其他'},
+    value_1: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 洗衣机
+  washer: {
+    value_0: {1: '滚筒洗衣机', 2: '波轮洗衣机'},
+    value_1: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 燃气灶
+  gas_stove: {
+    value_0: {1: '液化气燃气灶', 2: '天然气燃气灶'},
+    value_1: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 橱柜
+  sideboard: valueNumber,
+  // 洗菜池
+  washing_pool: valueNumber,
+  // 水龙头
+  faucet: valueNumber,
+  // 微波炉
+  microwave_oven: valueNumber,
+  // 厨房灯
+  kitchen_light: valueNumber,
+  // 阳台灯
+  balcony_light: valueNumber,
+  // 卫生间灯
+  bathroom_light: valueNumber,
+  // 浴霸灯
+  bath_heater_light: valueNumber,
+  // 洗面池
+  wash_basin: valueNumber,
+  // 马桶盖
+  toilet_lid: valueHave,
+  // 晾衣架
+  drying_rack: valueHave,
+  // 床
+  delivery_bed: valueNumber,
+  // 床垫
+  mattress: valueNumber,
+  // 衣柜
+  delivery_wardrobe: valueNumber,
+  // 窗帘
+  delivery_curtain: valueNumber,
+  // 空调
+  air_conditioning: {
+    value_0: {1: '壁挂式空调', 2: '立柜式空调'},
+    value_1: {1: '1个', 2: '2个', 3: '3个', 4: '4个', 5: '5个'},
+    value_2: {0: '无损坏', 1: '损坏'},
+    value_3: {0: ''},
+  },
+  // 空调遥控器
+  air_conditioner_remote: valueNumber,
+  // 电视遥控器
+  tv_remote_control: valueNumber,
+  // 书桌
+  desk: valueNumber,
+  // 门锁钥匙
+  door_lock_key: {
+    value_0: {1: '1把', 2: '2把', 3: '3把', 4: '4把', 5: '5把'},
+    value_1: {0: '无损坏', 1: '损坏'},
+    value_2: {0: ''},
   },
 };

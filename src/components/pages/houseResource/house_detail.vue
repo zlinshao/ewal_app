@@ -2,7 +2,8 @@
   <div id="house_detail">
     <div>
       <div class="main-img">
-        <img :src="detail.house_detail.cover" alt="" v-if="detail && detail.house_detail && detail.house_detail.cover" @click="handleLookPics(detail)">
+        <img :src="detail.house_detail.cover" alt="" v-if="detail && detail.house_detail && detail.house_detail.cover"
+             @click="handleLookPics(detail)">
         <img src="./detail.png" v-else alt="none" @click="handleLookPics(detail)">
       </div>
       <div class="main-content scroll_bar" ref="house_main" :style="mainHeight">
@@ -21,7 +22,9 @@
           <!--标签-->
           <div class="tags flex">
             <a v-if="detail && detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
-            <a class="tag tag-quality" v-if="detail && detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{ detail && detail.house_detail && detail.house_detail.warning_current_days }}</a>
+            <a class="tag tag-quality"
+               v-if="detail && detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{ detail &&
+              detail.house_detail && detail.house_detail.warning_current_days }}</a>
           </div>
           <!--属性-->
           <div class="property">
@@ -64,7 +67,8 @@
                 <a class="label">门锁</a><span class="val">{{ detail && detail.lock_type || '/'}}</span>
               </van-col>
               <van-col span="12">
-                <a class="label">有效时长</a><span class="val">{{ detail && detail.month }}月{{ detail && detail.day }}天</span>
+                <a class="label">有效时长</a><span
+                class="val">{{ detail && detail.month }}月{{ detail && detail.day }}天</span>
               </van-col>
             </van-row>
             <van-row>
@@ -80,12 +84,14 @@
           <div class="configuration">
             <div class="flex" @click="handleLookAssociate">
               <h2>房屋配置</h2>
-              <a>查看交接单<van-icon name="arrow" style="vertical-align: middle"></van-icon></a>
+              <a>查看交接单
+                <van-icon name="arrow" style="vertical-align: middle"></van-icon>
+              </a>
             </div>
             <div class="furniture">
               <van-row>
-                <van-col span="6" v-for="tmp in 8" :key="tmp">
-                  <div class="furniture" :class="['fur' + tmp]"></div>
+                <van-col span="6" v-for="tmp in house_config" :key="tmp.id">
+                  <div class="furniture" :class="{ ['fur' + tmp.id]: true, 'show_furniture': !tmp.val }"></div>
                 </van-col>
               </van-row>
             </div>
@@ -100,14 +106,14 @@
           <!--同小区成交-->
           <div class="common_city">
             <h3>同小区成交</h3>
-            <a class="clinch-btn">最新3套成交</a>
+            <a class="clinch-btn">最新{{ village_list.length > 0 && village_list.length }}套成交</a>
             <van-steps direction="vertical" :active="-1">
-              <van-step v-for="item in 5" :key="item">
+              <van-step v-for="item in village_list" :key="item.id">
                 <div class="flex house-clinch">
-                  <h3>仙居雅苑1-101</h3>
-                  <a>20000元/月</a>
+                  <h3>{{ item.name }}</h3>
+                  <a>{{ item.price }}元/月</a>
                 </div>
-                <p class="type-clinch">100㎡ 2室1厅1卫</p>
+                <p class="type-clinch">{{ item.area }} {{ item.hk }}</p>
               </van-step>
             </van-steps>
           </div>
@@ -145,7 +151,18 @@
         server: globalConfig.server_market,
         detail: '',
         mainHeight: '',
-        map: null
+        map: null,
+
+        village_list: [], //同小区房源
+
+        house_config: [
+          {id: 1,key: 'house_config_refrigerator',label: '冰箱',val: 3},
+          {id: 2,key: 'house_config_tv',label: '电视',val: ''},
+          {id: 3,key: 'house_config_airc',label: '空凋',val: 1},
+          {id: 4,key: 'house_config_microwave',label: '微波炉',val: ''},
+          {id: 5,key: 'house_config_washing',label: '洗衣机',val: ''},
+          {id: 6,key: 'house_config_heater',label: '热水器',val: 2},
+        ]
       }
     },
     mounted() {
@@ -156,7 +173,7 @@
     watch: {},
     computed: {},
     methods: {
-      handleInitialMap(position = [],name = '') {
+      handleInitialMap(position = [], name = '') {
         let that = this;
         this.map = new AMap.Map('map-container', {
           resizeEnable: true,
@@ -169,41 +186,44 @@
           map: that.map
         });
         marker.content = name;
-        marker.on('click',markerClick);
-        marker.emit('click',{target: marker});
+        marker.on('click', markerClick);
+        marker.emit('click', {target: marker});
         this.map.add(marker);
+
         function markerClick(e) {
           infoWindow.setContent(e.target.content);
           infoWindow.open(that.map, e.target.getPosition());
         }
       },
       handleLookPics(detail) {
-        this.routerLink('/house_image',{
+        this.routerLink('/house_image', {
           image: JSON.stringify(detail.album_photo)
         });
       },
       handleGoContract() {
-        this.routerLink('/houseContract',this.$route.query);
+        this.routerLink('/houseContract', this.$route.query);
       },
       handleLookAssociate() {
-        this.routerLink('/houseProperty');
+        this.routerLink('/houseProperty',this.$route.query);
       },
       handleGetHouseDetail() {
         if (!this.$route.query) {
           return false;
         }
         var house_id = this.$route.query.id;
-        this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`,{},'获取中...').then(res => {
+        this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
           if (res.code === 200) {
             this.detail = res.data;
+            this.village_list = res.data.village_data;
             var location = [];
             location[0] = this.detail.location && this.detail.location.longitude;
             location[1] = this.detail.location && this.detail.location.latitude;
             this.$nextTick(() => {
-              this.handleInitialMap(location,this.detail.house_name);
+              this.handleInitialMap(location, this.detail.house_name);
             })
           } else {
             this.house_detail = '';
+            this.village_list = [];
           }
         })
       },
@@ -217,6 +237,7 @@
   @mixin houseBg($m) {
     @include bgImage('../../../assets/image/houseResource/' + $m);
   }
+
   #house_detail {
     > div {
       .main-img {
@@ -226,14 +247,14 @@
       .main-content {
         position: relative;
         top: -.3rem;
-        border-radius: 15px 15px  0 0;
+        border-radius: 15px 15px 0 0;
         z-index: 1;
         background-color: white;
         > div {
           padding: .3rem .3rem 0 .3rem;
           .header {
             position: relative;
-            h1,h3 {
+            h1, h3 {
               font-weight: bold;
               font-family: 'dingzitiblod';
             }
@@ -285,7 +306,7 @@
             div.van-col {
               margin: .1rem auto;
             }
-            .label ,.val{
+            .label, .val {
               font-family: 'dingzitiblod';
               font-size: .25rem;
             }
@@ -305,7 +326,7 @@
             > div {
               &:first-child {
                 position: relative;
-                h2,a{
+                h2, a {
                   font-family: 'dingzitiblod';
                 }
                 a {
@@ -337,6 +358,9 @@
                   background: url("../../../assets/image/houseResource/fur#{$i}.png") no-repeat center;
 
                 }
+              }
+              .show_furniture {
+                opacity: .5;
               }
             }
           }
@@ -385,7 +409,7 @@
               color: #9B9B9B;
             }
           }
-          .more-house{
+          .more-house {
             padding: .3rem 0;
             border-bottom: 1px dashed #F2F2F2;
             h3 {
@@ -403,7 +427,7 @@
                 margin-left: .2rem;
                 position: relative;
                 width: calc(100% - 75pt);
-                h4,a,span {
+                h4, a, span {
                   font-family: 'dingzitiblod';
                 }
                 a {

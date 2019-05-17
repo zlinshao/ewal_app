@@ -121,10 +121,10 @@
         highList: [
           {
             id: 'CollectTakeLook',
-            text: '收房待办',
+            text: '收房待看',
           }, {
             id: 'RentTakeLook',
-            text: '租房待办',
+            text: '租房待看',
           }, {
             id: 'HouseCleaning',
             text: '保洁任务',
@@ -418,7 +418,7 @@
               placeholder: '必填 请选择',
               readonly: 'readonly',
               keyName: 'house_id',
-              keyType: '',
+              keyType: [],
               type: 'text',
               picker: 'searchHouse',
               showForm: 'formatData',//picker 显示form 或 formatData
@@ -558,15 +558,14 @@
         searchHouseModule: false,
       }
     },
-    created() {
-      this.resetting();
-    },
     mounted() {
       let taskTop = this.$refs.taskTop.offsetHeight;
       let commonBtn = this.$refs.commonBtn.offsetHeight;
       this.mainHeight = this.mainListHeight((taskTop + commonBtn));
     },
     activated() {
+      let query = this.$route.query;
+      this.checkChoose(query);
     },
     watch: {},
     computed: {},
@@ -575,7 +574,7 @@
       getHouse(val) {
         this.onCancel();
         if (val) {
-          this.form.house_id = val.id;
+          this.form.house_id = [val.id];
           this.formatData.house_id = val.name;
         }
       },
@@ -589,9 +588,9 @@
       },
       // 选择任务类型 show hidden
       checkChoose(item) {
-        this.postShowName = item.text;
-        this.postName = item.id;
-        this.changeTaskType = !this.changeTaskType;
+        this.postName = item.id || 'CollectTakeLook';
+        this.postShowName = item.text || '收房待办';
+        this.changeTaskType = false;
         this.resetting();
       },
       // 图片上传
@@ -737,8 +736,8 @@
           area: "122",
           community_id: 446,
           community_name: "太平北路122号",
-          customer_name: "发送",
-          contact_phone: "12321312",
+          customer_name: "张琳琳",
+          contact_phone: "18052001167",
           property_type: {id: "419", name: "住宅"},
           decorate: {id: "405", name: "毛坯"},
           direction: {id: "1", name: "东"},

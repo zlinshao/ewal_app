@@ -11,11 +11,10 @@
         <div class="mainRadius" :class="['mainRadius'+allReportNum]" ref="main"
              @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
           <div class="justify-around transition" :class="['slide' + slither]" :style="[slitherCss]">
-            <div class="main" :style="[mainWidth]" v-for="(slither,i) in Object.keys(drawSlither)">
+            <div class="main" :style="[mainWidth]" v-for="slither in Object.keys(drawSlither)">
               <!--显示formatData -->
               <div v-if="item.showForm === 'formatData'" v-for="(item,index) in drawSlither[slither]">
                 <!--select 下拉选择-->
-                <div v-if="(item.picker && item.readonly) || item.disabled">
                   <zl-input
                     v-model="formatData[item.keyName]"
                     @focus="choosePicker(item,form[item.keyName])"
@@ -29,7 +28,6 @@
                     <div class="unit" v-if="item.unit">{{item.unit}}</div>
                   </zl-input>
                   <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
-                </div>
               </div>
               <!--显示form -->
               <div v-else>
@@ -56,7 +54,7 @@
                   <label class="labelTitle">{{item.label}}</label>
                   <div class="justify-around">
                     <div v-for="(key,index) in item.value">
-                      <h1 @click="electricalChoose()">
+                      <h1 @click="electricalModule = true">
                         <span :class="['electrical-' + (index + 1)]"></span>
                       </h1>
                       <p>{{form[key.key]}}</p>
@@ -283,7 +281,7 @@
         // searchDepartModule: false,       //部门搜索
         searchConfig: {},
 
-        mainTop: ['房屋信息', '物品信息', '客户信息', '合同信息'],
+        mainTop: [],
         startClientX: 0,
         endClientX: 0,
         slither: 0,
@@ -295,14 +293,10 @@
         allReportNum: 0,//滑动列表数
 
         queryData: {},
-        task_id: '',
       }
     },
-    created() {
-      this.resetDrawing = this.jsonClone(defineCollectReport);
-      this.resetting();
-    },
     activated() {
+      this.bulletin_types(this.bulletinType);
       this.slither = 0;
       this.allReportNum = Object.keys(this.resetDrawing).length;
       let title = this.$refs.title.offsetHeight + 30;
@@ -311,30 +305,31 @@
       this.slitherCss = this.mainListHeight(title);
       this.slitherCss.width = this.allReportNum + '00%';
       this.$prompt('正在加载...', 'send');
-      this.resetting();
       let query = this.$route.query;
       this.queryData = query;
       if (query.revise) {
-        this.task_id = this.bulletinDetail.task_id;
         this.getRevise();
       } else if (query.again) {
-        this.task_id = this.taskDetail.task_id;
         this.againSave();
       } else {
-        this.task_id = this.taskDetail.task_id;
         this.getDraft();
       }
     },
     watch: {
       'form.month'(val) {
-        if (this.form.period_price_way_arr.length === 1) {
+        if (val) {
           this.form.period_price_way_arr[0].period = val;
+
         }
-      }
+      },
     },
     computed: {
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
+      },
+      // 报备类型
+      bulletinType() {
+        return this.$store.state.app.bulletinTypes;
       },
       bulletinDetail() {
         return this.$store.state.app.bulletinPreFill;
@@ -344,6 +339,24 @@
       }
     },
     methods: {
+      // 报备类型
+      bulletin_types(type) {
+        switch (type.bulletin) {
+          case 'bulletin_collect_basic':
+            this.mainTop = ['房屋信息', '物品信息', '客户信息', '合同信息'];
+            this.resetDrawing = this.jsonClone(defineCollectReport);
+            break;
+          case 'bulletin_rent_basic':
+            this.mainTop = ['租房报备'];
+            this.resetDrawing = this.jsonClone(defineRentReport);
+            break;
+          case 'agency':
+            this.mainTop = ['渠道费报备'];
+            this.resetDrawing = this.jsonClone(defineRentReport);
+            break;
+        }
+        this.resetting();
+      },
       // touch 左右切换
       tapStart(event) {
         for (let item of event.touches) {
@@ -375,7 +388,6 @@
         let data = {
           city_id: this.form.community.city,
           version: '1.1',
-          ticket: this.$refs.code.spot_code,
         };
         this.$httpZll.getElectronicContract(data).then(res => {
           this.electronicContractNumber = res.data.number || '';
@@ -438,7 +450,7 @@
           }
           let date = new Date(item.begin_date);
           if (item.begin_date) {
-            item.end_date = this.myUtils.formatAddRem('dd', period, date);
+            item.end_date = this.myUtils.formatAddRem('mm', period, date);
           }
           for (let item of Object.keys(value[0])) {
             if (item !== 'pay_way') {
@@ -535,17 +547,11 @@
             data.mobile = this.form.contact_phone;
             this.$httpZll.customerIdentity(data).then(res => {
               if (res) {
-                if (res.data.customer_id) {
+                if (res.data.fadada_user_id) {
                   this.form.signer = res.data;
                   this.certified();
                 } else {
-                  dd.biz.util.openLink({
-                    url: res.data.data,//要打开链接的地址
-                    onSuccess(result) {
-                    },
-                    onFail(err) {
-                    }
-                  });
+                  this.$ddSkip(res.data.data);
                 }
               }
             });
@@ -575,6 +581,7 @@
             }
           }
         }
+        this.form = Object.assign({}, this.form);
       },
       // 日期选择
       chooseTime(val, date) {
@@ -702,10 +709,6 @@
           this.formatData = show;
         }
       },
-      // 选择 家电
-      electricalChoose() {
-        this.electricalModule = true;
-      },
       // 家电 确认选择
       closeElectrical(val) {
         if (val !== 'close') {
@@ -741,9 +744,11 @@
       },
       // 发布
       saveReport(val) {
-        this.form.type = 1;
         this.form.is_draft = val;
-        this.form.task_id = this.task_id;
+        let bulletin = this.bulletinType;
+        if (bulletin.type) {
+          this.form.type = bulletin.type;
+        }
         // 重置 附属房东变化
         if (this.form.signatory_identity == 1) {
           this.resetChange('subsidiary_customer');
@@ -751,14 +756,17 @@
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
+            this.form.task_id = this.taskDetail.task_id;
+            this.form.process_instance_id = this.taskDetail.process_instance_id;
+            // this.form.spot_code = this.$refs.code.spot_code;
             this.form.spot_code = this.$refs.code.spot_code;
-            this.$httpZll.submitReport(this.form).then(res => {
+            this.$httpZll.submitReport(this.form, bulletin.to).then(res => {
               if (res) {
                 if (val === 1) {
                   this.form.id = res.data.id;
                 } else {
                   this.resetting();
-                  this.$store.dispatch('approval_tabs', {tab: '2', status: false});
+                  this.$store.dispatch('approval_tabs', {tab: '2', status: 0});
                   this.routerReplace('/approvals');
                 }
               }
@@ -771,7 +779,9 @@
           case 3:// 修改
             this.form.is_draft = 0;
             this.form.approved_level = this.bulletinDetail.variableName;
-            this.$httpZll.putReviseReport(this.form).then(res => {
+            this.form.task_id = this.bulletinDetail.task_id;
+            this.form.process_instance_id = this.bulletinDetail.process_instance_id;
+            this.$httpZll.putReviseReport(this.form, bulletin.to).then(res => {
               if (res) {
                 this.resetting();
                 this.$router.go(-1);
@@ -783,17 +793,20 @@
       // 草稿
       getDraft() {
         let params = {};
-        params.to = 'collect';
-        params.type = '1';
-        params.task_id = this.task_id;
+        params.task_id = this.taskDetail.task_id;
+        for (let val of Object.keys(this.bulletinType)) {
+          if (val !== 'bulletin') {
+            params[val] = this.bulletinType[val];
+          }
+        }
         this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
-            // this.handlePreFill(hhhhhhhhhhhh);
+            this.handlePreFill(hhhhhhhhhhhh);
             this.getPunchClockData();
           } else {
             let res = data.data;
             this.form.id = '';//草稿ID
-            // this.form = hhhhhhhhhhhh;
+            this.form = hhhhhhhhhhhh;
             this.handlePreFill(res);
           }
           this.electronicContract();
@@ -983,9 +996,9 @@
         }
         this.form.id = id || '';
         this.form.signer = '';
-        // this.form.bank = '上海浦东发展银行';
-        // this.form.account = '6225212583158743';
-        // this.form.account_name = '贾少君';
+
+        this.form.account = '6225212583158743';
+        this.form.account_name = '贾少君';
       }
     },
   }
@@ -1012,7 +1025,7 @@
       bottom: 0;
       transition: background .3s;
       .bulletinTitle {
-        padding: .1rem .3rem 0;
+        padding: .1rem .36rem 0;
         height: 1.2rem;
         @include flex('items-bet');
         label {
@@ -1021,16 +1034,17 @@
           font-family: 'fangzhengjianti';
         }
         p {
-          width: 30%;
           i {
             display: inline-block;
             width: .2rem;
             height: .2rem;
-            margin-right: .2rem;
+            margin-left: .16rem;
             @include radius(50%);
             background-color: #FFFFFF;
           }
           i.hover {
+            width: .33rem;
+            @include radius(1rem);
             background-color: #4570FE;
           }
         }

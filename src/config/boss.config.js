@@ -6,6 +6,7 @@ globalConfig = {
   server_hr: 'http://test.hr.api.ewal.lejias.cn/',//人资接口
   server_identity:'http://test.e_contract.api.ewal.lejias.cn/',//身份认证
   server_done:'http://47.101.204.100:8080/',//小飞 接口
+  // server_done:'http://192.168.20.64:8080/',//小飞 接口 本地
   domain: 'http://static.lejias.cn/',
   token: ''
 };

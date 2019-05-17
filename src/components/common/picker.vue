@@ -68,8 +68,6 @@
           this.formatData[parentKey][idx][key] = value;
         } else {
           if (picker.status.includes('arrs')) {
-            console.log(index);
-            console.log(value);
             if (key === 'house_type') {
               index[0] = index[0] + 1;
               this.forms[key] = index;

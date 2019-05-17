@@ -95,7 +95,10 @@ class myUtils {
     if (type === 'date') {
       return year + '-' + mm + '-' + dd;
     }
-    return year + '-' + mm + '-' + dd + ' ' + hh + ':' + md;
+    if (type === 'datetime') {
+      return year + '-' + mm + '-' + dd + ' ' + hh + ':' + md;
+    }
+    return year + '-' + mm + '-' + dd + ' ' + hh + ':' + md + ':' + ss;
   };
 
   // 数组去重
@@ -115,6 +118,30 @@ class myUtils {
     }
     return temp;
   }
+
+  // 计算时间差
+  static timeDifference(di) {//di作为一个变量传进来
+    //如果时间格式是正确的，那下面这一步转化时间格式就可以不用了
+    let dateBegin = new Date(di);//将-转化为/，使用new Date
+    let dateEnd = new Date();//获取当前时间
+    let dateDiff = -(dateEnd.getTime() - dateBegin.getTime());//时间差的毫秒数
+    let hours = Math.floor(dateDiff / (3600 * 1000));
+    let leave = dateDiff % (3600 * 1000);//计算小时数后剩余的毫秒数
+    let minutes = Math.floor(leave / (60 * 1000));//计算相差分钟数
+    return {hours, minutes}
+    // let dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));//计算出相差天数
+    // let leave1 = dateDiff % (24 * 3600 * 1000);//计算天数后剩余的毫秒数
+    // let hours = Math.floor(leave1 / (3600 * 1000));//计算出小时数
+    // //计算相差分钟数
+    // let leave2 = leave1 % (3600 * 1000);//计算小时数后剩余的毫秒数
+    // let minutes = Math.floor(leave2 / (60 * 1000));//计算相差分钟数
+    // //计算相差秒数
+    // let leave3 = leave2 % (60 * 1000);//计算分钟数后剩余的毫秒数
+    // let seconds = Math.round(leave3 / 1000);
+    // console.log(" 相差 " + dayDiff + "天 " + hours + "小时 " + minutes + " 分钟" + seconds + " 秒");
+    // console.log(dateDiff + "时间差的毫秒数", dayDiff + "计算出相差天数", leave1 + "计算天数后剩余的毫秒数"
+    //   , hours + "计算出小时数", minutes + "计算相差分钟数", seconds + "计算相差秒数");
+  };
 
   //格式化日期
   static formatDate2(v, format = 'yyyy-MM-dd') {//用法:format="yyyy-MM-dd hh:mm:ss";
@@ -146,19 +173,13 @@ class myUtils {
     return format;
   }
 
-
   //判断时间是否在给定的日期范围内
   //第三个参数传选定的日期 不传默认当前时间
   static judgeDateInRange(startTime, endTime, inTime = new Date()) {
     let time = new Date(inTime).getTime();
     let sTime = new Date(startTime.replace(/-/g, '/')).getTime();
     let eTime = new Date(endTime.replace(/-/g, '/')).getTime();
-    if (sTime < time && eTime > time) {
-      return true;
-    }
-    ;
-    return false;
-
+    return sTime < time && eTime > time;
   }
 }
 

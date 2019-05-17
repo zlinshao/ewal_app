@@ -66,12 +66,12 @@
     methods: {
       // 去签署
       actions(key = '', action = {}) {
-        let data = {}, postData = {};
-        postData.variables = [];
-        data.name = key;
-        data.value = action.action;
-        postData.variables.push(data);
+        let postData = {};
         postData.action = 'complete';
+        postData.variables = [{
+          name: key,
+          value: action.action,
+        }];
         this.$httpZll.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
           if (action.route === 'back') {
             this.$router.go(-1);
@@ -81,8 +81,12 @@
               rootProcessInstanceId: this.allDetail.root_id,
             };
             this.$httpZll.getNewTaskId(params).then(res => {
-              this.allDetail.task_id = res.data[0].id;
-              this.$store.dispatch('bulletin_draft', this.allDetail);
+              let data = res.data[0];
+              this.allDetail.task_id = data.id;
+              this.allDetail.process_instance_id = data.processInstanceId;
+              this.allDetail.root_process_instance_id = data.rootProcessInstanceId;
+              this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
+              this.$store.dispatch('task_detail', this.allDetail);
               this.routerReplace('/collectReport');
             });
           }

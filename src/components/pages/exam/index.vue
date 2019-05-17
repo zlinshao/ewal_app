@@ -19,7 +19,6 @@
 
       <div ref="listContainerRef" class="list-container scroll_bar" :style="mainListHeight(listHeight)">
 
-
         <scroll-load-paper @getLoadMore="scrollLoad" :disabled="!fullLoading">
           <div class="my-exam">
             <div class="my-exam-top">
@@ -51,7 +50,7 @@
               最新考试
             </div>
             <div class="latest-exam-bottom">
-              <div v-for="item in latestExamList" class="latest-exam-item">
+              <div v-if="latestExamList.length>0" v-for="item in latestExamList" class="latest-exam-item">
                 <div class="item-badge"></div>
 
                 <div class="item-center">
@@ -65,11 +64,15 @@
                 <div v-if="item.status==1" class="item-badge-corner colorFF6C00">进行中</div>
 
               </div>
+              <div v-if="latestExamList.length==0" class="no-exam-tip">
+                暂无最新考试...
+              </div>
             </div>
           </div>
 
           <div class="exam-tabbar">
-            <div @click="exam_active=item.id;params.status=item.value" :class="{checked:exam_active==item.id}" v-for="item in exam_status_list" class="exam-tabbar-item">
+            <div @click="exam_active=item.id;params.status=item.value" :class="{checked:exam_active==item.id}"
+                 v-for="item in exam_status_list" class="exam-tabbar-item">
               {{item.name}}
             </div>
           </div>
@@ -140,9 +143,10 @@
                     <div class="item-bottom-left">
                       {{item.start_time}}
                     </div>
-                    <div @click="answer(item)" v-if="item.status==1" class="item-bottom-right">
+                    <div @click="answer(item)" v-if="item.status==1 && (item.enroll[0].status==0||item.enroll[0].status==1)" class="item-bottom-right">
                       进入考试>
                     </div>
+                    <div class="item-exam-score" v-if="item.enroll[0].score"><span>{{item.enroll[0].score}}</span><span>分</span></div>
                   </div>
                   <div v-if="item.missExam" class="miss-exam"></div>
                 </div>
@@ -184,6 +188,8 @@
       </van-tabbar-item>
     </van-tabbar>
     <test-paper-exam :exam-data="exam_data" :visible.sync="test_paper_visible"></test-paper-exam>
+
+
   </div>
 </template>
 
@@ -210,13 +216,13 @@
           page: 1,
           limit: 6,
           search: '',
-          status:null
+          status: null
         },
         remHeight: 0,
         paging: 0,
         fullLoading: false,
         examList: [],//考试列表
-        latestExamList:[],//最新考试列表
+        latestExamList: [],//最新考试列表
         listHeight: 0,
         sliderWidth: 0,
         hasAuthority: false,//是否有权限
@@ -235,7 +241,7 @@
           active: tabbarRightActive
         },
         //我的考试
-        my_exam_count:[0,0,0,0],
+        my_exam_count: [0, 0, 0, 0],
 
         /*考试状态tabbar*/
         exam_active: 1,
@@ -243,22 +249,22 @@
           {
             id: 1,
             name: '全部',
-            value:null,
+            value: null,
           },
           {
-            id:2,
-            name:'未开始',
-            value:0,
+            id: 2,
+            name: '未开始',
+            value: 0,
           },
           {
-            id:3,
-            name:'进行中',
-            value:1,
+            id: 3,
+            name: '进行中',
+            value: 1,
           },
           {
-            id:4,
-            name:'已结束',
-            value:2,
+            id: 4,
+            name: '已结束',
+            value: 2,
           }
         ],
 
@@ -266,20 +272,49 @@
     },
     watch: {
       'params.status': {
-        handler(val,oldVal) {
+        handler(val, oldVal) {
           this.params.page = 1;
           this.getExamList();
+        },
+      },
+      test_paper_visible: {
+        handler(val, oldVal) {
+          if (!val) {
+            this.getExamList();
+          }
         },
       },
     },
     methods: {
 
-      //答题
+      //答题 => 生成试卷
       answer(item) {
         this.$httpTj.getExamDetail(item.id).then(res => {
           this.exam_data = res.data;
+          return res;
+        }).then(res => {
+          if (res.code.endsWith('0')) {
+            let params = {
+              user_id: 289,
+              type: res.data.type,//试卷类型 1.入职 2培训 3问卷 3在此页面暂且用不到 分离出单独的问卷模块 在问卷页面
+            };
+            this.$httpTj.generateExam(res.data.id, params).then(res => {
+              if (res.code.endsWith('0')) {
+                //debugger
+                this.test_paper_visible = true;
+                if(res.data && res.data.question_set) {
+                  this.exam_data.exam_id = res.data.id;//考试id  传到TestPaperExam组件中 用来提交考试
+                  this.exam_data.question_set = res.data.question_set;
+                }
+              } else {
+                this.myUtils.prompt(res.msg);
+              }
+            });
+          } else {
+            this.myUtils.prompt(res.msg);
+          }
         });
-        this.test_paper_visible = true;
+
       },
 
 
@@ -298,14 +333,14 @@
       //获取考试列表
       getExamList(isFirstInvoke = false) {
         let params = {
-          user_id:'self',
+          user_id: 'self',
           ...this.params,
           all: 1,
         };
         this.fullLoading = true;
         this.$httpTj.getExamList(params).then(res => {
           this.fullLoading = false;
-          if(!res) {
+          if (!res) {
             this.examList = [];
             return;
           }
@@ -318,41 +353,36 @@
             }
           }
           //遍历是否缺考
-          _.forEach(this.examList,(o)=> {
-            if(o.status==0) {//未开始
+          _.forEach(this.examList, (o) => {
+            if (o.status == 0) {//未开始
               //
-            }else if(o.status==1) {
-             //
-            }else if(o.status==2) {
-              let isExam = o.enroll && o.enroll[0].status;
-              if(isExam==0) {
+            } else if (o.status == 1) {
+              //
+            } else if (o.status == 2) {
+              let isExam = o.enroll && o.enroll[0].status==2;
+              if (isExam == 0) {
                 o.missExam = true;
                 //
               }
-              //this.my_exam_count[2]++;
             }
           });
 
           //计算我的考试数据及最新考试
-          if(isFirstInvoke) {
-           /* let copyExamList = _.cloneDeep(this.examList);
-            _(copyExamList).sortBy('');*/
-
-            _.forEach(this.examList,(o)=> {
-              if(o.status!=2) {
+          if (isFirstInvoke) {
+            this.my_exam_count= [0, 0, 0, 0];
+            _.forEach(this.examList, (o) => {
+              if (o.status != 2) {
                 this.latestExamList.push(o);
               }
 
-
-
               //计算考试数据
-              if(o.status==0) {//未开始
+              if (o.status == 0) {//未开始
                 this.my_exam_count[0]++;
-              }else if(o.status==1) {
+              } else if (o.status == 1) {
                 this.my_exam_count[1]++;
-              }else if(o.status==2) {
+              } else if (o.status == 2) {
                 let isExam = o.enroll && o.enroll[0].status;
-                if(isExam==0) {
+                if (isExam == 0) {
                   this.my_exam_count[3]++;
                 }
                 this.my_exam_count[2]++;

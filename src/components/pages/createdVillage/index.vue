@@ -173,7 +173,7 @@
           },
           {
             label: '街道地址',
-            placeholder: '必填 请输入',
+            placeholder: '已禁用',
             keyName: 'address',
             disabled: 'disabled',
             keyType: '',
@@ -319,13 +319,13 @@
 
         pickerModule: false,          //正常 select 下拉框
         pickers: {
-          title: '',                    //picker标题
-          type: '',                     //字典类型
-          keyName: '',                  //字段名
-          parentKey: '',                //父级 字段名 变化有picker
-          columns: [],                  //下拉框选择文本列表
-          ids: [],                      //当前字典所有id
-          index: '',                    //变化下标
+          title: '',                  //picker标题
+          type: '',                   //字典类型
+          keyName: '',                //字段名
+          parentKey: '',              //父级 字段名 变化有picker
+          columns: [],                //下拉框选择文本列表
+          ids: [],                    //当前字典所有id
+          index: '',                  //变化下标
         },
 
         province: [],
@@ -349,6 +349,7 @@
       },
     },
     methods: {
+      // 定位
       getVillageLocation() {
         let that = this;
         // 高德地图
@@ -447,6 +448,7 @@
       getImgData(val) {
         this.form.album[val[0]] = val[1];
       },
+      // 提交
       okAddVillage() {
         this.$httpZll.newAddVillage(this.form).then(res => {
           if (res.success) {

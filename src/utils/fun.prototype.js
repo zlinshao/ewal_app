@@ -1,4 +1,4 @@
-import {ImagePreview} from 'vant';
+import {ImagePreview, Dialog} from 'vant';
 import PickerSlot from '../components/common/picker-slot.vue';
 import ZlInput from '../components/common/zl-input.vue';
 import PickerInput from '../components/common/picker-input.vue';
@@ -105,21 +105,29 @@ export default {
         }
       }
     };
-    // 去打卡数据重组
-    Vue.prototype.groupHandlerListData = function (data, task = ['title']) {
+    // 列表 数据重组
+    Vue.prototype.groupHandlerListData = function (data) {
       let arr = [];
       for (let item of data) {
         let obj = {};
-        obj.name = item.name;
-        obj.task_id = item.id;
-        obj.status = item.status || [];
-        obj.root_id = item.rootProcessInstanceId;
-        obj.process_id = item.processInstanceId;
         for (let key of item.variables) {
-          if (task.includes(key.name)) {
-            obj[key.name] = key.value;
+          obj[key.name] = key.value;
+          if (key.name === 'signer') {
+            obj.signer = JSON.parse(key.value) || {};
+          }
+          if (key.name === 'due_date') {
+            let date = this.myUtils.timeDifference(key.value);
+            obj.due_date_hours = date.hours;
+            obj.due_date_minutes = date.minutes;
           }
         }
+        obj.name = item.name;
+        obj.task_id = item.id;
+        obj.duration = item.duration;
+        obj.status = item.status || [];
+        obj.root_id = item.rootProcessInstanceId;
+        obj.taskDefinitionKey = item.taskDefinitionKey;
+        obj.process_id = item.processInstanceId;
         arr.push(obj);
       }
       return arr;
@@ -314,7 +322,7 @@ export default {
           }
         }
       } else {
-        for (var key in val) {
+        for (let key of Object.keys(val)) {
           images.push(val[key].uri);
         }
       }
@@ -332,10 +340,78 @@ export default {
     Vue.prototype.$prompt = function (msg, type) {
       this.myUtils.prompt(msg, type);
     };
+    // 签署电子合同
+    Vue.prototype.$signPostApi = function (item, params, title = []) {
+      console.log(item);
+      let url = '', sign = {};
+      if (item.bulletin_type === 'bulletin_collect_basic') {
+        url = 'sign_collect';
+        sign = {
+          task_id: item.task_id,
+          contract_id: item.contract_number,
+        };
+      }
+      for (let key of Object.keys(params)) {
+        sign[key] = params[key]
+      }
+      this.$dialog(title[0], title[1]).then(data => {
+        if (data) {
+          this.$httpZll.localSignContract(url, sign).then(res => {
+            if (Number(sign.type) === 2) {
+              this.$ddSkip(res.data.data);
+            } else {
+              this.$prompt('发送成功!', 'success');
+            }
+          })
+        }
+      });
+    };
+    // 修改合同
+    Vue.prototype.$reviseContract = function (action = {}, name = '', item) {
+      this.$dialog('合同修改', '是否确认修改合同?').then(res => {
+        if (res) {
+          let postData = {};
+          postData.action = 'complete';
+          postData.variables = [{
+            name: name,
+            value: action.action,
+          }];
+          this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
+            if (action.action === 'success') {
+              this.$prompt('签署成功！');
+              this.routerLink(action.route);
+            } else {
+              let params = {
+                taskDefinitionKey: 'InputBulletinData',
+                rootProcessInstanceId: item.root_id,
+              };
+              this.$httpZll.getNewTaskId(params).then(res => {
+                let query = {};
+                let task = res.data[0];
+                query.task_id = task.id;
+                query.process_id = task.processInstanceId;
+                query.root_id = task.rootProcessInstanceId;
+                query.task_action = action.route;
+                for (let v of task.variables) {
+                  if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
+                    query[v.name] = v.value || '';
+                  }
+                }
+                if (query.bm_detail_request_url) {
+                  this.againTaskDetail(query).then(_ => {
+                    this.againDetailRequest(query, 'again');
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    };
     // 任务详情
-    Vue.prototype.againTaskDetail = function (url, val) {
+    Vue.prototype.againTaskDetail = function (val) {
       return new Promise((resolve, reject) => {
-        this.$httpZll.get(url, {}, 'prompt').then(res => {
+        this.$httpZll.get(val.ctl_detail_request_url, {}, 'prompt').then(res => {
           if (res.success) {
             let data = {};
             let content = res.data.content;
@@ -349,6 +425,8 @@ export default {
             }
             data.content = content;
             data.task_id = val.task_id;
+            data.process_instance_id = val.process_id;
+            data.root_process_instance_id = val.root_id;
             this.$store.dispatch('task_detail', data);
           }
           resolve(true);
@@ -356,16 +434,41 @@ export default {
       });
     };
     // 报备详情
-    Vue.prototype.againDetailRequest = function (url, val, again = '') {
-      this.$httpZll.get(url, {}, 'prompt').then(res => {
+    Vue.prototype.againDetailRequest = function (val, again = '') {
+      this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
         if (res.success) {
           let data = {};
           data.content = res.data.content;
           data.task_id = val.task_id;
+          data.process_instance_id = val.process_id;
           this.$store.dispatch('bulletin_draft', data);
           this.routerLink(val.task_action, {again: again});
         }
       });
+    };
+    // 确认弹出窗口
+    Vue.prototype.$dialog = function (title, content) {
+      return new Promise((resolve, reject) => {
+        Dialog.confirm({
+          title: title,
+          message: content
+        }).then(() => {
+          resolve(true);
+        }).catch(() => {
+          resolve(false);
+        });
+      })
+    };
+    // 钉钉超链接跳转
+    Vue.prototype.$ddSkip = function (url) {
+      let that = this;
+      dd.biz.util.openLink({
+        url: url,//要打开链接的地址
+        onSuccess(result) {
+        },
+        onFail(err) {
+        }
+      })
     };
     // 钉钉认证
     Vue.prototype.personalGet = function () {
@@ -421,7 +524,13 @@ export default {
     };
     // 关闭钉钉
     Vue.prototype.closeDD = function () {
-      dd.biz.navigation.close({});
+      let that = this;
+      dd.biz.navigation.close({
+        onSuccess(result) {
+        },
+        onFail(err) {
+        }
+      });
     };
   }
 }
