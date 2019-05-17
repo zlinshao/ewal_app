@@ -155,7 +155,6 @@ export default {
             obj.location[0] = res.position.lng;
             obj.location[1] = res.position.lat;
             for (let city of data) {
-              console.log(address.city.includes(city.name));
               if (address.city.includes(city.name)) {
                 if (Array.isArray(city.code)) {
                   obj.city = city.code;
@@ -529,6 +528,7 @@ export default {
       let that = this;
       dd.biz.navigation.close({
         onSuccess(result) {
+          alert(2222);
           // 认证完成
           console.log(555);
           let route = that.$store.state.app.signRouters;
