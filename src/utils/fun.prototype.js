@@ -155,6 +155,7 @@ export default {
             obj.location[0] = res.position.lng;
             obj.location[1] = res.position.lat;
             for (let city of data) {
+              console.log(address.city.includes(city.name));
               if (address.city.includes(city.name)) {
                 if (Array.isArray(city.code)) {
                   obj.city = city.code;
@@ -459,13 +460,12 @@ export default {
       })
     };
     // 钉钉超链接跳转
-    Vue.prototype.$ddSkip = function (url, type = '') {
+    Vue.prototype.$ddSkip = function (url, route) {
       let that = this;
-      console.log(type);
       dd.biz.util.openLink({
         url: url,//要打开链接的地址
         onSuccess(result) {
-          that.$store.dispatch('sign_routers', type);
+          sessionStorage.setItem('signRouter', route);
         },
         onFail(err) {
         }
@@ -528,25 +528,6 @@ export default {
       let that = this;
       dd.biz.navigation.close({
         onSuccess(result) {
-          // 认证完成
-          console.log(555);
-          let route = that.$store.state.app.signRouters;
-          console.log(666);
-          console.log(route);
-          alert(1);
-          switch (route) {
-            case 'toBeDone':
-              alert(2);
-              that.routerReplace(route);
-              break;
-            case '/toBeDone':
-              alert(3);
-              that.routerLink(route);
-              break;
-            case '':
-              break;
-          }
-          alert(4);
         },
         onFail(err) {
         }

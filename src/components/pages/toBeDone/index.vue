@@ -177,13 +177,15 @@
     },
     activated() {
       // this.onSearch();
-      console.log(3344);
       this.popupOperate();
     },
     watch: {
       'params.title'(val) {
         this.params.title = val.replace(/\s+/g, '');
       },
+      'sessionStorage.signRouter'(val) {
+        alert(val);
+      }
     },
     computed: {
       // 报备类型

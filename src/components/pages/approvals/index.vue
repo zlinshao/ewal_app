@@ -338,7 +338,7 @@
           index: 1,
         };
         title[1] = type === 2 ? '是否确认签署电子合同?' : '是否确认发送客户签署电子合同?';
-        this.$signPostApi(item, params, title, '/toBeDone');
+        this.$signPostApi(item, params, title, 'toBeDone');
       },
       // 报备类型
       handleBulletinType(item) {
