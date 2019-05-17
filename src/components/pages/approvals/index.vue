@@ -95,10 +95,10 @@
         mainHeight: '',
         //加载是否结束
         fullLoading: {
-          load1: false,
-          load2: false,
-          load3: false,
-          load4: false,
+          load1: true,
+          load2: true,
+          load3: true,
+          load4: true,
         },
         // 头部切换
         approvalTerm: [

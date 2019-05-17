@@ -18,7 +18,6 @@ import './assets/scss/rest.css'
 import './assets/scss/currency.css'
 import '@/assets/js/dictData.js'
 import '@/assets/js/formData.js'
-// import compressImage from "../static/js/compress";
 
 Vue.use(Vant);
 Vue.use(Vuex);
