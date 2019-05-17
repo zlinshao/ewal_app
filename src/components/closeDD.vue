@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: "",
+    name: "close-dd",
     data() {
       return {}
     },
@@ -15,7 +15,6 @@
     activated() {
       // this.$router.go(-1);
       // window.close();
-      sessionStorage.setItem('hhhhhh','fsdfasdfasdfsa');
       this.closeDD();
     },
     watch: {},

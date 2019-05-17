@@ -44,8 +44,6 @@
       // 使用watch 监听$router的变化
       $route(to, from) {
         // 页面高度
-        console.log(to);
-        console.log(from);
         if (to.path === '/') {
           this.closeDD();
           window.close();

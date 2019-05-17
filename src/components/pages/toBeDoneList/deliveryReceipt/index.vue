@@ -118,6 +118,9 @@
         </footer>
       </div>
     </div>
+    <div class="changeTag justify-center">
+      <i v-for="(item,index) in allReportNum" :class="{'hover': slither === index}" @click="changeTag(index)"></i>
+    </div>
     <!--日期-->
     <choose-time :module="timeModule" :formatData="formatData" @close="onCancel" @onDate="onConTime"></choose-time>
     <!--正常 picker-->
@@ -184,6 +187,9 @@
     watch: {},
     computed: {},
     methods: {
+      changeTag(index) {
+        this.slither = index;
+      },
       // touch 左右切换
       tapStart(event) {
         for (let item of event.touches) {
@@ -428,17 +434,33 @@
         @include scroll;
 
         li + li {
-          border-top: 1px dashed #F2F2F2;
+          border-top: 1px dashed #C6CAD8;
         }
       }
 
       footer {
-        border-top: 1px dashed #F2F2F2;
+        border-top: 1px solid #F2F2F2;
 
         .commonBtn {
           padding: .3rem .1rem .1rem;
           @include transition(all .3s);
         }
+      }
+    }
+
+    .changeTag {
+      i {
+        width: .2rem;
+        height: .2rem;
+        background: rgba(69, 112, 254, .3);
+        @include radius(50%);
+        margin: .2rem .1rem 0;
+      }
+
+      .hover {
+        width: .3rem;
+        @include radius(1rem);
+        background: rgba(69, 112, 254, 1);
       }
     }
   }

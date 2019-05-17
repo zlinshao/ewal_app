@@ -18,6 +18,7 @@ import './assets/scss/rest.css'
 import './assets/scss/currency.css'
 import '@/assets/js/dictData.js'
 import '@/assets/js/formData.js'
+// import compressImage from "../static/js/compress";
 
 Vue.use(Vant);
 Vue.use(Vuex);
@@ -30,9 +31,9 @@ Vue.prototype.$httpZll = httpZll;
 Vue.prototype.$httpTj = httpTj;
 Vue.prototype.$httpHs = httpHs;
 
-import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
-let vConsole = new VConsole(); // 初始化
-Vue.use(vConsole);
+// import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
+// let vConsole = new VConsole(); // 初始化
+// Vue.use(vConsole);
 
 // 监听软键盘
 (function () {
@@ -46,7 +47,7 @@ Vue.use(vConsole);
         //当软键盘弹出，在这里面操作
         store.dispatch('key_up_status', true);
       } else {
-        //当软键盘收起，在此处操作
+        //当软键盘收起，在此处操 作
         store.dispatch('key_up_status', false);
       }
     }
