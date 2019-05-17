@@ -1487,894 +1487,172 @@ defineRentReport = {
 
 // 收房交接单
 // 物品交接
+const childKeysTypeBad = ['type', 'is_bad', 'bad_number'];
+const childKeysTypeNum = ['type', 'number', 'is_bad', 'bad_number'];
+const childKeysHaveBad = ['is_have', 'is_bad', 'bad_number'];
+
 defineArticleReceipt = {
   // 客厅
-  hall_goods: [
-    {
-      label: '彩电',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'tv',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'tv',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '品牌',
-          placeholder: '请输入',
-          keyName: 'brand',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '门锁类型',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'gate_lock',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '密码',
-          placeholder: '必填 请输入',
-          keyName: 'password',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'gate_lock',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '钥匙',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'key',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'key',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '窗户',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'screen_window',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'screen_window',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '遥控器',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'remote_control',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['is_have', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'remote_control',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '沙发',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'sofa',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'sofa',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '茶几',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'tea_table',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'tea_table',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '冰箱',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'refrigerator',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'refrigerator',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '椅子',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'chair',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'chair',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '餐桌',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'dining_table',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'dining_table',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '客厅灯',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'hall_light',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'hall_light',
-          keyType: [],
-          slither: 'hall_goods',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '客厅备注',
-      placeholder: '必填 请输入',
-      keyName: 'remark',
-      keyType: '',
-      type: 'textarea',
-      status: 'child',
-      slot: '',
-    },
-  ],
+  hall_goods: handlerHallGoods('hall_goods'),
   // 厨房/阳台/卫生间
-  kitchen_balcony_bathroom: [
-    {
-      label: '热水器',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'water_heater',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'water_heater',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '浴霸',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'bath_heater',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'bath_heater',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '洗衣机',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'washer',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'washer',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '洗衣机品牌',
-          placeholder: '必填 请输入',
-          keyName: 'brand',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '燃气灶',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'gas_stove',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['type', 'number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'gas_stove',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '橱柜',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'sideboard',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'sideboard',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '洗菜池',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'washing_pool',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'washing_pool',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '水龙头',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'faucet',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'faucet',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '微波炉',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'microwave_oven',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'microwave_oven',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '厨房灯',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'kitchen_light',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'kitchen_light',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '阳台灯',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'balcony_light',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'balcony_light',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '卫生间灯',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'bathroom_light',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'bathroom_light',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '浴霸灯',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'bath_heater_light',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'bath_heater_light',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '洗面池',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'wash_basin',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'wash_basin',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '马桶盖',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'toilet_lid',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'toilet_lid',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '晾衣架',// 标题
-      placeholder: '必填 请选择',
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'drying_rack',
-      keyType: {},
-      type: 'text',// input 类型
-      status: 'child',
-      picker: 'picker',
-      showForm: 'formatData',
-      childKeys: ['number', 'is_bad', 'bad_number'],
-      children: [
-        {
-          label: '损坏照片',
-          placeholder: '必填',
-          keyName: 'drying_rack',
-          keyType: [],
-          slither: 'kitchen_balcony_bathroom',
-          status: 'upload',
-          slot: '',
-        },
-        {
-          label: '备注',
-          placeholder: '请输入',
-          keyName: 'remark',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-      ],
-    },
-    {
-      label: '备注',
-      placeholder: '请输入',
-      keyName: 'remark',
-      keyType: '',
-      type: 'text',
-      status: 'child',
-      slot: '',
-    },
-  ],
+  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom'),
   // 主卧
-  master_bedroom: [
-
-  ],
+  master_bedroom: handlerBedroom('master_bedroom'),
+  // 次卧
+  bedroom: handlerBedroom('bedroom'),
 };
+
+// 客厅
+function handlerHallGoods(value) {
+  return [
+    deliveryMorePickersBrand('彩电', value, 'tv', childKeysTypeNum),
+    deliveryMorePickers('门锁类型', value, 'gate_lock', childKeysTypeBad),
+    deliveryMorePickers('钥匙', value, 'key', childKeysTypeBad),
+    deliveryMorePickers('窗户', value, 'screen_window', childKeysTypeBad),
+    deliveryMorePickers('遥控器', value, 'remote_control', childKeysHaveBad),
+    deliveryMorePickers('沙发', value, 'sofa', childKeysTypeNum),
+    deliveryMorePickers('茶几', value, 'tea_table'),
+    deliveryMorePickers('冰箱', value, 'refrigerator', childKeysTypeNum),
+    deliveryMorePickers('椅子', value, 'chair'),
+    deliveryMorePickers('餐桌', value, 'dining_table', childKeysTypeNum),
+    deliveryMorePickers('客厅灯', value, 'light', childKeysTypeNum),
+    deliveryMorePickersRemark('客厅备注'),
+  ]
+}
+
+// 厨房/阳台/卫生间
+function handlerKitchenBalconyBathroom(value) {
+  return [
+    deliveryMorePickers('热水器', value, 'water_heater', childKeysTypeNum),
+    deliveryMorePickers('浴霸', value, 'bath_heater', childKeysTypeNum),
+    deliveryMorePickersBrand('洗衣机', value, 'washer', childKeysTypeNum),
+    deliveryMorePickers('燃气灶', value, 'gas_stove', childKeysTypeNum),
+    deliveryMorePickers('橱柜', value, 'sideboard'),
+    deliveryMorePickers('洗菜池', value, 'washing_pool'),
+    deliveryMorePickers('水龙头', value, 'faucet'),
+    deliveryMorePickers('微波炉', value, 'microwave_oven'),
+    deliveryMorePickers('厨房灯', value, 'kitchen_light'),
+    deliveryMorePickers('阳台灯', value, 'balcony_light'),
+    deliveryMorePickers('卫生间灯', value, 'bathroom_light'),
+    deliveryMorePickers('浴霸灯', value, 'bath_heater_light'),
+    deliveryMorePickers('洗面池', value, 'wash_basin'),
+    deliveryMorePickers('马桶盖', value, 'toilet_lid'),
+    deliveryMorePickers('晾衣架', value, 'drying_rack'),
+    deliveryMorePickers('晾衣架', value, 'drying_rack'),
+    deliveryMorePickersRemark('厨房/阳台/卫生间备注'),
+  ]
+}
+
+// 主卧次卧
+function handlerBedroom(value) {
+  return [
+    deliveryMorePickers('床', value, 'delivery_bed'),
+    deliveryMorePickers('床垫', value, 'mattress'),
+    deliveryMorePickers('窗帘', value, 'delivery_curtain'),
+    deliveryMorePickers('空调', value, 'air_conditioning', childKeysTypeNum),
+    deliveryMorePickers('吸顶灯', value, 'light', childKeysTypeNum),
+    deliveryMorePickers('电视', value, 'tv', childKeysTypeNum),
+    deliveryMorePickers('电视遥控器', value, 'tv_remote_control'),
+    deliveryMorePickers('门锁钥匙', value, 'door_lock_key'),
+    deliveryMorePickers('书桌', value, 'desk'),
+    deliveryMorePickers('椅子', value, 'chair'),
+    deliveryMorePickersRemark('卧室备注'),
+  ]
+}
+
+// 默认
+function deliveryMorePickers(name, parent, key, childKeys = ['number', 'is_bad', 'bad_number']) {
+  return {
+    label: name,// 标题
+    placeholder: '必填 请选择',
+    readonly: 'readonly',// 只读 picker必须有值
+    keyName: key,
+    keyType: {},
+    type: 'text',// input 类型
+    status: 'child',
+    picker: 'picker',
+    showForm: 'formatData',
+    childKeys: childKeys,
+    children: [
+      {
+        label: '损坏照片',
+        placeholder: '必填',
+        keyName: key,
+        keyType: [],
+        slither: parent,
+        status: 'upload',
+        slot: '',
+      },
+      {
+        label: '备注',
+        placeholder: '请输入',
+        keyName: 'remark',
+        keyType: '',
+        type: 'text',
+        status: '',
+        slot: '',
+      },
+    ],
+  }
+}
+
+// 品牌
+function deliveryMorePickersBrand(name, parent, key, childKeys = ['number', 'is_bad', 'bad_number']) {
+  return {
+    label: name,// 标题
+    placeholder: '必填 请选择',
+    readonly: 'readonly',// 只读 picker必须有值
+    keyName: key,
+    keyType: {},
+    type: 'text',// input 类型
+    status: 'child',
+    picker: 'picker',
+    showForm: 'formatData',
+    childKeys: childKeys,
+    children: [
+      {
+        label: '损坏照片',
+        placeholder: '必填',
+        keyName: key,
+        keyType: [],
+        slither: parent,
+        status: 'upload',
+        slot: '',
+      },
+      {
+        label: '品牌',
+        placeholder: '请输入',
+        keyName: 'brand',
+        keyType: '',
+        type: 'text',
+        status: '',
+        slot: '',
+      },
+      {
+        label: '备注',
+        placeholder: '请输入',
+        keyName: 'remark',
+        keyType: '',
+        type: 'text',
+        status: '',
+        slot: '',
+      },
+    ],
+  }
+}
+
+// 备注
+function deliveryMorePickersRemark(name) {
+  return {
+    label: name,
+    placeholder: '请输入',
+    keyName: 'remark',
+    keyType: '',
+    type: 'textarea',
+    status: 'child',
+    slot: '',
+  }
+}
+
 // 费用交接
 defineCostReceipt = {};

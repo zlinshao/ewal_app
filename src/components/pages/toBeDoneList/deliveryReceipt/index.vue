@@ -4,7 +4,7 @@
       <div>
         <p></p>
         <p></p>
-        <h2>客厅</h2>
+        <h2>{{mainTop[slither]}}</h2>
       </div>
       <h1></h1>
     </div>
@@ -111,9 +111,9 @@
         </div>
         <footer>
           <div class="commonBtn" :style="mainWidth">
-            <p class="btn reset">重置</p>
-            <p class="btn deliver">草稿</p>
-            <p class="btn" @click="saveReport">发布</p>
+            <p class="btn reset" @click="saveReport(2)">重置</p>
+            <p class="btn deliver" @click="saveReport(1)">草稿</p>
+            <p class="btn" @click="saveReport(0)">发布</p>
           </div>
         </footer>
       </div>
@@ -139,6 +139,7 @@
     components: {DeliveryPicker},
     data() {
       return {
+        mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧'],
         startClientX: 0,
         endClientX: 0,
         slither: 0,
@@ -162,20 +163,17 @@
           dateIdx: '',                      //日期字段下标 变化情况使用
         },
         drawForm: [],                       //表单集合
-        resetDrawing: {},                   //clone 重置使用
         drawSlither: {},
 
         childPhoto: [],
       }
     },
     created() {
-      this.resetDrawing = this.jsonClone(defineArticleReceipt);
-      this.resetting();
     },
     mounted() {
     },
     activated() {
-      this.closePickers();
+      this.resetting();
       this.allReportNum = Object.keys(this.drawSlither).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
@@ -288,11 +286,20 @@
         let key = file.slither;
         this.form[key][file.keyName]['photo'] = val[1];
       },
-      saveReport() {
+      saveReport(val) {
+        switch (val) {
+          case 0:
+            break;
+          case 1:
+            break;
+          case 2:
+            this.resetting();
+            break;
+        }
         console.log(this.form);
       },
       resetting() {
-        this.drawSlither = this.jsonClone(this.resetDrawing);
+        this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
           this.form[item] = {};
           this.formatData[item] = {};
@@ -419,9 +426,15 @@
       ul {
         height: 100%;
         @include scroll;
+
+        li + li {
+          border-top: 1px dashed #F2F2F2;
+        }
       }
 
       footer {
+        border-top: 1px dashed #F2F2F2;
+
         .commonBtn {
           padding: .3rem .1rem .1rem;
           @include transition(all .3s);
