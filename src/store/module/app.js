@@ -21,6 +21,7 @@ const app = {
     // 待办任务切换
     doneTab: '1',
     allDetail: {},//详情
+    signRouters: '',//签署路由
   },
   // 计算属性
   getter: {},
@@ -66,6 +67,10 @@ const app = {
     ALL_DETAIL(state, status) {
       state.allDetail = status;
     },
+    // 签署路由
+    SIGN_ROUTERS(state, status) {
+      state.signRouters = status;
+    },
   },
   // 执行函数
   actions: {
@@ -108,6 +113,10 @@ const app = {
     // 跟进记录
     all_detail({commit}, status) {
       commit('ALL_DETAIL', status);
+    },
+    // 签署路由
+    sign_routers({commit}, status) {
+      commit('SIGN_ROUTERS', status);
     },
   }
 };

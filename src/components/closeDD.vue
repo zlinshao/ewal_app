@@ -14,7 +14,7 @@
     },
     activated() {
       // this.$router.go(-1);
-      window.close();
+      // window.close();
       this.closeDD();
     },
     watch: {},

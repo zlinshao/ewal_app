@@ -42,8 +42,7 @@ Vue.prototype.$httpHs = httpHs;
   if (isAndroid) {
     let winHeight = window.innerHeight;   // 获取当前页面高度
     window.onresize = function () {
-      let thisHeight = this.innerHeight;
-      if (winHeight - thisHeight > 50) {
+      if (winHeight - this.innerHeight > 50) {
         //当软键盘弹出，在这里面操作
         store.dispatch('key_up_status', true);
       } else {

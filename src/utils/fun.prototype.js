@@ -341,7 +341,7 @@ export default {
       this.myUtils.prompt(msg, type);
     };
     // 签署电子合同
-    Vue.prototype.$signPostApi = function (item, params, title = []) {
+    Vue.prototype.$signPostApi = function (item, params, title = [], route) {
       console.log(item);
       let url = '', sign = {};
       if (item.bulletin_type === 'bulletin_collect_basic') {
@@ -358,7 +358,7 @@ export default {
         if (data) {
           this.$httpZll.localSignContract(url, sign).then(res => {
             if (Number(sign.type) === 2) {
-              this.$ddSkip(res.data.data);
+              this.$ddSkip(res.data.data, route);
             } else {
               this.$prompt('发送成功!', 'success');
             }
@@ -460,10 +460,12 @@ export default {
       })
     };
     // 钉钉超链接跳转
-    Vue.prototype.$ddSkip = function (url) {
+    Vue.prototype.$ddSkip = function (url, type = '') {
+      let that = this;
       dd.biz.util.openLink({
         url: url,//要打开链接的地址
         onSuccess(result) {
+          that.$store.dispatch('sign_routers', type);
         },
         onFail(err) {
         }
@@ -523,7 +525,21 @@ export default {
     };
     // 关闭钉钉
     Vue.prototype.closeDD = function () {
-      dd.biz.navigation.close({});
+      let that = this;
+      dd.biz.navigation.close({
+        onSuccess(result) {
+          let route = that.$store.state.app.signRouters;
+          switch (route) {
+            case 'toBeDone':
+              that.routerReplace(route);
+              break;
+            case '':
+              break;
+          }
+        },
+        onFail(err) {
+        }
+      });
     };
   }
 }
