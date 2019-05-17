@@ -178,6 +178,7 @@
     activated() {
       // this.onSearch();
       this.popupOperate();
+      console.log(sessionStorage.signRouter);
     },
     watch: {
       'params.title'(val) {
