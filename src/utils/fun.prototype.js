@@ -528,24 +528,25 @@ export default {
       let that = this;
       dd.biz.navigation.close({
         onSuccess(result) {
-          alert(2222);
           // 认证完成
           console.log(555);
           let route = that.$store.state.app.signRouters;
           console.log(666);
           console.log(route);
+          alert(1);
           switch (route) {
             case 'toBeDone':
-              console.log(11);
+              alert(2);
               that.routerReplace(route);
               break;
             case '/toBeDone':
-              console.log(22);
+              alert(3);
               that.routerLink(route);
               break;
             case '':
               break;
           }
+          alert(4);
         },
         onFail(err) {
         }
