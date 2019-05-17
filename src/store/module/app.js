@@ -69,6 +69,7 @@ const app = {
     },
     // 签署路由
     SIGN_ROUTERS(state, status) {
+      console.log(77);
       state.signRouters = status;
     },
   },
@@ -116,6 +117,7 @@ const app = {
     },
     // 签署路由
     sign_routers({commit}, status) {
+      console.log(66);
       commit('SIGN_ROUTERS', status);
     },
   }

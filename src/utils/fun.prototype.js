@@ -462,6 +462,7 @@ export default {
     // 钉钉超链接跳转
     Vue.prototype.$ddSkip = function (url, type = '') {
       let that = this;
+      console.log(type);
       dd.biz.util.openLink({
         url: url,//要打开链接的地址
         onSuccess(result) {
@@ -528,12 +529,16 @@ export default {
       let that = this;
       dd.biz.navigation.close({
         onSuccess(result) {
+          // 认证完成
           let route = that.$store.state.app.signRouters;
+          console.log(route);
           switch (route) {
             case 'toBeDone':
+              console.log(11);
               that.routerReplace(route);
               break;
             case '/toBeDone':
+              console.log(22);
               that.routerLink(route);
               break;
             case '':

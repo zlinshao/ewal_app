@@ -177,6 +177,7 @@
     },
     activated() {
       // this.onSearch();
+      console.log(3344);
       this.popupOperate();
     },
     watch: {
