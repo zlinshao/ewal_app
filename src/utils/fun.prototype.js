@@ -530,7 +530,9 @@ export default {
       dd.biz.navigation.close({
         onSuccess(result) {
           // 认证完成
+          console.log(555);
           let route = that.$store.state.app.signRouters;
+          console.log(666);
           console.log(route);
           switch (route) {
             case 'toBeDone':
