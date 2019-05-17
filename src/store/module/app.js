@@ -67,10 +67,6 @@ const app = {
     ALL_DETAIL(state, status) {
       state.allDetail = status;
     },
-    // 签署路由
-    SIGN_ROUTERS(state, status) {
-      state.signRouters = status;
-    },
   },
   // 执行函数
   actions: {

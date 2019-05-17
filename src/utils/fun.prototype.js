@@ -341,7 +341,7 @@ export default {
       this.myUtils.prompt(msg, type);
     };
     // 签署电子合同
-    Vue.prototype.$signPostApi = function (item, params, title = [], route) {
+    Vue.prototype.$signPostApi = function (item, params, title = []) {
       console.log(item);
       let url = '', sign = {};
       if (item.bulletin_type === 'bulletin_collect_basic') {
@@ -358,7 +358,7 @@ export default {
         if (data) {
           this.$httpZll.localSignContract(url, sign).then(res => {
             if (Number(sign.type) === 2) {
-              this.$ddSkip(res.data.data, route);
+              this.$ddSkip(res.data.data);
             } else {
               this.$prompt('发送成功!', 'success');
             }
@@ -460,12 +460,11 @@ export default {
       })
     };
     // 钉钉超链接跳转
-    Vue.prototype.$ddSkip = function (url, route) {
+    Vue.prototype.$ddSkip = function (url) {
       let that = this;
       dd.biz.util.openLink({
         url: url,//要打开链接的地址
         onSuccess(result) {
-          sessionStorage.setItem('signRouter', route);
         },
         onFail(err) {
         }

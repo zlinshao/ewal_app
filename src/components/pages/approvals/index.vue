@@ -258,17 +258,12 @@
       }
     },
     mounted() {
-      for (let i = 1; i < 5; i++) {
-        if (this.tabs.tab !== String(i)) {
-          this.onSearch(i);
-        }
-      }
+      console.log(this.tabs);
     },
     activated() {
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
       this.mainHeight = this.mainListHeight((approvalTop + mainTop));
-      // this.onSearch(this.tabs.tab);
     },
     watch: {},
     computed: {
@@ -338,7 +333,7 @@
           index: 1,
         };
         title[1] = type === 2 ? '是否确认签署电子合同?' : '是否确认发送客户签署电子合同?';
-        this.$signPostApi(item, params, title, 'toBeDone');
+        this.$signPostApi(item, params, title);
       },
       // 报备类型
       handleBulletinType(item) {
@@ -494,7 +489,7 @@
               this.approvalList['list' + tab]['data' + twoLevel].push(item);
             }
           }
-        })
+        });
       },
       // 操作按钮处理
       outcomes(data, tabs) {

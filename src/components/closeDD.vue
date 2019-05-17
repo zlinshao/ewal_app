@@ -15,7 +15,7 @@
     activated() {
       // this.$router.go(-1);
       // window.close();
-      sessionStorage.setItem('signRouter', '/' + sessionStorage.signRouter);
+      sessionStorage.setItem('hhhhhh','fsdfasdfasdfsa');
       this.closeDD();
     },
     watch: {},

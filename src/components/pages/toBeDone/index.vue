@@ -176,17 +176,12 @@
       })
     },
     activated() {
-      // this.onSearch();
       this.popupOperate();
-      console.log(sessionStorage.signRouter);
     },
     watch: {
       'params.title'(val) {
         this.params.title = val.replace(/\s+/g, '');
       },
-      'sessionStorage.signRouter'(val) {
-        alert(val);
-      }
     },
     computed: {
       // 报备类型
@@ -277,7 +272,7 @@
           params.index = 1;
           title = ['电子合同', '是否确认签署电子合同?'];
         }
-        this.$signPostApi(item, params, title, 'toBeDone');
+        this.$signPostApi(item, params, title);
       },
       // 滚动加载
       scrollLoad(val) {
@@ -292,9 +287,10 @@
       },
       // 搜索
       onSearch() {
-        this.params.page = 1;
-        this.toBeDoneList = [];
-        this.getToBeDoneList(this.params);
+        console.log(sessionStorage.hhhhhh);
+        // this.params.page = 1;
+        // this.toBeDoneList = [];
+        // this.getToBeDoneList(this.params);
       },
       // 待办列表
       getToBeDoneList(val) {

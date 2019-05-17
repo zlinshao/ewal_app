@@ -139,7 +139,6 @@
     methods: {
       // 头部
       topTabsTag(url) {
-        this.$store.dispatch('approval_tabs', {tab: '1', status: 0});
         this.routerLink(url);
       },
       // 底部
