@@ -222,10 +222,23 @@ class httpZll extends httpService {
   }
 
   // 任务跟进详情
-  // v1.0/market/task-follow-up/list?task_id
   static followRecordList(id) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/task-follow-up/list?task_id=${id}`, {}, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+      });
+    });
+  }
+
+  // 交接单
+  static postDeliveryReceipt(data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/handover`, data, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
         } else {

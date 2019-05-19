@@ -2,8 +2,8 @@
   <div id="deliveryReceipt" :style="this.mainListHeight()">
     <div class="top" ref="top">
       <div>
-        <p></p>
-        <p></p>
+        <p @click="slither = 0"></p>
+        <p @click="slither = 4"></p>
         <h2>{{mainTop[slither]}}</h2>
       </div>
       <h1></h1>
@@ -39,23 +39,9 @@
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
                 </zl-input>
               </div>
-              <div v-for="child in item.children">
+              <div v-for="child in item.children" v-if="!child.hidden">
                 <div v-if="child.type">
-                  <div v-if="child.showForm === 'formatData'">
-                    <zl-input
-                      v-model="formatData[slither][item.keyName]"
-                      @focus="choosePicker(item,form[slither][item.keyName][child.keyName],slither,child)"
-                      :key="index"
-                      :type="child.type"
-                      :label="child.label"
-                      :readonly="child.readonly"
-                      :disabled="child.disabled"
-                      :placeholder="child.placeholder">
-                      <div class="zl-button" v-if="child.button">{{child.button}}</div>
-                      <div class="unit" v-if="child.unit">{{child.unit}}</div>
-                    </zl-input>
-                  </div>
-                  <div class="items-center" v-else>
+                  <div class="items-center">
                     <zl-input
                       v-model="form[slither][item.keyName][child.keyName]"
                       :key="index"
@@ -70,7 +56,8 @@
                   <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
                 </div>
                 <div v-else>
-                  <Upload :file="child" :getImg="album[child.keyName]" @success="getImgDataObj"></Upload>
+                  <Upload :file="child" :getImg="album[child.keyName]" :close="!closePhoto"
+                          @success="getImgDataObj"></Upload>
                 </div>
               </div>
             </li>
@@ -92,7 +79,33 @@
                 </zl-input>
                 <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
               </div>
+              <!--上传-->
+              <div v-else-if="item.picker === 'upload' && item.value" class="uploadForm">
+                <div v-for="upload in item.value" class="flex">
+                  <Upload :file="upload" :getImg="album[upload.keyName]" :close="!closePhoto"
+                          @success="getImgData"></Upload>
+                </div>
+              </div>
               <!--普通输入框-->
+              <div v-else-if="item.keyName === 'other_fee'">
+                <div v-for="(val,num) in item.value">
+                  <zl-input
+                    :key="index"
+                    v-model="form[item.keyName][num]"
+                    :type="item.type"
+                    :label="item.label + (myUtils.DX(num+1))"
+                    @input="listenInput(item.keyName)"
+                    :placeholder="item.placeholder">
+                    <div v-if="item.button && item.value.length > 1">
+                      <van-icon name="cross" color="#4570FE" size=".36rem"
+                                @click='removeChange(slither,item.keyName,index,num)'/>
+                    </div>
+                  </zl-input>
+                </div>
+                <div :class="item.keyName">
+                  <span @click="addChange(slither,item.keyName,index,item.value[0])">+</span>
+                </div>
+              </div>
               <div v-else>
                 <zl-input
                   v-if="!item.hidden"
@@ -106,6 +119,7 @@
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
                 </zl-input>
               </div>
+              <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
             </li>
           </ul>
         </div>
@@ -142,10 +156,10 @@
     components: {DeliveryPicker},
     data() {
       return {
-        mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧'],
+        mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'],
+        slither: 0,
         startClientX: 0,
         endClientX: 0,
-        slither: 0,
         allReportNum: 0,
         popupStatus: '',
         pickerModule: false,
@@ -155,7 +169,7 @@
         pickers: {},
         slitherCss: {},
         mainWidth: {},
-
+        closePhoto: false,
         album: {},                          //图片
         form: {},
         formatData: {},                     //DOM显示数据
@@ -176,6 +190,7 @@
     mounted() {
     },
     activated() {
+      this.closePickers();
       this.resetting();
       this.allReportNum = Object.keys(this.drawSlither).length;
       let top = this.$refs.top.offsetHeight + 30;
@@ -185,7 +200,11 @@
       this.slitherCss.width = this.allReportNum + '00%';
     },
     watch: {},
-    computed: {},
+    computed: {
+      allDetail() {
+        return this.$store.state.app.allDetail;
+      }
+    },
     methods: {
       changeTag(index) {
         this.slither = index;
@@ -219,6 +238,16 @@
       // 监听输入框
       listenInput(val) {
 
+      },
+      // 其他费用
+      addChange(slither, name, index, value) {
+        this.drawSlither[slither][index].value.push(value);
+        this.form[name].push('');
+      },
+      // 其他费用
+      removeChange(slither, name, index, num) {
+        this.drawSlither[slither][index].value.splice(num, 1);
+        this.form[name].splice(num, 1);
       },
       // 下拉选择
       choosePicker(item, value = '', parentKey = '', child) {
@@ -266,8 +295,30 @@
         if (form !== 'close') {
           this.form = form;
           this.formatData = show;
+          this.isBadShowHidden(form);
         }
         this.closePickers();
+      },
+      isBadShowHidden() {
+        let list = this.drawSlither;
+        for (let item of Object.keys(list)) {
+          for (let key of list[item]) {
+            if (key.status === 'child') {
+              if (key.children) {
+                if (this.form[item][key.keyName].is_bad === 1) {
+                  for (let val of key.children) {
+                    val.hidden = false;
+                  }
+                } else {
+                  this.form[item][key.keyName].bad_number = 0;
+                  for (let val of key.children) {
+                    val.hidden = true;
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       // 日期选择
       chooseTime(val, date) {
@@ -278,6 +329,7 @@
       // 确认时间
       onConTime(val) {
         this.form[val.dateKey] = val.dateVal;
+        this.formatData[val.dateKey] = val.dateVal;
         this.onCancel();
       },
       // close Module
@@ -292,9 +344,17 @@
         let key = file.slither;
         this.form[key][file.keyName]['photo'] = val[1];
       },
+      // 图片
+      getImgData(val) {
+        this.form[val[0]] = val[1];
+      },
       saveReport(val) {
+        this.form.is_draft = val;
         switch (val) {
           case 0:
+            this.$httpZll.postDeliveryReceipt(this.form).then(res => {
+
+            });
             break;
           case 1:
             break;
@@ -305,6 +365,11 @@
         console.log(this.form);
       },
       resetting() {
+        this.slither = 0;
+        this.closePhoto = true;
+        setTimeout(_ => {
+          this.closePhoto = false;
+        }, 100);
         this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
           this.form[item] = {};
@@ -326,11 +391,26 @@
                 }
               }
             } else {
-              this.form[key.keyName] = key.keyType;
-              this.formatData[key.keyName] = key.keyType;
+              if (key.picker === 'upload') {
+                for (let pic of key.value) {
+                  this.form[pic.keyName] = [];
+                }
+              } else {
+                this.form[key.keyName] = key.keyType;
+                this.formatData[key.keyName] = key.keyType;
+              }
             }
           }
         }
+        this.form.task_id = this.allDetail.task_id;
+        this.form.house_id = this.allDetail.house_id;//房屋ID
+        if (this.allDetail.ewal_contract) {
+          this.form.contract_id = JSON.parse(this.allDetail.ewal_contract).v3_contract_id;//合同ID
+        } else {
+          this.form.contract_id = '';
+        }
+        this.form.collect_or_rent = '1';//收租标记
+        this.form = Object.assign({}, this.form);
       },
     },
   }
@@ -429,12 +509,44 @@
         }
       }
 
+      .transition5 {
+        .slide1 {
+          @include transform(translateX(-20%));
+        }
+
+        .slide2 {
+          @include transform(translateX(-40%));
+        }
+
+        .slide3 {
+          @include transform(translateX(-60%));
+        }
+
+        .slide4 {
+          @include transform(translateX(-80%));
+        }
+      }
+
       ul {
         height: 100%;
+        padding-right: .2rem;
         @include scroll;
 
-        li + li {
-          border-top: 1px dashed #C6CAD8;
+        li {
+          .other_fee {
+            span {
+              display: inline-block;
+              margin-left: 1.8rem;
+              text-align: center;
+              width: .5rem;
+              height: .5rem;
+              line-height: .5rem;
+              font-size: .5rem;
+              color: #FFFFFF;
+              background-color: #4A74FE;
+              @include radius(50%);
+            }
+          }
         }
       }
 

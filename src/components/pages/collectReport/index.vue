@@ -89,7 +89,7 @@
                     <div class="items-bet payWayChange"
                          v-if="item.children.length > 1 || item.picker === 'changeCustomer'">
                       <div class="items-center">
-                        <p>第{{num + 1}}{{item.pickerText}}</p>
+                        <p>第{{(myUtils.DX(num+1))}}{{item.pickerText}}</p>
                         <van-icon name="cross" color="#4570FE" size=".36rem"
                                   @click='removeChange(slither,item.keyName,index,num)'/>
                       </div>

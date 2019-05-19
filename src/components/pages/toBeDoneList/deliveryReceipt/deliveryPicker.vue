@@ -24,6 +24,7 @@
         formatData: {},
         pickerConfig: {},
         is_bad: 0,
+        length: []
       }
     },
     mounted() {
@@ -65,12 +66,18 @@
       setPickers() {
         let config = this.pickerConfig;
         if (!config.parentKey) return;
+        config.childKeys.forEach((res, index) => {
+          if (res === 'is_bad') {
+            this.length[0] = index;
+          }
+          if (res === 'bad_number') {
+            this.length[1] = index;
+          }
+        });
+        config.ids[this.length[1]].values = [];
         let obj = this.forms[config.parentKey][config.keyName];
-        let length = config.childKeys.length;
-        let idx = 0;
-        config.ids[length - 1].values = [];
-        for (let key of config.childKeys) {
-          if (key === config.childKeys[length - 2]) {
+        config.childKeys.forEach((key, idx) => {
+          if (key === 'is_bad') {
             this.is_bad = obj[key] || 0;
           }
           if (Number(config.ids[idx].values[0]) === 0) {
@@ -78,42 +85,35 @@
           } else {
             config.columns[idx].defaultIndex = obj[key] - 1;
           }
-          idx++;
-        }
+        });
         if (this.is_bad === 1) {
           this.addColumns();
-        }
-      },
-      // 选项变化监听
-      onChange(picker, value, index) {
-        let config = this.pickerConfig;
-        let length = config.childKeys.length;
-        let column = config.columns[length - 2].values;
-        config.ids[length - 1].values = [];
-        if (length) {
-          if (column.indexOf(value[length - 2]) === 0) {
-            config.ids[length - 1].values = [0];
-            this.is_bad = 0;
-            picker.setColumnValues(length - 1, ['']);
-            config.columns[1].defaultIndex = 0;
-          } else {
-            this.is_bad = 1;
-            this.addColumns(picker);
-          }
         }
       },
       // 增加损坏数量 选项
       addColumns(picker) {
         let num = [];
         let config = this.pickerConfig;
-        let length = config.childKeys.length;
         for (let i = 1; i < 6; i++) {
           num.push(i + '个');
-          config.ids[length - 1].values.push(i);
+          config.ids[this.length[1]].values.push(i);
         }
-        config.columns[length - 1].values = num;
+        config.columns[this.length[1]].values = num;
         if (picker) {
-          picker.setColumnValues(length - 1, num);
+          picker.setColumnValues(this.length[1], num);
+        }
+      },
+      // 选项变化监听
+      onChange(picker, value) {
+        let config = this.pickerConfig;
+        let column = config.columns[this.length[0]].values;
+        if (column.indexOf(value[this.length[0]]) === 0) {
+          this.is_bad = 0;
+          picker.setColumnValues(this.length[1], ['']);
+          config.columns[this.length[0]].defaultIndex = 0;
+        } else {
+          this.is_bad = 1;
+          this.addColumns(picker);
         }
       },
       // 确认选择

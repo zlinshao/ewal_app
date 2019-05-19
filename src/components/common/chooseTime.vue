@@ -85,7 +85,7 @@
         this.timeShow = false;
         let data = {};
         data.dateVal = this.timeValue;
-        data.dateIdx = this.formatData.dateIdx;
+        data.dateIdx = this.formatData.dateIdx || '';
         data.dateKey = this.formatData.dateKey;
         this.$emit('onDate', data);
       },

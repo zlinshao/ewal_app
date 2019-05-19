@@ -1488,7 +1488,7 @@ defineRentReport = {
 // 收房交接单
 // 物品交接
 const childKeysTypeBad = ['type', 'is_bad', 'bad_number'];
-const childKeysTypeNum = ['type', 'number', 'is_bad', 'bad_number'];
+const childKeysTypeNum = ['type', 'is_bad', 'bad_number', 'number'];
 const childKeysHaveBad = ['is_have', 'is_bad', 'bad_number'];
 
 defineArticleReceipt = {
@@ -1500,11 +1500,147 @@ defineArticleReceipt = {
   master_bedroom: handlerBedroom('master_bedroom'),
   // 次卧
   bedroom: handlerBedroom('bedroom'),
+  // 费用交接
+  slither: [
+    {
+      label: '缴费类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    handlerFreeDelivery('水卡卡号', 'water_card_num'),
+    handlerFreeDelivery('水务公司', 'water_company', 'text'),
+    handlerFreeDelivery('用水档数', 'water_level'),
+    handlerFreeDelivery('用水单价', 'water_unit_price'),
+    handlerFreeDelivery('上次缴费底数', 'water_fee_last'),
+    handlerFreeDelivery('本次缴费底数', 'water_meter'),
+    handlerFreeDelivery('结算金额', 'water_settlement_amount'),
+    handlerFreeDelivery('电卡卡号', 'electric_card_num'),
+    handlerFreeDelivery('电力公司', 'electric_company', 'text'),
+    handlerFreeDelivery('用电档数', 'electric_level'),
+    handlerFreeDelivery('谷值用电单价', 'electric_valley_unit_price'),
+    handlerFreeDelivery('上次缴费底数', 'electric_valley_last'),
+    handlerFreeDelivery('本次缴费底数', 'electric_valley'),
+    handlerFreeDelivery('谷值结算金额', 'electric_valley_settlement_amount'),
+    handlerFreeDelivery('峰值用电单价', 'electric_peak_unit_price'),
+    handlerFreeDelivery('上次缴费底数', 'electric_peak_last'),
+    handlerFreeDelivery('本次缴费底数', 'electric_peak'),
+    handlerFreeDelivery('峰值结算金额', 'electric_peak_settlement_amount'),
+    handlerFreeDelivery('燃气卡卡号', 'gas_card_num'),
+    handlerFreeDelivery('燃气公司', 'gas_company', 'text'),
+    handlerFreeDelivery('燃气档数', 'gas_level'),
+    handlerFreeDelivery('燃气单价', 'gas_price'),
+    handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
+    handlerFreeDelivery('本次缴费底数', 'gas_meter'),
+    handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
+    handlerFreeDelivery('物业费', 'property_costs'),
+    handlerFreeDelivery('公摊费', 'public_fee', 'number', '必填 请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
+    handlerFreeDelivery('维修费', 'repair_fees'),
+    {
+      label: '其他费用',
+      placeholder: '必填 请输入',
+      keyName: 'other_fee',
+      keyType: [],
+      type: 'number',
+      status: '',
+      button: 'other_fee',
+      slot: '',
+      value: [
+        {
+          label: '费用',
+          placeholder: '必填 请输入',
+          keyName: 'other_fee',
+          keyType: [],
+          type: 'number',
+          status: '',
+          slot: '',
+        }
+      ],
+    },
+    handlerFreeDelivery('费用总计', 'total_fee'),
+    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea'),
+  ],
 };
+
+// 费用交接
+function handlerFreeDelivery(name, key, type = 'number', place = '必填 请输入', prompts) {
+  return {
+    label: name,
+    placeholder: place,
+    keyName: key,
+    keyType: '',
+    type: type,
+    status: '',
+    prompts: prompts,
+    slot: '',
+  }
+}
 
 // 客厅
 function handlerHallGoods(value) {
   return [
+    {
+      label: '是否干净',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'is_clean',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '卫生备注',
+      placeholder: '必填 请输入',
+      keyName: 'health_remark',
+      keyType: '',
+      type: 'textarea',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '保洁时间',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'cleaning_time',
+      keyType: '',
+      type: 'text',
+      status: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '保洁类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'cleaning_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '上传',
+      picker: 'upload',
+      value: [
+        {
+          label: '需保洁照片',
+          placeholder: '必填',
+          keyName: 'house_album',
+        }
+      ]
+    },
     deliveryMorePickersBrand('彩电', value, 'tv', childKeysTypeNum),
     deliveryMorePickers('门锁类型', value, 'gate_lock', childKeysTypeBad),
     deliveryMorePickers('钥匙', value, 'key', childKeysTypeBad),
@@ -1561,7 +1697,7 @@ function handlerBedroom(value) {
 }
 
 // 默认
-function deliveryMorePickers(name, parent, key, childKeys = ['number', 'is_bad', 'bad_number']) {
+function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_number', 'number']) {
   return {
     label: name,// 标题
     placeholder: '必填 请选择',
@@ -1581,6 +1717,7 @@ function deliveryMorePickers(name, parent, key, childKeys = ['number', 'is_bad',
         keyType: [],
         slither: parent,
         status: 'upload',
+        hidden: true,
         slot: '',
       },
       {
@@ -1590,6 +1727,7 @@ function deliveryMorePickers(name, parent, key, childKeys = ['number', 'is_bad',
         keyType: '',
         type: 'text',
         status: '',
+        hidden: true,
         slot: '',
       },
     ],
@@ -1597,7 +1735,7 @@ function deliveryMorePickers(name, parent, key, childKeys = ['number', 'is_bad',
 }
 
 // 品牌
-function deliveryMorePickersBrand(name, parent, key, childKeys = ['number', 'is_bad', 'bad_number']) {
+function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad_number', 'number']) {
   return {
     label: name,// 标题
     placeholder: '必填 请选择',
@@ -1617,6 +1755,7 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['number', 'is_
         keyType: [],
         slither: parent,
         status: 'upload',
+        hidden: true,
         slot: '',
       },
       {
@@ -1626,6 +1765,7 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['number', 'is_
         keyType: '',
         type: 'text',
         status: '',
+        hidden: true,
         slot: '',
       },
       {
@@ -1635,6 +1775,7 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['number', 'is_
         keyType: '',
         type: 'text',
         status: '',
+        hidden: true,
         slot: '',
       },
     ],
@@ -1653,6 +1794,3 @@ function deliveryMorePickersRemark(name) {
     slot: '',
   }
 }
-
-// 费用交接
-defineCostReceipt = {};
