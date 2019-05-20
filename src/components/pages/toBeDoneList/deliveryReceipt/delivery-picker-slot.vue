@@ -1,19 +1,19 @@
 <template>
-  <div>
+  <div id="deliveryPickerSlot">
     <van-popup :overlay-style="{'background':'rgba(0,0,0,.4)'}" v-model="popupModule"
-               position="bottom" :overlay="true" class="popupModule">
+               position="bottom" :overlay="true" class="popupModule" :style="maxHeight">
       <div class="popupTop">
         <p>请完成相关选项</p>
         <h3 @click="finishData">完成</h3>
       </div>
       <div class="pickerInput">
-        <div v-for="slither of Object.keys(drawForm)" v-if="slither === pickerConfig.parentKey" class="listParent">
+        <div v-for="slither of Object.keys(drawForm)" class="listParent">
           <div v-for="(item,index) of drawForm[slither]"
-               v-if="slither !== 'slither'&& item.status === 'child' && item.picker === popup" class="chooseList"
-               :class="{'slotChoose':item.keyName === pickerName}">
+               v-if="slither !== 'slither' && pickerConfig.parentKey !== 'bedroom' && item.status === 'child' && item.picker === popup"
+               class="chooseList" :class="{'slotChoose':item.keyName === pickerName}">
             <picker-input
               v-model="formatData[slither][item.keyName]"
-              @focus="choosePicker(item,forms[slither][item.keyName],slither,item)"
+              @focus="choosePicker(item,forms[slither][item.keyName],slither)"
               :key="index"
               :type="item.type"
               :label="item.label"
@@ -21,6 +21,23 @@
               :disabled="item.disabled"
               :placeholder="item.placeholder">
             </picker-input>
+          </div>
+          <div
+            v-else-if="slither !== 'slither' && pickerConfig.parentKey === 'bedroom'" class="listChildren">
+            <div v-for="room in item" :class="{'slotChoose':room.keyName === pickerName}" v-if="room.picker === popup">
+              <picker-input
+                v-model="formatData[slither][index][room.keyName]"
+                @focus="choosePicker(room,forms[slither][index][room.keyName],slither,index)"
+                :key="index"
+                :type="room.type"
+                :label="room.label"
+                :readonly="room.readonly"
+                :disabled="room.disabled"
+                :placeholder="room.placeholder">
+                <div class="zl-button" v-if="room.button">{{room.button}}</div>
+                <div class="unit" v-if="room.unit">{{room.unit}}</div>
+              </picker-input>
+            </div>
           </div>
         </div>
       </div>
@@ -54,12 +71,14 @@
         pickerConfig: {},
         pickerName: '',
         is_bad: 0,
-        length: []
+        length: [],
+        maxHeight: '',
       }
     },
     mounted() {
     },
     activated() {
+      this.maxHeight = {maxHeight: (Number(sessionStorage.windowHeight) - 60) + 'px'};
     },
     watch: {
       module(val) {
@@ -85,6 +104,7 @@
         handler(val, oldVal) {
           this.pickerName = val.keyName;
           let config = this.jsonClone(val);
+          console.log(config);
           this.setPickers(config);
         },
         deep: true,
@@ -108,7 +128,7 @@
         })
       },
       // 切换
-      choosePicker(item, value = '', parentKey = '', child) {
+      choosePicker(item, value = '', parentKey = '', index = '') {
         this.closePickerConfig().then(_ => {
           this.pickerName = item.keyName;
           let dict = dicties[item.keyName];
@@ -124,8 +144,9 @@
             config.columns.push(obj);
             config.ids.push(ids);
           }
-          config.title = child.label;
+          config.title = item.label;
           config.parentKey = parentKey;
+          config.index = index;
           config.keyName = item.keyName;
           config.childKeys = item.childKeys;
           this.setPickers(config);
@@ -143,7 +164,12 @@
           }
         });
         config.ids[this.length[1]].values = [];
-        let obj = this.forms[config.parentKey][config.keyName];
+        let obj;
+        if (typeof config.index === 'number') {
+          obj = this.forms[config.parentKey][config.index][config.keyName];
+        } else {
+          obj = this.forms[config.parentKey][config.keyName];
+        }
         config.childKeys.forEach((key, idx) => {
           if (key === 'is_bad') {
             this.is_bad = obj[key] || 0;
@@ -151,13 +177,17 @@
           if (Number(config.ids[idx].values[0]) === 0) {
             config.columns[idx].defaultIndex = obj[key];
           } else {
-            config.columns[idx].defaultIndex = obj[key] - 1;
+            if (obj[key] > 0) {
+              config.columns[idx].defaultIndex = obj[key] - 1;
+            } else {
+              config.columns[idx].defaultIndex = obj[key];
+            }
           }
         });
+        this.pickerConfig = Object.assign({}, config);
         if (this.is_bad === 1) {
           this.addColumns();
         }
-        this.pickerConfig = Object.assign({}, config);
       },
       // 增加损坏数量 选项
       addColumns(picker) {
@@ -167,11 +197,11 @@
           num.push(i + '个');
           config.ids[this.length[1]].values.push(i);
         }
-        config.columns[this.length[1]].values = num;
         if (picker) {
           picker.setColumnValues(this.length[1], num);
         }
-        console.log(config);
+        config.columns[this.length[1]].values = num;
+        this.pickerConfig = Object.assign({}, config);
       },
       // 选项变化监听
       onChange(picker, value) {
@@ -188,17 +218,21 @@
       },
       // 确认选择
       onConfirm(value, index) {
-        let picker = this.pickerConfig;
-        let ids = picker.ids;//id组
-        let parentKey = picker.parentKey;//最外层字段名
-        let key = picker.keyName;//父级 字段名
-        let child = picker.childKeys;//子集 字段名
-        child.forEach((res, idx) => {
-          this.forms[parentKey][key][res] = Number(ids[idx].values[index[idx]]);
-        });
+        let config = this.pickerConfig;
+        let ids = config.ids;//id组
+        let parentKey = config.parentKey;//最外层字段名
+        let key = config.keyName;//父级 字段名
+        let child = config.childKeys;//子集 字段名
         value = value.filter(item => item !== '');
-        this.formatData[parentKey][key] = value.join('/');
-
+        child.forEach((res, idx) => {
+          if (typeof config.index === 'number') {
+            this.forms[parentKey][config.index][key][res] = Number(ids[idx].values[index[idx]]);
+            this.formatData[parentKey][config.index][key] = value.join('/');
+          } else {
+            this.forms[parentKey][key][res] = Number(ids[idx].values[index[idx]]);
+            this.formatData[parentKey][key] = value.join('/');
+          }
+        });
       },
       finishData() {
         this.$emit('close', this.forms, this.formatData);
@@ -208,5 +242,29 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "../../../../assets/scss/common.scss";
+
+  #deliveryPickerSlot {
+    .popupModule {
+      @include flex('bet-column');
+
+      .pickerInput {
+        height: 100%;
+        @include scroll;
+      }
+
+      .listChildren {
+        display: flex;
+        flex-wrap: wrap;
+
+        > div {
+          width: 33.33%;
+          padding: .2rem 0;
+          @include radius(.1rem);
+        }
+      }
+    }
+  }
+
 
 </style>

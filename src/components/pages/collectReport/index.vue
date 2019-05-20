@@ -121,7 +121,7 @@
                         v-if="((key.picker && key.readonly) || key.disabled) && key.length !== form[item.keyName].length"
                         v-model="form[item.keyName][num][key.keyName]"
                         @focus="choosePicker(key,form[item.keyName][num][key.keyName],num,item.keyName)"
-                        :key="idx"
+                        :key="num"
                         :type="key.type"
                         :label="key.label"
                         :readonly="key.readonly"
@@ -131,7 +131,7 @@
                       </zl-input>
                       <zl-input
                         v-else-if="key.length !== form[item.keyName].length"
-                        :key="idx"
+                        :key="num"
                         v-model="form[item.keyName][num][key.keyName]"
                         :type="key.type"
                         :label="key.label"

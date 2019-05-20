@@ -12,12 +12,71 @@
       <div :style="slitherCss" class="transition" :class="['transition' + allReportNum]">
         <div class="slide justify-around" :class="['slide' + slither]">
           <ul :style="mainWidth" v-for="slither in Object.keys(drawSlither)">
-            <li v-if="item.status === 'child'" v-for="(item,index) in drawSlither[slither]">
+            <li v-if="slither === 'bedroom'" v-for="(item,index) in drawSlither[slither]">
+              <div class="bedroom">
+                <p>
+                  <b>次卧{{myUtils.DX(index+1)}}</b>
+                  <van-icon name="cross" color="#4570FE" size=".36rem" v-if="drawSlither[slither].length > 1"
+                            @click='removeChange(slither,item.keyName,index)'/>
+                </p>
+                <div class="addChange" v-if="(index+1) === drawSlither[slither].length">
+                  <span @click="addChange(slither,item.keyName,index,item)">+</span>
+                </div>
+              </div>
+              <div v-for="room in item">
+                <div v-if="room.showForm === 'formatData'">
+                  <zl-input
+                    v-model="formatData[slither][index][room.keyName]"
+                    @focus="choosePicker(room,form[slither][index][room.keyName],slither,index)"
+                    :key="index"
+                    :type="room.type"
+                    :label="room.label"
+                    :readonly="room.readonly"
+                    :disabled="room.disabled"
+                    :placeholder="room.placeholder">
+                    <div class="zl-button" v-if="room.button">{{room.button}}</div>
+                    <div class="unit" v-if="room.unit">{{room.unit}}</div>
+                  </zl-input>
+                </div>
+                <div v-else>
+                  <zl-input
+                    v-model="form[slither][index][room.keyName]"
+                    :key="index"
+                    :type="room.type"
+                    :label="room.label"
+                    :placeholder="room.placeholder">
+                    <div class="zl-button" v-if="room.button">{{room.button}}</div>
+                    <div class="unit" v-if="room.unit">{{room.unit}}</div>
+                  </zl-input>
+                </div>
+                <div v-for="child in room.children" v-if="!child.hidden">
+                  <div v-if="child.type">
+                    <div class="items-center">
+                      <zl-input
+                        v-model="form[slither][index][room.keyName][child.keyName]"
+                        :key="index"
+                        :type="child.type"
+                        :label="child.label"
+                        :placeholder="child.placeholder">
+                        <div class="zl-button" v-if="child.button">{{child.button}}</div>
+                        <div class="unit" v-if="child.unit">{{child.unit}}</div>
+                      </zl-input>
+                    </div>
+                    <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
+                  </div>
+                  <div v-else>
+                    <Upload :file="child" :getImg="album[child.keyName]" :close="!closePhoto"
+                            @success="getImgDataBed"></Upload>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li v-else-if="item.status === 'child'">
               <!--select 下拉选择-->
               <div v-if="item.showForm === 'formatData'">
                 <zl-input
                   v-model="formatData[slither][item.keyName]"
-                  @focus="choosePicker(item,form[slither][item.keyName],slither,item)"
+                  @focus="choosePicker(item,form[slither][item.keyName],slither)"
                   :key="index"
                   :type="item.type"
                   :label="item.label"
@@ -47,7 +106,6 @@
                       :key="index"
                       :type="child.type"
                       :label="child.label"
-                      @input="listenInput(slither,item.keyName)"
                       :placeholder="child.placeholder">
                       <div class="zl-button" v-if="child.button">{{child.button}}</div>
                       <div class="unit" v-if="child.unit">{{child.unit}}</div>
@@ -89,20 +147,22 @@
               <!--普通输入框-->
               <div v-else-if="item.keyName === 'other_fee'">
                 <div v-for="(val,num) in item.value">
-                  <zl-input
-                    :key="index"
-                    v-model="form[item.keyName][num]"
-                    :type="item.type"
-                    :label="item.label + (myUtils.DX(num+1))"
-                    @input="listenInput(item.keyName)"
-                    :placeholder="item.placeholder">
+                  <div class="items-center">
+                    <label class="labelTitle">{{item.label + (myUtils.DX(num+1))}}</label>
+                    <zl-input
+                      v-for="(str,i) in val"
+                      :key="i"
+                      v-model="form[item.keyName][num][str.keyName]"
+                      :type="str.type"
+                      :placeholder="str.placeholder">
+                    </zl-input>
                     <div v-if="item.button && item.value.length > 1">
                       <van-icon name="cross" color="#4570FE" size=".36rem"
                                 @click='removeChange(slither,item.keyName,index,num)'/>
                     </div>
-                  </zl-input>
+                  </div>
                 </div>
-                <div :class="item.keyName">
+                <div class="addChange">
                   <span @click="addChange(slither,item.keyName,index,item.value[0])">+</span>
                 </div>
               </div>
@@ -113,7 +173,6 @@
                   v-model="form[item.keyName]"
                   :type="item.type"
                   :label="item.label"
-                  @input="listenInput(item.keyName)"
                   :placeholder="item.placeholder">
                   <div v-if="item.button">{{item.button}}</div>
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
@@ -139,13 +198,9 @@
     <choose-time :module="timeModule" :formatData="formatData" @close="onCancel" @onDate="onConTime"></choose-time>
     <!--正常 picker-->
     <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
-    <!--有input picker-->
+    <!--分类 选择-->
     <delivery-picker-slot :module="popupModule" :pickers="pickers" :drawing="drawSlither" :postData="form"
-                          :formData="formatData"
-                          :popup="popupStatus" @close="onConfirm"></delivery-picker-slot>
-    <!--分类选择-->
-    <delivery-picker :module="deliveryModule" :pickers="pickers" :form="form" :formData="formatData"
-                     @close="onConfirm"></delivery-picker>
+                          :formData="formatData" :popup="popupStatus" @close="onConfirm"></delivery-picker-slot>
   </div>
 </template>
 
@@ -155,7 +210,7 @@
 
   export default {
     name: "index",
-    components: {DeliveryPicker, DeliveryPickerSlot},
+    components: {DeliveryPickerSlot},
     data() {
       return {
         mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'],
@@ -244,21 +299,42 @@
           }
         }
       },
-      // 监听输入框
-      listenInput(val) {
-      },
       // 其他费用
       addChange(slither, name, index, value) {
-        this.drawSlither[slither][index].value.push(value);
-        this.form[name].push('');
+        let obj = {}, str = {}, arr = [];
+        let cloneVal = this.jsonClone(value);
+        if (slither === 'bedroom') {
+          for (let val of cloneVal) {
+            if (val.picker) {
+              val.picker = val.picker + index + 6;
+            }
+            obj[val.keyName] = val.keyType;
+            str[val.keyName] = '';
+            arr.push(val);
+          }
+          this.drawSlither[slither].push(arr);
+          this.form[slither].push(obj);
+          this.formatData[slither].push(str);
+          return;
+        }
+        this.drawSlither[slither][index].value.push(cloneVal);
+        for (let item of cloneVal) {
+          obj[item.keyName] = item.keyType;
+        }
+        this.form[name].push(obj);
       },
       // 其他费用
-      removeChange(slither, name, index, num) {
+      removeChange(slither, name, index, num = '') {
+        if (slither === 'bedroom') {
+          this.drawSlither[slither].splice(index, 1);
+          this.form[slither].splice(index, 1);
+          return;
+        }
         this.drawSlither[slither][index].value.splice(num, 1);
         this.form[name].splice(num, 1);
       },
       // 下拉选择
-      choosePicker(item, value = '', parentKey = '', child) {
+      choosePicker(item, value = '', parentKey = '', index = '') {
         this.popupStatus = item.picker;
         if (item.status === 'child') {
 
@@ -274,7 +350,8 @@
             this.pickers.columns.push(obj);
             this.pickers.ids.push(ids);
           }
-          this.pickers.title = child.label;
+          this.pickers.title = item.label;
+          this.pickers.index = index;
           this.pickers.parentKey = parentKey;
           this.pickers.keyName = item.keyName;
           this.pickers.childKeys = item.childKeys;
@@ -292,28 +369,45 @@
         if (form !== 'close') {
           this.form = form;
           this.formatData = show;
-          this.isBadShowHidden(form);
+          this.isBadShowHidden();
         }
       },
       isBadShowHidden() {
         let list = this.drawSlither;
         for (let item of Object.keys(list)) {
-          for (let key of list[item]) {
-            if (key.status === 'child') {
-              if (key.children) {
-                if (this.form[item][key.keyName].is_bad === 1) {
-                  for (let val of key.children) {
-                    val.hidden = false;
+          list[item].forEach((key, index) => {
+            if (item === 'bedroom') {
+              key.forEach((bed, idx) => {
+                if (bed.children) {
+                  for (let room of bed.children) {
+                    if (this.form[item][index][bed.keyName].is_bad === 1) {
+                      room.hidden = false;
+                    } else {
+                      for (let child of bed.childKeys) {
+                        this.form[item][index][bed.keyName][child] = '';
+                      }
+                      room.hidden = true;
+                    }
                   }
-                } else {
-                  this.form[item][key.keyName].bad_number = 0;
-                  for (let val of key.children) {
-                    val.hidden = true;
+                }
+              })
+            } else {
+              if (key.status === 'child') {
+                if (key.children) {
+                  if (this.form[item][key.keyName].is_bad === 1) {
+                    for (let val of key.children) {
+                      val.hidden = false;
+                    }
+                  } else {
+                    this.form[item][key.keyName].bad_number = 0;
+                    for (let val of key.children) {
+                      val.hidden = true;
+                    }
                   }
                 }
               }
             }
-          }
+          })
         }
       },
       // 日期选择
@@ -336,6 +430,11 @@
         this.deliveryModule = false;
       },
       // 图片
+      getImgDataBed(val, file) {
+        let key = file.slither;
+        console.log(file);
+        // this.form[key][file.keyName]['photo'] = val[1];
+      },
       getImgDataObj(val, file) {
         let key = file.slither;
         this.form[key][file.keyName]['photo'] = val[1];
@@ -349,7 +448,9 @@
         switch (val) {
           case 0:
             this.$httpZll.postDeliveryReceipt(this.form).then(res => {
-
+              if (res) {
+                this.$router.go(-1);
+              }
             });
             break;
           case 1:
@@ -360,6 +461,7 @@
         }
         console.log(this.form);
       },
+      // 重置
       resetting() {
         this.slither = 0;
         this.closePhoto = true;
@@ -369,11 +471,31 @@
         this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
           if (item !== 'slither') {
-            this.form[item] = {};
-            this.formatData[item] = {};
+            if (item === 'bedroom') {
+              this.form[item] = [];
+              this.formatData[item] = [];
+            } else {
+              this.form[item] = {};
+              this.formatData[item] = {};
+            }
+
           }
           for (let key of this.drawSlither[item]) {
-            if (key.status === 'child') {
+            if (item === 'bedroom') {
+              this.drawSlither[item].forEach((res, index) => {
+                this.form[item][index] = {};
+                this.formatData[item][index] = {};
+                for (let room of res) {
+                  this.form[item][index][room.keyName] = room.keyType;
+                  if (room.childKeys) {
+                    this.formatData[item][index][room.keyName] = '';
+                    for (let child of room.childKeys) {
+                      this.form[item][index][room.keyName][child] = '';
+                    }
+                  }
+                }
+              })
+            } else if (key.status === 'child') {
               this.form[item][key.keyName] = key.keyType;
               this.formatData[item][key.keyName] = '';
               if (key.childKeys || key.children) {
@@ -393,6 +515,15 @@
                 for (let pic of key.value) {
                   this.form[pic.keyName] = [];
                 }
+              } else if (key.status === 'other_fee') {
+                this.form[key.keyName] = key.keyType;
+                let obj = {};
+                for (let other of key.value) {
+                  for (let val of other) {
+                    obj[val.keyName] = '';
+                  }
+                }
+                this.form[key.keyName].push(obj);
               } else {
                 this.form[key.keyName] = key.keyType;
                 this.formatData[key.keyName] = key.keyType;
@@ -477,53 +608,25 @@
         }
       }
 
-      .transition2 {
-        .slide1 {
-          @include transform(translateX(-50%));
+      @mixin slides($n) {
+        $num: 100% / $n;
+        @for $i from 1 through $n {
+          .transition#{$n} {
+            .slide#{$i} {
+              @include transform(translateX(-($num*$i)));
+            }
+          }
         }
       }
-
-      .transition3 {
-        .slide1 {
-          @include transform(translateX(-33.33%));
-        }
-
-        .slide2 {
-          @include transform(translateX(-66.33%));
-        }
-      }
-
-      .transition4 {
-        .slide1 {
-          @include transform(translateX(-25%));
-        }
-
-        .slide2 {
-          @include transform(translateX(-50%));
-        }
-
-        .slide3 {
-          @include transform(translateX(-75%));
-        }
-      }
-
-      .transition5 {
-        .slide1 {
-          @include transform(translateX(-20%));
-        }
-
-        .slide2 {
-          @include transform(translateX(-40%));
-        }
-
-        .slide3 {
-          @include transform(translateX(-60%));
-        }
-
-        .slide4 {
-          @include transform(translateX(-80%));
-        }
-      }
+      @include slides(2);
+      @include slides(3);
+      @include slides(4);
+      @include slides(5);
+      @include slides(6);
+      @include slides(7);
+      @include slides(8);
+      @include slides(9);
+      @include slides(10);
 
       ul {
         height: 100%;
@@ -531,7 +634,7 @@
         @include scroll;
 
         li {
-          .other_fee {
+          .addChange {
             span {
               display: inline-block;
               margin-left: 1.8rem;
@@ -543,6 +646,23 @@
               color: #FFFFFF;
               background-color: #4A74FE;
               @include radius(50%);
+            }
+          }
+
+          .bedroom {
+            @include flex('items-bet');
+            padding-right: .3rem;
+
+            p {
+              @include flex('items-center');
+
+              b {
+                margin-right: .2rem;
+                color: #4570FE;
+                padding: .1rem .24rem;
+                @include radius(0 1rem 1rem 0);
+                background-color: rgba(69, 112, 254, .2);
+              }
             }
           }
         }

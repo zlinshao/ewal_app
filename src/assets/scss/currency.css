@@ -414,6 +414,7 @@
   display: -webkit-flex;
   align-items: center;
   flex-wrap: wrap;
+  padding-bottom: .2rem;
   border-bottom: .1rem solid #F8F8F8; }
   .popupModule .pickerInput .listParent {
     width: 100%;

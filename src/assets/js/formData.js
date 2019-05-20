@@ -1493,13 +1493,13 @@ const childKeysHaveBad = ['is_have', 'is_bad', 'bad_number'];
 
 defineArticleReceipt = {
   // 客厅
-  hall_goods: handlerHallGoods('hall_goods'),
+  hall_goods: handlerHallGoods('hall_goods', 1),
   // 厨房/阳台/卫生间
-  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom'),
+  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom', 2),
   // 主卧
-  master_bedroom: handlerBedroom('master_bedroom'),
+  master_bedroom: handlerBedroom('master_bedroom', 6),
   // 次卧
-  bedroom: handlerBedroom('bedroom'),
+  bedroom: [handlerBedroom('bedroom', 5)],
   // 费用交接
   slither: [
     {
@@ -1548,19 +1548,28 @@ defineArticleReceipt = {
       keyName: 'other_fee',
       keyType: [],
       type: 'number',
-      status: '',
+      status: 'other_fee',
       button: 'other_fee',
       slot: '',
       value: [
-        {
-          label: '费用',
-          placeholder: '必填 请输入',
-          keyName: 'other_fee',
-          keyType: [],
-          type: 'number',
-          status: '',
-          slot: '',
-        }
+        [
+          {
+            placeholder: '费用名称',
+            keyName: 'name',
+            keyType: '',
+            type: 'text',
+            status: '',
+            slot: '',
+          },
+          {
+            placeholder: '金额 必填',
+            keyName: 'value',
+            keyType: '',
+            type: 'number',
+            status: '',
+            slot: '',
+          },
+        ]
       ],
     },
     handlerFreeDelivery('费用总计', 'total_fee'),
@@ -1583,7 +1592,7 @@ function handlerFreeDelivery(name, key, type = 'number', place = '必填 请输�
 }
 
 // 客厅
-function handlerHallGoods(value) {
+function handlerHallGoods(value, num) {
   return [
     {
       label: '是否干净',
@@ -1641,57 +1650,58 @@ function handlerHallGoods(value) {
         }
       ]
     },
-    deliveryMorePickersBrand('彩电', value, 'tv', childKeysTypeNum, 1),
-    deliveryMorePickers('门锁类型', value, 'gate_lock', childKeysTypeBad, 1),
-    deliveryMorePickers('钥匙', value, 'key', childKeysTypeBad, 1),
-    deliveryMorePickers('窗户', value, 'screen_window', childKeysTypeBad, 1),
-    deliveryMorePickers('遥控器', value, 'remote_control', childKeysHaveBad, 1),
-    deliveryMorePickers('沙发', value, 'sofa', childKeysTypeNum, 1),
-    deliveryMorePickers('茶几', value, 'tea_table', undefined, 1),
-    deliveryMorePickers('冰箱', value, 'refrigerator', childKeysTypeNum, 1),
-    deliveryMorePickers('椅子', value, 'chair', undefined, 1),
-    deliveryMorePickers('餐桌', value, 'dining_table', childKeysTypeNum, 1),
-    deliveryMorePickers('客厅灯', value, 'light', childKeysTypeNum, 1),
+    deliveryMorePickersBrand('彩电', value, 'tv', childKeysTypeNum, num),
+    deliveryMorePickers('门锁类型', value, 'gate_lock', childKeysTypeBad, num),
+    deliveryMorePickers('钥匙', value, 'key', childKeysTypeBad, num),
+    deliveryMorePickers('窗户', value, 'screen_window', childKeysTypeBad, num),
+    deliveryMorePickers('遥控器', value, 'remote_control', childKeysHaveBad, num),
+    deliveryMorePickers('沙发', value, 'sofa', childKeysTypeNum, num),
+    deliveryMorePickers('茶几', value, 'tea_table', undefined, num),
+    deliveryMorePickers('冰箱', value, 'refrigerator', childKeysTypeNum, num),
+    deliveryMorePickers('椅子', value, 'chair', undefined, num),
+    deliveryMorePickers('餐桌', value, 'dining_table', childKeysTypeNum, num),
+    deliveryMorePickers('客厅灯', value, 'light', childKeysTypeNum, num),
     deliveryMorePickersRemark('客厅备注'),
   ]
 }
 
 // 厨房/阳台/卫生间
-function handlerKitchenBalconyBathroom(value) {
+function handlerKitchenBalconyBathroom(value, num) {
   return [
-    deliveryMorePickers('热水器', value, 'water_heater', childKeysTypeNum, 2),
-    deliveryMorePickers('浴霸', value, 'bath_heater', childKeysTypeNum, 2),
-    deliveryMorePickersBrand('洗衣机', value, 'washer', childKeysTypeNum, 2),
-    deliveryMorePickers('燃气灶', value, 'gas_stove', childKeysTypeNum, 2),
-    deliveryMorePickers('橱柜', value, 'sideboard', undefined, 2),
-    deliveryMorePickers('洗菜池', value, 'washing_pool', undefined, 2),
-    deliveryMorePickers('水龙头', value, 'faucet', undefined, 2),
-    deliveryMorePickers('微波炉', value, 'microwave_oven', undefined, 2),
-    deliveryMorePickers('厨房灯', value, 'kitchen_light', undefined, 2),
-    deliveryMorePickers('阳台灯', value, 'balcony_light', undefined, 3),
-    deliveryMorePickers('卫生间灯', value, 'bathroom_light', undefined, 3),
-    deliveryMorePickers('浴霸灯', value, 'bath_heater_light', undefined, 3),
-    deliveryMorePickers('洗面池', value, 'wash_basin', undefined, 3),
-    deliveryMorePickers('马桶盖', value, 'toilet_lid', undefined, 3),
-    deliveryMorePickers('晾衣架', value, 'drying_rack', undefined, 3),
-    deliveryMorePickers('晾衣架', value, 'drying_rack', undefined, 3),
+    deliveryMorePickers('热水器', value, 'water_heater', childKeysTypeNum, num),
+    deliveryMorePickers('浴霸', value, 'bath_heater', childKeysTypeNum, num),
+    deliveryMorePickersBrand('洗衣机', value, 'washer', childKeysTypeNum, num),
+    deliveryMorePickers('燃气灶', value, 'gas_stove', childKeysTypeNum, num),
+    deliveryMorePickers('橱柜', value, 'sideboard', undefined, num),
+    deliveryMorePickers('洗菜池', value, 'washing_pool', undefined, num),
+    deliveryMorePickers('水龙头', value, 'faucet', undefined, num),
+    deliveryMorePickers('微波炉', value, 'microwave_oven', undefined, num),
+    deliveryMorePickers('厨房灯', value, 'kitchen_light', undefined, num),
+    deliveryMorePickers('阳台灯', value, 'balcony_light', undefined, num),
+    deliveryMorePickers('卫生间灯', value, 'bathroom_light', undefined, num),
+    deliveryMorePickers('浴霸灯', value, 'bath_heater_light', undefined, num),
+    deliveryMorePickers('洗面池', value, 'wash_basin', undefined, num),
+    deliveryMorePickers('马桶盖', value, 'toilet_lid', undefined, num),
+    deliveryMorePickers('晾衣架', value, 'drying_rack', undefined, num),
     deliveryMorePickersRemark('厨房/阳台/卫生间备注'),
   ]
 }
 
 // 主卧次卧
-function handlerBedroom(value) {
+function handlerBedroom(value, num) {
   return [
-    deliveryMorePickers('床', value, 'delivery_bed', undefined, 4),
-    deliveryMorePickers('床垫', value, 'mattress', undefined, 4),
-    deliveryMorePickers('窗帘', value, 'delivery_curtain', undefined, 4),
-    deliveryMorePickers('空调', value, 'air_conditioning', childKeysTypeNum, 4),
-    deliveryMorePickers('吸顶灯', value, 'light', childKeysTypeNum, 4),
-    deliveryMorePickers('电视', value, 'tv', childKeysTypeNum, 4),
-    deliveryMorePickers('电视遥控器', value, 'tv_remote_control', undefined, 5),
-    deliveryMorePickers('门锁钥匙', value, 'door_lock_key', undefined, 5),
-    deliveryMorePickers('书桌', value, 'desk', undefined, 5),
-    deliveryMorePickers('椅子', value, 'chair', undefined, 5),
+    deliveryMorePickers('床', value, 'delivery_bed', undefined, num),
+    deliveryMorePickers('床垫', value, 'mattress', undefined, num),
+    deliveryMorePickers('衣柜', value, 'delivery_wardrobe', undefined, num),
+    deliveryMorePickers('窗帘', value, 'delivery_curtain', undefined, num),
+    deliveryMorePickers('空调', value, 'air_conditioning', childKeysTypeNum, num),
+    deliveryMorePickers('空调遥控器', value, 'air_conditioner_remote', undefined, num),
+    deliveryMorePickers('吸顶灯', value, 'light', childKeysTypeNum, num),
+    deliveryMorePickers('电视', value, 'tv', childKeysTypeNum, num),
+    deliveryMorePickers('电视遥控器', value, 'tv_remote_control', undefined, num),
+    deliveryMorePickers('门锁钥匙', value, 'door_lock_key', undefined, num),
+    deliveryMorePickers('书桌', value, 'desk', undefined, num),
+    deliveryMorePickers('椅子', value, 'chair', undefined, num),
     deliveryMorePickersRemark('卧室备注'),
   ]
 }
@@ -1717,6 +1727,7 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
         keyType: [],
         slither: parent,
         status: 'upload',
+        picker: 0,
         hidden: true,
         slot: '',
       },
@@ -1726,6 +1737,7 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
         keyName: 'remark',
         keyType: '',
         type: 'text',
+        picker: 0,
         status: '',
         hidden: true,
         slot: '',
