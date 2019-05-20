@@ -140,8 +140,9 @@
     <!--正常 picker-->
     <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
     <!--有input picker-->
-    <picker-slot :module="popupModule" :pickers="pickers" :drawing="drawForm" :postData="form" :formData="formatData"
-                 :popup="popupStatus" @close="onConfirm"></picker-slot>
+    <delivery-picker-slot :module="popupModule" :pickers="pickers" :drawing="drawSlither" :postData="form"
+                          :formData="formatData"
+                          :popup="popupStatus" @close="onConfirm"></delivery-picker-slot>
     <!--分类选择-->
     <delivery-picker :module="deliveryModule" :pickers="pickers" :form="form" :formData="formatData"
                      @close="onConfirm"></delivery-picker>
@@ -150,10 +151,11 @@
 
 <script>
   import DeliveryPicker from './deliveryPicker.vue'
+  import DeliveryPickerSlot from './delivery-picker-slot.vue'
 
   export default {
     name: "index",
-    components: {DeliveryPicker},
+    components: {DeliveryPicker, DeliveryPickerSlot},
     data() {
       return {
         mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'],
@@ -166,7 +168,16 @@
         deliveryModule: false,
         popupModule: false,
         timeModule: false,
-        pickers: {},
+        pickers: {
+          title: '',                        //picker标题
+          type: '',                         //字典类型
+          keyName: '',                      //字段名
+          childKeys: [],                    //字段名
+          parentKey: '',                    //父级 字段名 变化有picker
+          columns: [],                      //下拉框选择文本列表
+          ids: [],                          //当前字典所有id
+          index: '',                        //变化下标
+        },
         slitherCss: {},
         mainWidth: {},
         closePhoto: false,
@@ -179,7 +190,6 @@
           dateType: '',                     //日期类型 默认date 时分datetime
           dateIdx: '',                      //日期字段下标 变化情况使用
         },
-        drawForm: [],                       //表单集合
         drawSlither: {},
 
         childPhoto: [],
@@ -190,7 +200,6 @@
     mounted() {
     },
     activated() {
-      this.closePickers();
       this.resetting();
       this.allReportNum = Object.keys(this.drawSlither).length;
       let top = this.$refs.top.offsetHeight + 30;
@@ -237,7 +246,6 @@
       },
       // 监听输入框
       listenInput(val) {
-
       },
       // 其他费用
       addChange(slither, name, index, value) {
@@ -251,8 +259,9 @@
       },
       // 下拉选择
       choosePicker(item, value = '', parentKey = '', child) {
-        // this.popupStatus = item.picker;
+        this.popupStatus = item.picker;
         if (item.status === 'child') {
+
           let dict = dicties[item.keyName];
           this.pickers.columns = [];
           this.pickers.ids = [];
@@ -269,24 +278,12 @@
           this.pickers.parentKey = parentKey;
           this.pickers.keyName = item.keyName;
           this.pickers.childKeys = item.childKeys;
-          this.deliveryModule = true;
+          this.popupModule = true;
         } else if (item.status === 'date') {
           this.chooseTime(item, value);
         } else {
           this.pickerModule = true;
           this.pickers = this.inputSelect(this.pickers, item, value, parentKey);
-        }
-      },
-      closePickers() {
-        this.pickers = {
-          title: '',                        //picker标题
-          type: '',                         //字典类型
-          keyName: '',                      //字段名
-          childKeys: [],                    //字段名
-          parentKey: '',                    //父级 字段名 变化有picker
-          columns: [],                      //下拉框选择文本列表
-          ids: [],                          //当前字典所有id
-          index: '',                        //变化下标
         }
       },
       // 确认选择
@@ -297,7 +294,6 @@
           this.formatData = show;
           this.isBadShowHidden(form);
         }
-        this.closePickers();
       },
       isBadShowHidden() {
         let list = this.drawSlither;
@@ -372,8 +368,10 @@
         }, 100);
         this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
-          this.form[item] = {};
-          this.formatData[item] = {};
+          if (item !== 'slither') {
+            this.form[item] = {};
+            this.formatData[item] = {};
+          }
           for (let key of this.drawSlither[item]) {
             if (key.status === 'child') {
               this.form[item][key.keyName] = key.keyType;

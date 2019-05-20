@@ -779,7 +779,7 @@ defineCollectReport = {
       slot: '',
     },
     {
-      keyName: null,
+      keyName: undefined,
       picker: 'addCustomer',
       button: '+增加附属租客',
     },
@@ -1641,17 +1641,17 @@ function handlerHallGoods(value) {
         }
       ]
     },
-    deliveryMorePickersBrand('彩电', value, 'tv', childKeysTypeNum),
-    deliveryMorePickers('门锁类型', value, 'gate_lock', childKeysTypeBad),
-    deliveryMorePickers('钥匙', value, 'key', childKeysTypeBad),
-    deliveryMorePickers('窗户', value, 'screen_window', childKeysTypeBad),
-    deliveryMorePickers('遥控器', value, 'remote_control', childKeysHaveBad),
-    deliveryMorePickers('沙发', value, 'sofa', childKeysTypeNum),
-    deliveryMorePickers('茶几', value, 'tea_table'),
-    deliveryMorePickers('冰箱', value, 'refrigerator', childKeysTypeNum),
-    deliveryMorePickers('椅子', value, 'chair'),
-    deliveryMorePickers('餐桌', value, 'dining_table', childKeysTypeNum),
-    deliveryMorePickers('客厅灯', value, 'light', childKeysTypeNum),
+    deliveryMorePickersBrand('彩电', value, 'tv', childKeysTypeNum, 1),
+    deliveryMorePickers('门锁类型', value, 'gate_lock', childKeysTypeBad, 1),
+    deliveryMorePickers('钥匙', value, 'key', childKeysTypeBad, 1),
+    deliveryMorePickers('窗户', value, 'screen_window', childKeysTypeBad, 1),
+    deliveryMorePickers('遥控器', value, 'remote_control', childKeysHaveBad, 1),
+    deliveryMorePickers('沙发', value, 'sofa', childKeysTypeNum, 1),
+    deliveryMorePickers('茶几', value, 'tea_table', undefined, 1),
+    deliveryMorePickers('冰箱', value, 'refrigerator', childKeysTypeNum, 1),
+    deliveryMorePickers('椅子', value, 'chair', undefined, 1),
+    deliveryMorePickers('餐桌', value, 'dining_table', childKeysTypeNum, 1),
+    deliveryMorePickers('客厅灯', value, 'light', childKeysTypeNum, 1),
     deliveryMorePickersRemark('客厅备注'),
   ]
 }
@@ -1659,22 +1659,22 @@ function handlerHallGoods(value) {
 // 厨房/阳台/卫生间
 function handlerKitchenBalconyBathroom(value) {
   return [
-    deliveryMorePickers('热水器', value, 'water_heater', childKeysTypeNum),
-    deliveryMorePickers('浴霸', value, 'bath_heater', childKeysTypeNum),
-    deliveryMorePickersBrand('洗衣机', value, 'washer', childKeysTypeNum),
-    deliveryMorePickers('燃气灶', value, 'gas_stove', childKeysTypeNum),
-    deliveryMorePickers('橱柜', value, 'sideboard'),
-    deliveryMorePickers('洗菜池', value, 'washing_pool'),
-    deliveryMorePickers('水龙头', value, 'faucet'),
-    deliveryMorePickers('微波炉', value, 'microwave_oven'),
-    deliveryMorePickers('厨房灯', value, 'kitchen_light'),
-    deliveryMorePickers('阳台灯', value, 'balcony_light'),
-    deliveryMorePickers('卫生间灯', value, 'bathroom_light'),
-    deliveryMorePickers('浴霸灯', value, 'bath_heater_light'),
-    deliveryMorePickers('洗面池', value, 'wash_basin'),
-    deliveryMorePickers('马桶盖', value, 'toilet_lid'),
-    deliveryMorePickers('晾衣架', value, 'drying_rack'),
-    deliveryMorePickers('晾衣架', value, 'drying_rack'),
+    deliveryMorePickers('热水器', value, 'water_heater', childKeysTypeNum, 2),
+    deliveryMorePickers('浴霸', value, 'bath_heater', childKeysTypeNum, 2),
+    deliveryMorePickersBrand('洗衣机', value, 'washer', childKeysTypeNum, 2),
+    deliveryMorePickers('燃气灶', value, 'gas_stove', childKeysTypeNum, 2),
+    deliveryMorePickers('橱柜', value, 'sideboard', undefined, 2),
+    deliveryMorePickers('洗菜池', value, 'washing_pool', undefined, 2),
+    deliveryMorePickers('水龙头', value, 'faucet', undefined, 2),
+    deliveryMorePickers('微波炉', value, 'microwave_oven', undefined, 2),
+    deliveryMorePickers('厨房灯', value, 'kitchen_light', undefined, 2),
+    deliveryMorePickers('阳台灯', value, 'balcony_light', undefined, 3),
+    deliveryMorePickers('卫生间灯', value, 'bathroom_light', undefined, 3),
+    deliveryMorePickers('浴霸灯', value, 'bath_heater_light', undefined, 3),
+    deliveryMorePickers('洗面池', value, 'wash_basin', undefined, 3),
+    deliveryMorePickers('马桶盖', value, 'toilet_lid', undefined, 3),
+    deliveryMorePickers('晾衣架', value, 'drying_rack', undefined, 3),
+    deliveryMorePickers('晾衣架', value, 'drying_rack', undefined, 3),
     deliveryMorePickersRemark('厨房/阳台/卫生间备注'),
   ]
 }
@@ -1682,22 +1682,22 @@ function handlerKitchenBalconyBathroom(value) {
 // 主卧次卧
 function handlerBedroom(value) {
   return [
-    deliveryMorePickers('床', value, 'delivery_bed'),
-    deliveryMorePickers('床垫', value, 'mattress'),
-    deliveryMorePickers('窗帘', value, 'delivery_curtain'),
-    deliveryMorePickers('空调', value, 'air_conditioning', childKeysTypeNum),
-    deliveryMorePickers('吸顶灯', value, 'light', childKeysTypeNum),
-    deliveryMorePickers('电视', value, 'tv', childKeysTypeNum),
-    deliveryMorePickers('电视遥控器', value, 'tv_remote_control'),
-    deliveryMorePickers('门锁钥匙', value, 'door_lock_key'),
-    deliveryMorePickers('书桌', value, 'desk'),
-    deliveryMorePickers('椅子', value, 'chair'),
+    deliveryMorePickers('床', value, 'delivery_bed', undefined, 4),
+    deliveryMorePickers('床垫', value, 'mattress', undefined, 4),
+    deliveryMorePickers('窗帘', value, 'delivery_curtain', undefined, 4),
+    deliveryMorePickers('空调', value, 'air_conditioning', childKeysTypeNum, 4),
+    deliveryMorePickers('吸顶灯', value, 'light', childKeysTypeNum, 4),
+    deliveryMorePickers('电视', value, 'tv', childKeysTypeNum, 4),
+    deliveryMorePickers('电视遥控器', value, 'tv_remote_control', undefined, 5),
+    deliveryMorePickers('门锁钥匙', value, 'door_lock_key', undefined, 5),
+    deliveryMorePickers('书桌', value, 'desk', undefined, 5),
+    deliveryMorePickers('椅子', value, 'chair', undefined, 5),
     deliveryMorePickersRemark('卧室备注'),
   ]
 }
 
-// 默认
-function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_number', 'number']) {
+// 正常选项
+function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_number', 'number'], num) {
   return {
     label: name,// 标题
     placeholder: '必填 请选择',
@@ -1706,7 +1706,7 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
     keyType: {},
     type: 'text',// input 类型
     status: 'child',
-    picker: 'picker',
+    picker: 'picker' + num,
     showForm: 'formatData',
     childKeys: childKeys,
     children: [
@@ -1735,7 +1735,7 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
 }
 
 // 品牌
-function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad_number', 'number']) {
+function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad_number', 'number'], num) {
   return {
     label: name,// 标题
     placeholder: '必填 请选择',
@@ -1744,7 +1744,7 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad
     keyType: {},
     type: 'text',// input 类型
     status: 'child',
-    picker: 'picker',
+    picker: 'picker' + num,
     showForm: 'formatData',
     childKeys: childKeys,
     children: [

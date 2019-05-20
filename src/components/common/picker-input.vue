@@ -1,28 +1,30 @@
 <template>
   <div id="picker-input">
-    <div>{{label}}</div>
-    <input
-      v-if="readonly || disabled"
-      unselectable="on"
-      onfocus="this.blur()"
-      ref="input"
-      :value="value"
-      :type="type"
-      :disabled="disabled || false"
-      :readonly="readonly || false"
-      :placeholder="placeholder"
-      @focus="$emit('focus', $event)"
-      @blur="$emit('blur', $event)"
-      @input="$emit('input', $event.target.value)">
-    <input
-      v-else
-      ref="input"
-      :value="value"
-      :type="type"
-      :placeholder="placeholder"
-      @focus="$emit('focus', $event)"
-      @blur="$emit('blur', $event)"
-      @input="$emit('input', $event.target.value)">
+    <label>
+      <div>{{label}}</div>
+      <input
+        v-if="readonly || disabled"
+        unselectable="on"
+        onfocus="this.blur()"
+        ref="input"
+        :value="value"
+        :type="type"
+        :disabled="disabled || false"
+        :readonly="readonly || false"
+        :placeholder="placeholder"
+        @focus="$emit('focus', $event)"
+        @blur="$emit('blur', $event)"
+        @input="$emit('input', $event.target.value)">
+      <input
+        v-else
+        ref="input"
+        :value="value"
+        :type="type"
+        :placeholder="placeholder"
+        @focus="$emit('focus', $event)"
+        @blur="$emit('blur', $event)"
+        @input="$emit('input', $event.target.value)">
+    </label>
   </div>
 </template>
 
@@ -46,7 +48,6 @@
 <style lang="scss" scoped>
   #picker-input {
     text-align: center;
-    margin-bottom: .3rem;
     div {
       margin-bottom: .2rem;
     }

@@ -15,19 +15,19 @@
               <!--显示formatData -->
               <div v-if="item.showForm === 'formatData'" v-for="(item,index) in drawSlither[slither]">
                 <!--select 下拉选择-->
-                  <zl-input
-                    v-model="formatData[item.keyName]"
-                    @focus="choosePicker(item,form[item.keyName])"
-                    :key="index"
-                    :type="item.type"
-                    :label="item.label"
-                    :readonly="item.readonly"
-                    :disabled="item.disabled"
-                    :placeholder="item.placeholder">
-                    <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                    <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                  </zl-input>
-                  <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
+                <zl-input
+                  v-model="formatData[item.keyName]"
+                  @focus="choosePicker(item,form[item.keyName])"
+                  :key="index"
+                  :type="item.type"
+                  :label="item.label"
+                  :readonly="item.readonly"
+                  :disabled="item.disabled"
+                  :placeholder="item.placeholder">
+                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
+                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                </zl-input>
+                <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
               </div>
               <!--显示form -->
               <div v-else>
@@ -319,7 +319,6 @@
       'form.month'(val) {
         if (val) {
           this.form.period_price_way_arr[0].period = val;
-
         }
       },
     },
@@ -552,6 +551,11 @@
                   this.certified();
                 } else {
                   this.$ddSkip(res.data.data);
+                  this.$dialog('认证是否完成?').then(res => {
+                    if (res) {
+                      this.confirmation('identity');
+                    }
+                  })
                 }
               }
             });
@@ -1024,15 +1028,18 @@
       right: 0;
       bottom: 0;
       transition: background .3s;
+
       .bulletinTitle {
         padding: .1rem .36rem 0;
         height: 1.2rem;
         @include flex('items-bet');
+
         label {
           font-size: .36rem;
           color: #4570FE;
           font-family: 'fangzhengjianti';
         }
+
         p {
           i {
             display: inline-block;
@@ -1042,6 +1049,7 @@
             @include radius(50%);
             background-color: #FFFFFF;
           }
+
           i.hover {
             width: .33rem;
             @include radius(1rem);
@@ -1049,21 +1057,26 @@
           }
         }
       }
+
       .mainRadius {
         margin: 0 .3rem;
         overflow: hidden;
         @include radius(.06rem);
         background-color: rgba(255, 255, 255, .88);
+
         .transition {
           @include transition(all .3s);
         }
+
         .slide0 {
           @include transform(translateX(0));
         }
+
         .main {
           height: 100%;
           padding: .15rem .15rem 2rem;
           @include scroll;
+
           .addCustomer {
             color: #4570FE;
             text-align: center;
@@ -1071,30 +1084,37 @@
           }
         }
       }
+
       .mainRadius2 {
         .slide1 {
           @include transform(translateX(50%));
         }
       }
+
       .mainRadius3 {
         .slide1 {
           @include transform(translateX(-33.33%));
         }
+
         .slide2 {
           @include transform(translateX(-66.33%));
         }
       }
+
       .mainRadius4 {
         .slide1 {
           @include transform(translateX(-25%));
         }
+
         .slide2 {
           @include transform(translateX(-50%));
         }
+
         .slide3 {
           @include transform(translateX(-75%));
         }
       }
+
       .payWayChange {
         p {
           padding: .13rem .3rem;
@@ -1105,6 +1125,7 @@
           margin-right: .2rem;
         }
       }
+
       /*单选 radio*/
       .commonRadio {
         div {
@@ -1114,31 +1135,38 @@
           padding: .15rem .3rem;
           @include radius(1rem);
         }
+
         .chooseRadio {
           background-color: rgba(69, 112, 254, .3);
           color: #4570FE;
         }
       }
+
       /*报备底部按钮*/
       .footer {
         position: fixed;
         bottom: 0;
+
         span {
           color: #FFFFFF;
           padding: .2rem 0
         }
       }
+
       .footerLeft {
         width: 2.6rem;
         height: 1.6rem;
         @include bgImage('../../../assets/image/footer/caogaochongzhi.png');
         left: 0;
+
         div {
           height: 100%;
           text-align: left;
+
           span {
             width: 30%;
           }
+
           .resetting {
             width: 40%;
             padding: .2rem 0;
@@ -1147,6 +1175,7 @@
           }
         }
       }
+
       .footerRight {
         right: 0;
         width: 1.6rem;

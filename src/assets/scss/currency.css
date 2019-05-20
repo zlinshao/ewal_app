@@ -415,8 +415,19 @@
   align-items: center;
   flex-wrap: wrap;
   border-bottom: .1rem solid #F8F8F8; }
-  .popupModule .pickerInput > div {
-    width: 33.33%; }
+  .popupModule .pickerInput .listParent {
+    width: 100%;
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap; }
+  .popupModule .pickerInput .chooseList {
+    width: 33.33%;
+    padding: .2rem 0;
+    -webkit-border-radius: 0.16rem;
+    -moz-border-radius: 0.16rem;
+    border-radius: 0.16rem; }
+  .popupModule .pickerInput .slotChoose {
+    background-color: rgba(74, 116, 254, 0.2); }
 .popupModule .electricalList {
   display: flex;
   display: -webkit-flex;

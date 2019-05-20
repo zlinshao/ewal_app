@@ -342,29 +342,30 @@ export default {
     };
     // 签署电子合同
     Vue.prototype.$signPostApi = function (item, params, title = []) {
-      console.log(item);
-      let url = '', sign = {};
-      if (item.bulletin_type === 'bulletin_collect_basic') {
-        url = 'sign_collect';
-        sign = {
-          task_id: item.task_id,
-          contract_id: item.contract_number,
-        };
-      }
-      for (let key of Object.keys(params)) {
-        sign[key] = params[key]
-      }
-      this.$dialog(title[0], title[1]).then(data => {
-        if (data) {
-          this.$httpZll.localSignContract(url, sign).then(res => {
-            if (Number(sign.type) === 2) {
-              this.$ddSkip(res.data.data);
-            } else {
-              this.$prompt('发送成功!', 'success');
-            }
-          })
+      return new Promise((resolve, reject) => {
+        let url = '', sign = {};
+        if (item.bulletin_type === 'bulletin_collect_basic') {
+          url = 'sign_collect';
+          sign = {
+            task_id: item.task_id,
+            contract_id: item.contract_number,
+          };
         }
-      });
+        for (let key of Object.keys(params)) {
+          sign[key] = params[key]
+        }
+        this.$dialog(title[0], title[1]).then(data => {
+          if (data) {
+            this.$httpZll.localSignContract(url, sign).then(res => {
+              if (Number(sign.type) === 2) {
+                resolve(res.data.data)
+              } else {
+                this.$prompt('发送成功!', 'success');
+              }
+            })
+          }
+        });
+      })
     };
     // 修改合同
     Vue.prototype.$reviseContract = function (action = {}, name = '', item) {
@@ -461,7 +462,6 @@ export default {
     };
     // 钉钉超链接跳转
     Vue.prototype.$ddSkip = function (url) {
-      let that = this;
       dd.biz.util.openLink({
         url: url,//要打开链接的地址
         onSuccess(result) {

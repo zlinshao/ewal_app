@@ -272,7 +272,19 @@
           params.index = 1;
           title = ['电子合同', '是否确认签署电子合同?'];
         }
-        this.$signPostApi(item, params, title);
+        this.$signPostApi(item, params, title).then(res => {
+          if (res) {
+            this.$ddSkip(res);
+            this.$dialog('签署是否完成?').then(res => {
+              if (res) {
+                this.$prompt('正在处理..', 'send');
+                setTimeout(_ => {
+                  this.onSearch();
+                }, 1000)
+              }
+            })
+          }
+        });
       },
       // 滚动加载
       scrollLoad(val) {
