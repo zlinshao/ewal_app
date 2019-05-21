@@ -34,8 +34,8 @@
                   <p v-else>{{item.name}}</p>
                   <div>
                     <b>
-                      <img :src="item.bulletin_staff_avatar" v-if="item.bulletin_staff_avatar">
-                      <img src="../../../assets/image/common/noHead.png" v-else>
+                      <img :src="item.bulletin_staff_avatar" v-if="item.bulletin_staff_avatar" alt="">
+                      <img src="../../../assets/image/common/noHead.png" alt="" v-else>
                     </b>
                     <span v-if="item.bulletin_staff_name">{{item.bulletin_staff_name}}</span>
                     <span v-else>---</span>
@@ -699,6 +699,7 @@
                 }
 
                 span {
+                  white-space: nowrap;
                   margin-left: .12rem;
                   font-size: .28rem;
                   color: #686874;

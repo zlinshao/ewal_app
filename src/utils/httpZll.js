@@ -377,7 +377,7 @@ class httpZll extends httpService {
   static getElectronicContract(data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_identity}fdd/number/take`, data).then((res) => {
-        if (res.code === '20000') {
+        if (res.code.endsWith('0')) {
           resolve(res);
         } else {
           resolve(false);

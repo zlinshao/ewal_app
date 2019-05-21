@@ -292,6 +292,8 @@
             this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
             this.routerLink('/collectReport', {revise: 'revise'});
             break;
+          case'':
+            break;
         }
       },
       // 同意 拒绝
@@ -310,7 +312,10 @@
               value: action.action,
             }];
             this.$httpZll.finishBeforeTask(this.task_id, postData).then(_ => {
-              this.$router.go(-1);
+              this.$prompt('审核成功！', 'success');
+              setTimeout(_ => {
+                this.$router.go(-1);
+              }, 500);
             });
             break;
         }
@@ -558,16 +563,20 @@
       background-color: #4570FE;
       @include radius(.1rem .1rem 0 0);
       z-index: 3;
+
       div {
         @include flex('items-center');
+
         img {
           width: .6rem;
           height: .6rem;
           @include radius(50%);
         }
+
         span {
           margin: 0 .2rem 0 .1rem;
         }
+
         p {
           font-size: .22rem;
           padding: .12rem .3rem;
@@ -575,8 +584,10 @@
           background-color: #43A046;
         }
       }
+
       p {
         @include flex('items-center');
+
         i {
           width: .3rem;
           height: .3rem;
@@ -584,43 +595,52 @@
           @include detailImg('xiaohaoshijian');
         }
       }
+
       h1 {
         position: absolute;
         bottom: -.4rem;
         right: 0;
         @include flex('items-center');
+
         i {
           width: .8rem;
           height: .8rem;
           margin-right: .3rem;
           @include radius(50%);
         }
+
         .icon-1 {
           @include detailImg('bianji');
         }
+
         .icon-2 {
           @include detailImg('pinglun');
         }
+
         .icon-3 {
           @include detailImg('zhuanfa');
         }
       }
     }
+
     /*详情*/
     .main {
       background-color: #FFFFFF;
       @include boxShaw(0 -4px 10px 0 rgba(69, 112, 254, 0.2));
       @include flex('bet-column');
+
       .detailInfo {
         @include flex();
         height: 100%;
         padding: 1rem 0 .3rem;
         position: relative;
+
         .detailTitle {
           position: absolute;
           top: .5rem;
           left: .3rem;
           color: #4570FE;
+
           i {
             position: absolute;
             height: .5rem;
@@ -628,49 +648,61 @@
             top: -.5rem;
             left: .3rem;
           }
+
           span {
             background: rgba(69, 112, 254, .1);
             padding: .3rem .16rem;
             border-radius: 0 0 1rem 1rem
           }
         }
+
         .detail {
           width: 100%;
           height: 100%;
+
           > div {
             @include flex();
             width: 400%;
             height: 100%;
+
             ul {
               @include scroll;
               width: 100%;
               height: 100%;
               padding-left: .6rem;
               transition: transform .3s;
+
               li {
                 > div {
                   @include flex();
+
                   h1, > div {
                     padding: .1rem .15rem;
                   }
+
                   h1 {
                     width: 36%;
                     color: #4A4A4A;
                     text-align: right;
                   }
+
                   > div {
                     width: 64%;
                     color: #000;
+
                     h3 {
                       color: #4A4A4A;
                       padding-bottom: .1rem;
                     }
+
                     .h3, .h4 {
                       padding-top: .2rem;
                     }
+
                     h2 {
                       padding-left: .3rem;
                     }
+
                     img {
                       width: 1rem;
                       height: 1rem;
@@ -683,25 +715,32 @@
             }
           }
         }
+
         .slide0 {
           @include transform(translateX(0));
         }
+
         .slide1 {
           @include transform(translateX(-100%));
         }
+
         .slide2 {
           @include transform(translateX(-200%));
         }
+
         .slide3 {
           @include transform(translateX(-300%));
         }
       }
+
       .operates {
         overflow: hidden;
         @include flex('bet-column');
         border-top: 1px dashed #C6CAD8;
+
         p {
           @include flex('flex-center');
+
           i {
             width: .16rem;
             height: .16rem;
@@ -709,12 +748,14 @@
             @include radius(50%);
             background-color: #D8D8D8;
           }
+
           .hover {
             background-color: #448aff;
             @include radius(1rem);
             width: .3rem;
           }
         }
+
         div {
           height: 2.6rem;
           padding: 0 .8rem;
@@ -722,24 +763,29 @@
           @include flex('justify-around');
           justify-items: flex-end;
           flex-direction: row-reverse;
+
           .btn {
             width: .7rem;
             padding-bottom: .6rem;
             @include flex('flex-center');
           }
+
           /*取消*/
           .back {
             @include detailImg('quxiao');
           }
+
           /*拒绝*/
           .refuse {
             @include detailImg('jujue');
           }
+
           /*暂缓*/
           .postpone {
             color: #FFFFFF;
             @include detailImg('zanhuan');
           }
+
           /*通过*/
           .publish {
             color: #FFFFFF;
@@ -748,6 +794,7 @@
         }
       }
     }
+
     /*流程详情*/
     .records {
       position: fixed;
@@ -759,50 +806,61 @@
       background: rgba(69, 112, 254, .9);
       @include flex('items-center');
       padding-left: .24rem;
+
       p {
         width: .42rem;
         height: .42rem;
         @include detailImg('shenhejilu');
       }
     }
+
     .recordPopup {
       height: 100%;
       left: 1rem;
       background-color: #FFFFFF;
+
       .content {
         height: 100%;
         @include flex('bet-column');
+
         .contentMain {
           height: 100%;
           padding: .3rem 0;
           @include flex();
+
           > div {
             width: 100%;
             height: 100%;
             @include scroll;
           }
         }
+
         .commonBtn {
           padding: .36rem;
           border-top: 1px solid rgba(216, 216, 216, .5);;
         }
       }
     }
+
     /*评论弹窗===转交弹窗*/
     .commentPopup, .deliverPopup {
       padding: .42rem .3rem .3rem;
       @include radius(.1rem);
       @include flex('bet-column');
+
       h1 {
         font-size: .33rem;
         padding-bottom: .4rem;
       }
+
       > div {
         @include scroll;
         max-height: 6rem;
+
         div {
           @include flex();
           min-height: .88rem;
+
           label {
             min-width: 1.3rem;
             max-width: 1.3rem;
@@ -810,18 +868,22 @@
             margin-right: .3rem;
             white-space: nowrap;
           }
+
           input {
             padding-right: .3rem;
           }
+
           textarea {
             border: none;
           }
         }
+
         .deliver {
           @include flex('items-center');
           margin-bottom: .24rem;
         }
       }
+
       .commonBtn {
         padding: .8rem .1rem .2rem;
       }

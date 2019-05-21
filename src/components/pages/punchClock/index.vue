@@ -182,10 +182,10 @@
     methods: {
       // 确定打卡
       finishPunchClock() {
-        this.postForm.variables = this.jsonClone(this.form);
-        this.postForm.variables.property_phone = '182052501756';
-        this.postForm.variables.remark = '发的啥开发圣诞快乐';
-        this.postForm.variables.look_photo = [4227577, 4227578, 4227579];
+        // this.postForm.variables = this.jsonClone(this.form);
+        // this.postForm.variables.property_phone = '182052501756';
+        // this.postForm.variables.remark = '发的啥开发圣诞快乐';
+        // this.postForm.variables.look_photo = [4227577, 4227578, 4227579];
         this.$httpZll.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
             this.close_();
@@ -278,7 +278,7 @@
           // 员工位置
           let staffContent =
             `<div class="icon_location staffContent">
-               <img src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1">
+               <img src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1" alt="">
             </div>`;
           let staffMarker = new AMap.Marker({
             position: location,

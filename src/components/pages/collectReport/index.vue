@@ -391,7 +391,6 @@
         this.$httpZll.getElectronicContract(data).then(res => {
           this.electronicContractNumber = res.data.number || '';
           this.form.contract_number = this.electronicContractNumber;
-
         });
       },
       // 计算押金
