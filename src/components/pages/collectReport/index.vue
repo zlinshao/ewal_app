@@ -293,9 +293,11 @@
         allReportNum: 0,//滑动列表数
 
         queryData: {},
+        bulletinType: {},//报备类型
       }
     },
     activated() {
+      this.bulletinType = JSON.parse(sessionStorage.bulletin_type);
       this.bulletin_types(this.bulletinType);
       this.slither = 0;
       this.allReportNum = Object.keys(this.resetDrawing).length;
@@ -325,10 +327,6 @@
     computed: {
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
-      },
-      // 报备类型
-      bulletinType() {
-        return this.$store.state.app.bulletinTypes;
       },
       bulletinDetail() {
         return this.$store.state.app.bulletinPreFill;

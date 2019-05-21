@@ -169,7 +169,7 @@
     activated() {
       this.startTime();
       setInterval(this.startTime, 1000);
-      let query = this.$route.query;
+      let query = JSON.parse(sessionStorage.punchClock);
       let api = query.ctl_detail_request_url;
       this.close_();
       this.postForm.task_id = query.task_id;

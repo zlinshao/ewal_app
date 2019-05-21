@@ -3,12 +3,12 @@
     <div class="circleOut" ref="out">
       <div class="circleIn" ref="into">
         <div class="circleItem" v-for="(item,index) in buttonList" @click="toBulletin(item)" ref="item">
-          <img :src="item.icon" class="circleIcon" :class="[item.type]" :style="{transform: itemAngle}">
+          <img :src="item.icon" class="circleIcon" :class="[item.type]" :style="{transform: itemAngle}" alt="">
         </div>
       </div>
-      <img src="../assets/image/home/circle_logo.png" class="logo" ref="lejialogo">
+      <img src="../assets/image/home/circle_logo.png" class="logo" ref="lejialogo" alt="">
     </div>
-    <img src="../assets/image/home/zhuanpan_zhicheng.png" class="zhicheng">
+    <img src="../assets/image/home/zhuanpan_zhicheng.png" class="zhicheng" alt="">
     <!--<audio src="../assets/image/circlePanel/kaka.mp3" ref="audio"></audio>-->
   </div>
 </template>
@@ -187,7 +187,7 @@
     },
     methods: {
       toBulletin(item) {
-        this.$store.dispatch('bulletin_type', item.status);
+        sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
         this.routerLink(item.url);
       },
       getBasePoint() {

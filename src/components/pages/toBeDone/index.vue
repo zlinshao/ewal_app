@@ -165,6 +165,7 @@
         toBeDoneList: [],
         detail_request_url: '',
         variableName: '',
+        bulletin_type: {},//报备类型
       }
     },
     created() {
@@ -176,6 +177,9 @@
       })
     },
     activated() {
+      this.bulletin_type = JSON.parse(sessionStorage.bulletin_type);
+      this.toBeDoneList = [];
+      this.fullLoading = true;
       this.popupOperate();
     },
     watch: {
@@ -183,12 +187,7 @@
         this.params.title = val.replace(/\s+/g, '');
       },
     },
-    computed: {
-      // 报备类型
-      bulletin_type() {
-        return this.$store.state.app.bulletinTypes;
-      },
-    },
+    computed: {},
     methods: {
       // 右侧弹窗操作
       popupOperate() {
@@ -227,7 +226,8 @@
       goOperates(val) {
         switch (val.task_action) {
           case 'punchClock':
-            this.routerLink(val.task_action, val);
+            sessionStorage.setItem('punchClock', JSON.stringify(val));
+            this.routerLink(val.task_action);
             break;
           case 'collectReport':
             this.againTaskDetail(val).then(_ => {
@@ -242,7 +242,6 @@
       },
       // 变更 签署
       clickBtn(action = {}, name = '', item) {
-        console.log(item);
         let user_id = '';
         user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
         switch (action.action) {
