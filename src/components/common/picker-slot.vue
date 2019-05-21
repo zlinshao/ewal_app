@@ -148,6 +148,10 @@
       },
       // 确认选择
       onConfirm(value, index) {
+        if (!value.length) {
+          this.$prompt('请选择或输入内容');
+          return;
+        }
         let picker = this.pickerConfig;
         let key = picker.keyName;
         if (picker.status.includes('arrs')) {

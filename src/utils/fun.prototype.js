@@ -277,6 +277,22 @@ export default {
       });
       return formatData;
     };
+    // 下拉框 显示 重置
+    Vue.prototype.$closePicker = function () {
+      return new Promise((resolve, reject) => {
+        let picker = {
+          title: '',                        //picker标题
+          type: '',                         //字典类型
+          keyName: '',                      //字段名
+          childKeys: [],                    //字段名
+          parentKey: '',                    //父级 字段名 变化有picker
+          columns: [],                      //下拉框选择文本列表
+          ids: [],                          //当前字典所有id
+          index: '',                        //变化下标
+        };
+        resolve(picker)
+      })
+    };
     // 下拉框数据显示 picker 配置
     Vue.prototype.inputSelect = function (pickers, val, num, parentKey) {
       pickers.keyName = val.keyName;

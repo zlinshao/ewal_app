@@ -337,7 +337,6 @@
       choosePicker(item, value = '', parentKey = '', index = '') {
         this.popupStatus = item.picker;
         if (item.status === 'child') {
-
           let dict = dicties[item.keyName];
           this.pickers.columns = [];
           this.pickers.ids = [];

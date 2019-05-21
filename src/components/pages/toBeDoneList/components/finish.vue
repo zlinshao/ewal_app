@@ -18,7 +18,7 @@
           </div>
           <div class="photo" v-else>
             <p v-for="pic in item.value">
-              <img :src="pic.uri" @click="$bigPhoto(item.value,pic.uri)">
+              <img :src="pic.uri" @click="$bigPhoto(item.value,pic.uri)" alt="">
             </p>
           </div>
         </div>

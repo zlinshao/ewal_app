@@ -32,6 +32,7 @@
       // this.personalGet().then(res => {
       //   this.loading = !res;
       // });
+      dd.biz.navigation.setRight({show: false});
       sessionStorage.setItem('windowHeight', String(window.innerHeight));
       sessionStorage.setItem('windowWidth', String(window.innerWidth));
     },
@@ -39,7 +40,6 @@
 
     },
     activated() {
-      dd.biz.navigation.setRight({show: false});
     },
     watch: {
       // 使用watch 监听$router的变化

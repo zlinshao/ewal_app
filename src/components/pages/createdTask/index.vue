@@ -161,16 +161,7 @@
         noPickerModule: false,          //popup 模态框
         popupStatus: '',                //popup 模态框
         pickerModule: false,            //正常 select 下拉框
-        pickers: {
-          title: '',                    //picker标题
-          type: '',                     //字典类型
-          keyName: '',                  //字段名
-          parentKey: '',                //父级 字段名 变化有picker
-          columns: [],                  //下拉框选择文本列表
-          ids: [],                      //当前字典所有id
-          index: '',                    //变化下标
-        },
-
+        pickers: {},
         drawForm: [],                   //表单
         drawSlither: {                  //表单渲染 json
           // 收房待办
@@ -658,9 +649,6 @@
                 break;
 
             }
-            // for (let key of Object.keys(val)) {
-            //   this.form[key] = val[key];
-            // }
           }
         }
       },
@@ -703,8 +691,12 @@
         } else {
           this.popupModule = true;
         }
-        if (val.pickerRead) return;
-        this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+        this.$closePicker().then(res => {
+          this.pickers = res;
+          this.pickers.keyName = val.keyName;
+          if (val.pickerRead) return;
+          this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+        })
       },
       // 确认选择
       onConfirm(value, show) {
@@ -758,64 +750,78 @@
 
   #createdTask {
     background-color: #F8F8F8;
+
     .createdTask {
       .taskTop {
         height: .8rem;
         @include bgImage('../../../assets/image/add/toubupolang.png');
       }
+
       .main, .commonBtn {
         background-color: #FFFFFF;
       }
+
       .main {
         @include scroll;
         margin: 0 .3rem;
         padding: 0 .3rem;
+
         .taskType {
           @include flex('items-center');
           min-height: .88rem;
+
           label {
             min-width: 2.4rem;
             text-align: right;
           }
+
           div {
             @include flex('items-bet');
             width: 100%;
+
             p {
               width: 80%;
               padding: 0 .3rem;
             }
+
             i {
               width: .4rem;
               height: .4rem;
               @include bgImage('../../../assets/image/toBeDone/downselect.png');
               @include transition(all .51s);
             }
+
             .downSelect {
               @include transform(rotateZ(-180deg));
             }
           }
         }
+
         /*显示单选框*/
         .radioChecks {
           padding: 0 0 0 1rem;
           @include transform(translateX(100%));
           transition: all .6s;
           opacity: 0;
+
           .contents {
             width: 33.33%;
           }
         }
+
         .hidden {
           height: 0;
           opacity: 0;
           @include transform(translateX(100%));
         }
+
         .show {
           height: 1.6rem;
           opacity: 1;
           @include transform(translateX(0));
         }
       }
+
       .commonBtn {
         padding: .3rem;
       }
