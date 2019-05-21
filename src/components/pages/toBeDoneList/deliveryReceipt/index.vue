@@ -492,6 +492,13 @@
                     for (let child of room.childKeys) {
                       this.form[item][index][room.keyName][child] = '';
                     }
+                    for (let child of room.children) {
+                      if (child.status === 'upload') {
+                        this.form[item][index][room.keyName]['photo'] = [];
+                      } else {
+                        this.form[item][index][room.keyName][child.keyName] = '';
+                      }
+                    }
                   }
                 }
               })
