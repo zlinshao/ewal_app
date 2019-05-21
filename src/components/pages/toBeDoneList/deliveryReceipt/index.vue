@@ -386,6 +386,7 @@
           this.isBadShowHidden();
         }
       },
+      // 显示/隐藏 图片 备注
       isBadShowHidden() {
         let list = this.drawSlither;
         for (let item of Object.keys(list)) {

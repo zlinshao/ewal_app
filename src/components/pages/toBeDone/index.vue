@@ -25,13 +25,13 @@
           <div class="handleBtn">
             <!--合同修改 / 签署-->
             <div v-if="item.outcome" class="contract">
-              <p v-for="btn in item.outcome.outcomeOptions" @click="clickBtn(btn,item.outcome.variableName,item)">
+              <p v-for="btn in item.outcome.outcomeOptions" @click="clickBtn(btn,item)">
                 <i><img :src="changeOperates[btn.action]" alt=""></i>
                 <span>{{btn.title}}</span>
               </p>
             </div>
             <!--转交/代签-->
-            <div v-for="btn in normalOperates" :class="btn.class" v-else>
+            <div v-for="btn in normalOperates" :class="btn.action" @click="clickBtn(btn)" v-else>
               <i><img :src="btn.icon" alt=""></i>
               <span>{{btn.text}}</span>
             </div>
@@ -50,7 +50,11 @@
         </li>
       </scroll-load>
     </div>
-
+    <!--代签/转交-->
+    <van-popup v-model="deliverPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}" :overlay="true"
+               class="deliverPopup">
+      反对沙卡洛夫会考虑说大话疯狂打开拉萨
+    </van-popup>
     <!--新建待办任务-->
     <div class="addToBeDone" @click="showAddPopup = true"></div>
     <van-popup v-model="showAddPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
@@ -69,7 +73,6 @@
       </div>
       <div class="popupBottom"></div>
     </van-popup>
-
     <!--底部操作-->
     <div class="showTabsModule" :class="[tabsModule ? 'hiddenTabsModule' : '']">
       <div @click="tabsModule = true">
@@ -111,17 +114,18 @@
         fullLoading: true,
         //正常操作 按钮
         operates: {},//状态变更操作
+        deliverPopup: false,//代签/转交
         normalOperates: [
           {
             id: 1,
             icon: icon_daiqian,
             text: '代签',
-            class: 'allograph',
+            action: 'allograph',
           }, {
             id: 2,
             icon: icon_zhuanjiao,
             text: '转交',
-            class: 'deliver',
+            action: 'deliver',
           }
         ],
         // 状态变化按钮
@@ -222,6 +226,8 @@
             break;
         }
       },
+      // 代签 / 转交
+
       // 去打卡 去签约
       goOperates(val) {
         switch (val.task_action) {
@@ -240,21 +246,32 @@
             break;
         }
       },
-      // 变更 签署
-      clickBtn(action = {}, name = '', item) {
+      // 变更 签署 转交 代签
+      clickBtn(action = {}, item = {}) {
         let user_id = '';
-        user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
+        console.log(action);
         switch (action.action) {
           case 'success'://本地签署
+            user_id = this.getFadadaUserId(item);
             this.handlerSign(item, user_id, 2);
             break;
           case 'phone'://客户手机签署
+            user_id = this.getFadadaUserId(item);
             this.handlerSign(item, user_id, 1);
             break;
+          case 'deliver'://转交
+            this.deliverPopup = true;
+            break;
+          case 'allograph'://代签
+            this.deliverPopup = true;
+            break;
           default://合同修改
-            this.$reviseContract(action, name, item);
+            // this.$reviseContract(action, item.outcome.variableName, item);
             break
         }
+      },
+      getFadadaUserId(item) {
+        return item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
       },
       // 签署
       handlerSign(item, user_id, type) {

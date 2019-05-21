@@ -7,8 +7,7 @@
         <h3 @click="finishData">完成</h3>
       </div>
       <div class="pickerInput">
-        <div v-for="(item,index) in drawForm" class="chooseList" :class="{'slotChoose':item.keyName === pickerName}"
-             @click="pickerName = item.keyName">
+        <div v-for="(item,index) in drawForm" class="chooseList" :class="{'slotChoose':item.keyName === pickerName}">
           <div v-if="item.showForm === 'formatData'">
             <picker-input
               v-if="!item.pickerRead"
@@ -127,6 +126,7 @@
     methods: {
       choosePicker(val, date) {
         // show date
+        this.pickerName = val.keyName;
         if (val.status === 'dateSlot') {
           this.chooseTime(val, date);
           return;
