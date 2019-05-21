@@ -297,6 +297,7 @@
       }
     },
     activated() {
+      console.log(sessionStorage.bulletin_type)
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type);
       this.bulletin_types(this.bulletinType);
       this.slither = 0;
@@ -319,7 +320,7 @@
     },
     watch: {
       'form.month'(val) {
-        if (val) {
+        if (val && this.form.period_price_way_arr.length === 1) {
           this.form.period_price_way_arr[0].period = val;
         }
       },
@@ -828,6 +829,7 @@
         let res = this.bulletinDetail;
         this.form.id = '';
         this.handlePreFill(res.content, 'again');
+        this.electronicContract();
       },
       // 获取待办信息
       getPunchClockData() {
@@ -867,6 +869,7 @@
       },
       // 预填数据处理
       handlePreFill(res, status) {
+        console.log(1);
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
@@ -975,6 +978,7 @@
               break;
           }
         }
+        console.log(2);
         if (res.album) {
           for (let pic of Object.keys(res.album)) {
             this.album[pic] = res.album[pic];

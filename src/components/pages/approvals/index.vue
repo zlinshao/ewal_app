@@ -351,7 +351,7 @@
       handleBulletinType(item) {
         switch (item.bulletin_type) {
           case 'bulletin_collect_basic':
-            this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
+            sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
             break;
           case '':
             break;
@@ -373,7 +373,6 @@
       },
       // 报备详情
       routerLinkDetail(item) {
-        this.$store.dispatch('bulletin_type', {bulletin: item.bulletin_type});
         this.routerLink('/approvalDetail', item);
       },
       // 接口配置
