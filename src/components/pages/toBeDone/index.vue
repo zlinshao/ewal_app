@@ -178,8 +178,8 @@
     },
     activated() {
       this.bulletin_type = JSON.parse(sessionStorage.bulletin_type);
-      this.toBeDoneList = [];
       this.fullLoading = true;
+      this.toBeDoneList = [];
       this.popupOperate();
     },
     watch: {

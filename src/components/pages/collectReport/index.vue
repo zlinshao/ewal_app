@@ -827,7 +827,7 @@
       againSave() {
         let res = this.bulletinDetail;
         this.form.id = '';
-        this.handlePreFill(res.content);
+        this.handlePreFill(res.content, 'again');
       },
       // 获取待办信息
       getPunchClockData() {
@@ -866,7 +866,7 @@
         }
       },
       // 预填数据处理
-      handlePreFill(res) {
+      handlePreFill(res, status) {
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
@@ -882,7 +882,9 @@
               break;
             case 'signer'://认证
               if (res[item]) {
-                this.certified();
+                if (!status) {
+                  this.certified();
+                }
               }
               break;
             case 'house_type'://户型
