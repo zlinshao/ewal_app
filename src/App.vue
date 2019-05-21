@@ -39,6 +39,7 @@
 
     },
     activated() {
+      dd.biz.navigation.setRight({show: false});
     },
     watch: {
       // 使用watch 监听$router的变化

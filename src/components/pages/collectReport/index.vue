@@ -805,12 +805,12 @@
         }
         this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
-            this.handlePreFill(hhhhhhhhhhhh);
+            // this.handlePreFill(hhhhhhhhhhhh);
             this.getPunchClockData();
           } else {
             let res = data.data;
             this.form.id = '';//草稿ID
-            this.form = hhhhhhhhhhhh;
+            // this.form = hhhhhhhhhhhh;
             this.handlePreFill(res);
           }
           this.electronicContract();
