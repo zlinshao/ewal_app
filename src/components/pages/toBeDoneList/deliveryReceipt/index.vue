@@ -2,11 +2,13 @@
   <div id="deliveryReceipt" :style="this.mainListHeight()">
     <div class="top" ref="top">
       <div>
-        <p @click="slither = 0"></p>
-        <p @click="slither = 4"></p>
+        <p @click="slither = 0" :class="{'choose': slither !== 4}">物品交接</p>
+        <p @click="slither = 4" :class="{'choose': slither === 4}">费用交接</p>
         <h2>{{mainTop[slither]}}</h2>
       </div>
-      <h1></h1>
+      <h1 @click="previewDelivery">
+        <span class="writingMode">预览</span>
+      </h1>
     </div>
     <div class="mainTouch" ref="main" @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
       <div :style="slitherCss" class="transition" :class="['transition' + allReportNum]">
@@ -185,7 +187,7 @@
         <footer>
           <div class="commonBtn" :style="mainWidth">
             <p class="btn reset" @click="saveReport(2)">重置</p>
-            <p class="btn deliver" @click="saveReport(1)">草稿</p>
+            <p class="btn deliver" @click="saveReport(1)">保存</p>
             <p class="btn" @click="saveReport(0)">发布</p>
           </div>
         </footer>
@@ -256,6 +258,7 @@
     },
     activated() {
       this.resetting();
+      this.getDraft(this.allDetail.task_id);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
@@ -272,6 +275,18 @@
     methods: {
       changeTag(index) {
         this.slither = index;
+      },
+      // 预览交接单
+      previewDelivery() {
+        // this.$httpZll.postPreviewDelivery(this.form).then(res => {
+        //   this.$ddSkip(res.data);
+        // })
+      },
+      // 获取交接单草稿
+      getDraft(id) {
+        // this.$httpZll.getDeliveryDraft(id).then(res => {
+        //   console.log(res.data)
+        // })
       },
       // touch 左右切换
       tapStart(event) {
@@ -446,13 +461,13 @@
         this.form.is_draft = val;
         switch (val) {
           case 0:
+          // case 1:
             this.$httpZll.postDeliveryReceipt(this.form).then(res => {
               if (res) {
-                this.$router.go(-1);
+                console.log(res.data);
+                // this.$router.go(-1);
               }
             });
-            break;
-          case 1:
             break;
           case 2:
             this.resetting();
@@ -560,6 +575,7 @@
 
   #deliveryReceipt {
     background-color: #F8F8F8;
+    border-top: .1rem solid #f8f8f8;
 
     .top {
       padding: 0 .5rem;
@@ -575,7 +591,15 @@
           margin-right: .15rem;
           width: 1.5rem;
           height: .6rem;
-          background-color: #448aff;
+          text-align: center;
+          line-height: .6rem;
+          @include radius(.1rem);
+          color: #4570FE;
+          background-color: #8FB1FF;
+        }
+
+        .choose {
+          background-color: #CDDEFF;
         }
 
         h2 {
@@ -589,7 +613,9 @@
         @include flex('flex-center');
         width: .7rem;
         height: 1rem;
-        background-color: #CF2E33;
+        color: #FFFFFF;
+        @include radius(0 0 1rem 1rem);
+        background-color: #43A046;
       }
     }
 

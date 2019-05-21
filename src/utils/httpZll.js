@@ -249,6 +249,34 @@ class httpZll extends httpService {
     });
   }
 
+  // 获取交接单草稿
+  static getDeliveryDraft(id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/handover/draft?task_id=${id}`, {}, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+      });
+    });
+  }
+
+  // 预览交接单
+  static postPreviewDelivery(data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/handover`, data, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+      });
+    });
+  }
+
   // 完成当前任务
   static finishBeforeTask(id, data) {
     return new Promise((resolve, reject) => {
