@@ -777,8 +777,10 @@
             });
             break;
           case 2:// 重置
-            this.resetting();
-            this.getPunchClockData();
+            this.$dialog('您确定要清空表单吗?').then(_ => {
+              this.resetting();
+              this.getPunchClockData();
+            });
             break;
           case 3:// 修改
             this.form.is_draft = 0;
