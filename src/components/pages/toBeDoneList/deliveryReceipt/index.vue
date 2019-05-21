@@ -197,7 +197,7 @@
       <i v-for="(item,index) in allReportNum" :class="{'hover': slither === index}" @click="changeTag(index)"></i>
     </div>
     <!--日期-->
-    <choose-time :module="timeModule" :formatData="formatData" @close="onCancel" @onDate="onConTime"></choose-time>
+    <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
     <!--正常 picker-->
     <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
     <!--分类 选择-->
@@ -433,9 +433,11 @@
       },
       // 确认时间
       onConTime(val) {
-        this.form[val.dateKey] = val.dateVal;
-        this.formatData[val.dateKey] = val.dateVal;
         this.onCancel();
+        if (val !== 'close') {
+          this.form[val.dateKey] = val.dateVal;
+          this.formatData[val.dateKey] = val.dateVal;
+        }
       },
       // close Module
       onCancel() {
@@ -462,7 +464,7 @@
         this.form.is_draft = val;
         switch (val) {
           case 0:
-          // case 1:
+            // case 1:
             this.$httpZll.postDeliveryReceipt(this.form).then(res => {
               if (res) {
                 console.log(res.data);

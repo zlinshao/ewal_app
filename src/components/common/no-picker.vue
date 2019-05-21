@@ -73,8 +73,8 @@
     methods: {
       listenInput(val, key) {
         let show = this.jsonClone(val);
-        show[0] = show[0] ? show[0] + '栋' : '';
-        show[1] = show[1] ? show[1] + '单元' : '';
+        show[0] = show[0] ? show[0] + '-' : '';
+        show[1] = show[1] ? show[1] + '-' : '';
         show[2] = show[2] ? show[2] : '';
         this.formatData[key] = show.join('');
       },

@@ -63,8 +63,7 @@
     </van-popup>
 
     <!--日期-->
-    <choose-time :module="timeModule" :formatData="formatData" @close="timeModule = false"
-                 @onDate="onConTime"></choose-time>
+    <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
   </div>
 </template>
 
@@ -143,8 +142,10 @@
       },
       // 确认时间
       onConTime(val) {
-        this.postFormData[val.dateKey] = val.dateVal;
         this.timeModule = false;
+        if (val !== 'close') {
+          this.postFormData[val.dateKey] = val.dateVal;
+        }
       },
       // 确认选择
       onConfirm(value, index) {

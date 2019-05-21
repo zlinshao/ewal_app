@@ -16,7 +16,7 @@
         <li v-for="item in toBeDoneList">
           <div class="mainTitle">
             <label>{{item.title}}</label>
-            <p @click="routerLink('/closeDD')"><i></i></p>
+            <p @click="clickBtn({action:'finishTask'})"><i></i></p>
           </div>
           <p class="statusBtn">
             <span>{{item.name}}</span>
@@ -53,7 +53,27 @@
     <!--代签/转交-->
     <van-popup v-model="deliverPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}" :overlay="true"
                class="deliverPopup">
-      反对沙卡洛夫会考虑说大话疯狂打开拉萨
+      <div class="deliverTitle">
+        {{deliverIndex?'转交':'代签'}}
+      </div>
+      <div class="deliver">
+        <div v-for="item in defineDeliver[deliverIndex]" :class="item.type">
+          <label>{{item.label}}</label>
+          <input
+            v-if="item.type !== 'textarea'"
+            type="text"
+            v-model="form[item.keyName]"
+            :readonly="item.readonly"
+            :disabled="item.disabled"
+            @focus="choosePicker(item,form[item.keyName])"
+            :placeholder="item.placeholder">
+          <textarea v-else rows="3" v-model="form[item.keyName]" :placeholder="item.placeholder"></textarea>
+        </div>
+      </div>
+      <div class="commonBtn">
+        <p class="btn back" @click="onCancel">取消</p>
+        <p class="btn" @click="saveDeliver(deliverIndex)">确定</p>
+      </div>
     </van-popup>
     <!--新建待办任务-->
     <div class="addToBeDone" @click="showAddPopup = true"></div>
@@ -90,10 +110,16 @@
         </div>
       </div>
     </van-popup>
+    <!--员工搜索-->
+    <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
+    <!--日期-->
+    <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
   </div>
 </template>
 
 <script>
+  import SearchStaff from '../../common/searchStaff.vue';
+
   import icon_daiqian from '@/assets/image/toBeDone/daiqian.png'
   import icon_zhuanjiao from '@/assets/image/toBeDone/zhuanjiao.png'
   import icon_qudaka from '@/assets/image/toBeDone/qudaka.png'
@@ -108,13 +134,71 @@
 
   export default {
     name: "index",
+    components: {SearchStaff},
     data() {
       return {
         mainHeight: '',
         fullLoading: true,
         //正常操作 按钮
         operates: {},//状态变更操作
+        defineDeliver: [
+          [
+            {
+              label: '代签人',
+              readonly: 'readonly',
+              type: 'text',
+              keyName: 'staff_name',
+              placeholder: '必填 请选择',
+            },
+            {
+              label: '部门',
+              type: 'text',
+              disabled: 'disabled',
+              keyName: 'department_name',
+              placeholder: '已禁用',
+            },
+            {
+              label: '预约时间',
+              type: 'text',
+              readonly: 'readonly',
+              keyName: 'time',
+              placeholder: '必填 请选择',
+            },
+            {
+              label: '备注',
+              type: 'textarea',
+              keyName: 'remark',
+              placeholder: '请输入',
+            },
+          ],
+          [
+            {
+              label: '转交人',
+              readonly: 'readonly',
+              type: 'text',
+              keyName: 'staff_name',
+              placeholder: '必填 请选择',
+            },
+            {
+              label: '部门',
+              type: 'text',
+              disabled: 'disabled',
+              keyName: 'department_name',
+              placeholder: '已禁用',
+            },
+          ]
+        ],
+        deliverIndex: 0,
         deliverPopup: false,//代签/转交
+        timeModule: false,//日期
+        form: {},
+        formatData: {},
+        showData: {
+          dateVal: '',                  //日期
+          dateKey: '',                  //日期 字段名
+          dateType: '',                 //日期类型 默认date 时分datetime
+          dateIdx: '',                  //日期字段下标 变化情况使用
+        },
         normalOperates: [
           {
             id: 1,
@@ -128,6 +212,7 @@
             action: 'deliver',
           }
         ],
+
         // 状态变化按钮
         changeOperates: {
           punchClock: icon_qudaka,
@@ -160,7 +245,6 @@
         // 右侧栏
         showAddPopup: false,//新建待办任务
         addShowList: [],
-
         paging: 0,
         params: {
           title: '',
@@ -170,6 +254,7 @@
         detail_request_url: '',
         variableName: '',
         bulletin_type: {},//报备类型
+        searchStaffModule: false,
       }
     },
     created() {
@@ -193,6 +278,45 @@
     },
     computed: {},
     methods: {
+      // 结束任务
+      shutDown() {
+
+      },
+      // 人员/部门/时间
+      choosePicker(val, date = '') {
+        console.log(val);
+        switch (val.keyName) {
+          case 'staff_name':
+            this.searchStaffModule = true;
+            break;
+          case '2':
+            break;
+          case 'time':
+            this.timeModule = true;
+            this.formatData.dateKey = val.keyName;
+            this.formatData.dateVal = date;
+            break;
+        }
+      },
+      // 确认时间
+      onConTime(val) {
+        this.timeModule = false;
+        if (val !== 'close') {
+          this.form[val.dateKey] = val.dateVal;
+        }
+      },
+      // 员工搜索结果
+      getStaffInfo(val) {
+        this.searchStaffModule = false;
+        if (val !== 'close') {
+          for (let item of Object.keys(val)) {
+            this.form[item] = val[item];
+          }
+        }
+      },
+      onCancel() {
+        this.deliverPopup = false;
+      },
       // 右侧弹窗操作
       popupOperate() {
         let type = this.bulletin_type.bulletin;
@@ -226,8 +350,6 @@
             break;
         }
       },
-      // 代签 / 转交
-
       // 去打卡 去签约
       goOperates(val) {
         switch (val.task_action) {
@@ -246,10 +368,16 @@
             break;
         }
       },
-      // 变更 签署 转交 代签
+      // 转交 / 代签
+      saveDeliver(val) {
+        let url = val ? '' : '';
+        // this.$httpZll.postToBeDoneDeliver(this.form, url).then(res => {
+        //
+        // })
+      },
+      // 变更 签署 转交 代签 结束任务
       clickBtn(action = {}, item = {}) {
         let user_id = '';
-        console.log(action);
         switch (action.action) {
           case 'success'://本地签署
             user_id = this.getFadadaUserId(item);
@@ -259,17 +387,29 @@
             user_id = this.getFadadaUserId(item);
             this.handlerSign(item, user_id, 1);
             break;
-          case 'deliver'://转交
+          case 'allograph'://代签
+            this.resetting(0);
             this.deliverPopup = true;
             break;
-          case 'allograph'://代签
+          case 'deliver'://转交
+            this.resetting(1);
             this.deliverPopup = true;
+            break;
+          case 'finishTask'://结束任务
+            this.$dialog('结束任务', '是否结束该任务？').then(status => {
+              if (status) {
+                // this.$httpZll.finishToBeDoneTask(task_id).then(res => {
+                //
+                // })
+              }
+            });
             break;
           default://合同修改
-            // this.$reviseContract(action, item.outcome.variableName, item);
+            this.$reviseContract(action, item.outcome.variableName, item);
             break
         }
       },
+      // 获取fadadaId
       getFadadaUserId(item) {
         return item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
       },
@@ -291,7 +431,7 @@
         this.$signPostApi(item, params, title).then(res => {
           if (res) {
             this.$ddSkip(res);
-            this.$dialog('签署是否完成?').then(res => {
+            this.$dialog('签署', '签署是否完成?').then(res => {
               if (res) {
                 this.$prompt('正在处理..', 'send');
                 setTimeout(_ => {
@@ -385,10 +525,55 @@
             break;
         }
       },
+      resetting(val) {
+        this.deliverIndex = val;
+        this.form = {};
+        this.formatData = this.jsonClone(this.showData);
+        for (let item of this.defineDeliver[val]) {
+          this.form[item.keyName] = '';
+        }
+      },
     },
   }
 </script>
 
 <style lang="scss" scoped>
   @import "../../../assets/scss/toBeDone/index.scss";
+
+  .deliverPopup {
+    @include radius(.2rem);
+    padding: .3rem;
+
+    .deliverTitle {
+      font-size: .33rem;
+      padding: 0 0 .5rem .2rem;
+    }
+
+    .deliver {
+      > div {
+        @include flex('items-center');
+        min-height: .88rem;
+
+        label {
+          min-width: 1.5rem;
+          max-width: 1.5rem;
+          text-align: right;
+          margin-right: .3rem;
+        }
+
+        textarea {
+          border: none;
+        }
+      }
+
+      .textarea {
+        margin-top: .2rem;
+        align-items: flex-start;
+      }
+    }
+
+    .commonBtn {
+      padding: .5rem 0 .2rem;
+    }
+  }
 </style>

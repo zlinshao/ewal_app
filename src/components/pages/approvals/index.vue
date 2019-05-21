@@ -336,7 +336,7 @@
         this.$signPostApi(item, params, title).then(res => {
           if (res) {
             this.$ddSkip(res);
-            this.$dialog('签署是否完成?').then(res => {
+            this.$dialog('签署', '签署是否完成?').then(res => {
               if (res) {
                 this.$prompt('正在处理..', 'send');
                 setTimeout(_ => {

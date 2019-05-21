@@ -206,7 +206,7 @@
       <no-picker :module="noPickerModule" :drawing="drawForm" :postData="form" :popup="popupStatus"
                  :formData="formatData" @close="onConfirm"></no-picker>
       <!--日期-->
-      <choose-time :module="timeModule" :formatData="formatData" @close="onCancel" @onDate="onConTime"></choose-time>
+      <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
       <!--家电选择-->
       <Electrical :module="electricalModule" :form="form" :list="electricalList" @close="closeElectrical"></Electrical>
       <!--复选 非房东费用-->
@@ -549,7 +549,7 @@
                   this.certified();
                 } else {
                   this.$ddSkip(res.data.data);
-                  this.$dialog('认证是否完成?').then(res => {
+                  this.$dialog('认证', '认证是否完成?').then(res => {
                     if (res) {
                       this.confirmation('identity');
                     }
@@ -593,10 +593,12 @@
       },
       // 确认时间
       onConTime(val) {
-        this.form[val.dateKey] = val.dateVal;
         this.onCancel();
-        if (val.dateKey === 'begin_date') this.contractEnd(val.dateVal);
-        if (val.dateKey === 'pay_first_date') this.countChangeDate('period_price_way_arr');
+        if (val !== 'close') {
+          this.form[val.dateKey] = val.dateVal;
+          if (val.dateKey === 'begin_date') this.contractEnd(val.dateVal);
+          if (val.dateKey === 'pay_first_date') this.countChangeDate('period_price_way_arr');
+        }
       },
       // show picker
       choosePicker(val, value, num = '', parentKey = '') {
@@ -775,7 +777,7 @@
             });
             break;
           case 2:// 重置
-            this.$dialog('您确定要清空表单吗?').then(_ => {
+            this.$dialog('重置','您确定要清空表单吗?').then(_ => {
               this.resetting();
               this.getPunchClockData();
             });

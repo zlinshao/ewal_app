@@ -90,7 +90,7 @@
     <no-picker :module="noPickerModule" :drawing="drawForm" :postData="form" :popup="popupStatus"
                :formData="formatData" @close="onConfirm"></no-picker>
     <!--日期-->
-    <choose-time :module="timeModule" :formatData="formatData" @close="onCancel" @onDate="onConTime"></choose-time>
+    <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
     <!--房屋地址搜索-->
     <search-house :module="searchHouseModule" @close="getHouse"></search-house>
     <!--员工搜索-->
@@ -616,8 +616,10 @@
       },
       // 确认时间
       onConTime(val) {
-        this.form[val.dateKey] = val.dateVal;
         this.onCancel();
+        if (val !== 'close') {
+          this.form[val.dateKey] = val.dateVal;
+        }
       },
       // 员工搜索结果
       getStaffInfo(val, all) {

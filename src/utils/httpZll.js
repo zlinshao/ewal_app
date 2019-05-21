@@ -221,6 +221,34 @@ class httpZll extends httpService {
     });
   }
 
+  // 转交/代签
+  static postToBeDoneDeliver(data, url) {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/${url}`, data, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+        }
+        $httpPrompt(res.message);
+      });
+    });
+  }
+
+  // 结束任务
+  static finishToBeDoneTask(id) {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/${id}`, {}, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+        }
+        $httpPrompt(res.message);
+      });
+    });
+  }
+
   // 任务跟进详情
   static followRecordList(id) {
     return new Promise((resolve, reject) => {
