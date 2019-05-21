@@ -138,7 +138,7 @@ class httpZll extends httpService {
         if (res.code.endsWith('0')) {
           resolve(res);
         } else {
-          $httpPrompt(res.message);
+          $httpPrompt(res.msg);
           resolve(false);
         }
       });
@@ -266,7 +266,7 @@ class httpZll extends httpService {
   // 预览交接单
   static postPreviewDelivery(data) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/handover`, data, 'prompt').then(res => {
+      this.post(`${market}v1.0/market/handover/preview`, data, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
         } else {

@@ -77,6 +77,7 @@
       searchModule(val) {
         if (!val) {
           this.$emit('close', 'close');
+          this.fullLoading = false;
         } else {
           if (this.config) {
             this.staffOldValue = this.jsonClone(this.config.preFill || []);
@@ -157,7 +158,7 @@
       // 清空
       close_() {
         this.searchList = [];
-        this.fullLoading = true;
+        this.fullLoading = false;
       }
     },
   }

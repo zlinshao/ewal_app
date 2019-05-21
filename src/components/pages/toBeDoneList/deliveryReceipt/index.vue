@@ -278,9 +278,9 @@
       },
       // 预览交接单
       previewDelivery() {
-        // this.$httpZll.postPreviewDelivery(this.form).then(res => {
-        //   this.$ddSkip(res.data);
-        // })
+        this.$httpZll.postPreviewDelivery(this.form).then(res => {
+          this.$ddSkip(res.data);
+        })
       },
       // 获取交接单草稿
       getDraft(id) {
