@@ -385,7 +385,7 @@
           url = 'runtime/tasks';
         } else {
           url = 'history/tasks';
-          // params.finished = true;
+          params.finished = true;
         }
         this.$httpZll.getToBeDoneListApi(url, params, close).then(res => {
           this.fullLoading['load' + tab] = false;
@@ -425,8 +425,8 @@
             }
             break;
           case 'finish':
-            this.finishModule = true;
-            this.moduleDetail = val;
+            // this.finishModule = true;
+            // this.moduleDetail = val;
             break;
         }
       },

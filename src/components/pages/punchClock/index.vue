@@ -189,8 +189,7 @@
         this.$httpZll.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
             this.close_();
-            this.$store.dispatch('done_tabs', '2');
-            this.routerReplace('/toBeDoneList');
+            this.$router.go(-1);
           }
         });
       },
@@ -340,9 +339,11 @@
       height: 10rem;
       @include transition(all .3s);
     }
+
     #container.hover {
       height: 4.2rem;
     }
+
     /*重新获取定位*/
     .againLocation {
       position: fixed;
@@ -354,12 +355,14 @@
       padding-right: .2rem;
       z-index: 210;
       @include flex('items-center');
+
       i {
         width: .6rem;
         height: .6rem;
         @include bgImage('../../../assets/image/common/againLocation.png');
       }
     }
+
     /*打卡*/
     .punchClock {
       position: fixed;
@@ -370,56 +373,68 @@
       z-index: 200;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 36%);
       @include flex('flex-center');
+
       > div {
         @include flex('flex-center');
         position: absolute;
         bottom: .8rem;
         width: 3rem;
         height: 3rem;
+
         div {
           @include flex('flex-center');
           flex-direction: column;
           z-index: 6;
         }
+
         div, h2, h3, h4 {
           position: absolute;
           width: 100%;
           height: 100%;
           @include radius(50%);
         }
+
         h1 {
           font-size: .6rem;
           color: #FFFFFF;
           margin-bottom: .1rem;
         }
+
         h2, h3, h4 {
           z-index: 3;
           @include animation(circle-opacity 2s infinite);
         }
+
         h3 {
           animation-delay: 0.6s;
         }
+
         h4 {
           animation-delay: 1.1s;
         }
       }
+
       .infraMetas {
         div {
           background-color: #4570FE;
         }
+
         h2, h3, h4 {
           background-color: #d9ebff;
         }
       }
+
       .noInfraMetas {
         div {
           background-color: #FFC400;
         }
+
         h2, h3, h4 {
           background-color: #fff2c7;
         }
       }
     }
+
     @keyframes circle-opacity {
       0% {
         @include transform(scale(1));
@@ -439,6 +454,7 @@
       left: 0;
       right: 0;
       background: linear-gradient(135deg, rgba(137, 164, 255, 1) 0%, rgba(69, 112, 254, 1) 100%);
+
       .punchClockInfo {
         padding-top: .2rem;
         position: absolute;
@@ -450,6 +466,7 @@
         @include radius(.1rem);
         background-color: #FFFFFF;
         @include flex('bet-column');
+
         .commonBtn {
           padding: .42rem 0;
         }
