@@ -22,7 +22,7 @@
                             @click='removeChange(slither,item.keyName,index)'/>
                 </p>
                 <div class="addChange" v-if="(index+1) === drawSlither[slither].length">
-                  <span @click="addChange(slither,item.keyName,index,item)">+</span>
+                  <span @click="addChange(slither,item,index,item)">+</span>
                 </div>
               </div>
               <div v-for="room in item">
@@ -297,12 +297,12 @@
           this.form[item] = res[item];
           if (title.includes(item)) {
             for (let name of Object.keys(res[item])) {
-              this.getHandlePic(res[item], name, item);
+              this.getHandleData(res[item], name, item);
             }
           } else if (item === 'bedroom') {
             res[item].forEach((bed, index) => {
               for (let name of Object.keys(bed)) {
-                this.getHandlePic(res[item][index], name, item, index);
+                this.getHandleData(res[item][index], name, item, index);
               }
             });
           }
@@ -310,8 +310,8 @@
         this.isBadShowHidden();
         this.album = Object.assign({}, this.album);
       },
-      // 请求图片
-      getHandlePic(key, name, item, index = '') {
+      // 请求数据处理
+      getHandleData(key, name, item, index = '') {
         if (typeof key[name] !== 'string') {
           let show = [];
           for (let child of Object.keys(key[name])) {
@@ -394,20 +394,20 @@
           }
         }
       },
-      // 其他费用
+      // 变化增加
       addChange(slither, name, index, value) {
-        let obj = {}, str = {}, arr = [];
+        let obj = {}, str = {}, arr = [], pic = {};
         let cloneVal = this.jsonClone(value);
         if (slither === 'bedroom') {
           for (let val of cloneVal) {
-            if (val.picker) {
+            if (val.children) {
               val.picker = val.picker + index;
-              if (val.children) {
-                for (let child of val.children) {
-                  child.picker = index + 1;
-                }
+              for (let child of val.children) {
+                child.picker = index + 1;
+                child.hidden = true;
               }
             }
+            pic[val.keyName] = {};
             obj[val.keyName] = val.keyType;
             str[val.keyName] = '';
             arr.push(val);
@@ -415,6 +415,8 @@
           this.drawSlither[slither].push(arr);
           this.form[slither].push(obj);
           this.formatData[slither].push(str);
+          this.album[slither].push(pic);
+          console.log(this.drawSlither[slither]);
           return;
         }
         this.drawSlither[slither][index].value.push(cloneVal);
@@ -423,7 +425,7 @@
         }
         this.form[name].push(obj);
       },
-      // 其他费用
+      // 变化删除
       removeChange(slither, name, index, num = '') {
         if (slither === 'bedroom') {
           this.drawSlither[slither].splice(index, 1);
