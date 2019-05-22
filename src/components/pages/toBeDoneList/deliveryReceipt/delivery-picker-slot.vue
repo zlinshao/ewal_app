@@ -104,7 +104,6 @@
         handler(val, oldVal) {
           this.pickerName = val.keyName;
           let config = this.jsonClone(val);
-          console.log(config);
           this.setPickers(config);
         },
         deep: true,
@@ -154,6 +153,10 @@
       },
       // 预填所有选项
       setPickers(config) {
+        let unit = '';
+        let sets = ['air_conditioning', 'tv'];//台
+        let few = ['chair', 'door_lock_key', 'key'];//把
+        unit = sets.includes(config.keyName) ? '台' : (few.includes(config.keyName) ? '把' : '个');
         if (!config.parentKey) return;
         config.childKeys.forEach((res, index) => {
           if (res === 'is_bad') {
@@ -186,15 +189,16 @@
         });
         this.pickerConfig = Object.assign({}, config);
         if (this.is_bad === 1) {
-          this.addColumns();
+          this.addColumns('', unit);
         }
       },
       // 增加损坏数量 选项
-      addColumns(picker) {
+      addColumns(picker, unit) {
+        console.log(picker);
         let num = [];
         let config = this.pickerConfig;
         for (let i = 1; i < 6; i++) {
-          num.push(i + '个');
+          num.push(i + unit);
           config.ids[this.length[1]].values.push(i);
         }
         if (picker) {

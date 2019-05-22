@@ -1493,13 +1493,13 @@ const childKeysHaveBad = ['is_have', 'is_bad', 'bad_number'];
 
 defineArticleReceipt = {
   // 客厅
-  hall_goods: handlerHallGoods('hall_goods', 1),
+  hall_goods: handlerHallGoods('hall_goods', 11),
   // 厨房/阳台/卫生间
-  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom', 2),
+  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom', 12),
   // 主卧
-  master_bedroom: handlerBedroom('master_bedroom', 6),
+  master_bedroom: handlerBedroom('master_bedroom', 13),
   // 次卧
-  bedroom: [handlerBedroom('bedroom', 5)],
+  bedroom: [handlerBedroom('bedroom', 15)],
   // 费用交接
   slither: [
     {
@@ -1737,7 +1737,7 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
         keyName: 'remark',
         keyType: '',
         type: 'text',
-        picker: 0,
+        picker: '',
         status: '',
         hidden: true,
         slot: '',

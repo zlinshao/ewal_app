@@ -67,7 +67,7 @@
                     <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
                   </div>
                   <div v-else>
-                    <Upload :file="child" :getImg="album[child.keyName]" :close="!closePhoto"
+                    <Upload :file="child" :getImg="album[slither][index][room.keyName]" :close="!closePhoto"
                             @success="getImgDataBed"></Upload>
                   </div>
                 </div>
@@ -116,7 +116,7 @@
                   <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
                 </div>
                 <div v-else>
-                  <Upload :file="child" :getImg="album[child.keyName]" :close="!closePhoto"
+                  <Upload :file="child" :getImg="album[slither][item.keyName]" :close="!closePhoto"
                           @success="getImgDataObj"></Upload>
                 </div>
               </div>
@@ -292,9 +292,80 @@
       },
       // 交接单 草稿预填
       handlePreFill(res) {
+        let title = ['hall_goods', 'kitchen_balcony_bathroom', 'master_bedroom'];
         for (let item of Object.keys(this.form)) {
-          // console.log(res[item]);
-          // console.log(this.form[item])
+          this.form[item] = res[item];
+          if (title.includes(item)) {
+            for (let name of Object.keys(res[item])) {
+              this.getHandlePic(res[item], name, item);
+            }
+          } else if (item === 'bedroom') {
+            res[item].forEach((bed, index) => {
+              for (let name of Object.keys(bed)) {
+                this.getHandlePic(res[item][index], name, item, index);
+              }
+            });
+          }
+        }
+        this.isBadShowHidden();
+        this.album = Object.assign({}, this.album);
+      },
+      // 请求图片
+      getHandlePic(key, name, item, index = '') {
+        if (typeof key[name] !== 'string') {
+          let show = [];
+          for (let child of Object.keys(key[name])) {
+            if (child === 'photo') {
+              if (key[name][child].length) {
+                this.$httpZll.getUploadUrl(key[name][child]).then(res => {
+                  if (typeof index !== 'string') {
+                    this.album[item][index][name] = res.data;
+                  } else {
+                    this.album[item][name] = res.data;
+                  }
+                })
+              }
+            } else {
+              if (typeof key[name][child] !== 'string') {
+                let unit = '';
+                let sets = ['air_conditioning', 'tv'];//台
+                let few = ['chair', 'door_lock_key', 'key'];//把
+                unit = sets.includes(name) ? '台' : (few.includes(name) ? '把' : '个');
+                switch (child) {
+                  case 'type':
+                    for (let dict of Object.keys(dicties[name])) {
+                      if (dict.includes('0')) {
+                        show.push(dicties[name]['value_0'][key[name][child]]);
+                      }
+                    }
+                    break;
+                  case 'is_bad':
+                    if (key[name][child]) {
+                      show.push('损坏');
+                    } else {
+                      show.push('无损坏');
+                    }
+                    break;
+                  case 'bad_number':
+                    if (key[name][child]) {
+                      show.push(key[name][child] + unit);
+                    }
+                    break;
+                  case 'number':
+                    if (key[name][child]) {
+                      show.push('共' + key[name][child] + unit);
+                    }
+                    break;
+                }
+                if (typeof index !== 'string') {
+                  this.formatData[item][index][name] = show.join('/');
+                } else {
+                  this.formatData[item][name] = show.join('/');
+                }
+
+              }
+            }
+          }
         }
       },
       // touch 左右切换
@@ -330,7 +401,12 @@
         if (slither === 'bedroom') {
           for (let val of cloneVal) {
             if (val.picker) {
-              val.picker = val.picker + index + 6;
+              val.picker = val.picker + index;
+              if (val.children) {
+                for (let child of val.children) {
+                  child.picker = index + 1;
+                }
+              }
             }
             obj[val.keyName] = val.keyType;
             str[val.keyName] = '';
@@ -455,11 +531,10 @@
         this.popupModule = false;
         this.deliveryModule = false;
       },
-      // 图片
+      // 图片 次卧
       getImgDataBed(val, file) {
         let key = file.slither;
-        console.log(file);
-        // this.form[key][file.keyName]['photo'] = val[1];
+        this.form[key][file.picker][file.keyName]['photo'] = val[1];
       },
       getImgDataObj(val, file) {
         let key = file.slither;
@@ -501,21 +576,24 @@
         for (let item of Object.keys(this.drawSlither)) {
           if (item !== 'slither') {
             if (item === 'bedroom') {
+              this.album[item] = [];
               this.form[item] = [];
               this.formatData[item] = [];
             } else {
+              this.album[item] = {};
               this.form[item] = {};
               this.formatData[item] = {};
             }
-
           }
           for (let key of this.drawSlither[item]) {
             if (item === 'bedroom') {
               this.drawSlither[item].forEach((res, index) => {
                 this.form[item][index] = {};
                 this.formatData[item][index] = {};
+                this.album[item][index] = {};
                 for (let room of res) {
                   this.form[item][index][room.keyName] = room.keyType;
+                  this.album[item][index][room.keyName] = [];
                   if (room.childKeys) {
                     this.formatData[item][index][room.keyName] = '';
                     for (let child of room.childKeys) {
@@ -534,6 +612,7 @@
             } else if (key.status === 'child') {
               this.form[item][key.keyName] = key.keyType;
               this.formatData[item][key.keyName] = '';
+              this.album[item][key.keyName] = [];
               if (key.childKeys || key.children) {
                 for (let child of key.childKeys) {
                   this.form[item][key.keyName][child] = '';
