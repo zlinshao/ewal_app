@@ -10,8 +10,6 @@ const app = {
       department_id: '',
       department_name: '',
     },
-    bulletinPreFill: {},
-    taskDetail: {},
     //审批切换
     approvalTab: {
       tab: '1',
@@ -19,21 +17,11 @@ const app = {
     },
     // 待办任务切换
     doneTab: '1',
-    allDetail: {},//详情
-    signRouters: '',//签署路由
   },
   // 计算属性
   getter: {},
   // 函数声明
   mutations: {
-    // 报备草稿预填
-    BULLETIN_DRAFT(state, view) {
-      state.bulletinPreFill = view;
-    },
-    // 任务详情
-    TASK_DETAIL(state, view) {
-      state.taskDetail = view;
-    },
     // 个人信息
     PERSONAL_STORAGE(state, view) {
       let personal = JSON.parse(view);
@@ -58,10 +46,6 @@ const app = {
     SWITCH_VIDEO(state, status) {
       state.video_visible = status;
     },
-    // 跟进记录
-    ALL_DETAIL(state, status) {
-      state.allDetail = status;
-    },
   },
   // 执行函数
   actions: {
@@ -77,14 +61,6 @@ const app = {
     key_up_status({commit}, view) {
       commit('KEY_UP_STATUS', view);
     },
-    // 报备草稿预填
-    bulletin_draft({commit}, view) {
-      commit('BULLETIN_DRAFT', view);
-    },
-    // 任务 预填
-    task_detail({commit}, view) {
-      commit('TASK_DETAIL', view);
-    },
     // 审批切换
     approval_tabs({commit}, view) {
       commit('APPROVAL_TABS', view);
@@ -96,10 +72,6 @@ const app = {
     // 开关video
     switch_video({commit}, status) {
       commit('SWITCH_VIDEO', status);
-    },
-    // 跟进记录
-    all_detail({commit}, status) {
-      commit('ALL_DETAIL', status);
     },
     // 签署路由
     sign_routers({commit}, status) {

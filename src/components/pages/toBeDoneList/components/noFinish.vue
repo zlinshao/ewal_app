@@ -183,7 +183,7 @@
         if (val.type === 'deliver') {
 
         } else {
-          this.$store.dispatch('all_detail', this.allDetail);
+          sessionStorage.setItem('datumRecord',JSON.stringify(this.allDetail));
           this.routerLink('/datumRecord', this.params);
         }
       },

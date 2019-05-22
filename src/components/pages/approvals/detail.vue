@@ -234,7 +234,7 @@
     activated() {
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
-      let query = this.$route.query;
+      let query = JSON.parse(sessionStorage.approvalDetail || '{}');
       this.allDetail = query;
       this.task_id = query.task_id;
       this.process_instance_id = query.process_id;
@@ -253,7 +253,11 @@
       getOperates(query) {
         this.operates = [];
         if (!query.outcome) return;
-        this.operates = JSON.parse(query.outcome);
+        if (typeof query.outcome === 'string') {
+          this.operates = JSON.parse(query.outcome || '{}');
+        } else {
+          this.operates = query.outcome;
+        }
         let btn = [
           {
             action: true,
@@ -286,10 +290,10 @@
       },
       // 报备类型跳转
       bulletinRouter(type) {
-        this.$store.dispatch('bulletin_draft', this.allDetail);
+        sessionStorage.setItem('bulletin_draft', JSON.stringify(this.allDetail));
         switch (type) {
           case 'bulletin_collect_basic':
-            this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
+            sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
             this.routerLink('/collectReport', {revise: 'revise'});
             break;
           case'':

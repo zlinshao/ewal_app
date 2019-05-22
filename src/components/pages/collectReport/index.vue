@@ -294,11 +294,14 @@
 
         queryData: {},
         bulletinType: {},//报备类型
+        bulletinDetail: {},//修改/重新发布
+        taskDetail: {},//草稿
       }
     },
     activated() {
-      console.log(sessionStorage.bulletin_type)
-      this.bulletinType = JSON.parse(sessionStorage.bulletin_type);
+      this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
+      this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      this.bulletinDetail = JSON.parse(sessionStorage.bulletin_draft || '{}');
       this.bulletin_types(this.bulletinType);
       this.slither = 0;
       this.allReportNum = Object.keys(this.resetDrawing).length;
@@ -329,12 +332,6 @@
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
       },
-      bulletinDetail() {
-        return this.$store.state.app.bulletinPreFill;
-      },
-      taskDetail() {
-        return this.$store.state.app.taskDetail;
-      }
     },
     methods: {
       // 报备类型
@@ -777,9 +774,11 @@
             });
             break;
           case 2:// 重置
-            this.$dialog('重置','您确定要清空表单吗?').then(_ => {
-              this.resetting();
-              this.getPunchClockData();
+            this.$dialog('重置', '您确定要清空表单吗?').then(status => {
+              if (status) {
+                this.resetting();
+                this.getPunchClockData();
+              }
             });
             break;
           case 3:// 修改
@@ -871,7 +870,6 @@
       },
       // 预填数据处理
       handlePreFill(res, status) {
-        console.log(1);
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
@@ -980,7 +978,6 @@
               break;
           }
         }
-        console.log(2);
         if (res.album) {
           for (let pic of Object.keys(res.album)) {
             this.album[pic] = res.album[pic];
@@ -1007,7 +1004,7 @@
         }
         this.form.id = id || '';
         this.form.signer = '';
-
+        this.form.contract_number = this.electronicContractNumber;
         this.form.account = '6225212583158743';
         this.form.account_name = '贾少君';
       }

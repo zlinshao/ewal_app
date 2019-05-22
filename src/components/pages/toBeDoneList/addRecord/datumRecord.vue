@@ -77,6 +77,7 @@
     name: "datum",
     data() {
       return {
+        followRecord: {},
         picStatus: false,
         album: {},//图片预填
         oldPhoto: {},
@@ -171,6 +172,7 @@
     },
     activated() {
       this.close_();
+      this.followRecord = JSON.parse(sessionStorage.datumRecord);
       let record = this.followRecord.taskDefinitionKey;
       let query = this.$route.query;
       for (let key of Object.keys(query)) {
@@ -185,11 +187,7 @@
       }
     },
     watch: {},
-    computed: {
-      followRecord() {
-        return this.$store.state.app.allDetail;
-      }
-    },
+    computed: {},
     methods: {
       // 提交
       submit() {

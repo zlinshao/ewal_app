@@ -444,7 +444,7 @@ export default {
             data.task_id = val.task_id;
             data.process_instance_id = val.process_id;
             data.root_process_instance_id = val.root_id;
-            this.$store.dispatch('task_detail', data);
+            sessionStorage.setItem('task_detail',JSON.stringify(data));
           }
           resolve(true);
         });
@@ -458,7 +458,7 @@ export default {
           data.content = res.data.content;
           data.task_id = val.task_id;
           data.process_instance_id = val.process_id;
-          this.$store.dispatch('bulletin_draft', data);
+          sessionStorage.setItem('bulletin_draft',JSON.stringify(data));
           this.routerLink(val.task_action, {again: again});
         }
       });

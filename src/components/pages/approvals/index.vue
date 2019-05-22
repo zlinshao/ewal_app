@@ -373,7 +373,8 @@
       },
       // 报备详情
       routerLinkDetail(item) {
-        this.routerLink('/approvalDetail', item);
+        sessionStorage.setItem('approvalDetail', JSON.stringify(item));
+        this.routerLink('/approvalDetail');
       },
       // 接口配置
       apiHandle(tab, status) {

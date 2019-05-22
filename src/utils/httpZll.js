@@ -269,10 +269,12 @@ class httpZll extends httpService {
       this.post(`${market}v1.0/market/handover`, data, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
+          $httpPrompt(res.message,'success');
         } else {
+          $httpPrompt(res.message);
           resolve(false);
         }
-        $httpPrompt(res.message);
+
       });
     });
   }

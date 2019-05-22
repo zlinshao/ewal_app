@@ -419,8 +419,8 @@
                 this.noModuleDetail = val;
                 break;
               case 'InputHandoverOrder'://交接单
-                this.$store.dispatch('all_detail', val);
-                this.routerLink('/deliveryReceipt');
+                sessionStorage.setItem('deliveryReceipt',JSON.stringify(val));
+                this.routerLink('/deliveryReceipt',{task_id: val.task_id});
                 break;
             }
             break;

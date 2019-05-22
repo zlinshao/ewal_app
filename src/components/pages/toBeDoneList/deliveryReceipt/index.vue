@@ -215,6 +215,7 @@
     components: {DeliveryPickerSlot},
     data() {
       return {
+        allDetail: {},
         mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'],
         slither: 0,
         startClientX: 0,
@@ -257,6 +258,7 @@
     mounted() {
     },
     activated() {
+      this.allDetail = JSON.parse(sessionStorage.deliveryReceipt);
       this.resetting();
       this.getDraft(this.allDetail.task_id);
       this.allReportNum = Object.keys(this.drawSlither).length;
@@ -267,11 +269,7 @@
       this.slitherCss.width = this.allReportNum + '00%';
     },
     watch: {},
-    computed: {
-      allDetail() {
-        return this.$store.state.app.allDetail;
-      }
-    },
+    computed: {},
     methods: {
       changeTag(index) {
         this.slither = index;
@@ -284,9 +282,20 @@
       },
       // 获取交接单草稿
       getDraft(id) {
-        // this.$httpZll.getDeliveryDraft(id).then(res => {
-        //   console.log(res.data)
-        // })
+        this.$httpZll.getDeliveryDraft(id).then(res => {
+          if (res) {
+            let data = res.data;
+            this.form.id = data.id;
+            this.handlePreFill(data);
+          }
+        })
+      },
+      // 交接单 草稿预填
+      handlePreFill(res) {
+        for (let item of Object.keys(this.form)) {
+          // console.log(res[item]);
+          // console.log(this.form[item])
+        }
       },
       // touch 左右切换
       tapStart(event) {
@@ -464,11 +473,14 @@
         this.form.is_draft = val;
         switch (val) {
           case 0:
-            // case 1:
+          case 1:
             this.$httpZll.postDeliveryReceipt(this.form).then(res => {
               if (res) {
-                console.log(res.data);
-                // this.$router.go(-1);
+                if (val) {
+                  this.form.id = res.data.id;
+                } else {
+                  this.$router.go(-1);
+                }
               }
             });
             break;
