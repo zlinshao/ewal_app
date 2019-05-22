@@ -305,10 +305,33 @@
                 this.getHandleData(res[item][index], name, item, index);
               }
             });
+          } else {
+            switch (item) {
+              case 'house_album':
+                this.$httpZll.getUploadUrl(res[item]).then(res => {
+                  this.album[item] = res.data;
+                  this.album = Object.assign({}, this.album);
+                });
+                break;
+              case 'is_clean':
+              case 'cleaning_type':
+              case 'payment_type':
+                this.formatData[item] = dicties[item][res[item]];
+                break;
+              case 'cleaning_time':
+                this.formatData[item] = res[item];
+                break;
+              case 'other_fee':
+                for (let other of this.drawSlither['slither']) {
+                  if(other.keyName === 'other_fee'){
+                    other.value.push(other.value[0]);
+                  }
+                }
+                break;
+            }
           }
         }
         this.isBadShowHidden();
-        this.album = Object.assign({}, this.album);
       },
       // 请求数据处理
       getHandleData(key, name, item, index = '') {
@@ -323,6 +346,7 @@
                   } else {
                     this.album[item][name] = res.data;
                   }
+                  this.album = Object.assign({}, this.album);
                 })
               }
             } else {
@@ -430,10 +454,14 @@
         if (slither === 'bedroom') {
           this.drawSlither[slither].splice(index, 1);
           this.form[slither].splice(index, 1);
+          this.formatData[slither].splice(index, 1);
+          this.album[slither].splice(index, 1);
           return;
         }
         this.drawSlither[slither][index].value.splice(num, 1);
         this.form[name].splice(num, 1);
+        this.formatData[name].splice(num, 1);
+        this.album[name].splice(num, 1);
       },
       // 下拉选择
       choosePicker(item, value = '', parentKey = '', index = '') {
