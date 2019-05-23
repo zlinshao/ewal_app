@@ -16,7 +16,7 @@
         <li v-for="item in toBeDoneList">
           <div class="mainTitle">
             <label>{{item.title}}</label>
-            <p @click="clickBtn({action:'finishTask'})"><i></i></p>
+            <p @click="clickBtn({action:'finishTask'},item)"><i></i></p>
           </div>
           <p class="statusBtn">
             <span>{{item.name}}</span>
@@ -31,7 +31,7 @@
               </p>
             </div>
             <!--转交/代签-->
-            <div v-for="btn in normalOperates" :class="btn.action" @click="clickBtn(btn)" v-else>
+            <div v-for="btn in normalOperates" :class="btn.action" @click="clickBtn(btn,item)" v-else>
               <i><img :src="btn.icon" alt=""></i>
               <span>{{btn.text}}</span>
             </div>
@@ -62,12 +62,11 @@
           <input
             v-if="item.type !== 'textarea'"
             type="text"
-            v-model="form[item.keyName]"
+            v-model="formatData[item.keyName]"
             :readonly="item.readonly"
             :disabled="item.disabled"
-            @focus="choosePicker(item,form[item.keyName])"
+            @focus="choosePicker(item)"
             :placeholder="item.placeholder">
-          <textarea v-else rows="3" v-model="form[item.keyName]" :placeholder="item.placeholder"></textarea>
         </div>
       </div>
       <div class="commonBtn">
@@ -112,8 +111,6 @@
     </van-popup>
     <!--员工搜索-->
     <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
-    <!--日期-->
-    <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
   </div>
 </template>
 
@@ -139,6 +136,7 @@
       return {
         mainHeight: '',
         fullLoading: true,
+        task_id: '',
         //正常操作 按钮
         operates: {},//状态变更操作
         defineDeliver: [
@@ -147,7 +145,7 @@
               label: '代签人',
               readonly: 'readonly',
               type: 'text',
-              keyName: 'staff_name',
+              keyName: 'assignee',
               placeholder: '必填 请选择',
             },
             {
@@ -157,26 +155,13 @@
               keyName: 'department_name',
               placeholder: '已禁用',
             },
-            {
-              label: '预约时间',
-              type: 'text',
-              readonly: 'readonly',
-              keyName: 'time',
-              placeholder: '必填 请选择',
-            },
-            {
-              label: '备注',
-              type: 'textarea',
-              keyName: 'remark',
-              placeholder: '请输入',
-            },
           ],
           [
             {
               label: '转交人',
               readonly: 'readonly',
               type: 'text',
-              keyName: 'staff_name',
+              keyName: 'assignee',
               placeholder: '必填 请选择',
             },
             {
@@ -190,23 +175,14 @@
         ],
         deliverIndex: 0,
         deliverPopup: false,//代签/转交
-        timeModule: false,//日期
         form: {},
         formatData: {},
-        showData: {
-          dateVal: '',                  //日期
-          dateKey: '',                  //日期 字段名
-          dateType: '',                 //日期类型 默认date 时分datetime
-          dateIdx: '',                  //日期字段下标 变化情况使用
-        },
         normalOperates: [
           {
-            id: 1,
             icon: icon_daiqian,
             text: '代签',
             action: 'allograph',
           }, {
-            id: 2,
             icon: icon_zhuanjiao,
             text: '转交',
             action: 'deliver',
@@ -283,35 +259,16 @@
 
       },
       // 人员/部门/时间
-      choosePicker(val, date = '') {
-        console.log(val);
-        switch (val.keyName) {
-          case 'staff_name':
-            this.searchStaffModule = true;
-            break;
-          case '2':
-            break;
-          case 'time':
-            this.timeModule = true;
-            this.formatData.dateKey = val.keyName;
-            this.formatData.dateVal = date;
-            break;
-        }
-      },
-      // 确认时间
-      onConTime(val) {
-        this.timeModule = false;
-        if (val !== 'close') {
-          this.form[val.dateKey] = val.dateVal;
-        }
+      choosePicker(val) {
+        if (val.keyName === 'assignee') this.searchStaffModule = true;
       },
       // 员工搜索结果
       getStaffInfo(val) {
         this.searchStaffModule = false;
         if (val !== 'close') {
-          for (let item of Object.keys(val)) {
-            this.form[item] = val[item];
-          }
+          this.form.assignee = val.staff_id;
+          this.formatData.assignee = val.staff_name;
+          this.formatData.department_name = val.department_name;
         }
       },
       onCancel() {
@@ -370,13 +327,14 @@
       },
       // 转交 / 代签
       saveDeliver(val) {
-        let url = val ? '' : '';
-        // this.$httpZll.postToBeDoneDeliver(this.form, url).then(res => {
-        //
-        // })
+        this.form.changeOwner = Boolean(val);
+        this.$httpZll.postToBeDoneDeliver(this.task_id, this.form).then(res => {
+
+        })
       },
       // 变更 签署 转交 代签 结束任务
       clickBtn(action = {}, item = {}) {
+        this.task_id = item.task_id || '';
         let user_id = '';
         switch (action.action) {
           case 'success'://本地签署
@@ -525,13 +483,18 @@
             break;
         }
       },
+      // 转交/代签
       resetting(val) {
         this.deliverIndex = val;
-        this.form = {};
-        this.formatData = this.jsonClone(this.showData);
-        for (let item of this.defineDeliver[val]) {
-          this.form[item.keyName] = '';
-        }
+        this.formatData = {
+          assignee: '',
+          department_name: '',
+        };
+        this.form = {
+          assignee: '',
+          action: 'transfer',
+          changeOwner: true
+        };
       },
     },
   }
@@ -560,15 +523,6 @@
           text-align: right;
           margin-right: .3rem;
         }
-
-        textarea {
-          border: none;
-        }
-      }
-
-      .textarea {
-        margin-top: .2rem;
-        align-items: flex-start;
       }
     }
 

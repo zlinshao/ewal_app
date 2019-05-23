@@ -79,7 +79,7 @@
           <i v-for="(i,idx) in 4" :class="{'hover': idx === slither}"></i>
         </p>
         <div v-if="operates.variableName">
-          <h1 v-for="(item,idx) in operates.outcomeOptions" class="btn" :class="item.route || ''"
+          <h1 v-for="item in operates.outcomeOptions" class="btn" :class="item.route || ''"
               @click="clickBtn(operates.variableName, item)">
             <span class="writingMode">{{item.title}}</span>
           </h1>
@@ -176,10 +176,10 @@
         startClientX: 0,
         endClientX: 0,
         slither: 0,
-        allDetail: {},//详情
         allDetail: {},//所有参数
         task_id: '',//详情
-        process_instance_id: '',//详情
+        root_id: '',//详情
+        process_id: '',//详情
 
         // 头部操作
         topOperates: [
@@ -237,7 +237,8 @@
       let query = JSON.parse(sessionStorage.approvalDetail || '{}');
       this.allDetail = query;
       this.task_id = query.task_id;
-      this.process_instance_id = query.process_id;
+      this.process_id = query.process_id;
+      this.root_id = query.root_id;
       this.getOperates(query);
       this.handleData();
       this.approvalDetail(query.bm_detail_request_url);
@@ -303,10 +304,13 @@
       // 同意 拒绝
       clickBtn(key = '', action = {}) {
         switch (action.route) {
-          case'back':
+          case'back'://取消
             this.$router.go(-1);
             break;
-          case'postpone':
+          case'postpone'://暂缓
+            this.$httpZll.postponeTask(this.root_id, {action: 'activate'}).then(res => {
+
+            });
             break;
           default:
             let postData = {};
@@ -405,7 +409,7 @@
           if (res) {
             this.allDetail = this.jsonClone(res.data);
             this.allDetail.task_id = this.task_id;
-            this.allDetail.process_instance_id = this.process_instance_id;
+            this.allDetail.process_instance_id = this.process_id;
             this.allDetail.variableName = this.operates.variableName;
             this.formatData = res.data.content;
             this.handleDetail(res.data.content)

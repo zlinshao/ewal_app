@@ -416,19 +416,19 @@
         if (!begin_date) return;
         let begin = new Date(begin_date);//合同开始日期
         let month = Number(this.form.month || 0);//签约月数
-        let day = Number(this.form.day || 0) + (vacancy || 0) - 1;//签约天数
+        let day = Number(this.form.day || 0);//签约天数
         let vacancy = Number(this.form.vacancy || 0);//空置期天数
         //空置期结束日期
         this.form.end_date_vacant = this.myUtils.formatAddRem('dd', vacancy, begin);
-        let end_date_vacant = new Date(this.form.end_date_vacant);
         // 第一次打款日期
-        this.form.pay_first_date = this.myUtils.formatAddRem('dd', 1, end_date_vacant);
+        this.form.pay_first_date = this.myUtils.formatAddRem('dd', 1, new Date(this.form.end_date_vacant));
         // 付款方式变化 日期
         this.changeDateCount(this.form.pay_first_date, this.form.period_price_way_arr, 'period_price_way_arr');
         //合同结束日期
         if (day) {
           let end = this.myUtils.dateAdd('mm', month, begin);
-          this.form.end_date = this.myUtils.formatAddRem('dd', day, end);
+          let dayEnd = this.myUtils.dateAdd('dd', day, end);
+          this.form.end_date = this.myUtils.formatDate(dayEnd);
         } else {
           this.form.end_date = this.myUtils.formatAddRem('mm', month, begin);
         }
