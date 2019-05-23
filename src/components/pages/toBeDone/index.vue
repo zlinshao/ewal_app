@@ -395,6 +395,8 @@
                 setTimeout(_ => {
                   this.onSearch();
                 }, 1000)
+              } else {
+                this.onSearch();
               }
             })
           }

@@ -385,7 +385,7 @@ export default {
     };
     // 修改合同
     Vue.prototype.$reviseContract = function (action = {}, name = '', item) {
-      this.$dialog('合同修改', '是否确认修改合同?').then(res => {
+      this.$dialog('合同修改', '此操作将重新发起报备和审批，并结束该签署任务，且无法恢复，是否继续?').then(res => {
         if (res) {
           let postData = {};
           postData.action = 'complete';
