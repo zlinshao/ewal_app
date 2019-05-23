@@ -93,7 +93,8 @@
                         <van-icon name="cross" color="#4570FE" size=".36rem"
                                   @click='removeChange(slither,item.keyName,index,num)'/>
                       </div>
-                      <div class="zl-button" @click="changeInput(slither,item.keyName,index,item.children[0])">
+                      <div class="zl-button" @click="changeInput(slither,item.keyName,index,item.children[0])"
+                           v-if="num === (item.children.length - 1)">
                         {{item.button}}
                       </div>
                     </div>
