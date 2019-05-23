@@ -126,7 +126,7 @@
           resolve(true);
         })
       },
-      // 切换
+      // 点击切换
       choosePicker(item, value = '', parentKey = '', index = '') {
         this.closePickerConfig().then(_ => {
           this.pickerName = item.keyName;
@@ -153,10 +153,6 @@
       },
       // 预填所有选项
       setPickers(config) {
-        let unit = '';
-        let sets = ['air_conditioning', 'tv'];//台
-        let few = ['chair', 'door_lock_key', 'key'];//把
-        unit = sets.includes(config.keyName) ? '台' : (few.includes(config.keyName) ? '把' : '个');
         if (!config.parentKey) return;
         config.childKeys.forEach((res, index) => {
           if (res === 'is_bad') {
@@ -189,14 +185,17 @@
         });
         this.pickerConfig = Object.assign({}, config);
         if (this.is_bad === 1) {
-          this.addColumns('', unit);
+          this.addColumns();
         }
       },
       // 增加损坏数量 选项
-      addColumns(picker, unit) {
-        console.log(picker);
+      addColumns(picker) {
+        let unit = '';
         let num = [];
+        let sets = ['air_conditioning', 'tv'];//台
+        let few = ['chair', 'door_lock_key', 'key'];//把
         let config = this.pickerConfig;
+        unit = sets.includes(config.keyName) ? '台' : (few.includes(config.keyName) ? '把' : '个');
         for (let i = 1; i < 6; i++) {
           num.push(i + unit);
           config.ids[this.length[1]].values.push(i);

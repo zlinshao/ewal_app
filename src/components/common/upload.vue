@@ -8,7 +8,7 @@
            :style="uploadCss">
         <div class="img">
           <!--图片-->
-          <img :src="item.uri" v-if="item.mime.includes('image')" @click="$bigPhoto(showFile,item.uri)">
+          <img :src="item.uri" v-if="item.mime.includes('image')" @click="$bigPhoto(showFile,item.uri)" alt="">
           <!--视频-->
           <!--@click="videoPlay($event)" 播放事件-->
           <img src="../../assets/image/file/video.png" :alt="item.uri" @click="videoPlay($event)"

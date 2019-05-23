@@ -117,6 +117,18 @@ class myUtils {
     return temp;
   }
 
+  // 数组 去空
+  static arrayOffEmpty(temp) {
+    let arr = JSON.parse(JSON.stringify(temp));
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === '' || arr[i] === null || typeof (arr[i]) === undefined) {
+        arr.splice(i, 1);
+        i = i - 1;
+      }
+    }
+    return arr;
+  }
+
   // 计算时间差
   static timeDifference(di) {//di作为一个变量传进来
     //如果时间格式是正确的，那下面这一步转化时间格式就可以不用了
@@ -170,6 +182,7 @@ class myUtils {
     }
     return format;
   }
+
   // 阿拉伯数字 转换 中文数字
   static DX(num) {
     let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']; //changeNum[0] = "零"

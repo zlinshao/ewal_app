@@ -1491,23 +1491,29 @@ const childKeysTypeBad = ['type', 'is_bad', 'bad_number'];
 const childKeysTypeNum = ['type', 'is_bad', 'bad_number', 'number'];
 const childKeysHaveBad = ['is_have', 'is_bad', 'bad_number'];
 
-defineArticleReceipt = {
-  // 客厅
-  hall_goods: handlerHallGoods('hall_goods', 11),
-  // 厨房/阳台/卫生间
-  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom', 12),
-  // 主卧
-  master_bedroom: handlerBedroom('master_bedroom', 13),
-  // 次卧
-  bedroom: [handlerBedroom('bedroom', 15)],
-  // 费用交接
-  slither: [
+// 费用交接
+function handlerFreeDelivery(name, key, type = 'number', place = '必填 请输入', prompts) {
+  return {
+    label: name,
+    placeholder: place,
+    keyName: key,
+    keyType: '',
+    type: type,
+    status: '',
+    prompts: prompts,
+    slot: '',
+  }
+}
+// 费用交接切换
+handlerFreeDeliveryChange = [
+  [],
+  [
     {
       label: '缴费类型',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'payment_type',
-      keyType: '',
+      keyType: 1,
       type: 'text',
       status: 'objInt',
       picker: 'picker',
@@ -1573,23 +1579,45 @@ defineArticleReceipt = {
       ],
     },
     handlerFreeDelivery('费用总计', 'total_fee'),
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea'),
+    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
   ],
-};
-
-// 费用交接
-function handlerFreeDelivery(name, key, type = 'number', place = '必填 请输入', prompts) {
-  return {
-    label: name,
-    placeholder: place,
-    keyName: key,
-    keyType: '',
-    type: type,
-    status: '',
-    prompts: prompts,
-    slot: '',
-  }
-}
+  [
+    {
+      label: '缴费类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_type',
+      keyType: 1,
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
+    handlerFreeDelivery('物业费', 'property_costs'),
+    handlerFreeDelivery('费用总计', 'total_fee'),
+    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
+  ],
+  [
+    {
+      label: '缴费类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    handlerFreeDelivery('水卡余额', 'water_card_balance',),
+    handlerFreeDelivery('电卡余额', 'electric_card_balance',),
+    handlerFreeDelivery('燃气卡余额', 'gas_card_balance',),
+    handlerFreeDelivery('结算金额', 'settlement_amount',),
+  ]
+];
 
 // 客厅
 function handlerHallGoods(value, num) {
@@ -1806,3 +1834,16 @@ function deliveryMorePickersRemark(name) {
     slot: '',
   }
 }
+
+defineArticleReceipt = {
+  // 客厅
+  hall_goods: handlerHallGoods('hall_goods', 11),
+  // 厨房/阳台/卫生间
+  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom', 12),
+  // 主卧
+  master_bedroom: handlerBedroom('master_bedroom', 13),
+  // 次卧
+  bedroom: [handlerBedroom('bedroom', 15)],
+  // 费用交接
+  slither: handlerFreeDeliveryChange[1],
+};

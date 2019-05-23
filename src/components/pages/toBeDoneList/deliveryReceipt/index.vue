@@ -39,6 +39,26 @@
                     <div class="zl-button" v-if="room.button">{{room.button}}</div>
                     <div class="unit" v-if="room.unit">{{room.unit}}</div>
                   </zl-input>
+                  <div v-for="child in room.children" v-if="!child.hidden">
+                    <div v-if="child.type">
+                      <div class="items-center">
+                        <zl-input
+                          v-model="form[slither][index][room.keyName][child.keyName]"
+                          :key="index"
+                          :type="child.type"
+                          :label="child.label"
+                          :placeholder="child.placeholder">
+                          <div class="zl-button" v-if="child.button">{{child.button}}</div>
+                          <div class="unit" v-if="child.unit">{{child.unit}}</div>
+                        </zl-input>
+                      </div>
+                      <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
+                    </div>
+                    <div v-else>
+                      <Upload :file="child" :getImg="album[slither][index][room.keyName]" :close="!closePhoto"
+                              @success="getImgDataBed"></Upload>
+                    </div>
+                  </div>
                 </div>
                 <div v-else>
                   <zl-input
@@ -50,26 +70,6 @@
                     <div class="zl-button" v-if="room.button">{{room.button}}</div>
                     <div class="unit" v-if="room.unit">{{room.unit}}</div>
                   </zl-input>
-                </div>
-                <div v-for="child in room.children" v-if="!child.hidden">
-                  <div v-if="child.type">
-                    <div class="items-center">
-                      <zl-input
-                        v-model="form[slither][index][room.keyName][child.keyName]"
-                        :key="index"
-                        :type="child.type"
-                        :label="child.label"
-                        :placeholder="child.placeholder">
-                        <div class="zl-button" v-if="child.button">{{child.button}}</div>
-                        <div class="unit" v-if="child.unit">{{child.unit}}</div>
-                      </zl-input>
-                    </div>
-                    <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
-                  </div>
-                  <div v-else>
-                    <Upload :file="child" :getImg="album[slither][index][room.keyName]" :close="!closePhoto"
-                            @success="getImgDataBed"></Upload>
-                  </div>
                 </div>
               </div>
             </li>
@@ -88,6 +88,26 @@
                   <div class="zl-button" v-if="item.button">{{item.button}}</div>
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
                 </zl-input>
+                <div v-for="child in item.children" v-if="!child.hidden">
+                  <div v-if="child.type">
+                    <div class="items-center">
+                      <zl-input
+                        v-model="form[slither][item.keyName][child.keyName]"
+                        :key="index"
+                        :type="child.type"
+                        :label="child.label"
+                        :placeholder="child.placeholder">
+                        <div class="zl-button" v-if="child.button">{{child.button}}</div>
+                        <div class="unit" v-if="child.unit">{{child.unit}}</div>
+                      </zl-input>
+                    </div>
+                    <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
+                  </div>
+                  <div v-else>
+                    <Upload :file="child" :getImg="album[slither][item.keyName]" :close="!closePhoto"
+                            @success="getImgDataObj"></Upload>
+                  </div>
+                </div>
               </div>
               <div v-else>
                 <zl-input
@@ -99,26 +119,6 @@
                   <div class="zl-button" v-if="item.button">{{item.button}}</div>
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
                 </zl-input>
-              </div>
-              <div v-for="child in item.children" v-if="!child.hidden">
-                <div v-if="child.type">
-                  <div class="items-center">
-                    <zl-input
-                      v-model="form[slither][item.keyName][child.keyName]"
-                      :key="index"
-                      :type="child.type"
-                      :label="child.label"
-                      :placeholder="child.placeholder">
-                      <div class="zl-button" v-if="child.button">{{child.button}}</div>
-                      <div class="unit" v-if="child.unit">{{child.unit}}</div>
-                    </zl-input>
-                  </div>
-                  <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
-                </div>
-                <div v-else>
-                  <Upload :file="child" :getImg="album[slither][item.keyName]" :close="!closePhoto"
-                          @success="getImgDataObj"></Upload>
-                </div>
               </div>
             </li>
             <li v-else>
@@ -217,6 +217,7 @@
       return {
         allDetail: {},
         mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'],
+        payment_type: 1,
         slither: 0,
         startClientX: 0,
         endClientX: 0,
@@ -259,9 +260,8 @@
     },
     activated() {
       this.allDetail = JSON.parse(sessionStorage.deliveryReceipt);
-      this.resetting();
       this.getDraft(this.allDetail.task_id);
-      this.allReportNum = Object.keys(this.drawSlither).length;
+      this.allReportNum = Object.keys(defineArticleReceipt).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
       this.mainWidth = {minWidth: main, maxWidth: main};
@@ -286,7 +286,11 @@
           if (res) {
             let data = res.data;
             this.form.id = data.id;
+            this.payment_type = data.payment_type || 1;
+            this.resetting(this.payment_type);
             this.handlePreFill(data);
+          } else {
+            this.resetting(1);
           }
         })
       },
@@ -297,12 +301,32 @@
           this.form[item] = res[item];
           if (title.includes(item)) {
             for (let name of Object.keys(res[item])) {
-              this.getHandleData(res[item], name, item);
+              this.getHandleData(res, item, name);
             }
           } else if (item === 'bedroom') {
             res[item].forEach((bed, index) => {
+              if (index !== 0) {
+                let obj = {}, pic = [];
+                let draw = this.jsonClone(this.drawSlither[item][0]);
+                for (let room of draw) {
+                  if (room.children) {
+                    obj[room.keyName] = '';
+                    pic[room.keyName] = [];
+                    room.picker = room.picker + index;
+                    for (let child of room.children) {
+                      if (child.status === 'upload') {
+                        child.keyName = child.keyName + '-' + index;
+                        child.picker = index;
+                      }
+                    }
+                  }
+                }
+                this.drawSlither[item].push(draw);
+                this.formatData[item].push(obj);
+                this.album[item].push(pic);
+              }
               for (let name of Object.keys(bed)) {
-                this.getHandleData(res[item][index], name, item, index);
+                this.getHandleData(res, item, name, index);
               }
             });
           } else {
@@ -322,9 +346,11 @@
                 this.formatData[item] = res[item];
                 break;
               case 'other_fee':
-                for (let other of this.drawSlither['slither']) {
-                  if(other.keyName === 'other_fee'){
-                    other.value.push(other.value[0]);
+                if (res[item].length > 1) {
+                  for (let other of this.drawSlither['slither']) {
+                    if (other.keyName === 'other_fee') {
+                      other.value.push(other.value[0]);
+                    }
                   }
                 }
                 break;
@@ -334,14 +360,20 @@
         this.isBadShowHidden();
       },
       // 请求数据处理
-      getHandleData(key, name, item, index = '') {
-        if (typeof key[name] !== 'string') {
+      getHandleData(res, item, name, index) {
+        let value;
+        if (typeof index === 'number') {
+          value = res[item][index][name];
+        } else {
+          value = res[item][name];
+        }
+        if (value) {
           let show = [];
-          for (let child of Object.keys(key[name])) {
+          for (let child of Object.keys(value)) {
             if (child === 'photo') {
-              if (key[name][child].length) {
-                this.$httpZll.getUploadUrl(key[name][child]).then(res => {
-                  if (typeof index !== 'string') {
+              if (value[child].length) {
+                this.$httpZll.getUploadUrl(value[child]).then(res => {
+                  if (typeof index === 'number') {
                     this.album[item][index][name] = res.data;
                   } else {
                     this.album[item][name] = res.data;
@@ -350,43 +382,55 @@
                 })
               }
             } else {
-              if (typeof key[name][child] !== 'string') {
-                let unit = '';
-                let sets = ['air_conditioning', 'tv'];//台
-                let few = ['chair', 'door_lock_key', 'key'];//把
-                unit = sets.includes(name) ? '台' : (few.includes(name) ? '把' : '个');
+              let unit = '';
+              let sets = ['air_conditioning', 'tv'];//台
+              let few = ['chair', 'door_lock_key', 'key'];//把
+              unit = sets.includes(name) ? '台' : (few.includes(name) ? '把' : '个');
+              if (value[child]) {
                 switch (child) {
+                  case 'is_have':
+                    if (value[child]) {
+                      show[0] = '有';
+                    } else {
+                      show[0] = '没有';
+                    }
+                    break;
                   case 'type':
                     for (let dict of Object.keys(dicties[name])) {
                       if (dict.includes('0')) {
-                        show.push(dicties[name]['value_0'][key[name][child]]);
+                        show[0] = dicties[name]['value_0'][value[child]];
                       }
                     }
                     break;
                   case 'is_bad':
-                    if (key[name][child]) {
-                      show.push('损坏');
+                    if (value[child]) {
+                      show[1] = '损坏';
                     } else {
-                      show.push('无损坏');
+                      show[1] = '无损坏';
                     }
                     break;
                   case 'bad_number':
-                    if (key[name][child]) {
-                      show.push(key[name][child] + unit);
+                    if (value[child]) {
+                      show[2] = value[child] + unit;
                     }
                     break;
                   case 'number':
-                    if (key[name][child]) {
-                      show.push('共' + key[name][child] + unit);
+                    if (value[child]) {
+                      show[3] = '共' + value[child] + unit;
                     }
                     break;
                 }
-                if (typeof index !== 'string') {
-                  this.formatData[item][index][name] = show.join('/');
-                } else {
-                  this.formatData[item][name] = show.join('/');
+                let temp = [];
+                for (let i of show) {
+                  if (i) {
+                    temp.push(i);
+                  }
                 }
-
+                if (typeof index === 'number') {
+                  this.formatData[item][index][name] = temp.join('/');
+                } else {
+                  this.formatData[item][name] = temp.join('/');
+                }
               }
             }
           }
@@ -429,6 +473,9 @@
               for (let child of val.children) {
                 child.picker = index + 1;
                 child.hidden = true;
+                if (child.status === 'upload') {
+                  child.keyName = child.keyName + '-' + (index + 1);
+                }
               }
             }
             pic[val.keyName] = {};
@@ -440,7 +487,6 @@
           this.form[slither].push(obj);
           this.formatData[slither].push(str);
           this.album[slither].push(pic);
-          console.log(this.drawSlither[slither]);
           return;
         }
         this.drawSlither[slither][index].value.push(cloneVal);
@@ -499,7 +545,45 @@
           this.form = form;
           this.formatData = show;
           this.isBadShowHidden();
+          let name = this.pickers.keyName;
+          if (name === 'payment_type') {
+            this.changerPaymentType(this.form[name]);
+          }
         }
+      },
+      // 费用交接切换
+      changerPaymentType(val) {
+        let form = {}, keys = [];
+        let list = this.drawSlither;
+        // 切换前 存值
+        for (let item of list['slither']) {
+          if (item.keyName !== 'payment_type') {
+            keys.push(item.keyName);
+          }
+        }
+        // 切换前 赋值
+        for (let name of Object.keys(this.form)) {
+          if (!keys.includes(name)) {
+            form[name] = this.form[name];
+          }
+        }
+        // 切换后
+        list['slither'] = handlerFreeDeliveryChange[val];
+        for (let item of list['slither']) {
+          if (item.keyName === 'other_fee') {
+            form[item.keyName] = item.keyType;
+            let obj = {};
+            for (let other of item.value) {
+              for (let val of other) {
+                obj[val.keyName] = '';
+              }
+            }
+            form[item.keyName].push(obj);
+          } else if (item.keyName !== 'other_fee') {
+            form[item.keyName] = this.form[item.keyName];
+          }
+        }
+        this.form = this.jsonClone(form);
       },
       // 显示/隐藏 图片 备注
       isBadShowHidden() {
@@ -507,7 +591,7 @@
         for (let item of Object.keys(list)) {
           list[item].forEach((key, index) => {
             if (item === 'bedroom') {
-              key.forEach((bed, idx) => {
+              key.forEach((bed) => {
                 if (bed.children) {
                   for (let room of bed.children) {
                     if (this.form[item][index][bed.keyName].is_bad === 1) {
@@ -564,7 +648,8 @@
       // 图片 次卧
       getImgDataBed(val, file) {
         let key = file.slither;
-        this.form[key][file.picker][file.keyName]['photo'] = val[1];
+        let name = file.keyName.split('-')[0];
+        this.form[key][file.picker][name]['photo'] = val[1];
       },
       getImgDataObj(val, file) {
         let key = file.slither;
@@ -574,6 +659,7 @@
       getImgData(val) {
         this.form[val[0]] = val[1];
       },
+      // 发布
       saveReport(val) {
         this.form.is_draft = val;
         switch (val) {
@@ -590,18 +676,18 @@
             });
             break;
           case 2:
-            this.resetting();
+            this.resetting(1);
             break;
         }
-        console.log(this.form);
       },
       // 重置
-      resetting() {
+      resetting(val) {
         this.slither = 0;
         this.closePhoto = true;
         setTimeout(_ => {
           this.closePhoto = false;
         }, 100);
+        defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
         this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
           if (item !== 'slither') {
@@ -671,7 +757,11 @@
                 this.form[key.keyName].push(obj);
               } else {
                 this.form[key.keyName] = key.keyType;
-                this.formatData[key.keyName] = key.keyType;
+                if (key.keyType) {
+                  this.formatData[key.keyName] = dicties[key.keyName][key.keyType];
+                } else {
+                  this.formatData[key.keyName] = key.keyType;
+                }
               }
             }
           }
