@@ -1239,24 +1239,19 @@ defineCollectReport = {
 
 // 租房报备
 defineRentReport = {
-  // 房屋信息
+  // 租房信息
   slither0: [
     {
-      label: '转租类型',// 标题
-      placeholder: '必填 请选择',// placeholder
-      // placeholder: '请选择',// placeholder
-      readonly: 'readonly',// 只读 picker必须有值
-      // disabled: 'disabled',// 禁用
-      keyName: 'trans_type',// 字段名
-      keyType: '',// 数据类型
-      type: 'text',// input 类型
-      // date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 arrs多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
+      label: '转租类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'trans_type',
+      keyType: '',
+      type: 'text',
       status: 'objInt',
-      picker: 'picker',// 是否显示在弹窗内 不存在为正常输入框 值为picker正常选择 searchVillage 搜索小区
-      showForm: 'formatData',//picker 显示form 或 formatData
-      // prompts: '',//红色提示信息
-      // pickerRead: 'no', // 在弹窗内是否为readonly// 1房屋信息 2物品信息 3合同信息 4客户信息
-      slot: '',// 预留字段
+      picker: 'picker',
+      showForm: 'formatData',
+      slot: '',
     },
     {
       label: '房屋id',
@@ -1400,7 +1395,7 @@ defineRentReport = {
             keyType: '',
             type: 'text',
             status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
+            showForm: 'formatData',
             picker: 'picker',
             button: '付款变化',
             slot: '',
@@ -1414,7 +1409,6 @@ defineRentReport = {
             type: 'number',
             status: '',
             picker: '',
-            // length: 1,
             slot: '',
           },
         ]
@@ -1477,7 +1471,7 @@ defineRentReport = {
             keyType: '',
             type: 'text',
             status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
+            showForm: 'formatData',
             picker: 'picker',
             slot: '',
           },
@@ -1489,7 +1483,7 @@ defineRentReport = {
             keyType: '',
             type: 'text',
             status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
+            showForm: 'formatData',
             picker: 'picker',
             button: '支付变化',
             slot: '',
@@ -1642,8 +1636,8 @@ defineRentReport = {
     },
     {
       label: '是否渠道',
-      placeholder: '必填 请选择',
       readonly: 'readonly',
+      placeholder: '必填 请选择',
       keyName: 'is_agency',
       keyType: '',
       type: 'text',
@@ -1657,6 +1651,7 @@ defineRentReport = {
       placeholder: '必填 请输入',
       keyName: 'agency_name',
       keyType: '',
+      hidden: true,
       type: 'text',
       status: '',
       slot: '',
@@ -1666,7 +1661,8 @@ defineRentReport = {
       placeholder: '必填 请输入',
       keyName: 'agency_price',
       keyType: '',
-      type: 'text',
+      hidden: true,
+      type: 'number',
       status: '',
       slot: '',
     },
@@ -1675,16 +1671,18 @@ defineRentReport = {
       placeholder: '必填 请输入',
       keyName: 'agency_user_name',
       keyType: '',
+      hidden: true,
       type: 'text',
       status: '',
       slot: '',
     },
     {
-      label: '渠道联系人手机号',
+      label: '渠道手机',
       placeholder: '必填 请输入',
       keyName: 'agency_phone',
       keyType: '',
-      type: 'text',
+      hidden: true,
+      type: 'number',
       status: '',
       slot: '',
     },
@@ -1842,7 +1840,7 @@ defineRentReport = {
             keyType: '',
             type: 'text',
             status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
+            showForm: 'formatData',
             picker: 'picker',
             slot: '',
           },
@@ -1854,7 +1852,7 @@ defineRentReport = {
             keyType: '',
             type: 'text',
             status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
+            showForm: 'formatData',
             picker: 'picker',
             slot: '',
           },
@@ -1875,7 +1873,7 @@ defineRentReport = {
             keyType: '',
             type: 'text',
             status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
+            showForm: 'formatData',
             picker: 'picker',
             slot: '',
           },
@@ -1892,57 +1890,6 @@ defineRentReport = {
       ],
     },
   ],
-  // 渠道信息
-  // slither2: [
-  //   {
-  //     label: '是否渠道',
-  //     placeholder: '必填 请选择',
-  //     readonly: 'readonly',
-  //     keyName: 'is_agency',
-  //     keyType: '',
-  //     type: 'text',
-  //     status: 'objInt',
-  //     picker: 'picker',
-  //     showForm: 'formatData',
-  //     slot: '',
-  //   },
-  //   {
-  //     label: '渠道名称',
-  //     placeholder: '必填 请输入',
-  //     keyName: 'agency_name',
-  //     keyType: '',
-  //     type: 'text',
-  //     status: '',
-  //     slot: '',
-  //   },
-  //   {
-  //     label: '渠道价格',
-  //     placeholder: '必填 请输入',
-  //     keyName: 'agency_price',
-  //     keyType: '',
-  //     type: 'text',
-  //     status: '',
-  //     slot: '',
-  //   },
-  //   {
-  //     label: '渠道联系人',
-  //     placeholder: '必填 请输入',
-  //     keyName: 'agency_user_name',
-  //     keyType: '',
-  //     type: 'text',
-  //     status: '',
-  //     slot: '',
-  //   },
-  //   {
-  //     label: '渠道联系人手机号',
-  //     placeholder: '必填 请输入',
-  //     keyName: 'agency_phone',
-  //     keyType: '',
-  //     type: 'text',
-  //     status: '',
-  //     slot: '',
-  //   },
-  // ]
 };
 
 // 收房交接单
