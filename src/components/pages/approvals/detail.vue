@@ -308,7 +308,7 @@
             this.$router.go(-1);
             break;
           case'postpone'://暂缓
-            this.$httpZll.postponeTask(this.root_id, {action: 'activate'}).then(res => {
+            this.$httpZll.postponeTask(this.process_id, {action: 'suspend'}).then(res => {
 
             });
             break;
