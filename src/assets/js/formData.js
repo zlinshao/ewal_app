@@ -1443,7 +1443,7 @@ defineRentReport = {
     {
       label: '分金额付款信息',
       keyName: 'current_pay_info',
-      picker: 'changekkkkk',
+      picker: 'changePrice',
       pickerText: '周期',
       keyType: [],
       button: '付款变化',
@@ -1458,7 +1458,7 @@ defineRentReport = {
             type: 'text',
             status: '',
             picker: '',
-            length: 1,
+            // length: 1,
             slot: '',
           },
           {
@@ -1470,7 +1470,6 @@ defineRentReport = {
             type: 'text',
             status: '',
             picker: '',
-            length: 1,
             slot: '',
           },
           {
@@ -1481,7 +1480,6 @@ defineRentReport = {
             type: '',
             status: '',
             picker: '',
-            length: 1,
             slot: '',
           },
           {
@@ -1493,7 +1491,6 @@ defineRentReport = {
             type: '',
             status: '',
             picker: '',
-            length: 1,
             slot: '',
           },
         ]
