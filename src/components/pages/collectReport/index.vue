@@ -1092,7 +1092,7 @@
 
       .mainRadius2 {
         .slide1 {
-          @include transform(translateX(50%));
+          @include transform(translateX(-50%));
         }
       }
 
