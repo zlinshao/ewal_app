@@ -20,10 +20,12 @@
         <div class="searchHouse">
           <ul v-if="searchList.length">
             <li v-for="item in searchList" @click="onConfirm(item)">
-              <div class="img">
-
+              <div class="img" v-if="item.album_photo.length">
+                <img :src="item.album_photo[0].uri" v-if="item.album_photo[0].info.ext.includes('image')" alt="">
+                <span v-else>
+                  <img src="../../assets/image/file/upload.png" alt="">
+                </span>
               </div>
-              <img :src="item.album_photo[0].uri" v-if="" alt="">
               <div class="content">
                 <h1>{{item.name}}</h1>
                 <h2>
@@ -127,11 +129,23 @@
           margin-bottom: .3rem;
           @include flex();
 
-          img {
+          .img {
+            margin-right: .3rem;
             min-width: 1.8rem;
             max-width: 1.8rem;
-            height: 100%;
-            margin-right: .3rem;
+
+            span {
+              display: inline-block;
+              background-color: #c1c1c1;
+              width: 100%;
+              height: 100%;
+              @include flex('flex-center');
+
+              img {
+                width: .6rem;
+                height: .6rem;
+              }
+            }
           }
 
           .content {
