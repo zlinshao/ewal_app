@@ -10,26 +10,29 @@
         <div class="searchInput">
           <div class="input">
             <div>
-              <input type="text" v-model="keywords" @keyup.enter="onSearch" placeholder="输入房屋地址">
-              <span v-if="keywords" @click="keywords = ''"></span>
+              <input type="text" v-model="params.serach" @keyup.enter="onSearch" placeholder="输入房屋地址">
+              <span v-if="params.serach" @click="params.serach = ''"></span>
             </div>
-            <p v-if="keywords" class="searchBtn" @click="onSearch">搜索</p>
-            <p v-if="!keywords" @click="searchModule = false">取消</p>
+            <p v-if="params.serach" class="searchBtn" @click="onSearch">搜索</p>
+            <p v-if="!params.serach" @click="searchModule = false">取消</p>
           </div>
         </div>
         <div class="searchHouse">
           <ul v-if="searchList.length">
             <li v-for="item in searchList" @click="onConfirm(item)">
-              <img src="">
+              <div class="img">
+
+              </div>
+              <img :src="item.album_photo[0].uri" v-if="" alt="">
               <div class="content">
                 <h1>{{item.name}}</h1>
                 <h2>
-                  <span>{{item.area}}㎡</span><span>15&nbsp;/&nbsp;30</span><span>南</span><span>{{item.decorate}}-住宅</span>
+                  <span>{{item.area}}㎡</span><span>{{item.floor.this}}&nbsp;/&nbsp;{{item.floor.all}}</span><span>{{item.house_toward}}</span><span>{{item.decorate}}-{{item.house_identity}}</span>
                 </h2>
                 <h3>
                   <span class="span1">剩1年5个月12天</span>
                   <span class="span2">建议12月付</span>
-                  <span class="span3">首次出租</span>
+                  <span class="span3">{{item.house_status_name}}</span>
                 </h3>
                 <div>
                   <h4>
@@ -55,7 +58,6 @@
       return {
         searchModule: false,
         fullLoading: false,
-        keywords: '',
         searchList: [],
         total: 0,
         params: {
@@ -63,26 +65,16 @@
           page: 1,
           limit: 20,
         },
-        form: {
-          id: '',
-          name: '',
-        },
       }
     },
     mounted() {
-      this.$httpZll.searchHouseList(this.params).then(res => {
-        if (res) {
-          this.searchList = res.data.data;
-          this.total = res.data.all_count;
-        }
-      })
     },
     activated() {
     },
     watch: {
-      keywords(val) {
-        this.keywords = val.replace(/\s+/g, '');
-        if (!this.keywords) this.close_();
+      'params.search'(val) {
+        this.params.search = val.replace(/\s+/g, '');
+        if (!this.params.search) this.close_();
       },
       module(val) {
         this.searchModule = val;
@@ -96,12 +88,19 @@
     computed: {},
     methods: {
       onSearch() {
-
+        this.$httpZll.searchHouseList(this.params).then(res => {
+          if (res) {
+            this.searchList = res.data.data;
+            this.total = res.data.all_count;
+          }
+        })
       },
       onConfirm(item) {
-        this.form.id = item.id;
-        this.form.name = item.name;
-        this.$emit('close', this.form);
+        console.log(item);
+        let form = {};
+        form.id = item.id;
+        form.name = item.name;
+        this.$emit('close', form);
       }
     },
   }
@@ -115,83 +114,102 @@
       @include scroll;
       height: 100%;
       padding: 0 .25rem;
+
       ul {
         h1, h2, h3, h4, h5, h6, span {
           font-size: .26rem;
           font-family: "Microsoft YaHei UI";
         }
+
         li {
           padding: 0;
           height: 2rem;
           margin-bottom: .3rem;
           @include flex();
+
           img {
             min-width: 1.8rem;
             max-width: 1.8rem;
             height: 100%;
             margin-right: .3rem;
-            background-color: #CF2E33;
           }
+
           .content {
             width: 100%;
             @include flex('bet-column');
+
             h1 {
               font-weight: bold;
               font-size: .3rem;
             }
+
             h2 {
+              margin: .06rem 0 .1rem;
+
               span {
                 border-left: 1px dashed #797982;
                 padding: 0 .2rem;
                 font-size: .24rem;
                 color: #797982;
               }
+
               span:first-of-type {
                 border-left: none;
                 padding-left: 0;
               }
             }
+
             h3 {
               @include flex('items-center');
               flex-wrap: wrap;
+
               span:last-of-type {
                 margin-right: 0;
               }
+
               span {
                 @include radius(.06rem);
                 font-size: .2rem;
-                margin: .06rem .1rem 0 0;
+                margin-right: .1rem;
                 white-space: nowrap;
-                padding: .06rem .1rem;
+                padding: .04rem .12rem;
               }
+
               .span1 {
                 color: #797982;
                 background-color: #F0F0F0;
               }
+
               .span2 {
                 color: #4570FE;
                 background-color: #ECF0FF;
               }
+
               .span3 {
                 color: #FEB105;
                 background-color: #FFF9E1;
               }
             }
+
             div {
               margin-top: .24rem;
               @include flex('items-bet');
+
               h4 {
                 @include flex('items-center');
+
                 i {
                   width: .3rem;
                   height: .3rem;
                   margin-right: .1rem;
                   background-color: #CF2E33;
                 }
+
                 span {
                   color: #797982;
                 }
               }
+
               h5 {
                 font-size: .28rem;
                 color: #E53A36;
