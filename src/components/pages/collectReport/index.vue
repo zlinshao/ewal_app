@@ -81,12 +81,13 @@
                 </div>
                 <!--增加附属租客-->
                 <div class="addCustomer" v-else-if="item.picker === 'addCustomer' && !showCustomer"
-                     @click="showCustomer = true">{{item.button}}
+                     @click="showCustomer = true">
+                  {{item.button}}
                 </div>
                 <!--变化-->
                 <div v-else-if="item.picker && item.picker.includes('change')">
-                  <div v-for="(change,num) in item.children" v-if="showCustomer || item.picker === 'changePrice'">
-                    <div class="items-bet payWayChange"
+                  <div v-for="(change,num) in item.children">
+                    <div class="addChange"
                          v-if="item.children.length > 1 || item.picker === 'changeCustomer'">
                       <div class="items-center">
                         <p>第{{(myUtils.DX(num+1))}}{{item.pickerText}}</p>
@@ -382,7 +383,7 @@
       // 获取电子合同
       electronicContract() {
         let data = {
-          city_id: this.form.community.city,
+          city_id: this.form.community && this.form.community.city || '320100',
           version: '1.1',
         };
         this.$httpZll.getElectronicContract(data).then(res => {
@@ -411,7 +412,7 @@
             break;
         }
       },
-      // 日期计算
+      // 合同结束计算
       contractEnd(begin_date) {
         if (!begin_date) return;
         let begin = new Date(begin_date);//合同开始日期
@@ -652,7 +653,8 @@
       },
       // input 显示隐藏
       inputStatus(name, form) {
-        if (name === 'is_agency' || name === 'is_electronic_contract') {
+        let keys = ['is_other_fee', 'is_agency', 'is_electronic_contract', 'signatory_identity'];
+        if (keys.includes(name)) {
           switch (name) {
             case 'is_electronic_contract':
               let num = Number(form['is_electronic_contract']);
@@ -664,13 +666,13 @@
                 this.form.contract_number = this.electronicContractNumber;
               }
               break;
-            case 'is_agency':
-              this.emptyAgencyInfo(form);
+            case 'signatory_identity':
+              this.showCustomer = Number(form[name]) === 2;
+              break;
+            default:
+              this.emptyAgencyInfo(form, name);
               break;
           }
-        }
-        if (name === 'signatory_identity') {
-          this.showCustomer = Number(form[name]) === 2;
         }
       },
       // 合同编号 禁用
@@ -686,12 +688,12 @@
         }
       },
       // 清空中介信息
-      emptyAgencyInfo(form) {
+      emptyAgencyInfo(form, name) {
         for (let slither of Object.keys(this.drawSlither)) {
           for (let list of this.drawSlither[slither]) {
             if (list.keyName) {
-              if (list.keyName.includes('agency_')) {
-                let num = Number(form['is_agency']);
+              if (list.needHidden) {
+                let num = Number(form[name]);
                 if (num === 0) {
                   list.hidden = true;
                   this.form[list.keyName] = list.keyType;
@@ -1090,37 +1092,29 @@
         }
       }
 
-      .mainRadius2 {
-        .slide1 {
-          @include transform(translateX(-50%));
+      @mixin slides($n) {
+        $num: 100% / $n;
+        @for $i from 1 through $n {
+          .mainRadius#{$n} {
+            .slide#{$i} {
+              @include transform(translateX(-($num*$i)));
+            }
+          }
         }
       }
+      @include slides(2);
+      @include slides(3);
+      @include slides(4);
+      @include slides(5);
+      @include slides(6);
+      @include slides(7);
+      @include slides(8);
+      @include slides(9);
+      @include slides(10);
 
-      .mainRadius3 {
-        .slide1 {
-          @include transform(translateX(-33.33%));
-        }
+      .addChange {
+        @include flex('items-bet');
 
-        .slide2 {
-          @include transform(translateX(-66.33%));
-        }
-      }
-
-      .mainRadius4 {
-        .slide1 {
-          @include transform(translateX(-25%));
-        }
-
-        .slide2 {
-          @include transform(translateX(-50%));
-        }
-
-        .slide3 {
-          @include transform(translateX(-75%));
-        }
-      }
-
-      .payWayChange {
         p {
           padding: .13rem .3rem;
           background-color: #FFFFFF;

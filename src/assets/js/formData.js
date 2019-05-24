@@ -1126,6 +1126,7 @@ defineCollectReport = {
     {
       label: '渠道名称',
       placeholder: '必填 请输入',
+      needHidden: 'hidden',
       keyName: 'agency_name',
       keyType: '',
       hidden: true,
@@ -1136,6 +1137,7 @@ defineCollectReport = {
     {
       label: '渠道价格',
       placeholder: '必填 请输入',
+      needHidden: 'hidden',
       keyName: 'agency_price',
       keyType: '',
       hidden: true,
@@ -1146,6 +1148,7 @@ defineCollectReport = {
     {
       label: '渠道联系人',
       placeholder: '必填 请输入',
+      needHidden: 'hidden',
       keyName: 'agency_user_name',
       keyType: '',
       hidden: true,
@@ -1156,6 +1159,7 @@ defineCollectReport = {
     {
       label: '渠道手机',
       placeholder: '必填 请输入',
+      needHidden: 'hidden',
       keyName: 'agency_phone',
       keyType: '',
       hidden: true,
