@@ -421,7 +421,8 @@
               // assignee: '69',//登陆人
               taskDefinitionKeyIn: approvalSearch.approvals1.join(','),
               category: 'approval',
-              finished: Boolean(status)
+              finished: Boolean(status),
+              active: true,
             };
             break;
           case '2':
