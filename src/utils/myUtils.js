@@ -47,7 +47,8 @@ class myUtils {
 
   // 计算后格式化 日期
   static formatAddRem(interval, num, date, type) {
-    return this.formatDate(this.dateAdd(interval, num, date), type);
+    let time = this.dateAdd(interval, num, date);
+    return this.formatDate(time, type);
   }
 
   // 年月日 加减计算

@@ -553,11 +553,12 @@
       },
       // 费用交接切换
       changerPaymentType(val) {
+        let fee = ['payment_type', 'property_costs', 'public_fee', 'repair_fees', 'other_fee', 'total_fee'];
         let form = {}, keys = [];
         let list = this.drawSlither;
-        // 切换前 存值
+        // 切换前 费用交接需保留字段
         for (let item of list['slither']) {
-          if (item.keyName !== 'payment_type') {
+          if (!fee.includes(item.keyName)) {
             keys.push(item.keyName);
           }
         }
@@ -568,19 +569,20 @@
           }
         }
         // 切换后
-        list['slither'] = handlerFreeDeliveryChange[val];
+        list['slither'] = this.jsonClone(handlerFreeDeliveryChange[val]);
         for (let item of list['slither']) {
-          if (item.keyName === 'other_fee') {
+          if (item.keyName !== 'payment_type') {
             form[item.keyName] = item.keyType;
-            let obj = {};
-            for (let other of item.value) {
-              for (let val of other) {
-                obj[val.keyName] = '';
+            if (item.keyName === 'other_fee') {
+              form[item.keyName] = item.keyType;
+              let obj = {};
+              for (let other of item.value) {
+                for (let val of other) {
+                  obj[val.keyName] = '';
+                }
               }
+              form[item.keyName].push(obj);
             }
-            form[item.keyName].push(obj);
-          } else if (item.keyName !== 'other_fee') {
-            form[item.keyName] = this.form[item.keyName];
           }
         }
         this.form = this.jsonClone(form);
@@ -670,6 +672,7 @@
                 if (val) {
                   this.form.id = res.data.id;
                 } else {
+                  this.resetting(1);
                   this.$router.go(-1);
                 }
               }

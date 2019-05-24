@@ -317,7 +317,6 @@
                   is_number: 1,
                 };
                 this.$httpZll.sendElectronicContract(item.contract_number, params).then(data => {
-
                 })
               }
             });
@@ -342,6 +341,8 @@
                 setTimeout(_ => {
                   this.onSearch(this.tabs.tab);
                 }, 1000)
+              } else {
+                this.onSearch(this.tabs.tab);
               }
             })
           }
