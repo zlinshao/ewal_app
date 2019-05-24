@@ -1239,7 +1239,7 @@ defineCollectReport = {
 
 // 租房报备
 defineRentReport = {
-  // 租房信息
+  // 信息
   slither0: [
     {
       label: '转租类型',
