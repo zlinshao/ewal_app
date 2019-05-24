@@ -653,7 +653,7 @@
       },
       // input 显示隐藏
       inputStatus(name, form) {
-        let keys = ['is_other_fee', 'is_agency', 'is_electronic_contract', 'signatory_identity'];
+        let keys = ['rental_use', 'is_other_fee', 'is_agency', 'is_electronic_contract', 'signatory_identity'];
         if (keys.includes(name)) {
           switch (name) {
             case 'is_electronic_contract':
@@ -670,7 +670,7 @@
               this.showCustomer = Number(form[name]) === 2;
               break;
             default:
-              this.emptyAgencyInfo(form, name);
+              this.showHiddenInput(form, name);
               break;
           }
         }
@@ -688,7 +688,7 @@
         }
       },
       // 清空中介信息
-      emptyAgencyInfo(form, name) {
+      showHiddenInput(form, name) {
         for (let slither of Object.keys(this.drawSlither)) {
           for (let list of this.drawSlither[slither]) {
             if (list.keyName) {
@@ -940,20 +940,7 @@
             case 'is_agency'://是否渠道
               let agency = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '');
               this.formatData[item] = dicties[item][agency];
-              for (let slither of Object.keys(this.drawSlither)) {
-                for (let list of this.drawSlither[slither]) {
-                  if (list.keyName) {
-                    if (list.keyName.includes('agency_')) {
-                      if (agency === 1) {
-                        list.hidden = false;
-                      } else {
-                        list.hidden = true;
-                        this.form[list.keyName] = list.keyType;
-                      }
-                    }
-                  }
-                }
-              }
+              this.showHiddenInput(this.form, item);
               break;
             case 'remark_terms'://备注条款
               let terms = [];
