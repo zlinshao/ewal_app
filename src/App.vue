@@ -32,7 +32,7 @@
       // this.personalGet().then(res => {
       //   this.loading = !res;
       // });
-      dd.biz.navigation.setRight({show: false});
+      // dd.biz.navigation.setRight({show: false});
       sessionStorage.setItem('windowHeight', String(window.innerHeight));
       sessionStorage.setItem('windowWidth', String(window.innerWidth));
     },
