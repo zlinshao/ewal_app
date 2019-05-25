@@ -55,7 +55,7 @@
 <script>
   export default {
     name: "search-house",
-    props: ['module'],
+    props: ['module','config'],
     data() {
       return {
         searchModule: false,
