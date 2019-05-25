@@ -8,7 +8,7 @@
       </div>
       <div class="pickerInput">
         <div v-for="(item,index) in drawForm" class="chooseList" :class="{'slotChoose':item.keyName === pickerName}">
-          <div v-if="item.showForm === 'formatData'">
+          <div>
             <picker-input
               v-if="!item.pickerRead"
               v-model="formatData[item.keyName]"
@@ -24,27 +24,6 @@
               v-else
               :key="index"
               v-model="formatData[item.keyName]"
-              :type="item.type"
-              :label="item.label"
-              :placeholder="item.placeholder">
-            </picker-input>
-          </div>
-          <div v-else>
-            <picker-input
-              v-if="!item.pickerRead"
-              v-model="postFormData[item.keyName]"
-              @focus="choosePicker(item, postFormData[item.keyName])"
-              :key="index"
-              :type="item.type"
-              :label="item.label"
-              :readonly="item.readonly"
-              :disabled="item.disabled"
-              :placeholder="item.placeholder">
-            </picker-input>
-            <picker-input
-              v-else
-              :key="index"
-              v-model="postFormData[item.keyName]"
               :type="item.type"
               :label="item.label"
               :placeholder="item.placeholder">
@@ -124,13 +103,11 @@
     computed: {},
     methods: {
       choosePicker(val, date) {
-        // show date
         this.pickerName = val.keyName;
-        if (val.status === 'dateSlot') {
+        if (val.picker === 'date') {
           this.chooseTime(val, date);
           return;
         }
-        // show picker
         this.pickerModule = true;
         this.pickerConfig = this.inputSelect(this.pickerConfig, val);
       },

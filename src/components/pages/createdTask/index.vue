@@ -19,23 +19,21 @@
         </div>
         <div>
           <!--显示formatData -->
-          <div v-if="item.showForm === 'formatData'" v-for="(item,index) in drawSlither[postName]">
+          <div v-if="item.showForm === 'formatData' || item.picker" v-for="(item,index) in drawSlither">
             <!--select 下拉选择-->
-            <div v-if="(item.picker && item.readonly) || item.disabled">
-              <zl-input
-                v-model="formatData[item.keyName]"
-                @focus="choosePicker(item,form[item.keyName],item.keyName)"
-                :key="index"
-                :type="item.type"
-                :label="item.label"
-                :readonly="item.readonly"
-                :disabled="item.disabled"
-                :placeholder="item.placeholder">
-                <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                <div class="unit" v-if="item.unit">{{item.unit}}</div>
-              </zl-input>
-              <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
-            </div>
+            <zl-input
+              v-model="formatData[item.keyName]"
+              @focus="choosePicker(item,form[item.keyName],item.keyName)"
+              :key="index"
+              :type="item.type"
+              :label="item.label"
+              :readonly="item.readonly"
+              :disabled="item.disabled"
+              :placeholder="item.placeholder">
+              <div class="zl-button" v-if="item.button">{{item.button}}</div>
+              <div class="unit" v-if="item.unit">{{item.unit}}</div>
+            </zl-input>
+            <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
           </div>
           <!--文件上传-->
           <div v-else-if="item.picker === 'upload'">
@@ -46,7 +44,7 @@
           <!--显示form -->
           <div v-else>
             <!--select 下拉选择-->
-            <div v-if="(item.picker && item.readonly) || item.disabled">
+            <div v-if="item.disabled">
               <zl-input
                 :key="index"
                 v-model="form[item.keyName]"
@@ -84,15 +82,15 @@
     <!--正常 picker-->
     <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
     <!--有input picker-->
-    <picker-slot :module="popupModule" :pickers="pickers" :drawing="drawForm" :postData="form" :formData="formatData"
+    <picker-slot :module="popupModule" :pickers="pickers" :drawing="drawSlither" :postData="form" :formData="formatData"
                  :popup="popupStatus" @close="onConfirm"></picker-slot>
     <!--no-picker 门牌地址-->
-    <no-picker :module="noPickerModule" :drawing="drawForm" :postData="form" :popup="popupStatus"
+    <no-picker :module="noPickerModule" :drawing="drawSlither" :postData="form" :popup="popupStatus"
                :formData="formatData" @close="onConfirm"></no-picker>
     <!--日期-->
     <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
     <!--房屋地址搜索-->
-    <search-house :module="searchHouseModule" @close="getHouse"></search-house>
+    <search-house :module="searchHouseModule" :config="searchConfig" @close="getHouse"></search-house>
     <!--员工搜索-->
     <search-staff :module="searchStaffModule" :config="staffConfig" @close="getStaffInfo"></search-staff>
     <!--小区搜索-->
@@ -162,387 +160,10 @@
         popupStatus: '',                //popup 模态框
         pickerModule: false,            //正常 select 下拉框
         pickers: {},
-        drawForm: [],                   //表单
-        drawSlither: {                  //表单渲染 json
-          // 收房待办
-          CollectTakeLook: [
-            {
-              label: '小区名称',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'community_name',
-              keyType: [],
-              type: 'text',
-              status: '',
-              picker: 'searchVillage',
-              slot: '',
-            },
-            {
-              label: '门牌地址',
-              placeholder: '必填 请填写',// placeholder
-              readonly: 'readonly',
-              keyName: 'door_address',
-              keyType: [],
-              type: 'text',
-              status: '',
-              picker: 'noPicker',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-              moreArray: [
-                {
-                  label: '栋',
-                  placeholder: '必填',
-                  type: 'text',
-                  keyType: '',
-                  status: '',
-                  slot: '',
-                },
-                {
-                  label: '单元',
-                  placeholder: '必填',
-                  type: 'text',
-                  keyType: '',
-                  status: '',
-                  slot: '',
-                },
-                {
-                  label: '门牌号',
-                  placeholder: '必填',
-                  type: 'text',
-                  keyType: '',
-                  status: '',
-                  slot: '',
-                },
-              ],
-            },
-            {
-              label: '客户姓名',
-              placeholder: '必填 请输入',
-              keyName: 'customer_name',
-              keyType: '',
-              type: 'text',
-              button: '银行卡识别',
-              icon: 'identity',
-              status: '',
-              slot: '',
-            },
-            {
-              label: '客户电话',
-              placeholder: '必填 请输入',
-              keyName: 'contact_phone',
-              keyType: '',
-              type: 'number',
-              status: '',
-              slot: '',
-            },
-            {
-              label: '房屋类型',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'property_type',
-              keyType: '',
-              type: 'text',
-              status: 'obj',
-              picker: 'pickerSlot',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '户型',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'house_type',
-              keyType: [],
-              type: 'text',
-              status: 'column-0-1-1',
-              picker: 'pickerSlot',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '面积',
-              placeholder: '必填 请输入',
-              readonly: 'readonly',
-              keyName: 'area',
-              keyType: '',
-              type: 'number',
-              status: '',
-              unit: '平米',
-              picker: 'pickerSlot',
-              pickerRead: 'no',
-              slot: '',
-            },
-            {
-              label: '装修',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'decorate',
-              keyType: '',
-              type: 'text',
-              status: 'obj',
-              picker: 'pickerSlot',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '朝向',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'direction',
-              keyType: '',
-              type: 'text',
-              status: 'obj',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              picker: 'pickerSlot',
-              slot: '',
-            },
-            {
-              label: '楼层',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'floors',
-              keyType: [],
-              type: 'text',
-              status: 'column-3-0',
-              picker: 'pickerSlot',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '带看人',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'take_peoples',
-              keyType: [],
-              type: 'text',
-              status: '',
-              picker: 'searchStaff',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '主带看人',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'primary',
-              keyType: [],
-              type: 'text',
-              status: 'objInt',
-              picker: 'picker',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-          ],
-          // 租房待办
-          RentTakeLook: [
-            {
-              label: '带看时间',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'take_time',
-              keyType: '',
-              type: 'text',
-              status: 'date',
-              picker: 'picker',
-              slot: '',
-            },
-            {
-              label: '带看地址',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'house_id',
-              keyType: '',
-              type: 'text',
-              picker: 'searchHouse',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '客户姓名',
-              placeholder: '必填 请输入',
-              keyName: 'customer_name',
-              keyType: '',
-              type: 'text',
-              button: '银行卡识别',
-              icon: 'identity',
-              status: '',
-              slot: '',
-            },
-            {
-              label: '客户电话',
-              placeholder: '必填 请输入',
-              keyName: 'contact_phone',
-              keyType: '',
-              type: 'text',
-              status: '',
-              slot: '',
-            },
-            {
-              label: '带看人',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'take_peoples',
-              keyType: [],
-              type: 'text',
-              status: '',
-              picker: 'searchStaff',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '主带看人',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'primary',
-              keyType: [],
-              type: 'text',
-              status: 'objInt',
-              picker: 'picker',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-          ],
-          // 保洁任务
-          HouseCleaning: [
-            {
-              label: '房屋地址',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'house_id',
-              keyType: [],
-              type: 'text',
-              picker: 'searchHouse',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '保洁时间',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'cleaning_time',
-              keyType: '',
-              type: 'text',
-              status: 'date',
-              picker: 'picker',
-              slot: '',
-            },
-            {
-              label: '保洁内容',
-              placeholder: '必填 请输入',
-              keyName: 'repair_item',
-              keyType: '',
-              type: 'textarea',
-              status: '',
-              slot: '',
-            },
-            {
-              label: '处理人',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'cleaning_type',
-              keyType: '',
-              type: 'text',
-              status: 'objInt',
-              picker: 'picker',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '任务接收人',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'receive_id',
-              keyType: '',
-              type: 'text',
-              status: '',
-              picker: 'searchStaff',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '上传',
-              picker: 'upload',
-              value: [
-                {
-                  label: '房屋影像',
-                  placeholder: '必填',
-                  keyName: 'album',
-                }
-              ]
-            },
-          ],
-          // 维修任务
-          HouseRepair: [
-            {
-              label: '房屋地址',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'house_id',
-              keyType: '',
-              type: 'text',
-              picker: 'searchHouse',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '维修时间',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'repair_time',
-              keyType: '',
-              type: 'text',
-              status: 'date',
-              picker: 'picker',
-              slot: '',
-            },
-            {
-              label: '维修内容',
-              placeholder: '必填 请输入',
-              keyName: 'repair_item',
-              keyType: '',
-              type: 'textarea',
-              status: '',
-              slot: '',
-            },
-            {
-              label: '处理人',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'repair_type',
-              keyType: '',
-              type: 'text',
-              status: 'objInt',
-              picker: 'picker',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '任务接收人',
-              placeholder: '必填 请选择',
-              readonly: 'readonly',
-              keyName: 'receive_id',
-              keyType: '',
-              type: 'text',
-              status: '',
-              picker: 'searchStaff',
-              showForm: 'formatData',//picker 显示form 或 formatData
-              slot: '',
-            },
-            {
-              label: '上传',
-              picker: 'upload',
-              photos: [
-                {
-                  label: '房屋影像',
-                  placeholder: '必填',
-                  keyName: 'album',
-                }
-              ]
-            },
-          ],
-        },
+        drawSlither: [],
         searchStaffModule: false,//员工搜索
         staffConfig: {},//员工搜索 配置
+        searchConfig: {},
         // 小区搜索
         searchVillageModule: false,
         // 搜索房屋
@@ -619,6 +240,7 @@
         this.onCancel();
         if (val !== 'close') {
           this.form[val.dateKey] = val.dateVal;
+          this.formatData[val.dateKey] = val.dateVal;
         }
       },
       // 员工搜索结果
@@ -654,6 +276,47 @@
           }
         }
       },
+      // 搜索 员工 小区 房屋
+      choosePicker(val, value, num = '', parentKey = '') {
+        this.popupStatus = val.picker;
+        switch (val.picker) {
+          case 'picker':
+            this.pickerModule = true;
+            this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+            break;
+          case 'date':
+            this.chooseTime(val, value);
+            break;
+          case 'searchHouse':
+            this.searchHouseModule = true;
+            break;
+          case 'searchStaff':
+            this.searchStaffModule = true;
+            break;
+          case 'searchVillage':
+            this.searchVillageModule = true;
+            break;
+          case 'noPicker':
+            this.noPickerModule = true;
+            break;
+          default:
+            this.$closePicker().then(res => {
+              this.popupModule = true;
+              this.pickers = res;
+              this.pickers.keyName = val.keyName;
+              this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+            });
+            break;
+        }
+      },
+      // 确认选择
+      onConfirm(value, show) {
+        this.onCancel();
+        if (value !== 'close') {
+          this.form = value;
+          this.formatData = show;
+        }
+      },
       // 关闭模态框
       onCancel() {
         this.timeModule = false;
@@ -664,54 +327,10 @@
         this.searchHouseModule = false;
         this.searchVillageModule = false;
       },
-      // 搜索 员工 小区 房屋
-      choosePicker(val, date, num = '', parentKey = '') {
-        if (val.picker.includes('search')) {
-          switch (val.picker) {
-            case 'searchStaff':
-              this.searchStaffModule = true;
-              return;
-            case 'searchVillage':
-              this.searchVillageModule = true;
-              return;
-            case 'searchHouse':
-              this.searchHouseModule = true;
-              return;
-          }
-        }
-        // 日期
-        if (val.status === 'date') {
-          this.chooseTime(val, date);
-          return;
-        }
-        this.popupStatus = val.picker;
-        if (val.picker === 'picker') {
-          this.pickerModule = true;
-        } else if (val.picker === 'noPicker') {
-          this.noPickerModule = true;
-          return;
-        } else {
-          this.popupModule = true;
-        }
-        this.$closePicker().then(res => {
-          this.pickers = res;
-          this.pickers.keyName = val.keyName;
-          if (val.pickerRead) return;
-          this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
-        })
-      },
-      // 确认选择
-      onConfirm(value, show) {
-        this.onCancel();
-        if (value !== 'close') {
-          this.form = value;
-          this.formatData = show;
-        }
-      },
       // 初始化数据
       resetting() {
-        this.drawForm = this.jsonClone(this.drawSlither[this.postName]);
-        let all = this.initFormData(this.drawForm, this.showData, 'noStaff');
+        this.drawSlither = this.jsonClone(defineNewTask[this.postName]);
+        let all = this.initFormData(this.drawSlither, this.showData, 'noStaff');
         this.form = all.form;
         this.formatData = all.formatData;
         this.album = all.album;
@@ -722,7 +341,7 @@
             keys: 'take_peoples',
           };
         } else {
-          this.staffConfig = null;
+          this.staffConfig = {};
         }
         // this.form.primary = 69;
         // this.form.take_peoples = [69];

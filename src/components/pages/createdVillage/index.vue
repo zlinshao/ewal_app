@@ -53,7 +53,7 @@
               <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
             </div>
             <!--上传-->
-            <div v-else-if="item.picker === 'album' && item.value" class="uploadForm">
+            <div v-else-if="item.picker === 'album' && item.photos" class="uploadForm">
               <div v-for="upload in item.photos" class="flex">
                 <Upload :file="upload" :getImg="album" @success="getImgData"></Upload>
               </div>
@@ -103,219 +103,7 @@
         formatData: {},               //DOM显示数据
         showData: {},
         album: {},
-        drawSlither: [              //表单数据
-          {
-            label: '省',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'province',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            picker: 'picker',
-            slot: '',
-          },
-          {
-            label: '市',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'city',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            picker: 'picker',
-            slot: '',
-          },
-          {
-            label: '区/县',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'area',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            picker: 'picker',
-            slot: '',
-          },
-          {
-            label: '区域',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'region',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            picker: 'picker',
-            slot: '',
-          },
-          {
-            label: '小区名称',
-            placeholder: '必填 请输入',
-            keyName: 'village_name',
-            keyType: '',
-            type: 'text',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            status: '',
-            slot: '',
-          },
-          {
-            label: '小区别名',
-            placeholder: '请输入',
-            keyName: 'village_alias',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '街道地址',
-            placeholder: '已禁用',
-            keyName: 'address',
-            disabled: 'disabled',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '建筑年限',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'built_year',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            picker: 'picker',
-            slot: '',
-          },
-          {
-            label: '房屋类型',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'property_type',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            picker: 'picker',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            slot: '',
-          },
-          {
-            label: '总栋数',
-            placeholder: '请输入',
-            keyName: 'total_buildings',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '物业费',
-            placeholder: '必填 请输入',
-            keyName: 'property_fee',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '物业电话',
-            placeholder: '必填 请输入',
-            keyName: 'property_phone',
-            keyType: '',
-            type: 'number',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '物业公司',
-            placeholder: '必填 请输入',
-            keyName: 'property_com',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '开发商',
-            placeholder: '必填 请输入',
-            keyName: 'developers',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '小区房屋数量',
-            placeholder: '必填 请输入',
-            keyName: 'total_houses',
-            keyType: '',
-            type: 'number',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '周边信息',
-            placeholder: '请输入',
-            keyName: 'peripheral_info',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '地铁路线',
-            placeholder: '请输入',
-            keyName: 'subway_road',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '详情',
-            placeholder: '必填 请输入',
-            keyName: 'content',
-            keyType: '',
-            type: 'textarea',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '备注',
-            placeholder: '请输入',
-            keyName: 'remark',
-            keyType: '',
-            type: 'textarea',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '上传',
-            keyName: 'album',
-            keyType: {},
-            picker: 'album',
-            photos: [
-              {
-                label: '小区照片',
-                placeholder: '必填',
-                keyName: 'village_photo',
-              }, {
-                label: '房屋照片',
-                placeholder: '必填',
-                keyName: 'house_pic',
-              }, {
-                label: '调研报告',
-                placeholder: '可选文件',
-                keyName: 'files',
-              }
-            ]
-          },
-        ],
+        drawSlither: [],
 
         pickerModule: false,          //正常 select 下拉框
         pickers: {
@@ -383,8 +171,11 @@
       },
       // show picker
       choosePicker(val) {
-        this.pickerModule = true;
-        this.pickers = this.inputSelect(this.pickers, val);
+        this.$closePicker().then(res => {
+          this.pickers = res;
+          this.pickerModule = true;
+          this.pickers = this.inputSelect(this.pickers, val);
+        })
       },
       // 确认选择
       onConfirm(value, show) {
@@ -459,8 +250,8 @@
       },
       // 初始化数据
       resetting() {
-        this.drawForm = this.jsonClone(this.drawSlither);
-        let all = this.initFormData(this.drawForm, this.showData, 'noStaff');
+        this.drawSlither = this.jsonClone(defineNewAddVillage);
+        let all = this.initFormData(this.drawSlither, this.showData, 'noStaff');
         this.form = all.form;
         this.formatData = all.formatData;
         this.getVillageLocation();
@@ -474,6 +265,7 @@
   #createdVillage {
     .createdVillage {
       background: linear-gradient(135deg, rgba(137, 164, 255, 1) 0%, rgba(69, 112, 254, 1) 100%);
+
       .top {
         position: fixed;
         top: .4rem;
@@ -482,14 +274,17 @@
         height: .24rem;
         @include radius(1rem);
       }
+
       .top.bgColor {
         background-color: #001A6E;
         z-index: 1;
       }
+
       .top.shaw {
         background: linear-gradient(360deg, rgba(0, 26, 110, 0) 0%, rgba(0, 26, 110, 1) 100%);
         z-index: 3;
       }
+
       .main {
         position: fixed;
         top: .48rem;
@@ -501,15 +296,18 @@
         border-radius: .1rem .1rem 0 0;
         background-color: #FFFFFF;
         @include flex('bet-column');
+
         .mainList {
           height: 100%;
           @include scroll;
         }
+
         .commonBtn {
           position: relative;
           padding: .45rem 0;
           margin-top: .3rem;
           border-top: .01rem dashed #C6CAD8;
+
           i, b {
             position: absolute;
             top: -.15rem;
@@ -517,15 +315,18 @@
             height: .3rem;
             @include radius(50%);
           }
+
           i {
             left: -.15rem;
             background-color: #6387FF;
           }
+
           b {
             right: -.15rem;
             background-color: #4A74FE;
           }
         }
+
         .footerStatic {
           b, i {
             display: none;

@@ -1,74 +1,123 @@
 <template>
-  <div id="collectReport">
+  <div id="collectReport" :style="mainListHeight()">
     <div class="collectReport" :class="['bgBanner-' + (slither + 1)]">
-      <div>
-        <div class="bulletinTitle" ref="title">
-          <label>{{mainTop[slither]}}</label>
-          <p v-if="allReportNum > 1">
-            <i v-for="(i,idx) in allReportNum" :class="{'hover': idx === slither}" @click="slither = idx"></i>
-          </p>
-        </div>
-        <div class="mainRadius" :class="['mainRadius'+allReportNum]" ref="main"
-             @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
-          <div class="justify-around transition" :class="['slide' + slither]" :style="[slitherCss]">
-            <div class="main" :style="[mainWidth]" v-for="slither in Object.keys(drawSlither)">
-              <!--显示formatData -->
-              <div v-if="item.showForm === 'formatData'" v-for="(item,index) in drawSlither[slither]">
-                <!--select 下拉选择-->
-                <zl-input
-                  v-model="formatData[item.keyName]"
-                  @focus="choosePicker(item,form[item.keyName])"
-                  :key="index"
-                  :type="item.type"
-                  :label="item.label"
-                  :readonly="item.readonly"
-                  :disabled="item.disabled"
-                  :placeholder="item.placeholder">
-                  <div class="zl-button" v-if="item.button">{{item.button}}</div>
-                  <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                </zl-input>
-                <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
-              </div>
-              <!--显示form -->
-              <div v-else>
-                <!--select 下拉选择-->
-                <div v-if="(item.picker && item.readonly) || item.disabled">
+      <div class="bulletinTitle">
+        <label>{{bulletinTitle[slither]}}</label>
+        <p v-if="allReportNum > 1">
+          <i v-for="(num,idx) in allReportNum" :class="{'hover': idx === slither}" @click="slither = idx"></i>
+        </p>
+      </div>
+      <div class="mainRadius" :class="['mainRadius' + allReportNum]" ref="mainRadius"
+           @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
+        <div class="justify-around transition" :class="['slide' + slither]" :style="{'width':allReportNum + '00%'}">
+          <div class="list" :style="mainWidth" v-for="slither in Object.keys(drawSlither)">
+            <ul>
+              <li v-for="(item,index) in drawSlither[slither]">
+                <div v-if="item.showForm === 'formatData' || (item.picker && item.readonly)">
                   <zl-input
-                    :key="index"
-                    v-model="form[item.keyName]"
+                    v-model="formatData[item.keyName]"
                     @focus="choosePicker(item,form[item.keyName])"
+                    :key="index"
                     :type="item.type"
                     :label="item.label"
                     :readonly="item.readonly"
                     :disabled="item.disabled"
                     :placeholder="item.placeholder">
-                    <div class="zl-confirmation" :class="[item.icon]" v-if="item.button">
-                      <i :class="item.icon" v-if="item.icon"></i>{{item.button}}
-                    </div>
+                    <div class="zl-button" v-if="item.button">{{item.button}}</div>
                     <div class="unit" v-if="item.unit">{{item.unit}}</div>
                   </zl-input>
-                  <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
+
+                  <div v-if="item.showList">
+                    <zl-input
+                      v-if="!show.hidden"
+                      v-for="(show,num) in item.showList"
+                      :key="num"
+                      v-model="form[show.keyName]"
+                      :type="show.type"
+                      :label="show.label"
+                      :placeholder="show.placeholder">
+                    </zl-input>
+                  </div>
+                </div>
+                <!--变化 隐藏所有子元素-->
+                <div class="changeHiddenAll"
+                     v-else-if="item.picker === 'changeHiddenAll' && !changeHiddenAll && !item.keyName"
+                     @click="changeHiddenAll = true">{{item.changeBtn}}
+                </div>
+                <!--变化-->
+                <div v-else-if="item.keyName && item.picker && item.picker.includes('change')">
+                  <div v-for="(change,num) in item.children"
+                       v-if="item.picker.includes('Default') || changeHiddenAll">
+                    <div class="addChange" v-if="item.children.length > 1 || item.picker === 'changeHiddenAll'">
+                      <div class="items-center">
+                        <p>{{item.label}}{{(myUtils.DX(num+1))}}</p>
+                        <van-icon name="cross" color="#4570FE" size=".36rem"
+                                  @click='removeChange(slither,item.keyName,index,num)'/>
+                      </div>
+                      <div class="zl-button" @click="changeInput(slither,item.keyName,index,item.children[0])"
+                           v-if="num === item.children.length - 1">
+                        {{item.changeBtn}}
+                      </div>
+                    </div>
+                    <div v-for="(key,idx) in change">
+                      <div v-if="key.showForm === 'formatData'">
+                        <zl-input
+                          v-model="formatData[item.keyName][num][key.keyName]"
+                          @focus="choosePicker(key,form[item.keyName][num][key.keyName],num,item.keyName)"
+                          :key="idx"
+                          :type="key.type"
+                          :label="key.label"
+                          :readonly="key.readonly"
+                          :disabled="key.disabled"
+                          :placeholder="key.placeholder">
+                          <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                          <div class="zl-button"
+                               v-if="key.changeBtn && item.children.length < 2"
+                               @click="changeInput(slither,item.keyName,index,change)">
+                            {{key.changeBtn}}
+                          </div>
+                        </zl-input>
+                      </div>
+                      <div v-else>
+                        <zl-input
+                          v-if="key.length !== form[item.keyName].length"
+                          :key="idx"
+                          v-model="form[item.keyName][num][key.keyName]"
+                          :type="key.type"
+                          :label="key.label"
+                          :disabled="key.disabled"
+                          @input="listenInput(item.keyName)"
+                          :placeholder="key.placeholder">
+                          <div class="zl-button" v-if="key.changeBtn && item.children.length < 2"
+                               @click="changeInput(slither,item.keyName,index,change)">
+                            {{key.changeBtn}}
+                          </div>
+                          <div class="zl-confirmation" :class="[key.icon]"
+                               v-if="key.button" @click="confirmation(key.icon)">
+                            <i :class="key.icon" v-if="key.icon"></i>
+                            {{key.button}}
+                          </div>
+                          <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                        </zl-input>
+                      </div>
+                      <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
+                    </div>
+                  </div>
                 </div>
                 <!--家电-->
-                <div v-else-if="item.picker === 'electrical'" class="electrical flex">
+                <div v-else-if="item.lists" class="flex electrical">
                   <label class="labelTitle">{{item.label}}</label>
                   <div class="justify-around">
-                    <div v-for="(key,index) in item.value">
+                    <div v-for="(list,index) in item.lists">
                       <h1 @click="electricalModule = true">
                         <span :class="['electrical-' + (index + 1)]"></span>
                       </h1>
-                      <p>{{form[key.key]}}</p>
+                      <p>{{form[list.key]}}</p>
                     </div>
                   </div>
                 </div>
-                <!--上传-->
-                <div v-else-if="item.picker === 'upload' && item.value" class="uploadForm">
-                  <div v-for="upload in item.value" class="flex">
-                    <Upload :file="upload" :getImg="album[upload.keyName]" @success="getImgData"></Upload>
-                  </div>
-                </div>
                 <!--备注条款-->
-                <div v-else-if="item.picker === 'remark_terms'" class="remark_terms flex">
+                <div v-else-if="item.picker === 'remark_terms'" class="flex remark_terms">
                   <zl-input
                     :key="index"
                     v-model="formatData[item.keyName]"
@@ -79,197 +128,138 @@
                     :placeholder="item.placeholder">
                   </zl-input>
                 </div>
-                <!--增加附属租客-->
-                <div class="addCustomer" v-else-if="item.picker === 'addCustomer' && !showCustomer"
-                     @click="showCustomer = true">
-                  {{item.button}}
-                </div>
-                <!--变化-->
-                <div v-else-if="item.picker && item.picker.includes('change')">
-                  <div v-for="(change,num) in item.children">
-                    <div class="addChange"
-                         v-if="item.children.length > 1 || item.picker === 'changeCustomer'">
-                      <div class="items-center">
-                        <p>第{{(myUtils.DX(num+1))}}{{item.pickerText}}</p>
-                        <van-icon name="cross" color="#4570FE" size=".36rem"
-                                  @click='removeChange(slither,item.keyName,index,num)'/>
-                      </div>
-                      <div class="zl-button" @click="changeInput(slither,item.keyName,index,item.children[0])"
-                           v-if="num === (item.children.length - 1)">
-                        {{item.button}}
-                      </div>
-                    </div>
-                    <div v-for="(key,idx) in change" v-if="key.showForm === 'formatData'">
-                      <zl-input
-                        v-if="(key.picker && key.readonly) || key.disabled"
-                        v-model="formatData[item.keyName][num][key.keyName]"
-                        @focus="choosePicker(key,form[item.keyName][num][key.keyName],num,item.keyName)"
-                        :key="idx"
-                        :type="key.type"
-                        :label="key.label"
-                        :readonly="key.readonly"
-                        :disabled="key.disabled"
-                        :placeholder="key.placeholder">
-                        <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                        <div class="zl-button" v-if="key.button && item.children.length < 2"
-                             @click="changeInput(slither,item.keyName,index,change)">
-                          {{key.button}}
-                        </div>
-                      </zl-input>
-                      <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
-                    </div>
-                    <div v-else>
-                      <zl-input
-                        v-if="((key.picker && key.readonly) || key.disabled) && key.length !== form[item.keyName].length"
-                        v-model="form[item.keyName][num][key.keyName]"
-                        @focus="choosePicker(key,form[item.keyName][num][key.keyName],num,item.keyName)"
-                        :key="num"
-                        :type="key.type"
-                        :label="key.label"
-                        :readonly="key.readonly"
-                        :disabled="key.disabled"
-                        :placeholder="key.placeholder">
-                        <div class="unit" v-if="key.unit">{{key.unit}}</div>
-                      </zl-input>
-                      <zl-input
-                        v-else-if="key.length !== form[item.keyName].length"
-                        :key="num"
-                        v-model="form[item.keyName][num][key.keyName]"
-                        :type="key.type"
-                        :label="key.label"
-                        @input="listenInput(item.keyName)"
-                        :placeholder="key.placeholder">
-                        <div class="zl-button" v-if="key.button && item.children.length < 2"
-                             @click="changeInput(slither,item.keyName,index,change)">
-                          {{key.button}}
-                        </div>
-                        <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                      </zl-input>
-                      <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
-                    </div>
+                <!--上传-->
+                <div v-else-if="item.photos" class="uploadForm">
+                  <div v-for="upload in item.photos" class="flex">
+                    <Upload :file="upload" :getImg="album[upload.keyName]" @success="getImgData"></Upload>
                   </div>
                 </div>
                 <!--普通输入框-->
                 <div v-else>
-                  <div class="items-center" v-if="item.keyName && item.moreString">
-                    <label class="labelTitle">{{item.label}}</label>
-                    <zl-input
-                      v-if="item.moreString"
-                      v-for="(string,num) in item.moreString"
-                      :key="num"
-                      v-model="form[string.keyName]"
-                      :type="string.type"
-                      :label="string.label"
-                      @input="listenInput(string.keyName)"
-                      :placeholder="string.placeholder">
-                    </zl-input>
+                  <div v-if="item.keyName">
+                    <div class="items-center" v-if="item.moreString">
+                      <label class="labelTitle">{{item.label}}</label>
+                      <zl-input
+                        v-if="item.moreString"
+                        v-for="(string,num) in item.moreString"
+                        :key="num"
+                        v-model="form[string.keyName]"
+                        :type="string.type"
+                        :label="string.label"
+                        @input="listenInput(string.keyName)"
+                        :placeholder="string.placeholder">
+                      </zl-input>
+                    </div>
+                    <div v-else-if="item.disabled">
+                      <zl-input
+                        :key="index"
+                        v-model="form[item.keyName]"
+                        :type="item.type"
+                        :disabled="item.disabled"
+                        :label="item.label"
+                        :placeholder="item.placeholder">
+                        <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                        <div class="zl-confirmation" v-if="item.button">{{item.button}}</div>
+                      </zl-input>
+                    </div>
+                    <div v-else>
+                      <zl-input
+                        :key="index"
+                        v-model="form[item.keyName]"
+                        :type="item.type"
+                        :label="item.label"
+                        @input="listenInput(item.keyName)"
+                        :placeholder="item.placeholder">
+                        <div class="zl-confirmation" :class="[item.icon]"
+                             v-if="item.button" @click="confirmation(item.icon)">
+                          <i :class="item.icon" v-if="item.icon"></i>
+                          {{item.button}}
+                        </div>
+                        <div class="unit" v-if="item.unit">{{item.unit}}</div>
+                      </zl-input>
+                    </div>
+                    <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
                   </div>
-                  <div v-if="item.keyName && !item.moreString">
-                    <zl-input
-                      v-if="!item.hidden"
-                      :key="index"
-                      v-model="form[item.keyName]"
-                      :type="item.type"
-                      :label="item.label"
-                      @input="listenInput(item.keyName)"
-                      :placeholder="item.placeholder">
-                      <div class="zl-confirmation" :class="[item.icon]"
-                           v-if="item.button" @click="confirmation(item.icon)">
-                        <i :class="item.icon" v-if="item.icon"></i>
-                        {{item.button}}
-                      </div>
-                      <div class="unit" v-if="item.unit">{{item.unit}}</div>
-                    </zl-input>
-                  </div>
-                  <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
                 </div>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
-      <!--底部按钮-->
-      <div class="footer footerLeft" :class="{'footerStatic': keyUpStatus}" v-if="!queryData.revise">
-        <div class="items-center">
-          <span @click="saveReport(1)">草稿</span>
-          <span @click="saveReport(2)" class="resetting">重置</span>
-        </div>
+      <div class="footer" :class="{'footerStatic': keyUpStatus}" v-if="queryData.revise !== 'revise'">
+        <p class="p1" @click="saveReport(1)">
+          <span class="writingMode">草稿</span>
+        </p>
+        <p class="p2" @click="saveReport(2)">
+          <span>重置</span>
+        </p>
+        <p class="p3" @click="saveReport(0)">
+          <span>发布</span>
+        </p>
       </div>
-      <div class="footer footerRight" :class="{'footerStatic': keyUpStatus}">
-        <span @click="saveReport(3)" v-if="queryData.revise">修改</span>
-        <span @click="saveReport(0)" v-else>发布</span>
+      <div class="footer" :class="{'footerStatic': keyUpStatus}" v-else>
+        <p class="p3" @click="saveReport(3)">
+          <span>修改</span>
+        </p>
       </div>
-      <!--正常 picker-->
-      <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
-      <!--有input picker-->
-      <picker-slot :module="popupModule" :pickers="pickers" :drawing="drawForm" :postData="form" :formData="formatData"
-                   :popup="popupStatus" @close="onConfirm"></picker-slot>
-      <!--no-picker 门牌地址-->
-      <no-picker :module="noPickerModule" :drawing="drawForm" :postData="form" :popup="popupStatus"
-                 :formData="formatData" @close="onConfirm"></no-picker>
-      <!--日期-->
-      <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
-      <!--家电选择-->
-      <Electrical :module="electricalModule" :form="form" :list="electricalList" @close="closeElectrical"></Electrical>
-      <!--复选 非房东费用-->
-      <check-choose :module="checksModule" :list="checksList" :form="form" :formData="formatData"
-                    @close="onCheckChoose"></check-choose>
-      <!--唯一标识码-->
-      <float-button ref="code" :type="'payable'"></float-button>
-      <!--备注条款-->
-      <remark-terms :module="remarkTermsModule" :form="form" :formData="formatData"
-                    @close="closeTermsModule"></remark-terms>
-      <!--小区搜索-->
-      <!--<search-village :module="searchModule" :config="searchConfig" @close="getVillage"></search-village>-->
-      <!--员工搜索-->
-      <!--<search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>-->
-      <!--部门选择-->
-      <!--<search-depart :module="searchDepartModule" @close="getDepartInfo"></search-depart>-->
     </div>
+    <!--唯一标识码-->
+    <float-button ref="code" :type="'payable'"></float-button>
+    <!--房屋搜索-->
+    <search-house :module="searchHouseModule" :config="bulletinType" @close="hiddenHouse"></search-house>
+    <!--日期-->
+    <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
+    <!--正常 picker-->
+    <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
+    <!--有input 分类选择-->
+    <picker-slot :module="popupModule" :pickers="pickers" :drawing="drawForm" :postData="form" :formData="formatData"
+                 :popup="popupStatus" @close="onConfirm"></picker-slot>
+    <!--家电选择-->
+    <Electrical :module="electricalModule" :form="form" :list="electricalList" @close="closeElectrical"></Electrical>
+    <!--复选 非房东费用-->
+    <check-choose :module="checksModule" :list="checksList" :form="form" :formData="formatData"
+                  @close="onCheckChoose"></check-choose>
+    <!--备注条款-->
+    <remark-terms :module="remarkTermsModule" :form="form" :formData="formatData"
+                  @close="closeTermsModule"></remark-terms>
   </div>
 </template>
 
 <script>
   import Electrical from '../../common/electrical.vue'
-  // import SearchVillage from '../../common/searchVillage.vue';
-  import SearchStaff from '../../common/searchStaff.vue';
-  import searchDepart from '../../common/searchDepart.vue';
   import NoPicker from '../../common/no-picker.vue';
+  import SearchHouse from '../../common/searchHouse.vue';
   import CheckChoose from '../../common/checkChoose.vue';
   import RemarkTerms from './remarkTerms.vue';
 
   export default {
     name: "index",
-    components: {Electrical, SearchStaff, searchDepart, NoPicker, CheckChoose, RemarkTerms},
+    components: {SearchHouse, Electrical, NoPicker, CheckChoose, RemarkTerms},
     data() {
       return {
-        slitherCss: {},
-        mainWidth: {},
+        bulletinTitle: ['房屋信息', '物品信息', '客户信息', '合同信息'],
+        slither: 0,                         //模块切换记录
+        allReportNum: 0,                    //表单模块数
+        startClientX: 0,                    //滑动距离
+        endClientX: 0,                      //滑动距离
+        mainWidth: {},                      //列表宽度
 
-        album: {},                          //图片
+        queryData: {},
+        bulletinType: {},                   //报备类型
+        bulletinDetail: {},                 //修改/重新发布
+        taskDetail: {},                     //草稿
+
+        album: {},                          //图片预填
+        drawSlither: {},                    //遍历表单
+        drawForm: [],                       //表单集合
         form: {},
-        formatData: {},                     //DOM显示数据
+        formatData: {},
         showData: {
           dateVal: '',                      //日期
           dateKey: '',                      //日期 字段名
           dateType: '',                     //日期类型 默认date 时分datetime
           dateIdx: '',                      //日期字段下标 变化情况使用
         },
-        drawForm: [],                       //表单集合
-        resetDrawing: {},                   //clone 重置使用
-        drawSlither: {},
-
-        remarkTermsModule: false,           //备注条款
-
-        showCustomer: false,                //显示附属房东
-        electricalModule: false,            //家电选择
-        electricalList: [],                 //家具列表
-
-        timeModule: false,                  //日期选择
-        popupModule: false,                 //popup 模态框 下拉框 输入框
-        popupStatus: '',                    //popup 模态框 属性名 匹配 显示
-        noPickerModule: false,              //popup 模态框 只有输入框
-        pickerModule: false,                //正常 select 下拉框
         pickers: {
           title: '',                        //picker标题
           type: '',                         //字典类型
@@ -279,40 +269,37 @@
           ids: [],                          //当前字典所有id
           index: '',                        //变化下标
         },
-        // searchStaffModule: false,        //员工搜索
-        // searchDepartModule: false,       //部门搜索
-        searchConfig: {},
+        popupStatus: '',                    //picker分类
+        pickerModule: false,                //正常 select 下拉框
+        popupModule: false,                 //分类 select 下拉框
+        timeModule: false,                  //日期选择
+        searchHouseModule: false,           //房屋搜索
+        searchConfig: {},                   //搜索配置
 
-        mainTop: [],
-        startClientX: 0,
-        endClientX: 0,
-        slither: 0,
+        noPickerModule: false,              //模态框 只有输入框
+        checksList: {},                     //非房东费用
+        checksModule: false,                //非房东费用
+        remarkTermsModule: false,           //备注条款
 
-        checksModule: false,            //复选 非房东费用
-        checksList: [],
+        electricalList: [],                 //家电
+        changeHiddenAll: false,             //隐藏所有变化子元素
 
-        electronicContractNumber: '',   //电子合同编号
-        allReportNum: 0,//滑动列表数
+        electronicContractNumber: '',       //电子合同编号
 
-        queryData: {},
-        bulletinType: {},//报备类型
-        bulletinDetail: {},//修改/重新发布
-        taskDetail: {},//草稿
+        electricalModule: false,            //家电家具
       }
+    },
+    created() {
     },
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
       this.bulletinDetail = JSON.parse(sessionStorage.bulletin_draft || '{}');
+      this.drawSlither = this.jsonClone(defineCollectReport);
       this.bulletin_types(this.bulletinType);
-      this.slither = 0;
-      this.allReportNum = Object.keys(this.resetDrawing).length;
-      let title = this.$refs.title.offsetHeight + 30;
-      let main = this.$refs.main.offsetWidth + "px";
+      this.allReportNum = Object.keys(this.drawSlither).length;
+      let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
       this.mainWidth = {minWidth: main, maxWidth: main};
-      this.slitherCss = this.mainListHeight(title);
-      this.slitherCss.width = this.allReportNum + '00%';
-      this.$prompt('正在加载...', 'send');
       let query = this.$route.query;
       this.queryData = query;
       if (query.revise) {
@@ -340,16 +327,16 @@
       bulletin_types(type) {
         switch (type.bulletin) {
           case 'bulletin_collect_basic':
-            this.mainTop = ['房屋信息', '物品信息', '客户信息', '合同信息'];
-            this.resetDrawing = this.jsonClone(defineCollectReport);
+            this.bulletinTitle = ['房屋信息', '物品信息', '客户信息', '合同信息'];
+            this.drawSlither = this.jsonClone(defineCollectReport);
             break;
           case 'bulletin_rent_basic':
-            this.mainTop = ['租房报备'];
-            this.resetDrawing = this.jsonClone(defineRentReport);
+            this.bulletinTitle = ['租房报备'];
+            this.drawSlither = this.jsonClone(defineRentReport);
             break;
           case 'agency':
-            this.mainTop = ['渠道费报备'];
-            this.resetDrawing = this.jsonClone(defineRentReport);
+            this.bulletinTitle = ['渠道费报备'];
+            this.drawSlither = this.jsonClone(defineRentReport);
             break;
         }
         this.resetting();
@@ -380,63 +367,80 @@
           }
         }
       },
-      // 获取电子合同
-      electronicContract() {
-        let data = {
-          city_id: this.form.community && this.form.community.city || '320100',
-          version: '1.1',
-        };
-        this.$httpZll.getElectronicContract(data).then(res => {
-          this.electronicContractNumber = res.data.number || '';
-          this.form.contract_number = this.electronicContractNumber;
-        });
+      // 房屋搜索结果
+      hiddenHouse(val) {
+        this.searchHouseModule = false;
+        if (val !== 'close') {
+          console.log(val);
+        }
       },
-      // 计算押金
-      countPrice() {
-        let bet = Number(this.form.pay_way_bet || 0);
-        let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
-        this.form.deposit = bet * price;
+      // 日期选择
+      chooseTime(val, date) {
+        this.timeModule = true;
+        this.formatData.dateKey = val.keyName;
+        this.formatData.dateVal = date;
       },
-      // 日期计算
+      // 确认时间
+      onConTime(val) {
+        this.onCancel();
+        if (val !== 'close') {
+          this.setFormDate(val.dateKey, val.dateVal);
+          if (val.dateKey === 'begin_date') this.contractDateCount(val.dateVal);
+          if (val.dateKey === 'pay_first_date') this.moreChangeDateCount('period_price_way_arr');
+        }
+      },
+      // 日期赋值
+      setFormDate(key, date, child, index) {
+        if (child) {
+          this.form[key][index][child] = date;
+          this.formatData[key][index][child] = date;
+        } else {
+          this.form[key] = date;
+          this.formatData[key] = date;
+        }
+      },
+      // 监听 输入 计算日期
       listenInput(key) {
-        let begin = this.form.begin_date;//合同开始日期
         switch (key) {
           case 'month':
           case 'day':
           case 'vacancy':
-            this.contractEnd(begin);
+            this.contractDateCount(this.form.begin_date);//合同结束日期计算
             break;
           case 'period_price_way_arr':
-            this.countPrice();
-            this.countChangeDate(key);
+            this.countPrice();//押金计算
+            this.moreChangeDateCount(key);//变化日期计算
             break;
         }
       },
       // 合同结束计算
-      contractEnd(begin_date) {
-        if (!begin_date) return;
-        let begin = new Date(begin_date);//合同开始日期
+      contractDateCount(date) {
+        if (!date) return;
+        let bulletin = this.bulletinType.bulletin;
+        let begin = new Date(date);
+        let newBegin = new Date(date);
         let month = Number(this.form.month || 0);//签约月数
         let day = Number(this.form.day || 0);//签约天数
         let vacancy = Number(this.form.vacancy || 0);//空置期天数
-        //空置期结束日期
-        this.form.end_date_vacant = this.myUtils.formatAddRem('dd', vacancy, begin);
-        // 第一次打款日期
-        this.form.pay_first_date = this.myUtils.formatAddRem('dd', 1, new Date(this.form.end_date_vacant));
-        // 付款方式变化 日期
-        this.changeDateCount(this.form.pay_first_date, this.form.period_price_way_arr, 'period_price_way_arr');
-        //合同结束日期
-        if (day) {
-          let end = this.myUtils.dateAdd('mm', month, begin);
-          let dayEnd = this.myUtils.dateAdd('dd', day, end);
-          this.form.end_date = this.myUtils.formatDate(dayEnd);
+        let mmEnd = this.myUtils.dateAdd('mm', month, begin);
+        let ddEnd;//合同结束日期
+        if (bulletin === 'bulletin_collect_basic') {
+          ddEnd = this.myUtils.dateAdd('dd', (vacancy + day - 1), mmEnd);//合同结束日期
+          let vacant = this.myUtils.dateAdd('dd', vacancy, newBegin);//空置期结束日期
+          let pay_first = this.myUtils.dateAdd('dd', 1, vacant);//第一次打款日期
+          this.setFormDate('end_date_vacant', this.myUtils.formatDate(vacant));//空置期结束日期
+          this.setFormDate('pay_first_date', this.myUtils.formatDate(pay_first));//第一次打款日期
+          this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
         } else {
-          this.form.end_date = this.myUtils.formatAddRem('mm', month, begin);
+          ddEnd = this.myUtils.dateAdd('dd', day, mmEnd);//合同结束日期
         }
+        this.setFormDate('end_date', this.myUtils.formatDate(ddEnd));//合同结束日期
       },
       // 付款方式变化 日期计算
-      changeDateCount(val, arr, key) {
-        let value = this.jsonClone(arr);
+      changeDateCount(key, date) {
+        let bulletin = this.bulletinType.bulletin;
+        let val = this.myUtils.formatDate(date);
+        let value = this.form[key];
         value.forEach((item, index) => {
           let period = Number(item.period || 0);
           if (index > 0) {
@@ -444,23 +448,26 @@
           } else {
             value[index].begin_date = val;
           }
-          let date = new Date(item.begin_date);
-          if (item.begin_date) {
-            item.end_date = this.myUtils.formatAddRem('mm', period, date);
+          let begin_date = new Date(item.begin_date);
+          item.end_date = this.myUtils.formatAddRem('mm', period, begin_date);
+          if (bulletin === 'bulletin_collect_basic') {
+            this.sePaySecondDate(key, val);
           }
-          for (let item of Object.keys(value[0])) {
-            if (item !== 'pay_way') {
-              this.formatData[key][index][item] = value[index][item];
-            }
-          }
-        });
-        this.form[key] = value;
-        let form = this.form[key][0];
-        let first = this.form.pay_first_date;
-        if (!first) return;
-        let date = new Date(first);
-        let pay_way = Number(form.pay_way || 0);
-        this.form.pay_second_date = this.myUtils.formatAddRem('mm', pay_way, date);
+        })
+      },
+      // 第二次打款日期
+      sePaySecondDate(key, date) {
+        if (!date) return;
+        let val = new Date(date);
+        let pay_way = Number(this.form[key][0].pay_way || 0) * 30;
+        let pay_second = this.myUtils.formatAddRem('dd', pay_way, val);
+        this.setFormDate('pay_second_date', pay_second)
+      },
+      // 计算押金
+      countPrice() {
+        let bet = Number(this.form.pay_way_bet || 0);
+        let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
+        this.form.deposit = bet * price;
       },
       // 新增变化
       changeInput(slither, key, index, val) {
@@ -472,27 +479,82 @@
         this.form[key].push(value);
         this.formatData[key].push(value);
         if (key !== 'period_price_way_arr') return;
-        this.countChangeDate(key);
+        this.moreChangeDateCount(key);
+      },
+      // 输入变化周期计算日期
+      moreChangeDateCount(key) {
+        let date = this.form.pay_first_date;
+        if (!date) return;
+        this.changeDateCount(key, new Date(date));
       },
       // 删除变化
       removeChange(slither, key, index, num) {
         let draw = this.drawSlither[slither][index];
-        if (draw.picker === 'changeCustomer' && draw.children.length === 1) {
+        if (draw.picker === 'changeHiddenAll' && draw.children.length === 1) {
           for (let item of Object.keys(this.form[key][num])) {
             this.form[key][num][item] = '';
             this.formatData[key][num][item] = '';
           }
-          this.showCustomer = false;
+          this.resetChange(key);
           return;
         }
         this.form[key].splice(num, 1);
         this.formatData[key].splice(num, 1);
         draw.children.splice(num, 1);
-        if (draw.picker === 'changeCustomer') return;
+        if (draw.picker === 'changeHiddenAll') return;
         this.countPrice();
         this.countChangeDate(key);
       },
-      // 重置变化
+      // 下拉框筛选
+      choosePicker(val, value, num = '', parentKey = '') {
+        this.popupStatus = val.picker;
+        switch (val.picker) {
+          case 'picker':
+            this.pickerModule = true;
+            this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+            break;
+          case 'date':
+            this.chooseTime(val, value);
+            break;
+          case 'searchHouse':
+            this.searchHouseModule = true;
+            this.searchConfig = val;
+            break;
+          case 'noPicker':
+            this.noPickerModule = true;
+            break;
+          case 'non_landlord_fee':
+            this.checksList = val;
+            this.checksModule = true;
+            break;
+          case 'remark_terms':
+            this.remarkTermsModule = true;
+            break;
+          default:
+            this.popupModule = true;
+            this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+            break;
+        }
+      },
+      // 确认下拉选择
+      onConfirm(form, show, picker) {
+        this.onCancel();
+        if (form !== 'close') {
+          this.form = form;
+          this.formatData = show;
+          let name = picker.keyName;
+          let parentKey = picker.parentKey || '';
+          // input 显示隐藏
+          this.inputStatus(name, form);
+          // 付款方式变化处理
+          if (parentKey === 'period_price_way_arr') {
+            this.moreChangeDateCount(parentKey);
+            this.sePaySecondDate(parentKey, this.form.pay_first_date || '');
+          }
+          if (name === 'pay_way_bet') this.countPrice();
+        }
+      },
+      // 隐藏变化数据 重置
       resetChange(key) {
         let value = this.drawSlither;
         for (let item of Object.keys(value)) {
@@ -508,32 +570,61 @@
           this.form[key][0][keys] = '';
           this.formatData[key][0][keys] = '';
         }
-        if (key === 'subsidiary_customer') this.showCustomer = false;
+        this.changeHiddenAll = false;
       },
-      // 计算日期 公共方法
-      countChangeDate(key) {
-        let change_end_date = this.form.pay_first_date;
-        this.changeDateCount(change_end_date, this.form[key], key);
+      // input 显示隐藏
+      inputStatus(name, form) {
+        // let keys = ['rental_use', 'is_other_fee', 'is_agency', 'is_electronic_contract', 'signatory_identity'];
+        switch (name) {
+          case 'is_electronic_contract':
+            let num = Number(form['is_electronic_contract']);
+            if (num === 0) {
+              this.contractDis();
+              this.form.contract_number = 'LJSF';
+            } else {
+              this.contractDis('disabled');
+              this.form.contract_number = this.electronicContractNumber;
+            }
+            break;
+          case 'signatory_identity':
+            this.changeHiddenAll = Number(form[name]) === 2;
+            break;
+          default:
+            this.showHiddenInput(form, name);
+            break;
+        }
       },
-      // // 员工搜索结果
-      // getStaffInfo(val) {
-      //   this.onCancel();
-      //   if (val !== 'close') {
-      //     for (let key of Object.keys(val)) {
-      //       this.form[key] = val[key];
-      //     }
-      //   }
-      // },
-      // // 部门搜索结果
-      // getDepartInfo(val) {
-      //   this.onCancel();
-      //   if (val !== 'close') {
-      //     this.form.department_id = val.id;
-      //     this.form.department_name = val.name;
-      //   }
-      // },
-      // 身份认证
-      // 认证
+      // 清空中介信息
+      showHiddenInput(form, name) {
+        for (let slither of Object.keys(this.drawSlither)) {
+          for (let list of this.drawSlither[slither]) {
+            if (list.controlShow) {
+              let formNum = Number(form[name]);
+              let listNum = Number(list.controlShow);
+              for (let child of list.showList) {
+                if (formNum === listNum) {
+                  child.hidden = true;
+                  this.form[child.keyName] = child.keyType;
+                } else {
+                  child.hidden = false;
+                }
+              }
+            }
+          }
+        }
+      },
+      // 获取电子合同
+      electronicContract() {
+        let data = {
+          city_id: this.form.community && this.form.community.city || '320100',
+          version: '1.1',
+        };
+        this.$httpZll.getElectronicContract(data).then(res => {
+          this.electronicContractNumber = res.data.number || '';
+          this.form.contract_number = this.electronicContractNumber;
+        });
+      },
+      // 身份认证 银行认证
       confirmation(val) {
         switch (val) {
           case 'identity':
@@ -584,97 +675,7 @@
         }
         this.form = Object.assign({}, this.form);
       },
-      // 日期选择
-      chooseTime(val, date) {
-        this.timeModule = true;
-        this.formatData.dateKey = val.keyName;
-        this.formatData.dateVal = date;
-      },
-      // 确认时间
-      onConTime(val) {
-        this.onCancel();
-        if (val !== 'close') {
-          this.form[val.dateKey] = val.dateVal;
-          if (val.dateKey === 'begin_date') this.contractEnd(val.dateVal);
-          if (val.dateKey === 'pay_first_date') this.countChangeDate('period_price_way_arr');
-        }
-      },
-      // show picker
-      choosePicker(val, value, num = '', parentKey = '') {
-        // show date
-        if (val.status === 'date') {
-          this.chooseTime(val, value);
-          return;
-        }
-        // 搜索
-        // if (val.picker.includes('search')) {
-        //   switch (val.picker) {
-        //     case 'searchStaff':
-        //       this.searchStaffModule = true;
-        //       break;
-        //     case 'searchDepart':
-        //       this.searchDepartModule = true;
-        //       break;
-        //   }
-        //   return;
-        // }
-        this.popupStatus = val.picker;
-        if (val.picker === 'picker') {
-          this.pickerModule = true;
-        } else if (val.picker === 'noPicker') {
-          this.noPickerModule = true;
-          return;
-        } else if (val.picker === 'non_landlord_fee') {// 非房东费用
-          this.checksList = val;
-          this.checksModule = true;
-          return;
-        } else if (val.picker === 'remark_terms') {
-          this.remarkTermsModule = true;
-          return;
-        } else {
-          this.popupModule = true;
-        }
-        if (val.pickerRead) return;//弹窗内 可输入
-        this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
-      },
-      // 确认下拉选择
-      onConfirm(form, show) {
-        this.onCancel();
-        if (form !== 'close') {
-          this.form = form;
-          this.formatData = show;
-          let name = this.pickers.keyName;
-          // input 显示隐藏
-          this.inputStatus(name, form);
-          // 付款方式变化处理
-          if (name === 'pay_way') this.countChangeDate('period_price_way_arr');
-          if (name === 'pay_way_bet') this.countPrice();
-        }
-      },
-      // input 显示隐藏
-      inputStatus(name, form) {
-        let keys = ['rental_use', 'is_other_fee', 'is_agency', 'is_electronic_contract', 'signatory_identity'];
-        if (keys.includes(name)) {
-          switch (name) {
-            case 'is_electronic_contract':
-              let num = Number(form['is_electronic_contract']);
-              if (num === 0) {
-                this.contractDis();
-                this.form.contract_number = 'LJSF';
-              } else {
-                this.contractDis('disabled');
-                this.form.contract_number = this.electronicContractNumber;
-              }
-              break;
-            case 'signatory_identity':
-              this.showCustomer = Number(form[name]) === 2;
-              break;
-            default:
-              this.showHiddenInput(form, name);
-              break;
-          }
-        }
-      },
+      // 已认证
       // 合同编号 禁用
       contractDis(val = null) {
         for (let slither of Object.keys(this.drawSlither)) {
@@ -687,21 +688,12 @@
           }
         }
       },
-      // 清空中介信息
-      showHiddenInput(form, name) {
-        for (let slither of Object.keys(this.drawSlither)) {
-          for (let list of this.drawSlither[slither]) {
-            if (list.keyName) {
-              if (list.needHidden) {
-                let num = Number(form[name]);
-                if (num === 0) {
-                  list.hidden = true;
-                  this.form[list.keyName] = list.keyType;
-                } else {
-                  list.hidden = false;
-                }
-              }
-            }
+      // 家电 确认选择
+      closeElectrical(val) {
+        this.onCancel();
+        if (val !== 'close') {
+          for (let key of Object.keys(val)) {
+            this.form[key] = val[key];
           }
         }
       },
@@ -713,15 +705,6 @@
           this.formatData = show;
         }
       },
-      // 家电 确认选择
-      closeElectrical(val) {
-        if (val !== 'close') {
-          for (let key of Object.keys(val)) {
-            this.form[key] = val[key];
-          }
-        }
-        this.onCancel();
-      },
       // 备注条款
       closeTermsModule(form, show) {
         this.onCancel();
@@ -732,8 +715,6 @@
       },
       // close Module
       onCancel() {
-        // this.searchStaffModule = false;
-        // this.searchDepartModule = false;
         this.timeModule = false;
         this.pickerModule = false;
         this.popupModule = false;
@@ -753,16 +734,11 @@
         if (bulletin.type) {
           this.form.type = bulletin.type;
         }
-        // 重置 附属房东变化
-        if (this.form.signatory_identity == 1) {
-          this.resetChange('subsidiary_customer');
-        }
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
             this.form.task_id = this.taskDetail.task_id;
             this.form.process_instance_id = this.taskDetail.process_instance_id;
-            // this.form.spot_code = this.$refs.code.spot_code;
             this.form.spot_code = this.$refs.code.spot_code;
             this.$httpZll.submitReport(this.form, bulletin.to).then(res => {
               if (res) {
@@ -809,13 +785,11 @@
         }
         this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
-            // this.handlePreFill(hhhhhhhhhhhh);
             this.getPunchClockData();
           } else {
             let res = data.data;
             this.form.id = '';//草稿ID
-            // this.form = hhhhhhhhhhhh;
-            this.handlePreFill(res);
+            this.handlePreFill(res, 'new');
           }
           this.electronicContract();
         });
@@ -847,8 +821,8 @@
               break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item] || [1, 1, 1]);
-              door[0] = door[0] ? door[0] + '栋' : '';
-              door[1] = door[1] ? door[1] + '单元' : '';
+              door[0] = door[0] ? door[0] + '-' : '';
+              door[1] = door[1] ? door[1] + '-' : '';
               door[2] = door[2] ? door[2] : '';
               this.formatData[item] = door.join('');
               break;
@@ -866,6 +840,7 @@
               break;
             case 'floor':
             case 'floors':
+              console.log(res);
               this.formatData.floors = res.floor + ' / ' + res.floors;
               break;
           }
@@ -873,15 +848,31 @@
       },
       // 预填数据处理
       handlePreFill(res, status) {
+        let objInt = [], date = [];
+        for (let picker of this.drawForm) {
+          if (picker.status === 'objInt') {
+            objInt.push(picker.keyName);
+          }
+          if (picker.picker === 'date') {
+            date.push(picker.keyName);
+          }
+        }
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
-              door[0] = door[0] ? door[0] + '栋' : '';
-              door[1] = door[1] ? door[1] + '单元' : '';
+              door[0] = door[0] ? door[0] + '-' : '';
+              door[1] = door[1] ? door[1] + '-' : '';
               door[2] = door[2] ? door[2] : '';
               this.formatData[item] = door.join('');
+              break;
+            case 'house_type'://户型
+              let house = this.jsonClone(res[item]);
+              house[0] = house[0] ? house[0] + '室' : '';
+              house[1] = house[1] ? house[1] + '厅' : '';
+              house[2] = house[2] ? house[2] + '卫' : '';
+              this.formatData[item] = house.join('');
               break;
             case 'community'://小区
               this.formatData[item] = res[item].village_name;
@@ -893,42 +884,14 @@
                 }
               }
               break;
-            case 'house_type'://户型
-              let house = this.jsonClone(res[item]);
-              house[0] = house[0] ? house[0] + '室' : '';
-              house[1] = house[1] ? house[1] + '厅' : '';
-              house[2] = house[2] ? house[2] + '卫' : '';
-              this.formatData[item] = house.join('');
-              break;
             case 'decorate'://装修
             case 'property_type'://房屋类型
             case 'direction'://朝向
               this.formatData[item] = res[item].name;
               break;
+            case 'floor':
             case 'floors':
               this.formatData.floors = res.floor + ' / ' + res.floors;
-              break;
-            case 'holding_documents_type'://持有证件
-            case 'lock_type'://门锁类型
-            case 'bed'://床和床垫的情况
-            case 'wardrobe'://衣柜情况
-            case 'curtain'://窗帘情况
-            case 'is_fill'://家电是否补齐
-            case 'is_lord_fill'://房东是否补齐
-            case 'has_heater'://是否有暖气
-            case 'has_gas'://是否有天然气
-            case 'customer_sex'://性别
-            case 'card_type'://证件类型
-            case 'contact_way'://联系方式
-            case 'is_elevator'://是否有电梯
-            case 'is_clean'://卫生情况
-            case 'is_electronic_contract'://是否电子合同
-            case 'can_decorate'://可否装修
-            case 'can_add_goods'://可否添加物品
-            case 'signatory_identity'://签约人身份
-            case 'position'://所属区域
-              let num = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '');
-              this.formatData[item] = dicties[item][num];
               break;
             case 'non_landlord_fee'://非房东费用
               let names = [];
@@ -953,18 +916,20 @@
               if (res[item]) {
                 let customer = ['customer_sex', 'card_type', 'contact_way'];
                 this.formatData = this.changeHandle(res, item, customer, this.drawSlither, this.formatData);
-                for (let val of res[item]) {
-                  for (let value of Object.values(val)) {
-                    if (value) {
-                      this.showCustomer = true;
-                    }
-                  }
-                }
               }
               break;
             case 'period_price_way_arr'://付款方式变化
               let pay_way = ['pay_way'];
               this.formatData = this.changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
+              break;
+            default:
+              if (objInt.includes(item)) {
+                let num = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '');
+                this.formatData[item] = dicties[item][num];
+              }
+              if (date.includes(item)) {
+                this.formatData[item] = res[item];
+              }
               break;
           }
         }
@@ -976,9 +941,7 @@
       },
       // 初始化数据
       resetting() {
-        let allForm = [];
-        let id = this.form.id;
-        this.drawSlither = this.jsonClone(this.resetDrawing);
+        let allForm = [], id = this.form.id || '';
         for (let item of Object.keys(this.drawSlither)) {
           allForm = allForm.concat(this.drawSlither[item]);
         }
@@ -988,11 +951,11 @@
         this.formatData = all.formatData;
         this.album = all.album;
         this.electricalList = all.value;
-        this.showCustomer = false;
+        this.changeHiddenAll = false;
         for (let item of all.value) {
           item.num = this.form[item.key];
         }
-        this.form.id = id || '';
+        this.form.id = id;
         this.form.signer = '';
         this.form.contract_number = this.electronicContractNumber;
         this.form.account = '6225212583158743';
@@ -1005,6 +968,7 @@
 <style lang="scss" scoped>
   @import "../../../assets/scss/common.scss";
 
+  /*滑动背景图*/
   @mixin bgBannerImg() {
     @for $i from 1 through 4 {
       .bgBanner-#{$i} {
@@ -1013,30 +977,39 @@
     }
   }
 
+  /*滑动表单过渡效果*/
+  @mixin slides($n) {
+    $num: 100% / $n;
+    @for $i from 1 through $n {
+      .mainRadius#{$n} {
+        .slide#{$i} {
+          @include transform(translateX(-($num*$i)));
+        }
+      }
+    }
+  }
+
   @include bgBannerImg;
   #collectReport {
     .collectReport {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      transition: background .3s;
-
+      height: 100%;
+      padding: .3rem;
+      @include flex('bet-column');
+      @include transition(all .3s);
+      /*头部部分*/
       .bulletinTitle {
-        padding: .1rem .36rem 0;
-        height: 1.2rem;
         @include flex('items-bet');
 
         label {
-          font-size: .36rem;
           color: #4570FE;
+          font-size: .36rem;
           font-family: 'fangzhengjianti';
         }
 
         p {
+          @include flex('items-center');
+
           i {
-            display: inline-block;
             width: .2rem;
             height: .2rem;
             margin-left: .16rem;
@@ -1045,50 +1018,57 @@
           }
 
           i.hover {
-            width: .33rem;
+            width: .3rem;
             @include radius(1rem);
             background-color: #4570FE;
           }
         }
       }
 
+      /*表单部分*/
       .mainRadius {
-        margin: 0 .3rem;
+        height: 100%;
         overflow: hidden;
+        margin: .2rem 0 .3rem;
         @include radius(.06rem);
         background-color: rgba(255, 255, 255, .88);
 
         .transition {
+          height: 100%;
           @include transition(all .3s);
+
+          .list {
+            @include scroll;
+            width: 100%;
+            height: 100%;
+            padding: .2rem .2rem 3rem .1rem;
+
+            .changeHiddenAll {
+              color: #4570FE;
+              text-align: center;
+              padding: .2rem 0 .4rem;
+            }
+
+            .addChange {
+              @include flex('items-bet');
+
+              p {
+                padding: .13rem .3rem;
+                background-color: #FFFFFF;
+                margin-left: -.2rem;
+                border-radius: 0 1rem 1rem 0;
+                color: #4570FE;
+                margin-right: .2rem;
+              }
+            }
+          }
         }
 
         .slide0 {
           @include transform(translateX(0));
         }
-
-        .main {
-          height: 100%;
-          padding: .15rem .15rem 2rem;
-          @include scroll;
-
-          .addCustomer {
-            color: #4570FE;
-            text-align: center;
-            padding: .2rem 0 .4rem;
-          }
-        }
       }
 
-      @mixin slides($n) {
-        $num: 100% / $n;
-        @for $i from 1 through $n {
-          .mainRadius#{$n} {
-            .slide#{$i} {
-              @include transform(translateX(-($num*$i)));
-            }
-          }
-        }
-      }
       @include slides(2);
       @include slides(3);
       @include slides(4);
@@ -1099,77 +1079,42 @@
       @include slides(9);
       @include slides(10);
 
-      .addChange {
-        @include flex('items-bet');
-
-        p {
-          padding: .13rem .3rem;
-          background-color: #FFFFFF;
-          margin-left: -.2rem;
-          border-radius: 0 1rem 1rem 0;
-          color: #4570FE;
-          margin-right: .2rem;
-        }
-      }
-
-      /*单选 radio*/
-      .commonRadio {
-        div {
-          background-color: #EEEDEE;
-          color: #4A4A4A;
-          margin-left: .3rem;
-          padding: .15rem .3rem;
-          @include radius(1rem);
-        }
-
-        .chooseRadio {
-          background-color: rgba(69, 112, 254, .3);
-          color: #4570FE;
-        }
-      }
-
-      /*报备底部按钮*/
       .footer {
         position: fixed;
+        width: 100%;
         bottom: 0;
 
-        span {
+        p {
+          @include flex('flex-center');
           color: #FFFFFF;
-          padding: .2rem 0
+          position: absolute;
+          bottom: 0;
         }
-      }
 
-      .footerLeft {
-        width: 2.6rem;
-        height: 1.6rem;
-        @include bgImage('../../../assets/image/footer/caogaochongzhi.png');
-        left: 0;
-
-        div {
-          height: 100%;
-          text-align: left;
-
-          span {
-            width: 30%;
-          }
-
-          .resetting {
-            width: 40%;
-            padding: .2rem 0;
-            text-align: center;
-            margin-top: 1rem
-          }
+        .p1 {
+          left: -.3rem;
+          width: 1rem;
+          height: 1.6rem;
+          padding-right: .3rem;
+          @include bgImage('../../../assets/image/footer/footercaogao.png');
         }
-      }
 
-      .footerRight {
-        right: 0;
-        width: 1.6rem;
-        height: 1rem;
-        line-height: 1rem;
-        padding-left: .24rem;
-        @include bgImage('../../../assets/image/footer/fabu.png');
+        .p2 {
+          width: 2.5rem;
+          height: .8rem;
+          padding-top: .2rem;
+          @include bgImage('../../../assets/image/footer/footerchongzhi.png');
+        }
+
+        .p3 {
+          right: 0;
+          width: 1.6rem;
+          height: 1rem;
+          padding-right: .42rem;
+          @include bgImage('../../../assets/image/footer/footerfabu.png');
+        }
       }
     }
   }
+
 </style>

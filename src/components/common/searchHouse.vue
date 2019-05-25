@@ -55,7 +55,7 @@
 <script>
   export default {
     name: "search-house",
-    props: ['module','config'],
+    props: ['module', 'config'],
     data() {
       return {
         searchModule: false,
@@ -81,9 +81,12 @@
       module(val) {
         this.searchModule = val;
       },
+      config(val) {
+        console.log(val);
+      },
       searchModule(val) {
         if (!val) {
-          this.$emit('close');
+          this.$emit('close', 'close');
         }
       },
     },
@@ -98,11 +101,10 @@
         })
       },
       onConfirm(item) {
-        console.log(item);
         let form = {};
         form.id = item.id;
         form.name = item.name;
-        this.$emit('close', form);
+        this.$emit('close', form, this.config);
       }
     },
   }

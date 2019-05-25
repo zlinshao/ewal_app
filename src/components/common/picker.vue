@@ -95,7 +95,7 @@
         }
         let form = this.forms;
         let formatData = this.formatData;
-        this.$emit('close', form, formatData);
+        this.$emit('close', form, formatData, picker);
       },
     },
   }

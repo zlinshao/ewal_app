@@ -5,7 +5,7 @@ import HomePage from '@/components/index.vue'
 import CloseDD from '@/components/closeDD.vue'
 
 // 收房合同
-import CollectReport from '@/components/pages/collectReport/index1.vue'//收房
+import CollectReport from '@/components/pages/collectReport/index.vue'//收房
 import ToBeDone from '@/components/pages/toBeDone/index.vue'//市场部待办
 import ToBeDoneList from '@/components/pages/toBeDoneList/index.vue'//所有待办
 import DatumRecord from '@/components/pages/toBeDoneList/addRecord/datumRecord.vue'//增加资料跟进记录
@@ -73,14 +73,14 @@ export default new Router({
     {
       path: '/toBeDoneList',
       name: '待办',
-      hidden: 'index',
+      hidden: 'index.vue',
       component: ToBeDoneList,
       meta: {title: '待办', index: 4},
     },
     {
       path: '/punchClock',
       name: '带看打卡',
-      hidden: 'index',
+      hidden: 'index.vue',
       component: PunchClock,
       meta: {title: '带看打卡', index: 3},
     },
@@ -94,7 +94,7 @@ export default new Router({
     {
       path: '/approvals',
       name: '审批',
-      hidden: 'index',
+      hidden: 'index.vue',
       component: Approvals,
       meta: {title: '审批', index: 5},
     },
@@ -119,7 +119,7 @@ export default new Router({
     {
       path: '/toBeDone',
       name: '收房待办',
-      hidden: 'index',
+      hidden: 'index.vue',
       component: ToBeDone,
       params: {type: 'collect'},
       meta: {title: '收房待办', index: 2},
@@ -127,7 +127,7 @@ export default new Router({
     {
       path: '/toBeDone',
       name: '租房',
-      hidden: 'index',
+      hidden: 'index.vue',
       component: ToBeDone,
       params: {type: 'rent'},
       meta: {title: '租房', index: 2},
