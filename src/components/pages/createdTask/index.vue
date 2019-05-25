@@ -39,7 +39,7 @@
           </div>
           <!--文件上传-->
           <div v-else-if="item.picker === 'upload'">
-            <div v-for="upload in item.value" class="flex">
+            <div v-for="upload in item.photos" class="flex">
               <Upload :file="upload" :getImg="album[upload.keyName]" @success="getImgData"></Upload>
             </div>
           </div>
@@ -254,7 +254,7 @@
               keyName: 'house_type',
               keyType: [],
               type: 'text',
-              status: 'arrs-0-1-1',
+              status: 'column-0-1-1',
               picker: 'pickerSlot',
               showForm: 'formatData',//picker 显示form 或 formatData
               slot: '',
@@ -303,7 +303,7 @@
               keyName: 'floors',
               keyType: [],
               type: 'text',
-              status: 'arrs-3-0',
+              status: 'column-3-0',
               picker: 'pickerSlot',
               showForm: 'formatData',//picker 显示form 或 formatData
               slot: '',
@@ -531,7 +531,7 @@
             {
               label: '上传',
               picker: 'upload',
-              value: [
+              photos: [
                 {
                   label: '房屋影像',
                   placeholder: '必填',

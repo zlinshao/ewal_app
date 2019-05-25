@@ -180,46 +180,51 @@ export default {
     // 初始化数据
     Vue.prototype.initFormData = function (drawForm, showForm, noStaff) {
       let form = {};
-      let album = {};
-      let formatData = this.jsonClone(showForm);
-      let value = [];
+      let album = {};//图片字段集合
+      let formatData = this.jsonClone(showForm);//下拉框显示
+      let value = [];//家电家具
       for (let item of drawForm) {
-        if (item.moreString) {
-          for (let str of item.moreString) {
-            form[str.keyName] = str.keyType;
-            if (item.showForm) {
-              formatData[str.keyName] = str.keyType;
-            }
-          }
-        } else if (item.moreArray) {
+        if (item.moreArray) {
           form[item.keyName] = item.keyType;
           formatData[item.keyName] = this.jsonClone(item.keyType);
           for (let arr of item.moreArray) {
             form[item.keyName].push(arr.keyType);
             formatData[item.keyName] = '';
           }
+        } else if (item.moreString) {
+          for (let str of item.moreString) {
+            form[str.keyName] = str.keyType;
+          }
+        } else if (item.showList) {
+          form[item.keyName] = item.keyType;
+          for (let str of item.showList) {
+            form[str.keyName] = str.keyType;
+          }
         } else if (item.picker === 'upload') {
-          for (let up of item.value) {
-            form[up.keyName] = [];
-            album[up.keyName] = [];
+          for (let pic of item.photos) {
+            form[pic.keyName] = [];
+            album[pic.keyName] = [];
           }
         } else if (item.picker === 'album') {
           // 新建小区
           form[item.keyName] = item.keyType;
           album[item.keyName] = item.keyType;
-          for (let up of item.value) {
-            form[item.keyName][up.keyName] = [];
-            album[item.keyName][up.keyName] = [];
+          for (let pic of item.photos) {
+            form[item.keyName][pic.keyName] = [];
+            album[item.keyName][pic.keyName] = [];
           }
-        } else if (item.value) {
-          value = item.value;
-          for (let val of item.value) {
+        } else if (item.lists) {
+          // 家电家具
+          value = item.lists;
+          for (let val of item.lists) {
             form[val.key] = val.num;
           }
         } else if (item.checks) {
+          // 非房东费用
           form[item.keyName] = item.keyType;
-          formatData[item.keyName] = ''
+          formatData[item.keyName] = '';
         } else if (item.children) {
+          // 变化
           let obj = {};
           let child = [];
           for (let key of item.children) {
@@ -230,25 +235,23 @@ export default {
           child.push(obj);
           form[item.keyName] = child;
           formatData[item.keyName] = this.jsonClone(child);
-        } else {
-          if (item.status === 'obj') {
-            form[item.keyName] = {
-              id: '',
-              name: '',
-            };
-          } else if (item.keyName === 'floors') {
-            form.floor = '';
-            form.floors = '';
-          } else {
-            if (item.keyName) {
-              form[item.keyName] = item.keyType;
-            }
+        } else if (item.status === 'moreKeys') {
+          for (let key of Object.keys(item.moreKeys)) {
+            form[key] = item.moreKeys[key];
           }
-          if (item.showForm) {
+        } else {
+          if (item.keyName) {
+            form[item.keyName] = item.keyType;
+          }
+        }
+        if (item.showForm) {
+          if (item.moreArray) {
+            formatData[item.keyName] = '';
+          } else {
             formatData[item.keyName] = item.keyType || '';
-            if (item.keyType && dicties[item.keyName]) {
-              formatData[item.keyName] = dicties[item.keyName][Number(item.keyType)] || '';
-            }
+          }
+          if (item.keyType && dicties[item.keyName]) {
+            formatData[item.keyName] = dicties[item.keyName][Number(item.keyType)] || item.keyType;
           }
         }
       }
@@ -256,8 +259,9 @@ export default {
         this.getPersonal(form, this.$store.state.app.personal);
       }
       return {form, formatData, value, album};
-    };
-    // 预填数据处理
+    }
+    ;
+// 预填数据处理
     Vue.prototype.changeHandle = function (res, item, val, all, data) {
       let formatData = data;
       for (let slither of Object.keys(all)) {
@@ -277,7 +281,7 @@ export default {
       });
       return formatData;
     };
-    // 下拉框 显示 重置
+// 下拉框 显示 重置
     Vue.prototype.$closePicker = function () {
       return new Promise((resolve, reject) => {
         let picker = {
@@ -293,14 +297,14 @@ export default {
         resolve(picker)
       })
     };
-    // 下拉框数据显示 picker 配置
+// 下拉框数据显示 picker 配置
     Vue.prototype.inputSelect = function (pickers, val, num, parentKey) {
       pickers.keyName = val.keyName;
       pickers.status = val.status;
       pickers.title = val.label;
       pickers.index = num;
       pickers.parentKey = parentKey || '';
-      if (val.status.includes('arrs')) {
+      if (val.status.includes('column')) {
         let index = val.status.split('-');
         pickers.columns = [];
         for (let i = 0; i < index.length - 1; i++) {
@@ -322,7 +326,7 @@ export default {
       }
       return pickers;
     };
-    // 查看大图
+// 查看大图
     Vue.prototype.$bigPhoto = function (val, uri) {
       let images = [];
       if (val instanceof Array) {
@@ -352,11 +356,11 @@ export default {
         }
       });
     };
-    // loading/Toast 提示信息
+// loading/Toast 提示信息
     Vue.prototype.$prompt = function (msg, type) {
       this.myUtils.prompt(msg, type);
     };
-    // 签署电子合同
+// 签署电子合同
     Vue.prototype.$signPostApi = function (item, params, title = []) {
       return new Promise((resolve, reject) => {
         let url = '', sign = {};
@@ -383,7 +387,7 @@ export default {
         });
       })
     };
-    // 修改合同
+// 修改合同
     Vue.prototype.$reviseContract = function (action = {}, name = '', item) {
       this.$dialog('合同修改', '此操作将重新发起报备和审批，并结束该签署任务，且无法恢复，是否继续?').then(res => {
         if (res) {
@@ -425,7 +429,7 @@ export default {
         }
       });
     };
-    // 任务详情
+// 任务详情
     Vue.prototype.againTaskDetail = function (val) {
       return new Promise((resolve, reject) => {
         this.$httpZll.get(val.ctl_detail_request_url, {}, 'prompt').then(res => {
@@ -444,13 +448,13 @@ export default {
             data.task_id = val.task_id;
             data.process_instance_id = val.process_id;
             data.root_process_instance_id = val.root_id;
-            sessionStorage.setItem('task_detail',JSON.stringify(data));
+            sessionStorage.setItem('task_detail', JSON.stringify(data));
           }
           resolve(true);
         });
       });
     };
-    // 报备详情
+// 报备详情
     Vue.prototype.againDetailRequest = function (val, again = '') {
       this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
         if (res.success) {
@@ -458,12 +462,12 @@ export default {
           data.content = res.data.content;
           data.task_id = val.task_id;
           data.process_instance_id = val.process_id;
-          sessionStorage.setItem('bulletin_draft',JSON.stringify(data));
+          sessionStorage.setItem('bulletin_draft', JSON.stringify(data));
           this.routerLink(val.task_action, {again: again});
         }
       });
     };
-    // 确认弹出窗口
+// 确认弹出窗口
     Vue.prototype.$dialog = function (title, content) {
       return new Promise((resolve, reject) => {
         Dialog.confirm({
@@ -476,7 +480,7 @@ export default {
         });
       })
     };
-    // 钉钉超链接跳转
+// 钉钉超链接跳转
     Vue.prototype.$ddSkip = function (url) {
       dd.biz.util.openLink({
         url: url,//要打开链接的地址
@@ -486,7 +490,7 @@ export default {
         }
       })
     };
-    // 钉钉认证
+// 钉钉认证
     Vue.prototype.personalGet = function () {
       let that = this;
       // 隐藏 右上角更多
@@ -522,7 +526,7 @@ export default {
         });
       });
     };
-    // 存储个人信息
+// 存储个人信息
     Vue.prototype.personalData = function (res, resolve) {
       let token = res.token;
       console.log(res.user);
@@ -538,7 +542,7 @@ export default {
       // this.$store.dispatch('personal_storage', JSON.stringify(data));
       // resolve(true);
     };
-    // 关闭钉钉
+// 关闭钉钉
     Vue.prototype.closeDD = function () {
       let that = this;
       dd.biz.navigation.close({

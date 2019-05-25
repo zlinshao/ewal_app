@@ -1,156 +1,3 @@
-hhhhhhhhhhhh = {
-  "house_address": "",
-  "community": {
-    "id": "446",
-    "area": "320102",
-    "city": "320100",
-    "code": "025",
-    "unit": "[1]",
-    "album": "",
-    "floor": "[1]",
-    "py_all": "taipingbeilu122hao",
-    "region": "12",
-    "remark": "https://nj.lianjia.com/xiaoqu/1411041190210/",
-    "suffix": "[1]",
-    "address": "太平北路122号",
-    "content": "",
-    "latitude": "32.05203446324",
-    "position": "",
-    "province": "320000",
-    "py_first": "tpbl1h",
-    "longitude": "118.7980569475",
-    "max_price": "",
-    "min_price": "",
-    "built_year": "1971",
-    "created_at": "2017-12-05 19:58:46",
-    "developers": "南京市政建设开发有限公司",
-    "house_type": "0",
-    "seat_block": "[1]",
-    "updated_at": "2017-12-07 13:49:43",
-    "bd_latitude": "32.058392",
-    "subway_road": "距离浮桥(地铁站)3号线418米，距离鸡鸣寺(地铁站)4号线582米，距离大行宫(地铁站)2号线1187米，距离珠江路(地铁站)1号线1312米",
-    "bd_longitude": "118.804473",
-    "number_rooms": "[1]",
-    "property_com": "街道办事处（委员会）代管物业",
-    "property_fee": "0.1元/平米/月",
-    "total_houses": "746户",
-    "village_name": "太平北路122号",
-    "village_alias": "",
-    "district_group": "[1]",
-    "property_phone": "",
-    "peripheral_info": "",
-    "total_buildings": "15栋",
-    "property_fee_list": ""
-  },
-  "position": "2",
-  "property_address": "发发大水发射点",
-  "property_owner": "放大撒地方",
-  "door_address": ["12", "33", "44"],
-  "house_type": ["1", "1", "1"],
-  "area": "122",
-  "decorate": {"id": "405", "name": "毛坯"},
-  "direction": {"id": "1", "name": "东"},
-  "floor": "3",
-  "floors": "18",
-  "property_fee": "0.1元/平米/月",
-  "property_phone": "18188181",
-  "property_type": {"id": "419", "name": "住宅"},
-  "holding_documents_type": "2",
-  "property_right_card_number": "321312",
-  "qiu_quan_number": "2313123",
-  "lock_type": "1",
-  "other_remark": "fdsfda",
-  "photo": [4226867, 4226868, 4226869],
-  "house_video": [4226870],
-  "bed": "3",
-  "bed_remark": "fdfdsafasd",
-  "wardrobe": "2",
-  "wardrobe_remark": "fdsfas",
-  "curtain": "3",
-  "curtain_remark": "dfsfsdaf",
-  "is_elevator": "0",
-  "is_clean": "0",
-  "is_fill": "1",
-  "is_lord_fill": "1",
-  "has_heater": "0",
-  "has_gas": "0",
-  "lord_fill_date": "2019-04-30",
-  "other_furniture": "gfdgsdg",
-  "air_condition": "1",
-  "fridge": 2,
-  "television": "1",
-  "wash_machine": "1",
-  "water_heater": "1",
-  "hood": "1",
-  "microwave": "1",
-  "sofa": "1",
-  "clothe_rack": "1",
-  "gas_stove": "1",
-  "dining_table": "1",
-  "chair": "1",
-  "signatory_identity": "1",
-  "customer_name": "张琳琳",
-  "customer_sex": "m",
-  "card_type": "411",
-  "card_id": "320321198904010033",
-  "contact_way": "1",
-  "contact_phone": "18052001167",
-  "bank": "上海浦东发展银行",
-  "subbranch": "fgdsgdsf",
-  "account_name": "贾少君",
-  "account": "6225212583158743",
-  "relationship": "fdsaf",
-  "subsidiary_customer": [{
-    "card_id": "",
-    "card_type": "",
-    "contact_way": "",
-    "customer_sex": "",
-    "contact_phone": "",
-    "customer_name": ""
-  }],
-  "id_card_photo": [4226871, 4226872],
-  "bank_card_photo": [4226873, 4226874, 4226875, 4226876],
-  "is_electronic_contract": "1",
-  "contract_number": "",
-  "sign_date": "2019-04-30",
-  "month": "12",
-  "day": "3",
-  "vacancy": "12",
-  "begin_date": "2019-04-30",
-  "end_date": "2020-05-14",
-  "end_date_vacant": "2019-05-12",
-  "pay_way_bet": "1",
-  "period_price_way_arr": [{
-    "period": "12",
-    "pay_way": "1",
-    "end_date": "2019-05-25",
-    "begin_date": "2020-05-13",
-    "month_unit_price": "1222"
-  }],
-  "deposit": 1222,
-  "pay_first_date": "2019-05-13",
-  "pay_second_date": "2019-06-13",
-  "penalty": "3333",
-  "can_decorate": "0",
-  "can_add_goods": "0",
-  "is_agency": "1",
-  "agency_name": "321312",
-  "agency_price": "321312",
-  "agency_user_name": "3213",
-  "agency_phone": "432432",
-  "non_landlord_fee": [3, 2, 6],
-  "remark_terms": ["5", "4", "3"],
-  "staff_name": "张琳琳",
-  "department_name": "南京马群一组",
-  "staff_id": "69",
-  "department_id": "134",
-  "id": 110,
-  "task_id": "57145337-689b-11e9-895e-76de95b6db95",
-  "type": 1,
-  "is_draft": 0,
-  "spot_code": "s7d30"
-};
-
 // 报备类型
 bulletinRouterStatus = {
   newCollect: {
@@ -186,13 +33,13 @@ defineCollectReport = {
       keyName: 'house_address',// 字段名
       keyType: '',// 数据类型
       type: 'text',// input 类型
-      // date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 arrs多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
-      status: '',
+      // hidden: false,// true隐藏 false显示
+      // status: '',// date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 column多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
       // picker: 'searchVillage',// 是否显示在弹窗内 不存在为正常输入框 值为picker正常选择 searchVillage 搜索小区
       // showForm: 'formatData',//picker 显示form 或 formatData
       // prompts: '',//红色提示信息
       // pickerRead: 'no', // 在弹窗内是否为readonly// 1房屋信息 2物品信息 3合同信息 4客户信息
-      slot: '',// 预留字段
+      // slot: '',// 预留字段
     },
     {
       label: '小区地址',
@@ -222,7 +69,6 @@ defineCollectReport = {
       keyName: 'property_address',
       keyType: '',
       type: 'text',
-      status: '',
       slot: '',
     },
     {
@@ -231,17 +77,15 @@ defineCollectReport = {
       keyName: 'property_owner',
       keyType: '',
       type: 'text',
-      status: '',
       slot: '',
     },
     {
       label: '门牌地址',
       placeholder: '已禁用',
-      disabled: 'disabled',
+      readonly: 'readonly',
       keyName: 'door_address',
       keyType: [],
       type: 'text',
-      status: '',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
       moreArray: [
@@ -250,7 +94,6 @@ defineCollectReport = {
           placeholder: '必填',
           type: 'text',
           keyType: '',
-          status: '',
           slot: '',
         },
         {
@@ -258,7 +101,6 @@ defineCollectReport = {
           placeholder: '必填',
           type: 'text',
           keyType: '',
-          status: '',
           slot: '',
         },
         {
@@ -266,7 +108,6 @@ defineCollectReport = {
           placeholder: '必填',
           type: 'text',
           keyType: '',
-          status: '',
           slot: '',
         },
       ],
@@ -288,7 +129,6 @@ defineCollectReport = {
       keyName: 'area',
       keyType: '',
       type: 'number',
-      status: '',
       unit: '平米',
       slot: '',
     },
@@ -318,9 +158,10 @@ defineCollectReport = {
       placeholder: '已禁用',
       disabled: 'disabled',
       keyName: 'floors',
+      moreKeys: {floor: '', floors: ''},
       keyType: [],
       type: 'text',
-      status: 'arrs-3-0',
+      status: 'moreKeys',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
@@ -408,7 +249,7 @@ defineCollectReport = {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '房产证照片',
           placeholder: '必填',
@@ -565,8 +406,8 @@ defineCollectReport = {
       keyName: 'lord_fill_date',
       keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker',
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -588,7 +429,7 @@ defineCollectReport = {
       picker: 'electrical',
       slot: '',
       // 家具列表
-      value: [
+      lists: [
         {
           label: '空调',
           key: 'air_condition',
@@ -780,13 +621,12 @@ defineCollectReport = {
     },
     {
       keyName: undefined,
-      picker: 'addCustomer',
+      picker: 'changeHiddenAll',
       button: '+增加附属租客',
     },
     {
       keyName: 'subsidiary_customer',
-      picker: 'changeCustomer',
-      pickerText: '个附属房东',
+      picker: 'changeHiddenAll',
       label: '附属房东',
       button: '增加附属房东',
       keyType: [],
@@ -861,7 +701,7 @@ defineCollectReport = {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '证件照片',
           placeholder: '必填',
@@ -904,8 +744,8 @@ defineCollectReport = {
       keyName: 'sign_date',
       keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker',
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -948,8 +788,8 @@ defineCollectReport = {
       keyName: 'begin_date',
       keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker',
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -959,8 +799,8 @@ defineCollectReport = {
       keyName: 'end_date',
       keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker',
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -970,8 +810,8 @@ defineCollectReport = {
       keyName: 'end_date_vacant',
       keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker',
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -988,7 +828,7 @@ defineCollectReport = {
     {
       label: '应付款信息',
       keyName: 'period_price_way_arr',
-      picker: 'changePrice',
+      picker: 'changeHiddenDefault',
       pickerText: '周期',
       keyType: [],
       button: '付款变化',
@@ -1072,8 +912,8 @@ defineCollectReport = {
       keyName: 'pay_first_date',
       keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker',
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -1083,8 +923,8 @@ defineCollectReport = {
       keyName: 'pay_second_date',
       keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker',
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -1120,52 +960,51 @@ defineCollectReport = {
       type: 'text',
       status: 'objInt',
       picker: 'picker',
+      controlShow: '0',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
-    },
-    {
-      label: '渠道名称',
-      placeholder: '必填 请输入',
-      needHidden: 'hidden',
-      keyName: 'agency_name',
-      keyType: '',
-      hidden: true,
-      type: 'text',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '渠道价格',
-      placeholder: '必填 请输入',
-      needHidden: 'hidden',
-      keyName: 'agency_price',
-      keyType: '',
-      hidden: true,
-      type: 'number',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '渠道联系人',
-      placeholder: '必填 请输入',
-      needHidden: 'hidden',
-      keyName: 'agency_user_name',
-      keyType: '',
-      hidden: true,
-      type: 'text',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '渠道手机',
-      placeholder: '必填 请输入',
-      needHidden: 'hidden',
-      keyName: 'agency_phone',
-      keyType: '',
-      hidden: true,
-      type: 'number',
-      status: '',
-      slot: '',
+      showList: [
+        {
+          label: '渠道名称',
+          placeholder: '必填 请输入',
+          keyName: 'agency_name',
+          keyType: '',
+          hidden: true,
+          type: 'text',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '渠道价格',
+          placeholder: '必填 请输入',
+          keyName: 'agency_price',
+          keyType: '',
+          hidden: true,
+          type: 'number',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '渠道联系人',
+          placeholder: '必填 请输入',
+          keyName: 'agency_user_name',
+          keyType: '',
+          hidden: true,
+          type: 'text',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '渠道手机',
+          placeholder: '必填 请输入',
+          keyName: 'agency_phone',
+          keyType: '',
+          hidden: true,
+          type: 'number',
+          status: '',
+          slot: '',
+        },
+      ]
     },
     {
       label: '非房东费用',
@@ -1221,9 +1060,6 @@ defineCollectReport = {
       keyName: 'staff_name',
       keyType: '',
       type: 'text',
-      status: '',
-      // picker: 'searchStaff',
-      picker: '',
       slot: '',
     },
     {
@@ -1233,9 +1069,6 @@ defineCollectReport = {
       keyName: 'department_name',
       keyType: '',
       type: 'text',
-      status: '',
-      // picker: 'searchDepart',
-      picker: '',
       slot: '',
     },
   ],
@@ -1254,7 +1087,7 @@ defineRentReport = {
       keyName: 'trans_type',// 字段名
       keyType: '',// 数据类型
       type: 'text',// input 类型
-      // date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 arrs多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
+      // date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 column多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
       status: 'objInt',
       picker: 'picker',// 是否显示在弹窗内 不存在为正常输入框 值为picker正常选择 searchVillage 搜索小区
       showForm: 'formatData',//picker 显示form 或 formatData
@@ -1283,15 +1116,15 @@ defineRentReport = {
     {
       label: '签约日期',
       placeholder: '必填 请选择',
-      readonly: 'readonly', 
-      keyName: 'sign_date', 
-      keyType: '', 
+      readonly: 'readonly',
+      keyName: 'sign_date',
+      keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker', 
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       showForm: 'form',
-      slot: '', 
-    }, 
+      slot: '',
+    },
     {
       label: '签约月数',
       placeholder: '必填 请输入',
@@ -1313,27 +1146,25 @@ defineRentReport = {
     {
       label: '合同开始时间',
       placeholder: '必填 请选择',
-      readonly: 'readonly', 
-      keyName: 'begin_date', 
-      keyType: '', 
+      readonly: 'readonly',
+      keyName: 'begin_date',
+      keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker', 
-      showForm: 'form',
-      slot: '', 
-    }, 
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
     {
       label: '合同结束时间',
       placeholder: '必填 请选择',
-      readonly: 'readonly', 
-      keyName: 'end_date', 
-      keyType: '', 
+      readonly: 'readonly',
+      keyName: 'end_date',
+      keyType: '',
       type: 'text',
-      status: 'date',
-      picker: 'picker', 
-      showForm: 'form',
-      slot: '', 
-    }, 
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
     {
       label: '押金',
       placeholder: '必填 请输入',
@@ -1409,7 +1240,7 @@ defineRentReport = {
             button: '付款变化',
             slot: '',
           },
-           {
+          {
             label: '月付金额',
             placeholder: '必填 请选择',
             readonly: 'readonly',
@@ -1600,7 +1431,7 @@ defineRentReport = {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '凭证截图',
           placeholder: '必填',
@@ -1761,7 +1592,7 @@ defineRentReport = {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '证件照片',
           placeholder: '必填',
@@ -1786,7 +1617,7 @@ defineRentReport = {
       type: 'text',
       status: '',
       slot: '',
-    },{
+    }, {
       label: '银行',
       placeholder: '必填 请输入',
       keyName: 'bank',
@@ -1807,7 +1638,7 @@ defineRentReport = {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '银行卡照片',
           placeholder: '必填',
@@ -1968,6 +1799,7 @@ function handlerFreeDelivery(name, key, type = 'number', place = '必填 请输�
     slot: '',
   }
 }
+
 // 费用交接切换
 handlerFreeDeliveryChange = [
   [],
@@ -2202,9 +2034,8 @@ function handlerHallGoods(value, num) {
       keyName: 'cleaning_time',
       keyType: '',
       type: 'text',
-      status: 'date',
+      picker: 'date',
       showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker',
       slot: '',
     },
     {
@@ -2222,7 +2053,7 @@ function handlerHallGoods(value, num) {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '需保洁照片',
           placeholder: '必填',

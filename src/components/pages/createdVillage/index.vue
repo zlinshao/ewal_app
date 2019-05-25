@@ -54,7 +54,7 @@
             </div>
             <!--上传-->
             <div v-else-if="item.picker === 'album' && item.value" class="uploadForm">
-              <div v-for="upload in item.value" class="flex">
+              <div v-for="upload in item.photos" class="flex">
                 <Upload :file="upload" :getImg="album" @success="getImgData"></Upload>
               </div>
             </div>
@@ -299,7 +299,7 @@
             keyName: 'album',
             keyType: {},
             picker: 'album',
-            value: [
+            photos: [
               {
                 label: '小区照片',
                 placeholder: '必填',

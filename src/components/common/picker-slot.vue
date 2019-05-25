@@ -155,7 +155,7 @@
         }
         let picker = this.pickerConfig;
         let key = picker.keyName;
-        if (picker.status.includes('arrs')) {
+        if (picker.status.includes('column')) {
           if (key === 'house_type') {
             index[0] = index[0] + 1;
             this.postFormData[key] = index;

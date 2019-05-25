@@ -5,7 +5,7 @@ import HomePage from '@/components/index.vue'
 import CloseDD from '@/components/closeDD.vue'
 
 // 收房合同
-import CollectReport from '@/components/pages/collectReport/index.vue'//收房
+import CollectReport from '@/components/pages/collectReport/index1.vue'//收房
 import ToBeDone from '@/components/pages/toBeDone/index.vue'//市场部待办
 import ToBeDoneList from '@/components/pages/toBeDoneList/index.vue'//所有待办
 import DatumRecord from '@/components/pages/toBeDoneList/addRecord/datumRecord.vue'//增加资料跟进记录

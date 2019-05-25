@@ -141,7 +141,7 @@
               </div>
               <!--上传-->
               <div v-else-if="item.picker === 'upload' && item.value" class="uploadForm">
-                <div v-for="upload in item.value" class="flex">
+                <div v-for="upload in item.photos" class="flex">
                   <Upload :file="upload" :getImg="album[upload.keyName]" :close="!closePhoto"
                           @success="getImgData"></Upload>
                 </div>
@@ -746,7 +746,7 @@
               }
             } else {
               if (key.picker === 'upload') {
-                for (let pic of key.value) {
+                for (let pic of key.photos) {
                   this.form[pic.keyName] = [];
                 }
               } else if (key.status === 'other_fee') {

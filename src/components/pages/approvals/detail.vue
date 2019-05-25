@@ -371,7 +371,7 @@
       },
       // 视频播放
       videoPlay(event = '') {
-        if (event && event.target.alt.includes('http')) {
+        if (event && event.target.alt.includes(globalConfig.domain)) {
           this.videoSrc = event.target.alt;
         } else {
           this.videoSrc = '';
@@ -385,13 +385,9 @@
         for (let val of Object.keys(data)) {
           obj[val] = {};
           for (let item of data[val]) {
-            if (item.picker === 'upload' || item.picker === 'album') {
-              for (let up of item.value) {
-                obj[val][up.keyName] = up.label;
-              }
-            } else if (item.value) {
-              for (let key of item.value) {
-                obj[val][key.key] = key.label;
+            if (item.picker === 'upload') {
+              for (let pic of item.photos) {
+                obj[val][pic.keyName] = pic.label;
               }
             } else {
               if (item.keyName) {
