@@ -59,32 +59,51 @@
             icon: ic_qudao,
           },
           {
-            url: 'toBeDone',
+            url: 'collectReport',
             name: '尾款',
-            type: 'final',
+            status: {
+              bulletin: 'retainage',
+              to: 'retainage',
+            },
             icon: ic_weikuan,
           },
           {
-            url: 'toBeDone',
+            url: 'collectReport',
             name: '调租',
+            status: {
+              bulletin: 'change',
+              to: 'change',
+            },
             type: '',
             icon: ic_tiaozu,
           },
           {
-            url: 'toBeDone',
+            url: 'collectReport',
             name: '转租',
+            status: {
+              bulletin: 'sublet',
+              to: 'sublet',
+            },
             type: '',
             icon: ic_zhuanzu,
           },
           {
-            url: 'toBeDone',
+            url: 'collectReport',
             name: '特殊事项',
+            status: {
+              bulletin: 'special',
+              to: 'special',
+            },
             type: 'special',
             icon: ic_teshu,
           },
           {
-            url: 'toBeDone',
+            url: 'collectReport',
             name: '退租',
+            status: {
+              bulletin: 'checkout',
+              to: 'checkout',
+            },
             type: '',
             icon: ic_tuizu,
           },
