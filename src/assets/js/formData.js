@@ -163,6 +163,37 @@ bulletinRouterStatus = {
     to: 'rent',
     type: 1,
   },
+  newAgency: {
+    bulletin: 'agency',
+    to: 'agency',
+    type: 1,
+  },
+  newRetainage: {
+    bulletin: 'retainage',
+    to: 'retainage',
+    type: 1,
+  }, 
+  newChange: {
+    bulletin: 'change',
+    to: 'change',
+    type: 1,
+  },
+  newSublet: {
+    bulletin: 'sublet',
+    to: 'sublet',
+    type: 1,
+  }, 
+  newSpecial: {
+    bulletin: 'special',
+    to: 'special',
+    type: 1,
+  },
+  newCheckout: {
+    bulletin: 'checkout',
+    to: 'checkout',
+    type: 1,
+  },
+
 };
 
 // 审批筛选
@@ -1442,23 +1473,25 @@ defineRentReport = {
       children: [
         [
           {
-            label: '付款1',
+            label: '分金额',
             placeholder: '必填 请输入',
             keyName: 'money_sep',
             keyType: '',
-            type: 'text',
+            type: 'number',
             status: '',
             picker: '',
             slot: '',
           },
           {
-            label: '付款2',
+            label: '实际付款时间',
             placeholder: '必填 请选择',
+            readonly: 'readonly',
             keyName: 'real_pay_at',
             keyType: '',
             type: 'text',
-            status: '',
-            picker: '',
+            status: 'date',
+            picker: 'picker',
+            showForm: 'form',
             slot: '',
           },
           {
@@ -1474,7 +1507,7 @@ defineRentReport = {
             slot: '',
           },
           {
-            label: '付款4"',
+            label: '收款账户',
             placeholder: '必填 请输入',
             readonly: 'readonly',
             keyName: 'remittance_account"',
@@ -1554,9 +1587,23 @@ defineRentReport = {
     },
     {
       label: '租赁用途',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'rental_use',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '其他',
       placeholder: '必填 请输入',
       keyName: 'rental_use',
       keyType: '',
+      hidden: true,
+      needHidden: 'hidden',
       type: 'text',
       status: '',
       slot: '',
@@ -1886,6 +1933,324 @@ defineRentReport = {
     },
   ],
 };
+
+// 渠道报备
+defineAgencyReport={
+  slither0: [
+    {
+      label: '收房/租房',
+      placeholder: '选填 请选择',
+      readonly: 'readonly',
+      keyName: 'collect_or_rent',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '客户姓名',
+      placeholder: '选填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      status: '',
+      picker: '',
+      slot: '',
+    },
+    {
+      label: '签约时长',
+      placeholder: '选填 请输入',
+      keyName: 'month',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '月单价',
+      placeholder: '必填 请输入',
+      keyName: 'price',
+      keyType: '',
+      type: 'number',
+      status: '',
+      slot: '',
+    },
+    // {
+    //   label: '渠道费信息',
+    //   placeholder: '必填 请输入',
+    //   keyName: 'agency_infos',
+    //   keyType: '',
+    //   type: 'text',
+    //   status: '',
+    //   slot: '',
+    // },
+    {
+      label: '渠道费信息',
+      keyName: 'agency_infos',
+      picker: 'changePrice',
+      pickerText: '周期',
+      keyType: [],
+      button: '渠道费信息',
+      children: [
+        [
+          {
+            label: '开始时间',
+            placeholder: '已禁用',
+            disabled: 'disabled',
+            keyName: 'bank',
+            keyType: '',
+            type: 'text',
+            status: '',
+            picker: '',
+            length: 1,
+            slot: '',
+          },
+          {
+            label: '结束时间',
+            placeholder: '已禁用',
+            disabled: 'disabled',
+            keyName: 'account',
+            keyType: '',
+            type: 'text',
+            status: '',
+            picker: '',
+            length: 1,
+            slot: '',
+          },
+          {
+            label: '变化周期',
+            placeholder: '必填 请填写',
+            keyName: 'subbranch',
+            keyType: '',
+            type: 'number',
+            status: '',
+            picker: '',
+            length: 1,
+            slot: '',
+          },
+          {
+            label: '付款方式',
+            placeholder: '必填 请选择',
+            readonly: 'readonly',
+            keyName: 'agency_name',
+            keyType: '',
+            type: 'text',
+            status: 'objInt',
+            showForm: 'formatData',//picker 显示form 或 formatData
+            picker: 'picker',
+            button: '付款变化',
+            slot: '',
+          },
+          {
+            label: '月单价',
+            placeholder: '必填 月单价',
+            keyName: 'account_name',
+            keyType: '',
+            type: 'number',
+            status: '',
+            picker: '',
+            slot: '',
+          },
+          {
+            label: '渠道手机',
+            placeholder: '必填 手机',
+            keyName: 'agency_phone',
+            keyType: '',
+            type: 'number',
+            status: '',
+            picker: '',
+            slot: '',
+          },
+          {
+            label: '渠道费',
+            placeholder: '必填 渠道费',
+            keyName: 'agency_price',
+            keyType: '',
+            type: 'number',
+            status: '',
+            picker: '',
+            slot: '',
+          },
+          {
+            label: '月单价',
+            placeholder: '必填 月单价',
+            keyName: 'agency_username',
+            keyType: '',
+            type: 'number',
+            status: '',
+            picker: '',
+            slot: '',
+          },
+        ],
+      ],
+    },
+
+
+    {
+      label: '特殊情况截图',
+      picker: 'upload',
+      value: [
+        {
+          label: '特殊情况截图',
+          placeholder: '必填',
+          keyName: 'photo',
+        }
+      ]
+    },
+    {
+      label: '签约人姓名',
+      // placeholder: '必填 请输入',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'staff_name	',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '部门名称',
+      // placeholder: '必填 请输入',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'department_name',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+
+  ]
+};
+
+// 房屋尾款报备
+defineRetainageReport = {
+  slither0: [
+    {
+      label: '尾款',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      status: '',
+      picker: '',
+      slot: '',
+    },
+    {
+      label: '房屋地址',
+      placeholder: '必填 请输入',
+      keyName: 'address',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+  ]
+};
+
+// 调租报备报备
+defineChangeReport = {
+  slither0: [
+    {
+      label: '调组',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      status: '',
+      picker: '',
+      slot: '',
+    },
+    {
+      label: '房屋地址',
+      placeholder: '必填 请输入',
+      keyName: 'address',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+  ]
+};
+
+// 转租报备报备
+defineSubletReport = {
+  slither0: [
+    {
+      label: '转租',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      status: '',
+      picker: '',
+      slot: '',
+    },
+    {
+      label: '房屋地址',
+      placeholder: '必填 请输入',
+      keyName: 'address',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+  ]
+};
+
+// 特殊事项报备
+defineSpecialReport = {
+  slither0: [
+    {
+      label: '特殊',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      status: '',
+      picker: '',
+      slot: '',
+    },
+    {
+      label: '房屋地址',
+      placeholder: '必填 请输入',
+      keyName: 'address',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+  ]
+};
+
+// 退租报备
+defineCheckoutReport = {
+  slither0: [
+    {
+      label: '退租',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      status: '',
+      picker: '',
+      slot: '',
+    },
+    {
+      label: '房屋地址',
+      placeholder: '必填 请输入',
+      keyName: 'address',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
+  ]
+};
+
+
 
 // 收房交接单
 // 物品交接

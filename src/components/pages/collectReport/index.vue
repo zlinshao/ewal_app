@@ -338,18 +338,47 @@
       // 报备类型
       bulletin_types(type) {
         switch (type.bulletin) {
+            // 收房
           case 'bulletin_collect_basic':
             this.mainTop = ['房屋信息', '物品信息', '客户信息', '合同信息'];
             this.resetDrawing = this.jsonClone(defineCollectReport);
             break;
+            //租房
           case 'bulletin_rent_basic':
-            this.mainTop = ['租房报备'];
+            this.mainTop = ['租房报备','客户信息'];
             this.resetDrawing = this.jsonClone(defineRentReport);
             break;
+            //渠道
           case 'agency':
             this.mainTop = ['渠道费报备'];
-            this.resetDrawing = this.jsonClone(defineRentReport);
+            this.resetDrawing = this.jsonClone(defineAgencyReport);
             break;
+            // 房屋尾款
+          case 'retainage':
+            this.mainTop = ['房屋尾款报备'];
+            this.resetDrawing = this.jsonClone(defineRetainageReport);
+            break;
+            //调租
+          case 'change':
+            this.mainTop = ['调租报备','客户信息'];
+            this.resetDrawing = this.jsonClone(defineChangeReport);
+            break;
+            //转租
+          case 'sublet':
+            this.mainTop = ['转租报备','客户信息'];
+            this.resetDrawing = this.jsonClone(defineSubletReport);
+            break;
+            //特殊事项
+          case 'special':
+            this.mainTop = ['特殊事项报备'];
+            this.resetDrawing = this.jsonClone(defineSpecialReport);
+            break;
+            //退租
+          case 'checkout':
+            this.mainTop = ['退租报备','物品交接','客厅物品交接','厨房，阳台，卫生间','主卧','次卧','费用交接'];
+            this.resetDrawing = this.jsonClone(defineCheckoutReport);
+            break;
+
         }
         this.resetting();
       },
