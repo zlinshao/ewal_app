@@ -328,12 +328,12 @@
       // 转交 / 代签
       saveDeliver(val) {
         this.form.changeOwner = Boolean(val);
-        this.$httpZll.postToBeDoneDeliver(this.task_id, this.form).then(res => {
-          if (val) {
-            this.$prompt('发送转交成功', 'success');
-          } else {
-            this.$prompt('发送代签成功', 'success');
-          }
+        if (!this.form.assignee) {
+          let msg = '请选择' + (val ? '转交' : '代签') + '人';
+          this.$prompt(msg, 'fail');
+          return;
+        }
+        this.$httpZll.postToBeDoneDeliver(this.task_id, this.form, val).then(_ => {
           this.onCancel();
         })
       },

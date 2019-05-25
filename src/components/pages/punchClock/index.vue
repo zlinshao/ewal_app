@@ -24,8 +24,8 @@
             <!--显示form -->
             <div v-else>
               <!--上传-->
-              <div v-if="item.picker === 'upload' && item.value" class="uploadForm">
-                <div v-for="upload in item.value" class="flex">
+              <div v-if="item.picker === 'upload' && item.photos" class="uploadForm">
+                <div v-for="upload in item.photos" class="flex">
                   <Upload :file="upload" :getImg="album" @success="getImgData"></Upload>
                 </div>
               </div>
@@ -103,8 +103,6 @@
             keyName: 'punch_clock_time',
             keyType: '',
             type: 'text',
-            status: '',
-            picker: 'picker',
             slot: '',
           },
           {
@@ -114,8 +112,6 @@
             keyName: 'punch_clock_address',
             keyType: '',
             type: 'text',
-            status: '',
-            picker: 'picker',
             slot: '',
           },
           {
@@ -147,9 +143,8 @@
           },
           {
             label: '上传',
-            keyName: 'upload',
             picker: 'upload',
-            value: [
+            photos: [
               {
                 label: '带看照片',
                 placeholder: '必填',
@@ -207,7 +202,7 @@
             this.villageInfo.location = [village.longitude, village.latitude];
             this.villageInfo.village_name = village.village_name;
             this.form.punch_clock_address = village.village_name || '';
-            this.form.property_fee = village.property_fee || '';
+            this.form.property_fee = village.property_fee && village.property_fee === '暂无相关信息' || '';
             this.form.property_phone = village.property_phone || '';
           } else {
             this.villageInfo.location = [];

@@ -339,7 +339,7 @@ defineNewTask = {
       keyName: 'property_type',
       keyType: '',
       type: 'text',
-      status: 'objInt',
+      status: 'obj',
       picker: 'pickerSlot',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
@@ -376,7 +376,7 @@ defineNewTask = {
       keyName: 'decorate',
       keyType: '',
       type: 'text',
-      status: 'objInt',
+      status: 'obj',
       picker: 'pickerSlot',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
@@ -388,7 +388,7 @@ defineNewTask = {
       keyName: 'direction',
       keyType: '',
       type: 'text',
-      status: 'objInt',
+      status: 'obj',
       showForm: 'formatData',//picker 显示form 或 formatData
       picker: 'pickerSlot',
       slot: '',

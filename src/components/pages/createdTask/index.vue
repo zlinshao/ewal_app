@@ -196,6 +196,7 @@
         if (val !== 'close') {
           this.form.community_id = val.id;
           this.form.community_name = val.name;
+          this.formatData.community_name = val.name;
         }
       },
       // 选择任务类型 show hidden

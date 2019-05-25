@@ -23,7 +23,7 @@
             <picker-input
               v-else
               :key="index"
-              v-model="formatData[item.keyName]"
+              v-model="postFormData[item.keyName]"
               :type="item.type"
               :label="item.label"
               :placeholder="item.placeholder">

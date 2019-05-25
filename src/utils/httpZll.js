@@ -226,15 +226,14 @@ class httpZll extends httpService {
   }
 
   // 转交/代签
-  static postToBeDoneDeliver(id, data) {
+  static postToBeDoneDeliver(id, data, val) {
     return new Promise((resolve, reject) => {
-      this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+      this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(_ => {
+        resolve(true);
+        if (val) {
+          $httpPrompt('发送转交成功', 'success');
         } else {
-          resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt('发送代签成功', 'success');
         }
       });
     });

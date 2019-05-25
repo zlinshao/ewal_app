@@ -236,11 +236,17 @@ export default {
           form[item.keyName] = child;
           formatData[item.keyName] = this.jsonClone(child);
         } else if (item.status === 'moreKeys') {
+          // 楼层
           for (let key of Object.keys(item.moreKeys)) {
             form[key] = item.moreKeys[key];
           }
         } else {
-          if (item.keyName) {
+          if (item.status === 'obj') {
+            form[item.keyName] = {
+              id: '',
+              name: '',
+            };
+          } else if (item.keyName) {
             form[item.keyName] = item.keyType;
           }
         }
