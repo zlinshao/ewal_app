@@ -17,7 +17,7 @@
                   <zl-input
                     v-model="formatData[item.keyName]"
                     @focus="choosePicker(item,form[item.keyName])"
-                    :key="index"
+                    :key="index1"
                     :type="item.type"
                     :label="item.label"
                     :readonly="item.readonly"
@@ -52,9 +52,9 @@
                       <div class="items-center">
                         <p>{{item.label}}{{(myUtils.DX(num+1))}}</p>
                         <van-icon name="cross" color="#4570FE" size=".36rem"
-                                  @click='removeChange(slither,item.keyName,index,num)'/>
+                                  @click='removeChange(slither,item.keyName,index1,num)'/>
                       </div>
-                      <div class="zl-button" @click="changeInput(slither,item.keyName,index,item.children[0])"
+                      <div class="zl-button" @click="changeInput(slither,item.keyName,index1,item.children[0])"
                            v-if="num === item.children.length - 1">
                         {{item.changeBtn}}
                       </div>
@@ -73,7 +73,7 @@
                           <div class="unit" v-if="item.unit">{{item.unit}}</div>
                           <div class="zl-button"
                                v-if="key.changeBtn && item.children.length < 2"
-                               @click="changeInput(slither,item.keyName,index,change)">
+                               @click="changeInput(slither,item.keyName,index1,change)">
                             {{key.changeBtn}}
                           </div>
                         </zl-input>
@@ -89,7 +89,7 @@
                           @input="listenInput(item.keyName)"
                           :placeholder="key.placeholder">
                           <div class="zl-button" v-if="key.changeBtn && item.children.length < 2"
-                               @click="changeInput(slither,item.keyName,index,change)">
+                               @click="changeInput(slither,item.keyName,index1,change)">
                             {{key.changeBtn}}
                           </div>
                           <div class="zl-confirmation" :class="[key.icon]"
@@ -110,7 +110,7 @@
                   <div class="justify-around">
                     <div v-for="(list,index) in item.lists">
                       <h1 @click="electricalModule = true">
-                        <span :class="['electrical-' + (index + 1)]"></span>
+                        <span :class="['electrical-' + (index1 + 1)]"></span>
                       </h1>
                       <p>{{form[list.key]}}</p>
                     </div>
@@ -119,7 +119,7 @@
                 <!--备注条款-->
                 <div v-else-if="item.picker === 'remark_terms'" class="flex remark_terms">
                   <zl-input
-                    :key="index"
+                    :key="index1"
                     v-model="formatData[item.keyName]"
                     @focus="choosePicker(item)"
                     :type="item.type"
@@ -152,7 +152,7 @@
                     </div>
                     <div v-else-if="item.disabled">
                       <zl-input
-                        :key="index"
+                        :key="index1"
                         v-model="form[item.keyName]"
                         :type="item.type"
                         :disabled="item.disabled"
@@ -164,7 +164,7 @@
                     </div>
                     <div v-else>
                       <zl-input
-                        :key="index"
+                        :key="index1"
                         v-model="form[item.keyName]"
                         :type="item.type"
                         :label="item.label"
@@ -392,8 +392,8 @@
       // 日期赋值
       setFormDate(key, date, child, index) {
         if (child) {
-          this.form[key][index][child] = date;
-          this.formatData[key][index][child] = date;
+          this.form[key][index1][child] = date;
+          this.formatData[key][index1][child] = date;
         } else {
           this.form[key] = date;
           this.formatData[key] = date;
@@ -443,10 +443,10 @@
         let value = this.form[key];
         value.forEach((item, index) => {
           let period = Number(item.period || 0);
-          if (index > 0) {
-            value[index].begin_date = value[index - 1].end_date;
+          if (index1 > 0) {
+            value[index1].begin_date = value[index1 - 1].end_date;
           } else {
-            value[index].begin_date = val;
+            value[index1].begin_date = val;
           }
           let begin_date = new Date(item.begin_date);
           item.end_date = this.myUtils.formatAddRem('mm', period, begin_date);
@@ -471,7 +471,7 @@
       },
       // 新增变化
       changeInput(slither, key, index, val) {
-        this.drawSlither[slither][index].children.push(val);
+        this.drawSlither[slither][index1].children.push(val);
         let value = {};
         for (let item of val) {
           value[item.keyName] = item.keyType;
@@ -489,7 +489,7 @@
       },
       // 删除变化
       removeChange(slither, key, index, num) {
-        let draw = this.drawSlither[slither][index];
+        let draw = this.drawSlither[slither][index1];
         if (draw.picker === 'changeHiddenAll' && draw.children.length === 1) {
           for (let item of Object.keys(this.form[key][num])) {
             this.form[key][num][item] = '';
