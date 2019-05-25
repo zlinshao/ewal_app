@@ -166,7 +166,7 @@
         this.formatData = Object.assign({}, this.formatData);
       },
       finishData() {
-        this.$emit('close', this.postFormData, this.formatData);
+        this.$emit('close', this.postFormData, this.formatData, this.pickerConfig);
       }
     },
   }

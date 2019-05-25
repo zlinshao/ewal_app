@@ -225,6 +225,9 @@
   text-align: right;
   color: #4A4A4A; }
 
+.van-toast {
+  text-align: center; }
+
 .van-checkbox {
   display: flex;
   display: -webkit-flex;
