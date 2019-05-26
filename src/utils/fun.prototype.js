@@ -269,7 +269,6 @@ export default {
     Vue.prototype.$bulletinType = function (type) {
       let data, title;
       switch (type) {
-        case '':
         case 'bulletin_collect_basic':
           title = ['房屋信息', '物品信息', '客户信息', '合同信息'];
           data = this.jsonClone(defineCollectReport);
