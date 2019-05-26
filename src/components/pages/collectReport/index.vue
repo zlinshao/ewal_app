@@ -325,20 +325,9 @@
     methods: {
       // 报备类型
       bulletin_types(type) {
-        switch (type.bulletin) {
-          case 'bulletin_collect_basic':
-            this.bulletinTitle = ['房屋信息', '物品信息', '客户信息', '合同信息'];
-            this.drawSlither = this.jsonClone(defineCollectReport);
-            break;
-          case 'bulletin_rent_basic':
-            this.bulletinTitle = ['物品信息', '合同信息'];
-            this.drawSlither = this.jsonClone(defineRentReport);
-            break;
-          case 'agency':
-            this.bulletinTitle = ['渠道费报备'];
-            this.drawSlither = this.jsonClone(defineRentReport);
-            break;
-        }
+        let bulletinData = this.$bulletinType(type.bulletin);
+        this.bulletinTitle = bulletinData.title;
+        this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
       },
       // touch 左右切换

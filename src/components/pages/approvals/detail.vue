@@ -19,7 +19,7 @@
       <div class="detailInfo" @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
         <div class="detailTitle">
           <i></i>
-          <span class="writingMode">{{mainTop[slither]}}</span>
+          <span class="writingMode">{{bulletinTitle[slither]}}</span>
         </div>
         <div class="detail">
           <div>
@@ -172,7 +172,7 @@
     components: {SearchStaff},
     data() {
       return {
-        mainTop: ['房屋信息', '物品信息', '客户信息', '合同信息'],
+        bulletinTitle: [],
         startClientX: 0,
         endClientX: 0,
         slither: 0,
@@ -240,7 +240,7 @@
       this.process_id = query.process_id;
       this.root_id = query.root_id;
       this.getOperates(query);
-      this.handleData();
+      this.handleData(query);
       this.approvalDetail(query.bm_detail_request_url);
     },
     watch: {},
@@ -379,9 +379,12 @@
         }
       },
       // 展示数据字段
-      handleData() {
+      handleData(query) {
+        let bulletinData = this.$bulletinType(query.bulletin_type);
+        this.bulletinTitle = bulletinData.title;
+        this.drawSlither = this.jsonClone(bulletinData.data);
+        let data = this.drawSlither;
         let obj = {};
-        let data = this.jsonClone(defineCollectReport);
         for (let val of Object.keys(data)) {
           obj[val] = {};
           for (let item of data[val]) {
@@ -483,13 +486,6 @@
               if (res[item]) {
                 let customer = ['customer_sex', 'card_type', 'contact_way'];
                 this.formatData = this.changeHandle(res, item, customer, this.drawSlither, this.formatData);
-                for (let val of res[item]) {
-                  for (let value of Object.values(val)) {
-                    if (value) {
-                      this.showCustomer = true;
-                    }
-                  }
-                }
               }
               break;
             case 'period_price_way_arr'://付款方式变化
@@ -526,7 +522,6 @@
       },
       // 取消
       cancel(val) {
-        this.searchStaffModule = false;
         switch (val) {
           case 'comment':
             this.commentForm.remark = '';
