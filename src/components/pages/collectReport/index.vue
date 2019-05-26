@@ -591,7 +591,6 @@
       },
       // input 显示隐藏
       inputStatus(name, form) {
-        // let keys = ['rental_use', 'is_other_fee', 'is_agency', 'is_electronic_contract', 'signatory_identity'];
         switch (name) {
           case 'is_electronic_contract':
             let num = Number(form['is_electronic_contract']);
@@ -860,7 +859,7 @@
               this.formatData.floors = res.floor + ' / ' + res.floors;
               break;
             default:
-              this.pickerDefaultValue(res, item);
+              this.pickerDefaultValue(this.form, item);
               break;
           }
         }

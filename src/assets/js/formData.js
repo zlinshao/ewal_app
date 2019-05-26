@@ -140,6 +140,7 @@ defineNewAddVillage = [
     type: 'text',
     status: 'arr',
     picker: 'picker',
+    showForm: 'formatData',//picker 显示form 或 formatData
     slot: '',
   },
   {

@@ -83,9 +83,9 @@
           }
         }
         // 建筑年限
-        let year = {};
+        let year = [];
         for (let i = 1970; i < 2100; i++) {
-          year[i] = i;
+          year.push(i);
         }
         dicties.built_year = year;
         // 所有城市

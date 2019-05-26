@@ -311,7 +311,7 @@ export default {
           pickers.keyName = val.keyName;
           pickers.status = val.status;
           pickers.title = val.label;
-          pickers.index = num || '';
+          pickers.index = num;
           pickers.parentKey = parentKey || '';
           if (val.status.includes('column')) {
             let index = val.status.split('-');

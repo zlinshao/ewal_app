@@ -157,7 +157,8 @@
               this.formatData[key] = value;
               break;
             case 'arr':
-              this.postFormData[key] = picker.ids[index];
+              this.postFormData[key] = value;
+              this.formatData[key] = value;
               break;
             case 'objInt':
               this.postFormData[key] = picker.ids[index];

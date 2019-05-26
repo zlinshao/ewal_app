@@ -51,9 +51,7 @@
       pickers: {
         handler(val, oldVal) {
           this.pickerConfig = this.jsonClone(val);
-          console.log(val)
         },
-        immediate: true,
         deep: true,
       },
     },
@@ -85,7 +83,8 @@
                 this.formatData[key] = value;
                 break;
               case 'arr':
-                this.forms[key] = index;
+                this.forms[key] = value;
+                this.formatData[key] = value;
                 break;
               case 'objInt':
                 this.forms[key] = picker.ids[index];
