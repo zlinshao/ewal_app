@@ -280,7 +280,27 @@ export default {
           break;
         case 'agency':
           title = ['渠道费报备'];
-          data = this.jsonClone(defineRentReport);
+          data = this.jsonClone(defineAgencyReport);
+          break;
+        case 'retainage':
+          title = ['房屋尾款报备'];
+          data = this.jsonClone(defineRetainageReport);
+          break;
+        case 'change'://调租
+          title = ['客户信息','合同信息'];
+          data = this.jsonClone(defineChangeReport);
+          break;
+        case 'sublet'://转租
+          title = ['客户信息','合同信息'];
+          data = this.jsonClone(defineSubletReport);
+          break;
+        case 'special'://特殊事项
+          title = ['特殊事项报备'];
+          data = this.jsonClone(defineSpecialReport);
+          break;
+        case 'checkout'://特殊事项
+          title = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
+          data = this.jsonClone(defineCheckoutReport);
           break;
       }
       return {data, title}
