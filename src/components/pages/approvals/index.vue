@@ -285,7 +285,6 @@
       // 点击更多 操作
       onMoreOperates(action, name = '', item = {}) {
         let params = {}, user_id = '';
-        user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
         switch (action.action) {
           case 'preview'://合同预览
             if (!item.contract_view_url) {
@@ -304,9 +303,11 @@
             this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
+            user_id = this.getFadadaUserId(item);
             this.handlerSign(item, user_id, 2);
             break;
           case 'phone'://客户手机签署
+            user_id = this.getFadadaUserId(item);
             this.handlerSign(item, user_id, 1);
             break;
           case 'contract'://发送电子合同
@@ -316,12 +317,15 @@
                   fdd_user_id: user_id,
                   is_number: 1,
                 };
-                this.$httpZll.sendElectronicContract(item.contract_number, params).then(data => {
-                })
+                this.$httpZll.sendElectronicContract(item.contract_number, params).then(_ => {})
               }
             });
             break;
         }
+      },
+      // 获取fadadaId
+      getFadadaUserId(item) {
+        return item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
       },
       // 签署
       handlerSign(item, user_id, type) {
