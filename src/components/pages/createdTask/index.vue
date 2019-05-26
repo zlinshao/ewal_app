@@ -283,7 +283,9 @@
         switch (val.picker) {
           case 'picker':
             this.pickerModule = true;
-            this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+            this.inputSelect(val, num, parentKey).then(picker => {
+              this.pickers = picker;
+            });
             break;
           case 'date':
             this.chooseTime(val, value);
@@ -301,11 +303,9 @@
             this.noPickerModule = true;
             break;
           default:
-            this.$closePicker().then(res => {
-              this.popupModule = true;
-              this.pickers = res;
-              this.pickers.keyName = val.keyName;
-              this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+            this.popupModule = true;
+            this.inputSelect(val, num, parentKey).then(picker => {
+              this.pickers = picker;
             });
             break;
         }

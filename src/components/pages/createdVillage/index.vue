@@ -174,7 +174,9 @@
         this.$closePicker().then(res => {
           this.pickers = res;
           this.pickerModule = true;
-          this.pickers = this.inputSelect(this.pickers, val);
+          this.inputSelect(val).then(picker => {
+            this.pickers = picker;
+          });
         })
       },
       // 确认选择

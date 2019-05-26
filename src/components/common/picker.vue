@@ -51,6 +51,7 @@
       pickers: {
         handler(val, oldVal) {
           this.pickerConfig = this.jsonClone(val);
+          console.log(val)
         },
         immediate: true,
         deep: true,

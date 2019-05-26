@@ -109,7 +109,9 @@
           return;
         }
         this.pickerModule = true;
-        this.pickerConfig = this.inputSelect(this.pickerConfig, val);
+        this.inputSelect(val).then(picker => {
+          this.pickerConfig = picker;
+        });
       },
       // 日期选择
       chooseTime(val, date) {

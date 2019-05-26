@@ -304,33 +304,38 @@ export default {
       })
     };
 // 下拉框数据显示 picker 配置
-    Vue.prototype.inputSelect = function (pickers, val, num, parentKey) {
-      pickers.keyName = val.keyName;
-      pickers.status = val.status;
-      pickers.title = val.label;
-      pickers.index = num;
-      pickers.parentKey = parentKey || '';
-      if (val.status.includes('column')) {
-        let index = val.status.split('-');
-        pickers.columns = [];
-        for (let i = 0; i < index.length - 1; i++) {
-          let obj = {};
-          obj.values = dicties[val.keyName]['value_' + i];
-          obj.className = 'column' + (i + 1);
-          obj.defaultIndex = Number(index[i + 1]);
-          pickers.columns.push(obj);
-        }
-      } else {
-        if (val.status === 'arr') {
-          pickers.columns = dicties[val.keyName];
-        } else {
-          if (dicties[val.keyName]) {
-            pickers.columns = Object.values(dicties[val.keyName]);
-            pickers.ids = Object.keys(dicties[val.keyName]);
+    Vue.prototype.inputSelect = function (val, num, parentKey) {
+      return new Promise(resolve => {
+        this.$closePicker().then(res => {
+          let pickers = res;
+          pickers.keyName = val.keyName;
+          pickers.status = val.status;
+          pickers.title = val.label;
+          pickers.index = num || '';
+          pickers.parentKey = parentKey || '';
+          if (val.status.includes('column')) {
+            let index = val.status.split('-');
+            pickers.columns = [];
+            for (let i = 0; i < index.length - 1; i++) {
+              let obj = {};
+              obj.values = dicties[val.keyName]['value_' + i];
+              obj.className = 'column' + (i + 1);
+              obj.defaultIndex = Number(index[i + 1]);
+              pickers.columns.push(obj);
+            }
+          } else {
+            if (val.status === 'arr') {
+              pickers.columns = dicties[val.keyName];
+            } else {
+              if (dicties[val.keyName]) {
+                pickers.columns = Object.values(dicties[val.keyName]);
+                pickers.ids = Object.keys(dicties[val.keyName]);
+              }
+            }
           }
-        }
-      }
-      return pickers;
+          resolve(pickers);
+        });
+      })
     };
 // 查看大图
     Vue.prototype.$bigPhoto = function (val, uri) {

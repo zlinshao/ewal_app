@@ -237,7 +237,7 @@
     components: {SearchHouse, Electrical, NoPicker, CheckChoose, RemarkTerms},
     data() {
       return {
-        bulletinTitle: ['房屋信息', '物品信息', '客户信息', '合同信息'],
+        bulletinTitle: [],
         slither: 0,                         //模块切换记录
         allReportNum: 0,                    //表单模块数
         startClientX: 0,                    //滑动距离
@@ -331,7 +331,7 @@
             this.drawSlither = this.jsonClone(defineCollectReport);
             break;
           case 'bulletin_rent_basic':
-            this.bulletinTitle = ['租房报备'];
+            this.bulletinTitle = ['物品信息', '合同信息'];
             this.drawSlither = this.jsonClone(defineRentReport);
             break;
           case 'agency':
@@ -387,7 +387,7 @@
         this.onCancel();
         if (val !== 'close') {
           if (val.parentKey) {
-            this.setFormDate(val.parentKey, val.dateVal, val.dateKey, val.num);
+            this.setFormDate(val.parentKey, val.dateVal, val.dateKey, val.dateIdx);
           } else {
             this.setFormDate(val.dateKey, val.dateVal);
           }
@@ -524,7 +524,9 @@
         switch (val.picker) {
           case 'picker':
             this.pickerModule = true;
-            this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+            this.inputSelect(val, num, parentKey).then(picker => {
+              this.pickers = picker;
+            });
             break;
           case 'date':
             this.chooseTime(val, value, num, parentKey);
@@ -545,7 +547,9 @@
             break;
           default:
             this.popupModule = true;
-            this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
+            this.inputSelect(val, num, parentKey).then(picker => {
+              this.pickers = picker;
+            });
             break;
         }
       },
@@ -855,20 +859,14 @@
             case 'floors':
               this.formatData.floors = res.floor + ' / ' + res.floors;
               break;
+            default:
+              this.pickerDefaultValue(res, item);
+              break;
           }
         }
       },
       // 预填数据处理
       handlePreFill(res, status) {
-        let objInt = [], date = [];
-        for (let picker of this.drawForm) {
-          if (picker.status === 'objInt') {
-            objInt.push(picker.keyName);
-          }
-          if (picker.picker === 'date') {
-            date.push(picker.keyName);
-          }
-        }
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
@@ -935,13 +933,7 @@
               this.formatData = this.changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
               break;
             default:
-              if (objInt.includes(item)) {
-                let num = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '');
-                this.formatData[item] = dicties[item][num];
-              }
-              if (date.includes(item)) {
-                this.formatData[item] = res[item];
-              }
+              this.pickerDefaultValue(res, item);
               break;
           }
         }
@@ -949,6 +941,25 @@
           for (let pic of Object.keys(res.album)) {
             this.album[pic] = res.album[pic];
           }
+        }
+      },
+      // 下拉框 匹配字典
+      pickerDefaultValue(res, item) {
+        let objInt = [], date = [];
+        for (let picker of this.drawForm) {
+          if (picker.status === 'objInt' || picker.status === 'arr') {
+            objInt.push(picker.keyName);
+          }
+          if (picker.picker === 'date') {
+            date.push(picker.keyName);
+          }
+        }
+        if (objInt.includes(item)) {
+          let num = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '');
+          this.formatData[item] = dicties[item][num];
+        }
+        if (date.includes(item)) {
+          this.formatData[item] = res[item];
         }
       },
       // 初始化数据

@@ -535,7 +535,9 @@
           this.chooseTime(item, value);
         } else {
           this.pickerModule = true;
-          this.pickers = this.inputSelect(this.pickers, item, value, parentKey);
+          this.inputSelect(item, value, parentKey).then(picker => {
+            this.pickers = picker;
+          });
         }
       },
       // 确认选择
