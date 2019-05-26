@@ -2,14 +2,14 @@
   <div id="approvalDetail">
     <div class="detailTop" ref="top">
       <div>
-        <img :src="allDetail.bulletin_staff_avatar" v-if="allDetail.bulletin_staff_avatar">
+        <img :src="queryData.bulletin_staff_avatar" v-if="queryData.bulletin_staff_avatar">
         <img src="../../../assets/image/common/noHead.png" v-else>
-        <span>{{allDetail.bulletin_staff_name}}</span>
-        <p class="ellipsis">{{allDetail.bulletin_name}}</p>
+        <span>{{queryData.bulletin_staff_name}}</span>
+        <p class="ellipsis">{{queryData.bulletin_name}}</p>
       </div>
       <p class="ellipsis">
         <i></i>
-        <span>耗时{{allDetail.duration}}分钟</span>
+        <span>耗时{{queryData.duration}}分钟</span>
       </p>
       <h1 v-if="topOperates.length">
         <i v-for="item in topOperates" :class="['icon-'+item.id]" @click="iconButton(item.id)"></i>
@@ -176,10 +176,8 @@
         startClientX: 0,
         endClientX: 0,
         slither: 0,
-        allDetail: {},//所有参数
-        task_id: '',//详情
-        root_id: '',//详情
-        process_id: '',//详情
+        allDetail: {},//详情数据
+        queryData: {},//所有参数
 
         // 头部操作
         topOperates: [
@@ -235,10 +233,7 @@
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let query = JSON.parse(sessionStorage.approvalDetail || '{}');
-      this.allDetail = query;
-      this.task_id = query.task_id;
-      this.process_id = query.process_id;
-      this.root_id = query.root_id;
+      this.queryData = query;
       this.getOperates(query);
       this.handleData(query);
       this.approvalDetail(query.bm_detail_request_url);
@@ -279,7 +274,7 @@
       iconButton(num) {
         switch (num) {
           case '1':
-            this.bulletinRouter(this.allDetail.bulletin_type);
+            this.bulletinRouter(this.queryData.bulletin_type);
             break;
           case '2':
             this.commentPopup = true;
@@ -291,7 +286,7 @@
       },
       // 报备类型跳转
       bulletinRouter(type) {
-        sessionStorage.setItem('bulletin_draft', JSON.stringify(this.allDetail));
+        sessionStorage.setItem('bulletin_draft', JSON.stringify(this.queryData));
         switch (type) {
           case 'bulletin_collect_basic':
             sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
@@ -308,7 +303,7 @@
             this.$router.go(-1);
             break;
           case'postpone'://暂缓
-            this.$httpZll.postponeTask(this.process_id, {action: 'suspend'}).then(res => {
+            this.$httpZll.postponeTask(this.queryData.process_id, {action: 'suspend'}).then(res => {
 
             });
             break;
@@ -319,7 +314,7 @@
               name: key,
               value: action.action,
             }];
-            this.$httpZll.finishBeforeTask(this.task_id, postData).then(_ => {
+            this.$httpZll.finishBeforeTask(this.queryData.task_id, postData).then(_ => {
               this.$prompt('审核成功！', 'success');
               setTimeout(_ => {
                 this.$router.go(-1);
@@ -380,6 +375,7 @@
       },
       // 展示数据字段
       handleData(query) {
+        this.slither = 0;
         let bulletinData = this.$bulletinType(query.bulletin_type);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
@@ -407,8 +403,8 @@
         this.$httpZll.getApprovalDetail(url).then(res => {
           if (res) {
             this.allDetail = this.jsonClone(res.data);
-            this.allDetail.task_id = this.task_id;
-            this.allDetail.process_instance_id = this.process_id;
+            this.allDetail.task_id = this.queryData.task_id;
+            this.allDetail.process_instance_id = this.queryData.process_id;
             this.allDetail.variableName = this.operates.variableName;
             this.formatData = res.data.content;
             this.handleDetail(res.data.content)
