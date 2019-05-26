@@ -27,12 +27,12 @@
       data.department_id = '134';
       data.department_name = '南京马群组';
       this.$store.dispatch('personal_storage', JSON.stringify(data));
-      // dd.ui.webViewBounce.disable();
+      dd.ui.webViewBounce.disable();
       // this.loading = true;
       // this.personalGet().then(res => {
       //   this.loading = !res;
       // });
-      // dd.biz.navigation.setRight({show: false});
+      dd.biz.navigation.setRight({show: false});
       sessionStorage.setItem('windowHeight', String(window.innerHeight));
       sessionStorage.setItem('windowWidth', String(window.innerWidth));
     },
