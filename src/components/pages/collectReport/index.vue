@@ -17,7 +17,7 @@
                   <zl-input
                     v-model="formatData[item.keyName]"
                     @focus="choosePicker(item,form[item.keyName])"
-                    :key="index1"
+                    :key="index"
                     :type="item.type"
                     :label="item.label"
                     :readonly="item.readonly"
@@ -52,9 +52,9 @@
                       <div class="items-center">
                         <p>{{item.label}}{{(myUtils.DX(num+1))}}</p>
                         <van-icon name="cross" color="#4570FE" size=".36rem"
-                                  @click='removeChange(slither,item.keyName,index1,num)'/>
+                                  @click='removeChange(slither,item.keyName,index,num)'/>
                       </div>
-                      <div class="zl-button" @click="changeInput(slither,item.keyName,index1,item.children[0])"
+                      <div class="zl-button" @click="changeInput(slither,item.keyName,index,item.children[0])"
                            v-if="num === item.children.length - 1">
                         {{item.changeBtn}}
                       </div>
@@ -73,7 +73,7 @@
                           <div class="unit" v-if="item.unit">{{item.unit}}</div>
                           <div class="zl-button"
                                v-if="key.changeBtn && item.children.length < 2"
-                               @click="changeInput(slither,item.keyName,index1,change)">
+                               @click="changeInput(slither,item.keyName,index,change)">
                             {{key.changeBtn}}
                           </div>
                         </zl-input>
@@ -89,7 +89,7 @@
                           @input="listenInput(item.keyName)"
                           :placeholder="key.placeholder">
                           <div class="zl-button" v-if="key.changeBtn && item.children.length < 2"
-                               @click="changeInput(slither,item.keyName,index1,change)">
+                               @click="changeInput(slither,item.keyName,index,change)">
                             {{key.changeBtn}}
                           </div>
                           <div class="zl-confirmation" :class="[key.icon]"
@@ -110,7 +110,7 @@
                   <div class="justify-around">
                     <div v-for="(list,index) in item.lists">
                       <h1 @click="electricalModule = true">
-                        <span :class="['electrical-' + (index1 + 1)]"></span>
+                        <span :class="['electrical-' + (index + 1)]"></span>
                       </h1>
                       <p>{{form[list.key]}}</p>
                     </div>
@@ -119,7 +119,7 @@
                 <!--备注条款-->
                 <div v-else-if="item.picker === 'remark_terms'" class="flex remark_terms">
                   <zl-input
-                    :key="index1"
+                    :key="index"
                     v-model="formatData[item.keyName]"
                     @focus="choosePicker(item)"
                     :type="item.type"
@@ -152,7 +152,7 @@
                     </div>
                     <div v-else-if="item.disabled">
                       <zl-input
-                        :key="index1"
+                        :key="index"
                         v-model="form[item.keyName]"
                         :type="item.type"
                         :disabled="item.disabled"
@@ -164,7 +164,7 @@
                     </div>
                     <div v-else>
                       <zl-input
-                        :key="index1"
+                        :key="index"
                         v-model="form[item.keyName]"
                         :type="item.type"
                         :label="item.label"
@@ -256,6 +256,7 @@
         formatData: {},
         showData: {
           dateVal: '',                      //日期
+          parentKey: '',                    //父级 字段名 变化有picker
           dateKey: '',                      //日期 字段名
           dateType: '',                     //日期类型 默认date 时分datetime
           dateIdx: '',                      //日期字段下标 变化情况使用
@@ -295,7 +296,6 @@
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
       this.bulletinDetail = JSON.parse(sessionStorage.bulletin_draft || '{}');
-      this.drawSlither = this.jsonClone(defineCollectReport);
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -375,16 +375,22 @@
         }
       },
       // 日期选择
-      chooseTime(val, date) {
+      chooseTime(val, date, num, parentKey) {
         this.timeModule = true;
         this.formatData.dateKey = val.keyName;
         this.formatData.dateVal = date;
+        this.formatData.dateIdx = num;
+        this.formatData.parentKey = parentKey;
       },
       // 确认时间
       onConTime(val) {
         this.onCancel();
         if (val !== 'close') {
-          this.setFormDate(val.dateKey, val.dateVal);
+          if (val.parentKey) {
+            this.setFormDate(val.parentKey, val.dateVal, val.dateKey, val.num);
+          } else {
+            this.setFormDate(val.dateKey, val.dateVal);
+          }
           if (val.dateKey === 'begin_date') this.contractDateCount(val.dateVal);
           if (val.dateKey === 'pay_first_date') this.moreChangeDateCount('period_price_way_arr');
         }
@@ -392,8 +398,8 @@
       // 日期赋值
       setFormDate(key, date, child, index) {
         if (child) {
-          this.form[key][index1][child] = date;
-          this.formatData[key][index1][child] = date;
+          this.form[key][index][child] = date;
+          this.formatData[key][index][child] = date;
         } else {
           this.form[key] = date;
           this.formatData[key] = date;
@@ -433,6 +439,7 @@
           this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
         } else {
           ddEnd = this.myUtils.dateAdd('dd', day, mmEnd);//合同结束日期
+          this.changeDateCount('period_price_way_arr', begin, bulletin);//付款方式变化 日期计算
         }
         this.setFormDate('end_date', this.myUtils.formatDate(ddEnd));//合同结束日期
       },
@@ -443,10 +450,10 @@
         let value = this.form[key];
         value.forEach((item, index) => {
           let period = Number(item.period || 0);
-          if (index1 > 0) {
-            value[index1].begin_date = value[index1 - 1].end_date;
+          if (index > 0) {
+            value[index].begin_date = value[index - 1].end_date;
           } else {
-            value[index1].begin_date = val;
+            value[index].begin_date = val;
           }
           let begin_date = new Date(item.begin_date);
           item.end_date = this.myUtils.formatAddRem('mm', period, begin_date);
@@ -471,7 +478,7 @@
       },
       // 新增变化
       changeInput(slither, key, index, val) {
-        this.drawSlither[slither][index1].children.push(val);
+        this.drawSlither[slither][index].children.push(val);
         let value = {};
         for (let item of val) {
           value[item.keyName] = item.keyType;
@@ -483,13 +490,19 @@
       },
       // 输入变化周期计算日期
       moreChangeDateCount(key) {
-        let date = this.form.pay_first_date;
+        let bulletin = this.bulletinType.bulletin;
+        let date = '';
+        if (bulletin === 'bulletin_collect_basic') {
+          date = this.form.pay_first_date;
+        } else {
+          date = this.form.begin_date;
+        }
         if (!date) return;
         this.changeDateCount(key, new Date(date));
       },
       // 删除变化
       removeChange(slither, key, index, num) {
-        let draw = this.drawSlither[slither][index1];
+        let draw = this.drawSlither[slither][index];
         if (draw.picker === 'changeHiddenAll' && draw.children.length === 1) {
           for (let item of Object.keys(this.form[key][num])) {
             this.form[key][num][item] = '';
@@ -503,7 +516,7 @@
         draw.children.splice(num, 1);
         if (draw.picker === 'changeHiddenAll') return;
         this.countPrice();
-        this.countChangeDate(key);
+        this.moreChangeDateCount(key);
       },
       // 下拉框筛选
       choosePicker(val, value, num = '', parentKey = '') {
@@ -514,7 +527,7 @@
             this.pickers = this.inputSelect(this.pickers, val, num, parentKey);
             break;
           case 'date':
-            this.chooseTime(val, value);
+            this.chooseTime(val, value, num, parentKey);
             break;
           case 'searchHouse':
             this.searchHouseModule = true;

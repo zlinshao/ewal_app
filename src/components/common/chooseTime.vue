@@ -87,6 +87,8 @@
         data.dateVal = this.timeValue;
         data.dateIdx = this.formatData.dateIdx || '';
         data.dateKey = this.formatData.dateKey;
+        data.dateIdx = this.formatData.dateIdx;
+        data.parentKey = this.formatData.parentKey;
         this.$emit('close', data);
       },
       // select关闭
