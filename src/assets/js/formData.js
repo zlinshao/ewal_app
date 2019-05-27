@@ -328,9 +328,6 @@ defineNewTask = {
       keyName: 'customer_name',
       keyType: '',
       type: 'text',
-      button: '银行卡识别',
-      icon: 'identity',
-      status: '',
       slot: '',
     },
     {
@@ -2422,6 +2419,7 @@ defineAgencyReport = {
             button: '银行卡识别',
             icon: 'bank',
             status: '',
+            button: '',
             slot: '',
           },
           {

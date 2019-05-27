@@ -93,7 +93,7 @@
                             {{key.changeBtn}}
                           </div>
                           <div class="zl-confirmation" :class="[key.icon]"
-                               v-if="key.button" @click="confirmation(key.icon)">
+                               v-if="key.button" @click="confirmation(key.icon,item.keyName,num)">
                             <i :class="key.icon" v-if="key.icon"></i>
                             {{key.button}}
                           </div>
@@ -624,7 +624,7 @@
         });
       },
       // 身份认证 银行认证
-      confirmation(val) {
+      confirmation(val, parentKey, index) {
         switch (val) {
           case 'identity':
             let data = {};
@@ -648,12 +648,24 @@
             });
             break;
           case 'bank':
-            let params = {
-              card: this.form.account,
-              owner: this.form.account_name,
-            };
+            let params;
+            if (parentKey) {
+              params = {
+                card: this.form[parentKey][index].account,
+                owner: this.form[parentKey][index].account_name,
+              };
+            } else {
+              params = {
+                card: this.form.account,
+                owner: this.form.account_name,
+              };
+            }
             this.$httpZll.getBankNameAttestation(params).then(res => {
-              this.form.bank = res.data || '';
+              if (parentKey) {
+                this.form[parentKey][index].bank = res.data || '';
+              } else {
+                this.form.bank = res.data || '';
+              }
             });
             break;
         }
@@ -964,8 +976,8 @@
         this.form.id = id;
         this.form.signer = '';
         this.form.contract_number = this.electronicContractNumber;
-        this.form.account = '6225212583158743';
-        this.form.account_name = '贾少君';
+        // this.form.account = '6225212583158743';
+        // this.form.account_name = '贾少君';
       }
     },
   }
