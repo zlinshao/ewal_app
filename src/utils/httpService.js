@@ -6,7 +6,7 @@ function $httpPrompt(msg, type) {
   common.prompt(msg, type);
 }
 
-axios.defaults.timeout = 5000;
+axios.defaults.timeout = 10000;
 axios.defaults.headers.common['Authorization'] = globalConfig.token;
 
 // 发送请求拦截
