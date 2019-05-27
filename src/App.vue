@@ -110,11 +110,9 @@
           if (res) {
             for (let item of res.data) {
               let account = item.account;
-              console.log(account);
-              dicties.remittance_account[account.id] = account.account_num + ' ' + account.account_owner + ' ' + account.name;
+              dicties.remittance_account[account.id] = account.account_num + ' ' + account.account_owner + `<br>` + account.name;
             }
           }
-          console.log(dicties.remittance_account);
         });
       },
     },
