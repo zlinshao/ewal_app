@@ -648,7 +648,7 @@
             });
             break;
           case 'bank':
-            let params;
+            let params = {};
             if (parentKey) {
               params = {
                 card: this.form[parentKey][index].account,
@@ -662,9 +662,9 @@
             }
             this.$httpZll.getBankNameAttestation(params).then(res => {
               if (parentKey) {
-                this.form[parentKey][index].bank = res.data || '';
+                this.form[parentKey][index][val] = res.data || '';
               } else {
-                this.form.bank = res.data || '';
+                this.form[val] = res.data || '';
               }
             });
             break;
