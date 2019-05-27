@@ -602,9 +602,9 @@
               let listNum = Number(list.controlShow);
               for (let child of list.showList) {
                 if (formNum === listNum) {
-                  list[name].hidden = false;
+                  child.hidden = false;
                 } else {
-                  list[name].hidden = true;
+                  child.hidden = true;
                   this.form[child.keyName] = child.keyType;
                 }
               }
