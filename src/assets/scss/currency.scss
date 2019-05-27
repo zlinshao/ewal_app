@@ -16,9 +16,8 @@
 
 .van-ellipsis {
   @include flex('flex-center');
-  @include line-clamp(2);
   white-space: pre-wrap;
-  line-height: 22px;
+  line-height: 16px;
 }
 
 //vant checkbox
