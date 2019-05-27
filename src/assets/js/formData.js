@@ -2487,7 +2487,7 @@ defineAgencyReport = {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '特殊情况截图',
           placeholder: '必填',
