@@ -2,14 +2,14 @@
   <div id="approvalDetail">
     <div class="detailTop" ref="top">
       <div>
-        <img :src="queryData.bulletin_staff_avatar" v-if="queryData.bulletin_staff_avatar" alt="">
+        <img :src="detailData.bulletin_staff_avatar" v-if="detailData.bulletin_staff_avatar" alt="">
         <img src="../../../assets/image/common/noHead.png" alt="" v-else>
-        <span>{{queryData.bulletin_staff_name}}</span>
-        <p class="ellipsis">{{queryData.bulletin_name}}</p>
+        <span>{{detailData.bulletin_staff_name}}</span>
+        <p class="ellipsis">{{detailData.bulletin_name}}</p>
       </div>
       <p class="ellipsis">
         <i></i>
-        <span>耗时{{queryData.duration}}分钟</span>
+        <span>耗时{{detailData.duration}}分钟</span>
       </p>
       <h1 v-if="topOperates.length">
         <i v-for="item in topOperates" :class="['icon-'+item.id]" @click="iconButton(item.id)"></i>
@@ -172,7 +172,8 @@
         endClientX: 0,
         slither: 0,
         allDetail: {},//详情数据
-        queryData: {},//所有参数
+        detailData: {},//所有参数
+        tabs: {},//url 参数
 
         // 头部操作
         topOperates: [
@@ -227,28 +228,25 @@
     activated() {
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
-      let query = JSON.parse(sessionStorage.approvalDetail || '{}');
-      this.queryData = query;
-      this.getOperates(query);
-      this.handleData(query);
-      this.approvalDetail(query.bm_detail_request_url);
+      this.tabs = this.$route.query;
+      let detail = JSON.parse(sessionStorage.approvalDetail || '{}');
+      this.detailData = detail;
+      this.getOperates(detail, this.tabs);
+      this.handleData(detail);
+      this.approvalDetail(detail.bm_detail_request_url);
     },
     watch: {},
-    computed: {
-      tabs() {
-        return this.$store.state.app.approvalTab;
-      }
-    },
+    computed: {},
     methods: {
       // 获取操作按钮
-      getOperates(query) {
-        console.log(this.tabs);
+      getOperates(detail, query) {
+        console.log(query);
         this.operates = [];
-        if (!query.outcome) return;
-        if (typeof query.outcome === 'string') {
-          this.operates = JSON.parse(query.outcome || '{}');
+        if (!detail.outcome) return;
+        if (typeof detail.outcome === 'string') {
+          this.operates = JSON.parse(detail.outcome || '{}');
         } else {
-          this.operates = query.outcome;
+          this.operates = detail.outcome;
         }
         let btn = [
           {
@@ -270,7 +268,7 @@
       iconButton(num) {
         switch (num) {
           case '1':
-            this.bulletinRouter(this.queryData.bulletin_type);
+            this.bulletinRouter(this.detailData.bulletin_type);
             break;
           case '2':
             this.commentPopup = true;
@@ -282,7 +280,7 @@
       },
       // 报备类型跳转
       bulletinRouter(type) {
-        sessionStorage.setItem('bulletin_draft', JSON.stringify(this.queryData));
+        sessionStorage.setItem('bulletin_draft', JSON.stringify(this.detailData));
         switch (type) {
           case 'bulletin_collect_basic':
             sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
@@ -299,7 +297,7 @@
             this.$router.go(-1);
             break;
           case'postpone'://暂缓
-            this.$httpZll.postponeTask(this.queryData.process_id, {action: 'suspend'}).then(_ => {
+            this.$httpZll.postponeTask(this.detailData.process_id, {action: 'suspend'}).then(_ => {
               this.$prompt('操作成功', 'success');
               setTimeout(_ => {
                 this.$router.go(-1);
@@ -313,7 +311,7 @@
               name: key,
               value: action.action,
             }];
-            this.$httpZll.finishBeforeTask(this.queryData.task_id, postData).then(_ => {
+            this.$httpZll.finishBeforeTask(this.detailData.task_id, postData).then(_ => {
               this.$prompt('审核成功！', 'success');
               setTimeout(_ => {
                 this.$router.go(-1);
@@ -373,9 +371,9 @@
         }
       },
       // 展示数据字段
-      handleData(query) {
+      handleData(detail) {
         this.slither = 0;
-        let bulletinData = this.$bulletinType(query.bulletin_type);
+        let bulletinData = this.$bulletinType(detail.bulletin_type);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         let data = this.drawSlither;
@@ -402,8 +400,8 @@
         this.$httpZll.getApprovalDetail(url).then(res => {
           if (res) {
             this.allDetail = this.jsonClone(res.data);
-            this.allDetail.task_id = this.queryData.task_id;
-            this.allDetail.process_instance_id = this.queryData.process_id;
+            this.allDetail.task_id = this.detailData.task_id;
+            this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
             this.formatData = res.data.content;
             this.handleDetail(res.data.content)

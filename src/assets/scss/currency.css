@@ -228,6 +228,19 @@
 .van-toast {
   text-align: center; }
 
+.van-ellipsis {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: pre-wrap;
+  line-height: 22px; }
+
 .van-checkbox {
   display: flex;
   display: -webkit-flex;

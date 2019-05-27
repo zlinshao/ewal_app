@@ -17,21 +17,23 @@
       return {
         loading: false,
         transitionName: '',
+        personal: {},
       }
     },
     created() {
-      this.getDict();
       let data = {};
       data.staff_id = '69';
       data.staff_name = '张琳琳';
       data.department_id = '134';
       data.department_name = '南京马群组';
+      this.personal = data;
       this.$store.dispatch('personal_storage', JSON.stringify(data));
       dd.ui.webViewBounce.disable();
       // this.loading = true;
       // this.personalGet().then(res => {
       //   this.loading = !res;
       // });
+      this.getDict();
       dd.biz.navigation.setRight({show: false});
       sessionStorage.setItem('windowHeight', String(window.innerHeight));
       sessionStorage.setItem('windowWidth', String(window.innerWidth));
@@ -102,7 +104,18 @@
           dicties.decorate = dict[404];//装修
           dicties.card_type = dict[409];//证件类型
           dicties.property_type = dict[410];//房屋类型
-        })
+        });
+        // 收款账户
+        this.$httpZll.getFinancialAccount(this.personal.department_id).then(res => {
+          if (res) {
+            for (let item of res.data) {
+              let account = item.account;
+              console.log(account);
+              dicties.remittance_account[account.id] = account.account_num + ' ' + account.account_owner + ' ' + account.name;
+            }
+          }
+          console.log(dicties.remittance_account);
+        });
       },
     },
   }

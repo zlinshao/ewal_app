@@ -63,8 +63,14 @@
         let idx = picker.index;
         let key = picker.keyName;
         if (parentKey) {
-          this.forms[parentKey][idx][key] = picker.ids[index];
-          this.formatData[parentKey][idx][key] = value;
+          if (picker.keyName === 'remittance_account') {
+            this.forms[parentKey][idx]['account_id'] = picker.ids[index];
+            this.forms[parentKey][idx][key] = value;
+            this.formatData[parentKey][idx][key] = value;
+          } else {
+            this.forms[parentKey][idx][key] = picker.ids[index];
+            this.formatData[parentKey][idx][key] = value;
+          }
         } else {
           if (picker.status.includes('column')) {
             if (key === 'house_type') {
