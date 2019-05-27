@@ -65,8 +65,8 @@
         if (parentKey) {
           if (picker.keyName === 'remittance_account') {
             this.forms[parentKey][idx]['account_id'] = picker.ids[index];
-            this.forms[parentKey][idx][key] = value;
-            this.formatData[parentKey][idx][key] = value;
+            this.forms[parentKey][idx][key] = value.split('<br>').join(' ');
+            this.formatData[parentKey][idx][key] = value.split('<br>').join(' ');
           } else {
             this.forms[parentKey][idx][key] = picker.ids[index];
             this.formatData[parentKey][idx][key] = value;
