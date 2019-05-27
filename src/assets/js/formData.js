@@ -2396,7 +2396,7 @@ defineAgencyReport = {
     {
       label: '渠道费信息',
       keyName: 'agency_infos',
-      picker: 'changePrice',
+      picker: 'changeHiddenDefault',
       pickerText: '周期',
       keyType: [],
       // button: '渠道费信息',
@@ -3152,7 +3152,7 @@ defineChangeReport = {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '凭证截图',
           placeholder: '必填',
@@ -3309,7 +3309,7 @@ defineChangeReport = {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '证件照片',
           placeholder: '必填',
@@ -3401,7 +3401,7 @@ defineSpecialReport = {
     {
       label: '上传',
       picker: 'upload',
-      value: [
+      photos: [
         {
           label: '图片',
           placeholder: '必填',
