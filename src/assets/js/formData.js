@@ -1586,7 +1586,7 @@ defineCollectReport = {
       type: 'text',
       status: 'objInt',
       picker: 'picker',
-      controlShow: '0',
+      controlShow: '1',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
       showList: [
@@ -1969,7 +1969,7 @@ defineRentReport = {
       type: 'text',
       status: 'objInt',
       picker: 'picker',
-      controlShow: '0',
+      controlShow: '1',
       showForm: 'formatData',
       slot: '',
       showList: [
@@ -2074,7 +2074,7 @@ defineRentReport = {
       type: 'text',
       status: 'objInt',
       picker: 'picker',
-      controlShow: '0',
+      controlShow: '1',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
       showList: [

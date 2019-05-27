@@ -597,15 +597,15 @@
       showHiddenInput(form, name) {
         for (let slither of Object.keys(this.drawSlither)) {
           for (let list of this.drawSlither[slither]) {
-            if (list.controlShow) {
+            if (list.controlShow && list.keyName === name) {
               let formNum = Number(form[name]);
               let listNum = Number(list.controlShow);
               for (let child of list.showList) {
                 if (formNum === listNum) {
+                  child.hidden = false;
+                } else {
                   child.hidden = true;
                   this.form[child.keyName] = child.keyType;
-                } else {
-                  child.hidden = false;
                 }
               }
             }
