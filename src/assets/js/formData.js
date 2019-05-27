@@ -1919,28 +1919,15 @@ defineRentReport = {
             slot: '',
           },
           {
-            label: '支付方式',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'payment_method',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            picker: 'picker',
-            changeBtn: '支付变化',
-            slot: '',
-          },
-          {
             label: '收款账户',
             placeholder: '必填 请选择',
             readonly: 'readonly',
-            keyName: 'remittance_account"',
+            keyName: 'remittance_account',
             keyType: '',
             type: 'text',
             status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
             picker: 'picker',
+            showForm: 'formatData',//picker 显示form 或 formatData
             slot: '',
           },
           {

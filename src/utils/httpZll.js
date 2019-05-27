@@ -509,6 +509,21 @@ class httpZll extends httpService {
     })
   };
 
+  // financial/account_alloc/map?org_id=' + per.department_id
+  // 收款账户
+  static getFinancialAccount(id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_code}api/allocation/org_account?org_id=${id}`).then((res) => {
+        if (Number(res.code) === 200) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
   // 收房报备 发布
   static submitReport(data, to) {
     return new Promise((resolve, reject) => {

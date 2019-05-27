@@ -258,7 +258,6 @@
       }
     },
     mounted() {
-      console.log(this.tabs);
     },
     activated() {
       let approvalTop = this.$refs.approvalTop.offsetHeight;
@@ -317,7 +316,8 @@
                   fdd_user_id: user_id,
                   is_number: 1,
                 };
-                this.$httpZll.sendElectronicContract(item.contract_number, params).then(_ => {})
+                this.$httpZll.sendElectronicContract(item.contract_number, params).then(_ => {
+                })
               }
             });
             break;
@@ -379,7 +379,7 @@
       // 报备详情
       routerLinkDetail(item) {
         sessionStorage.setItem('approvalDetail', JSON.stringify(item));
-        this.routerLink('/approvalDetail');
+        this.routerLink('/approvalDetail', this.tabs);
       },
       // 接口配置
       apiHandle(tab, status) {

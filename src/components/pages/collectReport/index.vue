@@ -80,7 +80,7 @@
                       </div>
                       <div v-else>
                         <zl-input
-                          v-if="key.length !== form[item.keyName].length"
+                          v-if="key.length !== form[item.keyName].length && !key.hidden"
                           :key="idx"
                           v-model="form[item.keyName][num][key.keyName]"
                           :type="key.type"
@@ -247,7 +247,7 @@
         queryData: {},
         bulletinType: {},                   //报备类型
         bulletinDetail: {},                 //修改/重新发布
-        taskDetail: {},                     //草稿
+        taskDetail: {},                     //代办任务详情
 
         album: {},                          //图片预填
         drawSlither: {},                    //遍历表单
