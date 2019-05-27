@@ -1719,9 +1719,11 @@ defineRentReport = {
     {
       label: '房屋地址',
       placeholder: '必填 请输入',
+      readonly: 'readonly',
       keyName: 'address',
       keyType: '',
       type: 'text',
+      picker: 'searchHouse',
       status: '',
       slot: '',
     },
@@ -1939,6 +1941,19 @@ defineRentReport = {
             status: 'objInt',
             showForm: 'formatData',//picker 显示form 或 formatData
             picker: 'picker',
+            slot: '',
+          },
+          {
+            label: '收款账户id',
+            placeholder: '必填 请输入',
+            readonly: 'readonly',
+            keyName: 'account_id"',
+            keyType: '',
+            type: 'text',
+            // picker: 'picker',
+            // showForm: 'form',
+            // length: 1,
+            hidden: true,
             slot: '',
           },
         ]
@@ -2708,6 +2723,16 @@ defineRetainageReport = {
             button: '分金额付款',
             slot: '',
           },
+          {
+            label: '收款账户id',
+            placeholder: '必填 请输入',
+            readonly: 'readonly',
+            keyName: 'account_id"',
+            keyType: '',
+            type: 'text',
+            hidden:true,
+            slot: '',
+          },
         ]
       ]
     },
@@ -3042,6 +3067,16 @@ defineChangeReport = {
             showForm: 'formatData',
             picker: 'picker',
             button: '分金额付款',
+            slot: '',
+          },
+          {
+            label: '收款账户id',
+            placeholder: '必填 请输入',
+            readonly: 'readonly',
+            keyName: 'account_id"',
+            keyType: '',
+            type: 'text',
+            hidden:true,
             slot: '',
           },
         ]
