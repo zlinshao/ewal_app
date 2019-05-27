@@ -625,22 +625,40 @@
       },
       // 身份认证 银行认证
       confirmation(val, parentKey, index) {
+        console.log(val)
+        console.log(parentKey)
+        console.log(index)
+        let params = {};
         switch (val) {
           case 'identity':
-            let data = {};
-            data.customer_name = this.form.customer_name;
-            data.idcard = this.form.card_id;
-            data.mobile = this.form.contact_phone;
-            this.$httpZll.customerIdentity(data).then(res => {
+            if (parentKey) {
+              params = {
+                customer_name: this.form[parentKey][index].customer_name,
+                idcard: this.form[parentKey][index].card_id,
+                mobile: this.form[parentKey][index].contact_phone,
+              };
+            } else {
+              params = {
+                customer_name: this.form.customer_name,
+                idcard: this.form.card_id,
+                mobile: this.form.contact_phone,
+              };
+            }
+            this.$httpZll.customerIdentity(params).then(res => {
               if (res) {
                 if (res.data.fadada_user_id) {
-                  this.form.signer = res.data;
-                  this.certified();
+
+                  if (parentKey) {
+                    this.form[parentKey][index].fadada_user_id = res.data.fadada_user_id;
+                  } else {
+                    this.form.signer = res.data;
+                  }
+                  this.certified(parentKey);
                 } else {
                   this.$ddSkip(res.data.data);
                   this.$dialog('认证', '认证是否完成?').then(res => {
                     if (res) {
-                      this.confirmation('identity');
+                      this.confirmation('identity', parentKey, index);
                     }
                   })
                 }
@@ -648,7 +666,6 @@
             });
             break;
           case 'bank':
-            let params = {};
             if (parentKey) {
               params = {
                 card: this.form[parentKey][index].account,
@@ -671,19 +688,37 @@
         }
       },
       // 已认证
-      certified() {
+      certified(parentKey) {
+        let data = ['customer_name', 'contact_phone', 'card_id'];
         for (let slither of Object.keys(this.drawSlither)) {
           for (let key of this.drawSlither[slither]) {
-            if (key.icon === 'identity') {
-              key.button = '已认证';
-              key.icon = '';
-            }
-            let data = ['customer_name', 'contact_phone', 'card_id'];
-            if (data.includes(key.keyName)) {
-              key.disabled = 'disabled';
+            if (parentKey) {
+              if (key.keyName === parentKey) {
+                for (let children of key.children) {
+                  for (let child of children) {
+                    if (child.icon === 'identity') {
+                      child.button = '已认证';
+                      child.icon = '';
+                    }
+                    if (data.includes(child.keyName)) {
+                      child.disabled = 'disabled';
+                    }
+                  }
+                }
+                return;
+              }
+            } else {
+              if (key.icon === 'identity') {
+                key.button = '已认证';
+                key.icon = '';
+              }
+              if (data.includes(key.keyName)) {
+                key.disabled = 'disabled';
+              }
             }
           }
         }
+
         this.form = Object.assign({}, this.form);
       },
       // 已认证
