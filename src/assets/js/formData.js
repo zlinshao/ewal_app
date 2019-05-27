@@ -2419,7 +2419,6 @@ defineAgencyReport = {
             button: '银行卡识别',
             icon: 'bank',
             status: '',
-            button: '',
             slot: '',
           },
           {
