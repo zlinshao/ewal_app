@@ -2271,7 +2271,8 @@ defineRentReport = {
           keyName: 'customer_name',
           keyType: '',
           type: 'text',
-          status: '',
+          button: '身份识别',
+          icon: 'identity',
           slot: '',
         },
         {
