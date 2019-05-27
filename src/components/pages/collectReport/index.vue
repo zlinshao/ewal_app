@@ -653,7 +653,7 @@
                   } else {
                     this.form.signer = res.data;
                   }
-                  this.certified(parentKey);
+                  this.certified(parentKey, index);
                 } else {
                   this.$ddSkip(res.data.data);
                   this.$dialog('认证', '认证是否完成?').then(res => {
@@ -688,18 +688,16 @@
         }
       },
       // 已认证
-      certified(parentKey) {
+      certified(parentKey, index) {
         let data = ['customer_name', 'contact_phone', 'card_id'];
         for (let slither of Object.keys(this.drawSlither)) {
           for (let key of this.drawSlither[slither]) {
             if (parentKey) {
               if (key.keyName === parentKey) {
-                for (let children of key.children) {
+                for (let children of key.children[index]) {
                   for (let child of children) {
-                    if (child.icon === 'identity') {
-                      child.button = '已认证';
-                      child.icon = '';
-                    }
+                    child.button = '已认证';
+                    child.icon = '';
                     if (data.includes(child.keyName)) {
                       child.disabled = 'disabled';
                     }
@@ -708,17 +706,14 @@
                 return;
               }
             } else {
-              if (key.icon === 'identity') {
-                key.button = '已认证';
-                key.icon = '';
-              }
+              key.button = '已认证';
+              key.icon = '';
               if (data.includes(key.keyName)) {
                 key.disabled = 'disabled';
               }
             }
           }
         }
-
         this.form = Object.assign({}, this.form);
       },
       // 已认证
@@ -780,6 +775,7 @@
         if (bulletin.type) {
           this.form.type = bulletin.type;
         }
+        this.handlerSaveReport();
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
@@ -818,6 +814,49 @@
               }
             });
             break;
+        }
+      },
+      // 附属房东/租客 处理
+      handlerSaveReport() {
+        if (!this.changeHiddenAll) return;
+        let key = 'subsidiary_customer';
+        for (let slither of Object.keys(this.drawSlither)) {
+          this.drawSlither[slither].forEach((item, idx) => {
+            if (item.keyName === key) {
+              let customer = this.form[key];
+              let formCus = [];
+              let formatCus = [];
+              let children = this.jsonClone(this.drawSlither[slither][idx].children[0]);
+              this.drawSlither[slither][idx].children = [];
+              customer.forEach((data, index) => {
+                for (let value of Object.keys(data)) {
+                  if (data[value]) {
+                    formCus.push(data);
+                    formatCus.push(this.formatData[key][index]);
+                    return;
+                  }
+                }
+              });
+              if (formCus.length) {
+                this.form[key] = formCus;
+                this.formatData[key] = formatCus;
+                formCus.forEach(_ => {
+                  this.drawSlither[slither][idx].children.push(children);
+                });
+              } else {
+                this.changeHiddenAll = false;
+                this.drawSlither[slither][idx].children.push(children);
+                let obj = {};
+                let child = [];
+                for (let i of children) {
+                  obj[i.keyName] = i.keyType;
+                }
+                child.push(obj);
+                this.form[key] = child;
+                this.formatData[key] = this.jsonClone(child);
+              }
+            }
+          })
         }
       },
       // 草稿
@@ -952,14 +991,26 @@
               this.formatData[item] = terms.join(',');
               break;
             case 'subsidiary_customer'://附属房东
-              if (res[item]) {
-                let customer = ['customer_sex', 'card_type', 'contact_way'];
-                this.formatData = this.changeHandle(res, item, customer, this.drawSlither, this.formatData);
-              }
+              let customer = ['customer_sex', 'card_type', 'contact_way'];
+              this.$changeHandle(res, item, customer, this.drawSlither, this.formatData);
+              this.form[item].forEach((child, index) => {
+                for (let value of Object.values(child)) {
+                  if (child[value]) {
+                    this.changeHiddenAll = true;
+                  }
+                }
+                if (!status) {
+                  if (child.fadada_user_id) {
+                    this.certified(item, index);
+                  } else {
+                    this.certified();
+                  }
+                }
+              });
               break;
             case 'period_price_way_arr'://付款方式变化
               let pay_way = ['pay_way'];
-              this.formatData = this.changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
+              this.$changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
               break;
             default:
               this.pickerDefaultValue(res, item);

@@ -305,8 +305,7 @@ export default {
       return {data, title}
     };
     // 预填数据处理
-    Vue.prototype.changeHandle = function (res, item, val, all, data) {
-      let formatData = data;
+    Vue.prototype.$changeHandle = function (res, item, val, all, data) {
       for (let slither of Object.keys(all)) {
         for (let list of all[slither]) {
           if (list.keyName === item) {
@@ -316,13 +315,12 @@ export default {
           }
         }
       }
-      formatData[item] = this.jsonClone(res[item]);
+      data[item] = this.jsonClone(res[item]);
       res[item].forEach((key, idx) => {
         for (let key of val) {
-          formatData[item][idx][key] = dicties[key][res[item][idx][key]];
+          data[item][idx][key] = dicties[key][res[item][idx][key]];
         }
       });
-      return formatData;
     };
     // 下拉框 显示 重置
     Vue.prototype.$closePicker = function () {
