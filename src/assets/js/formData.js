@@ -328,9 +328,6 @@ defineNewTask = {
       keyName: 'customer_name',
       keyType: '',
       type: 'text',
-      button: '银行卡识别',
-      icon: 'identity',
-      status: '',
       slot: '',
     },
     {
@@ -2383,10 +2380,8 @@ defineAgencyReport = {
     {
       label: '渠道费信息',
       keyName: 'agency_infos',
-      picker: 'changePrice',
-      pickerText: '周期',
+      picker: 'changeHiddenDefault',
       keyType: [],
-      // button: '渠道费信息',
       children: [
         [
           {
@@ -2407,6 +2402,7 @@ defineAgencyReport = {
             keyType: '',
             type: 'number',
             status: '',
+            button: '',
             slot: '',
           },
           {
