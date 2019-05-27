@@ -286,11 +286,11 @@ export default {
           data = this.jsonClone(defineRetainageReport);
           break;
         case 'change'://调租
-          title = ['客户信息','合同信息'];
+          title = ['客户信息', '合同信息'];
           data = this.jsonClone(defineChangeReport);
           break;
         case 'sublet'://转租
-          title = ['客户信息','合同信息'];
+          title = ['客户信息', '合同信息'];
           data = this.jsonClone(defineSubletReport);
           break;
         case 'special'://特殊事项
@@ -336,6 +336,7 @@ export default {
           columns: [],                      //下拉框选择文本列表
           ids: [],                          //当前字典所有id
           index: '',                        //变化下标
+          controlShow: '',                  //控制显示隐藏
         };
         resolve(picker)
       })
@@ -348,6 +349,7 @@ export default {
           pickers.keyName = val.keyName;
           pickers.status = val.status;
           pickers.title = val.label;
+          pickers.controlShow = val.controlShow || '';
           pickers.index = num;
           pickers.parentKey = parentKey || '';
           if (val.status.includes('column')) {

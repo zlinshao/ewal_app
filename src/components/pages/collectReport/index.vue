@@ -261,15 +261,7 @@
           dateType: '',                     //日期类型 默认date 时分datetime
           dateIdx: '',                      //日期字段下标 变化情况使用
         },
-        pickers: {
-          title: '',                        //picker标题
-          type: '',                         //字典类型
-          keyName: '',                      //字段名
-          parentKey: '',                    //父级 字段名 变化有picker
-          columns: [],                      //下拉框选择文本列表
-          ids: [],                          //当前字典所有id
-          index: '',                        //变化下标
-        },
+        pickers: {},
         popupStatus: '',                    //picker分类
         pickerModule: false,                //正常 select 下拉框
         popupModule: false,                 //分类 select 下拉框
@@ -551,7 +543,9 @@
           let name = picker.keyName;
           let parentKey = picker.parentKey || '';
           // input 显示隐藏
-          this.inputStatus(name, form);
+          if (picker.controlShow) {
+            this.inputStatus(name, form);
+          }
           // 付款方式变化处理
           if (parentKey === 'period_price_way_arr') {
             this.moreChangeDateCount(parentKey);

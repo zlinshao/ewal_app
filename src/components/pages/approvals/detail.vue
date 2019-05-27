@@ -2,8 +2,8 @@
   <div id="approvalDetail">
     <div class="detailTop" ref="top">
       <div>
-        <img :src="queryData.bulletin_staff_avatar" v-if="queryData.bulletin_staff_avatar">
-        <img src="../../../assets/image/common/noHead.png" v-else>
+        <img :src="queryData.bulletin_staff_avatar" v-if="queryData.bulletin_staff_avatar" alt="">
+        <img src="../../../assets/image/common/noHead.png" alt="" v-else>
         <span>{{queryData.bulletin_staff_name}}</span>
         <p class="ellipsis">{{queryData.bulletin_name}}</p>
       </div>
@@ -86,17 +86,15 @@
         </div>
       </div>
     </div>
-
     <!--视频播放-->
     <div id="videoId" :class="['video-' + phoneType()]" v-show="videoSrc !== ''">
       <video id="video" :src="videoSrc" muted controls autoplay></video>
       <div class="items-center close">
         <span class="flex-center" @click="videoPlay()">
-          <img src="../../../assets/image/file/closeBtn.png">
+          <img src="../../../assets/image/file/closeBtn.png" alt="">
         </span>
       </div>
     </div>
-
     <!--评论-->
     <van-popup v-model="commentPopup" class="commentPopup">
       <h1>评论</h1>
@@ -115,7 +113,6 @@
         <p class="btn ">确定</p>
       </div>
     </van-popup>
-
     <!--转交-->
     <van-popup v-model="deliverPopup" class="deliverPopup">
       <h1>转交</h1>
@@ -139,7 +136,6 @@
         <p class="btn ">确定</p>
       </div>
     </van-popup>
-
     <!--历史审批流程-->
     <div class="records" @click="recordPopup = true"><p></p></div>
     <van-popup v-model="recordPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
@@ -158,7 +154,6 @@
         </div>
       </div>
     </van-popup>
-
     <!--选择人员-->
     <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
   </div>
@@ -247,6 +242,7 @@
     methods: {
       // 获取操作按钮
       getOperates(query) {
+        console.log(this.tabs);
         this.operates = [];
         if (!query.outcome) return;
         if (typeof query.outcome === 'string') {
@@ -303,8 +299,11 @@
             this.$router.go(-1);
             break;
           case'postpone'://暂缓
-            this.$httpZll.postponeTask(this.queryData.process_id, {action: 'suspend'}).then(res => {
-
+            this.$httpZll.postponeTask(this.queryData.process_id, {action: 'suspend'}).then(_ => {
+              this.$prompt('操作成功', 'success');
+              setTimeout(_ => {
+                this.$router.go(-1);
+              }, 500);
             });
             break;
           default:
@@ -411,7 +410,7 @@
           }
         })
       },
-      // id转换文本
+      // 数据转换文本
       handleDetail(res) {
         for (let item of Object.keys(res)) {
           this.formatData[item] = res[item] || this.formatData[item];

@@ -227,16 +227,7 @@
         deliveryModule: false,
         popupModule: false,
         timeModule: false,
-        pickers: {
-          title: '',                        //picker标题
-          type: '',                         //字典类型
-          keyName: '',                      //字段名
-          childKeys: [],                    //字段名
-          parentKey: '',                    //父级 字段名 变化有picker
-          columns: [],                      //下拉框选择文本列表
-          ids: [],                          //当前字典所有id
-          index: '',                        //变化下标
-        },
+        pickers: {},
         slitherCss: {},
         mainWidth: {},
         closePhoto: false,
