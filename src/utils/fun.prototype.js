@@ -274,7 +274,7 @@ export default {
           data = this.jsonClone(defineCollectReport);
           break;
         case 'bulletin_rent_basic':
-          title = ['物品信息', '合同信息'];
+          title = ['物品信息', '客户信息'];
           data = this.jsonClone(defineRentReport);
           break;
         case 'agency':
