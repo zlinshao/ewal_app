@@ -1702,209 +1702,8 @@ defineCollectReport = {
 
 // 租房报备
 defineRentReport = {
-  // 客户信息
-  slither0: [
-    {
-      label: '客户姓名',
-      placeholder: '必填 请输入',
-      keyName: 'customer_name',
-      keyType: '',
-      type: 'text',
-      button: '身份识别',
-      icon: 'identity',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '客户性别',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'customer_sex',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      showForm: 'formatData',
-      slot: '',
-    },
-    {
-      label: '证件类型',
-      placeholder: '必填 请选择',
-      disabled: 'disabled',
-      keyName: 'card_type',
-      keyType: 411,
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      showForm: 'formatData',
-      slot: '',
-    },
-    {
-      label: '证件号',
-      placeholder: '必填 请输入',
-      keyName: 'card_id',
-      keyType: '',
-      type: 'text',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '联系方式',
-      placeholder: '必填 请选择',
-      keyName: 'contact_way',
-      disabled: 'disabled',
-      keyType: 1,
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      showForm: 'formatData',
-      slot: '',
-    },
-    {
-      label: '联系电话',
-      placeholder: '必填 请输入',
-      keyName: 'contact_phone',
-      keyType: '',
-      type: 'text',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '开户名',
-      placeholder: '必填 请输入',
-      keyName: 'account_name',
-      keyType: '',
-      type: 'text',
-      button: '银行卡识别',
-      icon: 'bank',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '卡号',
-      placeholder: '必填 请输入',
-      keyName: 'account',
-      keyType: '',
-      type: 'text',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '银行',
-      placeholder: '必填 请输入',
-      keyName: 'bank',
-      keyType: '',
-      type: 'text',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '支行',
-      placeholder: '必填 请输入',
-      keyName: 'subbranch',
-      keyType: '',
-      type: 'text',
-      status: '',
-      slot: '',
-    },
-    {
-      keyName: undefined,
-      picker: 'changeHiddenAll',
-      changeBtn: '+增加附属租客',
-    },
-    {
-      keyName: 'subsidiary_customer',
-      picker: 'changeHiddenAll',
-      label: '附属房东',
-      changeBtn: '增加附属房东',
-      keyType: [],
-      children: [
-        [
-          {
-            label: '客户姓名',
-            placeholder: '必填 请输入',
-            keyName: 'customer_name',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '性别',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'customer_sex',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            picker: 'picker',
-            slot: '',
-          },
-          {
-            label: '证件类型',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'card_type',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            picker: 'picker',
-            slot: '',
-          },
-          {
-            label: '证件号',
-            placeholder: '必填 请输入',
-            keyName: 'card_id',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-          {
-            label: '联系方式',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'contact_way',
-            keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            picker: 'picker',
-            slot: '',
-          },
-          {
-            label: '联系电话',
-            placeholder: '必填 请输入',
-            keyName: 'contact_phone',
-            keyType: '',
-            type: 'text',
-            status: '',
-            slot: '',
-          },
-        ],
-      ],
-    },
-    {
-      label: '上传',
-      picker: 'upload',
-      photos: [
-        {
-          label: '证件照片',
-          placeholder: '必填',
-          keyName: 'id_card_photo',
-        },
-        {
-          label: '银行卡照片',
-          placeholder: '必填',
-          keyName: 'bank_card_photo',
-        }
-      ]
-    },
-  ],
   // 房屋信息
-  slither1: [
+  slither0: [
     {
       label: '转租类型',
       placeholder: '必填 请选择',
@@ -2047,7 +1846,7 @@ defineRentReport = {
           },
           {
             label: '月单价',
-            placeholder: '必填 请选择',
+            placeholder: '必填 请输入',
             readonly: 'readonly',
             keyName: 'month_unit_price',
             keyType: '',
@@ -2102,6 +1901,7 @@ defineRentReport = {
             keyName: 'money_sep',
             keyType: '',
             type: 'number',
+            length: 1,
             slot: '',
           },
           {
@@ -2113,6 +1913,7 @@ defineRentReport = {
             type: 'text',
             picker: 'date',
             showForm: 'formatData',//picker 显示form 或 formatData
+            length: 1,
             slot: '',
           },
           {
@@ -2125,6 +1926,7 @@ defineRentReport = {
             status: 'objInt',
             showForm: 'formatData',//picker 显示form 或 formatData
             picker: 'picker',
+            changeBtn: '支付变化',
             slot: '',
           },
           {
@@ -2137,7 +1939,6 @@ defineRentReport = {
             status: 'objInt',
             showForm: 'formatData',//picker 显示form 或 formatData
             picker: 'picker',
-            changeBtn: '支付变化',
             slot: '',
           },
         ]
@@ -2346,6 +2147,207 @@ defineRentReport = {
       slot: '',
     },
   ],
+  // 客户信息
+  slither1: [
+  {
+    label: '客户姓名',
+    placeholder: '必填 请输入',
+    keyName: 'customer_name',
+    keyType: '',
+    type: 'text',
+    button: '身份识别',
+    icon: 'identity',
+    status: '',
+    slot: '',
+  },
+  {
+    label: '客户性别',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'customer_sex',
+    keyType: '',
+    type: 'text',
+    status: 'objInt',
+    picker: 'picker',
+    showForm: 'formatData',
+    slot: '',
+  },
+  {
+    label: '证件类型',
+    placeholder: '必填 请选择',
+    disabled: 'disabled',
+    keyName: 'card_type',
+    keyType: 411,
+    type: 'text',
+    status: 'objInt',
+    picker: 'picker',
+    showForm: 'formatData',
+    slot: '',
+  },
+  {
+    label: '证件号',
+    placeholder: '必填 请输入',
+    keyName: 'card_id',
+    keyType: '',
+    type: 'text',
+    status: '',
+    slot: '',
+  },
+  {
+    label: '联系方式',
+    placeholder: '必填 请选择',
+    keyName: 'contact_way',
+    disabled: 'disabled',
+    keyType: 1,
+    type: 'text',
+    status: 'objInt',
+    picker: 'picker',
+    showForm: 'formatData',
+    slot: '',
+  },
+  {
+    label: '联系电话',
+    placeholder: '必填 请输入',
+    keyName: 'contact_phone',
+    keyType: '',
+    type: 'number',
+    status: '',
+    slot: '',
+  },
+  {
+    label: '开户名',
+    placeholder: '必填 请输入',
+    keyName: 'account_name',
+    keyType: '',
+    type: 'text',
+    button: '银行卡识别',
+    icon: 'bank',
+    status: '',
+    slot: '',
+  },
+  {
+    label: '卡号',
+    placeholder: '必填 请输入',
+    keyName: 'account',
+    keyType: '',
+    type: 'number',
+    status: '',
+    slot: '',
+  },
+  {
+    label: '银行',
+    placeholder: '必填 请输入',
+    keyName: 'bank',
+    keyType: '',
+    type: 'text',
+    status: '',
+    slot: '',
+  },
+  {
+    label: '支行',
+    placeholder: '必填 请输入',
+    keyName: 'subbranch',
+    keyType: '',
+    type: 'text',
+    status: '',
+    slot: '',
+  },
+  {
+    keyName: undefined,
+    picker: 'changeHiddenAll',
+    changeBtn: '+增加附属租客',
+  },
+  {
+    keyName: 'subsidiary_customer',
+    picker: 'changeHiddenAll',
+    label: '附属房东',
+    changeBtn: '增加附属房东',
+    keyType: [],
+    children: [
+      [
+        {
+          label: '客户姓名',
+          placeholder: '必填 请输入',
+          keyName: 'customer_name',
+          keyType: '',
+          type: 'text',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '性别',
+          placeholder: '必填 请选择',
+          readonly: 'readonly',
+          keyName: 'customer_sex',
+          keyType: '',
+          type: 'text',
+          status: 'objInt',
+          showForm: 'formatData',//picker 显示form 或 formatData
+          picker: 'picker',
+          slot: '',
+        },
+        {
+          label: '证件类型',
+          placeholder: '必填 请选择',
+          readonly: 'readonly',
+          keyName: 'card_type',
+          keyType: '',
+          type: 'text',
+          status: 'objInt',
+          showForm: 'formatData',//picker 显示form 或 formatData
+          picker: 'picker',
+          slot: '',
+        },
+        {
+          label: '证件号',
+          placeholder: '必填 请输入',
+          keyName: 'card_id',
+          keyType: '',
+          type: 'text',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '联系方式',
+          placeholder: '必填 请选择',
+          readonly: 'readonly',
+          keyName: 'contact_way',
+          keyType: '',
+          type: 'text',
+          status: 'objInt',
+          showForm: 'formatData',//picker 显示form 或 formatData
+          picker: 'picker',
+          slot: '',
+        },
+        {
+          label: '联系电话',
+          placeholder: '必填 请输入',
+          keyName: 'contact_phone',
+          keyType: '',
+          type: 'text',
+          status: '',
+          slot: '',
+        },
+      ],
+    ],
+  },
+  {
+    label: '上传',
+    picker: 'upload',
+    photos: [
+      {
+        label: '证件照片',
+        placeholder: '必填',
+        keyName: 'id_card_photo',
+      },
+      {
+        label: '银行卡照片',
+        placeholder: '必填',
+        keyName: 'bank_card_photo',
+      }
+    ]
+  },
+],
 };
 
 // 渠道报备
@@ -2378,7 +2380,7 @@ defineAgencyReport = {
       placeholder: '选填 请输入',
       keyName: 'month',
       keyType: '',
-      type: 'text',
+      type: 'number',
       status: '',
       slot: '',
     },
@@ -2483,7 +2485,7 @@ defineAgencyReport = {
       ],
     },
     {
-      label: '特殊情况截图',
+      label: '上传',
       picker: 'upload',
       value: [
         {
@@ -3895,6 +3897,10 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad
         slot: '',
       },
     ],
+
+
+
+    
   }
 }
 
