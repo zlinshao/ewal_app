@@ -101,7 +101,7 @@
       <div>
         <div>
           <label>评论内容</label>
-          <textarea placeholder="必填 请输入" v-model="commentForm.remark"></textarea>
+          <textarea placeholder="必填 请输入" v-model="commentForm.content.message"></textarea>
         </div>
         <div v-for="item in commentUpload">
           <label style="padding-top: .2rem">{{item.text}}</label>
@@ -110,7 +110,7 @@
       </div>
       <div class="commonBtn">
         <p class="btn back" @click="cancel('comment')">取消</p>
-        <p class="btn ">确定</p>
+        <p class="btn" @click="onComment">确定</p>
       </div>
     </van-popup>
     <!--转交-->
@@ -128,7 +128,7 @@
         </div>
         <div v-for="item in deliverUpload">
           <label style="padding-top: .2rem">{{item.text}}</label>
-          <Upload :file="item" :close="!deliverPopup" @success="getImgData1"></Upload>
+          <Upload :file="item" :close="!deliverPopup" @success="getImgDeliver"></Upload>
         </div>
       </div>
       <div class="commonBtn">
@@ -192,17 +192,17 @@
         deliverPopup: false,//转交
 
         commentForm: {
-          remark: '',
-          photo: [],
-          house_video: [],
+          author: 69,
+          content: {
+            message: '',
+            attachments: []
+          },
+          saveProcessInstanceId: true
         },
         commentUpload: [
           {
             text: '图片',
-            keyName: 'photo',
-          }, {
-            text: '附件',
-            keyName: 'house_video',
+            keyName: 'attachments',
           }
         ],
 
@@ -346,6 +346,12 @@
           }
         }
       },
+      // 评论
+      onComment() {
+        this.$httpZll.setBulletinComment(this.commentForm, this.detailData.process_id).then(res => {
+
+        })
+      },
       // 员工搜索
       getStaffInfo(val) {
         this.searchStaffModule = false;
@@ -356,9 +362,9 @@
       },
       // 图片上传
       getImgData(val) {
-        this.commentForm[val[0]] = val[1];
+        this.commentForm.content[val[0]] = val[1];
       },
-      getImgData1(val) {
+      getImgDeliver(val) {
         this.deliverForm[val[0]] = val[1];
       },
       // 视频播放
@@ -515,7 +521,10 @@
       cancel(val) {
         switch (val) {
           case 'comment':
-            this.commentForm.remark = '';
+            this.commentForm.content = {
+              message: '',
+              attachments: []
+            };
             this.commentPopup = false;
             break;
           case 'record':

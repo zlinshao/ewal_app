@@ -419,6 +419,20 @@ class httpZll extends httpService {
     })
   }
 
+  // 评论
+  static setBulletinComment(data, id) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_done}history/process-instances/${id}/comments`, data).then((res) => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
   // 暂缓任务
   static postponeTask(id, data) {
     return new Promise((resolve, reject) => {
@@ -509,7 +523,6 @@ class httpZll extends httpService {
     })
   };
 
-  // financial/account_alloc/map?org_id=' + per.department_id
   // 收款账户
   static getFinancialAccount(id) {
     return new Promise((resolve, reject) => {

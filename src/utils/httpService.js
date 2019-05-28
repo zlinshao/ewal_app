@@ -23,7 +23,6 @@ axios.interceptors.response.use(response => {
   if (err && err.response) {
     let msg = err.response.data.msg;
     let message = err.response.data.message;
-    console.log(err.response.data);
     switch (err.response.status) {
       case 400:
       case 401:
@@ -202,6 +201,5 @@ class Axios {
     })
   }
 }
-
 
 export default Axios

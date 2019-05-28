@@ -819,10 +819,11 @@
       // 附属房东/租客 处理
       handlerSaveReport() {
         if (!this.changeHiddenAll) return;
-        let key = 'subsidiary_customer';
         for (let slither of Object.keys(this.drawSlither)) {
           this.drawSlither[slither].forEach((item, idx) => {
-            if (item.keyName === key) {
+            if (item.picker === 'changeHiddenAll') {
+              let key = item.keyName;
+              if (!key) return;
               let customer = this.form[key];
               let formCus = [];
               let formatCus = [];
