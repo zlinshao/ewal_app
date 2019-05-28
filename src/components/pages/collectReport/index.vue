@@ -646,7 +646,6 @@
             this.$httpZll.customerIdentity(params).then(res => {
               if (res) {
                 if (res.data.fadada_user_id) {
-
                   if (parentKey) {
                     this.form[parentKey][index].fadada_user_id = res.data.fadada_user_id;
                   } else {
@@ -694,14 +693,12 @@
             if (parentKey) {
               if (key.keyName === parentKey) {
                 for (let children of key.children[index]) {
-                  for (let child of children) {
-                    if (child.icon === 'identity') {
-                      child.button = '已认证';
-                      child.icon = '';
-                    }
-                    if (data.includes(child.keyName)) {
-                      child.disabled = 'disabled';
-                    }
+                  if (children.icon === 'identity') {
+                    children.button = '已认证';
+                    children.icon = '';
+                  }
+                  if (data.includes(children.keyName)) {
+                    children.disabled = 'disabled';
                   }
                 }
                 return;
@@ -719,7 +716,6 @@
         }
         this.form = Object.assign({}, this.form);
       },
-      // 已认证
       // 合同编号 禁用
       contractDis(val = null) {
         for (let slither of Object.keys(this.drawSlither)) {
@@ -1064,7 +1060,7 @@
           item.num = this.form[item.key];
         }
         this.form.id = id;
-        this.form.signer = '';
+        this.form.signer = {};
         this.form.contract_number = this.electronicContractNumber;
         // this.form.account = '6225212583158743';
         // this.form.account_name = '贾少君';

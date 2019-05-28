@@ -234,6 +234,7 @@
     methods: {
       // 获取操作按钮
       getOperates(detail, query) {
+        this.operates = [];
         let tab = Number(query.tab), status = Number(query.status);
         if (tab === 1) {
           if (status) {
@@ -250,7 +251,9 @@
           }
         } else if (tab === 2) {
           if (status) {
-
+            this.topOperates = [
+              {id: '2'},
+            ]
           } else {
             this.topOperates = [
               {id: '1'},
@@ -260,7 +263,6 @@
         }
       },
       setOperates(detail) {
-        this.operates = [];
         if (!detail.outcome) return;
         if (typeof detail.outcome === 'string') {
           this.operates = JSON.parse(detail.outcome || '{}');

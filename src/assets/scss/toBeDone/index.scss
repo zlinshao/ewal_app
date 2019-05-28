@@ -24,6 +24,7 @@
         .mainTitle {
           @include flex('items-bet');
           label {
+            font-size: .33rem;
             @include line-clamp();
           }
           p {
