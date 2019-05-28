@@ -173,14 +173,9 @@
         slither: 0,
         allDetail: {},//详情数据
         detailData: {},//所有参数
-        tabs: {},//url 参数
 
         // 头部操作
-        topOperates: [
-          {id: '1'},
-          {id: '2'},
-          {id: '3'},
-        ],
+        topOperates: [],
 
         mainHeight: '',
         operates: [],
@@ -228,10 +223,9 @@
     activated() {
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
-      this.tabs = this.$route.query;
       let detail = JSON.parse(sessionStorage.approvalDetail || '{}');
       this.detailData = detail;
-      this.getOperates(detail, this.tabs);
+      this.getOperates(detail, this.$route.query);
       this.handleData(detail);
       this.approvalDetail(detail.bm_detail_request_url);
     },
@@ -240,7 +234,32 @@
     methods: {
       // 获取操作按钮
       getOperates(detail, query) {
-        console.log(query);
+        let tab = Number(query.tab), status = Number(query.status);
+        if (tab === 1) {
+          if (status) {
+            this.topOperates = [
+              {id: '2'},
+            ]
+          } else {
+            this.setOperates(detail);
+            this.topOperates = [
+              {id: '1'},
+              {id: '2'},
+              {id: '3'},
+            ]
+          }
+        } else if (tab === 2) {
+          if (status) {
+
+          } else {
+            this.topOperates = [
+              {id: '1'},
+              {id: '2'},
+            ]
+          }
+        }
+      },
+      setOperates(detail) {
         this.operates = [];
         if (!detail.outcome) return;
         if (typeof detail.outcome === 'string') {
@@ -280,7 +299,7 @@
       },
       // 报备类型跳转
       bulletinRouter(type) {
-        sessionStorage.setItem('bulletin_draft', JSON.stringify(this.detailData));
+        sessionStorage.setItem('bulletin_draft', JSON.stringify(this.allDetail));
         switch (type) {
           case 'bulletin_collect_basic':
             sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
