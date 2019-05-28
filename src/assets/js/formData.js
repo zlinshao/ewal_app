@@ -1,42 +1,50 @@
 // 报备类型
 bulletinRouterStatus = {
+  // 收房报备
   newCollect: {
     bulletin: 'bulletin_collect_basic',
     to: 'collect',
     type: 1,
   },
+  // 租房报备
   newRent: {
     bulletin: 'bulletin_rent_basic',
     to: 'rent',
     type: 1,
   },
+  // 渠道费报备
   newAgency: {
-    bulletin: 'agency',
+    bulletin: 'bulletin_agency',
     to: 'agency',
     type: 1,
   },
+  // 房屋尾款报备
   newRetainage: {
-    bulletin: 'retainage',
+    bulletin: 'bulletin_retainage',
     to: 'retainage',
     type: 1,
   },
+  // 调租报备
   newChange: {
-    bulletin: 'change',
+    bulletin: 'bulletin_change',
     to: 'change',
     type: 1,
   },
+  // 转租报备
   newSublet: {
-    bulletin: 'sublet',
+    bulletin: 'bulletin_rent_trans',
     to: 'sublet',
     type: 1,
   },
+  // 特殊事项报备
   newSpecial: {
-    bulletin: 'special',
+    bulletin: 'bulletin_special',
     to: 'special',
     type: 1,
   },
+  //退租报备
   newCheckout: {
-    bulletin: 'checkout',
+    bulletin: 'bulletin_checkout',
     to: 'checkout',
     type: 1,
   },
