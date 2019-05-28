@@ -52,59 +52,37 @@
           {
             url: 'collectReport',
             name: '渠道费',
-            status: {
-              bulletin: 'agency',
-              to: 'agency',
-            },
+            status: bulletinRouterStatus.newAgency,
             icon: ic_qudao,
           },
           {
             url: 'collectReport',
             name: '尾款',
-            status: {
-              bulletin: 'retainage',
-              to: 'retainage',
-            },
+            status: bulletinRouterStatus.newRetainage,
             icon: ic_weikuan,
           },
           {
             url: 'collectReport',
             name: '调租',
-            status: {
-              bulletin: 'change',
-              to: 'change',
-            },
-            type: '',
+            status: bulletinRouterStatus.newChange,
             icon: ic_tiaozu,
           },
           {
             url: 'collectReport',
             name: '转租',
-            status: {
-              bulletin: 'sublet',
-              to: 'sublet',
-            },
-            type: '',
+            status: bulletinRouterStatus.newSublet,
             icon: ic_zhuanzu,
           },
           {
             url: 'collectReport',
             name: '特殊事项',
-            status: {
-              bulletin: 'special',
-              to: 'special',
-            },
-            type: 'special',
+             status: bulletinRouterStatus.newSpecial,
             icon: ic_teshu,
           },
           {
             url: 'collectReport',
             name: '退租',
-            status: {
-              bulletin: 'checkout',
-              to: 'checkout',
-            },
-            type: '',
+            status: bulletinRouterStatus.newCheckout,
             icon: ic_tuizu,
           },
           // {
