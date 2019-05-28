@@ -478,12 +478,12 @@
             case 'subsidiary_customer'://附属房东
               if (res[item]) {
                 let customer = ['customer_sex', 'card_type', 'contact_way'];
-                this.formatData = this.changeHandle(res, item, customer, this.drawSlither, this.formatData);
+                this.changeHandle(res, item, customer, this.drawSlither, this.formatData);
               }
               break;
             case 'period_price_way_arr'://付款方式变化
               let pay_way = ['pay_way'];
-              this.formatData = this.changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
+              this.changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
               break;
           }
         }
@@ -495,7 +495,6 @@
       },
       // 变化数据 预填数据处理
       changeHandle(res, item, val, all, data) {
-        let formatData = data;
         for (let slither of Object.keys(all)) {
           for (let list of Object.keys(all[slither])) {
             if (all[slither][list].keyName === item) {
@@ -505,13 +504,12 @@
             }
           }
         }
-        formatData[item] = this.jsonClone(res[item]);
+        data[item] = this.jsonClone(res[item]);
         res[item].forEach((key, idx) => {
           for (let key of val) {
-            formatData[item][idx][key] = dicties[key][res[item][idx][key]];
+            data[item][idx][key] = dicties[key][res[item][idx][key]];
           }
         });
-        return formatData;
       },
       // 取消
       cancel(val) {
