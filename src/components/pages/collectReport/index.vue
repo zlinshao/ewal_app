@@ -786,6 +786,50 @@
             break;
         }
       },
+      // 附属房东/租客 处理
+      handlerSaveReport() {
+        if (!this.changeHiddenAll) return;
+        for (let slither of Object.keys(this.drawSlither)) {
+          this.drawSlither[slither].forEach((item, idx) => {
+            if (item.picker === 'changeHiddenAll') {
+              let key = item.keyName;
+              if (!key) return;
+              let customer = this.form[key];
+              let formCus = [];
+              let formatCus = [];
+              let children = this.jsonClone(this.drawSlither[slither][idx].children[0]);
+              this.drawSlither[slither][idx].children = [];
+              customer.forEach((data, index) => {
+                for (let value of Object.keys(data)) {
+                  if (data[value]) {
+                    formCus.push(data);
+                    formatCus.push(this.formatData[key][index]);
+                    return;
+                  }
+                }
+              });
+              if (formCus.length) {
+                this.form[key] = formCus;
+                this.formatData[key] = formatCus;
+                formCus.forEach(_ => {
+                  this.drawSlither[slither][idx].children.push(children);
+                });
+              } else {
+                this.changeHiddenAll = false;
+                this.drawSlither[slither][idx].children.push(children);
+                let obj = {};
+                let child = [];
+                for (let i of children) {
+                  obj[i.keyName] = i.keyType;
+                }
+                child.push(obj);
+                this.form[key] = child;
+                this.formatData[key] = this.jsonClone(child);
+              }
+            }
+          })
+        }
+      },
       // 草稿
       getDraft() {
         let params = {};
