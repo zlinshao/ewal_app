@@ -104,7 +104,7 @@
     methods: {
       choosePicker(val, date) {
         this.pickerName = val.keyName;
-        if (val.picker === 'date') {
+        if (val.picker === 'date' || val.picker === 'datetime') {
           this.chooseTime(val, date);
           return;
         }
@@ -117,6 +117,7 @@
       chooseTime(val, date) {
         this.timeModule = true;
         this.formatData.dateKey = val.keyName;
+        this.formatData.dateType = val.picker;
         this.formatData.dateVal = date;
       },
       // 确认时间

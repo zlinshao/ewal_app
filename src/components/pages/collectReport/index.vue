@@ -695,8 +695,10 @@
               if (key.keyName === parentKey) {
                 for (let children of key.children[index]) {
                   for (let child of children) {
-                    child.button = '已认证';
-                    child.icon = '';
+                    if (child.icon === 'identity') {
+                      child.button = '已认证';
+                      child.icon = '';
+                    }
                     if (data.includes(child.keyName)) {
                       child.disabled = 'disabled';
                     }
@@ -705,8 +707,10 @@
                 return;
               }
             } else {
-              key.button = '已认证';
-              key.icon = '';
+              if (key.icon === 'identity') {
+                key.button = '已认证';
+                key.icon = '';
+              }
               if (data.includes(key.keyName)) {
                 key.disabled = 'disabled';
               }
