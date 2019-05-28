@@ -359,6 +359,7 @@
       chooseTime(val, date, num, parentKey) {
         this.timeModule = true;
         this.formatData.dateKey = val.keyName;
+        this.formatData.dateType = val.picker;
         this.formatData.dateVal = date;
         this.formatData.dateIdx = num;
         this.formatData.parentKey = parentKey;
@@ -510,6 +511,7 @@
             });
             break;
           case 'date':
+          case 'datetime':
             this.chooseTime(val, value, num, parentKey);
             break;
           case 'searchHouse':
