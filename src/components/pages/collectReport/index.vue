@@ -625,9 +625,6 @@
       },
       // 身份认证 银行认证
       confirmation(val, parentKey, index) {
-        console.log(val)
-        console.log(parentKey)
-        console.log(index)
         let params = {};
         switch (val) {
           case 'identity':
