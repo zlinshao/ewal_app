@@ -10,11 +10,11 @@
         <div class="searchInput">
           <div class="input">
             <div>
-              <input type="text" v-model="params.serach" @keyup.enter="onSearch" placeholder="输入房屋地址">
-              <span v-if="params.serach" @click="params.serach = ''"></span>
+              <input type="text" v-model="params.search" @keyup.enter="onSearch" placeholder="输入房屋地址">
+              <span v-if="params.search" @click="params.search = ''"></span>
             </div>
-            <p v-if="params.serach" class="searchBtn" @click="onSearch">搜索</p>
-            <p v-if="!params.serach" @click="searchModule = false">取消</p>
+            <p v-if="params.search" class="searchBtn" @click="onSearch">搜索</p>
+            <p v-if="!params.search" @click="searchModule = false">取消</p>
           </div>
         </div>
         <div class="searchHouse">
@@ -51,6 +51,12 @@
               </div>
             </li>
           </ul>
+          <div class="popupSearch" v-else>
+            <div class="flex-center">
+              <span v-if="fullLoading">暂无相关数据...</span>
+              <span v-if="!params.search && !fullLoading">请输入搜索内容...</span>
+            </div>
+          </div>
         </div>
       </div>
     </van-popup>
@@ -67,6 +73,7 @@
         fullLoading: false,
         searchList: [],
         total: 0,
+        onConfig: {},
         params: {
           search: '',
           page: 1,
@@ -87,10 +94,11 @@
         this.searchModule = val;
       },
       config(val) {
-        console.log(val);
+        this.onConfig = val;
       },
       searchModule(val) {
         if (!val) {
+          this.close_();
           this.$emit('close', 'close');
         }
       },
@@ -98,7 +106,9 @@
     computed: {},
     methods: {
       onSearch() {
+        this.fullLoading = false;
         this.$httpZll.searchHouseList(this.params).then(res => {
+          this.fullLoading = true;
           if (res) {
             this.searchList = res.data.data;
             this.total = res.data.all_count;
@@ -109,8 +119,18 @@
         let form = {};
         form.id = item.id;
         form.name = item.name;
-        this.$emit('close', form, this.config);
-      }
+        this.$emit('close', form, this.onConfig);
+      },
+      close_() {
+        this.fullLoading = false;
+        this.searchList = [];
+        this.total = 0;
+        this.params = {
+          search: '',
+          page: 1,
+          limit: 20,
+        };
+      },
     },
   }
 </script>

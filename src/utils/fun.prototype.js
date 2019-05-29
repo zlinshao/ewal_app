@@ -167,7 +167,6 @@ export default {
             obj.location[0] = res.position.lng;
             obj.location[1] = res.position.lat;
             for (let city of data) {
-              console.log(address.city.includes(city.name));
               if (address.city.includes(city.name)) {
                 if (Array.isArray(city.code)) {
                   obj.city = city.code;
@@ -181,6 +180,7 @@ export default {
             resolve(obj);
           });
           AMap.event.addListener(geolocation, 'error', function (err) {
+            alert(1111);
             obj.city = [320100];
             obj.name = '南京';
             obj.location = [118.734235, 31.984095];

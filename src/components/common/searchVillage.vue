@@ -119,7 +119,7 @@
       },
       close_() {
         this.searchList = [];
-        this.fullLoading = true;
+        this.fullLoading = false;
       },
     },
   }

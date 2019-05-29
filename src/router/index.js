@@ -10,7 +10,6 @@ import ToBeDone from '@/components/pages/toBeDone/index.vue'//市场部待办
 import ToBeDoneList from '@/components/pages/toBeDoneList/index.vue'//所有待办
 import DatumRecord from '@/components/pages/toBeDoneList/addRecord/datumRecord.vue'//增加资料跟进记录
 import PunchClock from '@/components/pages/punchClock/index.vue'//待办
-// import GoSignContract from '@/components/pages/punchClock/finish.vue'//去签署
 import DeliveryReceipt from '@/components/pages/toBeDoneList/deliveryReceipt/index.vue'//交接单
 import Approvals from '@/components/pages/approvals/index.vue'//审批
 import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
@@ -84,13 +83,6 @@ export default new Router({
       component: PunchClock,
       meta: {title: '带看打卡', index: 3},
     },
-    // {
-    //   path: '/goSignContract',
-    //   name: '去签署',
-    //   hidden: 'index',
-    //   component: GoSignContract,
-    //   meta: {title: '去签署', index: 4},
-    // },
     {
       path: '/approvals',
       name: '审批',

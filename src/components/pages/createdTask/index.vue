@@ -199,7 +199,7 @@
       //房屋搜索
       getHouse(val, config) {
         this.onCancel();
-        if (val) {
+        if (val !== 'close') {
           this.form[config.keyName] = [val.id];
           this.formatData[config.keyName] = val.name;
         }

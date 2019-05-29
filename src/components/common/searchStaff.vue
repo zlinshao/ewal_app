@@ -36,7 +36,7 @@
           <p class="items-center" v-for="(item,index) in staffOldValue">
             {{item.name}}
             <i @click="deleteStaff(index)">
-              <img src="../../assets/image/common/deletestaff.png">
+              <img src="../../assets/image/common/deletestaff.png" alt="">
             </i>
           </p>
         </div>
@@ -147,6 +147,7 @@
         }
         this.staffList.name = names.join(',');
       },
+      // 确定
       finish() {
         this.cancel(this.staffList, this.staffOldValue);
       },
