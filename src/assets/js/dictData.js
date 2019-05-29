@@ -16,6 +16,12 @@ const valueHave = {
 dicties = {
   // 省
   province: {},
+  // 市
+  city: {},
+  // 区/县
+  district: {},
+  // 区域
+  region: {},
   // 房屋类型
   house_type: {
     value_0: ['1室', '2室', '3室', '4室', '5室', '6室', '7室', '8室'],

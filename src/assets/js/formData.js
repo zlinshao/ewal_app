@@ -54,8 +54,8 @@ bulletinRouterStatus = {
 // 审批筛选
 approvalSearch = {
   toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC', 'CollectReceiptSign'],
-  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentReceiptSign'],
-  approvals1: ['pqjl_approval', 'gkzx_approval'],
+  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC'],
+  approvals1: ['pqjl_approval', 'gkzx_approval','zcb_approval'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
 };
@@ -69,7 +69,7 @@ defineNewAddVillage = [
     keyName: 'province',
     keyType: '',
     type: 'text',
-    status: 'objInt',
+    status: 'obj',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
@@ -81,7 +81,7 @@ defineNewAddVillage = [
     keyName: 'city',
     keyType: '',
     type: 'text',
-    status: 'objInt',
+    status: 'obj',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
@@ -90,10 +90,10 @@ defineNewAddVillage = [
     label: '区/县',
     placeholder: '必填 请选择',
     readonly: 'readonly',
-    keyName: 'area',
+    keyName: 'district',
     keyType: '',
     type: 'text',
-    status: 'objInt',
+    status: 'obj',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
@@ -105,7 +105,7 @@ defineNewAddVillage = [
     keyName: 'region',
     keyType: '',
     type: 'text',
-    status: 'objInt',
+    status: 'obj',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
@@ -140,6 +140,15 @@ defineNewAddVillage = [
     slot: '',
   },
   {
+    label: '求租人电话',
+    placeholder: '必填 请输入',
+    keyName: 'lessor_phone',
+    keyType: '',
+    type: 'number',
+    status: '',
+    slot: '',
+  },
+  {
     label: '建筑年限',
     placeholder: '必填 请选择',
     readonly: 'readonly',
@@ -168,7 +177,7 @@ defineNewAddVillage = [
     placeholder: '请输入',
     keyName: 'total_buildings',
     keyType: '',
-    type: 'text',
+    type: 'number',
     status: '',
     slot: '',
   },
@@ -177,7 +186,7 @@ defineNewAddVillage = [
     placeholder: '必填 请输入',
     keyName: 'property_fee',
     keyType: '',
-    type: 'text',
+    type: 'number',
     status: '',
     slot: '',
   },
@@ -255,9 +264,7 @@ defineNewAddVillage = [
   },
   {
     label: '上传',
-    keyName: 'album',
-    keyType: {},
-    picker: 'album',
+    picker: 'upload',
     photos: [
       {
         label: '小区照片',
@@ -266,7 +273,7 @@ defineNewAddVillage = [
       }, {
         label: '房屋照片',
         placeholder: '必填',
-        keyName: 'house_pic',
+        keyName: 'home_photo',
       }, {
         label: '调研报告',
         placeholder: '可选文件',

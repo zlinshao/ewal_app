@@ -106,7 +106,7 @@ export default {
       }
     };
     // 列表 数据重组
-    Vue.prototype.groupHandlerListData = function (data) {
+    Vue.prototype.groupHandlerListData = function (data, url) {
       let arr = [];
       for (let item of data) {
         let obj = {};
@@ -121,13 +121,25 @@ export default {
             obj.due_date_minutes = date.minutes;
           }
         }
-        obj.name = item.name;
-        obj.task_id = item.id;
-        obj.duration = item.duration;
+        for (let key of Object.keys(item)) {
+          if (key !== 'variables') {
+            obj[key] = item[key]
+          }
+        }
+        if (url && url.includes('process-instances')) {
+          obj.process_id = item.id;
+          if (item.taskInfo && item.taskInfo.length) {
+            obj.task_id = item.taskInfo[0].id;
+          } else {
+            obj.task_id = '';
+          }
+        } else {
+          obj.task_id = item.id;
+          obj.process_id = item.processInstanceId;
+        }
         obj.status = item.status || [];
         obj.root_id = item.rootProcessInstanceId;
         obj.taskDefinitionKey = item.taskDefinitionKey;
-        obj.process_id = item.processInstanceId;
         arr.push(obj);
       }
       return arr;
@@ -274,7 +286,7 @@ export default {
           data = this.jsonClone(defineCollectReport);
           break;
         case 'bulletin_rent_basic':
-          title = [ '客户信息','合同信息'];
+          title = ['客户信息', '合同信息'];
           data = this.jsonClone(defineRentReport);
           break;
         case 'bulletin_agency':

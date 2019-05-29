@@ -53,7 +53,7 @@
               <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
             </div>
             <!--上传-->
-            <div v-else-if="item.picker === 'album' && item.photos" class="uploadForm">
+            <div v-else-if="item.picker === 'upload' && item.photos" class="uploadForm">
               <div v-for="upload in item.photos" class="flex">
                 <Upload :file="upload" :getImg="album" @success="getImgData"></Upload>
               </div>
@@ -110,7 +110,7 @@
 
         province: [],
         city: [],
-        area: [],
+        district: [],
       }
     },
     created() {
@@ -180,50 +180,59 @@
           let name = this.pickers.keyName;
           if (name === 'province') {
             this.closeSelect();
-            this.$httpZll.getAllCityList({province: value.province}).then(res => {
+            this.$httpZll.getAllCityList({province: value.province.id}).then(res => {
               let data = {};
               for (let val of res.data) {
                 data[val.city_id] = val.city_name;
               }
-              dicties['city'] = data;
+              dicties.city = data;
             });
           }
           if (name === 'city') {
-            this.formatData.village_name = show.city;
+            this.formatData.village_name = value.city.name;
             this.closeSelect('city');
-            this.$httpZll.getAllCityList({province: this.form.province, city: value.city}).then(res => {
+            this.$httpZll.getAllCityList({province: this.form.province.id, city: value.city.id}).then(res => {
               let data = {};
               for (let val of res.data) {
                 data[val.area_id] = val.area_name;
               }
-              dicties['area'] = data;
+              dicties.district = data;
             });
           }
-          if (name === 'area') {
+          if (name === 'district') {
             this.$httpZll.getAllCityList({
-              province: this.form.province,
-              city: this.form.city,
-              area: value.area
+              province: this.form.province.id,
+              city: this.form.city.id,
+              area: value.district.id
             }).then(res => {
               let data = {};
               for (let val of res.data) {
                 data[val.region_id] = val.region_name;
               }
-              dicties['region'] = data;
+              dicties.region = data;
             });
           }
         }
       },
       closeSelect(val) {
-        this.form.area = '';
-        this.formatData.area = '';
+        this.form.district = {
+          id: '',
+          name: ''
+        };
+        this.formatData.district = '';
         if (val === 'city') return;
-        this.form.city = '';
+        this.form.city = {
+          id: '',
+          name: ''
+        };
         this.formatData.city = '';
         this.formatData.village_name = '';
-        dicties.area = {};
-        if (val === 'area') return;
-        this.form.region = '';
+        dicties.district = {};
+        if (val === 'district') return;
+        this.form.region = {
+          id: '',
+          name: '',
+        };
         this.formatData.region = '';
         dicties.region = {};
       },
@@ -231,7 +240,7 @@
         this.pickerModule = false;
       },
       getImgData(val) {
-        this.form.album[val[0]] = val[1];
+        this.form[val[0]] = val[1];
       },
       // 提交
       okAddVillage() {

@@ -26,6 +26,11 @@
                   <img src="../../assets/image/file/upload.png" alt="">
                 </span>
               </div>
+              <div class="img" v-else>
+                <span>
+                  <img src="../../assets/image/file/upload.png" alt="">
+                </span>
+              </div>
               <div class="content">
                 <h1>{{item.name}}</h1>
                 <h2>

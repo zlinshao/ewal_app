@@ -22,7 +22,21 @@
           <div v-if="item.showForm === 'formatData' || item.picker" v-for="(item,index) in drawSlither">
             <!--select 下拉选择-->
             <zl-input
+              v-if="!item.pickerRead"
               v-model="formatData[item.keyName]"
+              @focus="choosePicker(item,form[item.keyName],item.keyName)"
+              :key="index"
+              :type="item.type"
+              :label="item.label"
+              :readonly="item.readonly"
+              :disabled="item.disabled"
+              :placeholder="item.placeholder">
+              <div class="zl-button" v-if="item.button">{{item.button}}</div>
+              <div class="unit" v-if="item.unit">{{item.unit}}</div>
+            </zl-input>
+            <zl-input
+              v-else
+              v-model="form[item.keyName]"
               @focus="choosePicker(item,form[item.keyName],item.keyName)"
               :key="index"
               :type="item.type"
@@ -115,14 +129,14 @@
         mainHeight: '',
         changeTaskType: false,
         postName: 'CollectTakeLook',
-        postShowName: '收房待办',
+        postShowName: '收房带看',
         highList: [
           {
             id: 'CollectTakeLook',
-            text: '收房待看',
+            text: '收房带看',
           }, {
             id: 'RentTakeLook',
-            text: '租房待看',
+            text: '租房带看',
           }, {
             id: 'HouseCleaning',
             text: '保洁任务',
@@ -183,11 +197,11 @@
     computed: {},
     methods: {
       //房屋搜索
-      getHouse(val) {
+      getHouse(val, config) {
         this.onCancel();
         if (val) {
-          this.form.house_id = [val.id];
-          this.formatData.house_id = val.name;
+          this.form[config.keyName] = [val.id];
+          this.formatData[config.keyName] = val.name;
         }
       },
       // 小区搜索
@@ -202,7 +216,7 @@
       // 选择任务类型 show hidden
       checkChoose(item) {
         this.postName = item.id || 'CollectTakeLook';
-        this.postShowName = item.text || '收房待办';
+        this.postShowName = item.text || '收房带看';
         this.changeTaskType = false;
         this.resetting();
       },
@@ -292,6 +306,7 @@
             break;
           case 'searchHouse':
             this.searchHouseModule = true;
+            this.searchConfig = val;
             break;
           case 'searchStaff':
             this.searchStaffModule = true;

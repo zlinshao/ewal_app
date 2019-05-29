@@ -504,6 +504,20 @@
       choosePicker(item, value = '', parentKey = '', index = '') {
         this.popupStatus = item.picker;
         if (item.status === 'child') {
+          this.deliveryPicker(item, value, parentKey, index);
+        } else if (item.status === 'date') {
+          this.chooseTime(item, value);
+        } else {
+          this.pickerModule = true;
+          this.inputSelect(item, value, parentKey).then(picker => {
+            this.pickers = picker;
+          });
+        }
+      },
+      // 交接单 picker
+      deliveryPicker(item, value, parentKey, index) {
+        this.$closePicker().then(res => {
+          this.pickers = res;
           let dict = dicties[item.keyName];
           this.pickers.columns = [];
           this.pickers.ids = [];
@@ -522,14 +536,7 @@
           this.pickers.keyName = item.keyName;
           this.pickers.childKeys = item.childKeys;
           this.popupModule = true;
-        } else if (item.status === 'date') {
-          this.chooseTime(item, value);
-        } else {
-          this.pickerModule = true;
-          this.inputSelect(item, value, parentKey).then(picker => {
-            this.pickers = picker;
-          });
-        }
+        });
       },
       // 确认选择
       onConfirm(form, show) {

@@ -498,7 +498,7 @@
           if (!twoLevel) {
             this.paging['paging' + tab] = res.total;
           }
-          let data = this.groupHandlerListData(res.data);
+          let data = this.groupHandlerListData(res.data, this.urlApiz);
           this.outcomes(data, this.tabs);
           if (this.params['params' + tab].page === 1) {
             this.approvalList['list' + tab]['data' + twoLevel] = data;

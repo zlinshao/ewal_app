@@ -693,8 +693,6 @@
           for (let key of this.drawSlither[slither]) {
             if (parentKey) {
               if (key.keyName === parentKey) {
-                console.log(key.children[index])
-                console.log(index)
                 for (let children of key.children[index]) {
                   if (children.icon === 'identity') {
                     children.button = '已认证';
@@ -704,7 +702,6 @@
                     children.disabled = 'disabled';
                   }
                 }
-                console.log(key.children[index])
                 return;
               }
             } else {

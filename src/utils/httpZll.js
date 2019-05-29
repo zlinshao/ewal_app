@@ -89,7 +89,7 @@ class httpZll extends httpService {
   // 新建小区
   static newAddVillage(data) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/community`, data, 'prompt').then(res => {
+      this.post(`${market}v1.0/market/bulletin/village`, data, 'prompt').then(res => {
         if (res.success) {
           $httpPrompt(res.message, 'success');
           resolve(res);
@@ -212,6 +212,7 @@ class httpZll extends httpService {
       // assignee: '69',//登陆人
       order: 'desc',
       taskDefinitionKeyIn: '',
+      rootProcessDefinitionKey: '',
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
     };
@@ -423,18 +424,13 @@ class httpZll extends httpService {
   static setBulletinComment(data, id) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}history/process-instances/${id}/comments`, data).then((res) => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
-        } else {
-          resolve(false);
-          $httpPrompt(res.msg);
-        }
+        resolve(res);
       })
     })
   }
 
   // 暂缓任务
-  static postponeTask(id, data) {
+  static putActionTask(id, data) {
     return new Promise((resolve, reject) => {
       this.put(`${url_done}runtime/process-instances/${id}`, data, 'prompt').then(res => {
         if (res.success) {

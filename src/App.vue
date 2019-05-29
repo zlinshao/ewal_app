@@ -96,7 +96,7 @@
           for (let val of res.data) {
             data[val.province_id] = val.province_name;
           }
-          dicties['province'] = data;
+          dicties.province = data;
         });
         // 字典
         this.$httpZll.getAllDict().then(res => {

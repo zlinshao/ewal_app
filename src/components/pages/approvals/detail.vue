@@ -27,9 +27,9 @@
               <li v-for="key in Object.keys(drawSlither[item])">
                 <div v-if="formatData[key]">
                   <h1>{{drawSlither[item][key]}}</h1>
-                  <div>
-                    <div v-if="Array.isArray(formatData[key])">
-                      <span v-for="(val,idx) in formatData[key]" v-if="val.uri">
+                  <div v-if="Array.isArray(formatData[key])">
+                    <div v-for="(val,idx) in formatData[key]">
+                      <span v-if="val.uri">
                         <!--图片-->
                         <img :src="val.uri" :alt="val.uri" v-if="val.info.ext.includes('image')"
                              @click="$bigPhoto(formatData[key],val.uri)">
@@ -64,10 +64,8 @@
                         <h2>联系电话：{{val.contact_phone}}</h2>
                       </div>
                     </div>
-                    <span v-else>
-                     {{formatData[key]}}
-                    </span>
                   </div>
+                  <span v-else>{{formatData[key]}}</span>
                 </div>
               </li>
             </ul>
@@ -79,13 +77,22 @@
           <i v-for="(i,idx) in 4" :class="{'hover': idx === slither}"></i>
         </p>
         <div v-if="operates.variableName">
-          <h1 v-for="item in operates.outcomeOptions" class="btn" :class="item.route || ''"
-              @click="clickBtn(operates.variableName, item)">
-            <span class="writingMode">{{item.title}}</span>
-          </h1>
+          <div v-if="operates.variableName !== 'btn'" class="detailBtn">
+            <h1 v-for="item in operates.outcomeOptions" :class="item.route || ''"
+                @click="clickBtn(operates.variableName, item)">
+              <span class="writingMode">{{item.title}}</span>
+            </h1>
+          </div>
+          <div v-else class="commonBtn">
+            <p class="btn" :class="item.route" v-for="item in operates.outcomeOptions"
+               @click="clickBtn(operates.variableName,item)">
+              {{item.title}}
+            </p>
+          </div>
         </div>
       </div>
     </div>
+
     <!--视频播放-->
     <div id="videoId" :class="['video-' + phoneType()]" v-show="videoSrc !== ''">
       <video id="video" :src="videoSrc" muted controls autoplay></video>
@@ -133,7 +140,7 @@
       </div>
       <div class="commonBtn">
         <p class="btn back" @click="cancel('deliver')">取消</p>
-        <p class="btn ">确定</p>
+        <p class="btn">确定</p>
       </div>
     </van-popup>
     <!--历史审批流程-->
@@ -150,7 +157,7 @@
         </div>
         <div class="commonBtn">
           <p class="btn back" @click="cancel('record')">取消</p>
-          <p class="btn ">确定</p>
+          <p class="btn">确定</p>
         </div>
       </div>
     </van-popup>
@@ -178,7 +185,7 @@
         topOperates: [],
 
         mainHeight: '',
-        operates: [],
+        operates: {},
         drawSlither: {},
         formatData: {},
         videoSrc: '',//视频
@@ -232,58 +239,120 @@
     watch: {},
     computed: {},
     methods: {
+      // 生成操作按钮
+      generateButton(btn) {
+        for (let val of btn) {
+          this.operates.outcomeOptions.push(val);
+        }
+        this.operates.outcomeOptions.push({
+          action: true,
+          route: "back",
+          title: "取消"
+        },)
+      },
       // 获取操作按钮
       getOperates(detail, query) {
-        this.operates = [];
+        this.operates = {};
+        this.topOperates = [];
         let tab = Number(query.tab), status = Number(query.status);
-        if (tab === 1) {
-          if (status) {
+        if (tab === 1) {//我审批
+          if (status) {//已审批
             this.topOperates = [
               {id: '2'},
             ]
-          } else {
-            this.setOperates(detail);
+          } else {//待审批
+            this.setOperates(detail.outcome);
             this.topOperates = [
               {id: '1'},
               {id: '2'},
               {id: '3'},
             ]
           }
-        } else if (tab === 2) {
+        } else if (tab === 2) {//我发起的
           if (status) {
-            this.topOperates = [
-              {id: '2'},
-            ]
-          } else {
-            this.topOperates = [
-              {id: '1'},
-              {id: '2'},
-            ]
+            if (status === 1) {//已完成
+              this.topOperates = [
+                {id: '2'},
+              ]
+            } else if (status === 2) {//待签署
+              this.getOperatesAgain('合同修改');
+              this.topOperates = [
+                {id: '2'},
+              ]
+            } else {//待重签
+              this.getOperatesAgain('重新提交');
+            }
+          } else {//未完成
+            this.operates.variableName = 'zll';
+            this.operates.outcomeOptions = [];
+            let btn = [
+              {
+                action: true,
+                route: "urge",
+                title: "催办"
+              },
+              {
+                action: true,
+                route: "cancel",
+                title: "撤销"
+              },
+            ];
+            this.generateButton(btn);
+            if (detail.suspended) {
+              this.topOperates = [
+                {id: '1'},
+                {id: '2'},
+              ]
+            } else {
+              this.topOperates = [
+                {id: '2'},
+              ]
+            }
           }
+        } else if (tab === 3) {//抄送我的
+
+        } else if (tab === 4) {//暂不处理
+          this.setOperates(detail.taskInfo[0].outcome);
+          this.topOperates = [
+            {id: '1'},
+            {id: '2'},
+            {id: '3'},
+          ]
         }
       },
-      setOperates(detail) {
-        if (!detail.outcome) return;
-        if (typeof detail.outcome === 'string') {
-          this.operates = JSON.parse(detail.outcome || '{}');
-        } else {
-          this.operates = detail.outcome;
-        }
+      // 待重签/待签署
+      getOperatesAgain(name) {
+        this.operates.variableName = 'btn';
+        this.operates.outcomeOptions = [];
         let btn = [
           {
             action: true,
-            route: "postpone",
-            title: "暂缓"
-          },
-          {
-            action: true,
-            route: "back",
-            title: "取消"
+            route: "again",
+            title: name
           },
         ];
-        for (let val of btn) {
-          this.operates.outcomeOptions.push(val);
+        this.generateButton(btn);
+      },
+      // 待审批
+      setOperates(outcome) {
+        if (!outcome) return;
+        if (typeof outcome === 'string') {
+          this.operates = JSON.parse(outcome || '{}');
+        } else {
+          this.operates = outcome;
         }
+        let btn = [];
+        if (!this.detailData.suspended) {
+          btn = [
+            {
+              action: true,
+              route: "suspend",
+              title: "暂缓"
+            },
+          ];
+        }
+        this.generateButton(btn);
+
       },
       // 头部操作按钮
       iconButton(num) {
@@ -311,19 +380,24 @@
             break;
         }
       },
-      // 同意 拒绝
+      // 同意 拒绝 催办 撤销
       clickBtn(key = '', action = {}) {
         switch (action.route) {
           case'back'://取消
             this.$router.go(-1);
             break;
-          case'postpone'://暂缓
-            this.$httpZll.postponeTask(this.detailData.process_id, {action: 'suspend'}).then(_ => {
+          case'suspend'://暂缓
+          case'urge'://催办
+          case'cancel'://撤销
+            this.$httpZll.putActionTask(this.detailData.process_id, {action: action.route}).then(_ => {
               this.$prompt('操作成功', 'success');
               setTimeout(_ => {
                 this.$router.go(-1);
               }, 500);
             });
+            break;
+          case 'again':
+            console.log(312312);
             break;
           default:
             let postData = {};
@@ -369,8 +443,18 @@
       },
       // 评论
       onComment() {
+        this.commentForm.content.message = this.commentForm.content.message.replace(/\s+/g, '');
+        if (!this.commentForm.content.message) {
+          this.$prompt('请填写评论内容');
+          return;
+        }
         this.$httpZll.setBulletinComment(this.commentForm, this.detailData.process_id).then(res => {
-
+          this.cancel('comment');
+          if (res.content && res.content.message) {
+            this.$prompt('评论成功！', 'success');
+          } else {
+            this.$prompt('评论失败！', 'fail');
+          }
         })
       },
       // 员工搜索
@@ -431,7 +515,7 @@
             this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
             this.formatData = res.data.content;
-            this.handleDetail(res.data.content)
+            this.handleDetail(res.data.content);
           }
         })
       },
@@ -693,20 +777,22 @@
               transition: transform .3s;
 
               li {
+
+                h1 {
+                  min-width: 38%;
+                  max-width: 38%;
+                  color: #4A4A4A;
+                  text-align: right;
+                  padding-right: .36rem;
+                }
+
                 > div {
                   @include flex();
-
-                  h1, > div {
-                    padding: .1rem .15rem;
-                  }
-
-                  h1 {
-                    width: 36%;
-                    color: #4A4A4A;
-                    text-align: right;
-                  }
+                  padding: .1rem .2rem .1rem 0;
 
                   > div {
+                    @include flex();
+                    flex-wrap: wrap;
                     width: 64%;
                     color: #000;
 
@@ -717,10 +803,6 @@
 
                     .h3, .h4 {
                       padding-top: .2rem;
-                    }
-
-                    h2 {
-                      padding-left: .3rem;
                     }
 
                     img {
@@ -758,13 +840,14 @@
         @include flex('bet-column');
         border-top: 1px dashed #C6CAD8;
 
-        p {
+        > p {
           @include flex('flex-center');
+          padding: .3rem 0;
 
           i {
             width: .16rem;
             height: .16rem;
-            margin: .2rem .04rem;
+            margin: 0 .06rem;
             @include radius(50%);
             background-color: #D8D8D8;
           }
@@ -776,17 +859,17 @@
           }
         }
 
-        div {
-          height: 2.6rem;
-          padding: 0 .8rem;
+        .detailBtn {
+          height: 2.4rem;
           margin-bottom: -.6rem;
+          padding: 0 .8rem;
           @include flex('justify-around');
           justify-items: flex-end;
           flex-direction: row-reverse;
 
-          .btn {
+          h1 {
+            padding-bottom: .8rem;
             width: .7rem;
-            padding-bottom: .6rem;
             @include flex('flex-center');
           }
 
@@ -796,21 +879,26 @@
           }
 
           /*拒绝*/
-          .refuse {
+          .refuse, .cancel {
             @include detailImg('jujue');
           }
 
           /*暂缓*/
-          .postpone {
+          .suspend {
             color: #FFFFFF;
             @include detailImg('zanhuan');
           }
 
           /*通过*/
-          .publish {
+          .publish, .urge {
             color: #FFFFFF;
             @include detailImg('tongguo');
           }
+        }
+
+        .commonBtn {
+          flex-direction: row-reverse;
+          padding: 0 .3rem .6rem;
         }
       }
     }

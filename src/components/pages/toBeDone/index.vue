@@ -429,6 +429,7 @@
         this.fullLoading = true;
         let type = this.bulletin_type.bulletin;
         let status = type === 'bulletin_collect_basic' ? 'toBeDoneCollect' : 'toBeDoneRent';
+        val.rootProcessDefinitionKey = type === 'bulletin_collect_basic' ? 'MarketCollect' : 'MarketRent';
         val.taskDefinitionKeyIn = approvalSearch[status].join(',');
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
