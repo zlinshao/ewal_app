@@ -1714,7 +1714,7 @@ defineCollectReport = {
 
 // 租房报备
 defineRentReport = {
-  // 合同信息
+  // 客户信息
   slither0: [
     {
       label: '客户姓名',
@@ -1915,8 +1915,8 @@ defineRentReport = {
         }
       ]
     },
-  ],  
-  // 客户信息
+  ],
+  // 合同信息
   slither1: [
     {
       label: '是否是电子合同',
@@ -2431,8 +2431,6 @@ defineRentReport = {
       slot: '',
     },
   ],
- 
- 
 };
 
 // 渠道报备
@@ -3381,7 +3379,6 @@ defineChangeReport = {
       ]
     },
   ],
-
 };
 
 // 转租报备==>租房报备
@@ -3524,19 +3521,6 @@ defineCheckoutReport = {
     },
   ]
 };
-// defineCheckoutReport={
-//   // 客厅
-//   hall_goods: handlerHallGoods('hall_goods', 11),
-//   // 厨房/阳台/卫生间
-//   kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom', 12),
-//   // 主卧
-//   master_bedroom: ('master_bedroom', 13),
-//   // 次卧
-//   bedroom: [handlerBedroom('bedroom', 15)],
-//   // 费用交接
-//   slither: handlerFreeDeliveryChange[1],
-// }
-
 
 // 收房交接单
 // 物品交接

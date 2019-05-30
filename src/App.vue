@@ -26,6 +26,8 @@
       data.staff_name = '张琳琳';
       data.department_id = '134';
       data.department_name = '南京马群组';
+      data.city_id = '320100';
+      data.city_name = '南京市';
       this.personal = data;
       this.$store.dispatch('personal_storage', JSON.stringify(data));
       dd.ui.webViewBounce.disable();
