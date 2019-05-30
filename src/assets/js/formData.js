@@ -661,6 +661,11 @@ defineNewTask = {
   ],
 };
 
+// 补充协议
+defineSupplyAgreement = [
+
+];
+
 // 收房报备
 defineCollectReport = {
   // 房屋信息

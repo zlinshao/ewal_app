@@ -289,7 +289,7 @@
                 id: 'CollectTakeLook',
                 text: '收房带看',
               }, {
-                url: '',
+                url: '/supplyAgreement',
                 text: '补充协议',
               }
             ];

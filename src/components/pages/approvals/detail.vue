@@ -174,6 +174,7 @@
     components: {SearchStaff},
     data() {
       return {
+        tabs: {},
         bulletinTitle: [],
         startClientX: 0,
         endClientX: 0,
@@ -232,7 +233,8 @@
       this.mainHeight = this.mainListHeight(top);
       let detail = JSON.parse(sessionStorage.approvalDetail || '{}');
       this.detailData = detail;
-      this.getOperates(detail, this.$route.query);
+      this.tabs = this.$route.query;
+      this.getOperates(detail, this.tabs);
       this.handleData(detail);
       this.approvalDetail(detail.bm_detail_request_url);
     },
@@ -382,6 +384,7 @@
       },
       // 同意 拒绝 催办 撤销
       clickBtn(key = '', action = {}) {
+        let msg = {suspend: '暂缓', urge: '催办', cancel: '撤销'};
         switch (action.route) {
           case'back'://取消
             this.$router.go(-1);
@@ -390,10 +393,17 @@
           case'urge'://催办
           case'cancel'://撤销
             this.$httpZll.putActionTask(this.detailData.process_id, {action: action.route}).then(_ => {
-              this.$prompt('操作成功', 'success');
-              setTimeout(_ => {
-                this.$router.go(-1);
-              }, 500);
+              this.$prompt((msg[action.route] + '成功'), 'success');
+              if (action.route === 'suspend' || action.route === 'cancel') {
+                setTimeout(_ => {
+                  if (action.route === 'suspend') {
+                    this.$store.dispatch('approval_tabs', {tab: '4'});
+                  } else {
+                    this.$store.dispatch('approval_tabs', {tab: '2', status: 3});
+                  }
+                  this.$router.go(-1);
+                }, 500);
+              }
             });
             break;
           case 'again':
@@ -409,6 +419,9 @@
             this.$httpZll.finishBeforeTask(this.detailData.task_id, postData).then(_ => {
               this.$prompt('审核成功！', 'success');
               setTimeout(_ => {
+                if (this.tabs.tab === '4') {
+                  this.$store.dispatch('approval_tabs', {tab: '1', status: 1});
+                }
                 this.$router.go(-1);
               }, 500);
             });

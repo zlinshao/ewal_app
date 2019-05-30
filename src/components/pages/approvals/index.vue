@@ -17,7 +17,8 @@
         <div class="flex">
           <p v-for="item in buttons['tab'+tabs.tab]" @click="tabsTag(item.value)"
              :class="[twoLevel['tab'+tabs.tab] === item.value ? 'hover' : '']">
-            {{item.text}}<span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
+            {{item.text}}
+            <span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
           </p>
         </div>
         <i></i>
@@ -38,13 +39,13 @@
                       <img src="../../../assets/image/common/noHead.png" alt="" v-else>
                     </b>
                     <span v-if="item.bulletin_staff_name">{{item.bulletin_staff_name}}</span>
-                    <span v-else>---</span>
+                    <span v-else>******</span>
                   </div>
                 </div>
                 <div class="listBottom">
                   <div>
                     <i class="icon-1"></i>
-                    <span>待产管审核</span>
+                    <span>{{item.status[0]}}</span>
                   </div>
                   <div>
                     <i class="icon-2"></i>
@@ -476,6 +477,7 @@
       scrollLoad(val) {
         let tab = this.tabs.tab;
         let status = this.tabs.status;
+        this.twoLevel['tab' + tab] = status;
         this.paramsHandle(tab, status, 'break');
         if (!val) {
           this.params['params' + tab].page = 1;

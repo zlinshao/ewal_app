@@ -46,14 +46,14 @@
             </div>
           </div>
           <div class="commonBtn" v-if="outcome">
-            <div class="btn back" @click="successPunchClock = false">取消</div>
+            <div class="btn back" @click="oncancel()">取消</div>
             <div class="btn" :class="btn.route" v-for="btn in outcome.outcomeOptions"
                  @click="finishPunchClock(btn,outcome.variableName)">
               {{btn.title}}
             </div>
           </div>
           <div class="commonBtn" v-else>
-            <div class="btn back" @click="successPunchClock = false">取消</div>
+            <div class="btn back" @click="oncancel()">取消</div>
             <div class="btn" @click="finishPunchClock()">签约</div>
           </div>
         </div>
@@ -186,6 +186,10 @@
     watch: {},
     computed: {},
     methods: {
+      // 取消
+      oncancel() {
+        this.successPunchClock = false;
+      },
       // 确定打卡
       finishPunchClock(btn, value) {
         if (btn) {
@@ -211,9 +215,9 @@
           if (res.success) {
             let village = {};
             if (bulletin.bulletin === 'bulletin_rent_basic') {
-              village = res.data.content.community_info;
+              village = res.data.content.community_info || {};
             } else {
-              village = res.data.content.community;
+              village = res.data.content.community || {};
             }
             this.handlerVillageDetail(village);
           } else {
@@ -226,11 +230,19 @@
         })
       },
       handlerVillageDetail(village) {
-        this.villageInfo.location = [village.longitude, village.latitude];
-        this.villageInfo.village_name = village.village_name || '';
         this.form.punch_clock_address = village.village_name || '';
-        this.form.property_fee = village.property_fee && village.property_fee || village.property_fee === '暂无相关信息' || '';
+        this.form.property_fee = '';
+        if (village.property_fee && village.property_fee !== '暂无信息') {
+          this.form.property_fee = village.property_fee;
+        }
         this.form.property_phone = village.property_phone || '';
+        this.villageInfo.village_name = village.village_name || '';
+        if (village.longitude && village.longitude) {
+          this.villageInfo.location = [village.longitude, village.latitude];
+        } else {
+          this.villageInfo.location = [];
+          this.$prompt('获取位置信息失败', 'fail');
+        }
       },
       // 时间
       startTime() {
