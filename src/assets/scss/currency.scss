@@ -347,7 +347,7 @@
         height: .6rem;
         border-radius: 50%;
         margin: 0 auto;
-        background-color: #4570FE;
+        background: linear-gradient(180deg, rgba(123, 169, 255, 1) 0%, rgba(69, 112, 254, 1) 100%);
         @include flex('flex-center');
 
         span {
@@ -384,7 +384,12 @@
 
   //转jiao
   .deliver {
-    @include bgImage('../image/footer/yuding.png');
+    @include bgImage('../image/footer/zhuanjiao.png');
+  }
+
+  .publish {
+    color: #212121;
+    @include bgImage('../image/footer/yuding.png'); 
   }
 
   //重置

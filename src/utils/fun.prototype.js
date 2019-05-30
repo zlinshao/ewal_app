@@ -180,7 +180,6 @@ export default {
             resolve(obj);
           });
           AMap.event.addListener(geolocation, 'error', function (err) {
-            alert(1111);
             obj.city = [320100];
             obj.name = '南京';
             obj.location = [118.734235, 31.984095];

@@ -527,7 +527,7 @@
       height: .6rem;
       border-radius: 50%;
       margin: 0 auto;
-      background-color: #4570FE;
+      background: linear-gradient(180deg, #7ba9ff 0%, #4570fe 100%);
       display: flex;
       display: -webkit-flex;
       align-items: center;
@@ -589,6 +589,10 @@
     background: url("../image/footer/queding.png") no-repeat scroll center;
     background-size: 100% 100%; }
   .commonBtn .deliver {
+    background: url("../image/footer/zhuanjiao.png") no-repeat scroll center;
+    background-size: 100% 100%; }
+  .commonBtn .publish {
+    color: #212121;
     background: url("../image/footer/yuding.png") no-repeat scroll center;
     background-size: 100% 100%; }
   .commonBtn .reset {

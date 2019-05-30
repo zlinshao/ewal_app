@@ -24,21 +24,25 @@
           </p>
           <div class="handleBtn">
             <!--合同修改 / 签署-->
-            <div v-if="item.outcome" class="contract">
+            <div v-if="item.outcome && !item.task_action" class="contract">
               <p v-for="btn in item.outcome.outcomeOptions" @click="clickBtn(btn,item)">
                 <i><img :src="changeOperates[btn.action]" alt=""></i>
                 <span>{{btn.title}}</span>
               </p>
             </div>
             <!--转交/代签-->
-            <div v-for="btn in normalOperates" :class="btn.action" @click="clickBtn(btn,item)" v-else>
-              <i><img :src="btn.icon" alt=""></i>
-              <span>{{btn.text}}</span>
+            <div v-for="btn in normalOperates" :class="btn.action" v-else>
+              <b @click="clickBtn(btn,item)">
+                <i><img :src="btn.icon" alt=""></i>
+                <span>{{btn.text}}</span>
+              </b>
             </div>
             <!--去打卡 / 去签约-->
-            <div @click="goOperates(item)" v-if="item.task_title" :class="item.task_action">
-              <i><img :src="changeOperates[item.task_action]" alt=""></i>
-              <span>{{item.task_title}}</span>
+            <div v-if="item.task_title" :class="item.task_action">
+              <b @click="goOperates(item)">
+                <i><img :src="changeOperates[item.task_action]" alt=""></i>
+                <span>{{item.task_title}}</span>
+              </b>
             </div>
           </div>
         </li>
@@ -309,14 +313,19 @@
       },
       // 去打卡 去签约
       goOperates(val) {
+        for (let key of Object.keys(val)) {
+          if (key.includes('detail_request_url')) {
+            val.detail_request_url = val[key];
+          }
+        }
         switch (val.task_action) {
           case 'punchClock':
             sessionStorage.setItem('punchClock', JSON.stringify(val));
             this.routerLink(val.task_action);
             break;
           case 'collectReport':
-            this.againTaskDetail(val).then(_ => {
-              if (val.bm_detail_request_url) {
+            this.againTaskDetail(val.detail_request_url).then(_ => {
+              if (api) {
                 this.againDetailRequest(val, 'again');
               } else {
                 this.routerLink(val.task_action);
@@ -435,7 +444,7 @@
           this.fullLoading = false;
           this.paging = res.total;
           let data = this.groupHandlerListData(res.data);
-          this.handlerOperates(data);
+          this.handlerOperates(data, type);
           if (this.params.page === 1) {
             this.toBeDoneList = data;
           } else {
@@ -446,13 +455,16 @@
         })
       },
       // 更多操作按钮
-      handlerOperates(data) {
+      handlerOperates(data, type) {
         for (let btn of data) {
           if (btn.outcome) {
-            let data = [{
-              title: '客户手机签署',
-              action: 'phone',
-            }];
+            let data = [];
+            if (type === 'bulletin_collect_basic') {
+              data = [{
+                title: '客户手机签署',
+                action: 'phone',
+              }];
+            }
             btn.outcome = JSON.parse(btn.outcome);
             btn.outcome.outcomeOptions = data.concat(btn.outcome.outcomeOptions);
           } else {

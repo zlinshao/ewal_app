@@ -45,9 +45,16 @@
               </div>
             </div>
           </div>
-          <div class="commonBtn">
+          <div class="commonBtn" v-if="outcome">
             <div class="btn back" @click="successPunchClock = false">取消</div>
-            <div class="btn" @click="finishPunchClock">确定</div>
+            <div class="btn" :class="btn.route" v-for="btn in outcome.outcomeOptions"
+                 @click="finishPunchClock(btn,outcome.variableName)">
+              {{btn.title}}
+            </div>
+          </div>
+          <div class="commonBtn" v-else>
+            <div class="btn back" @click="successPunchClock = false">取消</div>
+            <div class="btn" @click="finishPunchClock()">签约</div>
           </div>
         </div>
       </div>
@@ -69,9 +76,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div>
-
     </div>
   </div>
 </template>
@@ -154,6 +158,7 @@
           },
         ],
         postForm: {},//最终提交数据
+        outcome: '',
       }
     },
     created() {
@@ -164,19 +169,28 @@
     activated() {
       this.startTime();
       setInterval(this.startTime, 1000);
-      let query = JSON.parse(sessionStorage.punchClock);
-      let api = query.ctl_detail_request_url;
+      let query = JSON.parse(sessionStorage.punchClock || '{}');
+      let bulletin = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.close_();
       this.postForm.task_id = query.task_id;
       this.postForm.flow_type = query.flow_type;
       this.postForm.process_id = query.root_id;
-      this.villageDetail(api);
+      this.villageDetail(query.detail_request_url, bulletin);
+      if (bulletin.bulletin === 'bulletin_rent_basic') {
+        this.outcome = query.outcome;
+        this.form[query.outcome.variableName] = '';
+      } else {
+        this.outcome = '';
+      }
     },
     watch: {},
     computed: {},
     methods: {
       // 确定打卡
-      finishPunchClock() {
+      finishPunchClock(btn, value) {
+        if (btn) {
+          this.form[value] = btn.action;
+        }
         this.postForm.variables = this.jsonClone(this.form);
         this.$httpZll.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
@@ -191,25 +205,32 @@
         this.resetting();
       },
       // 带看小区信息 详情
-      villageDetail(api) {
+      villageDetail(api, bulletin) {
         this.successPunchClock = false;
         this.$httpZll.get(api).then(res => {
           if (res.success) {
-            let village = res.data.content.community;
-            this.villageInfo.location = [village.longitude, village.latitude];
-            this.villageInfo.village_name = village.village_name;
-            this.form.punch_clock_address = village.village_name || '';
-            this.form.property_fee = village.property_fee && village.property_fee === '暂无相关信息' || '';
-            this.form.property_phone = village.property_phone || '';
+            let village = {};
+            if (bulletin.bulletin === 'bulletin_rent_basic') {
+              village = res.data.content.community_info;
+            } else {
+              village = res.data.content.community;
+            }
+            this.handlerVillageDetail(village);
           } else {
+            this.close_();
             this.villageInfo.location = [];
             this.villageInfo.village_name = '';
-            this.form.punch_clock_address = '';
-            this.form.property_phone = '';
             this.$prompt(res.message);
           }
           this.getLocation(this.villageInfo);
         })
+      },
+      handlerVillageDetail(village) {
+        this.villageInfo.location = [village.longitude, village.latitude];
+        this.villageInfo.village_name = village.village_name || '';
+        this.form.punch_clock_address = village.village_name || '';
+        this.form.property_fee = village.property_fee && village.property_fee || village.property_fee === '暂无相关信息' || '';
+        this.form.property_phone = village.property_phone || '';
       },
       // 时间
       startTime() {
@@ -460,7 +481,7 @@
         @include flex('bet-column');
 
         .commonBtn {
-          padding: .42rem 0;
+          padding: .42rem .3rem;
         }
       }
     }
