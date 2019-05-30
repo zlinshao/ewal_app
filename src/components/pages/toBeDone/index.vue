@@ -324,8 +324,8 @@
             this.routerLink(val.task_action);
             break;
           case 'collectReport':
-            this.againTaskDetail(val.detail_request_url).then(_ => {
-              if (api) {
+            this.againTaskDetail(val).then(_ => {
+              if (val.bm_detail_request_url) {
                 this.againDetailRequest(val, 'again');
               } else {
                 this.routerLink(val.task_action);

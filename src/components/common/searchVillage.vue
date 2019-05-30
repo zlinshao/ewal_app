@@ -64,6 +64,8 @@
       this.$httpZll.getCityList().then(res => {
         this.cityList = res.data;
         this.getBeforeCity(res.data).then(res => {
+          console.log(1);
+          console.log(res);
           this.params.city = res.city;
           this.city_name = res.name;
         })

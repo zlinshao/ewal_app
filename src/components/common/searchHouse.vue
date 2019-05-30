@@ -4,7 +4,7 @@
                :overlay="true">
       <div class="searchModule" :style="mainListHeight(88)">
         <div class="popupTop">
-          <p>请选择房屋</p>
+          <p>请选择房屋{{personal}}</p>
           <h3></h3>
         </div>
         <div class="searchInput">
@@ -103,7 +103,11 @@
         }
       },
     },
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
+    },
     methods: {
       onSearch() {
         this.fullLoading = false;

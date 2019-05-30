@@ -163,6 +163,8 @@ export default {
           mapObj.addControl(geolocation);
           geolocation.getCurrentPosition();
           AMap.event.addListener(geolocation, 'complete', function (res) {
+            console.log(3);
+            console.log(res);
             let address = res.addressComponent;
             obj.location[0] = res.position.lng;
             obj.location[1] = res.position.lat;
@@ -180,6 +182,7 @@ export default {
             resolve(obj);
           });
           AMap.event.addListener(geolocation, 'error', function (err) {
+            console.log(2);
             obj.city = [320100];
             obj.name = '南京';
             obj.location = [118.734235, 31.984095];
@@ -472,16 +475,18 @@ export default {
                 query.process_id = task.processInstanceId;
                 query.root_id = task.rootProcessInstanceId;
                 query.task_action = action.route;
-                for (let v of task.variables) {
-                  if (v.name === 'ctl_detail_request_url' || v.name === 'bm_detail_request_url') {
-                    query[v.name] = v.value || '';
+                for (let able of task.variables) {
+                  if (able.name.includes('detail_request_url')) {
+                    if (able.name !== 'bm_detail_request_url') {
+                      query.detail_request_url = able.value || '';
+                    } else {
+                      query[able.name] = able.value || '';
+                    }
                   }
                 }
-                if (query.bm_detail_request_url) {
-                  this.againTaskDetail(query).then(_ => {
-                    this.againDetailRequest(query, 'again');
-                  });
-                }
+                this.againTaskDetail(query).then(_ => {
+                  this.againDetailRequest(query, 'again');
+                });
               });
             }
           });
@@ -490,8 +495,9 @@ export default {
     };
     // 任务详情
     Vue.prototype.againTaskDetail = function (val) {
+      console.log(val);
       return new Promise((resolve, reject) => {
-        this.$httpZll.get(val.ctl_detail_request_url, {}, 'prompt').then(res => {
+        this.$httpZll.get(val.detail_request_url, {}, 'prompt').then(res => {
           if (res.success) {
             let data = {};
             let content = res.data.content;
