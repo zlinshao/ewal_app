@@ -47,7 +47,7 @@
           </div>
           <div class="commonBtn" v-if="outcome">
             <div class="btn back" @click="oncancel()">取消</div>
-            <div class="btn" :class="btn.route" v-for="btn in outcome.outcomeOptions"
+            <div class="btn" :class="btn.action" v-for="btn in outcome.outcomeOptions"
                  @click="finishPunchClock(btn,outcome.variableName)">
               {{btn.title}}
             </div>

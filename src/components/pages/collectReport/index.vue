@@ -206,7 +206,7 @@
     <!--唯一标识码-->
     <float-button ref="code" :type="'payable'"></float-button>
     <!--房屋搜索-->
-    <search-house :module="searchHouseModule" :config="bulletinType" @close="hiddenHouse"></search-house>
+    <search-house :module="searchHouseModule" :config="searchConfig" @close="hiddenHouse"></search-house>
     <!--日期-->
     <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
     <!--正常 picker-->
@@ -280,6 +280,7 @@
         electronicContractNumber: '',       //电子合同编号
 
         electricalModule: false,            //家电家具
+
       }
     },
     created() {
@@ -349,10 +350,19 @@
         }
       },
       // 房屋搜索结果
-      hiddenHouse(val) {
-        this.searchHouseModule = false;
+      hiddenHouse(val, config) {
+        this.onCancel();
         if (val !== 'close') {
-          console.log(val);
+          let bulletin = config.bulletinType;
+          switch (bulletin.bulletin) {
+            case 'bulletin_rent_basic':
+              this.formatData[config.keyName] = val.address;
+              for (let item of Object.keys(val)) {
+                this.form[item] = val[item];
+              }
+              break;
+          }
+          console.log(this.form)
         }
       },
       // 日期选择
@@ -518,6 +528,7 @@
           case 'searchHouse':
             this.searchHouseModule = true;
             this.searchConfig = val;
+            this.searchConfig.bulletinType = this.bulletinType;
             break;
           case 'noPicker':
             this.noPickerModule = true;
@@ -763,6 +774,7 @@
         this.electricalModule = false;
         this.checksModule = false;
         this.remarkTermsModule = false;
+        this.searchHouseModule = false;
       },
       // 图片上传
       getImgData(val) {

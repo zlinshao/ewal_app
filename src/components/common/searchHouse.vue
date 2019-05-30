@@ -4,7 +4,7 @@
                :overlay="true">
       <div class="searchModule" :style="mainListHeight(88)">
         <div class="popupTop">
-          <p>请选择房屋{{personal}}</p>
+          <p>请选择房屋</p>
           <h3></h3>
         </div>
         <div class="searchInput">
@@ -74,11 +74,7 @@
         searchList: [],
         total: 0,
         onConfig: {},
-        params: {
-          search: '',
-          page: 1,
-          limit: 20,
-        },
+        params: {},
       }
     },
     mounted() {
@@ -97,8 +93,8 @@
         this.onConfig = val;
       },
       searchModule(val) {
+        this.close_();
         if (!val) {
-          this.close_();
           this.$emit('close', 'close');
         }
       },
@@ -121,8 +117,9 @@
       },
       onConfirm(item) {
         let form = {};
-        form.id = item.id;
-        form.name = item.name;
+        form.house_id = item.id;
+        form.contract_id = item.id;
+        form.address = item.name;
         this.$emit('close', form, this.onConfig);
       },
       close_() {
@@ -130,9 +127,11 @@
         this.searchList = [];
         this.total = 0;
         this.params = {
+          city_id: '320100',
           search: '',
           page: 1,
           limit: 20,
+          status: 1,
         };
       },
     },

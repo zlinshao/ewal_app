@@ -27,7 +27,7 @@
         </div>
         <div class="popupSearch">
           <ul v-if="searchList.length ">
-            <li v-for="item in searchList" @click="onConfirm(item)">{{item.address}}</li>
+            <li v-for="item in searchList" @click="onConfirm(item)">{{item.village_name}}</li>
           </ul>
           <div class="flex-center" v-else>
             <span v-if="fullLoading">暂无相关数据...</span>

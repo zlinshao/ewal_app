@@ -200,8 +200,8 @@
       getHouse(val, config) {
         this.onCancel();
         if (val !== 'close') {
-          this.form[config.keyName] = [val.id];
-          this.formatData[config.keyName] = val.name;
+          this.form[config.keyName] = [val.house_id];
+          this.formatData[config.keyName] = val.address;
         }
       },
       // 小区搜索
