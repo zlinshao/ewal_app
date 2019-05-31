@@ -327,10 +327,14 @@ export default {
       return {data, title}
     };
     // 预填数据处理
-    Vue.prototype.$changeHandle = function (res, item, val, all, data) {
+    Vue.prototype.$changeHandle = function (res, item, val, all, data, child) {
       for (let slither of Object.keys(all)) {
         for (let list of all[slither]) {
+
           if (list.keyName === item) {
+            if (child) {
+              child[item] = this.jsonClone(list.children[0]);
+            }
             for (let i = 1; i < res[item].length; i++) {
               list.children.push(list.children[0]);
             }

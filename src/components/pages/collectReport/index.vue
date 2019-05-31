@@ -1028,11 +1028,13 @@
               break;
             case 'subsidiary_customer'://附属房东
               let customer = ['customer_sex', 'card_type', 'contact_way'];
-              this.$changeHandle(res, item, customer, this.drawSlither, this.formatData);
+              this.allChildren[item] = [];
+              this.$changeHandle(res, item, customer, this.drawSlither, this.formatData, this.allChildren);
               this.form[item].forEach((child, index) => {
                 for (let value of Object.values(child)) {
-                  if (child[value]) {
+                  if (value) {
                     this.changeHiddenAll = true;
+                    return;
                   }
                 }
                 if (!status) {
