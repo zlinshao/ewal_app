@@ -1264,6 +1264,7 @@ defineCollectReport = {
     },
     {
       keyName: undefined,
+      status: 'subsidiary_customer',
       picker: 'changeHiddenAll',
       changeBtn: '+增加附属租客',
     },
@@ -2308,6 +2309,7 @@ defineRentReport = {
     },
     {
       keyName: undefined,
+      status: 'subsidiary_customer',
       picker: 'changeHiddenAll',
       changeBtn: '+增加附属租客',
     },

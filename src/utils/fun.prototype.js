@@ -202,6 +202,7 @@ export default {
       let album = {};//图片字段集合
       let formatData = this.jsonClone(showForm);//下拉框显示
       let value = [];//家电家具
+      let show = {};
       for (let item of drawForm) {
         if (item.moreArray) {
           form[item.keyName] = item.keyType;
@@ -215,6 +216,7 @@ export default {
             form[str.keyName] = str.keyType;
           }
         } else if (item.showList) {
+          show[item.keyName] = false;
           form[item.keyName] = item.keyType;
           for (let str of item.showList) {
             form[str.keyName] = str.keyType;
@@ -283,7 +285,7 @@ export default {
       if (!noStaff) {
         this.getPersonal(form, this.$store.state.app.personal);
       }
-      return {form, formatData, value, album};
+      return {form, formatData, value, album, show};
     };
     // 报备类型数据匹配
     Vue.prototype.$bulletinType = function (type) {
@@ -464,7 +466,11 @@ export default {
       this.$dialog('合同修改', '此操作将重新发起报备和审批，并结束该签署任务，且无法恢复，是否继续?').then(res => {
         if (res) {
           let postData = {};
-          postData.action = 'complete';
+          if (item.bulletin_type === 'bulletin_rent_basic') {
+            postData.action = 'complete_multi';
+          } else {
+            postData.action = 'complete';
+          }
           postData.variables = [{
             name: name,
             value: action.action,

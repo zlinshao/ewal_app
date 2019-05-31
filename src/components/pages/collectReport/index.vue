@@ -42,7 +42,7 @@
                 <!--变化 隐藏所有子元素-->
                 <div class="changeHiddenAll"
                      v-else-if="item.picker === 'changeHiddenAll' && !changeHiddenAll && !item.keyName"
-                     @click="changeHiddenAll = true">{{item.changeBtn}}
+                     @click="showListBtn(slither,item.status,(index + 1))">{{item.changeBtn}}
                 </div>
                 <!--变化-->
                 <div v-else-if="item.keyName && item.picker && item.picker.includes('change')">
@@ -279,7 +279,7 @@
         electronicContractNumber: '',       //电子合同编号
 
         electricalModule: false,            //家电家具
-
+        allChildren: {},
       }
     },
     created() {
@@ -477,19 +477,6 @@
         let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
         this.form.deposit = bet * price;
       },
-      // 新增变化
-      changeInput(slither, key, index, val) {
-        let child = this.jsonClone(val);
-        this.drawSlither[slither][index].children.push(child);
-        let value = {};
-        for (let item of child) {
-          value[item.keyName] = item.keyType;
-        }
-        this.form[key].push(value);
-        this.formatData[key].push(value);
-        if (key !== 'period_price_way_arr') return;
-        this.moreChangeDateCount(key);
-      },
       // 输入变化周期计算日期
       moreChangeDateCount(key) {
         let bulletin = this.bulletinType.bulletin;
@@ -501,6 +488,28 @@
         }
         if (!date) return;
         this.changeDateCount(key, new Date(date));
+      },
+      showListBtn(slither, child, index) {
+        this.changeHiddenAll = true;
+        this.allChildren[child] = this.jsonClone(this.drawSlither[slither][index].children[0]);
+      },
+      // 新增变化
+      changeInput(slither, key, index, val) {
+        let child;
+        if (this.changeHiddenAll) {
+          child = this.jsonClone(this.allChildren[key]);
+        } else {
+          child = this.jsonClone(val);
+        }
+        this.drawSlither[slither][index].children.push(child);
+        let value = {};
+        for (let item of child) {
+          value[item.keyName] = item.keyType;
+        }
+        this.form[key].push(value);
+        this.formatData[key].push(value);
+        if (key !== 'period_price_way_arr') return;
+        this.moreChangeDateCount(key);
       },
       // 删除变化
       removeChange(slither, key, index, num) {
@@ -841,11 +850,11 @@
       },
       // 附属房东/租客 处理
       handlerSaveReport() {
-        if (!this.changeHiddenAll) return;
         for (let slither of Object.keys(this.drawSlither)) {
           this.drawSlither[slither].forEach((item, idx) => {
             if (item.picker === 'changeHiddenAll') {
               let key = item.keyName;
+              if (!this.changeHiddenAll) return;
               if (!key) return;
               let customer = this.form[key];
               let formCus = [];
@@ -1084,10 +1093,10 @@
         this.formatData = all.formatData;
         this.album = this.jsonClone(all.album);
         this.electricalList = all.value;
-        this.changeHiddenAll = false;
         for (let item of all.value) {
           item.num = this.form[item.key];
         }
+        this.changeHiddenAll = false;
         this.form.id = id;
         this.form.signer = {};
         this.form.contract_number = this.electronicContractNumber;

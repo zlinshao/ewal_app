@@ -459,25 +459,28 @@
         for (let btn of data) {
           if (btn.outcome) {
             let data = [];
-            if (type === 'bulletin_collect_basic') {
-              data = [{
-                title: '客户手机签署',
-                action: 'phone',
-              }];
+            switch (type) {
+              case 'bulletin_collect_basic':
+              case 'bulletin_rent_basic':
+                data = [{
+                  title: '客户手机签署',
+                  action: 'phone',
+                }];
+                break;
             }
             btn.outcome = JSON.parse(btn.outcome);
-            btn.outcome.outcomeOptions = data.concat(btn.outcome.outcomeOptions);
+            btn.outcome.outcomeOptions = btn.outcome.outcomeOptions.concat(data);
           } else {
             if (btn.taskDefinitionKey === 'CollectReceiptSign') {
               btn.outcome = {
                 outcomeOptions: [
                   {
-                    title: '客户手机签署',
-                    action: 'phone',
-                  },
-                  {
                     title: '本地签署',
                     action: 'success',
+                  },
+                  {
+                    title: '客户手机签署',
+                    action: 'phone',
                   }
                 ],
               };
