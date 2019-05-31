@@ -70,7 +70,7 @@
         } else {
           btn = 'no';
         }
-        this.getDetail(val.ctl_detail_request_url, btn);
+        this.getDetail(val.detail_request_url, btn);
       },
       popupModule(val) {
         if (!val) {

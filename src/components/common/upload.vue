@@ -52,7 +52,6 @@
 <script>
   import * as qiniu from 'qiniu-js'
   import {md5} from '../../../static/js/MD5.js'
-  import {ImagePreview} from 'vant';
 
   export default {
     name: "upload",
@@ -77,6 +76,7 @@
     watch: {
       getImg: {
         handler(val, oldVal) {
+          if(!val) return;
           this.ids = [];
           this.showFile = [];
           this.progress = {};
@@ -94,6 +94,7 @@
           }
           this.$emit('success', [this.file.keyName, this.ids, true], this.file);
         },
+        immediate: true,
         deep: true,
       },
       close(val) {

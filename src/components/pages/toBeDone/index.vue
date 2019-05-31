@@ -231,7 +231,6 @@
           page: 1,
         },
         toBeDoneList: [],
-        detail_request_url: '',
         variableName: '',
         bulletin_type: {},//报备类型
         searchStaffModule: false,
@@ -313,22 +312,23 @@
       },
       // 去打卡 去签约
       goOperates(val) {
-        for (let key of Object.keys(val)) {
-          if (key.includes('detail_request_url')) {
-            val.detail_request_url = val[key];
-          }
-        }
         switch (val.task_action) {
           case 'punchClock':
             sessionStorage.setItem('punchClock', JSON.stringify(val));
             this.routerLink(val.task_action);
             break;
           case 'collectReport':
+            let result;
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
                 this.againDetailRequest(val, 'again');
               } else {
-                this.routerLink(val.task_action);
+                if (val.tk_result) {
+                  result = val.tk_result === 'bulletin' ? '1' : '0';
+                  this.routerLink(val.task_action, {result: result});
+                } else {
+                  this.routerLink(val.task_action);
+                }
               }
             });
             break;

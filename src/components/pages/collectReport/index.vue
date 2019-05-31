@@ -246,8 +246,7 @@
 
         queryData: {},
         bulletinType: {},                   //报备类型
-        bulletinDetail: {},                 //修改/重新发布
-        taskDetail: {},                     //代办任务详情
+        taskDetail: {},                     //任务详情
 
         album: {},                          //图片预填
         drawSlither: {},                    //遍历表单
@@ -288,7 +287,6 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
-      this.bulletinDetail = JSON.parse(sessionStorage.bulletin_draft || '{}');
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -322,6 +320,21 @@
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
+        this.DistinguishForm(type.bulletin);
+      },
+      // 区分报备类型参数
+      DistinguishForm(type) {
+        switch (type) {
+          case 'bulletin_rent_basic':
+            this.form.house_id = '';
+            this.form.contract_id = '';
+            this.form.is_sign = '';
+            let query = this.$route.query;
+            if (query.result) {
+              this.form.is_sign = query.result;
+            }
+            break;
+        }
       },
       // touch 左右切换
       tapStart(event) {
@@ -362,7 +375,6 @@
               }
               break;
           }
-          console.log(this.form)
         }
       },
       // 日期选择
@@ -626,11 +638,13 @@
           }
         }
       },
-      // 获取电子合同
+      // 获取电子合同编号
       electronicContract() {
+        let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
         let data = {
-          city_id: this.form.community && this.form.community.city || '320100',
-          version: '1.1',
+          // city_id: this.form.community && this.form.community.city || '320100',
+          city_id: '320100',
+          version: version,
         };
         this.$httpZll.getElectronicContract(data).then(res => {
           this.electronicContractNumber = res.data.number || '';
@@ -799,7 +813,7 @@
                 if (val === 1) {
                   this.form.id = res.data.id;
                 } else {
-                  this.resetting();
+                  this.bulletin_types(bulletin);
                   this.$store.dispatch('approval_tabs', {tab: '2', status: 0});
                   this.routerReplace('/approvals');
                 }
@@ -809,19 +823,19 @@
           case 2:// 重置
             this.$dialog('重置', '您确定要清空表单吗?').then(status => {
               if (status) {
-                this.resetting();
+                this.bulletin_types(bulletin);
                 this.getPunchClockData();
               }
             });
             break;
           case 3:// 修改
             this.form.is_draft = 0;
-            this.form.approved_level = this.bulletinDetail.variableName;
-            this.form.task_id = this.bulletinDetail.task_id;
-            this.form.process_instance_id = this.bulletinDetail.process_instance_id;
+            this.form.approved_level = this.taskDetail.variableName;
+            this.form.task_id = this.taskDetail.task_id;
+            this.form.process_instance_id = this.taskDetail.process_instance_id;
             this.$httpZll.putReviseReport(this.form, bulletin.to).then(res => {
               if (res) {
-                this.resetting();
+                this.bulletin_types(bulletin);
                 this.$router.go(-1);
               }
             });
@@ -894,7 +908,7 @@
       },
       // 修改
       getRevise() {
-        let res = this.bulletinDetail;
+        let res = this.taskDetail;
         this.form.spot_code = '';//唯一识别码
         this.form.id = '';
         this.form.process_id = res.process_id || '';//修改ID
@@ -902,7 +916,7 @@
       },
       // 重新发布
       againSave() {
-        let res = this.bulletinDetail;
+        let res = this.taskDetail;
         this.form.id = '';
         this.handlePreFill(res.content, 'again');
         this.electronicContract();
@@ -951,6 +965,9 @@
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
+            case 'address':
+              this.formatData.address = res[item];
+              break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
               door[0] = door[0] ? door[0] + '-' : '';
@@ -1022,8 +1039,10 @@
               });
               break;
             case 'period_price_way_arr'://付款方式变化
-              let pay_way = ['pay_way'];
-              this.$changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
+              this.$changeHandle(res, item, ['pay_way'], this.drawSlither, this.formatData);
+              break;
+            case 'current_pay_info'://付款方式变化
+              this.$changeHandle(res, item, [], this.drawSlither, this.formatData);
               break;
             default:
               this.pickerDefaultValue(res, item);
@@ -1066,7 +1085,7 @@
         let all = this.initFormData(allForm, this.showData);
         this.form = all.form;
         this.formatData = all.formatData;
-        this.album = all.album;
+        this.album = this.jsonClone(all.album);
         this.electricalList = all.value;
         this.changeHiddenAll = false;
         for (let item of all.value) {

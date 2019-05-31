@@ -120,6 +120,13 @@ export default {
             obj.due_date_hours = date.hours;
             obj.due_date_minutes = date.minutes;
           }
+          if (key.name.includes('detail_request_url')) {
+            if (key.name !== 'bm_detail_request_url') {
+              obj.detail_request_url = key.value || '';
+            } else {
+              obj[key.name] = key.value || '';
+            }
+          }
         }
         for (let key of Object.keys(item)) {
           if (key !== 'variables') {
@@ -163,7 +170,6 @@ export default {
           mapObj.addControl(geolocation);
           geolocation.getCurrentPosition();
           AMap.event.addListener(geolocation, 'complete', function (res) {
-            console.log(3);
             console.log(res);
             let address = res.addressComponent;
             obj.location[0] = res.position.lng;
@@ -182,7 +188,6 @@ export default {
             resolve(obj);
           });
           AMap.event.addListener(geolocation, 'error', function (err) {
-            console.log(2);
             obj.city = [320100];
             obj.name = '南京';
             obj.location = [118.734235, 31.984095];
@@ -280,6 +285,7 @@ export default {
       }
       return {form, formatData, value, album};
     };
+    // 报备类型数据匹配
     Vue.prototype.$bulletinType = function (type) {
       let data, title;
       switch (type) {
@@ -470,20 +476,12 @@ export default {
               };
               this.$httpZll.getNewTaskId(params).then(res => {
                 let query = {};
-                let task = res.data[0];
+                let task = this.groupHandlerListData(res.data)[0];
+                query = task;
                 query.task_id = task.id;
                 query.process_id = task.processInstanceId;
                 query.root_id = task.rootProcessInstanceId;
                 query.task_action = action.route;
-                for (let able of task.variables) {
-                  if (able.name.includes('detail_request_url')) {
-                    if (able.name !== 'bm_detail_request_url') {
-                      query.detail_request_url = able.value || '';
-                    } else {
-                      query[able.name] = able.value || '';
-                    }
-                  }
-                }
                 this.againTaskDetail(query).then(_ => {
                   this.againDetailRequest(query, 'again');
                 });
@@ -495,7 +493,6 @@ export default {
     };
     // 任务详情
     Vue.prototype.againTaskDetail = function (val) {
-      console.log(val);
       return new Promise((resolve, reject) => {
         this.$httpZll.get(val.detail_request_url, {}, 'prompt').then(res => {
           if (res.success) {
@@ -527,7 +524,7 @@ export default {
           data.content = res.data.content;
           data.task_id = val.task_id;
           data.process_instance_id = val.process_id;
-          sessionStorage.setItem('bulletin_draft', JSON.stringify(data));
+          sessionStorage.setItem('task_detail', JSON.stringify(data));
           this.routerLink(val.task_action, {again: again});
         }
       });

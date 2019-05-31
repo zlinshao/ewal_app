@@ -31,8 +31,7 @@
                    @click="routerLinkDetail(item)">
                 <div class="listTitle">{{item.house_address}}</div>
                 <div class="listMiddle">
-                  <p v-if="item.status.length">{{item.status[0]}}</p>
-                  <p v-else>{{item.name}}</p>
+                  <p>{{item.bulletin_name}}</p>
                   <div>
                     <b>
                       <img :src="item.bulletin_staff_avatar" v-if="item.bulletin_staff_avatar" alt="">
@@ -43,13 +42,19 @@
                   </div>
                 </div>
                 <div class="listBottom">
-                  <div>
+                  <div v-if="showStatus">
                     <i class="icon-1"></i>
-                    <span>{{item.status[0]}}</span>
+                    <span v-if="item.status.length">{{item.status[0]}}</span>
+                    <span v-else>{{item.name}}</span>
                   </div>
                   <div>
                     <i class="icon-2"></i>
-                    <span>以等待{{item.duration}}分钟</span>
+                    <span v-if="showStatus">
+                      已等待{{item.duration}}分钟
+                    </span>
+                    <span v-else>
+                       耗时{{item.duration}}分钟
+                    </span>
                   </div>
                 </div>
                 <div class="approvalStatus publish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
@@ -93,6 +98,7 @@
     data() {
       return {
         leftShift: false,
+        showStatus: false,
         mainHeight: '',
         //加载是否结束
         fullLoading: {
@@ -360,6 +366,8 @@
             sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
             break;
           case '':
+          case 'bulletin_rent_basic':
+            sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newRent));
             break;
         }
       },
@@ -418,6 +426,7 @@
       },
       // params 配置
       paramsHandle(tab, status, req) {
+        this.showStatus = (tab === '1' && !status) || (tab === '2' && !status) || tab === '4';
         this.apiHandle(tab, status);
         switch (tab) {
           case '1':
@@ -438,7 +447,6 @@
                   page: 1,
                   // taskOwner: '69',//登陆人
                   processDefinitionKey: 'MG-BulletinApproval',
-                  // processInstanceName: 'Collect',//区分报备类型
                   finished: Boolean(status),
                 };
                 break;
@@ -447,7 +455,6 @@
                   page: 1,
                   // assignee: '69',//登陆人
                   taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
-                  // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
               case 3:
@@ -456,7 +463,6 @@
                   cancelled: true,//待重签
                   taskDefinitionKeyIn: approvalSearch.approvals23.join(','),
                   active: true,
-                  // processInstanceName: 'Collect',//区分报备类型
                 };
                 break;
             }

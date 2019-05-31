@@ -21,9 +21,9 @@
           <i></i>
           <span class="writingMode">{{bulletinTitle[slither]}}</span>
         </div>
-        <div class="detail">
-          <div>
-            <ul v-for="item in Object.keys(drawSlither)" :class="['slide' + slither]">
+        <div class="detail" :class="['transition' + allReportNum]">
+          <div :style="{'width':bulletinTitle.length + '00%'}" :class="['slide' + slither]">
+            <ul v-for="item in Object.keys(drawSlither)">
               <li v-for="key in Object.keys(drawSlither[item])">
                 <div v-if="formatData[key]">
                   <h1>{{drawSlither[item][key]}}</h1>
@@ -63,6 +63,11 @@
                         <h2>联系方式：{{val.contact_way}}</h2>
                         <h2>联系电话：{{val.contact_phone}}</h2>
                       </div>
+                      <div v-else-if="val.money_sep">
+                        <h4 :class="[idx !== 0?'h4':'']">
+                          {{val.remittance_account + ':' + val.money_sep + '元'}}
+                        </h4>
+                      </div>
                     </div>
                   </div>
                   <span v-else>{{formatData[key]}}</span>
@@ -74,7 +79,7 @@
       </div>
       <div class="operates">
         <p>
-          <i v-for="(i,idx) in 4" :class="{'hover': idx === slither}"></i>
+          <i v-for="(i,idx) in allReportNum" :class="{'hover': idx === slither}"></i>
         </p>
         <div v-if="operates.variableName">
           <div v-if="operates.variableName !== 'btn'" class="detailBtn">
@@ -175,13 +180,14 @@
     data() {
       return {
         tabs: {},
+        allReportNum: 0,//表单模块数
         bulletinTitle: [],
         startClientX: 0,
         endClientX: 0,
         slither: 0,
         allDetail: {},//详情数据
         detailData: {},//所有参数
-
+        objInt: [],
         // 头部操作
         topOperates: [],
 
@@ -372,16 +378,19 @@
       },
       // 报备类型跳转
       bulletinRouter(type) {
-        sessionStorage.setItem('bulletin_draft', JSON.stringify(this.allDetail));
+        sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
         switch (type) {
           case 'bulletin_collect_basic':
             sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
             this.routerLink('/collectReport', {revise: 'revise'});
             break;
-          case'':
+          case 'bulletin_rent_basic':
+            sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newRent));
+            this.routerLink('/collectReport', {revise: 'revise'});
             break;
         }
       },
+
       // 同意 拒绝 催办 撤销
       clickBtn(key = '', action = {}) {
         let msg = {suspend: '暂缓', urge: '催办', cancel: '撤销'};
@@ -444,7 +453,7 @@
         let start = this.startClientX;
         let end = this.endClientX;
         if (start - end > 66) {
-          if (3 > this.slither > 0) {
+          if ((this.allReportNum - 1) > this.slither > 0) {
             this.slither++;
           }
         }
@@ -494,13 +503,27 @@
           // alert('不支持的视频文件！');
         }
       },
+      // 所有单选 picker
+      objIntArray(data) {
+        let arr = [];
+        for (let item of Object.keys(data)) {
+          for (let key of data[item]) {
+            if (key.status === 'objInt') {
+              arr.push(key.keyName);
+            }
+          }
+        }
+        return arr;
+      },
       // 展示数据字段
       handleData(detail) {
         this.slither = 0;
         let bulletinData = this.$bulletinType(detail.bulletin_type);
+        this.objInt = this.objIntArray(bulletinData.data);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         let data = this.drawSlither;
+        this.allReportNum = Object.keys(data).length;
         let obj = {};
         for (let val of Object.keys(data)) {
           obj[val] = {};
@@ -508,6 +531,11 @@
             if (item.picker === 'upload') {
               for (let pic of item.photos) {
                 obj[val][pic.keyName] = pic.label;
+              }
+            } else if (item.showList) {
+              obj[val][item.keyName] = item.label;
+              for (let list of item.showList) {
+                obj[val][list.keyName] = list.label;
               }
             } else {
               if (item.keyName) {
@@ -521,7 +549,7 @@
       // 获取详情数据
       approvalDetail(url) {
         this.formatData = {};
-        this.$httpZll.getApprovalDetail(url).then(res => {
+        this.$httpZll.getApprovalDetail(url).then((res) => {
           if (res) {
             this.allDetail = this.jsonClone(res.data);
             this.allDetail.task_id = this.detailData.task_id;
@@ -562,28 +590,12 @@
             case 'floors':
               this.formatData.floors = res.floor + ' / ' + res.floors;
               break;
-            case 'holding_documents_type'://持有证件
-            case 'lock_type'://门锁类型
-            case 'bed'://床和床垫的情况
-            case 'wardrobe'://衣柜情况
-            case 'curtain'://窗帘情况
-            case 'is_fill'://家电是否补齐
-            case 'is_lord_fill'://房东是否补齐
-            case 'has_heater'://是否有暖气
-            case 'has_gas'://是否有天然气
-            case 'customer_sex'://性别
-            case 'card_type'://证件类型
-            case 'contact_way'://联系方式
-            case 'is_elevator'://是否有电梯
-            case 'is_clean'://卫生情况
-            case 'is_agency'://是否渠道
-            case 'is_electronic_contract'://是否电子合同
-            case 'can_decorate'://可否装修
-            case 'can_add_goods'://可否添加物品
-            case 'signatory_identity'://签约人身份
-            case 'position'://所属区域
-              let num = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '');
-              this.formatData[item] = dicties[item][num];
+            case 'month':
+              if (res.day) {
+                this.formatData.month = res.month + '个月' + res.day + '天';
+              } else {
+                this.formatData.month = res.month + '个月';
+              }
               break;
             case 'non_landlord_fee'://非房东费用
               let names = [];
@@ -608,6 +620,12 @@
             case 'period_price_way_arr'://付款方式变化
               let pay_way = ['pay_way'];
               this.changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
+              break;
+            default:
+              if (this.objInt.includes(item)) {
+                let num = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '');
+                this.formatData[item] = dicties[item][num];
+              }
               break;
           }
         }
@@ -664,12 +682,20 @@
     @include bgImage('../../../assets/image/approvals/detail/' + $n + '.png');
   }
 
+  /*滑动表单过渡效果*/
+  @mixin slides($n) {
+    $num: 100% / $n;
+    @for $i from 1 through $n {
+      .transition#{$n} {
+        .slide#{$i} {
+          @include transform(translateX(-($num*$i)));
+        }
+      }
+    }
+  }
+
   #approvalDetail {
     background-color: #f8f8f8;
-    /*&:before {*/
-    /*content: '';*/
-    /*display: table;*/
-    /*}*/
     /*头部*/
     .detailTop {
       position: relative;
@@ -779,15 +805,14 @@
 
           > div {
             @include flex();
-            width: 400%;
             height: 100%;
+            transition: transform .3s;
 
             ul {
               @include scroll;
               width: 100%;
               height: 100%;
               padding-left: .6rem;
-              transition: transform .3s;
 
               li {
 
@@ -831,21 +856,15 @@
           }
         }
 
-        .slide0 {
-          @include transform(translateX(0));
-        }
-
-        .slide1 {
-          @include transform(translateX(-100%));
-        }
-
-        .slide2 {
-          @include transform(translateX(-200%));
-        }
-
-        .slide3 {
-          @include transform(translateX(-300%));
-        }
+        @include slides(2);
+        @include slides(3);
+        @include slides(4);
+        @include slides(5);
+        @include slides(6);
+        @include slides(7);
+        @include slides(8);
+        @include slides(9);
+        @include slides(10);
       }
 
       .operates {

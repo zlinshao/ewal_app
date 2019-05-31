@@ -54,8 +54,8 @@ bulletinRouterStatus = {
 // 审批筛选
 approvalSearch = {
   toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC', 'CollectReceiptSign'],
-  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC'],
-  approvals1: ['pqjl_approval', 'gkzx_approval','zcb_approval'],
+  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentBooking'],
+  approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
 };
@@ -662,9 +662,7 @@ defineNewTask = {
 };
 
 // 补充协议
-defineSupplyAgreement = [
-
-];
+defineSupplyAgreement = [];
 
 // 收房报备
 defineCollectReport = {
@@ -2075,17 +2073,6 @@ defineRentReport = {
       slot: '',
     },
     {
-      label: '上传',
-      picker: 'upload',
-      photos: [
-        {
-          label: '凭证截图',
-          placeholder: '必填',
-          keyName: 'photo',
-        }
-      ]
-    },
-    {
       label: '是否渠道',
       readonly: 'readonly',
       placeholder: '必填 请选择',
@@ -2204,22 +2191,15 @@ defineRentReport = {
       ]
     },
     {
-      label: '开单人',
-      placeholder: '已禁用',
-      disabled: 'disabled',
-      keyName: 'staff_name',
-      keyType: '',
-      type: 'text',
-      slot: '',
-    },
-    {
-      label: '部门',
-      placeholder: '已禁用',
-      disabled: 'disabled',
-      keyName: 'department_name',
-      keyType: '',
-      type: 'text',
-      slot: '',
+      label: '上传',
+      picker: 'upload',
+      photos: [
+        {
+          label: '凭证截图',
+          placeholder: '必填',
+          keyName: 'photo',
+        }
+      ]
     },
   ],
   // 客户信息
@@ -2320,7 +2300,7 @@ defineRentReport = {
     },
     {
       label: '支行',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'subbranch',
       keyType: '',
       type: 'text',
@@ -2418,10 +2398,27 @@ defineRentReport = {
         },
         {
           label: '银行卡照片',
-          placeholder: '必填',
           keyName: 'bank_card_photo',
         }
       ]
+    },
+    {
+      label: '开单人',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'staff_name',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '部门',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'department_name',
+      keyType: '',
+      type: 'text',
+      slot: '',
     },
   ],
 };
@@ -3939,8 +3936,6 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad
     ],
 
 
-
-    
   }
 }
 

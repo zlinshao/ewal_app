@@ -118,7 +118,7 @@
       onConfirm(item) {
         let form = {};
         form.house_id = item.id;
-        form.contract_id = item.id;
+        form.contract_id = item.last_lord.id || '';
         form.address = item.name;
         this.$emit('close', form, this.onConfig);
       },
@@ -128,10 +128,10 @@
         this.total = 0;
         this.params = {
           city_id: '320100',
-          search: '',
+          search: '太平北路122号',
           page: 1,
           limit: 20,
-          status: 1,
+          status: [1],
         };
       },
     },
