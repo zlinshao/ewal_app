@@ -432,13 +432,17 @@ export default {
     Vue.prototype.$signPostApi = function (item, params, title = []) {
       return new Promise((resolve, reject) => {
         let url = '', sign = {};
-        if (item.bulletin_type === 'bulletin_collect_basic') {
-          url = 'sign_collect';
-          sign = {
-            task_id: item.task_id,
-            contract_id: item.contract_number,
-          };
+        switch (item.bulletin_type) {
+          case 'bulletin_collect_basic':
+            url = 'sign_collect';
+            break;
+          case 'bulletin_rent_basic':
+            url = 'sign_rent';
         }
+        sign = {
+          task_id: item.task_id,
+          contract_id: item.contract_number,
+        };
         for (let key of Object.keys(params)) {
           sign[key] = params[key]
         }
@@ -477,11 +481,16 @@ export default {
               this.$httpZll.getNewTaskId(params).then(res => {
                 let query = {};
                 let task = this.groupHandlerListData(res.data)[0];
+                if (!task) {
+                  this.$prompt('获取任务失败', 'fail');
+                  return;
+                }
                 query = task;
                 query.task_id = task.id;
                 query.process_id = task.processInstanceId;
                 query.root_id = task.rootProcessInstanceId;
                 query.task_action = action.route;
+                console.log(query);
                 this.againTaskDetail(query).then(_ => {
                   this.againDetailRequest(query, 'again');
                 });

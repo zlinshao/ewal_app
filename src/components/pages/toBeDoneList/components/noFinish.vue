@@ -24,7 +24,7 @@
                 <b v-if="allDetail[item]">
                   <span v-for="house in Object.keys(allDetail[item])" style="display: block;">
                     <span v-if="house !== 'is_fill'">缺少{{makeGoods[house]}}{{allDetail[item][house]}}个</span>
-                    <span v-else>家电补不齐全</span>
+                    <span v-else>家电不齐全</span>
                   </span>
                 </b>
               </span>
@@ -34,14 +34,16 @@
           <div class="record" v-for="item in recordList">
             <h1>{{item.created_at}}</h1>
             <div>
-              <h2 v-for="key in Object.keys(item.content.complete_content)">
+              <h2 v-for="key in Object.keys(item.content.complete_content)" v-if="makeGoods[key]">
                 <label>{{makeGoods[key]}}</label>
                 <span>补充{{item.content.complete_content[key]}}个</span>
               </h2>
+            </div>
+            <div v-if="item.file">
               <h2 v-for="pic in Object.keys(item.file)">
                 <label>{{uploadCollect[pic]}}</label>
                 <i>
-                  <img v-for="p in item.file[pic]" :src="p.uri" @click="$bigPhoto(item.file[pic],p.uri)">
+                  <img v-for="p in item.file[pic]" :src="p.uri" @click="$bigPhoto(item.file[pic],p.uri)" alt="">
                 </i>
               </h2>
             </div>
@@ -183,7 +185,7 @@
         if (val.type === 'deliver') {
 
         } else {
-          sessionStorage.setItem('datumRecord',JSON.stringify(this.allDetail));
+          sessionStorage.setItem('datumRecord', JSON.stringify(this.allDetail));
           this.routerLink('/datumRecord', this.params);
         }
       },

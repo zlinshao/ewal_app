@@ -324,7 +324,7 @@
                   is_number: 1,
                 };
                 this.$httpZll.sendElectronicContract(item.contract_number, params).then(_ => {
-                })
+                });
               }
             });
             break;

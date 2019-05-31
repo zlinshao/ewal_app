@@ -1722,11 +1722,10 @@ defineRentReport = {
     {
       label: '房屋地址',
       placeholder: '必填 请输入',
-      readonly: 'readonly',
+      disabled: 'disabled',
       keyName: 'address',
       keyType: '',
       type: 'text',
-      picker: 'searchHouse',
       status: '',
       slot: '',
     },
@@ -2127,15 +2126,6 @@ defineRentReport = {
       ]
     },
     {
-      label: '备注条款',
-      placeholder: '必填 请选择',
-      keyName: 'remark_terms',
-      keyType: [],
-      type: 'textarea',
-      picker: 'remark_terms',
-      slot: '',
-    },
-    {
       label: '是否合租',
       readonly: 'readonly',
       placeholder: '必填 请选择',
@@ -2189,6 +2179,15 @@ defineRentReport = {
           slot: '',
         },
       ]
+    },
+    {
+      label: '备注条款',
+      placeholder: '必填 请选择',
+      keyName: 'remark_terms',
+      keyType: [],
+      type: 'textarea',
+      picker: 'remark_terms',
+      slot: '',
     },
     {
       label: '上传',

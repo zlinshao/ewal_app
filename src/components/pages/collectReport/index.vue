@@ -367,14 +367,11 @@
         this.onCancel();
         if (val !== 'close') {
           let bulletin = config.bulletinType;
-          switch (bulletin.bulletin) {
-            case 'bulletin_rent_basic':
-              this.formatData[config.keyName] = val.address;
-              for (let item of Object.keys(val)) {
-                this.form[item] = val[item];
-              }
-              break;
-          }
+          // switch (bulletin.bulletin) {
+          //   case 'bulletin_rent_basic':
+          //
+          //     break;
+          // }
         }
       },
       // 日期选择

@@ -200,8 +200,13 @@
       getHouse(val, config) {
         this.onCancel();
         if (val !== 'close') {
-          this.form[config.keyName] = [val.house_id];
           this.formatData[config.keyName] = val.address;
+          for (let item of Object.keys(val)) {
+            this.form[item] = val[item];
+          }
+          if (this.postName === 'RentTakeLook') {
+            this.form.house_id = [this.form.house_id];
+          }
         }
       },
       // 小区搜索
