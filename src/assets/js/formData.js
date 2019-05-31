@@ -662,7 +662,101 @@ defineNewTask = {
 };
 
 // 补充协议
-defineSupplyAgreement = [];
+defineSupplyAgreement = {
+  collect:[
+    {
+      label: '协议类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'position',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '房屋地址',// 标题
+      placeholder: '必填 请选择',// placeholder
+      readonly: 'readonly',// 只读 picker必须有值
+      keyName: 'house_address',// 字段名
+      keyType: '',// 数据类型
+      type: 'text',// input 类型
+      picker: 'searchHouse',
+      showForm: 'formatData',//picker 显示form 或 formatData
+    },
+    {
+      label: '原卡号',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '现卡号',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '开户名',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'text',
+      button: '银行卡识别',
+      icon: 'bank',
+      slot: '',
+    },
+    {
+      label: '开户行',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '签约人',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'text',
+      button: '身份识别',
+      icon: 'identity',
+      slot: '',
+    },
+    {
+      label: '身份证号',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '联系电话',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '备注',
+      placeholder: '必填 请输入',
+      keyName: 'property_owner',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+  ],
+  rent:[],
+};
 
 // 收房报备
 defineCollectReport = {
@@ -3952,7 +4046,7 @@ function deliveryMorePickersRemark(name) {
     slot: '',
   }
 }
-
+// 交接单
 defineArticleReceipt = {
   // 客厅
   hall_goods: handlerHallGoods('hall_goods', 11),
