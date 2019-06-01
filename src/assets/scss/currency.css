@@ -582,13 +582,13 @@
   align-items: center; }
   .commonBtn .btn {
     color: #FFFFFF;
-    padding: .2rem .6rem;
+    padding: .15rem .6rem;
     -webkit-border-radius: 1rem;
     -moz-border-radius: 1rem;
     border-radius: 1rem;
     background: url("../image/footer/queding.png") no-repeat scroll center;
     background-size: 100% 100%; }
-  .commonBtn .deliver {
+  .commonBtn .deliver, .commonBtn .save {
     background: url("../image/footer/zhuanjiao.png") no-repeat scroll center;
     background-size: 100% 100%; }
   .commonBtn .booking {

@@ -107,7 +107,7 @@
         align-items: flex-start;
 
         label {
-          padding-top: .2rem;
+          padding-top: .15rem;
         }
 
         textarea {

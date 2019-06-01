@@ -13,6 +13,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, input,
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   font-weight: normal;
+  font-family: "Microsoft YaHei UI";
 }
 
 html, body {
@@ -44,6 +45,10 @@ a {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+
+input {
+  padding-bottom: .03rem !important;
 }
 
 textarea:disabled, input:disabled {

@@ -91,7 +91,6 @@
   import woshenpide from '../../../assets/image/approvals/woshenpide.png'
   import chaosongwode from '../../../assets/image/approvals/chaosongwode.png'
   import zanbuchuli from '../../../assets/image/approvals/zanbuchuli.png'
-  import {Dialog} from 'vant'
 
   export default {
     name: "index",
@@ -651,7 +650,7 @@
             font-size: .24rem;
             color: #FFFFFF;
             text-align: center;
-            line-height: .3rem;
+            line-height: .33rem;
             @include radius(50%);
             background-color: #F4511E;
           }

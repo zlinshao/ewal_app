@@ -377,13 +377,13 @@
 
   .btn {
     color: #FFFFFF;
-    padding: .2rem .6rem;
+    padding: .15rem .6rem;
     @include radius(1rem);
     @include bgImage('../image/footer/queding.png');
   }
 
   //转jiao
-  .deliver {
+  .deliver, .save {
     @include bgImage('../image/footer/zhuanjiao.png');
   }
 

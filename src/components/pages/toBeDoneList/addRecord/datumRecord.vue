@@ -250,7 +250,9 @@
           this.changePhoto[pic.keyName] = data[pic.keyName] || [];
           if (this.oldPhoto[pic.keyName].length) {
             this.$httpZll.getUploadUrl(this.oldPhoto[pic.keyName], 'close').then(res => {
-              this.$set(this.album, pic.keyName, res.data);
+              this.album[pic.keyName] = res.data;
+              this.album = Object.assign({}, this.album);
+              console.log(this.album)
             })
           }
         }

@@ -62,7 +62,7 @@
           div {
             width: 100%;
             @include flex('items-center');
-            b {
+            b, p {
               @include flex('items-center');
               i {
                 width: .33rem;

@@ -206,11 +206,11 @@
         display: flex;
         display: -webkit-flex;
         align-items: center; }
-        #toBeDone .main ul li .handleBtn div b {
+        #toBeDone .main ul li .handleBtn div b, #toBeDone .main ul li .handleBtn div p {
           display: flex;
           display: -webkit-flex;
           align-items: center; }
-          #toBeDone .main ul li .handleBtn div b i {
+          #toBeDone .main ul li .handleBtn div b i, #toBeDone .main ul li .handleBtn div p i {
             width: .33rem;
             height: .33rem;
             margin-right: .1rem; }
