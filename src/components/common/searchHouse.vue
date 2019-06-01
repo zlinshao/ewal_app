@@ -59,7 +59,7 @@
     props: ['module', 'config'],
     data() {
       return {
-        searchModule: true,
+        searchModule: false,
         fullLoading: false,
         searchList: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         total: 0,
