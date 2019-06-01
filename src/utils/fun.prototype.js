@@ -113,7 +113,7 @@ export default {
         for (let key of item.variables) {
           obj[key.name] = key.value;
           if (key.name === 'signer') {
-            if (key.value && key.value.length > 6) {
+            if (key.value && key.value.length > 12) {
               if (JSON.parse(key.value)) {
                 obj.signer = JSON.parse(key.value);
               }
