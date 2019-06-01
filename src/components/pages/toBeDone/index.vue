@@ -300,7 +300,7 @@
                 id: 'RentTakeLook',
                 text: '租房带看',
               }, {
-                url: '',
+                url: '/supplyAgreement',
                 text: '补充协议',
               }, {
                 url: '/collectReport',

@@ -5,9 +5,10 @@
       <div class="main" :style="mainHeight">
         <div class="taskType">
           <label>任务类型</label>
-          <div @click="changeTaskType = !changeTaskType">
+          <!--@click="changeTaskType = !changeTaskType"-->
+          <div>
             <p>{{postShowName}}</p>
-            <i :class="[changeTaskType ? '' : 'downSelect']"></i>
+          <!--<i :class="[changeTaskType ? '' : 'downSelect']"></i>-->
           </div>
         </div>
         <div class="radioChecks" :class="[changeTaskType?'show':'hidden']">

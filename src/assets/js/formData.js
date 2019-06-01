@@ -663,12 +663,12 @@ defineNewTask = {
 
 // 补充协议
 defineSupplyAgreement = {
-  collect:[
+  collect: [
     {
       label: '协议类型',
       placeholder: '必填 请选择',
       readonly: 'readonly',
-      keyName: 'position',
+      keyName: 'agreement_type',
       keyType: '',
       type: 'text',
       status: 'objInt',
@@ -689,7 +689,7 @@ defineSupplyAgreement = {
     {
       label: '原卡号',
       placeholder: '必填 请输入',
-      keyName: 'property_owner',
+      keyName: 'old_account',
       keyType: '',
       type: 'number',
       slot: '',
@@ -697,15 +697,15 @@ defineSupplyAgreement = {
     {
       label: '现卡号',
       placeholder: '必填 请输入',
-      keyName: 'property_owner',
+      keyName: 'account',
       keyType: '',
       type: 'number',
       slot: '',
     },
     {
-      label: '开户名',
+      label: '开户人',
       placeholder: '必填 请输入',
-      keyName: 'property_owner',
+      keyName: 'account_name',
       keyType: '',
       type: 'text',
       button: '银行卡识别',
@@ -715,7 +715,7 @@ defineSupplyAgreement = {
     {
       label: '开户行',
       placeholder: '必填 请输入',
-      keyName: 'property_owner',
+      keyName: 'bank',
       keyType: '',
       type: 'text',
       slot: '',
@@ -723,7 +723,7 @@ defineSupplyAgreement = {
     {
       label: '签约人',
       placeholder: '必填 请输入',
-      keyName: 'property_owner',
+      keyName: 'customer_name',
       keyType: '',
       type: 'text',
       button: '身份识别',
@@ -733,7 +733,7 @@ defineSupplyAgreement = {
     {
       label: '身份证号',
       placeholder: '必填 请输入',
-      keyName: 'property_owner',
+      keyName: 'card_id',
       keyType: '',
       type: 'text',
       slot: '',
@@ -741,7 +741,7 @@ defineSupplyAgreement = {
     {
       label: '联系电话',
       placeholder: '必填 请输入',
-      keyName: 'property_owner',
+      keyName: 'contact_phone',
       keyType: '',
       type: 'number',
       slot: '',
@@ -749,13 +749,100 @@ defineSupplyAgreement = {
     {
       label: '备注',
       placeholder: '必填 请输入',
-      keyName: 'property_owner',
+      keyName: 'remark',
       keyType: '',
       type: 'textarea',
       slot: '',
     },
   ],
-  rent:[],
+  rent: [
+    {
+      label: '协议类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'agreement_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '房屋地址',// 标题
+      placeholder: '必填 请选择',// placeholder
+      readonly: 'readonly',// 只读 picker必须有值
+      keyName: 'house_address',// 字段名
+      keyType: '',// 数据类型
+      type: 'text',// input 类型
+      picker: 'searchHouse',
+      showForm: 'formatData',//picker 显示form 或 formatData
+    },
+    {
+      label: '原结束时间',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'old_end_time',
+      keyType: '',
+      type: 'text',
+      picker: 'datetime',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '延长时长',
+      placeholder: '必填 请输入',
+      keyName: 'lengthen_time',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '现结束时间',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'end_time',
+      keyType: '',
+      type: 'text',
+      picker: 'datetime',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '签约人',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      button: '身份识别',
+      icon: 'identity',
+      slot: '',
+    },
+    {
+      label: '身份证号',
+      placeholder: '必填 请输入',
+      keyName: 'card_id',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '联系电话',
+      placeholder: '必填 请输入',
+      keyName: 'contact_phone',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '备注',
+      placeholder: '必填 请输入',
+      keyName: 'remark',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+  ],
 };
 
 // 收房报备
@@ -4046,6 +4133,7 @@ function deliveryMorePickersRemark(name) {
     slot: '',
   }
 }
+
 // 交接单
 defineArticleReceipt = {
   // 客厅

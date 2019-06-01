@@ -20,33 +20,15 @@
         <div class="searchHouse">
           <ul v-if="searchList.length">
             <li v-for="item in searchList" @click="onConfirm(item)">
-              <div class="img" v-if="item.album_photo.length">
-                <img :src="item.album_photo[0].uri" v-if="item.album_photo[0].info.ext.includes('image')" alt="">
-                <span v-else>
-                  <img src="../../assets/image/file/upload.png" alt="">
-                </span>
-              </div>
-              <div class="img" v-else>
-                <span>
-                  <img src="../../assets/image/file/upload.png" alt="">
-                </span>
-              </div>
               <div class="content">
-                <h1>{{item.name}}</h1>
-                <h2>
-                  <span>{{item.area}}㎡</span><span>{{item.floor.this}}&nbsp;/&nbsp;{{item.floor.all}}</span><span>{{item.house_toward}}</span><span>{{item.decorate}}-{{item.house_identity}}</span>
-                </h2>
-                <h3>
-                  <span class="span1">剩1年5个月12天</span>
-                  <span class="span2">建议12月付</span>
-                  <span class="span3">{{item.house_status_name}}</span>
-                </h3>
                 <div>
-                  <h4>
-                    <i></i>
-                    <span>已空置{{item.warning_current_days || 0}}天</span>
-                  </h4>
-                  <h5>{{item.suggest_price}}元/月</h5>
+                  <h1>
+                    <b>收</b>
+                    <span>东方航空萨菲航空是东方航空斯卡拉</span>
+                  </h1>
+                  <h2>
+                    <span>生效中</span>
+                  </h2>
                 </div>
               </div>
             </li>
@@ -69,9 +51,9 @@
     props: ['module', 'config'],
     data() {
       return {
-        searchModule: false,
+        searchModule: true,
         fullLoading: false,
-        searchList: [],
+        searchList: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         total: 0,
         onConfig: {},
         params: {},
@@ -128,7 +110,7 @@
         this.total = 0;
         this.params = {
           city_id: '320100',
-          search: '太平北路122号',
+          search: '',
           page: 1,
           limit: 20,
           status: [1],
@@ -146,117 +128,40 @@
       @include scroll;
       height: 100%;
       padding: 0 .25rem;
+      background-color: #A2A2A2;
 
       ul {
-        h1, h2, h3, h4, h5, h6, span {
-          font-size: .26rem;
-          font-family: "Microsoft YaHei UI";
-        }
 
         li {
           padding: 0;
-          height: 2rem;
           margin-bottom: .3rem;
-          @include flex();
-
-          .img {
-            margin-right: .3rem;
-            min-width: 1.8rem;
-            max-width: 1.8rem;
-
-            span {
-              display: inline-block;
-              background-color: #c1c1c1;
-              width: 100%;
-              height: 100%;
-              @include flex('flex-center');
-
-              img {
-                width: .6rem;
-                height: .6rem;
-              }
-            }
-          }
 
           .content {
             width: 100%;
-            @include flex('bet-column');
+            @include radius(.1rem);
+            background-color: #FFFFFF;
+            padding: .3rem 0 .3rem .3rem;
 
-            h1 {
-              font-weight: bold;
-              font-size: .3rem;
-            }
-
-            h2 {
-              margin: .06rem 0 .1rem;
-
-              span {
-                border-left: 1px dashed #797982;
-                padding: 0 .2rem;
-                font-size: .24rem;
-                color: #797982;
-              }
-
-              span:first-of-type {
-                border-left: none;
-                padding-left: 0;
-              }
-            }
-
-            h3 {
-              @include flex('items-center');
-              flex-wrap: wrap;
-
-              span:last-of-type {
-                margin-right: 0;
-              }
-
-              span {
-                @include radius(.06rem);
-                font-size: .2rem;
-                margin-right: .1rem;
-                white-space: nowrap;
-                padding: .04rem .12rem;
-              }
-
-              .span1 {
-                color: #797982;
-                background-color: #F0F0F0;
-              }
-
-              .span2 {
-                color: #4570FE;
-                background-color: #ECF0FF;
-              }
-
-              .span3 {
-                color: #FEB105;
-                background-color: #FFF9E1;
-              }
+            div, h1, h2 {
+              @include flex('items-bet');
             }
 
             div {
-              margin-top: .24rem;
-              @include flex('items-bet');
-
-              h4 {
-                @include flex('items-center');
-
-                i {
-                  width: .3rem;
-                  height: .3rem;
+              h1 {
+                b {
                   margin-right: .1rem;
-                  background-color: #CF2E33;
-                }
-
-                span {
-                  color: #797982;
+                  width: .45rem;
+                  height: .45rem;
+                  text-align: center;
+                  line-height: .45rem;
+                  @include radius(.1rem);
+                  color: #4570FE;
+                  background-color: rgba(69, 112, 254, .2);
                 }
               }
 
-              h5 {
-                font-size: .28rem;
-                color: #E53A36;
+              h2 {
+
               }
             }
           }

@@ -366,7 +366,7 @@ export default {
       })
     };
     // 下拉框数据显示 picker 配置
-    Vue.prototype.inputSelect = function (val, num, parentKey) {
+    Vue.prototype.inputSelect = function (val, num = '', parentKey = '') {
       return new Promise(resolve => {
         this.$closePicker().then(res => {
           let pickers = res;

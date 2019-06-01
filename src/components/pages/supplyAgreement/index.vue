@@ -4,7 +4,7 @@
       <div class="title">协议内容</div>
       <div class="main">
         <div class="content">
-          <div v-for="(item,index) in drawSlither[agreementType]">
+          <div v-for="(item,index) in drawSlither">
             <div v-if="item.showForm === 'formatData' || (item.picker && item.readonly)">
               <zl-input
                 v-model="formatData[item.keyName]"
@@ -27,8 +27,7 @@
                 :label="item.label"
                 :disabled="item.disabled"
                 :placeholder="item.placeholder">
-                <div class="zl-confirmation" :class="[item.icon]"
-                     v-if="item.button" @click="confirmation(item.icon)">
+                <div class="zl-confirmation" :class="[item.icon]" v-if="item.button" @click="confirmation(item.icon)">
                   <i :class="item.icon" v-if="item.icon"></i>
                   {{item.button}}
                 </div>
@@ -38,22 +37,30 @@
         </div>
         <div class="commonBtn">
           <p class="btn back" @click="$router.go(-1)">取消</p>
-          <p class="btn">确定</p>
+          <p class="btn" @click="saveAgreement">确定</p>
         </div>
       </div>
     </div>
+    <!--日期-->
+    <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
     <!--正常 picker-->
     <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
+    <!--房屋搜索-->
+    <search-house :module="searchHouseModule" :config="searchConfig" @close="hiddenHouse"></search-house>
   </div>
 </template>
 
 <script>
+  import SearchHouse from '../../common/searchHouse.vue';
+
   export default {
     name: "index",
+    components: {SearchHouse},
     data() {
       return {
         drawSlither: {},
         agreementType: 'collect',
+        bulletinType: {},
 
         form: {},
         formatData: {},
@@ -67,6 +74,7 @@
         pickers: {},
         popupStatus: '',
         searchConfig: {},
+        timeModule: false,
         popupModule: false,
         pickerModule: false,
         searchHouseModule: false,
@@ -75,24 +83,42 @@
     mounted() {
     },
     activated() {
-      this.drawSlither = defineSupplyAgreement;
+      let type = JSON.parse(sessionStorage.bulletin_type || '{}');
+      this.bulletinType = type;
+      this.bulletin_types(type);
     },
     watch: {},
     computed: {},
     methods: {
+      bulletin_types(type) {
+        switch (type.bulletin) {
+          case "bulletin_collect_basic":
+            this.agreementType = 'collect';
+            break;
+          case "bulletin_rent_basic":
+            this.agreementType = 'rent';
+            break;
+        }
+        this.drawSlither = defineSupplyAgreement[this.agreementType];
+        this.resetting();
+      },
+      hiddenHouse(val, config) {
+        console.log(val);
+        console.log(config);
+      },
       // 下拉框筛选
-      choosePicker(val, value, num = '', parentKey = '') {
+      choosePicker(val, value) {
         this.popupStatus = val.picker;
         switch (val.picker) {
           case 'picker':
             this.pickerModule = true;
-            this.inputSelect(val, num, parentKey).then(picker => {
+            this.inputSelect(val).then(picker => {
               this.pickers = picker;
             });
             break;
           case 'date':
           case 'datetime':
-            this.chooseTime(val, value, num, parentKey);
+            this.chooseTime(val, value);
             break;
           case 'searchHouse':
             this.searchHouseModule = true;
@@ -101,10 +127,25 @@
             break;
           default:
             this.popupModule = true;
-            this.inputSelect(val, num, parentKey).then(picker => {
+            this.inputSelect(val).then(picker => {
               this.pickers = picker;
             });
             break;
+        }
+      },
+      // 日期选择
+      chooseTime(val, date) {
+        this.timeModule = true;
+        this.formatData.dateKey = val.keyName;
+        this.formatData.dateType = val.picker;
+        this.formatData.dateVal = date;
+      },
+      // 确认时间
+      onConTime(val) {
+        this.onCancel();
+        if (val !== 'close') {
+          this.form[val.dateKey] = val.dateVal;
+          this.formatData[val.dateKey] = val.dateVal;
         }
       },
       // 确认下拉选择
@@ -117,17 +158,69 @@
       },
       // close Module
       onCancel() {
+        this.timeModule = false;
         this.pickerModule = false;
         this.popupModule = false;
         this.searchHouseModule = false;
       },
       // 身份认证 银行认证
-      confirmation(val, parentKey, index) {
-
+      confirmation(val) {
+        let params = {};
+        switch (val) {
+          case 'identity':
+            params = {
+              customer_name: this.form.customer_name,
+              idcard: this.form.card_id,
+              mobile: this.form.contact_phone,
+            };
+            this.$httpZll.customerIdentity(params).then(res => {
+              if (res) {
+                if (res.data.fadada_user_id) {
+                  this.form.signer = res.data;
+                  this.certified();
+                } else {
+                  this.$ddSkip(res.data.data);
+                  this.$dialog('认证', '认证是否完成?').then(res => {
+                    if (res) {
+                      this.confirmation('identity');
+                    }
+                  })
+                }
+              }
+            });
+            break;
+          case 'bank':
+            params = {
+              card: this.form.account,
+              owner: this.form.account_name,
+            };
+            this.$httpZll.getBankNameAttestation(params).then(res => {
+              this.form[val] = res.data || '';
+            });
+            break;
+        }
       },
+      // 已认证
+      certified() {
+        let data = ['customer_name', 'contact_phone', 'card_id'];
+        for (let key of this.drawSlither) {
+          if (key.icon === 'identity') {
+            key.button = '已认证';
+            key.icon = '';
+          }
+          if (data.includes(key.keyName)) {
+            key.disabled = 'disabled';
+          }
+        }
+      },
+      // 提交
+      saveAgreement() {
+        console.log(this.form)
+      },
+      // 重置
       resetting() {
-        let allForm = this.drawSlither[this.agreementType];
-        let all = this.initFormData(allForm, this.showData);
+        let allForm = this.drawSlither;
+        let all = this.initFormData(allForm, this.showData, 'noStaff');
         this.form = all.form;
         this.formatData = all.formatData;
       }
