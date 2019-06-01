@@ -20,15 +20,23 @@
         <div class="searchHouse">
           <ul v-if="searchList.length">
             <li v-for="item in searchList" @click="onConfirm(item)">
-              <div class="content">
-                <div>
+              <div class="contract_content">
+                <div class="top">
                   <h1>
                     <b>收</b>
-                    <span>东方航空萨菲航空是东方航空斯卡拉</span>
+                    <span>东方航空萨菲航空是东方航范德萨富士达空斯卡拉</span>
                   </h1>
-                  <h2>
-                    <span>生效中</span>
-                  </h2>
+                  <h2><span>生效中</span></h2>
+                </div>
+                <div class="main">
+                  <div><h1>房东</h1><h2>冯宝宝</h2>
+                  </div>
+                  <div>
+                    <h1>开单人</h1><h2>亮亮</h2>
+                  </div>
+                  <div class="department">
+                    <h1>所属片区</h1><h2>南京马群一区</h2>
+                  </div>
                 </div>
               </div>
             </li>
@@ -56,7 +64,13 @@
         searchList: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         total: 0,
         onConfig: {},
-        params: {},
+        params: {
+          page: 1,
+          limit: 12,
+          contract_type: 1,//1
+          contract_txt: '收房',
+          search: '',
+        },
       }
     },
     mounted() {
@@ -89,12 +103,12 @@
     methods: {
       onSearch() {
         this.fullLoading = false;
-        this.$httpZll.searchHouseList(this.params).then(res => {
+        this.$httpZll.getContractList(this.params).then(res => {
           this.fullLoading = true;
-          if (res) {
-            this.searchList = res.data.data;
-            this.total = res.data.all_count;
-          }
+          // if (res) {
+          //   this.searchList = res.data.data;
+          //   this.total = res.data.all_count;
+          // }
         })
       },
       onConfirm(item) {
@@ -128,40 +142,90 @@
       @include scroll;
       height: 100%;
       padding: 0 .25rem;
-      background-color: #A2A2A2;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(248, 248, 248, 1) 100%);
 
       ul {
+        margin-top: .15rem;
 
         li {
           padding: 0;
-          margin-bottom: .3rem;
+          margin-bottom: .15rem;
 
-          .content {
+          .contract_content {
             width: 100%;
             @include radius(.1rem);
             background-color: #FFFFFF;
             padding: .3rem 0 .3rem .3rem;
 
-            div, h1, h2 {
+            .top {
               @include flex('items-bet');
-            }
+              width: 100%;
 
-            div {
+              h1, h2 {
+                @include flex('items-bet');
+              }
+
               h1 {
+                overflow: hidden;
+
                 b {
                   margin-right: .1rem;
-                  width: .45rem;
+                  min-width: .45rem;
+                  max-width: .45rem;
                   height: .45rem;
-                  text-align: center;
-                  line-height: .45rem;
+                  @include flex('flex-center');
                   @include radius(.1rem);
                   color: #4570FE;
                   background-color: rgba(69, 112, 254, .2);
                 }
+
+                span {
+                  @include ellipsis;
+                }
               }
 
               h2 {
+                white-space: nowrap;
+                padding: .1rem .2rem;
+                color: #7BB242;
+                @include radius(.1rem 0 0 .1rem);
+                background-color: rgba(123, 178, 66, .2);
+              }
 
+              .status {
+
+              }
+            }
+
+            .main {
+              width: 100%;
+              margin-top: .4rem;
+              @include flex();
+
+              div {
+                padding: 0 .24rem;
+                width: 30%;
+
+                h1, h2 {
+                  text-align: center;
+                }
+
+                h1 {
+                  color: #D2D2D2;
+                }
+
+                h2 {
+                  margin-top: .2rem;
+                }
+              }
+
+              div {
+                border-right: 1px dashed #A2A2A2;
+              }
+
+              .department {
+                width: 40%;
+                border-right: none;
               }
             }
           }

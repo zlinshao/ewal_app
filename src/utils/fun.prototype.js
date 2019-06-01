@@ -113,7 +113,11 @@ export default {
         for (let key of item.variables) {
           obj[key.name] = key.value;
           if (key.name === 'signer') {
-            obj.signer = JSON.parse(key.value) || {};
+            if (key.value && key.value.length > 6) {
+              if (JSON.parse(key.value)) {
+                obj.signer = JSON.parse(key.value);
+              }
+            }
           }
           if (key.name === 'due_date') {
             let date = this.myUtils.timeDifference(key.value);

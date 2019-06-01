@@ -129,6 +129,19 @@ class httpZll extends httpService {
     });
   }
 
+  // 合同搜索
+  static getContractList(params) {
+    return new Promise((resolve,reject) => {
+      this.get(`${market}v1.0/market/contract`,params).then(res => {
+        if (Number(res.code) === 200) {
+          resolve(res.data);
+        } else {
+          $httpPrompt(res.message);
+        }
+      })
+    })
+  }
+
   // 员工搜索
   static searchStaffList(val) {
     let params = {
