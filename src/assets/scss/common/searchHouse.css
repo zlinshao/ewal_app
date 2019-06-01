@@ -1,0 +1,215 @@
+@font-face {
+  font-family: 'dingzitiblod';
+  src: url("http://static.lejias.cn/lejia030d68d3219081dac300f4fe7d70ee4a.otf"); }
+@font-face {
+  font-family: 'dingziti';
+  src: url("http://static.lejias.cn/lejia7e25abfb1fff435a674925ec3354693a.otf"); }
+@font-face {
+  font-family: 'fangzhengjianti';
+  src: url("http://static.lejias.cn/lejia0cd2cb2d2b9ab930c7e4748708cb75c3.ttf"); }
+@font-face {
+  font-family: 'jingdianxingshu';
+  src: url("http://static.lejias.cn/lejia8e27268f1d507f9ea63b4bfd47a06404.otf"); }
+.flex {
+  display: flex;
+  display: -webkit-flex; }
+
+.bet-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  justify-content: space-between; }
+
+.space-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  justify-content: center; }
+
+.items-column {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  align-items: center; }
+
+.flex-center {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: center; }
+
+.items-bet {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: space-between; }
+
+.items-center {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center; }
+
+.items-start {
+  display: flex;
+  display: -webkit-flex;
+  align-items: flex-start; }
+
+.items-end {
+  display: flex;
+  display: -webkit-flex;
+  align-items: flex-end; }
+
+.justify-center {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center; }
+
+.justify-around {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-around; }
+
+.items-around {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: space-around; }
+
+.justify-bet {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between; }
+
+.justify-start {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: flex-start; }
+
+.justify-end {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: flex-end; }
+
+.writingMode {
+  writing-mode: vertical-rl;
+  writing-mode: tb-rl; }
+
+.line-clamp1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1; }
+
+.line-clamp2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; }
+
+.line-clamp3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; }
+
+.scroll_bar {
+  overflow: auto;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden; }
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
+
+#contractSearch .popupSearch {
+  height: 6rem; }
+  #contractSearch .popupSearch div {
+    height: 100%; }
+
+#contractSearch .searchHouse, #searchHouse .searchHouse {
+  overflow: auto;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  height: 100%;
+  padding: 0 .25rem;
+  background: linear-gradient(180deg, white 0%, #f8f8f8 100%); }
+  #contractSearch .searchHouse ul, #searchHouse .searchHouse ul {
+    margin-top: .15rem; }
+    #contractSearch .searchHouse ul li, #searchHouse .searchHouse ul li {
+      padding: 0;
+      margin-bottom: .15rem; }
+      #contractSearch .searchHouse ul li .contract_content, #searchHouse .searchHouse ul li .contract_content {
+        width: 100%;
+        -webkit-border-radius: 0.1rem;
+        -moz-border-radius: 0.1rem;
+        border-radius: 0.1rem;
+        background-color: #FFFFFF;
+        padding: .3rem 0 .3rem .3rem; }
+        #contractSearch .searchHouse ul li .contract_content .top, #searchHouse .searchHouse ul li .contract_content .top {
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%; }
+          #contractSearch .searchHouse ul li .contract_content .top h1, #contractSearch .searchHouse ul li .contract_content .top h2, #searchHouse .searchHouse ul li .contract_content .top h1, #searchHouse .searchHouse ul li .contract_content .top h2 {
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            justify-content: space-between; }
+          #contractSearch .searchHouse ul li .contract_content .top h1, #searchHouse .searchHouse ul li .contract_content .top h1 {
+            overflow: hidden; }
+            #contractSearch .searchHouse ul li .contract_content .top h1 b, #searchHouse .searchHouse ul li .contract_content .top h1 b {
+              margin-right: .1rem;
+              min-width: .45rem;
+              max-width: .45rem;
+              height: .45rem;
+              display: flex;
+              display: -webkit-flex;
+              align-items: center;
+              justify-content: center;
+              -webkit-border-radius: 0.1rem;
+              -moz-border-radius: 0.1rem;
+              border-radius: 0.1rem;
+              color: #4570FE;
+              background-color: rgba(69, 112, 254, 0.2); }
+            #contractSearch .searchHouse ul li .contract_content .top h1 span, #searchHouse .searchHouse ul li .contract_content .top h1 span {
+              white-space: nowrap;
+              overflow: hidden;
+              -ms-text-overflow: ellipsis;
+              text-overflow: ellipsis; }
+          #contractSearch .searchHouse ul li .contract_content .top h2, #searchHouse .searchHouse ul li .contract_content .top h2 {
+            white-space: nowrap;
+            padding: .1rem .2rem;
+            color: #7BB242;
+            -webkit-border-radius: 0.1rem 0 0 0.1rem;
+            -moz-border-radius: 0.1rem 0 0 0.1rem;
+            border-radius: 0.1rem 0 0 0.1rem;
+            background-color: rgba(123, 178, 66, 0.2); }
+        #contractSearch .searchHouse ul li .contract_content .main, #searchHouse .searchHouse ul li .contract_content .main {
+          width: 100%;
+          margin-top: .4rem;
+          display: flex;
+          display: -webkit-flex; }
+          #contractSearch .searchHouse ul li .contract_content .main div, #searchHouse .searchHouse ul li .contract_content .main div {
+            padding: 0 .24rem;
+            width: 30%; }
+            #contractSearch .searchHouse ul li .contract_content .main div h1, #contractSearch .searchHouse ul li .contract_content .main div h2, #searchHouse .searchHouse ul li .contract_content .main div h1, #searchHouse .searchHouse ul li .contract_content .main div h2 {
+              text-align: center; }
+            #contractSearch .searchHouse ul li .contract_content .main div h1, #searchHouse .searchHouse ul li .contract_content .main div h1 {
+              color: #D2D2D2; }
+            #contractSearch .searchHouse ul li .contract_content .main div h2, #searchHouse .searchHouse ul li .contract_content .main div h2 {
+              margin-top: .2rem; }
+          #contractSearch .searchHouse ul li .contract_content .main div, #searchHouse .searchHouse ul li .contract_content .main div {
+            border-right: 1px dashed #A2A2A2; }
+          #contractSearch .searchHouse ul li .contract_content .main .department, #searchHouse .searchHouse ul li .contract_content .main .department {
+            width: 40%;
+            border-right: none; }
+
+/*# sourceMappingURL=searchHouse.css.map */

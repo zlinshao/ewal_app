@@ -17,25 +17,11 @@
       return {
         loading: false,
         transitionName: '',
-        personal: {},
       }
     },
     created() {
-      let data = {};
-      data.staff_id = '69';
-      data.staff_name = '张琳琳';
-      data.department_id = '134';
-      data.department_name = '南京马群组';
-      data.city_id = '320100';
-      data.city_name = '南京市';
-      this.personal = data;
-      this.$store.dispatch('personal_storage', JSON.stringify(data));
-      dd.ui.webViewBounce.disable();
-      // this.loading = true;
-      // this.personalGet().then(res => {
-      //   this.loading = !res;
-      // });
       this.getDict();
+      dd.ui.webViewBounce.disable();
       dd.biz.navigation.setRight({show: false});
       sessionStorage.setItem('windowHeight', String(window.innerHeight));
       sessionStorage.setItem('windowWidth', String(window.innerWidth));
@@ -71,7 +57,11 @@
         // }
       }
     },
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personal;
+      }
+    },
     methods: {
       // 字典
       getDict() {
@@ -92,31 +82,77 @@
           year.push(i);
         }
         dicties.built_year = year;
-        // 所有城市
-        this.$httpZll.getAllCityList().then(res => {
-          let data = {};
-          for (let val of res.data) {
-            data[val.province_id] = val.province_name;
-          }
-          dicties.province = data;
+        this.loading = true;
+        this.personalGet().then(res => {
+          Promise.all([h1, h2, h3, h4]).then((result) => {
+            this.handlerDict(result[0], 'h1');
+            this.handlerDict(result[1], 'h2');
+            this.handlerDict(result[2], 'h3');
+            this.handlerDict(result[3], 'h4');
+            this.loading = !res;
+          }).catch((error) => {
+            console.log(error)
+          });
         });
+        // 所有省份
+        let h1 = this.$httpZll.getAllCityList();
+        //   .then(res => {
+        //   let data = {};
+        //   for (let val of res.data) {
+        //     data[val.province_id] = val.province_name;
+        //   }
+        //   dicties.province = data;
+        // });
         // 字典
-        this.$httpZll.getAllDict().then(res => {
-          let dict = res.data;
-          dicties.decorate = dict[404];//装修
-          dicties.card_type = dict[409];//证件类型
-          dicties.property_type = dict[410];//房屋类型
-        });
+        let h2 = this.$httpZll.getAllDict();
+        //   .then(res => {
+        //   let dict = res.data;
+        //   dicties.decorate = dict[404];//装修
+        //   dicties.card_type = dict[409];//证件类型
+        //   dicties.property_type = dict[410];//房屋类型
+        // });
         // 收款账户
-        this.$httpZll.getFinancialAccount(this.personal.department_id).then(res => {
-          if (res) {
+        let h3 = this.$httpZll.getFinancialAccount(this.personal.department_id);
+        // .then(res => {
+        // if (res) {
+        //   for (let item of res.data) {
+        //     let account = item.account;
+        //     dicties.remittance_account[account.id] = account.account_num + ' ' + account.account_owner + `<br>` + account.name;
+        //   }
+        // }
+        // });
+        // 城市
+        let h4 = this.$httpZll.getCityList();
+        // .then(res => {
+        // this.$store.dispatch('all_city_list', res.data);
+        // })
+      },
+      handlerDict(res, str) {
+        switch (str) {
+          case 'h1':
+            let data = {};
+            for (let val of res.data) {
+              data[val.province_id] = val.province_name;
+            }
+            dicties.province = data;
+            break;
+          case 'h2':
+            let dict = res.data;
+            dicties.decorate = dict[404];//装修
+            dicties.card_type = dict[409];//证件类型
+            dicties.property_type = dict[410];//房屋类型
+            break;
+          case 'h3':
             for (let item of res.data) {
               let account = item.account;
               dicties.remittance_account[account.id] = account.account_num + ' ' + account.account_owner + `<br>` + account.name;
             }
-          }
-        });
-      },
+            break;
+          case 'h4':
+            this.$store.dispatch('all_city_list', res.data);
+            break;
+        }
+      }
     },
   }
 </script>

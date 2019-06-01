@@ -131,8 +131,8 @@ class httpZll extends httpService {
 
   // 合同搜索
   static getContractList(params) {
-    return new Promise((resolve,reject) => {
-      this.get(`${market}v1.0/market/contract`,params).then(res => {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/contract`, params, 'prompt').then(res => {
         if (Number(res.code) === 200) {
           resolve(res.data);
         } else {
@@ -535,7 +535,7 @@ class httpZll extends httpService {
   // 收款账户
   static getFinancialAccount(id) {
     return new Promise((resolve, reject) => {
-      this.get(`${url_code}api/allocation/org_account?org_id=${id}`).then((res) => {
+      this.get(`${url_code}api/allocation/org_account?org_id=${id}`).then(res => {
         if (Number(res.code) === 200) {
           resolve(res);
         } else {

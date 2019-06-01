@@ -180,19 +180,14 @@ export default {
             obj.location[1] = res.position.lat;
             for (let city of data) {
               if (address.city.includes(city.name)) {
-                if (Array.isArray(city.code)) {
-                  obj.city = city.code;
-                  obj.name = city.name;
-                } else {
-                  obj.city.push(city.code);
-                  obj.name = city.name;
-                }
+                obj.code = city.code;
+                obj.name = city.name;
               }
             }
             resolve(obj);
           });
           AMap.event.addListener(geolocation, 'error', function (err) {
-            obj.city = [320100];
+            obj.code = 320100;
             obj.name = '南京';
             obj.location = [118.734235, 31.984095];
             resolve(obj);
@@ -581,34 +576,43 @@ export default {
       // 隐藏 右上角更多
       dd.biz.navigation.setRight({show: false});
       return new Promise((resolve, reject) => {
-        that.$httpZll.getDDConfig().then((res) => {
-          let _config = res;
-          dd.config({
-            agentId: _config.agentId, // 必填，微应用ID
-            corpId: _config.corpId,//必填，企业ID
-            timeStamp: _config.timeStamp, // 必填，生成签名的时间戳
-            nonceStr: _config.nonceStr, // 必填，生成签名的随机串
-            signature: _config.signature, // 必填，签名
-            jsApiList: ['biz.cspace.saveFile', 'biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
-          });
-          dd.ready(() => {
-            dd.runtime.permission.requestAuthCode({
-              corpId: _config.corpId,
-              onSuccess(info) {
-                that.$httpZll.getUserInfo(info.code).then((res) => {
-                  that.personalData(res, resolve);
-                })
-              },
-              onFail(err) {
-                alert('您不在系统内，请联系管理员添加！');
-                that.closeDD();
-              }
-            });
-          });
-          dd.error((err) => {
-            alert('dd error: ' + JSON.stringify(err));
-          });
-        });
+        let data = {};
+        data.staff_id = '69';
+        data.staff_name = '张琳琳';
+        data.department_id = '134';
+        data.department_name = '南京马群组';
+        data.city_id = '320100';
+        data.city_name = '南京市';
+        this.$store.dispatch('personal_storage', data);
+        resolve(true);
+        // that.$httpZll.getDDConfig().then((res) => {
+        //   let _config = res;
+        //   dd.config({
+        //     agentId: _config.agentId, // 必填，微应用ID
+        //     corpId: _config.corpId,//必填，企业ID
+        //     timeStamp: _config.timeStamp, // 必填，生成签名的时间戳
+        //     nonceStr: _config.nonceStr, // 必填，生成签名的随机串
+        //     signature: _config.signature, // 必填，签名
+        //     jsApiList: ['biz.cspace.saveFile', 'biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
+        //   });
+        //   dd.ready(() => {
+        //     dd.runtime.permission.requestAuthCode({
+        //       corpId: _config.corpId,
+        //       onSuccess(info) {
+        //         that.$httpZll.getUserInfo(info.code).then((res) => {
+        //           that.personalData(res, resolve);
+        //         })
+        //       },
+        //       onFail(err) {
+        //         alert('您不在系统内，请联系管理员添加！');
+        //         that.closeDD();
+        //       }
+        //     });
+        //   });
+        //   dd.error((err) => {
+        //     alert('dd error: ' + JSON.stringify(err));
+        //   });
+        // });
       });
     };
     // 存储个人信息

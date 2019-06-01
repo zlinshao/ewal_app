@@ -2,6 +2,7 @@ const app = {
   state: {
     video_visible: true, //显示隐藏全局video
     key_up_status: false,
+    allCityList: [],//所有城市
     personalDetail: {},//所有个人信息
     // 姓名/部门
     personal: {
@@ -24,11 +25,14 @@ const app = {
   mutations: {
     // 个人信息
     PERSONAL_STORAGE(state, view) {
-      let personal = JSON.parse(view);
-      state.personalDetail = personal;
+      state.personalDetail = view;
       for (let item of Object.keys(state.personal)) {
-        state.personal[item] = personal[item];
+        state.personal[item] = view[item];
       }
+    },
+    // 所有城市
+    ALL_CITY_LIST(state, view) {
+      state.allCityList = view;
     },
     // 监听键盘弹出/收起
     KEY_UP_STATUS(state, view) {
@@ -53,9 +57,9 @@ const app = {
     personal_storage({commit}, view) {
       commit('PERSONAL_STORAGE', view);
     },
-    // 获取个人信息
-    get_personal({commit}, view) {
-      commit('GET_PERSONAL', view);
+    // 所有城市
+    all_city_list({commit}, view) {
+      commit('ALL_CITY_LIST', view);
     },
     // 监听键盘弹出/收起
     key_up_status({commit}, view) {

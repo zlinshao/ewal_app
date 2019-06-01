@@ -1,0 +1,109 @@
+@import "../common.scss";
+
+#contractSearch {
+  .popupSearch {
+    height: 6rem;
+
+    div {
+      height: 100%;
+    }
+  }
+}
+
+#contractSearch, #searchHouse {
+  .searchHouse {
+    @include scroll;
+    height: 100%;
+    padding: 0 .25rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(248, 248, 248, 1) 100%);
+
+    ul {
+      margin-top: .15rem;
+
+      li {
+        padding: 0;
+        margin-bottom: .15rem;
+
+        .contract_content {
+          width: 100%;
+          @include radius(.1rem);
+          background-color: #FFFFFF;
+          padding: .3rem 0 .3rem .3rem;
+
+          .top {
+            @include flex('items-bet');
+            width: 100%;
+
+            h1, h2 {
+              @include flex('items-bet');
+            }
+
+            h1 {
+              overflow: hidden;
+
+              b {
+                margin-right: .1rem;
+                min-width: .45rem;
+                max-width: .45rem;
+                height: .45rem;
+                @include flex('flex-center');
+                @include radius(.1rem);
+                color: #4570FE;
+                background-color: rgba(69, 112, 254, .2);
+              }
+
+              span {
+                @include ellipsis;
+              }
+            }
+
+            h2 {
+              white-space: nowrap;
+              padding: .1rem .2rem;
+              color: #7BB242;
+              @include radius(.1rem 0 0 .1rem);
+              background-color: rgba(123, 178, 66, .2);
+            }
+
+            .status {
+
+            }
+          }
+
+          .main {
+            width: 100%;
+            margin-top: .4rem;
+            @include flex();
+
+            div {
+              padding: 0 .24rem;
+              width: 30%;
+
+              h1, h2 {
+                text-align: center;
+              }
+
+              h1 {
+                color: #D2D2D2;
+              }
+
+              h2 {
+                margin-top: .2rem;
+              }
+            }
+
+            div {
+              border-right: 1px dashed #A2A2A2;
+            }
+
+            .department {
+              width: 40%;
+              border-right: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

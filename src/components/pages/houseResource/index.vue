@@ -297,7 +297,7 @@
       this.$httpZll.getCityList().then(res => {
         this.cityList = res.data;
         this.getBeforeCity(res.data).then(res => {
-          this.params.city = res.city;
+          this.params.city = res.code;
           this.city_name = res.name;
         })
       });

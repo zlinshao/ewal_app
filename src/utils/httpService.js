@@ -6,7 +6,7 @@ function $httpPrompt(msg, type) {
   common.prompt(msg, type);
 }
 
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 6000;
 axios.defaults.headers.common['Authorization'] = globalConfig.token;
 
 // 发送请求拦截
@@ -98,7 +98,7 @@ axios.interceptors.response.use(response => {
   return Promise.resolve(err.response);
 });
 
-let msg = '正在处理..';
+let msg = '正在处理...';
 
 class Axios {
   static get(url, data = {}, prompt = '', close = '') {

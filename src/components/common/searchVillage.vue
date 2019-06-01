@@ -8,7 +8,7 @@
         </div>
         <div class="searchInput">
           <div class="input">
-            <p @click="chooseClickCity(params.city)">
+            <p @click="chooseClickCity()">
               {{city_name}}
               <i></i>
             </p>
@@ -55,18 +55,22 @@
         cityList: [],
         city_name: '',
         params: {
+          page: 1,
+          limit: 20,
           name: '',
-          city: [],
+          city: '',
         },
       }
     },
     mounted() {
       this.$httpZll.getCityList().then(res => {
         this.cityList = res.data;
-        this.getBeforeCity(res.data).then(res => {
-          this.params.city = res.city;
-          this.city_name = res.name;
-        })
+        for (let item of res.data) {
+          if (String(item.code) === String(this.personal.city_id)) {
+            this.city_name = item.name;
+            this.params.city = item.code;
+          }
+        }
       });
     },
     activated() {
@@ -80,25 +84,27 @@
         this.searchModule = val;
       },
       searchModule(val) {
+        this.close_();
         if (!val) {
           this.$emit('close', 'close');
         }
       },
     },
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
+    },
     methods: {
       // 选择城市
       chooseClickCity(item) {
         this.chooseCity = !this.chooseCity;
-        if (this.params.city === item) return;
-        this.params.city = [];
-        if (Array.isArray(item.code)) {
+        if (item) {
+          if (item.name === this.city_name) return;
+          this.city_name = item.name;
           this.params.city = item.code;
-        } else {
-          this.params.city.push(item.code);
+          this.close_();
         }
-        this.city_name = item.name;
-        this.searchList = [];
       },
       // 搜索
       onSearch() {
@@ -113,11 +119,11 @@
         let data = {};
         data.id = val.id;
         data.name = val.village_name;
-        this.params.name = '';
-        this.searchList = [];
         this.$emit('close', data, val);
       },
       close_() {
+        this.params.name = '';
+        this.params.page = 1;
         this.searchList = [];
         this.fullLoading = false;
       },

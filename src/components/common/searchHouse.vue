@@ -9,12 +9,21 @@
         </div>
         <div class="searchInput">
           <div class="input">
+            <p @click="chooseClickCity()">
+              {{city_name}}
+              <i></i>
+            </p>
             <div>
               <input type="text" v-model="params.search" @keyup.enter="onSearch" placeholder="输入房屋地址">
               <span v-if="params.search" @click="params.search = ''"></span>
             </div>
             <p v-if="params.search" class="searchBtn" @click="onSearch">搜索</p>
             <p v-if="!params.search" @click="searchModule = false">取消</p>
+          </div>
+          <div class="chooseBtn" v-if="chooseCity">
+            <p v-for="item in cityList" @click="chooseClickCity(item)">
+              <b :class="{'choose': city_name === item.name}">{{item.name}}</b>
+            </p>
           </div>
         </div>
         <div class="searchHouse">
@@ -29,13 +38,16 @@
                   <h2><span>生效中</span></h2>
                 </div>
                 <div class="main">
-                  <div><h1>房东</h1><h2>冯宝宝</h2>
+                  <div><h1>房东</h1>
+                    <h2>冯宝宝</h2>
                   </div>
                   <div>
-                    <h1>开单人</h1><h2>亮亮</h2>
+                    <h1>开单人</h1>
+                    <h2>亮亮</h2>
                   </div>
                   <div class="department">
-                    <h1>所属片区</h1><h2>南京马群一区</h2>
+                    <h1>所属片区</h1>
+                    <h2>南京马群一区</h2>
                   </div>
                 </div>
               </div>
@@ -61,19 +73,25 @@
       return {
         searchModule: false,
         fullLoading: false,
-        searchList: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        total: 0,
+        searchList: [],
         onConfig: {},
         params: {
           page: 1,
-          limit: 12,
-          contract_type: 1,//1
-          contract_txt: '收房',
+          limit: 20,
           search: '',
+          city_id: '',
         },
+        chooseCity: false,
+        city_name: '',
       }
     },
     mounted() {
+      for (let item of this.cityList) {
+        if (String(item.code) === String(this.personal.city_id)) {
+          this.city_name = item.name;
+          this.params.city_id = item.code;
+        }
+      }
     },
     activated() {
     },
@@ -98,6 +116,9 @@
     computed: {
       personal() {
         return this.$store.state.app.personalDetail;
+      },
+      cityList() {
+        return this.$store.state.app.allCityList;
       }
     },
     methods: {
@@ -105,11 +126,20 @@
         this.fullLoading = false;
         this.$httpZll.getContractList(this.params).then(res => {
           this.fullLoading = true;
-          // if (res) {
-          //   this.searchList = res.data.data;
-          //   this.total = res.data.all_count;
-          // }
+          if (res) {
+            // this.searchList = res.data.data;
+          }
         })
+      },
+      // 选择城市
+      chooseClickCity(item) {
+        this.chooseCity = !this.chooseCity;
+        if (item) {
+          if (item.name === this.city_name) return;
+          this.city_name = item.name;
+          this.params.city_id = item.code;
+          this.close_();
+        }
       },
       onConfirm(item) {
         let form = {};
@@ -119,118 +149,15 @@
         this.$emit('close', form, this.onConfig);
       },
       close_() {
+        this.params.page = 1;
+        this.params.search = '';
         this.fullLoading = false;
         this.searchList = [];
-        this.total = 0;
-        this.params = {
-          city_id: '320100',
-          search: '',
-          page: 1,
-          limit: 20,
-          status: [1],
-        };
       },
     },
   }
 </script>
 
 <style lang="scss" scoped>
-  @import "../../assets/scss/common.scss";
-
-  #searchHouse {
-    .searchHouse {
-      @include scroll;
-      height: 100%;
-      padding: 0 .25rem;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(248, 248, 248, 1) 100%);
-
-      ul {
-        margin-top: .15rem;
-
-        li {
-          padding: 0;
-          margin-bottom: .15rem;
-
-          .contract_content {
-            width: 100%;
-            @include radius(.1rem);
-            background-color: #FFFFFF;
-            padding: .3rem 0 .3rem .3rem;
-
-            .top {
-              @include flex('items-bet');
-              width: 100%;
-
-              h1, h2 {
-                @include flex('items-bet');
-              }
-
-              h1 {
-                overflow: hidden;
-
-                b {
-                  margin-right: .1rem;
-                  min-width: .45rem;
-                  max-width: .45rem;
-                  height: .45rem;
-                  @include flex('flex-center');
-                  @include radius(.1rem);
-                  color: #4570FE;
-                  background-color: rgba(69, 112, 254, .2);
-                }
-
-                span {
-                  @include ellipsis;
-                }
-              }
-
-              h2 {
-                white-space: nowrap;
-                padding: .1rem .2rem;
-                color: #7BB242;
-                @include radius(.1rem 0 0 .1rem);
-                background-color: rgba(123, 178, 66, .2);
-              }
-
-              .status {
-
-              }
-            }
-
-            .main {
-              width: 100%;
-              margin-top: .4rem;
-              @include flex();
-
-              div {
-                padding: 0 .24rem;
-                width: 30%;
-
-                h1, h2 {
-                  text-align: center;
-                }
-
-                h1 {
-                  color: #D2D2D2;
-                }
-
-                h2 {
-                  margin-top: .2rem;
-                }
-              }
-
-              div {
-                border-right: 1px dashed #A2A2A2;
-              }
-
-              .department {
-                width: 40%;
-                border-right: none;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+  @import "../../assets/scss/common/searchHouse.scss";
 </style>

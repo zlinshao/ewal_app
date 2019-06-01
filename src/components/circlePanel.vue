@@ -62,7 +62,7 @@
             icon: ic_weikuan,
           },
           {
-            url: 'collectReport',
+            url: 'contractSearch',
             name: '调租',
             status: bulletinRouterStatus.newChange,
             icon: ic_tiaozu,

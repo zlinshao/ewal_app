@@ -282,7 +282,6 @@
       getLocation(val) {
         let location;
         this.getBeforeCity().then(res => {
-          // location = val;
           location = res.location;
           let map = new AMap.Map('container', {
             resizeEnable: true,

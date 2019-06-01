@@ -255,7 +255,8 @@
         this.params.title = val.replace(/\s+/g, '');
       },
     },
-    computed: {},
+    computed: {
+    },
     methods: {
       // 结束任务
       shutDown() {

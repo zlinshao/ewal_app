@@ -15,6 +15,7 @@ import Approvals from '@/components/pages/approvals/index.vue'//审批
 import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
 import CreatedTask from '@/components/pages/createdTask/index.vue'//新建 带看任务
 import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建小区
+import ContractSearch from '@/components/pages/contractSearch/index.vue'//合同搜索
 
 // 补充协议
 import SupplyAgreement from '@/components/pages/supplyAgreement/index.vue'
@@ -65,6 +66,12 @@ export default new Router({
       name: '新建-收房带看任务',
       component: CreatedTask,
       meta: {title: '新建-收房带看任务', index: 1},
+    },
+    {
+      path: '/contractSearch',
+      name: '选择房屋',
+      component: ContractSearch,
+      meta: {title: '选择房屋', index: 2},
     },
     {
       path: '/supplyAgreement',
