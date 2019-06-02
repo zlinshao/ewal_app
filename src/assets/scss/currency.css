@@ -584,6 +584,7 @@
   justify-content: space-around;
   align-items: center; }
   .commonBtn .btn {
+    white-space: nowrap;
     color: #FFFFFF;
     padding: .15rem .6rem;
     -webkit-border-radius: 1rem;

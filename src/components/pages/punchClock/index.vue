@@ -177,8 +177,8 @@
       this.postForm.process_id = query.root_id;
       this.villageDetail(query.detail_request_url, bulletin);
       if (bulletin.bulletin === 'bulletin_rent_basic') {
-        this.outcome = query.outcome;
-        this.form[query.outcome.variableName] = '';
+        this.outcome = query.oldOutcome;
+        this.form[this.outcome.variableName] = '';
       } else {
         this.outcome = '';
       }

@@ -9,10 +9,10 @@
         </div>
         <div class="searchInput">
           <div class="input">
-<!--            <p @click="chooseClickCity()">-->
-<!--              {{city_name}}-->
-<!--              <i></i>-->
-<!--            </p>-->
+            <!--<p @click="chooseClickCity()">-->
+            <!--  {{city_name}}-->
+            <!--  <i></i>-->
+            <!--</p>-->
             <div>
               <input type="text" v-model="params.search" @keyup.enter="onSearch" placeholder="输入房屋地址">
               <span v-if="params.search" @click="params.search = ''"></span>
@@ -33,21 +33,37 @@
                 <div class="top">
                   <h1>
                     <b>收</b>
-                    <span>东方航空萨菲航空是东方航范德萨富士达空斯卡拉</span>
+                    <span>{{item.house_name}}</span>
                   </h1>
                   <h2><span>生效中</span></h2>
                 </div>
                 <div class="main">
-                  <div><h1>房东</h1>
-                    <h2>冯宝宝</h2>
+                  <div>
+                    <h1>房东</h1>
+                    <h2 v-if="item.customer_info && item.customer_info[0].name">
+                      <span>{{item.customer_info[0].name}}</span>
+                    </h2>
+                    <h2 v-else>
+                      ******
+                    </h2>
                   </div>
                   <div>
                     <h1>开单人</h1>
-                    <h2>亮亮</h2>
+                    <h2 v-if="item.sign_user && item.sign_user.name">
+                      <span>{{item.sign_user.name}}</span>
+                    </h2>
+                    <h2 v-else>
+                      ******
+                    </h2>
                   </div>
                   <div class="department">
                     <h1>所属片区</h1>
-                    <h2>南京马群一区</h2>
+                    <h2 v-if="item.sign_org && item.sign_org.name">
+                      <span>{{item.sign_org.name}}</span>
+                    </h2>
+                    <h2 v-else>
+                      ******
+                    </h2>
                   </div>
                 </div>
               </div>
@@ -77,9 +93,10 @@
         onConfig: {},
         params: {
           page: 1,
-          limit: 20,
+          limit: 50,
           status: 1,
           contract_type: 1,
+          from: 'task',
           search: '',
         },
         chooseCity: false,
@@ -128,7 +145,8 @@
         this.$httpZll.getContractList(this.params).then(res => {
           this.fullLoading = true;
           if (res) {
-            // this.searchList = res.data.data;
+            console.log(res.data);
+            this.searchList = res.data;
           }
         })
       },
@@ -145,9 +163,9 @@
       // 确认选择
       onConfirm(item) {
         let form = {};
-        form.house_id = item.id;
-        form.contract_id = item.last_lord.id || '';
-        form.address = item.name;
+        form.house_id = item.house_id;
+        form.contract_id = item.contract_id || '';
+        form.address = item.house_name;
         this.$emit('close', form, this.onConfig);
       },
       close_() {

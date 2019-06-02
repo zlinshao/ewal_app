@@ -380,6 +380,7 @@
   align-items: center;
 
   .btn {
+    white-space: nowrap;
     color: #FFFFFF;
     padding: .15rem .6rem;
     @include radius(1rem);
