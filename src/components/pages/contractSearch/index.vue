@@ -2,12 +2,21 @@
   <div id="contractSearch" :style="mainListHeight()">
     <div class="searchInput">
       <div class="input">
+        <p @click="chooseClickCity()">
+          {{city_name}}
+          <i></i>
+        </p>
         <div>
           <input type="text" v-model="params.search" @keyup.enter="onSearch" placeholder="输入房屋地址">
           <span v-if="params.search" @click="params.search = ''"></span>
         </div>
         <p v-if="params.search" class="searchBtn" @click="onSearch">搜索</p>
         <p v-if="!params.search" @click="$router.go(-1)">取消</p>
+      </div>
+      <div class="chooseBtn" v-if="chooseCity">
+        <p v-for="item in cityList" @click="chooseClickCity(item)">
+          <b :class="{'choose': city_name === item.name}">{{item.name}}</b>
+        </p>
       </div>
     </div>
     <div class="searchHouse">
@@ -127,9 +136,17 @@
           from: 'task',
           search: '',
         },
+        chooseCity: false,
+        city_name: '',
       }
     },
     mounted() {
+      for (let item of this.cityList) {
+        if (String(item.code) === String(this.personal.city_id)) {
+          this.city_name = item.name;
+          this.params.city_id = item.code;
+        }
+      }
     },
     activated() {
       this.close_();
@@ -145,6 +162,9 @@
       personal() {
         return this.$store.state.app.personalDetail;
       },
+      cityList() {
+        return this.$store.state.app.allCityList;
+      }
     },
     methods: {
       // scrollLoad(val) {
@@ -165,7 +185,7 @@
         })
       },
       onConfirm(item) {
-        this.routerLink('/collectReport');
+        this.routerReplace('/collectReport');
       },
       close_(val) {
         this.params.page = 1;
@@ -173,6 +193,16 @@
         this.searchList = [];
         if(val === 'no') return;
         this.params.search = '';
+      },
+      // 选择城市
+      chooseClickCity(item) {
+        this.chooseCity = !this.chooseCity;
+        if (item) {
+          if (item.name === this.city_name) return;
+          this.city_name = item.name;
+          this.params.city_id = item.code;
+          this.close_();
+        }
       },
     },
   }

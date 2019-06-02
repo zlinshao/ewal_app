@@ -297,6 +297,7 @@ export default {
         case 'bulletin_rent_basic':
           title = ['客户信息', '合同信息'];
           data = this.jsonClone(defineRentReport);
+          data.slither0 = defineNewRentReport.concat(data.slither0);
           break;
         case 'bulletin_agency':
           title = ['渠道费报备'];
@@ -312,7 +313,8 @@ export default {
           break;
         case 'bulletin_rent_trans'://转租
           title = ['客户信息', '合同信息'];
-          data = this.jsonClone(defineSubletReport);
+          data = this.jsonClone(defineRentReport);
+          data.slither0 = defineSubletReport.concat(data.slither0);
           break;
         case 'bulletin_special'://特殊事项
           title = ['特殊事项报备'];
