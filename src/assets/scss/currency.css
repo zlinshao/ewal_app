@@ -228,6 +228,9 @@
 .van-toast {
   text-align: center; }
 
+.van-popup-position {
+  background: rgba(0, 0, 0, 0.2); }
+
 .van-ellipsis {
   display: flex;
   display: -webkit-flex;

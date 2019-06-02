@@ -13,7 +13,7 @@
       </ul>
     </div>
     <div class="main">
-      <div ref="mainTop" class="mainTop items-bet">
+      <div ref="mainTop" class="mainTop">
         <div class="flex">
           <p v-for="item in buttons['tab'+tabs.tab]" @click="tabsTag(item.value)"
              :class="[twoLevel['tab'+tabs.tab] === item.value ? 'hover' : '']">
@@ -83,6 +83,11 @@
         </scroll-load>
       </div>
     </div>
+
+<!--    <van-popup :overlay-style="{'top': '185px'}" overlay-class="van-popup-position"-->
+<!--               v-model="approvalModule" position="top" :overlay="true">-->
+
+<!--    </van-popup>-->
   </div>
 </template>
 
@@ -98,7 +103,9 @@
       return {
         leftShift: false,
         showStatus: false,
-        mainHeight: '',
+        approvalModule: true,
+        mainHeight: {},
+        topHeight: 0,
         //加载是否结束
         fullLoading: {
           load1: true,
@@ -269,6 +276,7 @@
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
       this.mainHeight = this.mainListHeight((approvalTop + mainTop));
+      this.topHeight = approvalTop + mainTop;
     },
     watch: {},
     computed: {
@@ -633,6 +641,7 @@
 
     .main {
       .mainTop {
+        @include flex('items-bet');
         padding: .2rem .36rem;
 
         p {

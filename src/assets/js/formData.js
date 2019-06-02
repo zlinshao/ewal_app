@@ -2632,16 +2632,18 @@ defineAgencyReport = {
     },
     {
       label: '签约时长',
-      placeholder: '选填 请输入',
+      disabled: 'disabled',
       keyName: 'month',
+      placeholder: '已禁用',
       keyType: '',
-      type: 'text',
+      type: 'number',
       status: '',
       slot: '',
     },
     {
       label: '月单价',
-      placeholder: '必填 请输入',
+      disabled: 'disabled',
+      placeholder: '已禁用',
       keyName: 'price',
       keyType: '',
       type: 'number',
@@ -2751,7 +2753,6 @@ defineAgencyReport = {
     },
     {
       label: '签约人姓名',
-      // placeholder: '必填 请输入',
       placeholder: '已禁用',
       disabled: 'disabled',
       keyName: 'staff_name',
@@ -2762,7 +2763,6 @@ defineAgencyReport = {
     },
     {
       label: '部门名称',
-      // placeholder: '必填 请输入',
       placeholder: '已禁用',
       disabled: 'disabled',
       keyName: 'department_name',
@@ -2771,7 +2771,6 @@ defineAgencyReport = {
       status: '',
       slot: '',
     },
-
   ]
 };
 
@@ -2780,26 +2779,26 @@ defineRetainageReport = {
   slither0: [
     {
       label: '客户姓名',
-      placeholder: '选填 请输入',
+      disabled: 'disabled',
+      placeholder: '已禁用',
       keyName: 'customer_name',
       keyType: '',
       type: 'text',
-      status: '',
-      picker: '',
       slot: '',
     },
     {
       label: '签约时长',
-      placeholder: '选填 请输入',
+      disabled: 'disabled',
+      placeholder: '已禁用',
       keyName: 'month',
       keyType: '',
       type: 'text',
-      status: '',
       slot: '',
     },
     {
       label: '月单价',
-      placeholder: '必填 请输入',
+      disabled: 'disabled',
+      placeholder: '已禁用',
       keyName: 'price',
       keyType: '',
       type: 'text',

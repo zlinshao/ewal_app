@@ -9,10 +9,10 @@
         </div>
         <div class="searchInput">
           <div class="input">
-            <p @click="chooseClickCity()">
-              {{city_name}}
-              <i></i>
-            </p>
+<!--            <p @click="chooseClickCity()">-->
+<!--              {{city_name}}-->
+<!--              <i></i>-->
+<!--            </p>-->
             <div>
               <input type="text" v-model="params.search" @keyup.enter="onSearch" placeholder="输入房屋地址">
               <span v-if="params.search" @click="params.search = ''"></span>
@@ -78,20 +78,21 @@
         params: {
           page: 1,
           limit: 20,
+          status: 1,
+          contract_type: 1,
           search: '',
-          city_id: '',
         },
         chooseCity: false,
         city_name: '',
       }
     },
     mounted() {
-      for (let item of this.cityList) {
-        if (String(item.code) === String(this.personal.city_id)) {
-          this.city_name = item.name;
-          this.params.city_id = item.code;
-        }
-      }
+      // for (let item of this.cityList) {
+      //   if (String(item.code) === String(this.personal.city_id)) {
+      //     this.city_name = item.name;
+      //     this.params.city_id = item.code;
+      //   }
+      // }
     },
     activated() {
     },
@@ -141,6 +142,7 @@
           this.close_();
         }
       },
+      // 确认选择
       onConfirm(item) {
         let form = {};
         form.house_id = item.id;

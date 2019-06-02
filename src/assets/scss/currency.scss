@@ -14,6 +14,10 @@
   text-align: center;
 }
 
+.van-popup-position {
+  background: rgba(0, 0, 0, .2);
+}
+
 .van-ellipsis {
   @include flex('flex-center');
   white-space: pre-wrap;
@@ -389,7 +393,7 @@
 
   .booking {
     color: #212121;
-    @include bgImage('../image/footer/yuding.png'); 
+    @include bgImage('../image/footer/yuding.png');
   }
 
   //重置

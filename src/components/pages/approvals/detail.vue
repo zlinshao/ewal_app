@@ -519,9 +519,9 @@
       handleData(detail) {
         this.slither = 0;
         let bulletinData = this.$bulletinType(detail.bulletin_type);
-        this.objInt = this.objIntArray(bulletinData.data);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
+        this.objInt = this.objIntArray(bulletinData.data);
         let data = this.drawSlither;
         this.allReportNum = Object.keys(data).length;
         let obj = {};
