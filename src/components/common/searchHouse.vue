@@ -20,16 +20,16 @@
             <p v-if="params.search" class="searchBtn" @click="onSearch">搜索</p>
             <p v-if="!params.search" @click="searchModule = false">取消</p>
           </div>
-          <div class="chooseBtn" v-if="chooseCity">
-            <p v-for="item in cityList" @click="chooseClickCity(item)">
-              <b :class="{'choose': city_name === item.name}">{{item.name}}</b>
-            </p>
-          </div>
+          <!--<div class="chooseBtn" v-if="chooseCity">-->
+          <!--  <p v-for="item in cityList" @click="chooseClickCity(item)">-->
+          <!--    <b :class="{'choose': city_name === item.name}">{{item.name}}</b>-->
+          <!--  </p>-->
+          <!--</div>-->
         </div>
         <div class="searchHouse">
           <ul v-if="searchList.length">
-            <li v-for="item in searchList" @click="onConfirm(item)">
-              <div class="contract_content">
+            <li v-for="item in searchList">
+              <div class="contract_content" @click="onConfirm(item)">
                 <div class="top">
                   <h1>
                     <b>收</b>
@@ -99,8 +99,8 @@
           from: 'task',
           search: '',
         },
-        chooseCity: false,
-        city_name: '',
+        // chooseCity: false,
+        // city_name: '',
       }
     },
     mounted() {
@@ -135,30 +135,19 @@
       personal() {
         return this.$store.state.app.personalDetail;
       },
-      cityList() {
-        return this.$store.state.app.allCityList;
-      }
+      // cityList() {
+      //   return this.$store.state.app.allCityList;
+      // }
     },
     methods: {
       onSearch() {
-        this.fullLoading = false;
+        this.close_('no');
         this.$httpZll.getContractList(this.params).then(res => {
           this.fullLoading = true;
           if (res) {
-            console.log(res.data);
             this.searchList = res.data;
           }
         })
-      },
-      // 选择城市
-      chooseClickCity(item) {
-        this.chooseCity = !this.chooseCity;
-        if (item) {
-          if (item.name === this.city_name) return;
-          this.city_name = item.name;
-          this.params.city_id = item.code;
-          this.close_();
-        }
       },
       // 确认选择
       onConfirm(item) {
@@ -168,12 +157,23 @@
         form.address = item.house_name;
         this.$emit('close', form, this.onConfig);
       },
-      close_() {
+      close_(val) {
         this.params.page = 1;
-        this.params.search = '';
         this.fullLoading = false;
         this.searchList = [];
+        if (val === 'no') return;
+        this.params.search = '';
       },
+      // 选择城市
+      // chooseClickCity(item) {
+      //   this.chooseCity = !this.chooseCity;
+      //   if (item) {
+      //     if (item.name === this.city_name) return;
+      //     this.city_name = item.name;
+      //     this.params.city_id = item.code;
+      //     this.close_();
+      //   }
+      // },
     },
   }
 </script>
