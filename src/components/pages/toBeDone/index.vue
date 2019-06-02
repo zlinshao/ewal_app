@@ -55,29 +55,7 @@
       </scroll-load>
     </div>
     <!--代签/转交-->
-    <van-popup v-model="deliverPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}" :overlay="true"
-               class="deliverPopup">
-      <div class="deliverTitle">
-        {{deliverIndex?'转交':'代签'}}
-      </div>
-      <div class="deliver">
-        <div v-for="item in defineDeliver[deliverIndex]" :class="item.type">
-          <label>{{item.label}}</label>
-          <input
-            v-if="item.type !== 'textarea'"
-            type="text"
-            v-model="formatData[item.keyName]"
-            :readonly="item.readonly"
-            :disabled="item.disabled"
-            @focus="choosePicker(item)"
-            :placeholder="item.placeholder">
-        </div>
-      </div>
-      <div class="commonBtn">
-        <p class="btn back" @click="onCancel">取消</p>
-        <p class="btn" @click="saveDeliver(deliverIndex)">确定</p>
-      </div>
-    </van-popup>
+    <deliver :module="deliverPopup" :config="deliverConfig" @close="deliverPopup = false"></deliver>
     <!--新建待办任务-->
     <div class="addToBeDone" @click="showAddPopup = true"></div>
     <van-popup v-model="showAddPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
@@ -113,14 +91,11 @@
         </div>
       </div>
     </van-popup>
-    <!--员工搜索-->
-    <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
   </div>
 </template>
 
 <script>
-  import SearchStaff from '../../common/searchStaff.vue';
-
+  import Deliver from './deliver.vue'
   import icon_daiqian from '@/assets/image/toBeDone/daiqian.png'
   import icon_zhuanjiao from '@/assets/image/toBeDone/zhuanjiao.png'
   import icon_qudaka from '@/assets/image/toBeDone/qudaka.png'
@@ -135,7 +110,7 @@
 
   export default {
     name: "index",
-    components: {SearchStaff},
+    components: {Deliver},
     data() {
       return {
         mainHeight: '',
@@ -179,6 +154,7 @@
         ],
         deliverIndex: 0,
         deliverPopup: false,//代签/转交
+        deliverConfig: {},//代签/转交
         form: {},
         formatData: {},
         normalOperates: [
@@ -255,28 +231,11 @@
         this.params.title = val.replace(/\s+/g, '');
       },
     },
-    computed: {
-    },
+    computed: {},
     methods: {
       // 结束任务
       shutDown() {
 
-      },
-      // 人员/部门/时间
-      choosePicker(val) {
-        if (val.keyName === 'assignee') this.searchStaffModule = true;
-      },
-      // 员工搜索结果
-      getStaffInfo(val) {
-        this.searchStaffModule = false;
-        if (val !== 'close') {
-          this.form.assignee = val.staff_id;
-          this.formatData.assignee = val.staff_name;
-          this.formatData.department_name = val.department_name;
-        }
-      },
-      onCancel() {
-        this.deliverPopup = false;
       },
       // 右侧弹窗操作
       popupOperate() {
@@ -335,18 +294,6 @@
             break;
         }
       },
-      // 转交 / 代签
-      saveDeliver(val) {
-        this.form.changeOwner = Boolean(val);
-        if (!this.form.assignee) {
-          let msg = '请选择' + (val ? '转交' : '代签') + '人';
-          this.$prompt(msg, 'fail');
-          return;
-        }
-        this.$httpZll.postToBeDoneDeliver(this.task_id, this.form, val).then(_ => {
-          this.onCancel();
-        })
-      },
       // 变更 签署 转交 代签 结束任务
       clickBtn(action = {}, item = {}) {
         this.task_id = item.task_id || '';
@@ -361,11 +308,11 @@
             this.handlerSign(item, user_id, 1);
             break;
           case 'allograph'://代签
-            this.resetting(0);
-            this.deliverPopup = true;
-            break;
           case 'deliver'://转交
-            this.resetting(1);
+            let data = {};
+            data.name = action.action;
+            data.id = item.task_id;
+            this.deliverConfig = Object.assign({}, data);
             this.deliverPopup = true;
             break;
           case 'finishTask'://结束任务
@@ -385,6 +332,9 @@
       // 获取fadadaId
       getFadadaUserId(item) {
         return item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
+      },
+      onCancel() {
+        this.deliverPopup = false;
       },
       // 签署
       handlerSign(item, user_id, type) {
@@ -506,19 +456,6 @@
             this.routerLink('/toBeDoneList');
             break;
         }
-      },
-      // 转交/代签
-      resetting(val) {
-        this.deliverIndex = val;
-        this.formatData = {
-          assignee: '',
-          department_name: '',
-        };
-        this.form = {
-          assignee: '',
-          action: 'transfer',
-          changeOwner: true
-        };
       },
     },
   }

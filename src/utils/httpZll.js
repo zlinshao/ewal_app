@@ -244,11 +244,6 @@ class httpZll extends httpService {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(_ => {
         resolve(true);
-        if (val) {
-          $httpPrompt('发送转交成功', 'success');
-        } else {
-          $httpPrompt('发送代签成功', 'success');
-        }
       });
     });
   }
@@ -325,7 +320,7 @@ class httpZll extends httpService {
     });
   }
 
-  // 完成当前任务
+  // 完成任务
   static finishBeforeTask(id, data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {

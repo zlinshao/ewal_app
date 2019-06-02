@@ -424,7 +424,7 @@
         }
       },
       // params 配置
-      paramsHandle(tab, status, req) {
+      paramsHandle(tab, status) {
         this.showStatus = (tab === '1' && !status) || (tab === '2' && !status) || tab === '4';
         this.apiHandle(tab, status);
         switch (tab) {
@@ -475,7 +475,6 @@
             };
             break;
         }
-        if (req) return;
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 滚动加载
@@ -483,16 +482,15 @@
         let tab = this.tabs.tab;
         let status = this.tabs.status;
         this.twoLevel['tab' + tab] = status;
-        this.paramsHandle(tab, status, 'break');
         if (!val) {
-          this.params['params' + tab].page = 1;
+          this.paramsHandle(tab, status);
         } else {
           if (this.fullLoading['load' + tab]) return;
           let length = this.approvalList['list' + tab]['data' + this.twoLevel['tab' + tab]].length;
           if (length === this.total['total' + tab]) return;
           this.params['params' + tab].page++;
+          this.getApproval(this.urlApi, this.params['params' + tab], tab);
         }
-        this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 列表
       getApproval(url, params, tab) {

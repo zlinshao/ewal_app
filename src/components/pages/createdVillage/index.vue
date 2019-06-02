@@ -55,7 +55,7 @@
             <!--上传-->
             <div v-else-if="item.picker === 'upload' && item.photos" class="uploadForm">
               <div v-for="upload in item.photos" class="flex">
-                <Upload :file="upload" :getImg="album" @success="getImgData"></Upload>
+                <Upload :file="upload" :close="!villagePhoto" @success="getImgData"></Upload>
               </div>
             </div>
             <!--普通输入框-->
@@ -76,7 +76,7 @@
           <div id="container" style="width: 100%;height: 4.2rem;margin-top: .3rem;"></div>
         </div>
         <div class="commonBtn" :class="{'footerStatic': keyUpStatus}">
-          <p class="btn back" @click="resetting();$router.go(-1)">取消</p>
+          <p class="btn back" @click="onCancel()">取消</p>
           <p class="btn reset" @click="resetting()">重置</p>
           <p class="btn" @click="okAddVillage">确定</p>
           <i></i>
@@ -99,10 +99,10 @@
     data() {
       return {
         map: null,
+        villagePhoto: false,
         form: {},
         formatData: {},               //DOM显示数据
         showData: {},
-        album: {},
         drawSlither: [],
 
         pickerModule: false,          //正常 select 下拉框
@@ -114,13 +114,13 @@
       }
     },
     created() {
-      this.resetting();
+
     },
     mounted() {
       this.getVillageLocation();
     },
     activated() {
-
+      this.resetting()
     },
     watch: {},
     computed: {
@@ -173,7 +173,7 @@
       },
       // 确认选择
       onConfirm(value, show) {
-        this.onCancel();
+        this.pickerModule = false;
         if (value !== 'close') {
           this.form = value;
           this.formatData = show;
@@ -237,7 +237,8 @@
         dicties.region = {};
       },
       onCancel() {
-        this.pickerModule = false;
+        this.resetting();
+        this.$router.go(-1);
       },
       getImgData(val) {
         this.form[val[0]] = val[1];
@@ -253,6 +254,10 @@
       },
       // 初始化数据
       resetting() {
+        this.villagePhoto = true;
+        setTimeout(_ => {
+          this.villagePhoto = false;
+        }, 100);
         this.drawSlither = this.jsonClone(defineNewAddVillage);
         let all = this.initFormData(this.drawSlither, this.showData, 'noStaff');
         this.form = all.form;

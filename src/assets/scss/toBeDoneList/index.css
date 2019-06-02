@@ -269,6 +269,7 @@
           -moz-border-radius: 1rem;
           border-radius: 1rem; }
       #toBeDoneList .main .finish .finishMain .finish2 div {
+        white-space: nowrap;
         text-align: right; }
   #toBeDoneList .main .noMore, #toBeDoneList .main .noData {
     display: flex;

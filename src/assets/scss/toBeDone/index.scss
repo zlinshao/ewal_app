@@ -209,32 +209,4 @@
       @include toBeDoneImg('xinjiandaikandibu');
     }
   }
-  /*daiqian zhuanjiao*/
-  .deliverPopup {
-    @include radius(.2rem);
-    padding: .3rem;
-
-    .deliverTitle {
-      font-size: .33rem;
-      padding: 0 0 .5rem .2rem;
-    }
-
-    .deliver {
-      > div {
-        @include flex('items-center');
-        min-height: .88rem;
-
-        label {
-          min-width: 1.5rem;
-          max-width: 1.5rem;
-          text-align: right;
-          margin-right: .3rem;
-        }
-      }
-    }
-
-    .commonBtn {
-      padding: .5rem 0 .2rem;
-    }
-  }
 }

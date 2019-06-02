@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="goods" v-else>
-              <div class="flex">
+              <div class="flex" v-if="followRecord.house_goods">
                 <label>补齐物品</label>
                 <div class="polishing">
                   <h1 class="items-center" v-for="item in Object.keys(followRecord.house_goods)"
@@ -40,10 +40,10 @@
                     <i class='checkbox' @click="choosePolishing(item)"><b></b></i>
                     <b style="white-space: nowrap" @click="choosePolishing(item)">补充</b>
                     <span class="num items-center">
-                  <b @click="removeAdd('rem',item,followRecord.house_goods[item])">-</b>
-                  <span>{{goods[item]}}</span>
-                  <b class="add" @click="removeAdd('add',item,followRecord.house_goods[item])">+</b>
-                  </span>
+                      <b @click="removeAdd('rem',item,followRecord.house_goods[item])">-</b>
+                        <span>{{goods[item]}}</span>
+                      <b class="add" @click="removeAdd('add',item,followRecord.house_goods[item])">+</b>
+                    </span>
                   </h1>
                   <h2 class="items-center" :class="{'choose': chooseText.includes(item)}" v-else>
                     <b>家电不齐全</b>
@@ -63,7 +63,7 @@
             </div>
           </div>
           <div class="commonBtn">
-            <p class="btn back" @click="close_();$router.go(-1)">取消</p>
+            <p class="btn back" @click="onCancel()">取消</p>
             <p class="btn" @click="submit">确定</p>
           </div>
         </div>
@@ -237,7 +237,7 @@
         };
         this.$httpZll.getPolishingDetail(params).then(res => {
           if (res) {
-            this.photos(res.data);
+            this.photos(res.data.complete_content);
           } else {
             this.photos([]);
           }
@@ -252,7 +252,6 @@
             this.$httpZll.getUploadUrl(this.oldPhoto[pic.keyName], 'close').then(res => {
               this.album[pic.keyName] = res.data;
               this.album = Object.assign({}, this.album);
-              console.log(this.album)
             })
           }
         }
@@ -289,15 +288,20 @@
           }
         }
       },
+      onCancel() {
+        this.close_();
+        this.$router.go(-1);
+      },
       // 清空
       close_() {
         this.picStatus = true;
         setTimeout(_ => {
           this.picStatus = false;
         }, 100);
+        this.followRecord = {};
         this.album = {};
-        this.oldPhoto = [];
-        this.changePhoto = [];
+        this.oldPhoto = {};
+        this.changePhoto = {};
         this.chooseText = [];
         this.form = {
           task_id: '',

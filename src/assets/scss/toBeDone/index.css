@@ -132,8 +132,7 @@
   overflow: hidden;
   background: linear-gradient(180deg, white 0%, #f8f8f8 100%);
   /*bottom 鎿嶄綔*/
-  /*鍙充晶 popup*/
-  /*daiqian zhuanjiao*/ }
+  /*鍙充晶 popup*/ }
   #toBeDone .toBeDoneTop {
     padding: 0 .3rem;
     border-top: .1rem solid #F4F4F4;
@@ -349,25 +348,5 @@
     height: 1.5rem;
     background: url("../../../assets/image/toBeDone/xinjiandaikandibu.png") no-repeat scroll center;
     background-size: 100% 100%; }
-  #toBeDone .deliverPopup {
-    -webkit-border-radius: 0.2rem;
-    -moz-border-radius: 0.2rem;
-    border-radius: 0.2rem;
-    padding: .3rem; }
-    #toBeDone .deliverPopup .deliverTitle {
-      font-size: .33rem;
-      padding: 0 0 .5rem .2rem; }
-    #toBeDone .deliverPopup .deliver > div {
-      display: flex;
-      display: -webkit-flex;
-      align-items: center;
-      min-height: .88rem; }
-      #toBeDone .deliverPopup .deliver > div label {
-        min-width: 1.5rem;
-        max-width: 1.5rem;
-        text-align: right;
-        margin-right: .3rem; }
-    #toBeDone .deliverPopup .commonBtn {
-      padding: .5rem 0 .2rem; }
 
 /*# sourceMappingURL=index.css.map */

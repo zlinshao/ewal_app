@@ -59,15 +59,21 @@
         </div>
       </div>
     </van-popup>
+    <deliver :module="deliverPopup" :config="deliverConfig" @close="deliverPopup = false"></deliver>
   </div>
 </template>
 
 <script>
+  import Deliver from '../../toBeDone/deliver.vue'
+
   export default {
     name: "polishing",
+    components: {Deliver},
     props: ['module', 'detail'],
     data() {
       return {
+        deliverConfig: {},
+        deliverPopup: false,
         popupModule: false,
         allDetail: {},//父组件传值
         recordList: [],//跟进记录
@@ -192,10 +198,20 @@
             console.log(val);
             break;
           case 'deliver'://转交
-            console.log(val);
+            let status = {};
+            status.name = val.type;
+            status.id = this.allDetail.task_id;
+            this.deliverConfig = Object.assign({}, status);
+            this.deliverPopup = true;
             break;
           case 'save'://提交
-            console.log(val);
+            let data = {
+              action: 'complete',
+              outcome: 'accepted',
+            };
+            this.$httpZll.finishBeforeTask(this.allDetail.task_id, data).then(res => {
+              this.$prompt('提交成功', 'success');
+            });
             break;
         }
       },
@@ -221,10 +237,10 @@
 
       h6 {
         position: absolute;
-        left: 72%;
+        left: 80%;
         top: 36%;
-        width: .8rem;
-        height: .8rem;
+        width: .7rem;
+        height: .7rem;
       }
 
       .moduleTop {
