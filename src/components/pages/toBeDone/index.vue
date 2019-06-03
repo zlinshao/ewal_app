@@ -422,7 +422,6 @@
             btn.outcome = JSON.parse(btn.outcome);
             btn.oldOutcome = this.jsonClone(btn.outcome);
             btn.outcome.outcomeOptions = btn.outcome.outcomeOptions.concat(data);
-            console.log(btn)
           } else {
             // 签收据
             if (btn.taskDefinitionKey === 'CollectReceiptSign') {

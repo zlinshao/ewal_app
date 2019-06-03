@@ -1661,6 +1661,7 @@ defineCollectReport = {
       keyName: 'period_price_way_arr',
       picker: 'changeHiddenDefault',
       pickerText: '周期',
+      status: 'countDate',
       keyType: [],
       changeBtn: '付款变化',
       children: [
@@ -2002,6 +2003,7 @@ defineRentReport = {
       keyName: 'period_price_way_arr',
       picker: 'changeHiddenDefault',
       pickerText: '周期',
+      status: 'countDate',
       keyType: [],
       changeBtn: '付款变化',
       children: [
@@ -2759,6 +2761,7 @@ defineChangeReport = {
       keyName: 'period_price_way_arr',
       picker: 'changeHiddenDefault',
       pickerText: '周期',
+      status: 'countDate',
       keyType: [],
       changeBtn: '付款变化',
       children: [
@@ -3403,6 +3406,7 @@ defineRetainageReport = {
       keyName: 'period_price_way_arr',
       picker: 'changeHiddenDefault',
       pickerText: '周期',
+      status: 'countDate',
       keyType: [],
       changeBtn: '付款变化',
       children: [

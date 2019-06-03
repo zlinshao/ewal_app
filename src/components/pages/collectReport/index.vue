@@ -495,8 +495,9 @@
       },
       // 新增变化
       changeInput(slither, key, index, val) {
+        console.log(this.drawSlither[slither][index].picker);
         let child;
-        if (this.changeHiddenAll) {
+        if (this.drawSlither[slither][index].picker === 'changeHiddenAll') {
           child = this.jsonClone(this.allChildren[key]);
         } else {
           child = this.jsonClone(val);
@@ -506,6 +507,7 @@
         for (let item of child) {
           value[item.keyName] = item.keyType;
         }
+        console.log(value);
         this.form[key].push(value);
         this.formatData[key].push(value);
         if (key !== 'period_price_way_arr') return;
@@ -525,7 +527,7 @@
         this.form[key].splice(num, 1);
         this.formatData[key].splice(num, 1);
         draw.children.splice(num, 1);
-        if (draw.picker === 'changeHiddenAll') return;
+        if (draw.status !== 'countDate') return;
         this.countPrice();
         this.moreChangeDateCount(key);
       },
