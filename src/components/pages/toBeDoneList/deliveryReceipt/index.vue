@@ -140,7 +140,7 @@
                 <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
               </div>
               <!--上传-->
-              <div v-else-if="item.picker === 'upload' && item.value" class="uploadForm">
+              <div v-else-if="item.picker === 'upload' && item.photos" class="uploadForm">
                 <div v-for="upload in item.photos" class="flex">
                   <Upload :file="upload" :getImg="album[upload.keyName]" :close="!closePhoto"
                           @success="getImgData"></Upload>
@@ -245,6 +245,10 @@
         childPhoto: [],
       }
     },
+    beforeRouteLeave (to, from, next) {
+      this.resetting(1);
+      next(vm => {})
+    },
     created() {
     },
     mounted() {
@@ -259,7 +263,8 @@
       this.slitherCss = this.mainListHeight(top);
       this.slitherCss.width = this.allReportNum + '00%';
     },
-    watch: {},
+    watch: {
+    },
     computed: {},
     methods: {
       changeTag(index) {
@@ -280,8 +285,6 @@
             this.payment_type = data.payment_type || 1;
             this.resetting(this.payment_type);
             this.handlePreFill(data);
-          } else {
-            this.resetting(1);
           }
         })
       },
@@ -585,6 +588,7 @@
             }
           }
         }
+        // this.payment_type = val;
         this.form = this.jsonClone(form);
       },
       // 显示/隐藏 图片 备注
@@ -672,14 +676,13 @@
                 if (val) {
                   this.form.id = res.data.id;
                 } else {
-                  this.resetting(1);
                   this.$router.go(-1);
                 }
               }
             });
             break;
           case 2:
-            this.resetting(1);
+            this.resetting(this.payment_type);
             break;
         }
       },

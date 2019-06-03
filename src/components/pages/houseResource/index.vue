@@ -74,7 +74,7 @@
                 <b :class="{'choose': params.house_lift.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
-            <div class="commonBtn radioChecksFoot">
+            <div class="commonBtn">
               <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,1)">
                 {{item.label}}
               </p>
@@ -122,7 +122,7 @@
                 <van-field placeholder="请输入" type="number" @input="handlePriceTop"></van-field>
               </p>
             </div>
-            <div class="commonBtn radioChecksFoot">
+            <div class="commonBtn">
               <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,2)">
                 {{item.label}}
               </p>

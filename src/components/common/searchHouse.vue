@@ -1,7 +1,6 @@
 <template>
   <div id="searchHouse">
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="searchModule" position="bottom"
-               :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="searchModule" position="bottom" :overlay="true">
       <div class="searchModule" :style="mainListHeight(88)">
         <div class="popupTop">
           <p>请选择房屋</p>
@@ -154,12 +153,13 @@
       // 确认选择
       onConfirm(item) {
         let form = {};
-        form.house_id = item.house_id;
+        form.house_id = item.house_id || '';
         form.contract_id = item.contract_id || '';
         form.address = item.house_name.name || '******';
         this.$emit('close', form, this.onConfig);
       },
       close_(val) {
+        this.chooseCity = false;
         this.params.page = 1;
         this.fullLoading = false;
         this.searchList = [];

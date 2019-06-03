@@ -75,8 +75,8 @@
 
     <!--右侧栏-->
     <div class="addToBeDone" @click="showAddPopup = true"></div>
-    <van-popup v-model="showAddPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
-               position="right" :overlay="true" class="showAddPopup">
+    <van-popup v-model="showAddPopup" overlay-class="overlay-color" position="right" :overlay="true"
+               class="showAddPopup">
       <p class="addTitle">
         <span class="writingMode">新建任务</span>
       </p>
@@ -91,8 +91,8 @@
       <div class="popupBottom"></div>
     </van-popup>
     <!--搜索-->
-    <van-popup v-model="searchHigh" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
-               position="top" :overlay="true" class="searchHigh" :style="mainListHeight(80)">
+    <van-popup v-model="searchHigh" overlay-class="overlay-color" position="top" :overlay="true" class="searchHigh"
+               :style="mainListHeight(80)">
       <div class="searchInput">
         <div class="input">
           <div>
@@ -100,7 +100,7 @@
             <span v-if="highParams.title" @click="highParams.title = ''"></span>
           </div>
           <p v-if="highParams.title" class="searchBtn" @click="getFinishList(tabs)">搜索</p>
-          <p v-if="!highParams.title" @click="searchHigh = false">取消</p>
+          <p @click="searchHigh = false" v-else>取消</p>
         </div>
       </div>
       <div class="scroll_bar">
@@ -119,8 +119,8 @@
           </div>
         </div>
       </div>
-      <div class="commonBtn radioChecksFoot">
-        <p :class="['btn ' + item.type || '']" v-for="item of searchObj.buttons" @click="searchBtn(item.type)">
+      <div class="commonBtn">
+        <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type)">
           {{item.label}}
         </p>
       </div>
@@ -279,21 +279,19 @@
             ],
           },
         },
-        searchObj: {
-          buttons: [
-            {
-              label: '取消',
-              type: 'back'
-            },
-            {
-              label: '重置',
-              type: 'reset'
-            },
-            {
-              label: '确定',
-            },
-          ]
-        },
+        buttons: [
+          {
+            label: '取消',
+            type: 'back'
+          },
+          {
+            label: '重置',
+            type: 'reset'
+          },
+          {
+            label: '确定',
+          },
+        ],
         // 未完成
         noFinishModule: false,
         noModuleDetail: {},
@@ -306,9 +304,9 @@
       this.resetting();
     },
     mounted() {
-
     },
     activated() {
+      this.resetting();
       let listTop = this.$refs.listTop.offsetHeight;
       this.mainHeight = this.mainListHeight(listTop);
       let tab = this.tabs;
@@ -319,7 +317,11 @@
         this.getFinishList('1');
       }
     },
-    watch: {},
+    watch: {
+      'highParams.title'(val) {
+        this.highParams.title = val.replace(/\s+/g, '');
+      },
+    },
     computed: {
       tabs() {
         return this.$store.state.app.doneTab;
@@ -419,8 +421,8 @@
                 this.noModuleDetail = val;
                 break;
               case 'InputHandoverOrder'://交接单
-                sessionStorage.setItem('deliveryReceipt',JSON.stringify(val));
-                this.routerLink('/deliveryReceipt',{task_id: val.task_id});
+                sessionStorage.setItem('deliveryReceipt', JSON.stringify(val));
+                this.routerLink('/deliveryReceipt', {task_id: val.task_id});
                 break;
             }
             break;
@@ -481,6 +483,7 @@
           this.highParams[item] = list[item].keyType;
         }
         this.highParams.title = '';
+        this.highParams = Object.assign({}, this.highParams);
       },
       // 底部按钮跳转
       footerTag(val) {

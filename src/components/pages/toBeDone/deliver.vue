@@ -1,7 +1,6 @@
 <template>
   <div id="deliver">
-    <van-popup v-model="deliverPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}" :overlay="true"
-               class="deliverPopup">
+    <van-popup v-model="deliverPopup" overlay-class="overlay-color" :overlay="true" class="deliverPopup">
       <div class="deliverTitle">
         {{deliverIndex?'转交':'代签'}}
       </div>

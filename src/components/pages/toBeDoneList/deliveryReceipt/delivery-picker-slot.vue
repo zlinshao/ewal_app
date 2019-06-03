@@ -1,7 +1,7 @@
 <template>
   <div id="deliveryPickerSlot">
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.4)'}" v-model="popupModule"
-               position="bottom" :overlay="true" class="popupModule" :style="maxHeight">
+    <van-popup overlay-class="overlay-color" v-model="popupModule" position="bottom" :overlay="true" class="popupModule"
+               :style="maxHeight">
       <div class="popupTop">
         <p>请完成相关选项</p>
         <h3 @click="finishData">完成</h3>

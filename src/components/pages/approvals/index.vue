@@ -21,7 +21,7 @@
             <span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
           </p>
         </div>
-        <i></i>
+        <i @click="approvalModule = true"></i>
       </div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
@@ -84,9 +84,40 @@
       </div>
     </div>
 
-    <!--<van-popup :overlay-style="{'top': '185px'}" overlay-class="van-popup-position"-->
-    <!--           v-model="approvalModule" position="top" :overlay="true">-->
-    <!--</van-popup>-->
+    <van-popup :overlay-style="{'top': '3.68rem'}" overlay-class="overlay-color" v-model="approvalModule"
+               position="right" :overlay="true">
+      <div class="searchApproval">
+        <div class="searchInput">
+          <div class="input">
+            <div>
+              <input type="text" v-model="highParams.title" @keyup.enter="onSearch(tabs.tab)" placeholder="请输入搜索内容">
+              <span v-if="highParams.title" @click="highParams.title = ''"></span>
+            </div>
+            <p v-if="highParams.title" class="searchBtn" @click="onSearch(tabs.tab)">搜索</p>
+            <p v-if="!highParams.title" @click="showOnSearch()">取消</p>
+          </div>
+        </div>
+        <div class="radioChecksLabel" v-for="item of Object.keys(highList)">
+          <label>{{highList[item].title}}</label>
+          <div class="radioChecks">
+            <div v-for="val in highList[item].value" class="contents">
+              <p @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
+                 :class="{'chooseCheck': highParams[item].includes(val.id)}">
+                {{val.text}}
+              </p>
+              <p @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}" v-else>
+                {{val.text}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="commonBtn">
+          <p :class="['btn ' + item.type || '']" v-for="item of buttonFoot" @click="searchBtn(item.type)">
+            {{item.label}}
+          </p>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -102,9 +133,67 @@
       return {
         leftShift: false,
         showStatus: false,
-        approvalModule: true,
+        approvalModule: false,
         mainHeight: {},
-        topHeight: 0,
+        moduleHeight: {},
+        // 搜索 审批类型
+        highParams: {},
+        highList: {
+          status: {
+            title: '待办类型',
+            type: 'check',
+            keyType: [],
+            value: [
+              {
+                id: 1,
+                text: '收房报备',
+              }, {
+                id: 2,
+                text: '续收报备',
+              }, {
+                id: 3,
+                text: '补充协议',
+              }, {
+                id: 4,
+                text: '租房预定',
+              }, {
+                id: 5,
+                text: '租房签约',
+              }, {
+                id: 6,
+                text: '续租签约',
+              }, {
+                id: 7,
+                text: '转租调租',
+              }, {
+                id: 8,
+                text: '退租报备',
+              }, {
+                id: 9,
+                text: '房屋款项',
+              }, {
+                id: 10,
+                text: '中介报备',
+              }, {
+                id: 11,
+                text: '其他',
+              },
+            ],
+          },
+        },
+        buttonFoot: [
+          {
+            label: '取消',
+            type: 'back'
+          },
+          {
+            label: '重置',
+            type: 'reset'
+          },
+          {
+            label: '确定',
+          },
+        ],
         //加载是否结束
         fullLoading: {
           load1: true,
@@ -269,15 +358,25 @@
         task_ids: [],
       }
     },
+    created() {
+      this.resetting();
+
+    },
     mounted() {
     },
     activated() {
+      this.resetting();
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
-      this.mainHeight = this.mainListHeight((approvalTop + mainTop));
-      this.topHeight = approvalTop + mainTop;
+      let top = approvalTop + mainTop;
+      this.mainHeight = this.mainListHeight(top);
+      this.moduleHeight = this.mainListHeight(top + 40);
     },
-    watch: {},
+    watch: {
+      'highParams.title'(val) {
+        this.highParams.title = val.replace(/\s+/g, '');
+      },
+    },
     computed: {
       // 1我审批的 2我发起的 3抄送我的 4暂不处理
       tabs() {
@@ -285,6 +384,33 @@
       },
     },
     methods: {
+      showOnSearch() {
+        this.approvalModule = false;
+      },
+      // 筛选条件
+      checkChoose(val, key) {
+        let type = this.highList[key];
+        if (type.type === 'radio') {
+          this.highParams[key] = this.highParams[key] === val.id ? '' : val.id;
+        } else {
+          this.checkChooseCommon(val, this.highParams[key]);
+        }
+        this.highParams = Object.assign({}, this.highParams);
+      },
+      // 搜索按钮
+      searchBtn(val) {
+        switch (val) {
+          case 'back':
+            this.showOnSearch();
+            break;
+          case 'reset':
+            this.resetting();
+            break;
+          default:
+            this.onSearch(this.tabs.tab);
+            break;
+        }
+      },
       // 显示 更多操作
       moreOperates(id) {
         if (this.task_ids.includes(id)) {
@@ -432,6 +558,7 @@
       },
       // params 配置
       paramsHandle(tab, status) {
+        this.showOnSearch();
         this.showStatus = (tab === '1' && !status) || (tab === '2' && !status) || tab === '4';
         this.apiHandle(tab, status);
         switch (tab) {
@@ -587,6 +714,15 @@
         this.$store.dispatch('approval_tabs', this.tabs);
         this.onSearch(tab);
       },
+      // 重置搜索
+      resetting() {
+        let list = this.jsonClone(this.highList);
+        for (let item of Object.keys(list)) {
+          this.highParams[item] = list[item].keyType;
+        }
+        this.highParams.title = '';
+        this.highParams = Object.assign({}, this.highParams);
+      },
     },
   }
 </script>
@@ -600,6 +736,7 @@
 
   #approvals {
     .approvalTop {
+      height: 2.8rem;
       background: #E6F4F9;
       border-top: .16rem solid #F8F8F8;
 
@@ -640,8 +777,9 @@
 
     .main {
       .mainTop {
+        height: .88rem;
         @include flex('items-bet');
-        padding: .2rem .36rem;
+        padding: 0 .36rem;
 
         p {
           position: relative;
@@ -894,5 +1032,28 @@
       }
     }
 
+    .van-popup.van-popup--right {
+      top: 2.8rem;
+      width: 100%;
+      @include transform(translate3d(0, 0, 0));
+      @include transition(all 0s);
+      @include scroll;
+    }
+
+    .searchApproval {
+      padding: .1rem;
+
+      .searchInput {
+        margin-top: .3rem;
+      }
+
+      label {
+        padding: .3rem;
+      }
+
+      .commonBtn {
+        padding: .42rem 0;
+      }
+    }
   }
 </style>

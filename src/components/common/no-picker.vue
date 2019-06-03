@@ -1,7 +1,7 @@
 <template>
   <div>
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.4)'}" v-model="popupModule"
-               position="bottom" :overlay="true" class="popupModule">
+    <van-popup overlay-class="overlay-color" v-model="popupModule" position="bottom" :overlay="true"
+               class="popupModule">
       <div class="popupTop">
         <p>请完成相关填写</p>
         <h3 @click="finishData">完成</h3>

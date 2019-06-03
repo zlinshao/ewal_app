@@ -1,7 +1,6 @@
 <template>
   <div id="polishing">
-    <van-popup v-model="popupModule" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
-               position="right" :overlay="true" class="popupModule">
+    <van-popup v-model="popupModule" overlay-class="overlay-color" position="right" :overlay="true" class="popupModule">
       <div class="moduleTop">
         <h1>
           {{taskDefinitionKey[allDetail.taskDefinitionKey]}}

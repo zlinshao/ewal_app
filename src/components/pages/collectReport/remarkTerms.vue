@@ -1,7 +1,6 @@
 <template>
   <div id="remarkTerms">
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="popupModule" position="bottom"
-               :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="popupModule" position="bottom" :overlay="true">
       <div class="remarkTerms">
         <div class="top">
           <h1>请完成相关选项</h1>

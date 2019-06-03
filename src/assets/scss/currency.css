@@ -228,7 +228,7 @@
 .van-toast {
   text-align: center; }
 
-.van-popup-position {
+.overlay-color {
   background: rgba(0, 0, 0, 0.2); }
 
 .van-ellipsis {
@@ -500,7 +500,7 @@
     display: -webkit-flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: .3rem; }
+    margin-bottom: .15rem; }
     .radioChecks div p {
       font-size: .26rem;
       width: 88%;

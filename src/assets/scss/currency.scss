@@ -14,7 +14,7 @@
   text-align: center;
 }
 
-.van-popup-position {
+.overlay-color {
   background: rgba(0, 0, 0, .2);
 }
 
@@ -311,7 +311,7 @@
   div {
     width: 25%;
     @include flex('flex-center');
-    margin-bottom: .3rem;
+    margin-bottom: .15rem;
 
     p {
       font-size: .26rem;

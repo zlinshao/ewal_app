@@ -1,7 +1,6 @@
 <template>
   <div id="goSignContract">
-    <van-popup v-model="popupModule" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
-               position="right" :overlay="true" class="popupModule">
+    <van-popup v-model="popupModule" overlay-class="overlay-color" position="right" :overlay="true" class="popupModule">
       <div class="moduleTop">
         <span>带看打卡</span>
         <b></b>
@@ -106,7 +105,7 @@
               this.allDetail.process_instance_id = data.processInstanceId;
               this.allDetail.root_process_instance_id = data.rootProcessInstanceId;
               sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
-              sessionStorage.setItem('task_detail',JSON.stringify(this.allDetail));
+              sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
               this.routerReplace(action.route);
               this.$emit('close');
             });
@@ -195,6 +194,7 @@
       @include radius(.2rem 0 0 .2rem);
       background-color: #43A046;
       @include flex('bet-column');
+
       .moduleTop {
         position: relative;
         min-height: 2rem;
@@ -203,9 +203,11 @@
         padding: .45rem;
         font-size: .36rem;
         color: #FFFFFF;
+
         b, i {
           position: absolute;
         }
+
         b {
           top: 0;
           right: 1rem;
@@ -214,6 +216,7 @@
           z-index: 3;
           @include goSignImg('yiwancheng');
         }
+
         i {
           right: 0;
           bottom: -1.1rem;
@@ -223,46 +226,57 @@
           @include goSignImg('yiwanchengzhiwen');
         }
       }
+
       .container, .main, .commonBtn {
         background-color: #FFFFFF;
       }
+
       .container {
         @include radius(.3rem .3rem 0 0);
         min-height: 3.3rem;
         padding-bottom: .3rem;
         overflow: hidden;
+
         #container {
           height: 100%;
         }
       }
+
       .main {
         @include scroll;
         height: 100%;
+
         .detail {
           @include flex('items-center');
           min-height: .6rem;
           padding: .1rem .3rem .1rem 0;
+
           div {
             margin-left: .3rem;
           }
+
           .photo {
             @include flex('items-center');
             flex-wrap: wrap;
+
             p {
               margin: 0 .2rem .2rem 0;
               width: 1rem;
               height: 1rem;
+
               img {
                 @include radius(.1rem);
               }
             }
           }
         }
+
         .look_photo {
           margin-top: .2rem;
           align-items: flex-start;
         }
       }
+
       .commonBtn {
         padding: .3rem;
         flex-direction: row-reverse;

@@ -201,7 +201,6 @@
       getHouse(val, config) {
         this.onCancel();
         if (val !== 'close') {
-          console.log(val)
           this.formatData[config.keyName] = val.address;
           for (let item of Object.keys(val)) {
             this.form[item] = val[item];

@@ -57,8 +57,8 @@
     <deliver :module="deliverPopup" :config="deliverConfig" @close="deliverPopup = false"></deliver>
     <!--新建待办任务-->
     <div class="addToBeDone" @click="showAddPopup = true"></div>
-    <van-popup v-model="showAddPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
-               position="right" :overlay="true" class="showAddPopup">
+    <van-popup v-model="showAddPopup" overlay-class="overlay-color" position="right" :overlay="true"
+               class="showAddPopup">
       <p class="addTitle">
         <span class="writingMode">新建</span>
       </p>
@@ -81,8 +81,7 @@
         <i></i>
       </div>
     </div>
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="tabsModule" position="bottom"
-               :overlay="true" class="tabsModule">
+    <van-popup overlay-class="overlay-color" v-model="tabsModule" position="bottom" :overlay="true" class="tabsModule">
       <div class="modules">
         <div v-for="item in modules" @click="tabsTag(item.id)">
           <i><img :src="item.icon" alt=""></i>

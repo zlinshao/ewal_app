@@ -1,7 +1,6 @@
 <template>
   <div>
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="pickerModule" position="bottom"
-               :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="pickerModule" position="bottom" :overlay="true">
       <van-picker
         show-toolbar
         :title="'请选择' + pickerConfig.title"

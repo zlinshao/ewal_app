@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="timeShow" position="bottom" :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="timeShow" position="bottom" :overlay="true">
       <van-datetime-picker
         v-model="currentDate"
         :type="dateType"
