@@ -489,6 +489,7 @@
         if (!date) return;
         this.changeDateCount(key, new Date(date));
       },
+      // 附属租客/房东
       showListBtn(slither, child, index) {
         this.changeHiddenAll = true;
         this.allChildren[child] = this.jsonClone(this.drawSlither[slither][index].children[0]);

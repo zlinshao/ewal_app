@@ -1547,7 +1547,7 @@ defineCollectReport = {
   // 合同信息
   slither3: [
     {
-      label: '是否是电子合同',
+      label: '是否电子合同',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'is_electronic_contract',
@@ -1909,25 +1909,25 @@ defineRentReport = {
   // 合同信息
   slither0: [
     {
-      label: '是否是电子合同',
+      label: '是否电子合同',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'is_electronic_contract',
       keyType: '1',
       type: 'text',
       status: 'objInt',
+      controlShow: 'disabled',
       picker: 'picker',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
       label: '合同编号',
+      disabled: 'disabled',
       placeholder: '必填 请填写',
       keyName: 'contract_number',
       keyType: 'LJSHE',
       type: 'text',
-      status: '',
-      picker: '',
       slot: '',
     },
     {
@@ -2648,7 +2648,7 @@ defineSubletReport = [
     placeholder: '必填 请选择',
     readonly: 'readonly',
     keyName: 'trans_type',
-    keyType: '',
+    keyType: '0',
     type: 'text',
     status: 'objInt',
     picker: 'picker',
@@ -2657,7 +2657,8 @@ defineSubletReport = [
   },
   {
     label: '房屋地址',
-    placeholder: '必填 请输入',
+    disabled: 'disabled',
+    placeholder: '已禁用',
     keyName: 'address',
     keyType: '',
     type: 'text',
