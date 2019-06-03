@@ -183,6 +183,7 @@
       }, passive);
     },
     methods: {
+      // 报备跳转
       toBulletin(item) {
         sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
         this.routerLink(item.url);

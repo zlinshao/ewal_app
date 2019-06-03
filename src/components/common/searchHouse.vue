@@ -33,7 +33,8 @@
                 <div class="top">
                   <h1>
                     <b>收</b>
-                    <span>{{item.house_name}}</span>
+                    <span v-if="item.house_name && item.house_name.name">{{item.house_name.name}}</span>
+                    <span v-else>******</span>
                   </h1>
                   <h2><span>生效中</span></h2>
                 </div>
@@ -96,7 +97,7 @@
           limit: 50,
           status: 1,
           contract_type: 1,
-          city_id: '',
+          city_name: '',
           from: 'task',
           search: '',
         },
@@ -108,7 +109,7 @@
       for (let item of this.cityList) {
         if (String(item.code) === String(this.personal.city_id)) {
           this.city_name = item.name;
-          this.params.city_id = item.code;
+          this.params.city_name = item.name + '市';
         }
       }
     },
@@ -171,7 +172,7 @@
         if (item) {
           if (item.name === this.city_name) return;
           this.city_name = item.name;
-          this.params.city_id = item.code;
+          this.params.city_name = item.name + '市';
           this.close_();
         }
       },

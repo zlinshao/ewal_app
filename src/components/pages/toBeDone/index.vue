@@ -20,7 +20,6 @@
           </div>
           <p class="statusBtn">
             <span>{{item.name}}</span>
-            <!--<label>密码 506231</label>-->
           </p>
           <div class="handleBtn">
             <!--合同修改 / 签署-->
@@ -157,6 +156,7 @@
         deliverConfig: {},//代签/转交
         form: {},
         formatData: {},
+        // 自定义按钮
         normalOperates: [
           {
             icon: icon_daiqian,
@@ -168,7 +168,6 @@
             action: 'deliver',
           }
         ],
-
         // 状态变化按钮
         changeOperates: {
           punchClock: icon_qudaka,
@@ -388,9 +387,9 @@
       getToBeDoneList(val) {
         this.fullLoading = true;
         let type = this.bulletin_type.bulletin;
-        let status = type === 'bulletin_collect_basic' ? 'toBeDoneCollect' : 'toBeDoneRent';
-        val.rootProcessDefinitionKey = type === 'bulletin_collect_basic' ? 'MarketCollect' : 'MarketRent';
-        val.taskDefinitionKeyIn = approvalSearch[status].join(',');
+        let obj = this.bulletinStatus(type);
+        val.rootProcessDefinitionKey = obj.type;
+        val.taskDefinitionKeyIn = approvalSearch[obj.status].join(',');
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           this.paging = res.total;
@@ -404,6 +403,20 @@
             }
           }
         })
+      },
+      bulletinStatus(type) {
+        let obj = {};
+        switch (type) {
+          case "bulletin_collect_basic":
+            obj.status = 'toBeDoneCollect';
+            obj.type = 'MarketCollect';
+            break;
+          case "bulletin_rent_basic":
+            obj.status = 'toBeDoneRent';
+            obj.type = 'MarketRent';
+            break;
+        }
+        return obj;
       },
       // 更多操作按钮
       handlerOperates(data, type) {

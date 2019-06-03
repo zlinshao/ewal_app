@@ -674,7 +674,7 @@ defineSupplyAgreement = {
       label: '协议类型',
       placeholder: '必填 请选择',
       readonly: 'readonly',
-      keyName: 'agreement_type',
+      keyName: 'pact_type',
       keyType: '',
       type: 'text',
       status: 'objInt',

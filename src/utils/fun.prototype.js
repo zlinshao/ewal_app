@@ -501,7 +501,6 @@ export default {
                 query.process_id = task.processInstanceId;
                 query.root_id = task.rootProcessInstanceId;
                 query.task_action = action.route;
-                console.log(query);
                 this.againTaskDetail(query).then(_ => {
                   this.againDetailRequest(query, 'again');
                 });
