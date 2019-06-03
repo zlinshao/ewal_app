@@ -21,7 +21,7 @@ bulletinRouterStatus = {
   // 转租报备
   newSublet: {
     bulletin: 'bulletin_rent_trans',
-    to: 'sublet',
+    to: 'rent',
     type: 2,
   },
   // 调租报备
@@ -2578,6 +2578,7 @@ defineRentReport = {
         },
         {
           label: '银行卡照片',
+          placeholder: '必填',
           keyName: 'bank_card_photo',
         }
       ]

@@ -103,8 +103,10 @@
         this.resetting();
       },
       hiddenHouse(val, config) {
-        console.log(val);
-        console.log(config);
+        if (val !== 'close') {
+          console.log(val);
+          console.log(config);
+        }
       },
       // 下拉框筛选
       choosePicker(val, value) {

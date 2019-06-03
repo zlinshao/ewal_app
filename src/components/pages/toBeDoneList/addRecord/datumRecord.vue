@@ -305,6 +305,7 @@
         this.chooseText = [];
         this.form = {
           task_id: '',
+          process_id: '',
           house_name: '',
           contract_id: '',
           bulletin_staff_id: '',

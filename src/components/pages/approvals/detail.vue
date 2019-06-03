@@ -518,11 +518,11 @@
       // 展示数据字段
       handleData(detail) {
         this.slither = 0;
+        this.formatData = {};
         let bulletinData = this.$bulletinType(detail.bulletin_type);
         this.bulletinTitle = bulletinData.title;
-        this.drawSlither = this.jsonClone(bulletinData.data);
+        let data = this.jsonClone(bulletinData.data);
         this.objInt = this.objIntArray(bulletinData.data);
-        let data = this.drawSlither;
         this.allReportNum = Object.keys(data).length;
         let obj = {};
         for (let val of Object.keys(data)) {
@@ -548,7 +548,6 @@
       },
       // 获取详情数据
       approvalDetail(url) {
-        this.formatData = {};
         this.$httpZll.getApprovalDetail(url).then((res) => {
           if (res) {
             this.allDetail = this.jsonClone(res.data);
@@ -563,7 +562,6 @@
       // 数据转换文本
       handleDetail(res) {
         for (let item of Object.keys(res)) {
-          this.formatData[item] = res[item] || this.formatData[item];
           switch (item) {
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
@@ -634,6 +632,7 @@
             this.formatData[pic] = res.album[pic];
           }
         }
+
       },
       // 变化数据 预填数据处理
       changeHandle(res, item, val, all, data) {
@@ -659,7 +658,7 @@
           case 'comment':
             this.commentForm.content = {
               message: '',
-              attachments: []
+              attachments: [],
             };
             this.commentPopup = false;
             break;

@@ -29,7 +29,7 @@
             <div class="contentList">
               <div class="listUp" :class="[task_ids.includes(item.task_id) ? 'leftShift' : '']"
                    @click="routerLinkDetail(item)">
-                <div class="listTitle">{{item.house_address}}</div>
+                <div class="listTitle">{{item.house_address || '******'}}</div>
                 <div class="listMiddle">
                   <p>{{item.bulletin_name}}</p>
                   <div>
@@ -84,10 +84,9 @@
       </div>
     </div>
 
-<!--    <van-popup :overlay-style="{'top': '185px'}" overlay-class="van-popup-position"-->
-<!--               v-model="approvalModule" position="top" :overlay="true">-->
-
-<!--    </van-popup>-->
+    <!--<van-popup :overlay-style="{'top': '185px'}" overlay-class="van-popup-position"-->
+    <!--           v-model="approvalModule" position="top" :overlay="true">-->
+    <!--</van-popup>-->
   </div>
 </template>
 

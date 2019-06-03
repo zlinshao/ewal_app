@@ -152,6 +152,7 @@
           bulletin_staff_id: val.bulletin_staff_id,
           house_name: val.house_address,
           task_id: val.task_id,
+          process_id: val.process_id,
           contract_id: contract_id,
         };
         // 需要补齐物品 列表
