@@ -156,7 +156,7 @@
         let form = {};
         form.house_id = item.house_id;
         form.contract_id = item.contract_id || '';
-        form.address = item.house_name;
+        form.address = item.house_name.name || '******';
         this.$emit('close', form, this.onConfig);
       },
       close_(val) {
