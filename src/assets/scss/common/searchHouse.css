@@ -205,7 +205,10 @@
             #contractSearch .searchHouse ul li .contract_content .main div h1, #searchHouse .searchHouse ul li .contract_content .main div h1 {
               color: #D2D2D2; }
             #contractSearch .searchHouse ul li .contract_content .main div h2, #searchHouse .searchHouse ul li .contract_content .main div h2 {
-              margin-top: .2rem; }
+              margin-top: .2rem;
+              font-size: .26rem; }
+              #contractSearch .searchHouse ul li .contract_content .main div h2 span, #searchHouse .searchHouse ul li .contract_content .main div h2 span {
+                font-size: .26rem; }
           #contractSearch .searchHouse ul li .contract_content .main div, #searchHouse .searchHouse ul li .contract_content .main div {
             border-right: 1px dashed #A2A2A2; }
           #contractSearch .searchHouse ul li .contract_content .main .department, #searchHouse .searchHouse ul li .contract_content .main .department {

@@ -245,10 +245,6 @@
         childPhoto: [],
       }
     },
-    beforeRouteLeave (to, from, next) {
-      this.resetting(1);
-      next(vm => {})
-    },
     created() {
     },
     mounted() {
@@ -263,8 +259,7 @@
       this.slitherCss = this.mainListHeight(top);
       this.slitherCss.width = this.allReportNum + '00%';
     },
-    watch: {
-    },
+    watch: {},
     computed: {},
     methods: {
       changeTag(index) {
@@ -285,6 +280,8 @@
             this.payment_type = data.payment_type || 1;
             this.resetting(this.payment_type);
             this.handlePreFill(data);
+          } else {
+            this.resetting(1);
           }
         })
       },
@@ -508,7 +505,7 @@
         this.popupStatus = item.picker;
         if (item.status === 'child') {
           this.deliveryPicker(item, value, parentKey, index);
-        } else if (item.status === 'date') {
+        } else if (item.picker === 'date') {
           this.chooseTime(item, value);
         } else {
           this.pickerModule = true;

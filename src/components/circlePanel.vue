@@ -68,13 +68,13 @@
             icon: ic_tiaozu,
           },
           {
-            url: 'collectReport',
+            url: 'contractSearch',
             name: '转租',
             status: bulletinRouterStatus.newSublet,
             icon: ic_zhuanzu,
           },
           {
-            url: 'collectReport',
+            url: 'contractSearch',
             name: '特殊事项',
              status: bulletinRouterStatus.newSpecial,
             icon: ic_teshu,

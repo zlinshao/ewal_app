@@ -38,11 +38,14 @@
             <div>
               <h2 v-for="key in Object.keys(item.content.complete_content)" v-if="makeGoods[key]">
                 <label>{{makeGoods[key]}}</label>
-                <span>补充{{item.content.complete_content[key]}}个</span>
+                <span v-if="key !== 'is_fill'">补充{{item.content.complete_content[key]}}个</span>
+                <span v-else>
+                  <span>{{item.content.complete_content[key] == 1 ?'齐全':'不齐全'}}</span>
+                </span>
               </h2>
             </div>
             <div v-if="item.file">
-              <h2 v-for="pic in Object.keys(item.file)">
+              <h2 v-for="pic in Object.keys(item.file)" v-if="item.file[pic].length">
                 <label>{{uploadCollect[pic]}}</label>
                 <i>
                   <img v-for="p in item.file[pic]" :src="p.uri" @click="$bigPhoto(item.file[pic],p.uri)" alt="">
@@ -352,8 +355,8 @@
                 @include flex('items-center');
 
                 label {
-                  min-width: 1.6rem;
-                  max-width: 1.6rem;
+                  min-width: 1.8rem;
+                  max-width: 1.8rem;
                 }
 
                 i {

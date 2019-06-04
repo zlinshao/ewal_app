@@ -320,10 +320,10 @@
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
-        this.DistinguishForm(type.bulletin);
+        this.distinguishForm(type.bulletin);
       },
       // 区分报备类型参数
-      DistinguishForm(type) {
+      distinguishForm(type) {
         switch (type) {
           case 'bulletin_rent_basic':
             this.form.house_id = '';
@@ -333,6 +333,10 @@
             if (query.result) {
               this.form.is_sign = query.result;
             }
+            break;
+          case 'bulletin_special':
+            this.form.house_id = '';
+            this.form.contract_id = '';
             break;
         }
       },

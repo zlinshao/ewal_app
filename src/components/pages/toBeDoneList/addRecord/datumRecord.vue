@@ -210,9 +210,7 @@
       choosePolishing(item) {
         if (this.chooseText.includes(item)) {
           this.chooseText.splice(this.chooseText.indexOf(item), 1);
-          if (item === 'is_fill') {
-            this.goods[item] = 0;
-          }
+          this.goods[item] = 0;
         } else {
           this.chooseText.push(item);
           if (item === 'is_fill') {
