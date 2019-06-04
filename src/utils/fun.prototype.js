@@ -304,7 +304,7 @@ export default {
           data = this.jsonClone(defineAgencyReport);
           break;
         case 'bulletin_retainage':
-          title = ['房屋尾款报备'];
+          title = ['尾款报备'];
           data = this.jsonClone(defineRetainageReport);
           break;
         case 'bulletin_change'://调租

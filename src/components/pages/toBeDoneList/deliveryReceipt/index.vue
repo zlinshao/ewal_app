@@ -805,6 +805,7 @@
         flex-wrap: wrap;
 
         p {
+          font-size: .26rem;
           margin-right: .15rem;
           width: 1.5rem;
           height: .6rem;
@@ -886,7 +887,6 @@
           .addChange {
             span {
               display: inline-block;
-              margin-left: 1.8rem;
               text-align: center;
               width: .5rem;
               height: .5rem;

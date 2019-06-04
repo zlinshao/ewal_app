@@ -56,7 +56,7 @@
             icon: ic_qudao,
           },
           {
-            url: 'collectReport',
+            url: 'toBeDone',
             name: '尾款',
             status: bulletinRouterStatus.newRetainage,
             icon: ic_weikuan,

@@ -172,9 +172,9 @@
     },
     activated() {
       this.close_();
-      this.followRecord = JSON.parse(sessionStorage.datumRecord);
+      this.followRecord = JSON.parse(sessionStorage.datumRecord || '{}');
+      let query = JSON.parse(this.$route.query.params || '{}');
       let record = this.followRecord.taskDefinitionKey;
-      let query = this.$route.query;
       for (let key of Object.keys(query)) {
         this.form[key] = query[key];
       }

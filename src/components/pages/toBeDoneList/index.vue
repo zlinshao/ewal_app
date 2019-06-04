@@ -179,7 +179,6 @@
           total1: 0,
           total2: 0,
         },
-
         //右侧栏
         showAddPopup: false,
         addShowList: [
@@ -353,9 +352,6 @@
         if (!this.finishList['list' + val].length) {
           this.getFinishList(val);
         }
-        // this.finishList['list' + val] = [];
-        // this.params['params' + val].page = 1;
-        // this.getFinishList(val);
       },
       // 清空 列表
       close_(tab) {

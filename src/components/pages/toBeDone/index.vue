@@ -414,7 +414,13 @@
             obj.status = 'toBeDoneRent';
             obj.type = 'MarketRent';
             break;
+          case "bulletin_retainage":
+            obj.status = 'toBeDoneRetainage';
+            obj.type = 'MarketRent';
+            break;
         }
+        // Market-CollectWithdrawal 收房退租
+        // Market-RentWithdrawal 租房退租
         return obj;
       },
       // 更多操作按钮

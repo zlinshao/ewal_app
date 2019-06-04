@@ -529,6 +529,9 @@
           this.resetChange(key);
           return;
         }
+        if (draw.children.length === 1 && draw.keyName === 'period_price_way_arr') {
+          this.form.period_price_way_arr[0].period = this.form.month;
+        }
         this.form[key].splice(num, 1);
         this.formatData[key].splice(num, 1);
         draw.children.splice(num, 1);

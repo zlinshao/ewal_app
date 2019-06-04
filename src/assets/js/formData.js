@@ -53,13 +53,13 @@ bulletinRouterStatus = {
     to: 'checkout',
     type: 1,
   },
-
 };
 
 // 审批筛选
 approvalSearch = {
   toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC', 'CollectReceiptSign'],
   toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentBooking'],
+  toBeDoneRetainage: ['RentRetainage'],
   approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
