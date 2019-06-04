@@ -130,6 +130,7 @@
           } else {
             this.$prompt('发送代签成功', 'success');
           }
+          this.$emit('close','success');
           this.onCancel();
         })
       },

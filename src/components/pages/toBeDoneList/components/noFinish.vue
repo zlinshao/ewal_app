@@ -61,7 +61,7 @@
         </div>
       </div>
     </van-popup>
-    <deliver :module="deliverPopup" :config="deliverConfig" @close="deliverPopup = false"></deliver>
+    <deliver :module="deliverPopup" :config="deliverConfig" @close="deliverFinish"></deliver>
   </div>
 </template>
 
@@ -178,7 +178,7 @@
       },
       popupModule(val) {
         if (!val) {
-          this.$emit('close');
+          this.$emit('close', 'close');
         }
       }
     },
@@ -214,10 +214,19 @@
             };
             this.$httpZll.finishBeforeTask(this.allDetail.task_id, data).then(res => {
               this.$prompt('提交成功', 'success');
+              this.deliverFinish('success');
             });
             break;
         }
       },
+      // 转交成功
+      deliverFinish(val) {
+        if (val !== 'close') {
+          this.deliverPopup = false;
+          this.popupModule = false;
+          this.$emit('close', 'success');
+        }
+      }
     },
   }
 </script>
@@ -244,6 +253,7 @@
         top: 36%;
         width: .7rem;
         height: .7rem;
+        z-index: 1;
       }
 
       .moduleTop {

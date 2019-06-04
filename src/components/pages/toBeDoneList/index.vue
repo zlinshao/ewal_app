@@ -435,7 +435,7 @@
       // 未完成 模态框
       noFinisHidden(val) {
         this.cancel();
-        if (val === 'again') {
+        if (val !== 'close') {
           this.scrollLoad(false);
         }
       },
