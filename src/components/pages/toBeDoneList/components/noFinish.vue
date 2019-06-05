@@ -198,7 +198,6 @@
           case 'confirm'://增加跟进记录
             sessionStorage.setItem('datumRecord', JSON.stringify(this.allDetail));
             this.routerLink('/datumRecord', {params: JSON.stringify(this.params)});
-            console.log(val);
             break;
           case 'deliver'://转交
             let status = {};

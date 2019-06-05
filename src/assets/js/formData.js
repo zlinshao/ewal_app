@@ -667,14 +667,14 @@ defineNewTask = {
 };
 
 // 补充协议
-defineSupplyAgreement = {
-  collect: [
+defineSupplyAgreement = [
+  [
     {
       label: '协议类型',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'pact_type',
-      keyType: '',
+      keyType: 1,
       type: 'text',
       status: 'objInt',
       showForm: 'formatData',//picker 显示form 或 formatData
@@ -760,13 +760,205 @@ defineSupplyAgreement = {
       slot: '',
     },
   ],
-  rent: [
+  [
     {
       label: '协议类型',
       placeholder: '必填 请选择',
       readonly: 'readonly',
-      keyName: 'agreement_type',
+      keyName: 'pact_type',
+      keyType: 2,
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '房屋地址',// 标题
+      placeholder: '必填 请选择',// placeholder
+      readonly: 'readonly',// 只读 picker必须有值
+      keyName: 'house_address',// 字段名
+      keyType: '',// 数据类型
+      type: 'text',// input 类型
+      picker: 'searchHouse',
+      showForm: 'formatData',//picker 显示form 或 formatData
+    },
+    {
+      label: '原卡号',
+      placeholder: '必填 请输入',
+      keyName: 'old_account',
       keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '原开户人',
+      placeholder: '必填 请输入',
+      keyName: 'old_account',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '现卡号',
+      placeholder: '必填 请输入',
+      keyName: 'account',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '现开户人',
+      placeholder: '必填 请输入',
+      keyName: 'account_name',
+      keyType: '',
+      type: 'text',
+      button: '银行卡识别',
+      icon: 'bank',
+      slot: '',
+    },
+    {
+      label: '开户行',
+      placeholder: '必填 请输入',
+      keyName: 'bank',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '签约人',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      button: '身份识别',
+      icon: 'identity',
+      slot: '',
+    },
+    {
+      label: '身份证号',
+      placeholder: '必填 请输入',
+      keyName: 'card_id',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '联系电话',
+      placeholder: '必填 请输入',
+      keyName: 'contact_phone',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '备注',
+      placeholder: '必填 请输入',
+      keyName: 'remark',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+  ],
+  [
+    {
+      label: '协议类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'pact_type',
+      keyType: 3,
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '房屋地址',// 标题
+      placeholder: '必填 请选择',// placeholder
+      readonly: 'readonly',// 只读 picker必须有值
+      keyName: 'house_address',// 字段名
+      keyType: '',// 数据类型
+      type: 'text',// input 类型
+      picker: 'searchHouse',
+      showForm: 'formatData',//picker 显示form 或 formatData
+    },
+    {
+      label: '原卡号',
+      placeholder: '必填 请输入',
+      keyName: 'old_account',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '现卡号',
+      placeholder: '必填 请输入',
+      keyName: 'account',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '开户人',
+      placeholder: '必填 请输入',
+      keyName: 'account_name',
+      keyType: '',
+      type: 'text',
+      button: '银行卡识别',
+      icon: 'bank',
+      slot: '',
+    },
+    {
+      label: '开户行',
+      placeholder: '必填 请输入',
+      keyName: 'bank',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '签约人',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      button: '身份识别',
+      icon: 'identity',
+      slot: '',
+    },
+    {
+      label: '身份证号',
+      placeholder: '必填 请输入',
+      keyName: 'card_id',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '联系电话',
+      placeholder: '必填 请输入',
+      keyName: 'contact_phone',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '备注',
+      placeholder: '必填 请输入',
+      keyName: 'remark',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+  ],
+  [
+    {
+      label: '协议类型',
+      placeholder: '必填 请选择',
+      disabled: 'disabled',
+      keyName: 'pact_type',
+      keyType: 4,
       type: 'text',
       status: 'objInt',
       showForm: 'formatData',//picker 显示form 或 formatData
@@ -848,7 +1040,7 @@ defineSupplyAgreement = {
       slot: '',
     },
   ],
-};
+];
 
 // 收房报备
 defineCollectReport = {

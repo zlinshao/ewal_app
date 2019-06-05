@@ -26,7 +26,7 @@
               <span>{{followRecord.house_address || ''}}</span>
             </div>
             <div v-if="followRecord.taskDefinitionKey === 'CompleteData'">
-              <div v-for="pic in upload" class="flex">
+              <div v-for="pic in upload[followRecord.bulletin_type]" class="flex">
                 <Upload :file="pic" :getImg="album[pic.keyName]" :close="!picStatus" @success="getImgData"></Upload>
               </div>
             </div>
@@ -63,7 +63,7 @@
             </div>
           </div>
           <div class="commonBtn">
-            <p class="btn back" @click="onCancel()">取消</p>
+            <p class="btn back" @click="$router.go(-1)">取消</p>
             <p class="btn" @click="submit">确定</p>
           </div>
         </div>
@@ -99,65 +99,106 @@
         goods: {},//物品补齐
         oldGoods: {},//物品补齐
         chooseText: [],//物品补齐多选
-        upload: [
-          {
-            label: '证件照片',
-            placeholder: '必填',
-            keyName: 'identity_photo',
-          }, {
-            label: '银行卡照片',
-            placeholder: '必填',
-            keyName: 'bank_photo',
-          }, {
-            label: '合同照片',
-            placeholder: '必填',
-            keyName: 'photo',
-          }, {
-            label: '水表照片',
-            placeholder: '必填',
-            keyName: 'water_photo',
-          }, {
-            label: '电表照片',
-            placeholder: '必填',
-            keyName: 'electricity_photo',
-          }, {
-            label: '气表照片',
-            placeholder: '必填',
-            keyName: 'gas_photo',
-          }, {
-            label: '交接单照片',
-            placeholder: '必填',
-            keyName: 'checkin_photo',
-          }, {
-            label: '委托书照片',
-            placeholder: '必填',
-            keyName: 'auth_photo',
-          }, {
-            label: '押金照片',
-            placeholder: '必填',
-            keyName: 'deposit_photo',
-          }, {
-            label: '承诺书照片',
-            placeholder: '必填',
-            keyName: 'promise',
-          }, {
-            label: '房产证',
-            placeholder: '必填',
-            keyName: 'property_photo',
-          }, {
-            label: '水卡',
-            placeholder: '必填',
-            keyName: 'water_card_photo',
-          }, {
-            label: '电卡',
-            placeholder: '必填',
-            keyName: 'electricity_card_photo',
-          }, {
-            label: '气卡',
-            placeholder: '必填',
-            keyName: 'gas_card_photo',
-          },
-        ],
+        upload: {
+          bulletin_collect_basic: [
+            {
+              label: '证件照片',
+              placeholder: '必填',
+              keyName: 'identity_photo',
+            }, {
+              label: '银行卡照片',
+              placeholder: '必填',
+              keyName: 'bank_photo',
+            }, {
+              label: '合同照片',
+              placeholder: '必填',
+              keyName: 'photo',
+            }, {
+              label: '水表照片',
+              placeholder: '必填',
+              keyName: 'water_photo',
+            }, {
+              label: '电表照片',
+              placeholder: '必填',
+              keyName: 'electricity_photo',
+            }, {
+              label: '气表照片',
+              placeholder: '必填',
+              keyName: 'gas_photo',
+            }, {
+              label: '交接单照片',
+              placeholder: '必填',
+              keyName: 'checkin_photo',
+            }, {
+              label: '委托书照片',
+              placeholder: '必填',
+              keyName: 'auth_photo',
+            }, {
+              label: '押金照片',
+              placeholder: '必填',
+              keyName: 'deposit_photo',
+            }, {
+              label: '承诺书照片',
+              placeholder: '必填',
+              keyName: 'promise',
+            }, {
+              label: '房产证',
+              placeholder: '必填',
+              keyName: 'property_photo',
+            }, {
+              label: '水卡',
+              placeholder: '必填',
+              keyName: 'water_card_photo',
+            }, {
+              label: '电卡',
+              placeholder: '必填',
+              keyName: 'electricity_card_photo',
+            }, {
+              label: '气卡',
+              placeholder: '必填',
+              keyName: 'gas_card_photo',
+            }
+          ],
+          bulletin_rent_basic: [
+            {
+              label: '交接单',
+              placeholder: '必填',
+              keyName: 'checkin_photo',
+            }, {
+              label: '截图凭证',
+              placeholder: '必填',
+              keyName: 'certificate_photo',
+            }, {
+              label: '押金收条',
+              placeholder: '必填',
+              keyName: 'deposit_photo',
+            }, {
+              label: '证件照片',
+              placeholder: '必填',
+              keyName: 'identity_photo',
+            }, {
+              label: '合同照片',
+              placeholder: '必填',
+              keyName: 'photo',
+            }, {
+              label: '银行卡照片',
+              placeholder: '必填',
+              keyName: 'bank_photo',
+            }, {
+              label: '水表照片',
+              placeholder: '必填',
+              keyName: 'water_photo',
+            }, {
+              label: '电表照片',
+              placeholder: '必填',
+              keyName: 'electricity_photo',
+            }, {
+              label: '气表照片',
+              placeholder: '必填',
+              keyName: 'gas_photo',
+            }
+          ],
+        },
         // 物品照片
         goodsUpload: [
           {
@@ -168,10 +209,14 @@
         ],
       }
     },
+    beforeRouteLeave(to, from, next) {
+      this.close_();
+      next(vm => {
+      })
+    },
     mounted() {
     },
     activated() {
-      this.close_();
       this.followRecord = JSON.parse(sessionStorage.datumRecord || '{}');
       let query = JSON.parse(this.$route.query.params || '{}');
       let record = this.followRecord.taskDefinitionKey;
@@ -183,7 +228,7 @@
           house_goods: [],
         };
       } else {
-        this.albumDetail(query);
+        this.albumDetail(query, this.followRecord.bulletin_type);
       }
     },
     watch: {},
@@ -191,6 +236,8 @@
     methods: {
       // 提交
       submit() {
+        let type = this.followRecord.bulletin_type;
+        this.form.contract_type = type === 'bulletin_collect_basic' ? 1 : 2;
         this.form.complete_content = {};
         let api = '';
         let key = this.followRecord.taskDefinitionKey;
@@ -228,22 +275,23 @@
         }
       },
       // 获取图片
-      albumDetail(query) {
+      albumDetail(query, type) {
+        let status = type === 'bulletin_collect_basic' ? 1 : 2;
         let params = {
-          type: 1,
+          type: status,
           id: query.contract_id,
         };
         this.$httpZll.getPolishingDetail(params).then(res => {
           if (res) {
-            this.photos(res.data.complete_content);
+            this.photos(res.data.complete_content, type);
           } else {
-            this.photos([]);
+            this.photos([], type);
           }
         });
       },
       // 生成图片字段
-      photos(data) {
-        for (let pic of this.upload) {
+      photos(data, type) {
+        for (let pic of this.upload[type]) {
           this.oldPhoto[pic.keyName] = data[pic.keyName] || [];
           this.changePhoto[pic.keyName] = data[pic.keyName] || [];
           if (this.oldPhoto[pic.keyName].length) {
@@ -285,10 +333,6 @@
             this.form.complete_content[key] = this.goods[key];
           }
         }
-      },
-      onCancel() {
-        this.close_();
-        this.$router.go(-1);
       },
       // 清空
       close_() {

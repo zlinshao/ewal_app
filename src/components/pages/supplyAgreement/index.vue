@@ -58,8 +58,7 @@
     components: {SearchHouse},
     data() {
       return {
-        drawSlither: {},
-        agreementType: 'collect',
+        drawSlither: [],
         bulletinType: {},
 
         form: {},
@@ -91,16 +90,16 @@
     computed: {},
     methods: {
       bulletin_types(type) {
+        let agreementType;
         switch (type.bulletin) {
           case "bulletin_collect_basic":
-            this.agreementType = 'collect';
+            agreementType = 1;
             break;
           case "bulletin_rent_basic":
-            this.agreementType = 'rent';
+            agreementType = 4;
             break;
         }
-        this.drawSlither = defineSupplyAgreement[this.agreementType];
-        this.resetting();
+        this.resetting(agreementType);
       },
       hiddenHouse(val, config) {
         if (val !== 'close') {
@@ -151,11 +150,14 @@
         }
       },
       // 确认下拉选择
-      onConfirm(form, show) {
+      onConfirm(form, show, config) {
         this.onCancel();
         if (form !== 'close') {
           this.form = form;
           this.formatData = show;
+          if (config.keyName === 'pact_type') {
+            this.resetting(Number(form[config.keyName]));
+          }
         }
       },
       // close Module
@@ -220,11 +222,15 @@
         console.log(this.form)
       },
       // 重置
-      resetting() {
+      resetting(num) {
+        this.drawSlither = this.jsonClone(defineSupplyAgreement[num - 1]);
         let allForm = this.drawSlither;
         let all = this.initFormData(allForm, this.showData, 'noStaff');
         this.form = all.form;
         this.formatData = all.formatData;
+        if (num === 4) {
+          this.formatData.pact_type = '延长租房时长'
+        }
       }
     },
   }
