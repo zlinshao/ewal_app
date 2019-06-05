@@ -145,6 +145,7 @@
                         :key="num"
                         v-model="form[string.keyName]"
                         :type="string.type"
+                        :disabled="item.disabled"
                         :label="string.label"
                         @input="listenInput(string.keyName)"
                         :placeholder="string.placeholder">
@@ -279,7 +280,9 @@
         electronicContractNumber: '',       //电子合同编号
 
         electricalModule: false,            //家电家具
-        allChildren: {},
+        allChildren: {},                    //附属租客
+
+        isGetTake: false,                   //尾款
       }
     },
     created() {
@@ -303,8 +306,13 @@
     },
     watch: {
       'form.month'(val) {
-        if (val && this.form.period_price_way_arr.length === 1) {
+        if (val && this.form.period_price_way_arr && this.form.period_price_way_arr.length === 1) {
           this.form.period_price_way_arr[0].period = val;
+        }
+      },
+      'form.money_sum'(val) {
+        if (val && this.form.current_pay_info && this.form.current_pay_info.length === 1) {
+          this.form.current_pay_info[0].money_sep = val;
         }
       },
     },
@@ -317,6 +325,7 @@
       // 报备类型
       bulletin_types(type) {
         let bulletinData = this.$bulletinType(type.bulletin);
+        this.isGetTake = type.bulletin === 'bulletin_retainage';
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
@@ -324,21 +333,26 @@
       },
       // 区分报备类型参数
       distinguishForm(type) {
-        switch (type) {
-          case 'bulletin_rent_basic':
-            this.form.house_id = '';
-            this.form.contract_id = '';
-            this.form.is_sign = '';
-            let query = this.$route.query;
-            if (query.result) {
-              this.form.is_sign = query.result;
-            }
-            break;
-          case 'bulletin_special':
-            this.form.house_id = '';
-            this.form.contract_id = '';
-            break;
+        this.form.house_id = '';
+        this.form.contract_id = '';
+        if (type === 'bulletin_rent_basic') {
+          this.form.is_sign = '';
+          let query = this.$route.query;
+          if (query.result) {
+            this.form.is_sign = query.result;
+          }
         }
+        // switch (type) {
+        //   case 'bulletin_rent_basic':
+        //     this.form.is_sign = '';
+        //     let query = this.$route.query;
+        //     if (query.result) {
+        //       this.form.is_sign = query.result;
+        //     }
+        //     break;
+        //   case'':
+        //     break;
+        // }
       },
       // touch 左右切换
       tapStart(event) {
@@ -500,7 +514,6 @@
       },
       // 新增变化
       changeInput(slither, key, index, val) {
-        console.log(this.drawSlither[slither][index].picker);
         let child;
         if (this.drawSlither[slither][index].picker === 'changeHiddenAll') {
           child = this.jsonClone(this.allChildren[key]);
@@ -512,7 +525,6 @@
         for (let item of child) {
           value[item.keyName] = item.keyType;
         }
-        console.log(value);
         this.form[key].push(value);
         this.formatData[key].push(value);
         if (key !== 'period_price_way_arr') return;
@@ -529,8 +541,13 @@
           this.resetChange(key);
           return;
         }
-        if (draw.children.length === 1 && draw.keyName === 'period_price_way_arr') {
-          this.form.period_price_way_arr[0].period = this.form.month;
+        if (draw.children.length === 1) {
+          if (draw.keyName === 'period_price_way_arr') {
+            this.form.period_price_way_arr[0].period = this.form.month;
+          }
+          if (draw.keyName === 'current_pay_info') {
+            this.form.current_pay_info[0].money_sep = this.form.money_sum;
+          }
         }
         this.form[key].splice(num, 1);
         this.formatData[key].splice(num, 1);
@@ -913,7 +930,94 @@
         }
         this.$httpZll.getBulletinDraft(params).then(data => {
           if (!data) {
-            this.form = {"address":"馨合家园3-2206","is_electronic_contract":"1","contract_number":"LJZFE010000308","sign_date":"2019-06-04","month":"12","day":"3","begin_date":"2019-06-04","end_date":"2020-06-07","pay_way_bet":1,"period_price_way_arr":[{"begin_date":"2019-06-04", "end_date":"2020-06-04","period":"12","pay_way":"1","month_unit_price":"1222"}],"deposit":1222,"amount_type_received":"1","money_sum":"1000","current_pay_info":[{"money_sep":"1000","real_pay_at":"2019-06-04 22:09","remittance_account":"3107666344@qq.com 乐伽企业支付宝 乐伽公寓企业支付宝","account_id":"98"}],"memo":"fdsfdsafdsa","discount":"122","is_other_fee":"0","other_fee_name":"","other_fee":"","retainage_date":"2019-06-04","rental_use":"1","rental_use_remark":"","num_of_residents":"2","is_family":"0","is_agency":"0","agency_name":"","agency_price":"","agency_user_name":"","agency_phone":"","is_joint":"0","network_fee":"","management_fee":"","water_fee":"","property_fee":"","remark_terms":["2","3"],"photo":[4229443],"customer_name":"张琳琳","customer_sex":"m","card_type":411,"card_id":"320321198904010033","contact_way":1,"contact_phone":"18052001167","account":"6225212583158743","account_name":"贾少君","bank":"上海浦东发展银行","subbranch":"fdsa","subsidiary_customer":[{"customer_name":"","customer_sex":"","card_type":"","card_id":"","contact_way":"","contact_phone":""}],"id_card_photo":[4229444],"bank_card_photo":[4229445],"staff_name":"张琳琳","department_name":"南京马群组","staff_id":"69","department_id":"134","id":"","signer":{"fadada_user_id":"37C5DC6B9D52D38E354CD46A8B3AE47A","name":"张琳琳","phone":"18052001167","idcard":"320321198904010033"},"house_id":550,"contract_id":475,"is_sign":"1","is_draft":0,"type":1,"task_id":"4e2dcf8c-86d2-11e9-8cb1-0242a6cf5631","process_instance_id":"4e2c96f4-86d2-11e9-8cb1-0242a6cf5631","spot_code":"s6ff04"};
+            this.form = {
+              "address": "馨合家园3-2206",
+              "is_electronic_contract": "1",
+              "contract_number": "LJZFE010000308",
+              "sign_date": "2019-06-04",
+              "month": "12",
+              "day": "3",
+              "begin_date": "2019-06-04",
+              "end_date": "2020-06-07",
+              "pay_way_bet": 1,
+              "period_price_way_arr": [{
+                "begin_date": "2019-06-04",
+                "end_date": "2020-06-04",
+                "period": "12",
+                "pay_way": "1",
+                "month_unit_price": "1222"
+              }],
+              "deposit": 1222,
+              "amount_type_received": "1",
+              "money_sum": "1000",
+              "current_pay_info": [{
+                "money_sep": "1000",
+                "real_pay_at": "2019-06-04 22:09",
+                "remittance_account": "3107666344@qq.com 乐伽企业支付宝 乐伽公寓企业支付宝",
+                "account_id": "98"
+              }],
+              "memo": "fdsfdsafdsa",
+              "discount": "122",
+              "is_other_fee": "0",
+              "other_fee_name": "",
+              "other_fee": "",
+              "retainage_date": "2019-06-04",
+              "rental_use": "1",
+              "rental_use_remark": "",
+              "num_of_residents": "2",
+              "is_family": "0",
+              "is_agency": "0",
+              "agency_name": "",
+              "agency_price": "",
+              "agency_user_name": "",
+              "agency_phone": "",
+              "is_joint": "0",
+              "network_fee": "",
+              "management_fee": "",
+              "water_fee": "",
+              "property_fee": "",
+              "remark_terms": ["2", "3"],
+              "photo": [4229443],
+              "customer_name": "张琳琳",
+              "customer_sex": "m",
+              "card_type": 411,
+              "card_id": "320321198904010033",
+              "contact_way": 1,
+              "contact_phone": "18052001167",
+              "account": "6225212583158743",
+              "account_name": "贾少君",
+              "bank": "上海浦东发展银行",
+              "subbranch": "fdsa",
+              "subsidiary_customer": [{
+                "customer_name": "",
+                "customer_sex": "",
+                "card_type": "",
+                "card_id": "",
+                "contact_way": "",
+                "contact_phone": ""
+              }],
+              "id_card_photo": [4229444],
+              "bank_card_photo": [4229445],
+              "staff_name": "张琳琳",
+              "department_name": "南京马群组",
+              "staff_id": "69",
+              "department_id": "134",
+              "id": "",
+              "signer": {
+                "fadada_user_id": "37C5DC6B9D52D38E354CD46A8B3AE47A",
+                "name": "张琳琳",
+                "phone": "18052001167",
+                "idcard": "320321198904010033"
+              },
+              "house_id": 550,
+              "contract_id": 475,
+              "is_sign": "1",
+              "is_draft": 0,
+              "type": 1,
+              "task_id": "4e2dcf8c-86d2-11e9-8cb1-0242a6cf5631",
+              "process_instance_id": "4e2c96f4-86d2-11e9-8cb1-0242a6cf5631",
+              "spot_code": "s6ff04"
+            };
             this.getPunchClockData();
           } else {
             let res = data.data;
@@ -935,8 +1039,36 @@
       againSave() {
         let res = this.taskDetail;
         this.form.id = '';
-        this.handlePreFill(res.content, 'again');
-        this.electronicContract();
+        if (!this.isGetTake) {
+          this.handlePreFill(res.content, 'again');
+          this.electronicContract();
+        } else {
+          this.childBulletin(res.content);
+        }
+      },
+      childBulletin(res) {
+        for (let item of Object.keys(this.form)) {
+          switch (item) {
+            case 'house_id':
+              this.form[item] = res[item] || this.form[item];
+              this.formatData.house_id = res.address;
+              break;
+            case 'month':
+            case 'contract_id':
+            case 'customer_name':
+              this.form[item] = res[item] || this.form[item];
+              break;
+            case 'price':
+              let str = [];
+              this.form[item] = res.period_price_way_arr || this.form[item];
+              this.formatData[item] = '';
+              for (let key of res.period_price_way_arr) {
+                str.push(`${key.begin_date}至${key.end_date}:${key.month_unit_price}元`);
+              }
+              this.formatData[item] = str.join(' ; ');
+              break;
+          }
+        }
       },
       // 获取待办信息
       getPunchClockData() {
@@ -945,6 +1077,9 @@
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
+            case 'house_id':
+              this.formatData.house_id = res.address;
+              break;
             case 'community':
               this.formatData[item] = res[item].village_name;
               break;
@@ -982,8 +1117,8 @@
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
-            case 'address':
-              this.formatData.address = res[item];
+            case 'house_id':
+              this.formatData.house_id = res.address;
               break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
@@ -1111,10 +1246,12 @@
         }
         this.changeHiddenAll = false;
         this.form.id = id;
-        this.form.signer = {};
-        this.form.contract_number = this.electronicContractNumber;
-        this.form.account = '6225212583158743';
-        this.form.account_name = '贾少君';
+        if (!this.isGetTake) {
+          this.form.signer = {};
+          this.form.contract_number = this.electronicContractNumber;
+        }
+        // this.form.account = '6225212583158743';
+        // this.form.account_name = '贾少君';
       }
     },
   }
