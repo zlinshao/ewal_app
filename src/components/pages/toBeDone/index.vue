@@ -5,7 +5,7 @@
         <div class="input">
           <div>
             <input type="text" placeholder="请输入搜索内容" v-model="params.title" @keyup.enter="onSearch()">
-            <span v-if="params.title" @click="params.title = ''"></span>
+            <span v-if="params.title" @click="emptyTitle"></span>
           </div>
           <p class="searchBtn" @click="onSearch()">搜索</p>
         </div>
@@ -270,16 +270,22 @@
       },
       // 去打卡 去签约
       goOperates(val) {
+        sessionStorage.setItem('task_detail',JSON.stringify(val));
         switch (val.task_action) {
           case 'punchClock':
-            sessionStorage.setItem('punchClock', JSON.stringify(val));
             this.routerLink(val.task_action);
             break;
           case 'collectReport':
+            let type = this.bulletin_type.bulletin;
             let result;
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
-                this.againDetailRequest(val, 'again');
+                if (type === 'bulletin_retainage') {
+
+                  this.againDetailRequest(val);
+                } else {
+                  this.againDetailRequest(val, 'again');
+                }
               } else {
                 if (val.tk_result) {
                   result = val.tk_result === 'bulletin' ? '1' : '0';
@@ -375,6 +381,11 @@
           this.params.page++;
           this.getToBeDoneList(this.params);
         }
+      },
+      // 清空搜索内容
+      emptyTitle() {
+        this.params.title = '';
+        this.onSearch();
       },
       // 搜索
       onSearch() {

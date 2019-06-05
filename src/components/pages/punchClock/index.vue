@@ -169,7 +169,7 @@
     activated() {
       this.startTime();
       setInterval(this.startTime, 1000);
-      let query = JSON.parse(sessionStorage.punchClock || '{}');
+      let query = JSON.parse(sessionStorage.task_detail || '{}');
       let bulletin = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.close_();
       this.postForm.task_id = query.task_id;
