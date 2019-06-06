@@ -135,7 +135,7 @@ export default {
             let contract = JSON.parse(key.value);
             obj.contract_id = contract.v3_contract_id;
           }
-          if(key.name.includes('_approved')){
+          if (key.name.includes('_approved')) {
             obj.approvedStatus = key.value || '';
           }
         }
@@ -478,8 +478,44 @@ export default {
         });
       })
     };
+    // 签署电子合同
+    Vue.prototype.$handlerSign = function (item, user_id, type) {
+      return new Promise((resolve, reject) => {
+        let title = ['电子合同', ''];
+        let params = {
+          customer_id: user_id,
+          type: type,
+          index: 1,
+        };
+        title[1] = type === 2 ? '是否确认签署电子合同?' : '是否确认发送客户签署电子合同?';
+        this.$signPostApi(item, params, title).then(res => {
+          if (res) {
+            this.$ddSkip(res);
+            this.$dialog('签署', '签署是否完成?').then(res => {
+              if (res) {
+                this.$prompt('正在处理..', 'send');
+                setTimeout(_ => {
+                  resolve('success');
+                }, 1000)
+              } else {
+                resolve('success');
+              }
+            })
+          }
+        });
+      });
+    };
+    // 获取fadadaId
+    Vue.prototype.$getFadadaUserId = function (item) {
+      return item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
+
+    };
+    // 报备类型
+    Vue.prototype.$handleBulletinType = function (item) {
+      sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus[item.bulletin_type]));
+    };
     // 修改合同
-    Vue.prototype.$reviseContract = function (action = {}, name = '', item) {
+    Vue.prototype.$reviseContract = function (action = {}, name = '', item, replace = '') {
       this.$dialog('合同修改', '此操作将重新发起报备和审批，并结束该签署任务，且无法恢复，是否继续?').then(res => {
         if (res) {
           let postData = {};
@@ -514,7 +550,7 @@ export default {
                 query.root_id = task.rootProcessInstanceId;
                 query.task_action = action.route;
                 this.againTaskDetail(query).then(_ => {
-                  this.againDetailRequest(query, 'again');
+                  this.againDetailRequest(query, 'again', replace);
                 });
               });
             }
@@ -548,7 +584,7 @@ export default {
       });
     };
     // 报备详情
-    Vue.prototype.againDetailRequest = function (val, again = '') {
+    Vue.prototype.againDetailRequest = function (val, again, replace) {
       this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
         if (res.success) {
           let data = {};
@@ -560,7 +596,11 @@ export default {
           data.process_instance_id = val.process_id;
           data.completion_amount = val.completion_amount;
           sessionStorage.setItem('task_detail', JSON.stringify(data));
-          this.routerLink(val.task_action, {again: again});
+          if (replace) {
+            this.routerReplace(val.task_action, {again: again});
+          } else {
+            this.routerLink(val.task_action, {again: again});
+          }
         }
       });
     };

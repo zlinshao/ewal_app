@@ -342,11 +342,11 @@
       // 关闭模态框
       onCancel() {
         this.timeModule = false;
-        this.pickerModule = false;
         this.popupModule = false;
+        this.pickerModule = false;
         this.noPickerModule = false;
-        this.searchStaffModule = false;
         this.searchHouseModule = false;
+        this.searchStaffModule = false;
         this.searchVillageModule = false;
       },
       // 初始化数据
@@ -383,7 +383,7 @@
         //   primary: 69,
         //   take_peoples: [69],
         // };
-        // this.form = {"take_time":"2019-06-04","house_id":[1861],"customer_name":"张琳琳","contact_phone":"18052001167","take_peoples":[69],"primary":69,"contract_id":1632,"address":"莱茵铂郡1-833"}
+        this.form = {"take_time":"2019-06-04","house_id":[1861],"customer_name":"张琳琳","contact_phone":"18052001167","take_peoples":[69],"primary":69,"contract_id":1632,"address":"莱茵铂郡1-833"}
       }
     },
   }

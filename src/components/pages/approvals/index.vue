@@ -434,22 +434,25 @@
             this.$ddSkip(item.contract_view_url);
             break;
           case 'again'://重新提交
-            this.handleBulletinType(item);
+            this.$handleBulletinType(item);
             item.task_action = action.route;
             this.againSave(item);
             break;
           case 'modify'://合同修改
-            console.log()
-            this.handleBulletinType(item);
+            this.$handleBulletinType(item);
             this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
-            user_id = this.getFadadaUserId(item);
-            this.handlerSign(item, user_id, 2);
+            user_id = this.$getFadadaUserId(item);
+            this.$handlerSign(item, user_id, 2).then(_ => {
+              this.onSearch(this.tabs.tab);
+            });
             break;
           case 'phone'://客户手机签署
-            user_id = this.getFadadaUserId(item);
-            this.handlerSign(item, user_id, 1);
+            user_id = this.$getFadadaUserId(item);
+            this.$handlerSign(item, user_id, 1).then(_ => {
+              this.onSearch(this.tabs.tab);
+            });
             break;
           case 'contract'://发送电子合同
             this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
@@ -465,39 +468,7 @@
             break;
         }
       },
-      // 获取fadadaId
-      getFadadaUserId(item) {
-        return item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
-      },
-      // 签署
-      handlerSign(item, user_id, type) {
-        let title = ['电子合同', ''];
-        let params = {
-          customer_id: user_id,
-          type: type,
-          index: 1,
-        };
-        title[1] = type === 2 ? '是否确认签署电子合同?' : '是否确认发送客户签署电子合同?';
-        this.$signPostApi(item, params, title).then(res => {
-          if (res) {
-            this.$ddSkip(res);
-            this.$dialog('签署', '签署是否完成?').then(res => {
-              if (res) {
-                this.$prompt('正在处理..', 'send');
-                setTimeout(_ => {
-                  this.onSearch(this.tabs.tab);
-                }, 1000)
-              } else {
-                this.onSearch(this.tabs.tab);
-              }
-            })
-          }
-        });
-      },
-      // 报备类型
-      handleBulletinType(item) {
-        sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus[item.bulletin_type]));
-      },
+
       // 重新提交
       againSave(val) {
         this.againTaskDetail(val).then(_ => {

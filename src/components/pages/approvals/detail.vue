@@ -82,15 +82,15 @@
           <i v-for="(i,idx) in allReportNum" :class="{'hover': idx === slither}"></i>
         </p>
         <div v-if="operates.variableName">
-          <div v-if="operates.variableName !== 'btn'" class="detailBtn">
+          <div v-if="operates.status !== 'btn'" class="detailBtn">
             <h1 v-for="item in operates.outcomeOptions" :class="item.route || ''"
-                @click="clickBtn(operates.variableName, item)">
+                @click="clickBtn(item,operates.variableName)">
               <span class="writingMode">{{item.title}}</span>
             </h1>
           </div>
           <div v-else class="commonBtn">
             <p class="btn" :class="item.route" v-for="item in operates.outcomeOptions"
-               @click="clickBtn(operates.variableName,item)">
+               @click="clickBtn(item,operates.variableName)">
               {{item.title}}
             </p>
           </div>
@@ -234,6 +234,7 @@
     mounted() {
     },
     activated() {
+
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let detail = JSON.parse(sessionStorage.approvalDetail || '{}');
@@ -246,21 +247,16 @@
     watch: {},
     computed: {},
     methods: {
-      // 生成操作按钮
-      generateButton(btn) {
-        for (let val of btn) {
-          this.operates.outcomeOptions.push(val);
-        }
-        this.operates.outcomeOptions.push({
-          action: true,
-          route: "back",
-          title: "取消"
-        },)
+      closeOperates() {
+        this.topOperates = [];//头部按钮
+        this.operates = {};//底部按钮
+        this.operates.variableName = '';//底部按钮 点击状态
+        this.operates.outcomeOptions = [];//底部按钮
       },
       // 获取操作按钮
       getOperates(detail, query) {
-        this.operates = {};
-        this.topOperates = [];
+        this.closeOperates();
+        let btn = [];
         let tab = Number(query.tab), status = Number(query.status);
         if (tab === 1) {//我审批
           if (status) {//已审批
@@ -288,18 +284,26 @@
               this.topOperates = [
                 {id: '2'},
               ]
-            } else if (status === 2) {//待签署
-              this.getOperatesAgain('合同修改');
+            } else if (status === 2) {//合同修改
+
+              for (let come of detail.outcome.outcomeOptions) {
+                if (come.action === 'modify') {
+                  btn.push(come);
+                }
+              }
+              this.operates.variableName = detail.outcome.variableName;
+              this.operates.status = 'btn';
+              this.generateButton(btn);
               this.topOperates = [
-                {id: '2'},
+                {id: '4'},
+                {id: '5'},
+                {id: '6'},
               ]
-            } else {//待重签
-              this.getOperatesAgain('重新提交');
+            } else if (status === 3) {
+
             }
           } else {//未完成
-            this.operates.variableName = 'zll';
-            this.operates.outcomeOptions = [];
-            let btn = [
+            btn = [
               {
                 action: true,
                 route: "urge",
@@ -311,6 +315,7 @@
                 title: "撤销"
               },
             ];
+            this.operates.variableName = 'zll';
             this.generateButton(btn);
             if (detail.suspended) {
               this.topOperates = [
@@ -341,10 +346,8 @@
           }
         }
       },
-      // 待重签/待签署
+      // 待重签
       getOperatesAgain(name) {
-        this.operates.variableName = 'btn';
-        this.operates.outcomeOptions = [];
         let btn = [
           {
             action: true,
@@ -354,6 +357,18 @@
         ];
         this.generateButton(btn);
       },
+      // 生成操作按钮
+      generateButton(btn) {
+        for (let val of btn) {
+          this.operates.outcomeOptions.push(val);
+        }
+        this.operates.outcomeOptions.push({
+          action: true,
+          route: "back",
+          title: "取消"
+        },)
+      },
+
       // 待审批
       setOperates(outcome) {
         if (!outcome) return;
@@ -376,15 +391,43 @@
       },
       // 头部操作按钮
       iconButton(num) {
+        let detail = this.detailData;
         switch (num) {
           case '1':
-            this.bulletinRouter(this.detailData.bulletin_type);
+            this.bulletinRouter(detail.bulletin_type);
             break;
           case '2':
             this.commentPopup = true;
             break;
           case '3':
             this.deliverPopup = true;
+            break;
+          case '4'://预览
+          case '5'://本地签署
+          case '6'://客户手机签署
+            let outcome = detail.outcome;
+            for (let item of outcome.outcomeOptions) {
+              if (num === '4' && item.action === 'preview') {
+                if (!detail.contract_view_url) {
+                  this.$prompt('合同地址不存在！');
+                  return;
+                }
+                this.$ddSkip(detail.contract_view_url);
+              }
+              if (num === '5' || num === '6') {
+                let user_id, index;
+                if (num === '5' && item.action === 'success') {
+                  index = 2;
+                }
+                if (num === '6' && item.action === 'phone') {
+                  index = 1;
+                }
+                user_id = this.$getFadadaUserId(detail);
+                this.$handlerSign(detail, user_id, index).then(_ => {
+                  this.$router.go(-1);
+                });
+              }
+            }
             break;
         }
       },
@@ -395,7 +438,7 @@
         this.routerLink('/collectReport', {revise: 'revise'});
       },
       // 同意 拒绝 催办 撤销
-      clickBtn(key = '', action = {}) {
+      clickBtn(action = {}, name = '') {
         let detail = this.detailData;
         let msg = {suspend: '暂缓', urge: '催办', cancel: '撤销'};
         switch (action.route) {
@@ -419,15 +462,15 @@
               }
             });
             break;
-          case 'again':
-            console.log(detail);
-            console.log(action);
+          case 'collectReport':
+            this.$handleBulletinType(detail);
+            this.$reviseContract(action, name, detail, 'replace');
             break;
           default:
             let postData = {};
             postData.action = 'complete';
             postData.variables = [{
-              name: key,
+              name: name,
               value: action.action,
             }];
             this.$httpZll.finishBeforeTask(detail.task_id, postData).then(_ => {
@@ -770,6 +813,18 @@
 
         .icon-3 {
           @include detailImg('zhuanfa');
+        }
+
+        .icon-4 {
+          @include detailImg('detaihetongyulan');
+        }
+
+        .icon-5 {
+          @include detailImg('bendiqianshu');
+        }
+
+        .icon-6 {
+          @include detailImg('kehushoujiqianshu');
         }
       }
     }
