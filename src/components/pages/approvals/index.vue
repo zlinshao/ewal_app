@@ -439,6 +439,7 @@
             this.againSave(item);
             break;
           case 'modify'://合同修改
+            console.log()
             this.handleBulletinType(item);
             this.$reviseContract(action, name, item);
             break;

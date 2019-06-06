@@ -396,6 +396,7 @@
       },
       // 同意 拒绝 催办 撤销
       clickBtn(key = '', action = {}) {
+        let detail = this.detailData;
         let msg = {suspend: '暂缓', urge: '催办', cancel: '撤销'};
         switch (action.route) {
           case'back'://取消
@@ -404,7 +405,7 @@
           case'suspend'://暂缓
           case'urge'://催办
           case'cancel'://撤销
-            this.$httpZll.putActionTask(this.detailData.process_id, {action: action.route}).then(_ => {
+            this.$httpZll.putActionTask(detail.process_id, {action: action.route}).then(_ => {
               this.$prompt((msg[action.route] + '成功'), 'success');
               if (action.route === 'suspend' || action.route === 'cancel') {
                 setTimeout(_ => {
@@ -419,7 +420,8 @@
             });
             break;
           case 'again':
-            console.log(312312);
+            console.log(detail);
+            console.log(action);
             break;
           default:
             let postData = {};
@@ -428,7 +430,7 @@
               name: key,
               value: action.action,
             }];
-            this.$httpZll.finishBeforeTask(this.detailData.task_id, postData).then(_ => {
+            this.$httpZll.finishBeforeTask(detail.task_id, postData).then(_ => {
               this.$prompt('审核成功！', 'success');
               setTimeout(_ => {
                 if (this.tabs.tab === '4') {
