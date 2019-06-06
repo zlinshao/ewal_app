@@ -82,7 +82,7 @@
           <i v-for="(i,idx) in allReportNum" :class="{'hover': idx === slither}"></i>
         </p>
         <div v-if="operates.variableName">
-          <div v-if="operates.status !== 'btn'" class="detailBtn">
+          <div v-if="operates.status !== 'common'" class="detailBtn">
             <h1 v-for="item in operates.outcomeOptions" :class="item.route || ''"
                 @click="clickBtn(item,operates.variableName)">
               <span class="writingMode">{{item.title}}</span>
@@ -292,15 +292,24 @@
                 }
               }
               this.operates.variableName = detail.outcome.variableName;
-              this.operates.status = 'btn';
+              this.operates.status = 'common';
               this.generateButton(btn);
               this.topOperates = [
                 {id: '4'},
                 {id: '5'},
                 {id: '6'},
               ]
-            } else if (status === 3) {
-
+            } else if (status === 3) {//待重签
+              btn = [
+                {
+                  action: true,
+                  route: "again",
+                  title: "重新提交"
+                },
+              ];
+              this.operates.variableName = 'zll';
+              this.operates.status = 'common';
+              this.generateButton(btn);
             }
           } else {//未完成
             btn = [
@@ -465,6 +474,12 @@
           case 'collectReport':
             this.$handleBulletinType(detail);
             this.$reviseContract(action, name, detail, 'replace');
+            break;
+          case 'again':
+            this.$handleBulletinType(detail);
+            this.againTaskDetail(detail).then(_ => {
+              this.againDetailRequest(detail, 'again', 'replace');
+            });
             break;
           default:
             let postData = {};
