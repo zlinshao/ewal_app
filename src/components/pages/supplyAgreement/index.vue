@@ -102,9 +102,11 @@
         this.resetting(agreementType);
       },
       hiddenHouse(val, config) {
+        this.searchHouseModule = false;
         if (val !== 'close') {
-          console.log(val);
-          console.log(config);
+          for (let item of Object.keys(val)) {
+            this.form[item] = val[item];
+          }
         }
       },
       // 下拉框筛选
@@ -219,7 +221,11 @@
       },
       // 提交
       saveAgreement() {
-        console.log(this.form)
+        this.form.is_draft = 0;
+        let type = this.form.pact_type === 4 ? 'rent' : 'collect';
+        this.$httpZll.postSupplyAgreement(this.form, type).then(res => {
+
+        })
       },
       // 重置
       resetting(num) {

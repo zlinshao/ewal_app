@@ -59,7 +59,8 @@ approvalSearch = {
   toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC', 'CollectReceiptSign'],
   toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentBooking'],
   toBeDoneRetainage: ['RentRetainage'],
-  approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval'],
+  toBeDoneAgency: ['BulletinAgency'],
+  approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
 };
@@ -667,6 +668,7 @@ defineNewTask = {
 
 // 补充协议
 defineSupplyAgreement = [
+  // 延长收房时长
   [
     {
       label: '协议类型',
@@ -691,25 +693,25 @@ defineSupplyAgreement = [
       showForm: 'formatData',//picker 显示form 或 formatData
     },
     {
-      label: '原卡号',
+      label: '原合同结束时间',
       placeholder: '必填 请输入',
-      keyName: 'old_account',
+      keyName: 'old_end_at',
       keyType: '',
       type: 'number',
       slot: '',
     },
     {
-      label: '现卡号',
+      label: '延长天数',
       placeholder: '必填 请输入',
-      keyName: 'account',
+      keyName: 'add_days',
       keyType: '',
       type: 'number',
       slot: '',
     },
     {
-      label: '开户人',
+      label: '现合同结束时间',
       placeholder: '必填 请输入',
-      keyName: 'account_name',
+      keyName: 'now_end_at',
       keyType: '',
       type: 'text',
       button: '银行卡识别',
@@ -717,15 +719,7 @@ defineSupplyAgreement = [
       slot: '',
     },
     {
-      label: '开户行',
-      placeholder: '必填 请输入',
-      keyName: 'bank',
-      keyType: '',
-      type: 'text',
-      slot: '',
-    },
-    {
-      label: '签约人',
+      label: '客户姓名',
       placeholder: '必填 请输入',
       keyName: 'customer_name',
       keyType: '',
@@ -759,6 +753,7 @@ defineSupplyAgreement = [
       slot: '',
     },
   ],
+  // 房东更换银行卡
   [
     {
       label: '协议类型',
@@ -784,107 +779,8 @@ defineSupplyAgreement = [
     },
     {
       label: '原卡号',
-      placeholder: '必填 请输入',
-      keyName: 'old_account',
-      keyType: '',
-      type: 'number',
-      slot: '',
-    },
-    {
-      label: '原开户人',
-      placeholder: '必填 请输入',
-      keyName: 'old_account',
-      keyType: '',
-      type: 'number',
-      slot: '',
-    },
-    {
-      label: '现卡号',
-      placeholder: '必填 请输入',
-      keyName: 'account',
-      keyType: '',
-      type: 'number',
-      slot: '',
-    },
-    {
-      label: '现开户人',
-      placeholder: '必填 请输入',
-      keyName: 'account_name',
-      keyType: '',
-      type: 'text',
-      button: '银行卡识别',
-      icon: 'bank',
-      slot: '',
-    },
-    {
-      label: '开户行',
-      placeholder: '必填 请输入',
-      keyName: 'bank',
-      keyType: '',
-      type: 'text',
-      slot: '',
-    },
-    {
-      label: '签约人',
-      placeholder: '必填 请输入',
-      keyName: 'customer_name',
-      keyType: '',
-      type: 'text',
-      button: '身份识别',
-      icon: 'identity',
-      slot: '',
-    },
-    {
-      label: '身份证号',
-      placeholder: '必填 请输入',
-      keyName: 'card_id',
-      keyType: '',
-      type: 'text',
-      slot: '',
-    },
-    {
-      label: '联系电话',
-      placeholder: '必填 请输入',
-      keyName: 'contact_phone',
-      keyType: '',
-      type: 'number',
-      slot: '',
-    },
-    {
-      label: '备注',
-      placeholder: '必填 请输入',
-      keyName: 'remark',
-      keyType: '',
-      type: 'textarea',
-      slot: '',
-    },
-  ],
-  [
-    {
-      label: '协议类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'pact_type',
-      keyType: 3,
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker',
-      slot: '',
-    },
-    {
-      label: '房屋地址',// 标题
-      placeholder: '必填 请选择',// placeholder
-      readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'house_address',// 字段名
-      keyType: '',// 数据类型
-      type: 'text',// input 类型
-      picker: 'searchHouse',
-      showForm: 'formatData',//picker 显示form 或 formatData
-    },
-    {
-      label: '原卡号',
-      placeholder: '必填 请输入',
+      placeholder: '已禁用',
+      disabled: 'disabled',
       keyName: 'old_account',
       keyType: '',
       type: 'number',
@@ -917,7 +813,15 @@ defineSupplyAgreement = [
       slot: '',
     },
     {
-      label: '签约人',
+      label: '支行',
+      placeholder: '必填 请输入',
+      keyName: 'subbranch',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '客户姓名',
       placeholder: '必填 请输入',
       keyName: 'customer_name',
       keyType: '',
@@ -951,10 +855,87 @@ defineSupplyAgreement = [
       slot: '',
     },
   ],
+  // 调整收房价格
   [
     {
       label: '协议类型',
       placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'pact_type',
+      keyType: 3,
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData',//picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '房屋地址',// 标题
+      placeholder: '必填 请选择',// placeholder
+      readonly: 'readonly',// 只读 picker必须有值
+      keyName: 'house_address',// 字段名
+      keyType: '',// 数据类型
+      type: 'text',// input 类型
+      picker: 'searchHouse',
+      showForm: 'formatData',//picker 显示form 或 formatData
+    },
+    {
+      label: '原收房价格',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'old_month_price',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '现收房价格',
+      placeholder: '必填 请输入',
+      keyName: 'new_month_price',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '客户姓名',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      button: '身份识别',
+      icon: 'identity',
+      slot: '',
+    },
+    {
+      label: '身份证号',
+      placeholder: '必填 请输入',
+      keyName: 'card_id',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '联系电话',
+      placeholder: '必填 请输入',
+      keyName: 'contact_phone',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '备注',
+      placeholder: '必填 请输入',
+      keyName: 'remark',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+  ],
+  // 延长租房时长
+  [
+    {
+      label: '协议类型',
+      placeholder: '已禁用',
       disabled: 'disabled',
       keyName: 'pact_type',
       keyType: 4,
@@ -975,37 +956,37 @@ defineSupplyAgreement = [
       showForm: 'formatData',//picker 显示form 或 formatData
     },
     {
-      label: '原结束时间',
+      label: '原合同结束时间',
       placeholder: '必填 请选择',
       readonly: 'readonly',
-      keyName: 'old_end_time',
+      keyName: 'old_end_at',
       keyType: '',
       type: 'text',
-      picker: 'datetime',
+      picker: 'date',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
-      label: '延长时长',
+      label: '延长天数',
       placeholder: '必填 请输入',
-      keyName: 'lengthen_time',
+      keyName: 'add_days',
       keyType: '',
-      type: 'text',
+      type: 'number',
       slot: '',
     },
     {
-      label: '现结束时间',
+      label: '现合同结束时间',
       placeholder: '必填 请选择',
       readonly: 'readonly',
-      keyName: 'end_time',
+      keyName: 'now_end_at',
       keyType: '',
       type: 'text',
-      picker: 'datetime',
+      picker: 'date',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
-      label: '签约人',
+      label: '客户姓名',
       placeholder: '必填 请输入',
       keyName: 'customer_name',
       keyType: '',
@@ -1643,7 +1624,7 @@ defineCollectReport = {
       keyName: undefined,
       status: 'subsidiary_customer',
       picker: 'changeHiddenAll',
-      changeBtn: '+增加附属租客',
+      changeBtn: '+增加附属房东',
     },
     {
       keyName: 'subsidiary_customer',
@@ -2687,7 +2668,7 @@ defineRentReport = {
       keyName: 'subsidiary_customer',
       picker: 'changeHiddenAll',
       label: '附属房东',
-      changeBtn: '增加附属房东',
+      changeBtn: '增加附属租客',
       keyType: [],
       children: [
         [
@@ -3526,10 +3507,9 @@ defineRetainageReport = {
       label: '房屋地址',
       placeholder: '已禁用',
       disabled: 'disabled',
-      keyName: 'house_id',
+      keyName: 'address',
       keyType: '',
       type: 'text',
-      showForm: 'formatData',
       status: '',
       slot: '',
     },

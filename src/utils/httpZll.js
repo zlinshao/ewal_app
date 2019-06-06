@@ -225,7 +225,7 @@ class httpZll extends httpService {
       // assignee: '69',//登陆人
       order: 'desc',
       taskDefinitionKeyIn: '',
-      rootProcessDefinitionKey: '',
+      rootProcessDefinitionKeyIn: '',
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
     };
@@ -539,6 +539,21 @@ class httpZll extends httpService {
         }
       })
     })
+  }
+
+  // 补充协议
+  static postSupplyAgreement(data, type) {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/bulletin/agreement/${type}`, data, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+          $httpPrompt(res.message, 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+      });
+    });
   }
 
   // 收房报备 发布

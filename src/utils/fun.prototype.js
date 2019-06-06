@@ -543,6 +543,7 @@ export default {
           data.content = res.data.content;
           data.task_id = val.task_id;
           data.process_instance_id = val.process_id;
+          data.completion_amount = val.completion_amount;
           sessionStorage.setItem('task_detail', JSON.stringify(data));
           this.routerLink(val.task_action, {again: again});
         }

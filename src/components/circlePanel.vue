@@ -50,7 +50,7 @@
             icon: ic_zufang,
           },
           {
-            url: 'collectReport',
+            url: 'toBeDone',
             name: '渠道费',
             status: bulletinRouterStatus.newAgency,
             icon: ic_qudao,

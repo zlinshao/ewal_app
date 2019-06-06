@@ -270,9 +270,9 @@
       },
       // 去打卡 去签约
       goOperates(val) {
-        sessionStorage.setItem('task_detail',JSON.stringify(val));
         switch (val.task_action) {
           case 'punchClock':
+            sessionStorage.setItem('punchClock', JSON.stringify(val));
             this.routerLink(val.task_action);
             break;
           case 'collectReport':
@@ -281,7 +281,6 @@
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
                 if (type === 'bulletin_retainage') {
-
                   this.againDetailRequest(val);
                 } else {
                   this.againDetailRequest(val, 'again');
@@ -398,7 +397,7 @@
         this.fullLoading = true;
         let type = this.bulletin_type.bulletin;
         let obj = this.bulletinStatus(type);
-        val.rootProcessDefinitionKey = obj.type;
+        val.rootProcessDefinitionKeyIn = obj.type;
         val.taskDefinitionKeyIn = approvalSearch[obj.status].join(',');
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
@@ -428,6 +427,10 @@
           case "bulletin_retainage":
             obj.status = 'toBeDoneRetainage';
             obj.type = 'MarketRent';
+            break;
+          case "bulletin_agency":
+            obj.status = 'toBeDoneAgency';
+            obj.type = 'MarketCollect,MarketRent';
             break;
         }
         // Market-CollectWithdrawal 收房退租

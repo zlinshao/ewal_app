@@ -562,6 +562,9 @@
       handleDetail(res) {
         for (let item of Object.keys(res)) {
           switch (item) {
+            case 'address'://门牌地址
+              this.formatData.house_id = res[item];
+              break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
               door[0] = door[0] ? door[0] + '栋' : '';
