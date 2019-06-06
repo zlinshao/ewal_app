@@ -7,14 +7,14 @@ bulletinRouterStatus = {
     type: 1,
   },
   // 租房报备
-  bulletin_rent_trans: {
+  bulletin_rent_basic: {
     bulletin: 'bulletin_rent_basic',
     to: 'rent',
     type: 1,
   },
   // 续租报备
-  ContinueRent: {
-    bulletin: 'bulletin_rent_basic',
+  bulletin_rent_trans: {
+    bulletin: 'bulletin_rent_trans',
     to: 'rent',
     type: 3,
   },
@@ -728,8 +728,6 @@ defineSupplyAgreement = [
       keyName: 'customer_name',
       keyType: '',
       type: 'text',
-      button: '身份识别',
-      icon: 'identity',
       slot: '',
     },
     {
@@ -746,6 +744,8 @@ defineSupplyAgreement = [
       keyName: 'contact_phone',
       keyType: '',
       type: 'number',
+      button: '身份识别',
+      icon: 'identity',
       slot: '',
     },
     {
@@ -830,8 +830,6 @@ defineSupplyAgreement = [
       keyName: 'customer_name',
       keyType: '',
       type: 'text',
-      button: '身份识别',
-      icon: 'identity',
       slot: '',
     },
     {
@@ -848,6 +846,8 @@ defineSupplyAgreement = [
       keyName: 'contact_phone',
       keyType: '',
       type: 'number',
+      button: '身份识别',
+      icon: 'identity',
       slot: '',
     },
     {
@@ -906,8 +906,6 @@ defineSupplyAgreement = [
       keyName: 'customer_name',
       keyType: '',
       type: 'text',
-      button: '身份识别',
-      icon: 'identity',
       slot: '',
     },
     {
@@ -924,6 +922,8 @@ defineSupplyAgreement = [
       keyName: 'contact_phone',
       keyType: '',
       type: 'number',
+      button: '身份识别',
+      icon: 'identity',
       slot: '',
     },
     {
@@ -995,8 +995,6 @@ defineSupplyAgreement = [
       keyName: 'customer_name',
       keyType: '',
       type: 'text',
-      button: '身份识别',
-      icon: 'identity',
       slot: '',
     },
     {
@@ -1013,6 +1011,8 @@ defineSupplyAgreement = [
       keyName: 'contact_phone',
       keyType: '',
       type: 'number',
+      button: '身份识别',
+      icon: 'identity',
       slot: '',
     },
     {
@@ -2013,7 +2013,7 @@ defineCollectReport = {
     },
     {
       label: '非房东费用',
-      placeholder: '必填 请选择',
+      placeholder: '请选择',
       readonly: 'readonly',
       keyName: 'non_landlord_fee',
       keyType: [],
@@ -2051,7 +2051,7 @@ defineCollectReport = {
     },
     {
       label: '备注条款',
-      placeholder: '必填 请选择',
+      placeholder: '请选择',
       keyName: 'remark_terms',
       keyType: [],
       type: 'textarea',

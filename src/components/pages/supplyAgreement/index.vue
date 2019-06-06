@@ -101,12 +101,13 @@
         }
         this.resetting(agreementType);
       },
-      hiddenHouse(val, config) {
+      hiddenHouse(val) {
         this.searchHouseModule = false;
         if (val !== 'close') {
           for (let item of Object.keys(val)) {
             this.form[item] = val[item];
           }
+          this.formatData.house_address = val.house_address;
         }
       },
       // 下拉框筛选
@@ -214,10 +215,13 @@
       },
       // 提交
       saveAgreement() {
-        this.form.is_draft = 1;
+        this.form.is_draft = 0;
         let type = this.form.pact_type === 4 ? 'rent' : 'collect';
         this.$httpZll.postSupplyAgreement(this.form, type).then(res => {
-
+          if(res){
+            this.$router.go(-1);
+            this.resetting(this.form.pact_type);
+          }
         })
       },
       // 重置

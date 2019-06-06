@@ -324,6 +324,10 @@ export default {
           title = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
           data = this.jsonClone(defineCheckoutReport);
           break;
+        case 'supplement_lord_time'://补充协议
+          title = ['补充协议'];
+          data = this.jsonClone(defineSupplyAgreement[0]);
+          break;
       }
       return {data, title}
     };

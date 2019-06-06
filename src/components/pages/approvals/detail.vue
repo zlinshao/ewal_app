@@ -528,6 +528,7 @@
         this.objInt = this.objIntArray(bulletinData.data);
         this.allReportNum = Object.keys(data).length;
         let obj = {};
+        console.log(data);
         for (let val of Object.keys(data)) {
           obj[val] = {};
           for (let item of data[val]) {
