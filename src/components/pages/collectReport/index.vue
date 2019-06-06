@@ -325,16 +325,23 @@
       // 报备类型
       bulletin_types(type) {
         let bulletinData = this.$bulletinType(type.bulletin);
-        this.isGetTake = type.bulletin === 'bulletin_retainage';
+        this.isGetTake = type.bulletin === 'bulletin_retainage' || type.bulletin === 'bulletin_agency';
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
         this.distinguishForm(type.bulletin);
+        if (type.bulletin === 'bulletin_agency') {
+          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 1 : 2;
+          this.form.collect_or_rent = type;
+          this.formatData.collect_or_rent = dicties['collect_or_rent'][type];
+        }
       },
       // 区分报备类型参数
       distinguishForm(type) {
-        this.form.house_id = '';
-        this.form.contract_id = '';
+        if (type !== 'bulletin_collect_basic') {
+          this.form.house_id = this.taskDetail.house_id;
+          this.form.contract_id = this.taskDetail.contract_id;
+        }
         if (type === 'bulletin_rent_basic') {
           this.form.is_sign = '';
           let query = this.$route.query;
@@ -430,7 +437,6 @@
           case 'customer_name':
           case 'card_id':
           case 'contact_phone':
-            console.log(key)
             if (slither) {
               this.certified('change', slither, index);
             } else {
@@ -1071,8 +1077,7 @@
           switch (item) {
             case 'month':
             case 'address':
-            case 'house_id':
-            case 'contract_id':
+            case 'house_address':
             case 'customer_name':
               this.form[item] = res[item] || this.form[item];
               break;

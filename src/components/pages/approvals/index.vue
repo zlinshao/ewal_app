@@ -27,7 +27,7 @@
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
           <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]">
             <div class="contentList">
-              <div class="listUp" :class="[task_ids.includes(item.task_id) ? 'leftShift' : '']"
+              <div class="listUp" :class="[ids.includes(item.id) ? 'leftShift' : '']"
                    @click="routerLinkDetail(item)">
                 <div class="listTitle">{{item.house_address || '******'}}</div>
                 <div class="listMiddle">
@@ -57,8 +57,10 @@
                     </span>
                   </div>
                 </div>
-                <div class="approvalStatus publish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
-                <div class="moreOperate" @click.stop="moreOperates(item.task_id)"
+                <div class="approvalStatus finish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
+                <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"
+                     v-if="tabs.tab === '1' && tabs.status === 1"></div>
+                <div class="moreOperate" @click.stop="moreOperates(item.id)"
                      v-if="tabs.tab === '2' && tabs.status !== 0"></div>
               </div>
               <div class="listDown" v-if="item.outcome">
@@ -355,7 +357,7 @@
             },
           ]
         },
-        task_ids: [],
+        ids: [],
       }
     },
     created() {
@@ -413,11 +415,11 @@
       },
       // 显示 更多操作
       moreOperates(id) {
-        if (this.task_ids.includes(id)) {
-          let index = this.task_ids.indexOf(id);
-          this.task_ids.splice(index, 1);
+        if (this.ids.includes(id)) {
+          let index = this.ids.indexOf(id);
+          this.ids.splice(index, 1);
         } else {
-          this.task_ids.push(id);
+          this.ids.push(id);
         }
       },
       // 点击更多 操作
@@ -620,7 +622,7 @@
       },
       // 列表
       getApproval(url, params, tab) {
-        this.task_ids = [];
+        this.ids = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
@@ -685,7 +687,7 @@
       },
       // 头部切换
       changeApproval(val) {
-        this.task_ids = [];
+        this.ids = [];
         let tab = val.id;
         let status = this.twoLevel['tab' + tab];
         this.tabs.tab = tab;
@@ -901,6 +903,12 @@
               bottom: 0;
               width: 1.3rem;
               height: 1.3rem;
+            }
+
+            .finish {
+              width: 1.6rem;
+              height: 1.6rem;
+              @include approvalsImg('yiwancheng');
             }
 
             .publish {

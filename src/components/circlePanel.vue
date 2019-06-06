@@ -52,7 +52,7 @@
           {
             url: 'toBeDone',
             name: '渠道费',
-            status: bulletinRouterStatus.newAgency,
+            status: bulletinRouterStatus.bulletin_agency,
             icon: ic_qudao,
           },
           {

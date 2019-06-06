@@ -56,7 +56,7 @@
     <!--代签/转交-->
     <deliver :module="deliverPopup" :config="deliverConfig" @close="deliverPopup = false"></deliver>
     <!--新建待办任务-->
-    <div class="addToBeDone" @click="showAddPopup = true"></div>
+    <div class="addToBeDone" @click="showAddPopup = true" v-if="showRightAdd"></div>
     <van-popup v-model="showAddPopup" overlay-class="overlay-color" position="right" :overlay="true"
                class="showAddPopup">
       <p class="addTitle">
@@ -207,6 +207,7 @@
         toBeDoneList: [],
         variableName: '',
         bulletin_type: {},//报备类型
+        showRightAdd: false,//显示新增
         searchStaffModule: false,
       }
     },
@@ -221,6 +222,7 @@
     activated() {
       this.bulletin_type = JSON.parse(sessionStorage.bulletin_type);
       this.fullLoading = true;
+      this.showRightAdd = false;
       this.toBeDoneList = [];
       this.popupOperate();
     },
@@ -240,6 +242,7 @@
         let type = this.bulletin_type.bulletin;
         switch (type) {
           case 'bulletin_collect_basic':
+            this.showRightAdd = true;
             this.addShowList = [
               {
                 url: '/createdTask',
@@ -252,6 +255,7 @@
             ];
             break;
           case 'bulletin_rent_basic':
+            this.showRightAdd = true;
             this.addShowList = [
               {
                 url: '/createdTask',
@@ -280,7 +284,7 @@
             let result;
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
-                if (type === 'bulletin_retainage') {
+                if (type === 'bulletin_retainage' || type === 'bulletin_agency') {
                   this.againDetailRequest(val);
                 } else {
                   this.againDetailRequest(val, 'again');

@@ -131,6 +131,13 @@ export default {
               obj[key.name] = key.value || '';
             }
           }
+          if (key.name === 'ewal_contract') {
+            let contract = JSON.parse(key.value);
+            obj.contract_id = contract.v3_contract_id;
+          }
+          if(key.name.includes('_approved')){
+            obj.approvedStatus = key.value || '';
+          }
         }
         for (let key of Object.keys(item)) {
           if (key !== 'variables') {
@@ -547,6 +554,9 @@ export default {
           let data = {};
           data.content = res.data.content;
           data.task_id = val.task_id;
+          data.house_id = val.house_id;
+          data.contract_id = val.contract_id || '';
+          data.bulletin = val.bulletin_type;
           data.process_instance_id = val.process_id;
           data.completion_amount = val.completion_amount;
           sessionStorage.setItem('task_detail', JSON.stringify(data));

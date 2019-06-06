@@ -31,10 +31,9 @@ bulletinRouterStatus = {
     type: 1,
   },
   // 渠道费报备
-  newAgency: {
+  bulletin_agency: {
     bulletin: 'bulletin_agency',
     to: 'agency',
-    type: 1,
   },
   // 房屋尾款报备
   newRetainage: {
@@ -3352,46 +3351,52 @@ defineChangeReport = {
 defineAgencyReport = {
   slither0: [
     {
-      label: '收房/租房',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
+      label: '收租标记',
+      placeholder: '已禁用',
+      disabled: 'disabled',
       keyName: 'collect_or_rent',
       keyType: '',
       type: 'text',
-      status: 'objInt',
-      picker: 'picker',
       showForm: 'formatData',//picker 显示form 或 formatData
+      status: '',
+      slot: '',
+    },
+    {
+      label: '房屋地址',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'house_address',
+      keyType: '',
+      type: 'text',
+      status: '',
       slot: '',
     },
     {
       label: '客户姓名',
-      placeholder: '选填 请输入',
+      disabled: 'disabled',
+      placeholder: '已禁用',
       keyName: 'customer_name',
       keyType: '',
       type: 'text',
-      status: '',
-      picker: '',
       slot: '',
     },
     {
       label: '签约时长',
       disabled: 'disabled',
-      keyName: 'month',
       placeholder: '已禁用',
+      keyName: 'month',
       keyType: '',
-      type: 'number',
-      status: '',
+      type: 'text',
       slot: '',
     },
     {
       label: '月单价',
-      disabled: 'disabled',
       placeholder: '已禁用',
+      disabled: 'disabled',
       keyName: 'price',
       keyType: '',
-      type: 'text',
+      type: 'textarea',
       showForm: 'formatData',//picker 显示form 或 formatData
-      status: '',
       slot: '',
     },
     {
