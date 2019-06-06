@@ -2084,6 +2084,14 @@ defineRentReport = {
   // 合同信息
   slither0: [
     {
+      label: '房屋地址',// 标题
+      placeholder: '必填 请选择',// placeholder
+      disabled: 'disabled',// 禁用
+      keyName: 'house_address',// 字段名
+      keyType: '',// 数据类型
+      type: 'text',// input 类型
+    },
+    {
       label: '是否电子合同',
       placeholder: '必填 请选择',
       readonly: 'readonly',
