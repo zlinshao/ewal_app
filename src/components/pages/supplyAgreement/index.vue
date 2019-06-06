@@ -214,7 +214,7 @@
       },
       // 提交
       saveAgreement() {
-        this.form.is_draft = 0;
+        this.form.is_draft = 1;
         let type = this.form.pact_type === 4 ? 'rent' : 'collect';
         this.$httpZll.postSupplyAgreement(this.form, type).then(res => {
 
