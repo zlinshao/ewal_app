@@ -40,13 +40,13 @@
           {
             url: 'toBeDone',
             name: '收房',
-            status: bulletinRouterStatus.newCollect,
+            status: bulletinRouterStatus.bulletin_collect_basic,
             icon: ic_shoufang,
           },
           {
             url: 'toBeDone',
             name: '租房',
-            status: bulletinRouterStatus.newRent,
+            status: bulletinRouterStatus.bulletin_rent_basic,
             icon: ic_zufang,
           },
           {

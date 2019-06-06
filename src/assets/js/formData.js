@@ -1,13 +1,13 @@
 // 报备类型
 bulletinRouterStatus = {
   // 收房报备
-  newCollect: {
+  bulletin_collect_basic: {
     bulletin: 'bulletin_collect_basic',
     to: 'collect',
     type: 1,
   },
   // 租房报备
-  newRent: {
+  bulletin_rent_trans: {
     bulletin: 'bulletin_rent_basic',
     to: 'rent',
     type: 1,
@@ -694,10 +694,13 @@ defineSupplyAgreement = [
     },
     {
       label: '原合同结束时间',
-      placeholder: '必填 请输入',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
       keyName: 'old_end_at',
       keyType: '',
-      type: 'number',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -710,12 +713,13 @@ defineSupplyAgreement = [
     },
     {
       label: '现合同结束时间',
-      placeholder: '必填 请输入',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
       keyName: 'now_end_at',
       keyType: '',
       type: 'text',
-      button: '银行卡识别',
-      icon: 'bank',
+      picker: 'date',
+      showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
     {

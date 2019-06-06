@@ -493,15 +493,7 @@
       },
       // 报备类型
       handleBulletinType(item) {
-        switch (item.bulletin_type) {
-          case 'bulletin_collect_basic':
-            sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
-            break;
-          case '':
-          case 'bulletin_rent_basic':
-            sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newRent));
-            break;
-        }
+        sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus[item.bulletin_type]));
       },
       // 重新提交
       againSave(val) {

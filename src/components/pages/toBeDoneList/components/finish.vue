@@ -104,7 +104,7 @@
               this.allDetail.task_id = data.id;
               this.allDetail.process_instance_id = data.processInstanceId;
               this.allDetail.root_process_instance_id = data.rootProcessInstanceId;
-              sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
+              sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.bulletin_collect_basic));
               sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
               this.routerReplace(action.route);
               this.$emit('close');

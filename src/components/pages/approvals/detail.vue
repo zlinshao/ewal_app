@@ -269,11 +269,18 @@
             ]
           } else {//待审批
             this.setOperates(detail.outcome);
-            this.topOperates = [
-              {id: '1'},
-              {id: '2'},
-              {id: '3'},
-            ]
+            if (detail.bulletin_type === 'bulletin_retainage') {
+              this.topOperates = [
+                {id: '2'},
+                {id: '3'},
+              ]
+            } else {
+              this.topOperates = [
+                {id: '1'},
+                {id: '2'},
+                {id: '3'},
+              ]
+            }
           }
         } else if (tab === 2) {//我发起的
           if (status) {
@@ -320,11 +327,18 @@
 
         } else if (tab === 4) {//暂不处理
           this.setOperates(detail.taskInfo[0].outcome);
-          this.topOperates = [
-            {id: '1'},
-            {id: '2'},
-            {id: '3'},
-          ]
+          if (detail.bulletin_type === 'bulletin_retainage') {
+            this.topOperates = [
+              {id: '2'},
+              {id: '3'},
+            ]
+          } else {
+            this.topOperates = [
+              {id: '1'},
+              {id: '2'},
+              {id: '3'},
+            ]
+          }
         }
       },
       // 待重签/待签署
@@ -359,7 +373,6 @@
           ];
         }
         this.generateButton(btn);
-
       },
       // 头部操作按钮
       iconButton(num) {
@@ -378,18 +391,9 @@
       // 报备类型跳转
       bulletinRouter(type) {
         sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
-        switch (type) {
-          case 'bulletin_collect_basic':
-            sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newCollect));
-            this.routerLink('/collectReport', {revise: 'revise'});
-            break;
-          case 'bulletin_rent_basic':
-            sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.newRent));
-            this.routerLink('/collectReport', {revise: 'revise'});
-            break;
-        }
+        sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus[type]));
+        this.routerLink('/collectReport', {revise: 'revise'});
       },
-
       // 同意 拒绝 催办 撤销
       clickBtn(key = '', action = {}) {
         let msg = {suspend: '暂缓', urge: '催办', cancel: '撤销'};
