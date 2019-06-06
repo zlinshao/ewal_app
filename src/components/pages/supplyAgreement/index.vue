@@ -181,16 +181,9 @@
             };
             this.$httpZll.customerIdentity(params).then(res => {
               if (res) {
-                if (res.data.fadada_user_id) {
-                  this.form.signer = res.data;
+                this.form.fdd_user_id = res.data.fadada_user_id || '';
+                if (this.form.fdd_user_id) {
                   this.certified();
-                } else {
-                  this.$ddSkip(res.data.data);
-                  this.$dialog('认证', '认证是否完成?').then(res => {
-                    if (res) {
-                      this.confirmation('identity');
-                    }
-                  })
                 }
               }
             });

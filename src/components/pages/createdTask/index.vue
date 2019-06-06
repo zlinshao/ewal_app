@@ -365,24 +365,24 @@
         } else {
           this.staffConfig = {};
         }
-        this.form.primary = 69;
-        this.form.take_peoples = [69];
-        this.form = {
-          area: "122",
-          community_id: 446,
-          community_name: "太平北路122号",
-          customer_name: "张琳琳",
-          contact_phone: "18052001167",
-          property_type: {id: "419", name: "住宅"},
-          decorate: {id: "405", name: "毛坯"},
-          direction: {id: "1", name: "东"},
-          door_address: ["12", "33", "44"],
-          floor: 3,
-          floors: 18,
-          house_type: [2, 2, 2],
-          primary: 69,
-          take_peoples: [69],
-        };
+        // this.form.primary = 69;
+        // this.form.take_peoples = [69];
+        // this.form = {
+        //   area: "122",
+        //   community_id: 446,
+        //   community_name: "太平北路122号",
+        //   customer_name: "张琳琳",
+        //   contact_phone: "18052001167",
+        //   property_type: {id: "419", name: "住宅"},
+        //   decorate: {id: "405", name: "毛坯"},
+        //   direction: {id: "1", name: "东"},
+        //   door_address: ["12", "33", "44"],
+        //   floor: 3,
+        //   floors: 18,
+        //   house_type: [2, 2, 2],
+        //   primary: 69,
+        //   take_peoples: [69],
+        // };
         // this.form = {"take_time":"2019-06-04","house_id":[1861],"customer_name":"张琳琳","contact_phone":"18052001167","take_peoples":[69],"primary":69,"contract_id":1632,"address":"莱茵铂郡1-833"}
       }
     },
