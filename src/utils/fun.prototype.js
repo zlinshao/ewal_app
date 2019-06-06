@@ -287,7 +287,7 @@ export default {
       return {form, formatData, value, album, show};
     };
     // 报备类型数据匹配
-    Vue.prototype.$bulletinType = function (type) {
+    Vue.prototype.$bulletinType = function (type, num = '') {
       let data, title;
       switch (type) {
         case 'bulletin_collect_basic':
@@ -325,8 +325,9 @@ export default {
           data = this.jsonClone(defineCheckoutReport);
           break;
         case 'supplement_lord_time'://补充协议
+          data = {};
           title = ['补充协议'];
-          data = this.jsonClone(defineSupplyAgreement[0]);
+          data.slither0 = this.jsonClone(defineSupplyAgreement[num - 1]);
           break;
       }
       return {data, title}

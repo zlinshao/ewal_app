@@ -522,13 +522,12 @@
       handleData(detail) {
         this.slither = 0;
         this.formatData = {};
-        let bulletinData = this.$bulletinType(detail.bulletin_type);
+        let bulletinData = this.$bulletinType(detail.bulletin_type, detail.pact_type);
         this.bulletinTitle = bulletinData.title;
         let data = this.jsonClone(bulletinData.data);
         this.objInt = this.objIntArray(bulletinData.data);
         this.allReportNum = Object.keys(data).length;
         let obj = {};
-        console.log(data);
         for (let val of Object.keys(data)) {
           obj[val] = {};
           for (let item of data[val]) {
@@ -567,6 +566,9 @@
       handleDetail(res) {
         for (let item of Object.keys(res)) {
           switch (item) {
+            case 'house_id':
+              this.formatData.house_id = res.address;
+              break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
               door[0] = door[0] ? door[0] + '栋' : '';
@@ -587,6 +589,7 @@
             case 'decorate'://装修
             case 'property_type'://房屋类型
             case 'direction'://朝向
+            case 'house_address':
               this.formatData[item] = res[item].name;
               break;
             case 'floors':

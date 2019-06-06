@@ -86,7 +86,7 @@
                           :type="key.type"
                           :label="key.label"
                           :disabled="key.disabled"
-                          @input="listenInput(item.keyName)"
+                          @input="listenInput(item.keyName,slither,index)"
                           :placeholder="key.placeholder">
                           <div class="zl-button" v-if="key.changeBtn && item.children.length < 2"
                                @click="changeInput(slither,item.keyName,index,change)">
@@ -424,9 +424,19 @@
           this.formatData[key] = date;
         }
       },
-      // 监听 输入 计算日期
-      listenInput(key) {
+      // 监听输入变化
+      listenInput(key, slither, index) {
         switch (key) {
+          case 'customer_name':
+          case 'card_id':
+          case 'contact_phone':
+            console.log(key)
+            if (slither) {
+              this.certified('change', slither, index);
+            } else {
+              this.certified('change');
+            }
+            break;
           case 'month':
           case 'day':
           case 'vacancy':
@@ -710,7 +720,7 @@
                   } else {
                     this.form.signer = res.data;
                   }
-                  this.certified(parentKey, index);
+                  this.certified('', parentKey, index);
                 } else {
                   this.$ddSkip(res.data.data);
                   this.$dialog('认证', '认证是否完成?').then(res => {
@@ -745,30 +755,29 @@
         }
       },
       // 已认证
-      certified(parentKey, index) {
-        let data = ['customer_name', 'contact_phone', 'card_id'];
+      certified(change, parentKey, index) {
         for (let slither of Object.keys(this.drawSlither)) {
           for (let key of this.drawSlither[slither]) {
             if (parentKey) {
               if (key.keyName === parentKey) {
                 for (let children of key.children[index]) {
                   if (children.icon === 'identity') {
-                    children.button = '已认证';
-                    children.icon = '';
-                  }
-                  if (data.includes(children.keyName)) {
-                    children.disabled = 'disabled';
+                    if (change) {
+                      children.button = '身份识别';
+                    } else {
+                      children.button = '已认证';
+                    }
                   }
                 }
                 return;
               }
             } else {
               if (key.icon === 'identity') {
-                key.button = '已认证';
-                key.icon = '';
-              }
-              if (data.includes(key.keyName)) {
-                key.disabled = 'disabled';
+                if (change) {
+                  key.button = '身份识别';
+                } else {
+                  key.button = '已认证';
+                }
               }
             }
           }
@@ -1071,7 +1080,7 @@
               let str = [], price = [];
               if (res.period_price_way_arr) {
                 price = res.period_price_way_arr;
-              }else{
+              } else {
                 price = res[item];
               }
               this.form[item] = price || this.form[item];
@@ -1152,8 +1161,8 @@
               this.formatData[item] = res[item].village_name;
               break;
             case 'signer'://认证
-              if (res[item]) {
-                if (!status) {
+              if (!status) {
+                if (res[item].fadada_user_id && !Array.isArray(res[item])) {
                   this.certified();
                 }
               }
@@ -1198,10 +1207,12 @@
                   }
                 }
                 if (!status) {
-                  if (child.fadada_user_id) {
-                    this.certified(item, index);
-                  } else {
-                    this.certified();
+                  if (!Array.isArray(res[item])) {
+                    if (child.fadada_user_id) {
+                      this.certified('', item, index);
+                    } else {
+                      this.certified();
+                    }
                   }
                 }
               });

@@ -667,9 +667,9 @@ defineNewTask = {
 };
 
 // 补充协议
-defineSupplyAgreement = [
+defineSupplyAgreement = {
   // 延长收房时长
-  [
+  0: [
     {
       label: '协议类型',
       placeholder: '必填 请选择',
@@ -758,7 +758,7 @@ defineSupplyAgreement = [
     },
   ],
   // 房东更换银行卡
-  [
+  1: [
     {
       label: '协议类型',
       placeholder: '必填 请选择',
@@ -860,7 +860,7 @@ defineSupplyAgreement = [
     },
   ],
   // 调整收房价格
-  [
+  2: [
     {
       label: '协议类型',
       placeholder: '必填 请选择',
@@ -936,7 +936,7 @@ defineSupplyAgreement = [
     },
   ],
   // 延长租房时长
-  [
+  3: [
     {
       label: '协议类型',
       placeholder: '已禁用',
@@ -1024,7 +1024,7 @@ defineSupplyAgreement = [
       slot: '',
     },
   ],
-];
+};
 
 // 收房报备
 defineCollectReport = {
@@ -2083,14 +2083,6 @@ defineCollectReport = {
 defineRentReport = {
   // 合同信息
   slither0: [
-    {
-      label: '房屋地址',// 标题
-      placeholder: '必填 请选择',// placeholder
-      disabled: 'disabled',// 禁用
-      keyName: 'house_address',// 字段名
-      keyType: '',// 数据类型
-      type: 'text',// input 类型
-    },
     {
       label: '是否电子合同',
       placeholder: '必填 请选择',

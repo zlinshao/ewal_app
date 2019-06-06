@@ -252,6 +252,9 @@
     activated() {
       this.allDetail = JSON.parse(sessionStorage.deliveryReceipt);
       this.getDraft(this.allDetail.task_id);
+      // this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
+      //
+      // });
       this.allReportNum = Object.keys(defineArticleReceipt).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
@@ -776,7 +779,7 @@
         } else {
           this.form.contract_id = '';
         }
-        this.form.collect_or_rent = '1';//收租标记
+        this.form.collect_or_rent = this.allDetail.bulletin_type === 'bulletin_collect_basic' ? 1 : 2;//收租标记
         this.form = Object.assign({}, this.form);
       },
     },
