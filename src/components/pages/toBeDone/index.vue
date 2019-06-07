@@ -203,6 +203,7 @@
         params: {
           title: '',
           page: 1,
+          assignee: '',
         },
         toBeDoneList: [],
         variableName: '',
@@ -231,7 +232,11 @@
         this.params.title = val.replace(/\s+/g, '');
       },
     },
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personal;
+      },
+    },
     methods: {
       // 结束任务
       shutDown() {
@@ -402,6 +407,7 @@
         let type = this.bulletin_type.bulletin;
         let obj = this.bulletinStatus(type);
         val.rootProcessDefinitionKeyIn = obj.type;
+        val.assignee = this.personal.staff_id;
         val.taskDefinitionKeyIn = approvalSearch[obj.status].join(',');
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;

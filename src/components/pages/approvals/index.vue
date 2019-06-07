@@ -362,7 +362,6 @@
     },
     created() {
       this.resetting();
-
     },
     mounted() {
     },
@@ -383,6 +382,9 @@
       // 1我审批的 2我发起的 3抄送我的 4暂不处理
       tabs() {
         return this.$store.state.app.approvalTab;
+      },
+      personal() {
+        return this.$store.state.app.personal;
       },
     },
     methods: {
@@ -531,7 +533,6 @@
           case '1':
             this.params['params' + tab] = {
               page: 1,
-              // assignee: '69',//登陆人
               taskDefinitionKeyIn: approvalSearch.approvals1.join(','),
               category: 'approval',
               finished: Boolean(status),
@@ -544,7 +545,6 @@
               case 1:
                 this.params['params' + tab] = {
                   page: 1,
-                  // taskOwner: '69',//登陆人
                   processDefinitionKey: 'MG-BulletinApproval',
                   finished: Boolean(status),
                 };
@@ -552,7 +552,6 @@
               case 2:
                 this.params['params' + tab] = {
                   page: 1,
-                  // assignee: '69',//登陆人
                   taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
                 };
                 break;
@@ -569,12 +568,12 @@
           case '3':
             this.params['params' + tab] = {
               page: 1,
-              // assignee: '69',//登陆人
               category: 'cc',
               finished: Boolean(status),
             };
             break;
         }
+        this.params['params' + tab].assignee = this.personal.staff_id;
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 滚动加载

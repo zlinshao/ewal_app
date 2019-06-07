@@ -324,7 +324,10 @@
     computed: {
       tabs() {
         return this.$store.state.app.doneTab;
-      }
+      },
+      personal() {
+        return this.$store.state.app.personal;
+      },
     },
     methods: {
       // 新建带看
@@ -385,6 +388,7 @@
           url = 'history/tasks';
           params.finished = true;
         }
+        params.assignee = this.personal.staff_id;
         this.$httpZll.getToBeDoneListApi(url, params, close).then(res => {
           this.fullLoading['load' + tab] = false;
           this.total['total' + tab] = res.total || 0;
