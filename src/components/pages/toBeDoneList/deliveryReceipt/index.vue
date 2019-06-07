@@ -207,7 +207,6 @@
 </template>
 
 <script>
-  import DeliveryPicker from './deliveryPicker.vue'
   import DeliveryPickerSlot from './delivery-picker-slot.vue'
 
   export default {
