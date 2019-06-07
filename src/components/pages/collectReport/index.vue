@@ -842,8 +842,23 @@
       getImgData(val) {
         this.form[val[0]] = val[1];
       },
+      // 字段认证是否为空
+      attestationKey() {
+        for (let item of this.drawForm) {
+          if (item.keyName) {
+            if (item.placeholder && item.placeholder.includes('必填')) {
+              if (this.form[item.keyName] === item.keyType) {
+                this.$prompt(item.label + item.placeholder);
+                return true
+              }
+            }
+          }
+        }
+        return false;
+      },
       // 发布
       saveReport(val) {
+        if (this.attestationKey()) return;
         this.form.is_draft = val;
         let bulletin = this.bulletinType;
         if (bulletin.type) {

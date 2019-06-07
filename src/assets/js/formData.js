@@ -3493,7 +3493,6 @@ defineAgencyReport = {
       keyName: 'staff_name',
       keyType: '',
       type: 'text',
-      status: '',
       slot: '',
     },
     {
@@ -3503,7 +3502,6 @@ defineAgencyReport = {
       keyName: 'department_name',
       keyType: '',
       type: 'text',
-      status: '',
       slot: '',
     },
   ]
