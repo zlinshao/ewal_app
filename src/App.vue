@@ -84,25 +84,28 @@
         dicties.built_year = year;
         this.loading = true;
         this.personalGet().then(res => {
-          Promise.all([h1, h2, h3, h4]).then((result) => {
-            this.handlerDict(result[0], 'h1');
-            this.handlerDict(result[1], 'h2');
-            this.handlerDict(result[2], 'h3');
-            this.handlerDict(result[3], 'h4');
-            this.loading = !res;
-          }).catch((error) => {
-            console.log(error)
-          });
+          if (res) {
+            // 所有省份
+            let h1 = this.$httpZll.getAllCityList();
+            // 字典
+            let h2 = this.$httpZll.getAllDict();
+            // 收款账户
+            let h3 = this.$httpZll.getFinancialAccount(this.personal.department_id);
+            // 城市
+            let h4 = this.$httpZll.getCityList();
+            Promise.all([h1, h2, h3, h4]).then((result) => {
+              this.handlerDict(result[0], 'h1');
+              this.handlerDict(result[1], 'h2');
+              this.handlerDict(result[2], 'h3');
+              this.handlerDict(result[3], 'h4');
+              this.loading = !res;
+            }).catch((error) => {
+              console.log(error)
+            });
+          }
         });
-        // 所有省份
-        let h1 = this.$httpZll.getAllCityList();
-        // 字典
-        let h2 = this.$httpZll.getAllDict();
-        // 收款账户
-        let h3 = this.$httpZll.getFinancialAccount(this.personal.department_id);
-        // 城市
-        let h4 = this.$httpZll.getCityList();
       },
+      // 字典赋值
       handlerDict(res, str) {
         switch (str) {
           case 'h1':

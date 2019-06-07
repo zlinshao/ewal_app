@@ -7,10 +7,10 @@ function $httpPrompt(msg, type) {
 }
 
 axios.defaults.timeout = 10000;
-axios.defaults.headers.common['Authorization'] = globalConfig.token;
 
 // 发送请求拦截
 axios.interceptors.request.use((request) => {
+  request.headers.common['Authorization'] = globalConfig.token;
   return request;
 }, (err) => {
   return Promise.reject(err);

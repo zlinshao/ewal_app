@@ -675,20 +675,26 @@ export default {
     // 存储个人信息
     Vue.prototype.personalData = function (res, resolve) {
       globalConfig.token = 'Bearer ' + res.access_token;
-      console.log(globalConfig.token);
       this.$httpZll.getUserInfo().then(res => {
-        console.log(res);
-        resolve(false);
+        if (res) {
+          let data = {}, info = res.data.detail;
+          data.avatar = info.avatar;
+          data.phone = info.phone;
+          data.staff_id = info.id;
+          data.staff_name = info.name;
+          if (info.org && info.org.length) {
+            let org = info.org[0];
+            data.department_name = org.name;
+            data.department_id = org.id;
+          } else {
+            resolve(false);
+            this.$prompt('获取部门失败!','fail');
+            return;
+          }
+          this.$store.dispatch('personal_storage', data);
+          resolve(true);
+        }
       })
-      // let info = res.data;
-      // data.avatar = info.avatar;
-      // data.phone = info.phone;
-      // data.staff_id = info.id;
-      // data.staff_name = info.name;
-      // data.department_name = info.org[0].name;
-      // data.department_id = info.org[0].id;
-      // this.$store.dispatch('personal_storage', JSON.stringify(data));
-      // resolve(true);
     };
     // 关闭钉钉
     Vue.prototype.closeDD = function () {

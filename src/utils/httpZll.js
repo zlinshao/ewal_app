@@ -33,10 +33,16 @@ class httpZll extends httpService {
       })
     })
   }
+
+  // 获取个人信息
   static getUserInfo(code) {
     return new Promise((resolve, reject) => {
       this.get(`${url_login}api/auth/user`, {code: code}).then(res => {
-        resolve(res);
+        if (res.success) {
+          resolve(res);
+        } else {
+          $httpPrompt(res.message, 'fail');
+        }
       })
     })
   }
@@ -301,7 +307,7 @@ class httpZll extends httpService {
   }
 
   // 获取房屋最新交接单
-  static getNewDeliveryDraft(params){
+  static getNewDeliveryDraft(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/handover/info`, params, 'prompt').then(res => {
         if (res.success) {
