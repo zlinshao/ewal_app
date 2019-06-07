@@ -75,8 +75,13 @@
       listenInput(val, key) {
         let show = this.jsonClone(val);
         show[0] = show[0] ? show[0] + '-' : '';
-        show[1] = show[1] ? show[1] + '-' : '';
-        show[2] = show[2] ? show[2] : '';
+        if (show[1]) {
+          show[1] = show[1] ? show[1] + '-' : '';
+        }
+        if (show[2]) {
+          show[1] = show[1] ? show[1] + '-' : '';
+          show[2] = show[2] ? show[2] : '';
+        }
         this.formatData[key] = show.join('');
       },
       finishData() {
