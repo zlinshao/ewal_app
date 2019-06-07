@@ -632,15 +632,6 @@ export default {
       // 隐藏 右上角更多
       dd.biz.navigation.setRight({show: false});
       return new Promise((resolve, reject) => {
-        // let data = {};
-        // data.staff_id = '69';
-        // data.staff_name = '张琳琳';
-        // data.department_id = '134';
-        // data.department_name = '南京马群组';
-        // data.city_id = '320100';
-        // data.city_name = '南京市';
-        // this.$store.dispatch('personal_storage', data);
-        // resolve(true);
         that.$httpZll.getDDConfig().then((res) => {
           let _config = res;
           // dd.config({
@@ -661,7 +652,8 @@ export default {
                 })
               },
               onFail(err) {
-                alert('您不在系统内，请联系管理员添加！');
+                alert('dd error: ' + JSON.stringify(err));
+                // alert('您不在系统内，请联系管理员添加！');
                 that.closeDD();
               }
             });
