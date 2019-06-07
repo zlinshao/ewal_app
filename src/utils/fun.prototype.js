@@ -206,9 +206,11 @@ export default {
       for (let item of data) {
         if (item.keyName) {
           if (item.placeholder && item.placeholder.includes('必填')) {
-            if (this.form[item.keyName] === item.keyType) {
-              this.$prompt(item.label + item.placeholder);
-              return true
+            if (!item.keyType) {
+              if (this.form[item.keyName] === item.keyType) {
+                this.$prompt(item.label + item.placeholder);
+                return true
+              }
             }
           }
         }
