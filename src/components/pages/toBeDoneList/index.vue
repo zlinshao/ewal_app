@@ -329,7 +329,7 @@
     methods: {
       // 新建带看
       createRouter(val) {
-        if (val.id) {
+        if (val.id === 'CollectTakeLook' || val.id === 'RentTakeLook') {
           this.routerLink('/createdTask', val);
         }
       },
