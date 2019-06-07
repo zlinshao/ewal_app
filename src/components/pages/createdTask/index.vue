@@ -195,7 +195,11 @@
       this.checkChoose(query);
     },
     watch: {},
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personal;
+      }
+    },
     methods: {
       //房屋搜索
       getHouse(val, config) {
@@ -275,8 +279,8 @@
               this.formatData.receive_id = val.staff_name;
               break;
             default:
-              this.form.take_peoples = [val.staff_id];
               this.form.primary = val.staff_id;
+              this.form.take_peoples = [val.staff_id];
               this.formatData.take_peoples = [val.staff_name];
               break;
           }
@@ -376,8 +380,12 @@
         // } else {
         //   this.staffConfig = {};
         // }
-        // this.form.primary = 69;
-        // this.form.take_peoples = [69];
+        let id, name;
+        id = this.personal.staff_id;
+        name = this.personal.staff_name;
+        this.form.primary = id;
+        this.form.take_peoples = [id];
+        this.formatData.take_peoples = [name];
         // this.form = {
         //   area: "122",
         //   community_id: 446,
