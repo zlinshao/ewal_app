@@ -677,7 +677,8 @@ export default {
       globalConfig.token = 'Bearer ' + res.access_token;
       console.log(globalConfig.token);
       this.$httpZll.getUserInfo().then(res => {
-        console.log(res)
+        console.log(res);
+        resolve(false);
       })
       // let info = res.data;
       // data.avatar = info.avatar;
