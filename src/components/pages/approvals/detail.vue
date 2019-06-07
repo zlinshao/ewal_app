@@ -79,7 +79,7 @@
       </div>
       <div class="operates">
         <p>
-          <i v-for="(i,idx) in allReportNum" :class="{'hover': idx === slither}"></i>
+          <i v-for="(i,idx) in allReportNum" :class="{'hover': idx === slither}" @click="slither = idx"></i>
         </p>
         <div v-if="operates.variableName">
           <div v-if="operates.status !== 'common'" class="detailBtn">
@@ -205,7 +205,7 @@
             message: '',
             attachments: []
           },
-          saveProcessInstanceId: true
+          saveProcessInstanceId: true,
         },
         commentUpload: [
           {
@@ -631,8 +631,8 @@
               break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
-              door[0] = door[0] ? door[0] + '栋' : '';
-              door[1] = door[1] ? door[1] + '单元' : '';
+              door[0] = door[0] ? door[0] + '-' : '';
+              door[1] = door[1] ? door[1] + '-' : '';
               door[2] = door[2] ? door[2] : '';
               this.formatData[item] = door.join('');
               break;
