@@ -4194,7 +4194,7 @@ function handlerBedroom(value, num) {
 function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_number', 'number'], num) {
   return {
     label: name,// 标题
-    placeholder: '必填 请选择',
+    placeholder: '请选择',
     readonly: 'readonly',// 只读 picker必须有值
     keyName: key,
     keyType: {},
@@ -4234,7 +4234,7 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
 function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad_number', 'number'], num) {
   return {
     label: name,// 标题
-    placeholder: '必填 请选择',
+    placeholder: '请选择',
     readonly: 'readonly',// 只读 picker必须有值
     keyName: key,
     keyType: {},
@@ -4256,7 +4256,7 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad
       },
       {
         label: '品牌',
-        placeholder: '请输入',
+        placeholder: '必填 请输入',
         keyName: 'brand',
         keyType: '',
         type: 'text',

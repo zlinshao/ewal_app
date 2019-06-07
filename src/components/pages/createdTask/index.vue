@@ -235,7 +235,8 @@
         this.form[val[0]] = val[1];
       },
       // 提交 重置 取消
-      saveSubmit(val = '') {
+      saveSubmit(val) {
+        if (this.$attestationKey(this.drawSlither)) return;
         switch (val) {
           case 'submit'://提交
             this.$httpZll.createdTask(this.form, this.postName).then(res => {

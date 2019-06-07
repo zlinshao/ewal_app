@@ -201,6 +201,20 @@ export default {
         });
       })
     };
+    // 提交字段认证是否为空
+    Vue.prototype.$attestationKey = function (data) {
+      for (let item of data) {
+        if (item.keyName) {
+          if (item.placeholder && item.placeholder.includes('必填')) {
+            if (this.form[item.keyName] === item.keyType) {
+              this.$prompt(item.label + item.placeholder);
+              return true
+            }
+          }
+        }
+      }
+      return false;
+    };
     // 初始化数据
     Vue.prototype.initFormData = function (drawForm, showForm, noStaff) {
       let form = {};
