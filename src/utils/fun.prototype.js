@@ -676,11 +676,19 @@ export default {
           data.staff_name = info.name;
           if (info.org && info.org.length) {
             let org = info.org[0];
+            if (org.city && org.city.length) {
+              let city = org.city[0];
+              data.city_id = city.city_id;
+              data.city_name = city.city_name;
+            } else {
+              data.city_id = '320100';
+              data.city_name = '南京市';
+            }
             data.department_name = org.name;
             data.department_id = org.id;
           } else {
             resolve(false);
-            this.$prompt('获取部门失败!','fail');
+            this.$prompt('获取部门失败!', 'fail');
             return;
           }
           this.$store.dispatch('personal_storage', data);
