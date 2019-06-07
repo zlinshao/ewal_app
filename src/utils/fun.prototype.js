@@ -10,7 +10,6 @@ import ScrollLoad from '../components/common/scrollLoad'
 
 export default {
   install(Vue, options) {
-    let urls = globalConfig.login;
     // 全局组件
     Vue.component('picker', Picker);//正常picker
     Vue.component('picker-slot', PickerSlot);//带表单 弹出窗
@@ -644,20 +643,20 @@ export default {
         // resolve(true);
         that.$httpZll.getDDConfig().then((res) => {
           let _config = res;
-          dd.config({
-            agentId: _config.agentId, // 必填，微应用ID
-            corpId: _config.corpId,//必填，企业ID
-            timeStamp: _config.timeStamp, // 必填，生成签名的时间戳
-            nonceStr: _config.nonceStr, // 必填，生成签名的随机串
-            signature: _config.signature, // 必填，签名
-            jsApiList: ['biz.cspace.saveFile', 'biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
-          });
+          // dd.config({
+          //   agentId: _config.agentId, // 必填，微应用ID
+          //   corpId: _config.corpId,//必填，企业ID
+          //   timeStamp: _config.timeStamp, // 必填，生成签名的时间戳
+          //   nonceStr: _config.nonceStr, // 必填，生成签名的随机串
+          //   signature: _config.signature, // 必填，签名
+          //   jsApiList: ['biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
+          // });
           console.log(res);
           dd.ready(() => {
             dd.runtime.permission.requestAuthCode({
               corpId: _config.corpId,
               onSuccess(info) {
-                that.$httpZll.getUserInfo(info.code).then((res) => {
+                that.$httpZll.getTokenInfo(info.code).then((res) => {
                   that.personalData(res, resolve);
                 })
               },
@@ -675,10 +674,11 @@ export default {
     };
     // 存储个人信息
     Vue.prototype.personalData = function (res, resolve) {
-      // let token = res.token;
-      console.log(res);
-      // globalConfig.token = token.token_type + ' ' + token.access_token;
-      // console.log(globalConfig.token);
+      globalConfig.token = 'Bearer ' + res.access_token;
+      console.log(globalConfig.token);
+      this.$httpZll.getUserInfo().then(res => {
+        console.log(res)
+      })
       // let info = res.data;
       // data.avatar = info.avatar;
       // data.phone = info.phone;

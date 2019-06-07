@@ -25,10 +25,17 @@ class httpZll extends httpService {
     })
   }
 
-  // 获取 登录信息
-  static getUserInfo(code) {
+  // 获取 登录token
+  static getTokenInfo(code) {
     return new Promise((resolve, reject) => {
       this.get(`${url_login}api/sns/dingtalk/fromClient`, {code: code}).then(res => {
+        resolve(res);
+      })
+    })
+  }
+  static getUserInfo(code) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_login}api/auth/user`, {code: code}).then(res => {
         resolve(res);
       })
     })
