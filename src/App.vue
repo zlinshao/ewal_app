@@ -96,36 +96,12 @@
         });
         // 所有省份
         let h1 = this.$httpZll.getAllCityList();
-        //   .then(res => {
-        //   let data = {};
-        //   for (let val of res.data) {
-        //     data[val.province_id] = val.province_name;
-        //   }
-        //   dicties.province = data;
-        // });
         // 字典
         let h2 = this.$httpZll.getAllDict();
-        //   .then(res => {
-        //   let dict = res.data;
-        //   dicties.decorate = dict[404];//装修
-        //   dicties.card_type = dict[409];//证件类型
-        //   dicties.property_type = dict[410];//房屋类型
-        // });
         // 收款账户
         let h3 = this.$httpZll.getFinancialAccount(this.personal.department_id);
-        // .then(res => {
-        // if (res) {
-        //   for (let item of res.data) {
-        //     let account = item.account;
-        //     dicties.remittance_account[account.id] = account.account_num + ' ' + account.account_owner + `<br>` + account.name;
-        //   }
-        // }
-        // });
         // 城市
         let h4 = this.$httpZll.getCityList();
-        // .then(res => {
-        // this.$store.dispatch('all_city_list', res.data);
-        // })
       },
       handlerDict(res, str) {
         switch (str) {

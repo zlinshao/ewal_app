@@ -650,34 +650,34 @@ export default {
         //     timeStamp: _config.timeStamp, // 必填，生成签名的时间戳
         //     nonceStr: _config.nonceStr, // 必填，生成签名的随机串
         //     signature: _config.signature, // 必填，签名
-        //     jsApiList: ['biz.cspace.saveFile', 'biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
+        //     jsApiList: ['biz.cspace.saveFile', 'biz.cspace.preview']   // 必填，需要使用的jsapi列表，注意：不要带dd。
         //   });
-        //   dd.ready(() => {
-        //     dd.runtime.permission.requestAuthCode({
-        //       corpId: _config.corpId,
-        //       onSuccess(info) {
-        //         that.$httpZll.getUserInfo(info.code).then((res) => {
-        //           that.personalData(res, resolve);
-        //         })
-        //       },
-        //       onFail(err) {
-        //         alert('您不在系统内，请联系管理员添加！');
-        //         that.closeDD();
-        //       }
-        //     });
-        //   });
-        //   dd.error((err) => {
-        //     alert('dd error: ' + JSON.stringify(err));
-        //   });
+          // dd.ready(() => {
+          //   dd.runtime.permission.requestAuthCode({
+          //     corpId: _config.corpId,
+          //     onSuccess(info) {
+          //       that.$httpZll.getUserInfo(info.code).then((res) => {
+          //         that.personalData(res, resolve);
+          //       })
+          //     },
+          //     onFail(err) {
+          //       alert('您不在系统内，请联系管理员添加！');
+          //       that.closeDD();
+          //     }
+          //   });
+          // });
+          // dd.error((err) => {
+          //   alert('dd error: ' + JSON.stringify(err));
+          // });
         // });
       });
     };
     // 存储个人信息
     Vue.prototype.personalData = function (res, resolve) {
-      let token = res.token;
-      console.log(res.user);
-      globalConfig.token = token.token_type + ' ' + token.access_token;
-      console.log(globalConfig.token);
+      console.log(res);
+      // let token = res.token;
+      // globalConfig.token = token.token_type + ' ' + token.access_token;
+      // console.log(globalConfig.token);
       // let info = res.data;
       // data.avatar = info.avatar;
       // data.phone = info.phone;

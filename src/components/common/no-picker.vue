@@ -27,14 +27,13 @@
 
   export default {
     name: "no-picker",
-    props: ['module', 'drawing', 'postData', 'formData', 'popup'],
+    props: ['module', 'drawing', 'postData', 'formData'],
     data() {
       return {
         popupModule: false,
         drawForm: [],
         postFormData: {},
         formatData: {},
-
       }
     },
     mounted() {
@@ -45,20 +44,22 @@
       module(val) {
         this.popupModule = val;
       },
-      popup(val) {
-        this.popupStatus = val;
-      },
       popupModule(val) {
         if (!val) {
           this.$emit('close', 'close');
-        } else {
+        }
+      },
+      drawing: {
+        handler(val, oldVal) {
           this.drawForm = [];
-          for (let item of this.drawing) {
-            if (item.picker === this.popup) {
+          for (let item of val) {
+            if (item.picker === 'noPicker') {
               this.drawForm.push(item);
             }
           }
-        }
+        },
+        immediate: true,
+        deep: true,
       },
       postData: {
         handler(val, oldVal) {

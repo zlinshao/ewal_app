@@ -436,25 +436,25 @@ defineNewTask = {
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'take_peoples',
-      keyType: [],
+      keyType: '',
       type: 'text',
       status: '',
       picker: 'searchStaff',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
-    {
-      label: '主带看人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'primary',
-      keyType: [],
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      slot: '',
-    },
+    // {
+    //   label: '主带看人',
+    //   placeholder: '必填 请选择',
+    //   readonly: 'readonly',
+    //   keyName: 'primary',
+    //   keyType: [],
+    //   type: 'text',
+    //   status: 'objInt',
+    //   picker: 'picker',
+    //   showForm: 'formatData',//picker 显示form 或 formatData
+    //   slot: '',
+    // },
   ],
   // 租房待办
   RentTakeLook: [
@@ -505,25 +505,25 @@ defineNewTask = {
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'take_peoples',
-      keyType: [],
+      keyType: '',
       type: 'text',
       status: '',
       picker: 'searchStaff',
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
-    {
-      label: '主带看人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'primary',
-      keyType: [],
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      slot: '',
-    },
+    // {
+    //   label: '主带看人',
+    //   placeholder: '必填 请选择',
+    //   readonly: 'readonly',
+    //   keyName: 'primary',
+    //   keyType: [],
+    //   type: 'text',
+    //   status: 'objInt',
+    //   picker: 'picker',
+    //   showForm: 'formatData',//picker 显示form 或 formatData
+    //   slot: '',
+    // },
   ],
   // 保洁任务
   HouseCleaning: [

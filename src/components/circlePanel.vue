@@ -62,25 +62,25 @@
             icon: ic_weikuan,
           },
           {
-            url: 'contractSearch',
+            url: '',
             name: '调租',
             status: bulletinRouterStatus.newChange,
             icon: ic_tiaozu,
           },
           {
-            url: 'contractSearch',
+            url: '',
             name: '转租',
             status: bulletinRouterStatus.newSublet,
             icon: ic_zhuanzu,
           },
           {
-            url: 'contractSearch',
+            url: '',
             name: '特殊事项',
              status: bulletinRouterStatus.newSpecial,
             icon: ic_teshu,
           },
           {
-            url: 'collectReport',
+            url: '',
             name: '退租',
             status: bulletinRouterStatus.newCheckout,
             icon: ic_tuizu,
@@ -185,6 +185,7 @@
     methods: {
       // 报备跳转
       toBulletin(item) {
+        if(!item.url) return;
         sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
         this.routerLink(item.url);
       },

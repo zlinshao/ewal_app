@@ -68,15 +68,18 @@
             name: '审批',
             icon: ic_shenpi,
           }, {
-            url: '/contract',
+            // url: '/contract',
+            url: '',
             name: '合同',
             icon: ic_hetong,
           }, {
-            url: '/questionnaire',
+            // url: '/questionnaire',
+            url: '',
             name: '问卷',
             icon: ic_wenjuan,
           }, {
-            url: '/exam',
+            // url: '/exam',
+            url: '',
             name: '考试',
             icon: ic_kaoshi,
           }
@@ -139,6 +142,7 @@
     methods: {
       // 头部
       topTabsTag(url) {
+        if (!url) return;
         this.routerLink(url);
       },
       // 底部
@@ -148,7 +152,7 @@
             this.routerLink('/toBeDoneList');
             break;
           case '3':
-            this.routerLink('/houseResource');
+            // this.routerLink('/houseResource');
             break;
         }
       },

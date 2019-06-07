@@ -8,7 +8,7 @@
           <!--@click="changeTaskType = !changeTaskType"-->
           <div>
             <p>{{postShowName}}</p>
-          <!--<i :class="[changeTaskType ? '' : 'downSelect']"></i>-->
+            <!--<i :class="[changeTaskType ? '' : 'downSelect']"></i>-->
           </div>
         </div>
         <div class="radioChecks" :class="[changeTaskType?'show':'hidden']">
@@ -100,14 +100,14 @@
     <picker-slot :module="popupModule" :pickers="pickers" :drawing="drawSlither" :postData="form" :formData="formatData"
                  :popup="popupStatus" @close="onConfirm"></picker-slot>
     <!--no-picker 门牌地址-->
-    <no-picker :module="noPickerModule" :drawing="drawSlither" :postData="form" :popup="popupStatus"
-               :formData="formatData" @close="onConfirm"></no-picker>
+    <no-picker :module="noPickerModule" :drawing="drawSlither" :postData="form" :formData="formatData"
+               @close="onConfirm"></no-picker>
     <!--日期-->
     <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
     <!--房屋地址搜索-->
     <search-house :module="searchHouseModule" :config="searchConfig" @close="getHouse"></search-house>
     <!--员工搜索-->
-    <search-staff :module="searchStaffModule" :config="staffConfig" @close="getStaffInfo"></search-staff>
+    <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
     <!--小区搜索-->
     <search-village :module="searchVillageModule" @close="getVillage"></search-village>
   </div>
@@ -177,7 +177,7 @@
         pickers: {},
         drawSlither: [],
         searchStaffModule: false,//员工搜索
-        staffConfig: {},//员工搜索 配置
+        // staffConfig: {},//员工搜索 配置
         searchConfig: {},
         // 小区搜索
         searchVillageModule: false,
@@ -268,33 +268,44 @@
       getStaffInfo(val, all) {
         this.onCancel();
         if (val !== 'close') {
-          if (this.staffConfig) {
-            let key = this.staffConfig.keys || 'staff_name';
-            this.form[key] = val.id;
-            this.formatData[key] = val.name;
-            this.staffConfig.preFill = all;
-            dicties.primary = {};
-            if (all.length === 1) {
-              this.form.primary = all[0].id;
-              this.formatData.primary = all[0].name;
-              dicties.primary[all[0].id] = all[0].name;
-            } else {
-              this.form.primary = '';
-              this.formatData.primary = '';
-              for (let item of all) {
-                dicties.primary[item.id] = item.name;
-              }
-            }
-          } else {
-            switch (this.postName) {
-              case 'HouseCleaning':
-              case 'HouseRepair':
-                this.form.receive_id = val.staff_id;
-                this.formatData.receive_id = val.staff_name;
-                break;
-
-            }
+          switch (this.postName) {
+            case 'HouseCleaning':
+            case 'HouseRepair':
+              this.form.receive_id = val.staff_id;
+              this.formatData.receive_id = val.staff_name;
+              break;
+            default:
+              this.form.take_peoples = [val.staff_id];
+              this.form.primary = val.staff_id;
+              this.formatData.take_peoples = [val.staff_name];
+              break;
           }
+          // if (this.staffConfig) {
+          //   let key = this.staffConfig.keys || 'staff_name';
+          //   this.form[key] = val.id;
+          //   this.formatData[key] = val.name;
+          //   this.staffConfig.preFill = all;
+          //   dicties.primary = {};
+          //   if (all.length === 1) {
+          //     this.form.primary = all[0].id;
+          //     this.formatData.primary = all[0].name;
+          //     dicties.primary[all[0].id] = all[0].name;
+          //   } else {
+          //     this.form.primary = '';
+          //     this.formatData.primary = '';
+          //     for (let item of all) {
+          //       dicties.primary[item.id] = item.name;
+          //     }
+          //   }
+          // } else {
+          //   switch (this.postName) {
+          //     case 'HouseCleaning':
+          //     case 'HouseRepair':
+          //       this.form.receive_id = val.staff_id;
+          //       this.formatData.receive_id = val.staff_name;
+          //       break;
+          //   }
+          // }
         }
       },
       // 搜索 员工 小区 房屋
@@ -356,15 +367,15 @@
         this.form = all.form;
         this.formatData = all.formatData;
         this.album = all.album;
-        if (this.postName === 'CollectTakeLook' || this.postName === 'RentTakeLook') {
-          this.staffConfig = {//员工搜索 配置
-            num: 3,
-            preFill: [],
-            keys: 'take_peoples',
-          };
-        } else {
-          this.staffConfig = {};
-        }
+        // if (this.postName === 'CollectTakeLook' || this.postName === 'RentTakeLook') {
+        //   this.staffConfig = {//员工搜索 配置
+        //     num: 3,
+        //     preFill: [],
+        //     keys: 'take_peoples',
+        //   };
+        // } else {
+        //   this.staffConfig = {};
+        // }
         // this.form.primary = 69;
         // this.form.take_peoples = [69];
         // this.form = {
