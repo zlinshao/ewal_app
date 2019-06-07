@@ -951,94 +951,6 @@
           this.form.id = '';//草稿ID
           if (!data) {
             if (!this.isGetTake) {
-              // this.form = {
-              //   "address": "馨合家园3-2206",
-              //   "is_electronic_contract": "1",
-              //   "contract_number": "LJZFE010000308",
-              //   "sign_date": "2019-06-04",
-              //   "month": "12",
-              //   "day": "3",
-              //   "begin_date": "2019-06-04",
-              //   "end_date": "2020-06-07",
-              //   "pay_way_bet": 1,
-              //   "period_price_way_arr": [{
-              //     "begin_date": "2019-06-04",
-              //     "end_date": "2020-06-04",
-              //     "period": "12",
-              //     "pay_way": "1",
-              //     "month_unit_price": "1222"
-              //   }],
-              //   "deposit": 1222,
-              //   "amount_type_received": "1",
-              //   "money_sum": "1000",
-              //   "current_pay_info": [{
-              //     "money_sep": "1000",
-              //     "real_pay_at": "2019-06-04 22:09",
-              //     "remittance_account": "3107666344@qq.com 乐伽企业支付宝 乐伽公寓企业支付宝",
-              //     "account_id": "98"
-              //   }],
-              //   "memo": "fdsfdsafdsa",
-              //   "discount": "122",
-              //   "is_other_fee": "0",
-              //   "other_fee_name": "",
-              //   "other_fee": "",
-              //   "retainage_date": "2019-06-04",
-              //   "rental_use": "1",
-              //   "rental_use_remark": "",
-              //   "num_of_residents": "2",
-              //   "is_family": "0",
-              //   "is_agency": "0",
-              //   "agency_name": "",
-              //   "agency_price": "",
-              //   "agency_user_name": "",
-              //   "agency_phone": "",
-              //   "is_joint": "0",
-              //   "network_fee": "",
-              //   "management_fee": "",
-              //   "water_fee": "",
-              //   "property_fee": "",
-              //   "remark_terms": ["2", "3"],
-              //   "photo": [4229443],
-              //   "customer_name": "张琳琳",
-              //   "customer_sex": "m",
-              //   "card_type": 411,
-              //   "card_id": "320321198904010033",
-              //   "contact_way": 1,
-              //   "contact_phone": "18052001167",
-              //   "account": "6225212583158743",
-              //   "account_name": "贾少君",
-              //   "bank": "上海浦东发展银行",
-              //   "subbranch": "fdsa",
-              //   "subsidiary_customer": [{
-              //     "customer_name": "",
-              //     "customer_sex": "",
-              //     "card_type": "",
-              //     "card_id": "",
-              //     "contact_way": "",
-              //     "contact_phone": ""
-              //   }],
-              //   "id_card_photo": [4229444],
-              //   "bank_card_photo": [4229445],
-              //   "staff_name": "张琳琳",
-              //   "department_name": "南京马群组",
-              //   "staff_id": "69",
-              //   "department_id": "134",
-              //   "id": "",
-              //   "signer": {
-              //     "fadada_user_id": "37C5DC6B9D52D38E354CD46A8B3AE47A",
-              //     "name": "张琳琳",
-              //     "phone": "18052001167",
-              //     "idcard": "320321198904010033"
-              //   },
-              //   "house_id": 550,
-              //   "contract_id": 475,
-              //   "is_sign": "1",
-              //   "is_draft": 0,
-              //   "type": 1,
-              //   "task_id": "4e2dcf8c-86d2-11e9-8cb1-0242a6cf5631",
-              //   "process_instance_id": "4e2c96f4-86d2-11e9-8cb1-0242a6cf5631",
-              //   "spot_code": "s6ff04"
-              // };
               this.getPunchClockData();
             } else {
               this.childBulletin(this.taskDetail.content);
@@ -1080,6 +992,15 @@
             case 'house_address':
             case 'customer_name':
               this.form[item] = res[item] || this.form[item];
+              break;
+            case 'agency_infos':
+              for (let info of this.form[item]) {
+                for (let key of Object.keys(info)) {
+                  if (key.includes('agency_')) {
+                    info[key] = res[key]
+                  }
+                }
+              }
               break;
             case 'price':
               let str = [], price = [];

@@ -3459,13 +3459,13 @@ defineAgencyReport = {
           {
             label: '渠道联系人',
             placeholder: '必填 请输入',
-            keyName: 'agency_username',
+            keyName: 'agency_user_name',
             keyType: '',
             type: 'text',
             slot: '',
           },
           {
-            label: '渠道联系电话',
+            label: '渠道手机',
             placeholder: '必填 请输入',
             keyName: 'agency_phone',
             keyType: '',
