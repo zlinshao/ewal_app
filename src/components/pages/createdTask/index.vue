@@ -11,13 +11,13 @@
             <!--<i :class="[changeTaskType ? '' : 'downSelect']"></i>-->
           </div>
         </div>
-        <div class="radioChecks" :class="[changeTaskType?'show':'hidden']">
-          <div v-for="item in highList" class="contents">
-            <p @click="checkChoose(item)" :class="{'chooseCheck': postName === item.id}">
-              {{item.text}}
-            </p>
-          </div>
-        </div>
+        <!--<div class="radioChecks" :class="[changeTaskType?'show':'hidden']">-->
+        <!--  <div v-for="item in highList" class="contents">-->
+        <!--    <p @click="checkChoose(item)" :class="{'chooseCheck': postName === item.id}">-->
+        <!--      {{item.text}}-->
+        <!--    </p>-->
+        <!--  </div>-->
+        <!--</div>-->
         <div>
           <!--显示formatData -->
           <div v-if="item.showForm === 'formatData' || item.picker" v-for="(item,index) in drawSlither">
