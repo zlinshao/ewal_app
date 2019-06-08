@@ -86,7 +86,7 @@
                           :type="key.type"
                           :label="key.label"
                           :disabled="key.disabled"
-                          @input="listenInput(item.keyName,slither,index)"
+                          @input="listenInput(item.keyName,slither,index, key.keyName)"
                           :placeholder="key.placeholder">
                           <div class="zl-button" v-if="key.changeBtn && item.children.length < 2"
                                @click="changeInput(slither,item.keyName,index,change)">
@@ -432,7 +432,7 @@
         }
       },
       // 监听输入变化
-      listenInput(key, slither, index) {
+      listenInput(key, slither, index, child) {
         switch (key) {
           case 'customer_name':
           case 'card_id':
@@ -449,7 +449,9 @@
             this.contractDateCount(this.form.begin_date);//合同结束日期计算
             break;
           case 'period_price_way_arr':
-            this.countPrice();//押金计算
+            if (child === 'month_unit_price') {
+              this.countPrice();//押金计算
+            }
             this.moreChangeDateCount(key);//变化日期计算
             break;
         }

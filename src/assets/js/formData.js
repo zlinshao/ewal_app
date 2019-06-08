@@ -1405,7 +1405,7 @@ defineCollectReport = {
     },
     {
       label: '最迟补齐日期',
-      placeholder: '必填 请选择',
+      placeholder: '若房东补齐 请选择',
       readonly: 'readonly',
       keyName: 'lord_fill_date',
       keyType: '',
@@ -2217,17 +2217,26 @@ defineRentReport = {
           },
           {
             label: '付款方式',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
+            placeholder: '必填 请输入',
             keyName: 'pay_way',
             keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData',//picker 显示form 或 formatData
-            picker: 'picker',
+            type: 'number',
             changeBtn: '付款变化',
             slot: '',
           },
+          // {
+          //   label: '付款方式',
+          //   placeholder: '必填 请选择',
+          //   readonly: 'readonly',
+          //   keyName: 'pay_way',
+          //   keyType: '',
+          //   type: 'text',
+          //   status: 'objInt',
+          //   showForm: 'formatData',//picker 显示form 或 formatData
+          //   picker: 'picker',
+          //   changeBtn: '付款变化',
+          //   slot: '',
+          // },
           {
             label: '月单价',
             placeholder: '必填 月单价',

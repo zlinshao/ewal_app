@@ -154,7 +154,7 @@
       <div class="content">
         <div class="contentMain">
           <div>
-            <div>发起申请</div>
+            <div class="startApply">发起申请</div>
             <ul>
               <li v-for="(item,index) in 20" :class="{'lastBorder':index === 18}">
                 <div class="process">
@@ -190,7 +190,7 @@
         </div>
         <div class="commonBtn">
           <p class="btn back" @click="cancel('record')">取消</p>
-          <p class="btn">评论</p>
+          <p class="btn" @click="commentPopup = true">评论</p>
         </div>
       </div>
     </van-popup>
@@ -282,7 +282,6 @@
     methods: {
       // 历史流程
       historyProcess(detail) {
-        console.log(detail);
         this.$httpZll.getHistoryProcess(detail.process_id).then(res => {
 
         })
@@ -582,6 +581,7 @@
             this.cancel('comment');
             if (res.content && res.content.message) {
               this.$prompt('评论成功！', 'success');
+              this.historyProcess(this.allDetail);
             } else {
               this.$prompt('评论失败！', 'fail');
             }
@@ -1079,6 +1079,7 @@
     }
 
     .recordPopup {
+      @include radius(.2rem 0 0 .2rem);
       height: 100%;
       left: 1rem;
       background-color: #FFFFFF;
@@ -1091,6 +1092,16 @@
           height: 100%;
           padding: .3rem 0;
           @include flex();
+
+          .startApply {
+            float: left;
+            margin: 0 0 .2rem 1rem;
+            font-size: .24rem;
+            padding: .1rem .3rem;
+            @include radius(1rem);
+            background: rgba(69, 112, 254, .2);
+            color: #4570FE;
+          }
 
           > div {
             padding-top: .6rem;
