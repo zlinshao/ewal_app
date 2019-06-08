@@ -20,9 +20,9 @@ axios.interceptors.request.use((request) => {
 axios.interceptors.response.use(response => {
   if (!response.data) {
     response.data = {};
-    response.data.code = response.status;
+    response.data.httpCode = response.status;
   } else {
-    response.data.code = response.status;
+    response.data.httpCode = response.status;
   }
   return response
 }, err => {

@@ -225,7 +225,7 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}${url}`, params, 'prompt', close).then(res => {
-        if (199 < res.code < 300) {
+        if (199 < res.httpCode < 300) {
           resolve(res);
         } else {
           resolve(false);
@@ -252,7 +252,7 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
-        if (199 < res.code < 300) {
+        if (199 < res.httpCode < 300) {
           resolve(res);
         } else {
           resolve(false);
@@ -266,7 +266,7 @@ class httpZll extends httpService {
   static postToBeDoneDeliver(id, data, val) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {
-        if (199 < res.code < 300) {
+        if (199 < res.httpCode < 300) {
           resolve(true);
         } else {
           resolve(false);
@@ -280,7 +280,7 @@ class httpZll extends httpService {
   static finishToBeDoneTask(id, data) {
     return new Promise((resolve, reject) => {
       this.delete(`${url_done}runtime/process-instances/${id}`, data, 'prompt').then(res => {
-        if (199 < res.code < 300) {
+        if (199 < res.httpCode < 300) {
           resolve(true);
           $httpPrompt('任务删除成功!', 'success');
         } else {
@@ -365,7 +365,7 @@ class httpZll extends httpService {
   static finishBeforeTask(id, data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {
-        if (199 < res.code < 300) {
+        if (199 < res.httpCode < 300) {
           resolve(true);
         } else {
           resolve(false);
@@ -379,7 +379,7 @@ class httpZll extends httpService {
   static getNewTaskId(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
-        if (199 < res.code < 300) {
+        if (199 < res.httpCode < 300) {
           resolve(res);
         } else {
           resolve(false);
@@ -400,7 +400,7 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}${url}`, params, 'prompt').then(res => {
-        if (199 < res.code < 300) {
+        if (199 < res.httpCode < 300) {
           resolve(res);
         } else {
           resolve(false);
@@ -497,7 +497,7 @@ class httpZll extends httpService {
   static setBulletinComment(data, id) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}history/process-instances/${id}/comments`, data).then(res => {
-        if (199 < res.code < 300) {
+        if (199 < res.httpCode < 300) {
           resolve(res);
         } else {
           resolve(false);
@@ -661,7 +661,7 @@ class httpZll extends httpService {
   static getBulletinDraft(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/bulletin`, params, 'prompt').then(res => {
-        if (Number(res.code) === 200) {
+        if (res.success) {
           resolve(res);
         } else {
           resolve(false);
