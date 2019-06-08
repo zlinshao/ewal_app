@@ -650,6 +650,18 @@ export default {
       return new Promise((resolve, reject) => {
         that.$httpZll.getDDConfig().then((res) => {
           let _config = res;
+          let data = {
+            avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
+            city_id: "320100",
+            city_name: "南京市",
+            department_id: 395,
+            department_name: "开发",
+            phone: "18052001167",
+            staff_id: 69,
+            staff_name: "张琳琳",
+          };
+          this.$store.dispatch('personal_storage', data);
+          resolve(true);
           // dd.config({
           //   agentId: _config.agentId, // 必填，微应用ID
           //   corpId: _config.corpId,//必填，企业ID
@@ -658,25 +670,25 @@ export default {
           //   signature: _config.signature, // 必填，签名
           //   jsApiList: ['biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
           // });
-          console.log(res);
-          dd.ready(() => {
-            dd.runtime.permission.requestAuthCode({
-              corpId: _config.corpId,
-              onSuccess(info) {
-                that.$httpZll.getTokenInfo(info.code).then((res) => {
-                  that.personalData(res, resolve);
-                })
-              },
-              onFail(err) {
-                alert('dd error: ' + JSON.stringify(err));
-                // alert('您不在系统内，请联系管理员添加！');
-                that.closeDD();
-              }
-            });
-          });
-          dd.error((err) => {
-            alert('dd error: ' + JSON.stringify(err));
-          });
+          // console.log(res);
+          // dd.ready(() => {
+          //   dd.runtime.permission.requestAuthCode({
+          //     corpId: _config.corpId,
+          //     onSuccess(info) {
+          //       that.$httpZll.getTokenInfo(info.code).then((res) => {
+          //         that.personalData(res, resolve);
+          //       })
+          //     },
+          //     onFail(err) {
+          //       alert('dd error: ' + JSON.stringify(err));
+          //       // alert('您不在系统内，请联系管理员添加！');
+          //       that.closeDD();
+          //     }
+          //   });
+          // });
+          // dd.error((err) => {
+          //   alert('dd error: ' + JSON.stringify(err));
+          // });
         });
       });
     };

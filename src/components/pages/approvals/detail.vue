@@ -154,14 +154,19 @@
       <div class="content">
         <div class="contentMain">
           <div>
-            <div v-for="item in 100">
-              {{item}}
+            <div v-for="item in 20" class="process">
+              <div>
+
+                <p>
+                  <img :src="personal.avatar" alt="">
+                </p>
+              </div>
             </div>
           </div>
         </div>
         <div class="commonBtn">
           <p class="btn back" @click="cancel('record')">取消</p>
-          <p class="btn">确定</p>
+          <p class="btn">评论</p>
         </div>
       </div>
     </van-popup>
@@ -234,22 +239,27 @@
     mounted() {
     },
     activated() {
-
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let detail = JSON.parse(sessionStorage.approvalDetail || '{}');
       this.detailData = detail;
       this.tabs = this.$route.query;
+      this.historyProcess(detail);
       this.getOperates(detail, this.tabs);
       this.handleData(detail);
       this.approvalDetail(detail.bm_detail_request_url);
     },
     watch: {},
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
+    },
     methods: {
       // 历史流程
-      historyProcess() {
-        this.$httpZll.getHistoryProcess().then(res => {
+      historyProcess(detail) {
+        console.log(detail);
+        this.$httpZll.getHistoryProcess(detail.process_id).then(res => {
 
         })
       },
@@ -1058,6 +1068,13 @@
             width: 100%;
             height: 100%;
             @include scroll;
+
+            .process {
+              p{
+                width: .6rem;
+                height: .6rem;
+              }
+            }
           }
         }
 
