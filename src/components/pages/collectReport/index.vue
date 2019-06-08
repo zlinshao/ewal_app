@@ -844,7 +844,9 @@
       },
       // 发布
       saveReport(val) {
-        if (this.$attestationKey(this.drawForm)) return;
+        if (val !== 1) {
+          if (this.$attestationKey(this.drawForm)) return;
+        }
         this.form.is_draft = val;
         let bulletin = this.bulletinType;
         if (bulletin.type) {
@@ -961,7 +963,7 @@
             if (!this.isGetTake) {
               this.handlePreFill(res);
             } else {
-              this.childBulletin(res);
+              this.childBulletin(res, 'draft');
             }
           }
           if (!this.isGetTake) {
@@ -985,7 +987,7 @@
         this.electronicContract();
       },
       // 尾款待办信息
-      childBulletin(res) {
+      childBulletin(res, draft) {
         for (let item of Object.keys(this.form)) {
           switch (item) {
             case 'month':
@@ -995,10 +997,14 @@
               this.form[item] = res[item] || this.form[item];
               break;
             case 'agency_infos':
-              for (let info of this.form[item]) {
-                for (let key of Object.keys(info)) {
-                  if (key.includes('agency_')) {
-                    info[key] = res[key]
+              if (draft) {
+                this.form[item] = res[item];
+              } else {
+                for (let info of this.form[item]) {
+                  for (let key of Object.keys(info)) {
+                    if (key.includes('agency_')) {
+                      info[key] = res[key]
+                    }
                   }
                 }
               }

@@ -154,14 +154,38 @@
       <div class="content">
         <div class="contentMain">
           <div>
-            <div v-for="item in 20" class="process">
-              <div>
-
-                <p>
-                  <img :src="personal.avatar" alt="">
-                </p>
-              </div>
-            </div>
+            <div>发起申请</div>
+            <ul>
+              <li v-for="(item,index) in 20" :class="{'lastBorder':index === 18}">
+                <div class="process">
+                  <div class="personal">
+                    <p>
+                      <img :src="personal.avatar" alt="">
+                      <span>发货的&nbsp;(&nbsp;同意&nbsp;)&nbsp;</span>
+                      <i><b></b></i>
+                    </p>
+                    <h2 class="date">2019-03-23 18:03</h2>
+                  </div>
+                  <div class="children" v-if="index !== 19">
+                    <div v-for="item in 4">
+                      <i></i>
+                      <div>
+                        <h3>
+                          <span>磨刀刀—修改报备资料</span>
+                          <span class="date">2019-03-23 18:03</span>
+                        </h3>
+                        <h4>
+                          <span>产权地址修改为：中华路309号鸿源1-5</span>
+                          <span>
+                            <img :src="personal.avatar" alt="">
+                          </span>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="commonBtn">
@@ -1065,14 +1089,122 @@
           @include flex();
 
           > div {
+            padding-top: .6rem;
             width: 100%;
             height: 100%;
             @include scroll;
 
-            .process {
-              p{
-                width: .6rem;
-                height: .6rem;
+            li {
+              padding: 0 .3rem;
+
+              .process {
+
+                .date {
+                  color: #9B9B9B;
+                }
+
+                .personal {
+                  width: 100%;
+                  @include flex('items-bet');
+
+                  p {
+                    position: relative;
+                    @include flex('items-bet');
+
+                    span {
+                      color: #4A4A4A;
+                    }
+
+                    i {
+                      position: absolute;
+                      @include flex('flex-center');
+                      @include radius(50%);
+                      bottom: -.04rem;
+                      left: .36rem;
+                      width: .3rem;
+                      height: .3rem;
+                      padding: .025rem;
+                      background-color: #FFFFFF;
+
+                      b {
+                        width: 100%;
+                        height: 100%;
+                        background: #fd9007;
+                        @include radius(50%);
+                      }
+                    }
+
+                    img {
+                      margin-right: .1rem;
+                      width: .6rem;
+                      height: .6rem;
+                      @include radius(50%);
+                    }
+                  }
+                }
+
+                .children {
+                  border-left: .03rem solid #9B9B9B;
+                  margin: .06rem 0 .06rem .29rem;
+                  min-height: 1rem;
+
+                  > div {
+                    position: relative;
+
+                    div {
+                      margin: .3rem 0 .3rem .3rem;
+
+                      h3 {
+                        @include flex('items-bet');
+
+                        span {
+                          font-size: .26rem;
+                        }
+                      }
+
+                      h4 {
+                        span {
+                          display: block;
+                          margin-top: .16rem;
+                          font-size: .24rem;
+                          color: #4570FE;
+                        }
+
+                        img {
+                          @include radius(.1rem);
+                          width: 1.1rem;
+                          height: .8rem;
+                        }
+                      }
+                    }
+
+                    i {
+                      top: .1rem;
+                      transform: translateX(-58%);
+                      position: absolute;
+                      width: .12rem;
+                      height: .12rem;
+                      background-color: #4570FE;
+                      @include radius(50%);
+                    }
+                  }
+                }
+              }
+            }
+
+            li:last-of-type {
+              .process {
+                .children {
+                  border: none;
+                }
+              }
+            }
+
+            .lastBorder {
+              .process {
+                .children {
+                  border-left-style: dashed;
+                }
               }
             }
           }
