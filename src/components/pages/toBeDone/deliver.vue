@@ -124,14 +124,16 @@
           this.$prompt(msg, 'fail');
           return;
         }
-        this.$httpZll.postToBeDoneDeliver(this.task_id, this.form, val).then(_ => {
-          if (val) {
-            this.$prompt('发送转交成功', 'success');
-          } else {
-            this.$prompt('发送代签成功', 'success');
+        this.$httpZll.postToBeDoneDeliver(this.task_id, this.form, val).then(res => {
+          if (res) {
+            if (val) {
+              this.$prompt('发送转交成功', 'success');
+            } else {
+              this.$prompt('发送代签成功', 'success');
+            }
+            this.$emit('close', 'success');
+            this.onCancel();
           }
-          this.$emit('close','success');
-          this.onCancel();
         })
       },
       onCancel() {

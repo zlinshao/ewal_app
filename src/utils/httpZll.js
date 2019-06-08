@@ -225,7 +225,12 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}${url}`, params, 'prompt', close).then(res => {
-        resolve(res);
+        if (199 < res.code < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
@@ -247,7 +252,12 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
-        resolve(res);
+        if (199 < res.code < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
@@ -255,22 +265,27 @@ class httpZll extends httpService {
   // 转交/代签
   static postToBeDoneDeliver(id, data, val) {
     return new Promise((resolve, reject) => {
-      this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(_ => {
-        resolve(true);
+      this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {
+        if (199 < res.code < 300) {
+          resolve(true);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
 
   // 结束任务
-  static finishToBeDoneTask(id) {
+  static finishToBeDoneTask(id, data) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/${id}`, {}, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+      this.delete(`${url_done}runtime/process-instances/${id}`, data, 'prompt').then(res => {
+        if (199 < res.code < 300) {
+          resolve(true);
+          $httpPrompt('任务删除成功!', 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.code);
         }
       });
     });
@@ -350,7 +365,12 @@ class httpZll extends httpService {
   static finishBeforeTask(id, data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {
-        resolve(res);
+        if (199 < res.code < 300) {
+          resolve(true);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
@@ -359,7 +379,12 @@ class httpZll extends httpService {
   static getNewTaskId(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
-        resolve(res);
+        if (199 < res.code < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
@@ -375,7 +400,12 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}${url}`, params, 'prompt').then(res => {
-        resolve(res);
+        if (199 < res.code < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
@@ -466,8 +496,13 @@ class httpZll extends httpService {
   // 评论
   static setBulletinComment(data, id) {
     return new Promise((resolve, reject) => {
-      this.post(`${url_done}history/process-instances/${id}/comments`, data).then((res) => {
-        resolve(res);
+      this.post(`${url_done}history/process-instances/${id}/comments`, data).then(res => {
+        if (199 < res.code < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       })
     })
   }

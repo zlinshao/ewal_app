@@ -543,31 +543,35 @@ export default {
             name: name,
             value: action.action,
           }];
-          this.$httpZll.finishBeforeTask(item.task_id, postData).then(_ => {
-            if (action.action === 'success') {
-              this.$prompt('签署成功！');
-              this.routerLink(action.route);
-            } else {
-              let params = {
-                taskDefinitionKey: 'InputBulletinData',
-                rootProcessInstanceId: item.root_id,
-              };
-              this.$httpZll.getNewTaskId(params).then(res => {
-                let query = {};
-                let task = this.groupHandlerListData(res.data)[0];
-                if (!task) {
-                  this.$prompt('获取任务失败', 'fail');
-                  return;
-                }
-                query = task;
-                query.task_id = task.id;
-                query.process_id = task.processInstanceId;
-                query.root_id = task.rootProcessInstanceId;
-                query.task_action = action.route;
-                this.againTaskDetail(query).then(_ => {
-                  this.againDetailRequest(query, 'again', replace);
+          this.$httpZll.finishBeforeTask(item.task_id, postData).then(res => {
+            if (res) {
+              if (action.action === 'success') {
+                this.$prompt('签署成功！');
+                this.routerLink(action.route);
+              } else {
+                let params = {
+                  taskDefinitionKey: 'InputBulletinData',
+                  rootProcessInstanceId: item.root_id,
+                };
+                this.$httpZll.getNewTaskId(params).then(res => {
+                  if (res) {
+                    let query = {};
+                    let task = this.groupHandlerListData(res.data)[0];
+                    if (!task) {
+                      this.$prompt('获取任务失败', 'fail');
+                      return;
+                    }
+                    query = task;
+                    query.task_id = task.id;
+                    query.process_id = task.processInstanceId;
+                    query.root_id = task.rootProcessInstanceId;
+                    query.task_action = action.route;
+                    this.againTaskDetail(query).then(_ => {
+                      this.againDetailRequest(query, 'again', replace);
+                    });
+                  }
                 });
-              });
+              }
             }
           });
         }

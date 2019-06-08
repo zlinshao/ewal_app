@@ -113,7 +113,6 @@
       return {
         mainHeight: '',
         fullLoading: true,
-        task_id: '',
         //正常操作 按钮
         operates: {},//状态变更操作
         defineDeliver: [
@@ -308,7 +307,6 @@
       },
       // 变更 签署 转交 代签 结束任务
       clickBtn(action = {}, item = {}) {
-        this.task_id = item.task_id || '';
         let user_id = '';
         switch (action.action) {
           case 'success'://本地签署
@@ -330,9 +328,8 @@
           case 'finishTask'://结束任务
             this.$dialog('结束任务', '是否结束该任务？').then(status => {
               if (status) {
-                // this.$httpZll.finishToBeDoneTask(task_id).then(res => {
-                //
-                // })
+                this.$httpZll.finishToBeDoneTask(item.root_id, {deleteReason: '结束'}).then(_ => {
+                })
               }
             });
             break;
@@ -411,14 +408,16 @@
         val.taskDefinitionKeyIn = approvalSearch[obj.status].join(',');
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
-          this.paging = res.total;
-          let data = this.groupHandlerListData(res.data);
-          this.handlerOperates(data, type);
-          if (this.params.page === 1) {
-            this.toBeDoneList = data;
-          } else {
-            for (let item of data) {
-              this.toBeDoneList.push(item);
+          if (res) {
+            this.paging = res.total;
+            let data = this.groupHandlerListData(res.data);
+            this.handlerOperates(data, type);
+            if (this.params.page === 1) {
+              this.toBeDoneList = data;
+            } else {
+              for (let item of data) {
+                this.toBeDoneList.push(item);
+              }
             }
           }
         })

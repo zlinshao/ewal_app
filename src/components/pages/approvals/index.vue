@@ -597,18 +597,20 @@
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
-          let twoLevel = this.twoLevel['tab' + tab];
-          this.total['total' + tab] = res.total;
-          if (!twoLevel) {
-            this.paging['paging' + tab] = res.total;
-          }
-          let data = this.groupHandlerListData(res.data, this.urlApi);
-          this.outcomes(data, this.tabs);
-          if (this.params['params' + tab].page === 1) {
-            this.approvalList['list' + tab]['data' + twoLevel] = data;
-          } else {
-            for (let item of data) {
-              this.approvalList['list' + tab]['data' + twoLevel].push(item);
+          if (res) {
+            let twoLevel = this.twoLevel['tab' + tab];
+            this.total['total' + tab] = res.total;
+            if (!twoLevel) {
+              this.paging['paging' + tab] = res.total;
+            }
+            let data = this.groupHandlerListData(res.data, this.urlApi);
+            this.outcomes(data, this.tabs);
+            if (this.params['params' + tab].page === 1) {
+              this.approvalList['list' + tab]['data' + twoLevel] = data;
+            } else {
+              for (let item of data) {
+                this.approvalList['list' + tab]['data' + twoLevel].push(item);
+              }
             }
           }
         });

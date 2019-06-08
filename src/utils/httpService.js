@@ -18,6 +18,12 @@ axios.interceptors.request.use((request) => {
 
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
+  if (!response.data) {
+    response.data = {};
+    response.data.code = response.status;
+  } else {
+    response.data.code = response.status;
+  }
   return response
 }, err => {
   if (err && err.response) {
@@ -167,7 +173,7 @@ class Axios {
       $httpPrompt(msg, 'send');
     }
     return new Promise((resolve, reject) => {
-      axios.delete(url, data).then(response => {
+      axios.delete(url, {params: data}).then(response => {
         if (response.status > 399) {
           return;
         }

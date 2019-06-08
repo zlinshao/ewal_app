@@ -391,21 +391,23 @@
         params.assignee = this.personal.staff_id;
         this.$httpZll.getToBeDoneListApi(url, params, close).then(res => {
           this.fullLoading['load' + tab] = false;
-          this.total['total' + tab] = res.total || 0;
-          let data = this.groupHandlerListData(res.data);
-          if (params.page === 1) {
-            this.finishList['list' + tab] = data;
-          } else {
-            for (let item of data) {
-              this.finishList['list' + tab].push(item);
+          if (res) {
+            this.total['total' + tab] = res.total || 0;
+            let data = this.groupHandlerListData(res.data);
+            if (params.page === 1) {
+              this.finishList['list' + tab] = data;
+            } else {
+              for (let item of data) {
+                this.finishList['list' + tab].push(item);
+              }
             }
-          }
-          if (tab === '1') {
-            this.listLength = [];
-            let index = 1;
-            for (let i of this.finishList['list1']) {
-              this.listLength.push(index);
-              index = index + 3;
+            if (tab === '1') {
+              this.listLength = [];
+              let index = 1;
+              for (let i of this.finishList['list1']) {
+                this.listLength.push(index);
+                index = index + 3;
+              }
             }
           }
         })

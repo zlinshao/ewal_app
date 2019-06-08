@@ -87,28 +87,32 @@
           name: key,
           value: action.action,
         }];
-        this.$httpZll.finishBeforeTask(this.allDetail.task_id, postData).then(_ => {
-          if (action.route === 'back') {
-            this.$emit('close', 'again');
-          } else {
-            let params = {
-              taskDefinitionKey: 'InputBulletinData',
-              rootProcessInstanceId: this.allDetail.root_id,
-            };
-            this.$httpZll.getNewTaskId(params).then(res => {
-              if (!res.data.length) {
-                this.$prompt('未找到签约信息！');
-                return;
-              }
-              let data = res.data[0];
-              this.allDetail.task_id = data.id;
-              this.allDetail.process_instance_id = data.processInstanceId;
-              this.allDetail.root_process_instance_id = data.rootProcessInstanceId;
-              sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.bulletin_collect_basic));
-              sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
-              this.routerReplace(action.route);
-              this.$emit('close');
-            });
+        this.$httpZll.finishBeforeTask(this.allDetail.task_id, postData).then(res => {
+          if (res) {
+            if (action.route === 'back') {
+              this.$emit('close', 'again');
+            } else {
+              let params = {
+                taskDefinitionKey: 'InputBulletinData',
+                rootProcessInstanceId: this.allDetail.root_id,
+              };
+              this.$httpZll.getNewTaskId(params).then(res => {
+                if (res) {
+                  if (!res.data.length) {
+                    this.$prompt('未找到签约信息！');
+                    return;
+                  }
+                  let data = res.data[0];
+                  this.allDetail.task_id = data.id;
+                  this.allDetail.process_instance_id = data.processInstanceId;
+                  this.allDetail.root_process_instance_id = data.rootProcessInstanceId;
+                  sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.bulletin_collect_basic));
+                  sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
+                  this.routerReplace(action.route);
+                  this.$emit('close');
+                }
+              });
+            }
           }
         })
       },

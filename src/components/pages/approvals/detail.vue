@@ -530,14 +530,16 @@
               name: name,
               value: action.action,
             }];
-            this.$httpZll.finishBeforeTask(detail.task_id, postData).then(_ => {
-              this.$prompt('审核成功！', 'success');
-              setTimeout(_ => {
-                if (this.tabs.tab === '4') {
-                  this.$store.dispatch('approval_tabs', {tab: '1', status: 1});
-                }
-                this.$router.go(-1);
-              }, 500);
+            this.$httpZll.finishBeforeTask(detail.task_id, postData).then(res => {
+              if (res) {
+                this.$prompt('审核成功！', 'success');
+                setTimeout(_ => {
+                  if (this.tabs.tab === '4') {
+                    this.$store.dispatch('approval_tabs', {tab: '1', status: 1});
+                  }
+                  this.$router.go(-1);
+                }, 500);
+              }
             });
             break;
         }
@@ -576,11 +578,13 @@
           return;
         }
         this.$httpZll.setBulletinComment(this.commentForm, this.detailData.process_id).then(res => {
-          this.cancel('comment');
-          if (res.content && res.content.message) {
-            this.$prompt('评论成功！', 'success');
-          } else {
-            this.$prompt('评论失败！', 'fail');
+          if (res) {
+            this.cancel('comment');
+            if (res.content && res.content.message) {
+              this.$prompt('评论成功！', 'success');
+            } else {
+              this.$prompt('评论失败！', 'fail');
+            }
           }
         })
       },

@@ -212,8 +212,10 @@
               outcome: 'accepted',
             };
             this.$httpZll.finishBeforeTask(this.allDetail.task_id, data).then(res => {
-              this.$prompt('提交成功', 'success');
-              this.deliverFinish('success');
+              if (res) {
+                this.$prompt('提交成功', 'success');
+                this.deliverFinish('success');
+              }
             });
             break;
         }
