@@ -247,6 +247,14 @@
     watch: {},
     computed: {},
     methods: {
+      // 历史流程
+      historyProcess() {
+        this.$httpZll.getHistoryProcess().then(res => {
+
+        })
+      },
+
+      // 按钮数据初始化
       closeOperates() {
         this.topOperates = [];//头部按钮
         this.operates = {};//底部按钮

@@ -454,6 +454,15 @@ class httpZll extends httpService {
     })
   }
 
+  // 历史流程节点
+  static getHistoryProcess(id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_done}history/process-instances/${id}/log`).then(res => {
+
+      })
+    })
+  }
+
   // 评论
   static setBulletinComment(data, id) {
     return new Promise((resolve, reject) => {
