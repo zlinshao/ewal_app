@@ -54,14 +54,12 @@
                           {{val.pay_way}}：{{val.month_unit_price}}元
                         </h4>
                       </div>
-                      <div v-else-if="val.card_id">
-                        <h3 :class="[idx !== 0?'h3':'']" v-if="formatData[key].length > 1">附属房东{{idx+1}}</h3>
-                        <h2>客户姓名：{{val.customer_name}}</h2>
-                        <h2>性别：{{val.customer_sex}}</h2>
-                        <h2>证件类型：{{val.card_type}}</h2>
-                        <h2>证件号：{{val.card_id}}</h2>
-                        <h2>联系方式：{{val.contact_way}}</h2>
-                        <h2>联系电话：{{val.contact_phone}}</h2>
+                      <div v-else-if="changeFormData[key]">
+                        <h3 :class="[idx !== 0?'h3':'']" v-if="formatData[key].length > 1">
+                          {{changeFormData[key]['keyName']}}{{(myUtils.DX(idx+1))}}</h3>
+                        <h2 v-for="name of Object.keys(changeFormData[key])" v-if="name !== 'keyName'">
+                          {{changeFormData[key][name]}}：{{val[name]}}
+                        </h2>
                       </div>
                       <div v-else-if="val.money_sep">
                         <h4 :class="[idx !== 0?'h4':'']">
@@ -218,7 +216,7 @@
         objInt: [],
         // 头部操作
         topOperates: [],
-
+        allBulletin: {},//报备原数据
         mainHeight: '',
         operates: {},
         drawSlither: {},
@@ -256,6 +254,7 @@
           }
         ],
         searchStaffModule: false,
+        changeFormData: {},
       }
     },
     created() {
@@ -280,13 +279,38 @@
       }
     },
     methods: {
+      // touch 左右切换
+      tapStart(event) {
+        for (let item of event.touches) {
+          this.startClientX = item.clientX;
+          this.endClientX = item.clientX;
+        }
+      },
+      tapMove(event) {
+        for (let item of event.touches) {
+          this.endClientX = item.clientX;
+        }
+      },
+      tapEnd() {
+        let start = this.startClientX;
+        let end = this.endClientX;
+        if (start - end > 66) {
+          if ((this.allReportNum - 1) > this.slither > 0) {
+            this.slither++;
+          }
+        }
+        if (start - end < -66) {
+          if (this.slither > 0) {
+            this.slither--;
+          }
+        }
+      },
       // 历史流程
       historyProcess(detail) {
         this.$httpZll.getHistoryProcess(detail.process_id).then(res => {
 
         })
       },
-
       // 按钮数据初始化
       closeOperates() {
         this.topOperates = [];//头部按钮
@@ -418,7 +442,6 @@
           title: "取消"
         },)
       },
-
       // 待审批
       setOperates(outcome) {
         if (!outcome) return;
@@ -543,32 +566,6 @@
             break;
         }
       },
-      // touch 左右切换
-      tapStart(event) {
-        for (let item of event.touches) {
-          this.startClientX = item.clientX;
-          this.endClientX = item.clientX;
-        }
-      },
-      tapMove(event) {
-        for (let item of event.touches) {
-          this.endClientX = item.clientX;
-        }
-      },
-      tapEnd() {
-        let start = this.startClientX;
-        let end = this.endClientX;
-        if (start - end > 66) {
-          if ((this.allReportNum - 1) > this.slither > 0) {
-            this.slither++;
-          }
-        }
-        if (start - end < -66) {
-          if (this.slither > 0) {
-            this.slither--;
-          }
-        }
-      },
       // 评论
       onComment() {
         this.commentForm.content.message = this.commentForm.content.message.replace(/\s+/g, '');
@@ -631,6 +628,7 @@
         let bulletinData = this.$bulletinType(detail.bulletin_type, detail.pact_type);
         this.bulletinTitle = bulletinData.title;
         let data = this.jsonClone(bulletinData.data);
+        this.allBulletin = data;
         this.objInt = this.objIntArray(bulletinData.data);
         this.allReportNum = Object.keys(data).length;
         let obj = {};
@@ -726,6 +724,7 @@
               if (res[item]) {
                 let customer = ['customer_sex', 'card_type', 'contact_way'];
                 this.changeHandle(res, item, customer, this.drawSlither, this.formatData);
+                this.customerDomShow(item);
               }
               break;
             case 'period_price_way_arr'://付款方式变化
@@ -765,6 +764,22 @@
           }
         });
       },
+      // 附属房东 dom 显示
+      customerDomShow(item) {
+        for (let cus of Object.keys(this.allBulletin)) {
+          for (let child of this.allBulletin[cus]) {
+            if (child.keyName === item) {
+              this.changeFormData[item] = {};
+              let children = this.jsonClone(child.children[0]);
+              this.changeFormData[item]['keyName'] = child.label;
+              for (let sub of children) {
+                this.changeFormData[item][sub.keyName] = sub.label;
+              }
+              console.log(this.changeFormData);
+            }
+          }
+        }
+      },
       // 取消
       cancel(val) {
         switch (val) {
@@ -788,495 +803,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../../assets/scss/common.scss";
+  @import "../../../assets/scss/approvals/detail.scss";
 
-  @mixin detailImg($n) {
-    @include bgImage('../../../assets/image/approvals/detail/' + $n + '.png');
-  }
-
-  /*滑动表单过渡效果*/
-  @mixin slides($n) {
-    $num: 100% / $n;
-    @for $i from 1 through $n {
-      .transition#{$n} {
-        .slide#{$i} {
-          @include transform(translateX(-($num*$i)));
-        }
-      }
-    }
-  }
-
-  #approvalDetail {
-    background-color: #f8f8f8;
-    /*头部*/
-    .detailTop {
-      position: relative;
-      color: #FFFFFF;
-      @include flex('items-bet');
-      margin: 0 .3rem;
-      padding: .3rem .3rem .8rem;
-      background-color: #4570FE;
-      @include radius(.1rem .1rem 0 0);
-      z-index: 3;
-
-      div {
-        @include flex('items-center');
-
-        img {
-          width: .6rem;
-          height: .6rem;
-          @include radius(50%);
-        }
-
-        span {
-          margin: 0 .2rem 0 .1rem;
-        }
-
-        p {
-          font-size: .22rem;
-          padding: .12rem .3rem;
-          @include radius(1rem);
-          background-color: #43A046;
-        }
-      }
-
-      p {
-        @include flex('items-center');
-
-        i {
-          width: .3rem;
-          height: .3rem;
-          margin-right: .06rem;
-          @include detailImg('xiaohaoshijian');
-        }
-      }
-
-      h1 {
-        position: absolute;
-        bottom: -.4rem;
-        right: 0;
-        @include flex('items-center');
-
-        i {
-          width: .8rem;
-          height: .8rem;
-          margin-right: .3rem;
-          @include radius(50%);
-        }
-
-        .icon-1 {
-          @include detailImg('bianji');
-        }
-
-        .icon-2 {
-          @include detailImg('pinglun');
-        }
-
-        .icon-3 {
-          @include detailImg('zhuanfa');
-        }
-
-        .icon-4 {
-          @include detailImg('detaihetongyulan');
-        }
-
-        .icon-5 {
-          @include detailImg('bendiqianshu');
-        }
-
-        .icon-6 {
-          @include detailImg('kehushoujiqianshu');
-        }
-      }
-    }
-
-    /*详情*/
-    .main {
-      background-color: #FFFFFF;
-      @include boxShaw(0 -4px 10px 0 rgba(69, 112, 254, 0.2));
-      @include flex('bet-column');
-
-      .detailInfo {
-        @include flex();
-        height: 100%;
-        padding: 1rem 0 .3rem;
-        position: relative;
-
-        .detailTitle {
-          position: absolute;
-          top: .5rem;
-          left: .3rem;
-          color: #4570FE;
-
-          i {
-            position: absolute;
-            height: .5rem;
-            border-left: 1px solid #448aff;
-            top: -.5rem;
-            left: .3rem;
-          }
-
-          span {
-            background: rgba(69, 112, 254, .1);
-            padding: .3rem .16rem;
-            border-radius: 0 0 1rem 1rem
-          }
-        }
-
-        .detail {
-          width: 100%;
-          height: 100%;
-
-          > div {
-            @include flex();
-            height: 100%;
-            transition: transform .3s;
-
-            ul {
-              @include scroll;
-              width: 100%;
-              height: 100%;
-              padding-left: .6rem;
-
-              li {
-
-                h1 {
-                  min-width: 38%;
-                  max-width: 38%;
-                  color: #4A4A4A;
-                  text-align: right;
-                  padding-right: .36rem;
-                }
-
-                > div {
-                  @include flex();
-                  padding: .1rem .2rem .1rem 0;
-
-                  > div {
-                    @include flex();
-                    flex-wrap: wrap;
-                    width: 64%;
-                    color: #000;
-
-                    h3 {
-                      color: #4A4A4A;
-                      padding-bottom: .1rem;
-                    }
-
-                    .h3, .h4 {
-                      padding-top: .2rem;
-                    }
-
-                    img {
-                      width: 1rem;
-                      height: 1rem;
-                      margin: .1rem .1rem 0 0;
-                      @include radius(.1rem);
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        @include slides(2);
-        @include slides(3);
-        @include slides(4);
-        @include slides(5);
-        @include slides(6);
-        @include slides(7);
-        @include slides(8);
-        @include slides(9);
-        @include slides(10);
-      }
-
-      .operates {
-        overflow: hidden;
-        @include flex('bet-column');
-        border-top: 1px dashed #C6CAD8;
-
-        > p {
-          @include flex('flex-center');
-          padding: .3rem 0;
-
-          i {
-            width: .16rem;
-            height: .16rem;
-            margin: 0 .06rem;
-            @include radius(50%);
-            background-color: #D8D8D8;
-          }
-
-          .hover {
-            background-color: #448aff;
-            @include radius(1rem);
-            width: .3rem;
-          }
-        }
-
-        .detailBtn {
-          height: 2.4rem;
-          margin-bottom: -.6rem;
-          padding: 0 .8rem;
-          @include flex('justify-around');
-          justify-items: flex-end;
-          flex-direction: row-reverse;
-
-          h1 {
-            padding-bottom: .8rem;
-            width: .7rem;
-            @include flex('flex-center');
-          }
-
-          /*取消*/
-          .back {
-            @include detailImg('quxiao');
-          }
-
-          /*拒绝*/
-          .refuse, .cancel {
-            @include detailImg('jujue');
-          }
-
-          /*暂缓*/
-          .suspend {
-            color: #FFFFFF;
-            @include detailImg('zanhuan');
-          }
-
-          /*通过*/
-          .publish, .urge {
-            color: #FFFFFF;
-            @include detailImg('tongguo');
-          }
-        }
-
-        .commonBtn {
-          flex-direction: row-reverse;
-          padding: 0 .3rem .6rem;
-        }
-      }
-    }
-
-    /*流程详情*/
-    .records {
-      position: fixed;
-      bottom: 3rem;
-      right: -.8rem;
-      width: 1.6rem;
-      height: 1.6rem;
-      @include radius(50%);
-      background: rgba(69, 112, 254, .9);
-      @include flex('items-center');
-      padding-left: .24rem;
-
-      p {
-        width: .42rem;
-        height: .42rem;
-        @include detailImg('shenhejilu');
-      }
-    }
-
-    .recordPopup {
-      @include radius(.2rem 0 0 .2rem);
-      height: 100%;
-      left: 1rem;
-      background-color: #FFFFFF;
-
-      .content {
-        height: 100%;
-        @include flex('bet-column');
-
-        .contentMain {
-          height: 100%;
-          padding: .3rem 0;
-          @include flex();
-
-          .startApply {
-            float: left;
-            margin: 0 0 .2rem 1rem;
-            font-size: .24rem;
-            padding: .1rem .3rem;
-            @include radius(1rem);
-            background: rgba(69, 112, 254, .2);
-            color: #4570FE;
-          }
-
-          > div {
-            padding-top: .6rem;
-            width: 100%;
-            height: 100%;
-            @include scroll;
-
-            li {
-              padding: 0 .3rem;
-
-              .process {
-
-                .date {
-                  color: #9B9B9B;
-                }
-
-                .personal {
-                  width: 100%;
-                  @include flex('items-bet');
-
-                  p {
-                    position: relative;
-                    @include flex('items-bet');
-
-                    span {
-                      color: #4A4A4A;
-                    }
-
-                    i {
-                      position: absolute;
-                      @include flex('flex-center');
-                      @include radius(50%);
-                      bottom: -.04rem;
-                      left: .36rem;
-                      width: .3rem;
-                      height: .3rem;
-                      padding: .025rem;
-                      background-color: #FFFFFF;
-
-                      b {
-                        width: 100%;
-                        height: 100%;
-                        background: #fd9007;
-                        @include radius(50%);
-                      }
-                    }
-
-                    img {
-                      margin-right: .1rem;
-                      width: .6rem;
-                      height: .6rem;
-                      @include radius(50%);
-                    }
-                  }
-                }
-
-                .children {
-                  border-left: .03rem solid #9B9B9B;
-                  margin: .06rem 0 .06rem .29rem;
-                  min-height: 1rem;
-
-                  > div {
-                    position: relative;
-
-                    div {
-                      margin: .3rem 0 .3rem .3rem;
-
-                      h3 {
-                        @include flex('items-bet');
-
-                        span {
-                          font-size: .26rem;
-                        }
-                      }
-
-                      h4 {
-                        span {
-                          display: block;
-                          margin-top: .16rem;
-                          font-size: .24rem;
-                          color: #4570FE;
-                        }
-
-                        img {
-                          @include radius(.1rem);
-                          width: 1.1rem;
-                          height: .8rem;
-                        }
-                      }
-                    }
-
-                    i {
-                      top: .1rem;
-                      transform: translateX(-58%);
-                      position: absolute;
-                      width: .12rem;
-                      height: .12rem;
-                      background-color: #4570FE;
-                      @include radius(50%);
-                    }
-                  }
-                }
-              }
-            }
-
-            li:last-of-type {
-              .process {
-                .children {
-                  border: none;
-                }
-              }
-            }
-
-            .lastBorder {
-              .process {
-                .children {
-                  border-left-style: dashed;
-                }
-              }
-            }
-          }
-        }
-
-        .commonBtn {
-          padding: .36rem;
-          border-top: 1px solid rgba(216, 216, 216, .5);;
-        }
-      }
-    }
-
-    /*评论弹窗===转交弹窗*/
-    .commentPopup, .deliverPopup {
-      padding: .42rem .3rem .3rem;
-      @include radius(.1rem);
-      @include flex('bet-column');
-
-      h1 {
-        font-size: .33rem;
-        padding-bottom: .4rem;
-      }
-
-      > div {
-        @include scroll;
-        max-height: 6rem;
-
-        div {
-          @include flex();
-          min-height: .88rem;
-
-          label {
-            min-width: 1.3rem;
-            max-width: 1.3rem;
-            text-align: right;
-            margin-right: .3rem;
-            white-space: nowrap;
-          }
-
-          input {
-            padding-right: .3rem;
-          }
-
-          textarea {
-            border: none;
-          }
-        }
-
-        .deliver {
-          @include flex('items-center');
-          margin-bottom: .24rem;
-        }
-      }
-
-      .commonBtn {
-        padding: .8rem .1rem .2rem;
-      }
-    }
-  }
 </style>

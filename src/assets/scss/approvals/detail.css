@@ -1,0 +1,41 @@
+/*
+Error: Invalid GBK character "\xE6"
+        on line 7 of detail.scss
+
+2: 
+3: @mixin detailImg($n) {
+4:   @include bgImage('../../../assets/image/approvals/detail/' + $n + '.png');
+5: }
+6: 
+7: /*滑动表单过渡效果*\/
+8: @mixin slides($n) {
+9:   $num: 100% / $n;
+10:   @for $i from 1 through $n {
+11:     .transition#{$n} {
+12:       .slide#{$i} {
+
+Backtrace:
+detail.scss:7
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1090:in `rescue in block in find_encoding_error'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1087:in `block in find_encoding_error'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1086:in `each'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1086:in `each_with_index'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1086:in `find_encoding_error'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:820:in `rescue in check_sass_encoding'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:816:in `check_sass_encoding'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/engine.rb:444:in `check_encoding!'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/engine.rb:400:in `_to_tree'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/engine.rb:389:in `_render_with_sourcemap'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/engine.rb:307:in `render_with_sourcemap'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/exec/sass_scss.rb:387:in `run'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/exec/sass_scss.rb:63:in `process_result'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/exec/base.rb:50:in `parse'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/exec/base.rb:18:in `parse!'
+C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/bin/sass:13:in `<top (required)>'
+C:/APP/ruby/Ruby24-x64/bin/sass:23:in `load'
+C:/APP/ruby/Ruby24-x64/bin/sass:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid GBK character \"\xE6\"\A         on line 7 of detail.scss\A \A 2: \A 3: @mixin detailImg($n) {\A 4:   @include bgImage('../../../assets/image/approvals/detail/' + $n + '.png');\A 5: }\A 6: \A 7: /*滑动表单过渡效果*/\A 8: @mixin slides($n) {\A 9:   $num: 100% / $n;\A 10:   @for $i from 1 through $n {\A 11:     .transition#{$n} {\A 12:       .slide#{$i} {"; }
