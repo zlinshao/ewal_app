@@ -2679,7 +2679,7 @@ defineRentReport = {
     {
       keyName: 'subsidiary_customer',
       picker: 'changeHiddenAll',
-      label: '附属房东',
+      label: '附属租客',
       changeBtn: '增加附属租客',
       keyType: [],
       children: [

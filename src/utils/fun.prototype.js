@@ -507,14 +507,10 @@ export default {
           if (res) {
             this.$ddSkip(res);
             this.$dialog('签署', '签署是否完成?').then(res => {
-              if (res) {
-                this.$prompt('正在处理..', 'send');
-                setTimeout(_ => {
-                  resolve('success');
-                }, 1000)
-              } else {
+              this.$prompt('正在处理..', 'send');
+              setTimeout(_ => {
                 resolve('success');
-              }
+              }, 2000)
             })
           }
         });
