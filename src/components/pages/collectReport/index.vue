@@ -1078,6 +1078,9 @@
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
+            case 'house_id':
+              this.formatData.house_id = res.address;
+              break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
               door[0] = door[0] ? door[0] + '-' : '';
