@@ -236,9 +236,9 @@
       },
       // 提交 重置 取消
       saveSubmit(val) {
-        if (this.$attestationKey(this.drawSlither)) return;
         switch (val) {
           case 'submit'://提交
+            if (this.$attestationKey(this.drawSlither)) return;
             this.$httpZll.createdTask(this.form, this.postName).then(res => {
               if (res.success) {
                 this.resetting();
@@ -247,7 +247,11 @@
             });
             break;
           case 'reset'://重置
-            this.resetting();
+            this.$dialog('重置', '您确定要清空表单吗?').then(status => {
+              if (status) {
+                this.resetting();
+              }
+            });
             break;
           case 'back'://取消
             this.$router.go(-1);
