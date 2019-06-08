@@ -681,7 +681,11 @@
             });
             break;
           case 2:
-            this.resetting(this.payment_type);
+            this.$dialog('重置', '您确定要清空表单吗?').then(status => {
+              if (status) {
+                this.resetting(this.payment_type);
+              }
+            });
             break;
         }
       },

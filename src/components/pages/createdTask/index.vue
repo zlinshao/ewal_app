@@ -247,11 +247,7 @@
             });
             break;
           case 'reset'://重置
-            this.$dialog('重置', '您确定要清空表单吗?').then(status => {
-              if (status) {
-                this.resetting();
-              }
-            });
+            this.resetting();
             break;
           case 'back'://取消
             this.$router.go(-1);
