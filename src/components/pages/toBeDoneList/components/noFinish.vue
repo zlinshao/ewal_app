@@ -10,9 +10,18 @@
           <i style="height: 54%;"></i>
         </h2>
       </div>
+      <!--转交-->
       <h6 @click="addRecord({type: 'deliver'})">
         <img src="../../../../assets/image/approvals/detail/zhuanfa.png" alt="">
       </h6>
+      <!--&lt;!&ndash;延期&ndash;&gt;-->
+      <!--<h4 @click="addRecord({type: 'delay'})" v-if="allDetail.taskDefinitionKey === 'CompleteAsset'">-->
+      <!--  <img src="../../../../assets/image/toBeDoneList/buqiyanqi.png" alt="">-->
+      <!--</h4>-->
+      <!--&lt;!&ndash;结束&ndash;&gt;-->
+      <!--<h5 @click="addRecord({type: 'finish'})" v-if="allDetail.taskDefinitionKey === 'CompleteAsset'">-->
+      <!--  <img src="../../../../assets/image/toBeDoneList/buqijieshu.png" alt="">-->
+      <!--</h5>-->
       <div class="moduleMain">
         <div class="main">
           <div class="detail">
@@ -206,6 +215,12 @@
             this.deliverConfig = Object.assign({}, status);
             this.deliverPopup = true;
             break;
+          case 'delay'://延期
+
+            break;
+          case 'finish'://结束
+
+            break;
           case 'save'://提交
             let data = {
               action: 'complete',
@@ -248,13 +263,24 @@
       @include radius(.2rem 0 0 .2rem);
       @include flex('bet-column');
 
-      h6 {
+      h4, h5, h6 {
         position: absolute;
         left: 80%;
-        top: 36%;
         width: .7rem;
         height: .7rem;
         z-index: 1;
+      }
+
+      h6 {
+        top: 36%;
+      }
+
+      h4 {
+        top: 43%;
+      }
+
+      h5 {
+        top: 50%;
       }
 
       .moduleTop {
