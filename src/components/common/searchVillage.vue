@@ -63,15 +63,26 @@
     },
     mounted() {
       this.$httpZll.getCityList().then(res => {
-        this.cityList = res.data;
-        this.city_name = '天津';
-        this.params.city = '120000';
-        // for (let item of res.data) {
-        //   if (String(item.code) === String(this.personal.city_id)) {
-        //     this.city_name = item.name;
-        //     this.params.city = item.code;
-        //   }
-        // }
+        this.cityList = [];
+        if (res.data.length === 1) {
+          let obj = {};
+          this.city_name = res.data[0].name;
+          this.params.city = res.data[0].province.code;
+          obj.name = this.city_name;
+          obj.code = this.params.city;
+          this.cityList.push(obj)
+        } else {
+          for (let item of res.data) {
+            let obj = {};
+            if (String(item.code) === String(this.personal.city_id)) {
+              this.city_name = item.name;
+              this.params.city = item.province.code;
+              obj.name = item.name;
+              obj.code = item.code;
+              this.cityList.push(obj);
+            }
+          }
+        }
       });
     },
     activated() {
