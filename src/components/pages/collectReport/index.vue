@@ -1353,6 +1353,7 @@
           width: 1rem;
           height: 1.6rem;
           padding-right: .3rem;
+          z-index: 1;
           @include bgImage('../../../assets/image/footer/footercaogao.png');
         }
 
