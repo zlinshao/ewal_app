@@ -74,7 +74,7 @@
     </div>
 
     <!--右侧栏-->
-    <div class="addToBeDone" @click="showAddPopup = true"></div>
+    <!--<div class="addToBeDone" @click="showAddPopup = true"></div>-->
     <van-popup v-model="showAddPopup" overlay-class="overlay-color" position="right" :overlay="true"
                class="showAddPopup">
       <p class="addTitle">

@@ -301,6 +301,13 @@ export default {
           if (item.keyType && dicties[item.keyName]) {
             formatData[item.keyName] = dicties[item.keyName][Number(item.keyType)] || item.keyType;
           }
+        } else if (item.picker === 'remark_terms') {
+          // 租房备注条款默认全选
+          let terms = [];
+          for (let name of form[item.keyName]) {
+            terms.push(name + '、' + dicties[item.keyName][name]);
+          }
+          formatData[item.keyName] = terms.join(',');
         }
       }
       if (!noStaff) {
@@ -317,7 +324,7 @@ export default {
           data = this.jsonClone(defineCollectReport);
           break;
         case 'bulletin_rent_basic':
-          title = ['客户信息', '合同信息'];
+          title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineRentReport);
           data.slither0 = defineNewRentReport.concat(data.slither0);
           break;
@@ -672,7 +679,7 @@ export default {
           //   department_id: 395,
           //   department_name: "开发",
           //   phone: "18052001167",
-          //   staff_id: 69,
+          //   staff_id: '69',
           //   staff_name: "张琳琳",
           // };
           // this.$store.dispatch('personal_storage', data);

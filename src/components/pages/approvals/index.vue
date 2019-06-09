@@ -538,7 +538,7 @@
               finished: Boolean(status),
               active: true,
             };
-            this.params['params' + tab].assignee = this.personal.staff_id;
+            // this.params['params' + tab].assignee = this.personal.staff_id;
             break;
           case '2':
             switch (status) {
@@ -610,7 +610,6 @@
             if (!twoLevel) {
               this.paging['paging' + tab] = res.total;
             }
-            console.log(JSON.stringify(res.data[0]));
             let data = this.groupHandlerListData(res.data, this.urlApi);
             this.outcomes(data, this.tabs);
             if (this.params['params' + tab].page === 1) {

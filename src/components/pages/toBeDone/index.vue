@@ -237,10 +237,6 @@
       },
     },
     methods: {
-      // 结束任务
-      shutDown() {
-
-      },
       // 右侧弹窗操作
       popupOperate() {
         let type = this.bulletin_type.bulletin;
@@ -268,10 +264,11 @@
               }, {
                 url: '/supplyAgreement',
                 text: '补充协议',
-              }, {
-                url: '/collectReport',
-                text: '未收先租',
-              }
+              },
+              // {
+              //   url: '/collectReport',
+              //   text: '未收先租',
+              // }
             ];
             break;
         }
@@ -329,6 +326,7 @@
             this.$dialog('结束任务', '是否结束该任务？').then(status => {
               if (status) {
                 this.$httpZll.finishToBeDoneTask(item.root_id, {deleteReason: '结束'}).then(_ => {
+                  this.getToBeDoneList(this.params)
                 })
               }
             });

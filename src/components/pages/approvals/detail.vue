@@ -66,6 +66,7 @@
                           {{val.remittance_account + ':' + val.money_sep + '元'}}
                         </h4>
                       </div>
+                      <div :class="key" v-else>{{val}}</div>
                     </div>
                   </div>
                   <span v-else>{{formatData[key]}}</span>
@@ -147,7 +148,7 @@
       </div>
     </van-popup>
     <!--历史审批流程-->
-    <div class="records" @click="recordPopup = true"><p></p></div>
+<!--    <div class="records" @click="recordPopup = true"><p></p></div>-->
     <van-popup v-model="recordPopup" overlay-class="overlay-color" position="right" :overlay="true" class="recordPopup">
       <div class="content">
         <div class="contentMain">
@@ -718,7 +719,7 @@
               for (let name of res[item]) {
                 terms.push(name + '、' + dicties[item][name]);
               }
-              this.formatData[item] = terms.join(',');
+              this.formatData[item] = terms;
               break;
             case 'subsidiary_customer'://附属房东
               if (res[item]) {
