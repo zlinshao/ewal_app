@@ -181,7 +181,7 @@
         if (val.due_date) {
           this.allDetail.due_date = this.myUtils.formatDate(new Date(val.due_date), 'datetime');
         }
-        this.uploadCollect = Object.assign({}, this.uploadCollect, this.commonPic);
+        this.uploadCollect = Object.assign({}, this.uploadCollect, this.commonPic, this.uploadRent);
         this.recordList = [];
         this.getRecordList(val.task_id);
       },
