@@ -112,11 +112,13 @@
       handlerDict(res, str) {
         switch (str) {
           case 'h1':
-            let data = {};
-            for (let val of res.data) {
-              data[val.province_id] = val.province_name;
+            if (res.data && res.data.length) {
+              let data = {};
+              for (let val of res.data) {
+                data[val.province_id] = val.province_name;
+              }
+              dicties.province = data;
             }
-            dicties.province = data;
             break;
           case 'h2':
             let dict = res.data;
