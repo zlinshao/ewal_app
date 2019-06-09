@@ -40,7 +40,7 @@
             <b :class="{'choose': params.status === item.id }">{{ item.val }}</b>
           </p>
         </div>
-        <div class="commonBtn radioChecksFoot">
+        <div class="commonBtn">
           <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type)">
             {{item.label}}
           </p>

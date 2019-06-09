@@ -5,15 +5,28 @@
         <label class="labelTitle">{{label}}</label>
         <div class="textarea">
         <textarea
-          :placeholder="placeholder"
+          v-if="readonly || disabled"
+          unselectable="on"
+          onfocus="this.blur()"
+          ref="input"
           :value="value"
+          :type="type"
           :id="id"
           :disabled="disabled"
           :readonly="readonly"
-          rows="3"
+          :placeholder="placeholder"
           @focus="$emit('focus', $event)"
           @blur="$emit('blur', $event)"
-          @input="$emit('input', $event.target.value)"></textarea>
+          @input="$emit('input', $event.target.value)">></textarea>
+          <textarea
+            v-else
+            :placeholder="placeholder"
+            :value="value"
+            :id="id"
+            rows="3"
+            @focus="$emit('focus', $event)"
+            @blur="$emit('blur', $event)"
+            @input="$emit('input', $event.target.value)"></textarea>
         </div>
       </div>
       <div class="zl-input-form" v-else>
@@ -51,7 +64,7 @@
 <script>
   export default {
     name: "zl-input",
-    props: ['type', 'value', 'placeholder', 'label', 'disabled', 'readonly','id'],
+    props: ['type', 'value', 'placeholder', 'label', 'disabled', 'readonly', 'id'],
     data() {
       return {}
     },
@@ -72,25 +85,31 @@
     .zl-input {
       min-height: .88rem;
       @include flex('items-bet');
+
       .zl-input-form {
         @include flex('items-center');
         height: 100%;
         width: 100%;
+
         div {
           width: 66%;
         }
+
         input {
           width: 100%;
           height: 80%;
           padding: 0 .24rem;
         }
       }
+
       .textarea {
         padding-top: .12rem;
         align-items: flex-start;
+
         label {
-          padding-top: .2rem;
+          padding-top: .15rem;
         }
+
         textarea {
           max-width: 100%;
           line-height: .4rem;
@@ -99,6 +118,7 @@
           background-color: transparent;
         }
       }
+
       .unit {
         white-space: nowrap;
         padding: 0 .2rem;

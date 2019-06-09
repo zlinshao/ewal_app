@@ -5,7 +5,7 @@
         <div class="input">
           <div>
             <input type="text" placeholder="请输入搜索内容" v-model="params.title" @keyup.enter="onSearch()">
-            <span v-if="params.title" @click="params.title = ''"></span>
+            <span v-if="params.title" @click="emptyTitle"></span>
           </div>
           <p class="searchBtn" @click="onSearch()">搜索</p>
         </div>
@@ -16,29 +16,32 @@
         <li v-for="item in toBeDoneList">
           <div class="mainTitle">
             <label>{{item.title}}</label>
-            <p @click="routerLink('/closeDD')"><i></i></p>
+            <p @click="clickBtn({action:'finishTask'},item)"><i></i></p>
           </div>
           <p class="statusBtn">
             <span>{{item.name}}</span>
-            <!--<label>密码 506231</label>-->
           </p>
           <div class="handleBtn">
             <!--合同修改 / 签署-->
-            <div v-if="item.outcome" class="contract">
-              <p v-for="btn in item.outcome.outcomeOptions" @click="clickBtn(btn,item.outcome.variableName,item)">
+            <div v-if="item.outcome && !item.task_action" class="contract">
+              <p v-for="btn in item.outcome.outcomeOptions" @click="clickBtn(btn,item)">
                 <i><img :src="changeOperates[btn.action]" alt=""></i>
                 <span>{{btn.title}}</span>
               </p>
             </div>
             <!--转交/代签-->
-            <div v-for="btn in normalOperates" :class="btn.class" v-else>
-              <i><img :src="btn.icon" alt=""></i>
-              <span>{{btn.text}}</span>
+            <div v-for="btn in normalOperates" :class="btn.action" v-else>
+              <b @click="clickBtn(btn,item)">
+                <i><img :src="btn.icon" alt=""></i>
+                <span>{{btn.text}}</span>
+              </b>
             </div>
             <!--去打卡 / 去签约-->
-            <div @click="goOperates(item)" v-if="item.task_title" :class="item.task_action">
-              <i><img :src="changeOperates[item.task_action]" alt=""></i>
-              <span>{{item.task_title}}</span>
+            <div v-if="item.task_title" :class="item.task_action">
+              <b @click="goOperates(item)">
+                <i><img :src="changeOperates[item.task_action]" alt=""></i>
+                <span>{{item.task_title}}</span>
+              </b>
             </div>
           </div>
         </li>
@@ -50,11 +53,12 @@
         </li>
       </scroll-load>
     </div>
-
+    <!--代签/转交-->
+    <deliver :module="deliverPopup" :config="deliverConfig" @close="deliverPopup = false"></deliver>
     <!--新建待办任务-->
-    <div class="addToBeDone" @click="showAddPopup = true"></div>
-    <van-popup v-model="showAddPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
-               position="right" :overlay="true" class="showAddPopup">
+    <div class="addToBeDone" @click="showAddPopup = true" v-if="showRightAdd"></div>
+    <van-popup v-model="showAddPopup" overlay-class="overlay-color" position="right" :overlay="true"
+               class="showAddPopup">
       <p class="addTitle">
         <span class="writingMode">新建</span>
       </p>
@@ -69,7 +73,6 @@
       </div>
       <div class="popupBottom"></div>
     </van-popup>
-
     <!--底部操作-->
     <div class="showTabsModule" :class="[tabsModule ? 'hiddenTabsModule' : '']">
       <div @click="tabsModule = true">
@@ -78,8 +81,7 @@
         <i></i>
       </div>
     </div>
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="tabsModule" position="bottom"
-               :overlay="true" class="tabsModule">
+    <van-popup overlay-class="overlay-color" v-model="tabsModule" position="bottom" :overlay="true" class="tabsModule">
       <div class="modules">
         <div v-for="item in modules" @click="tabsTag(item.id)">
           <i><img :src="item.icon" alt=""></i>
@@ -91,6 +93,7 @@
 </template>
 
 <script>
+  import Deliver from './deliver.vue'
   import icon_daiqian from '@/assets/image/toBeDone/daiqian.png'
   import icon_zhuanjiao from '@/assets/image/toBeDone/zhuanjiao.png'
   import icon_qudaka from '@/assets/image/toBeDone/qudaka.png'
@@ -105,23 +108,62 @@
 
   export default {
     name: "index",
+    components: {Deliver},
     data() {
       return {
         mainHeight: '',
         fullLoading: true,
         //正常操作 按钮
         operates: {},//状态变更操作
+        defineDeliver: [
+          [
+            {
+              label: '代签人',
+              readonly: 'readonly',
+              type: 'text',
+              keyName: 'assignee',
+              placeholder: '必填 请选择',
+            },
+            {
+              label: '部门',
+              type: 'text',
+              disabled: 'disabled',
+              keyName: 'department_name',
+              placeholder: '已禁用',
+            },
+          ],
+          [
+            {
+              label: '转交人',
+              readonly: 'readonly',
+              type: 'text',
+              keyName: 'assignee',
+              placeholder: '必填 请选择',
+            },
+            {
+              label: '部门',
+              type: 'text',
+              disabled: 'disabled',
+              keyName: 'department_name',
+              placeholder: '已禁用',
+            },
+          ]
+        ],
+        deliverIndex: 0,
+        deliverPopup: false,//代签/转交
+        deliverConfig: {},//代签/转交
+        form: {},
+        formatData: {},
+        // 自定义按钮
         normalOperates: [
           {
-            id: 1,
             icon: icon_daiqian,
             text: '代签',
-            class: 'allograph',
+            action: 'allograph',
           }, {
-            id: 2,
             icon: icon_zhuanjiao,
             text: '转交',
-            class: 'deliver',
+            action: 'deliver',
           }
         ],
         // 状态变化按钮
@@ -156,15 +198,17 @@
         // 右侧栏
         showAddPopup: false,//新建待办任务
         addShowList: [],
-
         paging: 0,
         params: {
           title: '',
           page: 1,
+          assignee: '',
         },
         toBeDoneList: [],
-        detail_request_url: '',
         variableName: '',
+        bulletin_type: {},//报备类型
+        showRightAdd: false,//显示新增
+        searchStaffModule: false,
       }
     },
     created() {
@@ -176,6 +220,10 @@
       })
     },
     activated() {
+      this.bulletin_type = JSON.parse(sessionStorage.bulletin_type);
+      this.fullLoading = true;
+      this.showRightAdd = false;
+      this.toBeDoneList = [];
       this.popupOperate();
     },
     watch: {
@@ -184,36 +232,41 @@
       },
     },
     computed: {
-      // 报备类型
-      bulletin_type() {
-        return this.$store.state.app.bulletinTypes;
+      personal() {
+        return this.$store.state.app.personal;
       },
     },
     methods: {
+      // 结束任务
+      shutDown() {
+
+      },
       // 右侧弹窗操作
       popupOperate() {
         let type = this.bulletin_type.bulletin;
         switch (type) {
           case 'bulletin_collect_basic':
+            this.showRightAdd = true;
             this.addShowList = [
               {
                 url: '/createdTask',
                 id: 'CollectTakeLook',
                 text: '收房带看',
               }, {
-                url: '',
+                url: '/supplyAgreement',
                 text: '补充协议',
               }
             ];
             break;
           case 'bulletin_rent_basic':
+            this.showRightAdd = true;
             this.addShowList = [
               {
                 url: '/createdTask',
                 id: 'RentTakeLook',
                 text: '租房带看',
               }, {
-                url: '',
+                url: '/supplyAgreement',
                 text: '补充协议',
               }, {
                 url: '/collectReport',
@@ -227,35 +280,70 @@
       goOperates(val) {
         switch (val.task_action) {
           case 'punchClock':
-            this.routerLink(val.task_action, val);
+            sessionStorage.setItem('punchClock', JSON.stringify(val));
+            this.routerLink(val.task_action);
             break;
           case 'collectReport':
+            let type = this.bulletin_type.bulletin;
+            let result;
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
-                this.againDetailRequest(val, 'again');
+                if (type === 'bulletin_retainage' || type === 'bulletin_agency') {
+                  this.againDetailRequest(val);
+                } else {
+                  this.againDetailRequest(val, 'again');
+                }
               } else {
-                this.routerLink(val.task_action);
+                if (val.tk_result) {
+                  result = val.tk_result === 'bulletin' ? '1' : '0';
+                  this.routerLink(val.task_action, {result: result});
+                } else {
+                  this.routerLink(val.task_action);
+                }
               }
             });
             break;
         }
       },
-      // 变更 签署
-      clickBtn(action = {}, name = '', item) {
-        console.log(item);
+      // 变更 签署 转交 代签 结束任务
+      clickBtn(action = {}, item = {}) {
         let user_id = '';
-        user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
         switch (action.action) {
           case 'success'://本地签署
+            user_id = this.getFadadaUserId(item);
             this.handlerSign(item, user_id, 2);
             break;
           case 'phone'://客户手机签署
+            user_id = this.getFadadaUserId(item);
             this.handlerSign(item, user_id, 1);
             break;
+          case 'allograph'://代签
+          case 'deliver'://转交
+            let data = {};
+            data.name = action.action;
+            data.id = item.task_id;
+            this.deliverConfig = Object.assign({}, data);
+            this.deliverPopup = true;
+            break;
+          case 'finishTask'://结束任务
+            this.$dialog('结束任务', '是否结束该任务？').then(status => {
+              if (status) {
+                this.$httpZll.finishToBeDoneTask(item.root_id, {deleteReason: '结束'}).then(_ => {
+                })
+              }
+            });
+            break;
           default://合同修改
-            this.$reviseContract(action, name, item);
+            this.$reviseContract(action, item.outcome.variableName, item);
             break
         }
+      },
+      // 获取fadadaId
+      getFadadaUserId(item) {
+        return item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
+      },
+      onCancel() {
+        this.deliverPopup = false;
       },
       // 签署
       handlerSign(item, user_id, type) {
@@ -272,7 +360,17 @@
           params.index = 1;
           title = ['电子合同', '是否确认签署电子合同?'];
         }
-        this.$signPostApi(item, params, title);
+        this.$signPostApi(item, params, title).then(res => {
+          if (res) {
+            this.$ddSkip(res);
+            this.$dialog('签署', '签署是否完成?').then(res => {
+              this.$prompt('正在处理..', 'send');
+              setTimeout(_ => {
+                this.onSearch();
+              }, 2000)
+            })
+          }
+        });
       },
       // 滚动加载
       scrollLoad(val) {
@@ -285,6 +383,11 @@
           this.getToBeDoneList(this.params);
         }
       },
+      // 清空搜索内容
+      emptyTitle() {
+        this.params.title = '';
+        this.onSearch();
+      },
       // 搜索
       onSearch() {
         this.params.page = 1;
@@ -295,43 +398,79 @@
       getToBeDoneList(val) {
         this.fullLoading = true;
         let type = this.bulletin_type.bulletin;
-        let status = type === 'bulletin_collect_basic' ? 'toBeDoneCollect' : 'toBeDoneRent';
-        val.taskDefinitionKeyIn = approvalSearch[status].join(',');
+        let obj = this.bulletinStatus(type);
+        val.rootProcessDefinitionKeyIn = obj.type;
+        val.assignee = this.personal.staff_id;
+        val.taskDefinitionKeyIn = approvalSearch[obj.status].join(',');
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
-          this.paging = res.total;
-          let data = this.groupHandlerListData(res.data);
-          this.handlerOperates(data);
-          if (this.params.page === 1) {
-            this.toBeDoneList = data;
-          } else {
-            for (let item of data) {
-              this.toBeDoneList.push(item);
+          if (res) {
+            this.paging = res.total;
+            let data = this.groupHandlerListData(res.data);
+            this.handlerOperates(data, type);
+            if (this.params.page === 1) {
+              this.toBeDoneList = data;
+            } else {
+              for (let item of data) {
+                this.toBeDoneList.push(item);
+              }
             }
           }
         })
       },
+      bulletinStatus(type) {
+        let obj = {};
+        switch (type) {
+          case "bulletin_collect_basic":
+            obj.status = 'toBeDoneCollect';
+            obj.type = 'MarketCollect';
+            break;
+          case "bulletin_rent_basic":
+            obj.status = 'toBeDoneRent';
+            obj.type = 'MarketRent';
+            break;
+          case "bulletin_retainage":
+            obj.status = 'toBeDoneRetainage';
+            obj.type = 'MarketRent';
+            break;
+          case "bulletin_agency":
+            obj.status = 'toBeDoneAgency';
+            obj.type = 'MarketCollect,MarketRent';
+            break;
+        }
+        // Market-CollectWithdrawal 收房退租
+        // Market-RentWithdrawal 租房退租
+        return obj;
+      },
       // 更多操作按钮
-      handlerOperates(data) {
+      handlerOperates(data, type) {
         for (let btn of data) {
           if (btn.outcome) {
-            let data = [{
-              title: '客户手机签署',
-              action: 'phone',
-            }];
+            let data = [];
+            switch (type) {
+              case 'bulletin_collect_basic':
+              case 'bulletin_rent_basic':
+                data = [{
+                  title: '客户手机签署',
+                  action: 'phone',
+                }];
+                break;
+            }
             btn.outcome = JSON.parse(btn.outcome);
-            btn.outcome.outcomeOptions = data.concat(btn.outcome.outcomeOptions);
+            btn.oldOutcome = this.jsonClone(btn.outcome);
+            btn.outcome.outcomeOptions = btn.outcome.outcomeOptions.concat(data);
           } else {
+            // 签收据
             if (btn.taskDefinitionKey === 'CollectReceiptSign') {
               btn.outcome = {
                 outcomeOptions: [
                   {
-                    title: '客户手机签署',
-                    action: 'phone',
-                  },
-                  {
                     title: '本地签署',
                     action: 'success',
+                  },
+                  {
+                    title: '客户手机签署',
+                    action: 'phone',
                   }
                 ],
               };

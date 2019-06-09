@@ -3,12 +3,12 @@
     <div class="circleOut" ref="out">
       <div class="circleIn" ref="into">
         <div class="circleItem" v-for="(item,index) in buttonList" @click="toBulletin(item)" ref="item">
-          <img :src="item.icon" class="circleIcon" :class="[item.type]" :style="{transform: itemAngle}">
+          <img :src="item.icon" class="circleIcon" :class="[item.type]" :style="{transform: itemAngle}" alt="">
         </div>
       </div>
-      <img src="../assets/image/home/circle_logo.png" class="logo" ref="lejialogo">
+      <img src="../assets/image/home/circle_logo.png" class="logo" ref="lejialogo" alt="">
     </div>
-    <img src="../assets/image/home/zhuanpan_zhicheng.png" class="zhicheng">
+    <img src="../assets/image/home/zhuanpan_zhicheng.png" class="zhicheng" alt="">
     <!--<audio src="../assets/image/circlePanel/kaka.mp3" ref="audio"></audio>-->
   </div>
 </template>
@@ -40,52 +40,49 @@
           {
             url: 'toBeDone',
             name: '收房',
-            status: bulletinRouterStatus.newCollect,
+            status: bulletinRouterStatus.bulletin_collect_basic,
             icon: ic_shoufang,
           },
           {
             url: 'toBeDone',
             name: '租房',
-            status: bulletinRouterStatus.newRent,
+            status: bulletinRouterStatus.bulletin_rent_basic,
             icon: ic_zufang,
           },
           {
-            url: 'collectReport',
+            url: 'toBeDone',
             name: '渠道费',
-            status: {
-              bulletin: 'agency',
-              to: 'agency',
-            },
+            status: bulletinRouterStatus.bulletin_agency,
             icon: ic_qudao,
           },
           {
             url: 'toBeDone',
             name: '尾款',
-            type: 'final',
+            status: bulletinRouterStatus.newRetainage,
             icon: ic_weikuan,
           },
           {
-            url: 'toBeDone',
+            url: '',
             name: '调租',
-            type: '',
+            status: bulletinRouterStatus.newChange,
             icon: ic_tiaozu,
           },
           {
-            url: 'toBeDone',
+            url: '',
             name: '转租',
-            type: '',
+            status: bulletinRouterStatus.newSublet,
             icon: ic_zhuanzu,
           },
           {
-            url: 'toBeDone',
+            url: '',
             name: '特殊事项',
-            type: 'special',
+             status: bulletinRouterStatus.newSpecial,
             icon: ic_teshu,
           },
           {
-            url: 'toBeDone',
+            url: '',
             name: '退租',
-            type: '',
+            status: bulletinRouterStatus.newCheckout,
             icon: ic_tuizu,
           },
           // {
@@ -186,8 +183,10 @@
       }, passive);
     },
     methods: {
+      // 报备跳转
       toBulletin(item) {
-        this.$store.dispatch('bulletin_type', item.status);
+        if(!item.url) return;
+        sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
         this.routerLink(item.url);
       },
       getBasePoint() {

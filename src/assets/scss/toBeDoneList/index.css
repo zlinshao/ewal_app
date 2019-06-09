@@ -269,6 +269,7 @@
           -moz-border-radius: 1rem;
           border-radius: 1rem; }
       #toBeDoneList .main .finish .finishMain .finish2 div {
+        white-space: nowrap;
         text-align: right; }
   #toBeDoneList .main .noMore, #toBeDoneList .main .noData {
     display: flex;
@@ -335,7 +336,7 @@
     justify-content: space-between;
     padding: .3rem;
     border-top: .1rem solid #F8F8F8; }
-  #toBeDoneList .radioChecksFoot {
+  #toBeDoneList .commonBtn {
     padding: .3rem 0; }
 
 /*# sourceMappingURL=index.css.map */

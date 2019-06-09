@@ -6,10 +6,11 @@ function $httpPrompt(msg, type) {
   common.prompt(msg, type);
 }
 
-axios.defaults.timeout = 5000;
+axios.defaults.timeout = 10000;
 
 // 发送请求拦截
 axios.interceptors.request.use((request) => {
+  request.headers.common['Authorization'] = globalConfig.token;
   return request;
 }, (err) => {
   return Promise.reject(err);
@@ -17,12 +18,17 @@ axios.interceptors.request.use((request) => {
 
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
+  if (!response.data) {
+    response.data = {};
+    response.data.httpCode = response.status;
+  } else {
+    response.data.httpCode = response.status;
+  }
   return response
 }, err => {
   if (err && err.response) {
     let msg = err.response.data.msg;
     let message = err.response.data.message;
-    console.log(err.response.data);
     switch (err.response.status) {
       case 400:
       case 401:
@@ -98,7 +104,7 @@ axios.interceptors.response.use(response => {
   return Promise.resolve(err.response);
 });
 
-let msg = '正在处理..';
+let msg = '正在处理...';
 
 class Axios {
   static get(url, data = {}, prompt = '', close = '') {
@@ -167,7 +173,7 @@ class Axios {
       $httpPrompt(msg, 'send');
     }
     return new Promise((resolve, reject) => {
-      axios.delete(url, data).then(response => {
+      axios.delete(url, {params: data}).then(response => {
         if (response.status > 399) {
           return;
         }
@@ -201,6 +207,5 @@ class Axios {
     })
   }
 }
-
 
 export default Axios

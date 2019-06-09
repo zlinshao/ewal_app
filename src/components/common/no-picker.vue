@@ -1,7 +1,7 @@
 <template>
   <div>
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.4)'}" v-model="popupModule"
-               position="bottom" :overlay="true" class="popupModule">
+    <van-popup overlay-class="overlay-color" v-model="popupModule" position="bottom" :overlay="true"
+               class="popupModule">
       <div class="popupTop">
         <p>请完成相关填写</p>
         <h3 @click="finishData">完成</h3>
@@ -27,14 +27,13 @@
 
   export default {
     name: "no-picker",
-    props: ['module', 'drawing', 'postData', 'formData', 'popup'],
+    props: ['module', 'drawing', 'postData', 'formData'],
     data() {
       return {
         popupModule: false,
         drawForm: [],
         postFormData: {},
         formatData: {},
-
       }
     },
     mounted() {
@@ -45,20 +44,22 @@
       module(val) {
         this.popupModule = val;
       },
-      popup(val) {
-        this.popupStatus = val;
-      },
       popupModule(val) {
         if (!val) {
           this.$emit('close', 'close');
-        } else {
+        }
+      },
+      drawing: {
+        handler(val, oldVal) {
           this.drawForm = [];
-          for (let item of this.drawing) {
-            if (item.picker === this.popup) {
+          for (let item of val) {
+            if (item.picker === 'noPicker') {
               this.drawForm.push(item);
             }
           }
-        }
+        },
+        immediate: true,
+        deep: true,
       },
       postData: {
         handler(val, oldVal) {
@@ -73,8 +74,8 @@
     methods: {
       listenInput(val, key) {
         let show = this.jsonClone(val);
-        show[0] = show[0] ? show[0] + '栋' : '';
-        show[1] = show[1] ? show[1] + '单元' : '';
+        show[0] = show[0] ? show[0] + '-' : '';
+        show[1] = show[1] ? show[1] + '-' : '';
         show[2] = show[2] ? show[2] : '';
         this.formatData[key] = show.join('');
       },

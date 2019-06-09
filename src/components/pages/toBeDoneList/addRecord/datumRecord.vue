@@ -26,12 +26,12 @@
               <span>{{followRecord.house_address || ''}}</span>
             </div>
             <div v-if="followRecord.taskDefinitionKey === 'CompleteData'">
-              <div v-for="pic in upload" class="flex">
+              <div v-for="pic in upload[followRecord.bulletin_type]" class="flex">
                 <Upload :file="pic" :getImg="album[pic.keyName]" :close="!picStatus" @success="getImgData"></Upload>
               </div>
             </div>
             <div class="goods" v-else>
-              <div class="flex">
+              <div class="flex" v-if="followRecord.house_goods">
                 <label>补齐物品</label>
                 <div class="polishing">
                   <h1 class="items-center" v-for="item in Object.keys(followRecord.house_goods)"
@@ -40,10 +40,10 @@
                     <i class='checkbox' @click="choosePolishing(item)"><b></b></i>
                     <b style="white-space: nowrap" @click="choosePolishing(item)">补充</b>
                     <span class="num items-center">
-                  <b @click="removeAdd('rem',item,followRecord.house_goods[item])">-</b>
-                  <span>{{goods[item]}}</span>
-                  <b class="add" @click="removeAdd('add',item,followRecord.house_goods[item])">+</b>
-                  </span>
+                      <b @click="removeAdd('rem',item,followRecord.house_goods[item])">-</b>
+                        <span>{{goods[item]}}</span>
+                      <b class="add" @click="removeAdd('add',item,followRecord.house_goods[item])">+</b>
+                    </span>
                   </h1>
                   <h2 class="items-center" :class="{'choose': chooseText.includes(item)}" v-else>
                     <b>家电不齐全</b>
@@ -63,7 +63,7 @@
             </div>
           </div>
           <div class="commonBtn">
-            <p class="btn back" @click="close_();$router.go(-1)">取消</p>
+            <p class="btn back" @click="$router.go(-1)">取消</p>
             <p class="btn" @click="submit">确定</p>
           </div>
         </div>
@@ -77,6 +77,7 @@
     name: "datum",
     data() {
       return {
+        followRecord: {},
         picStatus: false,
         album: {},//图片预填
         oldPhoto: {},
@@ -98,65 +99,106 @@
         goods: {},//物品补齐
         oldGoods: {},//物品补齐
         chooseText: [],//物品补齐多选
-        upload: [
-          {
-            label: '证件照片',
-            placeholder: '必填',
-            keyName: 'identity_photo',
-          }, {
-            label: '银行卡照片',
-            placeholder: '必填',
-            keyName: 'bank_photo',
-          }, {
-            label: '合同照片',
-            placeholder: '必填',
-            keyName: 'photo',
-          }, {
-            label: '水表照片',
-            placeholder: '必填',
-            keyName: 'water_photo',
-          }, {
-            label: '电表照片',
-            placeholder: '必填',
-            keyName: 'electricity_photo',
-          }, {
-            label: '气表照片',
-            placeholder: '必填',
-            keyName: 'gas_photo',
-          }, {
-            label: '交接单照片',
-            placeholder: '必填',
-            keyName: 'checkin_photo',
-          }, {
-            label: '委托书照片',
-            placeholder: '必填',
-            keyName: 'auth_photo',
-          }, {
-            label: '押金照片',
-            placeholder: '必填',
-            keyName: 'deposit_photo',
-          }, {
-            label: '承诺书照片',
-            placeholder: '必填',
-            keyName: 'promise',
-          }, {
-            label: '房产证',
-            placeholder: '必填',
-            keyName: 'property_photo',
-          }, {
-            label: '水卡',
-            placeholder: '必填',
-            keyName: 'water_card_photo',
-          }, {
-            label: '电卡',
-            placeholder: '必填',
-            keyName: 'electricity_card_photo',
-          }, {
-            label: '气卡',
-            placeholder: '必填',
-            keyName: 'gas_card_photo',
-          },
-        ],
+        upload: {
+          bulletin_collect_basic: [
+            {
+              label: '证件照片',
+              placeholder: '必填',
+              keyName: 'identity_photo',
+            }, {
+              label: '银行卡照片',
+              placeholder: '必填',
+              keyName: 'bank_photo',
+            }, {
+              label: '合同照片',
+              placeholder: '必填',
+              keyName: 'photo',
+            }, {
+              label: '水表照片',
+              placeholder: '必填',
+              keyName: 'water_photo',
+            }, {
+              label: '电表照片',
+              placeholder: '必填',
+              keyName: 'electricity_photo',
+            }, {
+              label: '气表照片',
+              placeholder: '必填',
+              keyName: 'gas_photo',
+            }, {
+              label: '交接单照片',
+              placeholder: '必填',
+              keyName: 'checkin_photo',
+            }, {
+              label: '委托书照片',
+              placeholder: '必填',
+              keyName: 'auth_photo',
+            }, {
+              label: '押金照片',
+              placeholder: '必填',
+              keyName: 'deposit_photo',
+            }, {
+              label: '承诺书照片',
+              placeholder: '必填',
+              keyName: 'promise',
+            }, {
+              label: '房产证',
+              placeholder: '必填',
+              keyName: 'property_photo',
+            }, {
+              label: '水卡',
+              placeholder: '必填',
+              keyName: 'water_card_photo',
+            }, {
+              label: '电卡',
+              placeholder: '必填',
+              keyName: 'electricity_card_photo',
+            }, {
+              label: '气卡',
+              placeholder: '必填',
+              keyName: 'gas_card_photo',
+            }
+          ],
+          bulletin_rent_basic: [
+            {
+              label: '交接单',
+              placeholder: '必填',
+              keyName: 'checkin_photo',
+            }, {
+              label: '截图凭证',
+              placeholder: '必填',
+              keyName: 'certificate_photo',
+            }, {
+              label: '押金收条',
+              placeholder: '必填',
+              keyName: 'deposit_photo',
+            }, {
+              label: '证件照片',
+              placeholder: '必填',
+              keyName: 'identity_photo',
+            }, {
+              label: '合同照片',
+              placeholder: '必填',
+              keyName: 'photo',
+            }, {
+              label: '银行卡照片',
+              placeholder: '必填',
+              keyName: 'bank_photo',
+            }, {
+              label: '水表照片',
+              placeholder: '必填',
+              keyName: 'water_photo',
+            }, {
+              label: '电表照片',
+              placeholder: '必填',
+              keyName: 'electricity_photo',
+            }, {
+              label: '气表照片',
+              placeholder: '必填',
+              keyName: 'gas_photo',
+            }
+          ],
+        },
         // 物品照片
         goodsUpload: [
           {
@@ -167,12 +209,17 @@
         ],
       }
     },
+    beforeRouteLeave(to, from, next) {
+      this.close_();
+      next(vm => {
+      })
+    },
     mounted() {
     },
     activated() {
-      this.close_();
+      this.followRecord = JSON.parse(sessionStorage.datumRecord || '{}');
+      let query = JSON.parse(this.$route.query.params || '{}');
       let record = this.followRecord.taskDefinitionKey;
-      let query = this.$route.query;
       for (let key of Object.keys(query)) {
         this.form[key] = query[key];
       }
@@ -181,18 +228,16 @@
           house_goods: [],
         };
       } else {
-        this.albumDetail(query);
+        this.albumDetail(query, this.followRecord.bulletin_type);
       }
     },
     watch: {},
-    computed: {
-      followRecord() {
-        return this.$store.state.app.allDetail;
-      }
-    },
+    computed: {},
     methods: {
       // 提交
       submit() {
+        let type = this.followRecord.bulletin_type;
+        this.form.contract_type = type === 'bulletin_collect_basic' ? 1 : 2;
         this.form.complete_content = {};
         let api = '';
         let key = this.followRecord.taskDefinitionKey;
@@ -212,9 +257,7 @@
       choosePolishing(item) {
         if (this.chooseText.includes(item)) {
           this.chooseText.splice(this.chooseText.indexOf(item), 1);
-          if (item === 'is_fill') {
-            this.goods[item] = 0;
-          }
+          this.goods[item] = 0;
         } else {
           this.chooseText.push(item);
           if (item === 'is_fill') {
@@ -232,27 +275,29 @@
         }
       },
       // 获取图片
-      albumDetail(query) {
+      albumDetail(query, type) {
+        let status = type === 'bulletin_collect_basic' ? 1 : 2;
         let params = {
-          type: 1,
+          type: status,
           id: query.contract_id,
         };
         this.$httpZll.getPolishingDetail(params).then(res => {
           if (res) {
-            this.photos(res.data);
+            this.photos(res.data.complete_content, type);
           } else {
-            this.photos([]);
+            this.photos([], type);
           }
         });
       },
       // 生成图片字段
-      photos(data) {
-        for (let pic of this.upload) {
+      photos(data, type) {
+        for (let pic of this.upload[type]) {
           this.oldPhoto[pic.keyName] = data[pic.keyName] || [];
           this.changePhoto[pic.keyName] = data[pic.keyName] || [];
           if (this.oldPhoto[pic.keyName].length) {
             this.$httpZll.getUploadUrl(this.oldPhoto[pic.keyName], 'close').then(res => {
-              this.$set(this.album, pic.keyName, res.data);
+              this.album[pic.keyName] = res.data;
+              this.album = Object.assign({}, this.album);
             })
           }
         }
@@ -295,12 +340,14 @@
         setTimeout(_ => {
           this.picStatus = false;
         }, 100);
+        this.followRecord = {};
         this.album = {};
-        this.oldPhoto = [];
-        this.changePhoto = [];
+        this.oldPhoto = {};
+        this.changePhoto = {};
         this.chooseText = [];
         this.form = {
           task_id: '',
+          process_id: '',
           house_name: '',
           contract_id: '',
           bulletin_staff_id: '',

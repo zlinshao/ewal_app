@@ -1,7 +1,6 @@
 <template>
   <div id="searchDepart">
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="searchModule" position="bottom"
-               :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="searchModule" position="bottom" :overlay="true">
       <div class="searchModule" :style="mainListHeight(150)">
         <div class="popupTop">
           <p>请选择部门</p>

@@ -2,6 +2,7 @@ const app = {
   state: {
     video_visible: true, //显示隐藏全局video
     key_up_status: false,
+    allCityList: [],//所有城市
     personalDetail: {},//所有个人信息
     // 姓名/部门
     personal: {
@@ -10,9 +11,6 @@ const app = {
       department_id: '',
       department_name: '',
     },
-    bulletinTypes: '',
-    bulletinPreFill: {},
-    taskDetail: {},
     //审批切换
     approvalTab: {
       tab: '1',
@@ -20,32 +18,21 @@ const app = {
     },
     // 待办任务切换
     doneTab: '1',
-    allDetail: {},//详情
-    signRouters: '',//签署路由
   },
   // 计算属性
   getter: {},
   // 函数声明
   mutations: {
-    // 报备类型
-    BULLETIN_TYPE(state, view) {
-      state.bulletinTypes = view;
-    },
-    // 报备草稿预填
-    BULLETIN_DRAFT(state, view) {
-      state.bulletinPreFill = view;
-    },
-    // 任务详情
-    TASK_DETAIL(state, view) {
-      state.taskDetail = view;
-    },
     // 个人信息
     PERSONAL_STORAGE(state, view) {
-      let personal = JSON.parse(view);
-      state.personalDetail = personal;
+      state.personalDetail = view;
       for (let item of Object.keys(state.personal)) {
-        state.personal[item] = personal[item];
+        state.personal[item] = view[item];
       }
+    },
+    // 所有城市
+    ALL_CITY_LIST(state, view) {
+      state.allCityList = view;
     },
     // 监听键盘弹出/收起
     KEY_UP_STATUS(state, view) {
@@ -63,10 +50,6 @@ const app = {
     SWITCH_VIDEO(state, status) {
       state.video_visible = status;
     },
-    // 跟进记录
-    ALL_DETAIL(state, status) {
-      state.allDetail = status;
-    },
   },
   // 执行函数
   actions: {
@@ -74,25 +57,13 @@ const app = {
     personal_storage({commit}, view) {
       commit('PERSONAL_STORAGE', view);
     },
-    // 获取个人信息
-    get_personal({commit}, view) {
-      commit('GET_PERSONAL', view);
+    // 所有城市
+    all_city_list({commit}, view) {
+      commit('ALL_CITY_LIST', view);
     },
     // 监听键盘弹出/收起
     key_up_status({commit}, view) {
       commit('KEY_UP_STATUS', view);
-    },
-    // 报备类型
-    bulletin_type({commit}, view) {
-      commit('BULLETIN_TYPE', view);
-    },
-    // 报备草稿预填
-    bulletin_draft({commit}, view) {
-      commit('BULLETIN_DRAFT', view);
-    },
-    // 任务 预填
-    task_detail({commit}, view) {
-      commit('TASK_DETAIL', view);
     },
     // 审批切换
     approval_tabs({commit}, view) {
@@ -105,10 +76,6 @@ const app = {
     // 开关video
     switch_video({commit}, status) {
       commit('SWITCH_VIDEO', status);
-    },
-    // 跟进记录
-    all_detail({commit}, status) {
-      commit('ALL_DETAIL', status);
     },
     // 签署路由
     sign_routers({commit}, status) {

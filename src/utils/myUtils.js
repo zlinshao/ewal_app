@@ -47,7 +47,8 @@ class myUtils {
 
   // 计算后格式化 日期
   static formatAddRem(interval, num, date, type) {
-    return this.formatDate(this.dateAdd(interval, num, date), type);
+    let time = this.dateAdd(interval, num, date);
+    return this.formatDate(time, type);
   }
 
   // 年月日 加减计算
@@ -104,7 +105,6 @@ class myUtils {
   // 数组去重
   static arrayWeight(array) {
     let temp = [];
-    let index = [];
     let l = array.length;
     for (let i = 0; i < l; i++) {
       for (let j = i + 1; j < l; j++) {
@@ -114,9 +114,20 @@ class myUtils {
         }
       }
       temp.push(array[i]);
-      index.push(i);
     }
     return temp;
+  }
+
+  // 数组 去空
+  static arrayOffEmpty(temp) {
+    let arr = JSON.parse(JSON.stringify(temp));
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === '' || arr[i] === null || typeof (arr[i]) === undefined) {
+        arr.splice(i, 1);
+        i = i - 1;
+      }
+    }
+    return arr;
   }
 
   // 计算时间差
@@ -171,6 +182,25 @@ class myUtils {
       }
     }
     return format;
+  }
+
+  // 阿拉伯数字 转换 中文数字
+  static DX(num) {
+    let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']; //changeNum[0] = "零"
+    let unit = ["", "十", "百", "千", "万"];
+    num = parseInt(num);
+    let getWan = (temp) => {
+      let strArr = temp.toString().split("").reverse();
+      let newNum = "";
+      for (var i = 0; i < strArr.length; i++) {
+        newNum = (i == 0 && strArr[i] == 0 ? "" : (i > 0 && strArr[i] == 0 && strArr[i - 1] == 0 ? "" : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i]))) + newNum;
+      }
+      return newNum;
+    };
+    let overWan = Math.floor(num / 10000);
+    let noWan = num % 10000;
+    if (noWan.toString().length < 4) noWan = "0" + noWan;
+    return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
   }
 
   //判断时间是否在给定的日期范围内

@@ -24,8 +24,8 @@
             <!--显示form -->
             <div v-else>
               <!--上传-->
-              <div v-if="item.picker === 'upload' && item.value" class="uploadForm">
-                <div v-for="upload in item.value" class="flex">
+              <div v-if="item.picker === 'upload' && item.photos" class="uploadForm">
+                <div v-for="upload in item.photos" class="flex">
                   <Upload :file="upload" :getImg="album" @success="getImgData"></Upload>
                 </div>
               </div>
@@ -45,9 +45,16 @@
               </div>
             </div>
           </div>
-          <div class="commonBtn">
-            <div class="btn back" @click="successPunchClock = false">取消</div>
-            <div class="btn" @click="finishPunchClock">确定</div>
+          <div class="commonBtn" v-if="outcome">
+            <div class="btn back" @click="oncancel()">取消</div>
+            <div class="btn" :class="btn.action" v-for="btn in outcome.outcomeOptions"
+                 @click="finishPunchClock(btn,outcome.variableName)">
+              {{btn.title}}
+            </div>
+          </div>
+          <div class="commonBtn" v-else>
+            <div class="btn back" @click="oncancel()">取消</div>
+            <div class="btn" @click="finishPunchClock()">签约</div>
           </div>
         </div>
       </div>
@@ -69,9 +76,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div>
-
     </div>
   </div>
 </template>
@@ -103,8 +107,6 @@
             keyName: 'punch_clock_time',
             keyType: '',
             type: 'text',
-            status: '',
-            picker: 'picker',
             slot: '',
           },
           {
@@ -114,8 +116,6 @@
             keyName: 'punch_clock_address',
             keyType: '',
             type: 'text',
-            status: '',
-            picker: 'picker',
             slot: '',
           },
           {
@@ -147,9 +147,8 @@
           },
           {
             label: '上传',
-            keyName: 'upload',
             picker: 'upload',
-            value: [
+            photos: [
               {
                 label: '带看照片',
                 placeholder: '必填',
@@ -159,6 +158,7 @@
           },
         ],
         postForm: {},//最终提交数据
+        outcome: '',
       }
     },
     created() {
@@ -169,28 +169,37 @@
     activated() {
       this.startTime();
       setInterval(this.startTime, 1000);
-      let query = this.$route.query;
-      let api = query.ctl_detail_request_url;
+      let query = JSON.parse(sessionStorage.punchClock || '{}');
+      let bulletin = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.close_();
       this.postForm.task_id = query.task_id;
       this.postForm.flow_type = query.flow_type;
       this.postForm.process_id = query.root_id;
-      this.villageDetail(api);
+      this.villageDetail(query.detail_request_url, bulletin);
+      if (bulletin.bulletin === 'bulletin_rent_basic') {
+        this.outcome = query.oldOutcome;
+        this.form[this.outcome.variableName] = '';
+      } else {
+        this.outcome = '';
+      }
     },
     watch: {},
     computed: {},
     methods: {
+      // 取消
+      oncancel() {
+        this.successPunchClock = false;
+      },
       // 确定打卡
-      finishPunchClock() {
+      finishPunchClock(btn, value) {
+        if (btn) {
+          this.form[value] = btn.action;
+        }
         this.postForm.variables = this.jsonClone(this.form);
-        this.postForm.variables.property_phone = '182052501756';
-        this.postForm.variables.remark = '发的啥开发圣诞快乐';
-        this.postForm.variables.look_photo = [4227577, 4227578, 4227579];
         this.$httpZll.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
             this.close_();
-            this.$store.dispatch('done_tabs', '2');
-            this.routerReplace('/toBeDoneList');
+            this.$router.go(-1);
           }
         });
       },
@@ -200,25 +209,40 @@
         this.resetting();
       },
       // 带看小区信息 详情
-      villageDetail(api) {
+      villageDetail(api, bulletin) {
         this.successPunchClock = false;
         this.$httpZll.get(api).then(res => {
           if (res.success) {
-            let village = res.data.content.community;
-            this.villageInfo.location = [village.longitude, village.latitude];
-            this.villageInfo.village_name = village.village_name;
-            this.form.punch_clock_address = village.village_name || '';
-            this.form.property_fee = village.property_fee || '';
-            this.form.property_phone = village.property_phone || '';
+            let village = {};
+            if (bulletin.bulletin === 'bulletin_rent_basic') {
+              village = res.data.content.community_info || {};
+            } else {
+              village = res.data.content.community || {};
+            }
+            this.handlerVillageDetail(village);
           } else {
+            this.close_();
             this.villageInfo.location = [];
             this.villageInfo.village_name = '';
-            this.form.punch_clock_address = '';
-            this.form.property_phone = '';
             this.$prompt(res.message);
           }
           this.getLocation(this.villageInfo);
         })
+      },
+      handlerVillageDetail(village) {
+        this.form.punch_clock_address = village.village_name || '';
+        this.form.property_fee = '';
+        if (village.property_fee && village.property_fee !== '暂无信息') {
+          this.form.property_fee = village.property_fee;
+        }
+        this.form.property_phone = village.property_phone || '';
+        this.villageInfo.village_name = village.village_name || '';
+        if (village.longitude && village.longitude) {
+          this.villageInfo.location = [village.longitude, village.latitude];
+        } else {
+          this.villageInfo.location = [];
+          this.$prompt('获取位置信息失败', 'fail');
+        }
       },
       // 时间
       startTime() {
@@ -258,7 +282,6 @@
       getLocation(val) {
         let location;
         this.getBeforeCity().then(res => {
-          // location = val;
           location = res.location;
           let map = new AMap.Map('container', {
             resizeEnable: true,
@@ -278,7 +301,7 @@
           // 员工位置
           let staffContent =
             `<div class="icon_location staffContent">
-               <img src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1">
+               <img src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1" alt="">
             </div>`;
           let staffMarker = new AMap.Marker({
             position: location,
@@ -340,9 +363,11 @@
       height: 10rem;
       @include transition(all .3s);
     }
+
     #container.hover {
       height: 4.2rem;
     }
+
     /*重新获取定位*/
     .againLocation {
       position: fixed;
@@ -354,12 +379,14 @@
       padding-right: .2rem;
       z-index: 210;
       @include flex('items-center');
+
       i {
         width: .6rem;
         height: .6rem;
         @include bgImage('../../../assets/image/common/againLocation.png');
       }
     }
+
     /*打卡*/
     .punchClock {
       position: fixed;
@@ -370,56 +397,68 @@
       z-index: 200;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 36%);
       @include flex('flex-center');
+
       > div {
         @include flex('flex-center');
         position: absolute;
         bottom: .8rem;
         width: 3rem;
         height: 3rem;
+
         div {
           @include flex('flex-center');
           flex-direction: column;
           z-index: 6;
         }
+
         div, h2, h3, h4 {
           position: absolute;
           width: 100%;
           height: 100%;
           @include radius(50%);
         }
+
         h1 {
           font-size: .6rem;
           color: #FFFFFF;
           margin-bottom: .1rem;
         }
+
         h2, h3, h4 {
           z-index: 3;
           @include animation(circle-opacity 2s infinite);
         }
+
         h3 {
           animation-delay: 0.6s;
         }
+
         h4 {
           animation-delay: 1.1s;
         }
       }
+
       .infraMetas {
         div {
           background-color: #4570FE;
         }
+
         h2, h3, h4 {
           background-color: #d9ebff;
         }
       }
+
       .noInfraMetas {
         div {
           background-color: #FFC400;
         }
+
         h2, h3, h4 {
           background-color: #fff2c7;
         }
       }
     }
+
     @keyframes circle-opacity {
       0% {
         @include transform(scale(1));
@@ -439,6 +478,7 @@
       left: 0;
       right: 0;
       background: linear-gradient(135deg, rgba(137, 164, 255, 1) 0%, rgba(69, 112, 254, 1) 100%);
+
       .punchClockInfo {
         padding-top: .2rem;
         position: absolute;
@@ -450,8 +490,9 @@
         @include radius(.1rem);
         background-color: #FFFFFF;
         @include flex('bet-column');
+
         .commonBtn {
-          padding: .42rem 0;
+          padding: .42rem .3rem;
         }
       }
     }
