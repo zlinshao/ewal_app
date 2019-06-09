@@ -741,7 +741,6 @@ export default {
             this.$prompt('获取部门失败!', 'fail');
             return;
           }
-          console.log(data);
           this.$store.dispatch('personal_storage', data);
           resolve(true);
         }
