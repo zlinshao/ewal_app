@@ -57,7 +57,7 @@
                       <div v-else-if="changeFormData[key]">
                         <h3 :class="[idx !== 0?'h3':'']" v-if="formatData[key].length > 1">
                           {{changeFormData[key]['keyName']}}{{(myUtils.DX(idx+1))}}</h3>
-                        <h2 v-for="name of Object.keys(changeFormData[key])" v-if="name !== 'keyName'">
+                        <h2 v-for="name of Object.keys(changeFormData[key])" v-if="name !== 'keyName' && val[name]">
                           {{changeFormData[key][name]}}：{{val[name]}}
                         </h2>
                       </div>
@@ -254,7 +254,7 @@
           }
         ],
         searchStaffModule: false,
-        changeFormData: {},
+        changeFormData: {},//附属房东变化
       }
     },
     created() {

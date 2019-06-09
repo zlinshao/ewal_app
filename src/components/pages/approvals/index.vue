@@ -493,10 +493,10 @@
       // 接口配置
       apiHandle(tab, status) {
         switch (tab) {
-          case '1':
+          case '1'://我审批的
             this.urlApi = status === 1 ? 'history/tasks' : 'runtime/tasks';
             break;
-          case '2':
+          case '2'://我发起的
             switch (status) {
               case 0:
                 this.urlApi = 'runtime/process-instances';
@@ -512,14 +512,14 @@
                 break;
             }
             break;
-          case '3':
+          case '3'://抄送我的
             if (status === 0) {
               this.urlApi = 'runtime/tasks';
             } else {
               this.urlApi = 'history/tasks';
             }
             break;
-          case '4':
+          case '4'://暂不处理
             this.urlApi = 'runtime/process-instances';
             break;
         }

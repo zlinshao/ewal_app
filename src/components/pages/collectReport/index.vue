@@ -559,17 +559,19 @@
           this.resetChange(key);
           return;
         }
-        if (draw.children.length === 1) {
-          if (draw.keyName === 'period_price_way_arr') {
-            this.form.period_price_way_arr[0].period = this.form.month;
-          }
-          if (draw.keyName === 'current_pay_info') {
-            this.form.current_pay_info[0].money_sep = this.form.money_sum;
-          }
-        }
         this.form[key].splice(num, 1);
         this.formatData[key].splice(num, 1);
         draw.children.splice(num, 1);
+        if (draw.children.length === 1) {
+          if (draw.keyName === 'period_price_way_arr') {
+            this.form[draw.keyName][0].period = this.form.month;
+            console.log(this.form[draw.keyName][0])
+          }
+          if (draw.keyName === 'current_pay_info') {
+            this.form[draw.keyName][0].money_sep = this.form.money_sum;
+            console.log(this.form[draw.keyName][0])
+          }
+        }
         if (draw.status !== 'countDate') return;
         this.countPrice();
         this.moreChangeDateCount(key);

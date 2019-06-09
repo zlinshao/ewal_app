@@ -358,7 +358,6 @@ export default {
     Vue.prototype.$changeHandle = function (res, item, val, all, data, child) {
       for (let slither of Object.keys(all)) {
         for (let list of all[slither]) {
-
           if (list.keyName === item) {
             if (child) {
               child[item] = this.jsonClone(list.children[0]);
