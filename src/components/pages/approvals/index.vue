@@ -573,7 +573,7 @@
             };
             break;
         }
-        // this.params['params' + tab].assignee = this.personal.staff_id;
+        this.params['params' + tab].assignee = this.personal.staff_id;
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 滚动加载

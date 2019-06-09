@@ -240,7 +240,7 @@ class httpZll extends httpService {
     let params = {
       size: 12,
       tenantId: 'market',
-      // assignee: '69',//登陆人
+      assignee: '',//登陆人
       order: 'desc',
       taskDefinitionKeyIn: '',
       rootProcessDefinitionKeyIn: '',
