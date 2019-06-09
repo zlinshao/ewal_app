@@ -848,7 +848,7 @@
       },
       // 发布
       saveReport(val) {
-        if (val !== 1 || val !== 2) {
+        if (val !== 1 && val !== 2) {
           if (this.$attestationKey(this.drawForm)) return;
         }
         this.form.is_draft = val;
@@ -955,6 +955,215 @@
           }
         }
         this.$httpZll.getBulletinDraft(params).then(data => {
+        // this.form = {
+        //   "id": 242,
+        //   "bed": "1",
+        //   "day": "3",
+        //   "area": "122",
+        //   "bank": "上海浦东发展银行",
+        //   "hood": "1",
+        //   "sofa": "1",
+        //   "type": "1",
+        //   "chair": "1",
+        //   "floor": "1",
+        //   "month": "12",
+        //   "photo": [
+        //     "4229831"
+        //   ],
+        //   "floors": "1",
+        //   "fridge": "1",
+        //   "signer": {
+        //     "name": "张琳琳",
+        //     "phone": "18052001167",
+        //     "idcard": "320321198904010033",
+        //     "fadada_user_id": "37C5DC6B9D52D38E354CD46A8B3AE47A"
+        //   },
+        //   "account": "6225212583158743",
+        //   "card_id": "320321198904010033",
+        //   "curtain": "1",
+        //   "deposit": "1222",
+        //   "has_gas": "0",
+        //   "is_fill": "0",
+        //   "task_id": "56baa546-8aca-11e9-b5a0-0242a6cf5631",
+        //   "vacancy": "12",
+        //   "decorate": {
+        //     "id": "405",
+        //     "name": "毛坯"
+        //   },
+        //   "end_date": "2020-06-23",
+        //   "is_clean": "0",
+        //   "is_draft": "0",
+        //   "position": "1",
+        //   "staff_id": "69",
+        //   "wardrobe": "1",
+        //   "card_type": "411",
+        //   "community": {
+        //     "id": "363",
+        //     "area": "320102",
+        //     "city": "320100",
+        //     "code": "",
+        //     "unit": "[]",
+        //     "album": {
+        //       "house_pic": []
+        //     },
+        //     "floor": "[]",
+        //     "py_all": "emeilu12hao",
+        //     "region": "8",
+        //     "remark": "https://nj.lianjia.com/xiaoqu/1413170019151816/",
+        //     "suffix": "[]",
+        //     "address": "峨眉路12号",
+        //     "content": "位于玄武区商圈，交通便利，多路公交可达地铁4号线鼓楼站地铁1号线鼓楼站3号线鸡鸣寺站；小区绿化高，周边配套齐全，商场、医疗、教育资源丰富，菜场、银行一应俱全。购物方便，生活便捷。",
+        //     "del_flag": "0",
+        //     "fix_flag": "0",
+        //     "latitude": "32.062752049662",
+        //     "position": "",
+        //     "province": "320000",
+        //     "py_first": "eml1h",
+        //     "longitude": "118.78724028973",
+        //     "max_price": "",
+        //     "min_price": "",
+        //     "built_year": "2005",
+        //     "created_at": "",
+        //     "developers": "暂无信息",
+        //     "house_type": "1",
+        //     "p_fee_list": "",
+        //     "seat_block": "[]",
+        //     "updated_at": "",
+        //     "bd_latitude": "32.069036",
+        //     "subway_road": "距离鼓楼(地铁站)1号线529米，距离鼓楼(地铁站)4号线529米，距离鸡鸣寺(地铁站)3号线1206米，距离新街口(地铁站)2号线2325米",
+        //     "bd_longitude": "118.793683",
+        //     "number_rooms": "[]",
+        //     "property_com": "暂无信息",
+        //     "property_fee": "暂无信息",
+        //     "total_houses": "30户",
+        //     "village_name": "峨眉路12号",
+        //     "village_alias": "",
+        //     "district_group": "[]",
+        //     "property_phone": "",
+        //     "peripheral_info": "1、购物：万达广场等多家商场；多家便利店、菜场环绕四周2、医疗：江苏省肿瘤医院、南京鼓楼医院等多家医院3、教育：幼儿园、小学、中学、大学，学校齐全",
+        //     "total_buildings": "暂无信息",
+        //     "property_fee_list": ""
+        //   },
+        //   "direction": {
+        //     "id": "1",
+        //     "name": "东"
+        //   },
+        //   "gas_stove": "1",
+        //   "is_agency": "0",
+        //   "lock_type": "1",
+        //   "microwave": "1",
+        //   "sign_date": "2019-06-09",
+        //   "spot_code": "s24f09",
+        //   "subbranch": "",
+        //   "bed_remark": "",
+        //   "begin_date": "2019-06-09",
+        //   "has_heater": "0",
+        //   "house_type": [
+        //     "1",
+        //     "1",
+        //     "1"
+        //   ],
+        //   "staff_name": "张琳琳",
+        //   "television": "1",
+        //   "agency_name": "",
+        //   "clothe_rack": "1",
+        //   "contact_way": "1",
+        //   "house_video": [
+        //     "4229832"
+        //   ],
+        //   "is_elevator": "0",
+        //   "pay_way_bet": "1",
+        //   "account_name": "贾少君",
+        //   "agency_phone": "",
+        //   "agency_price": "",
+        //   "can_decorate": "0",
+        //   "customer_sex": "m",
+        //   "dining_table": "1",
+        //   "door_address": [
+        //     "33",
+        //     "44",
+        //     "55"
+        //   ],
+        //   "is_lord_fill": "0",
+        //   "other_remark": "dsfsad",
+        //   "property_fee": "1233",
+        //   "relationship": "fdsfas",
+        //   "remark_terms": [
+        //     "2",
+        //     "3"
+        //   ],
+        //   "wash_machine": "1",
+        //   "water_heater": "1",
+        //   "air_condition": "1",
+        //   "bulletin_name": "收房报备",
+        //   "bulletin_type": "bulletin_collect_basic",
+        //   "can_add_goods": "0",
+        //   "contact_phone": "18052001167",
+        //   "customer_name": "张琳琳",
+        //   "department_id": "395",
+        //   "house_address": "峨眉路12号33-44-55",
+        //   "id_card_photo": [
+        //     "4229834",
+        //     "4229835",
+        //     "4229836"
+        //   ],
+        //   "property_type": {
+        //     "id": "419",
+        //     "name": "住宅"
+        //   },
+        //   "curtain_remark": "",
+        //   "lord_fill_date": "",
+        //   "pay_first_date": "2019-06-22",
+        //   "property_owner": "dfsfsdfas",
+        //   "property_phone": "1232131231",
+        //   "bank_card_photo": [
+        //     "4229833"
+        //   ],
+        //   "contract_number": "LJSFE010003231",
+        //   "department_name": "开发",
+        //   "end_date_vacant": "2019-06-22",
+        //   "other_furniture": "",
+        //   "pay_second_date": "2019-07-22",
+        //   "qiu_quan_number": "gfdgds",
+        //   "wardrobe_remark": "",
+        //   "agency_user_name": "",
+        //   "non_landlord_fee": [
+        //     "2",
+        //     "6"
+        //   ],
+        //   "property_address": "dfsfas",
+        //   "signatory_identity": "1",
+        //   "process_instance_id": "56b770d8-8aca-11e9-b5a0-0242a6cf5631",
+        //   "subsidiary_customer": [
+        //     {
+        //       "card_id": "",
+        //       "card_type": "",
+        //       "contact_way": "",
+        //       "customer_sex": "",
+        //       "contact_phone": "",
+        //       "customer_name": ""
+        //     }
+        //   ],
+        //   "period_price_way_arr": [
+        //     {
+        //       "period": "12",
+        //       "pay_way": "1",
+        //       "end_date": "2020-06-22",
+        //       "begin_date": "2019-06-22",
+        //       "month_unit_price": "1222"
+        //     }
+        //   ],
+        //   "holding_documents_type": "1",
+        //   "is_electronic_contract": "1",
+        //   "property_right_card_number": "fgdgdsfgds",
+        //   "location": {
+        //     "province_name": "江苏省",
+        //     "city_name": "南京市",
+        //     "area_name": "玄武区",
+        //     "region_name": "玄武门"
+        //   },
+        //   "staff_phone": null,
+        //   }
           this.form.id = '';//草稿ID
           if (!data) {
             if (!this.isGetTake) {

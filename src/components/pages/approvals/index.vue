@@ -538,6 +538,7 @@
               finished: Boolean(status),
               active: true,
             };
+            this.params['params' + tab].assignee = this.personal.staff_id;
             break;
           case '2':
             switch (status) {
@@ -548,12 +549,14 @@
                   processDefinitionKey: 'MG-BulletinApproval',
                   finished: Boolean(status),
                 };
+                this.params['params' + tab].taskOwner = this.personal.staff_id;
                 break;
               case 2:
                 this.params['params' + tab] = {
                   page: 1,
                   taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
                 };
+                 this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
               case 3:
                 this.params['params' + tab] = {
@@ -562,6 +565,7 @@
                   taskDefinitionKeyIn: approvalSearch.approvals23.join(','),
                   active: true,
                 };
+                 this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
             }
             break;
@@ -571,9 +575,12 @@
               category: 'cc',
               finished: Boolean(status),
             };
+             this.params['params' + tab].assignee = this.personal.staff_id;
+            break;
+          case '4':
+            this.params['params' + tab].taskOwner = this.personal.staff_id;
             break;
         }
-        this.params['params' + tab].assignee = this.personal.staff_id;
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 滚动加载
@@ -603,6 +610,7 @@
             if (!twoLevel) {
               this.paging['paging' + tab] = res.total;
             }
+            console.log(JSON.stringify(res.data[0]));
             let data = this.groupHandlerListData(res.data, this.urlApi);
             this.outcomes(data, this.tabs);
             if (this.params['params' + tab].page === 1) {

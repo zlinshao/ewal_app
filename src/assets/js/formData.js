@@ -1213,7 +1213,7 @@ defineCollectReport = {
     },
     {
       label: '产权证号',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'property_right_card_number',
       keyType: '',
       type: 'text',
@@ -1222,7 +1222,7 @@ defineCollectReport = {
     },
     {
       label: '丘权号',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'qiu_quan_number',
       keyType: '',
       type: 'text',
@@ -1779,7 +1779,7 @@ defineCollectReport = {
     },
     {
       label: '空置天数',
-      placeholder: '请输入',
+      placeholder: '必填 请输入',
       keyName: 'vacancy',
       keyType: '',
       type: 'number',
