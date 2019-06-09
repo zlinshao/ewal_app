@@ -189,12 +189,13 @@
             });
           }
           if (name === 'city') {
+            console.log(value)
             this.formatData.village_name = value.city.name;
             this.closeSelect('city');
             this.$httpZll.getAllCityList({province: this.form.province.id, city: value.city.id}).then(res => {
               let data = {};
               for (let val of res.data) {
-                data[val.area_id] = val.area_name;
+                data[val.city_id] = val.city_name;
               }
               dicties.district = data;
             });
@@ -207,7 +208,7 @@
             }).then(res => {
               let data = {};
               for (let val of res.data) {
-                data[val.region_id] = val.region_name;
+                data[val.area_id] = val.area_name;
               }
               dicties.region = data;
             });

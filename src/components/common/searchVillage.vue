@@ -64,12 +64,14 @@
     mounted() {
       this.$httpZll.getCityList().then(res => {
         this.cityList = res.data;
-        for (let item of res.data) {
-          if (String(item.code) === String(this.personal.city_id)) {
-            this.city_name = item.name;
-            this.params.city = item.code;
-          }
-        }
+        this.city_name = '天津';
+        this.params.city = '120000';
+        // for (let item of res.data) {
+        //   if (String(item.code) === String(this.personal.city_id)) {
+        //     this.city_name = item.name;
+        //     this.params.city = item.code;
+        //   }
+        // }
       });
     },
     activated() {
