@@ -695,8 +695,8 @@
       electronicContract() {
         let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
         let data = {
-          // city_id: this.form.community && this.form.community.city || '320100',
-          city_id: '320100',
+          city_id: this.form.community && this.form.community.city || '320100',
+          // city_id: '320100',
           version: version,
         };
         this.$httpZll.getElectronicContract(data).then(res => {
@@ -849,7 +849,7 @@
       // 发布
       saveReport(val) {
         if (val !== 1 && val !== 2) {
-          // if (this.$attestationKey(this.drawForm)) return;
+          if (this.$attestationKey(this.drawForm)) return;
         }
         this.form.is_draft = val;
         let bulletin = this.bulletinType;
