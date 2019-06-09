@@ -189,7 +189,6 @@
             });
           }
           if (name === 'city') {
-            console.log(value)
             this.formatData.village_name = value.city.name;
             this.closeSelect('city');
             this.$httpZll.getAllCityList({province: this.form.province.id, city: value.city.id}).then(res => {
