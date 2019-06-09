@@ -4253,7 +4253,7 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('本次缴费底数', 'gas_meter'),
     handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
     handlerFreeDelivery('物业费', 'property_costs'),
-    handlerFreeDelivery('公摊费', 'public_fee', 'number', '必填 请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
+    handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
     handlerFreeDelivery('维修费', 'repair_fees'),
     {
       label: '其他费用',
@@ -4285,7 +4285,7 @@ handlerFreeDeliveryChange = [
         ]
       ],
     },
-    handlerFreeDelivery('费用总计', 'total_fee'),
+    //handlerFreeDelivery('费用总计', 'total_fee'),
     handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
   ],
   [
@@ -4301,13 +4301,13 @@ handlerFreeDeliveryChange = [
       showForm: 'formatData',//picker 显示form 或 formatData
       slot: '',
     },
-    handlerFreeDelivery('水务公司', 'water_company', 'text'),
+    // handlerFreeDelivery('水务公司', 'water_company', 'text'),
     handlerFreeDelivery('用水档数', 'water_level'),
     handlerFreeDelivery('用水单价', 'water_unit_price'),
     handlerFreeDelivery('上次缴费底数', 'water_fee_last'),
     handlerFreeDelivery('本次缴费底数', 'water_meter'),
     handlerFreeDelivery('结算金额', 'water_settlement_amount'),
-    handlerFreeDelivery('电力公司', 'electric_company', 'text'),
+    // handlerFreeDelivery('电力公司', 'electric_company', 'text'),
     handlerFreeDelivery('用电档数', 'electric_level'),
     handlerFreeDelivery('谷值用电单价', 'electric_valley_unit_price'),
     handlerFreeDelivery('上次缴费底数', 'electric_valley_last'),
@@ -4317,14 +4317,14 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('上次缴费底数', 'electric_peak_last'),
     handlerFreeDelivery('本次缴费底数', 'electric_peak'),
     handlerFreeDelivery('峰值结算金额', 'electric_peak_settlement_amount'),
-    handlerFreeDelivery('燃气公司', 'gas_company', 'text'),
+    // handlerFreeDelivery('燃气公司', 'gas_company', 'text'),
     handlerFreeDelivery('燃气档数', 'gas_level'),
     handlerFreeDelivery('燃气单价', 'gas_price'),
     handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
     handlerFreeDelivery('本次缴费底数', 'gas_meter'),
     handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
     handlerFreeDelivery('物业费', 'property_costs'),
-    handlerFreeDelivery('公摊费', 'public_fee', 'number', '必填 请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
+    handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
     handlerFreeDelivery('维修费', 'repair_fees'),
     {
       label: '其他费用',
@@ -4356,7 +4356,7 @@ handlerFreeDeliveryChange = [
         ]
       ],
     },
-    handlerFreeDelivery('费用总计', 'total_fee'),
+    //handlerFreeDelivery('费用总计', 'total_fee'),
     handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
   ],
   [
@@ -4409,7 +4409,7 @@ handlerFreeDeliveryChange = [
         ]
       ],
     },
-    handlerFreeDelivery('费用总计', 'total_fee'),
+    //handlerFreeDelivery('费用总计', 'total_fee'),
     handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
   ]
 ];
@@ -4431,47 +4431,47 @@ function handlerHallGoods(value, num) {
     },
     {
       label: '卫生备注',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'health_remark',
       keyType: '',
       type: 'textarea',
       status: '',
       slot: '',
     },
-    {
-      label: '保洁时间',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'cleaning_time',
-      keyType: '',
-      type: 'text',
-      picker: 'date',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '保洁类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'cleaning_type',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      showForm: 'formatData',//picker 显示form 或 formatData
-      picker: 'picker',
-      slot: '',
-    },
-    {
-      label: '上传',
-      picker: 'upload',
-      photos: [
-        {
-          label: '需保洁照片',
-          placeholder: '必填',
-          keyName: 'house_album',
-        }
-      ]
-    },
+    // {
+    //   label: '保洁时间',
+    //   placeholder: '必填 请选择',
+    //   readonly: 'readonly',
+    //   keyName: 'cleaning_time',
+    //   keyType: '',
+    //   type: 'text',
+    //   picker: 'date',
+    //   showForm: 'formatData',//picker 显示form 或 formatData
+    //   slot: '',
+    // },
+    // {
+    //   label: '保洁类型',
+    //   placeholder: '必填 请选择',
+    //   readonly: 'readonly',
+    //   keyName: 'cleaning_type',
+    //   keyType: '',
+    //   type: 'text',
+    //   status: 'objInt',
+    //   showForm: 'formatData',//picker 显示form 或 formatData
+    //   picker: 'picker',
+    //   slot: '',
+    // },
+    // {
+    //   label: '上传',
+    //   picker: 'upload',
+    //   photos: [
+    //     {
+    //       label: '需保洁照片',
+    //       placeholder: '必填',
+    //       keyName: 'house_album',
+    //     }
+    //   ]
+    // },
     deliveryMorePickersBrand('彩电', value, 'tv', childKeysTypeNum, num),
     deliveryMorePickers('门锁类型', value, 'gate_lock', childKeysTypeBad, num),
     deliveryMorePickers('钥匙', value, 'key', childKeysTypeBad, num),
