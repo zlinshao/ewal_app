@@ -125,9 +125,11 @@
             dicties.property_type = dict[410];//房屋类型
             break;
           case 'h3':
-            for (let item of res.data) {
-              let account = item.account;
-              dicties.remittance_account[account.id] = account.account_num + ' ' + account.account_owner + `<br>` + account.name;
+            if (res.data && res.data.length) {
+              for (let item of res.data) {
+                let account = item.account;
+                dicties.remittance_account[account.id] = account.account_num + ' ' + account.account_owner + `<br>` + account.name;
+              }
             }
             break;
           case 'h4':
