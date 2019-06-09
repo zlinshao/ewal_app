@@ -776,7 +776,10 @@
           }
         }
         this.form.task_id = this.allDetail.task_id;
-        this.form.house_id = this.allDetail.house_id;//房屋ID
+        if (this.allDetail.ewal_contract) {
+          let contract = JSON.parse(this.allDetail.ewal_contract || '{}');
+          this.form.house_id = contract.house_id;//房屋ID
+        }
         if (this.allDetail.ewal_contract) {
           this.form.contract_id = JSON.parse(this.allDetail.ewal_contract).v3_contract_id;//合同ID
         } else {
