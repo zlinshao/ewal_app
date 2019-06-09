@@ -848,6 +848,7 @@
       },
       // 发布
       saveReport(val) {
+        console.log(this.form);
         if (val !== 1 && val !== 2) {
           if (this.$attestationKey(this.drawForm)) return;
         }
@@ -956,7 +957,7 @@
         }
         this.$httpZll.getBulletinDraft(params).then(data => {
           // this.form = collectBulletinDraft;//收房预填
-          // this.form = rentBulletinDraft;//租房预填
+          this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
           if (!data) {
             if (!this.isGetTake) {
@@ -998,6 +999,7 @@
           switch (item) {
             case 'month':
             case 'address':
+            case 'house_id':
             case 'house_address':
             case 'customer_name':
               this.form[item] = res[item] || this.form[item];

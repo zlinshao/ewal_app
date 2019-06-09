@@ -103,98 +103,98 @@
           bulletin_collect_basic: [
             {
               label: '证件照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'identity_photo',
             }, {
               label: '银行卡照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'bank_photo',
             }, {
               label: '合同照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'photo',
             }, {
               label: '水表照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'water_photo',
             }, {
               label: '电表照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'electricity_photo',
             }, {
               label: '气表照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'gas_photo',
             }, {
               label: '交接单照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'checkin_photo',
             }, {
               label: '委托书照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'auth_photo',
             }, {
               label: '押金照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'deposit_photo',
             }, {
               label: '承诺书照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'promise',
             }, {
               label: '房产证',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'property_photo',
             }, {
               label: '水卡',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'water_card_photo',
             }, {
               label: '电卡',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'electricity_card_photo',
             }, {
               label: '气卡',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'gas_card_photo',
             }
           ],
           bulletin_rent_basic: [
             {
               label: '交接单',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'checkin_photo',
             }, {
               label: '截图凭证',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'certificate_photo',
             }, {
               label: '押金收条',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'deposit_photo',
             }, {
               label: '证件照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'identity_photo',
             }, {
               label: '合同照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'photo',
             }, {
               label: '银行卡照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'bank_photo',
             }, {
               label: '水表照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'water_photo',
             }, {
               label: '电表照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'electricity_photo',
             }, {
               label: '气表照片',
-              placeholder: '必填',
+              // placeholder: '必填',
               keyName: 'gas_photo',
             }
           ],
@@ -203,7 +203,7 @@
         goodsUpload: [
           {
             text: '物品照片',
-            placeholder: '必填',
+            // placeholder: '必填',
             keyName: 'house_goods',
           },
         ],
