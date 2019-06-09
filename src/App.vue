@@ -94,12 +94,15 @@
             // 城市
             let h4 = this.$httpZll.getCityList();
             Promise.all([h1, h2, h3, h4]).then((result) => {
+              console.log(1);
+              console.log(result);
               this.handlerDict(result[0], 'h1');
               this.handlerDict(result[1], 'h2');
               this.handlerDict(result[2], 'h3');
               this.handlerDict(result[3], 'h4');
               this.loading = !res;
             }).catch((error) => {
+              console.log(2);
               console.log(error)
             });
           }
