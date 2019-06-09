@@ -2,40 +2,40 @@
   <div id="index">
     <div class="index" :style="mainListHeight()">
       <!--头部标签-->
-      <!--      <div class="indexTop">-->
-      <!--        <div>-->
-      <!--          <p v-for="(item,index) in indexTop" :class="['p'+(index+1)]" @click="topTabsTag(item.url)">-->
-      <!--            <img :src="item.icon" alt="">-->
-      <!--          </p>-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <div class="indexTop">
+        <div>
+          <p v-for="(item,index) in indexTop" :class="['p'+(index+1)]" @click="topTabsTag(item.url)">
+            <img :src="item.icon" alt="">
+          </p>
+        </div>
+      </div>
       <!--增加小区-->
       <div class="addVillage" @click="routerLink('/createdVillage')"></div>
       <!--空置房源-->
-      <!--      <div class="vacancyHouse">-->
-      <!--        <h1></h1>-->
-      <!--        <div v-for="item in vacancyHouse">-->
-      <!--          <i></i>-->
-      <!--          <p>-->
-      <!--            <b>{{item.num}}</b>-->
-      <!--            <span>{{item.scope}}</span>-->
-      <!--          </p>-->
-      <!--        </div>-->
-      <!--        <h2></h2>-->
-      <!--      </div>-->
+      <div class="vacancyHouse">
+        <h1></h1>
+        <div v-for="item in vacancyHouse">
+          <i></i>
+          <p>
+            <b>{{item.num}}</b>
+            <span>{{item.scope}}</span>
+          </p>
+        </div>
+        <h2></h2>
+      </div>
       <!--摩天轮-->
       <CirclePanel class="circle"></CirclePanel>
       <!--小火车-->
-      <!--      <div class="smallTrain">-->
-      <!--        <h1></h1>-->
-      <!--        <div :class="[item.class?item.class:'railroadCar']" v-for="item in trans">-->
-      <!--          <i></i>-->
-      <!--          <p class="p1">-->
-      <!--            <b>{{item.num}}</b>-->
-      <!--            <span>{{item.scope}}</span>-->
-      <!--          </p>-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <div class="smallTrain">
+        <h1></h1>
+        <div :class="[item.class?item.class:'railroadCar']" v-for="item in trans">
+          <i></i>
+          <p class="p1">
+            <b>{{item.num}}</b>
+            <span>{{item.scope}}</span>
+          </p>
+        </div>
+      </div>
     </div>
     <div class="indexBottom">
       <p v-for="item in indexBottom" @click="bottomTabsTag(item.id)">
@@ -86,31 +86,31 @@
         ],
         vacancyHouse: [
           {
-            num: '7',
+            num: '0',
             scope: '小于7天',
           }, {
-            num: '100',
+            num: '0',
             scope: '8-14天',
           }, {
-            num: '45',
+            num: '0',
             scope: '15-21天',
           }, {
-            num: '10',
+            num: '0',
             scope: '大于21天',
           },
         ],
         trans: [
           {
-            num: '7',
+            num: '0',
             scope: '带看',
           }, {
-            num: '7',
+            num: '0',
             scope: '资料',
           }, {
-            num: '7',
+            num: '0',
             scope: '维保',
           }, {
-            num: '7',
+            num: '0',
             class: 'lastRailroadCar',
             scope: '空置跟进',
           }
@@ -124,10 +124,10 @@
             id: '2',
             icon: tab_home2,
           },
-          // {
-          //   id: '3',
-          //   icon: tab_home3,
-          // },
+          {
+            id: '3',
+            icon: tab_home3,
+          },
           {
             id: '4',
             icon: tab_home4,
@@ -153,9 +153,6 @@
         switch (val) {
           case '4':
             this.routerLink('/toBeDoneList');
-            break;
-          case '2':
-            this.routerLink('/approvals');
             break;
           case '3':
             // this.routerLink('/houseResource');
