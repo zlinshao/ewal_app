@@ -117,7 +117,7 @@
 
     },
     mounted() {
-      this.getVillageLocation();
+
     },
     activated() {
       this.resetting()
@@ -190,6 +190,7 @@
           }
           if (name === 'city') {
             this.formatData.village_name = value.city.name;
+            this.getVillageLocation();
             this.closeSelect('city');
             this.$httpZll.getAllCityList({province: this.form.province.id, city: value.city.id}).then(res => {
               let data = {};
