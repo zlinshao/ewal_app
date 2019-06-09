@@ -625,7 +625,7 @@
       handleData(detail) {
         this.slither = 0;
         this.formatData = {};
-        let bulletinData = this.$bulletinType(detail.bulletin_type, detail.pact_type);
+        let bulletinData = this.$bulletinType(detail.bulletin_type);
         this.bulletinTitle = bulletinData.title;
         let data = this.jsonClone(bulletinData.data);
         this.allBulletin = data;

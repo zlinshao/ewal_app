@@ -309,7 +309,7 @@ export default {
       return {form, formatData, value, album, show};
     };
     // 报备类型数据匹配
-    Vue.prototype.$bulletinType = function (type, num = '') {
+    Vue.prototype.$bulletinType = function (type) {
       let data, title;
       switch (type) {
         case 'bulletin_collect_basic':
@@ -346,10 +346,26 @@ export default {
           title = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
           data = this.jsonClone(defineCheckoutReport);
           break;
-        case 'supplement_lord_time'://补充协议
+        case 'supplement_lord_time': //延长收房时长
+        case 'supplement_lord_change_bank': //房东跟还银行卡
+        case 'supplement_lord_change_price': //调整收房价格
+        case 'supplement_renter_time': //租客延长租期
           data = {};
           title = ['补充协议'];
-          data.slither0 = this.jsonClone(defineSupplyAgreement[num - 1]);
+          switch (type) {
+            case 'supplement_lord_time':
+              data.slither0 = this.jsonData(defineSupplyAgreement[1]);
+              break;
+            case 'supplement_lord_change_bank':
+              data.slither0 = this.jsonData(defineSupplyAgreement[2]);
+              break;
+            case 'supplement_lord_change_price':
+              data.slither0 = this.jsonData(defineSupplyAgreement[3]);
+              break;
+            case 'supplement_renter_time':
+              data.slither0 = this.jsonData(defineSupplyAgreement[4]);
+              break;
+          }
           break;
       }
       return {data, title}
