@@ -246,6 +246,7 @@
       },
       // 提交
       okAddVillage() {
+        this.form.village_name=this.formatData.village_name;
         if (this.$attestationKey(this.drawSlither)) return;
         this.$httpZll.newAddVillage(this.form).then(res => {
           if (res.success) {
