@@ -1079,7 +1079,7 @@ defineSupplyAgreement = {
     },
     {
       label: '备注',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'remark',
       keyType: '',
       type: 'textarea',
@@ -1181,7 +1181,7 @@ defineSupplyAgreement = {
     },
     {
       label: '备注',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'remark',
       keyType: '',
       type: 'textarea',
@@ -1257,7 +1257,7 @@ defineSupplyAgreement = {
     },
     {
       label: '备注',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'remark',
       keyType: '',
       type: 'textarea',
@@ -1346,7 +1346,7 @@ defineSupplyAgreement = {
     },
     {
       label: '备注',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'remark',
       keyType: '',
       type: 'textarea',

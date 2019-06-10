@@ -220,6 +220,7 @@
       },
       // 提交
       saveAgreement() {
+        if (this.$attestationKey(this.drawSlither)) return;
         this.form.is_draft = 0;
         let type = this.form.pact_type === 4 ? 'rent' : 'collect';
         this.$httpZll.postSupplyAgreement(this.form, type).then(res => {
