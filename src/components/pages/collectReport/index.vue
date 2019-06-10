@@ -376,12 +376,12 @@
       tapEnd() {
         let start = this.startClientX;
         let end = this.endClientX;
-        if (start - end > 66) {
+        if (start - end > 100) {
           if ((this.allReportNum - 1) > this.slither > 0) {
             this.slither++;
           }
         }
-        if (start - end < -66) {
+        if (start - end < -100) {
           if (this.slither > 0) {
             this.slither--;
           }

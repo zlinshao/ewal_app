@@ -148,7 +148,7 @@
       </div>
     </van-popup>
     <!--历史审批流程-->
-<!--    <div class="records" @click="recordPopup = true"><p></p></div>-->
+<!--    <div class="records" @click="recordPopup = true"><p></p> </div>-->
     <van-popup v-model="recordPopup" overlay-class="overlay-color" position="right" :overlay="true" class="recordPopup">
       <div class="content">
         <div class="contentMain">
