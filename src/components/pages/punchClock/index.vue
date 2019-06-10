@@ -184,7 +184,11 @@
       }
     },
     watch: {},
-    computed: {},
+    computed: {
+      personal() {
+        return this.$sotre.state.app.personalDetail;
+      }
+    },
     methods: {
       // 取消
       oncancel() {
@@ -269,17 +273,18 @@
       punchClock(val) {
         if (val) {
           this.successPunchClock = true;
+        } else {
           this.form.punch_clock_time = this.today;
           let that = this;
           let con = that.$refs.con.offsetHeight;
           that.mainHeight = that.mainListHeight(con);
-        } else {
+
           this.$prompt('超出打卡范围（范围300米）')
         }
       },
       // 获取 打卡地点 员工位置
       getLocation(val) {
-        let location;
+        let location, that = this;
         this.getBeforeCity().then(res => {
           location = res.location;
           let map = new AMap.Map('container', {
@@ -300,7 +305,7 @@
           // 员工位置
           let staffContent =
             `<div class="icon_location staffContent">
-               <img src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1" alt="">
+               <img src=${that.personalDetail.avatar} alt="">
             </div>`;
           let staffMarker = new AMap.Marker({
             position: location,
