@@ -1,6 +1,6 @@
 <template>
   <div id="createdVillage">
-    <div class="createdVillage" :style="mainListHeight()">
+    <div class="createdVillage" :style="htmlCss">
       <div class="top bgColor"></div>
       <div class="top shaw"></div>
       <div class="main">
@@ -98,9 +98,11 @@
     components: {},
     data() {
       return {
+        htmlCss: {},
         map: null,
         villagePhoto: false,
         form: {},
+        village: '',
         formatData: {},               //DOM显示数据
         showData: {},
         drawSlither: [],
@@ -120,12 +122,21 @@
 
     },
     activated() {
-      this.resetting()
+      this.htmlCss = this.mainListHeight();
+      this.htmlCss.width = window.innerWidth + 'px';
+      this.resetting();
     },
-    watch: {},
+    watch: {
+      'formatData.village'() {
+        this.form.address = '';
+      }
+    },
     computed: {
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
+      },
+      personal() {// 个人信息
+        return this.$store.state.app.personalDetail;
       },
     },
     methods: {
@@ -138,7 +149,8 @@
         });
         //输入提示
         let autoOptions = {
-          input: "village_name"
+          input: "village_name",
+          city: this.village || this.personal.city_name,
         };
         let auto = new AMap.Autocomplete(autoOptions);
         let placeSearch = new AMap.PlaceSearch({
@@ -147,16 +159,11 @@
         //构造地点查询类
         AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
         function select(e) {
-          let name = that.formatData.city;
-          if (e.poi.name.startsWith(name)) {
-            that.formatData.village_name = e.poi.name;
-          } else {
-            that.formatData.village_name = that.formatData.city + e.poi.name;
-          }
+          that.formatData.village_name = e.poi.name;
           that.form.village_name = e.poi.name;
+          that.form.address = e.poi.address;
           that.form.longitude = e.poi.location.lng;
           that.form.latitude = e.poi.location.lat;
-          that.form.address = e.poi.address;
           placeSearch.setCity(e.poi.adcode);
           placeSearch.search(e.poi.name);  //关键字查询查询
         }
@@ -189,7 +196,7 @@
             });
           }
           if (name === 'city') {
-            this.formatData.village_name = value.city.name;
+            this.village = value.city.name;
             this.getVillageLocation();
             this.closeSelect('city');
             this.$httpZll.getAllCityList({province: this.form.province.id, city: value.city.id}).then(res => {
@@ -246,7 +253,7 @@
       },
       // 提交
       okAddVillage() {
-        this.form.village_name=this.formatData.village_name;
+        this.form.village_name = this.formatData.village_name;
         if (this.$attestationKey(this.drawSlither)) return;
         this.$httpZll.newAddVillage(this.form).then(res => {
           if (res.success) {
