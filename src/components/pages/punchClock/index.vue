@@ -269,12 +269,11 @@
       punchClock(val) {
         if (val) {
           this.successPunchClock = true;
-        } else {
-          this.successPunchClock = true;
           this.form.punch_clock_time = this.today;
           let that = this;
           let con = that.$refs.con.offsetHeight;
           that.mainHeight = that.mainListHeight(con);
+        } else {
           this.$prompt('超出打卡范围（范围300米）')
         }
       },
