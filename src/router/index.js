@@ -63,9 +63,9 @@ export default new Router({
     },
     {
       path: '/createdTask',
-      name: '新建-收房带看任务',
+      name: '新建-带看任务',
       component: CreatedTask,
-      meta: {title: '新建-收房带看任务', index: 1},
+      meta: {title: '新建-带看任务', index: 1},
     },
     {
       path: '/contractSearch',
