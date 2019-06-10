@@ -538,7 +538,7 @@
               finished: Boolean(status),
               active: true,
             };
-            // this.params['params' + tab].assignee = this.personal.staff_id;
+            this.params['params' + tab].assignee = this.personal.staff_id;
             break;
           case '2':
             switch (status) {
