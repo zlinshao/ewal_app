@@ -457,6 +457,7 @@
             });
             break;
           case 'contract'://发送电子合同
+            user_id = this.$getFadadaUserId(item);
             this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
               if (res) {
                 params = {
