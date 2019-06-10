@@ -215,7 +215,7 @@
       },
       // 带看小区信息 详情
       villageDetail(api, bulletin) {
-        this.successPunchClock = false;
+        this.oncancel();
         this.$httpZll.get(api).then(res => {
           if (res.success) {
             let village = {};
@@ -274,6 +274,10 @@
       punchClock(val) {
         if (val) {
           this.successPunchClock = true;
+          this.form.punch_clock_time = this.today;
+          let that = this;
+          let con = that.$refs.con.offsetHeight;
+          that.mainHeight = that.mainListHeight(con);
         } else {
           this.successPunchClock = true;
           this.form.punch_clock_time = this.today;
