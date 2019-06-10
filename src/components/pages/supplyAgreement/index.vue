@@ -90,7 +90,7 @@
     computed: {},
     methods: {
       bulletin_types(type) {
-        let agreementType = '', to = '';
+        let agreementType = '';
         switch (type.bulletin) {
           case "bulletin_collect_basic":
             agreementType = 1;
