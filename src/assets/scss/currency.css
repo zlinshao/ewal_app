@@ -290,7 +290,7 @@
   font-size: .23rem; }
 
 .footerStatic {
-  position: static !important; }
+  position: relative !important; }
 
 .zl-button, .zl-confirmation {
   color: #FFFFFF;

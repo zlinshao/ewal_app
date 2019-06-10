@@ -217,7 +217,6 @@
       villageDetail(api, bulletin) {
         this.successPunchClock = false;
         this.$httpZll.get(api).then(res => {
-          console.log(res);
           if (res.success) {
             let village = {};
             if (bulletin.bulletin === 'bulletin_rent_basic') {
