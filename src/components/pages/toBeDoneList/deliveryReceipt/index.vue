@@ -115,7 +115,6 @@
                   :key="index"
                   :type="item.type"
                   :label="item.label"
-                  @input="listenInput(item.keyName)"
                   :placeholder="item.placeholder">
                   <div class="zl-button" v-if="item.button">{{item.button}}</div>
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
@@ -157,6 +156,7 @@
                       :key="i"
                       v-model="form[item.keyName][num][str.keyName]"
                       :type="str.type"
+                      @input="listenInput(item.keyName)"
                       :placeholder="str.placeholder">
                     </zl-input>
                     <div v-if="item.button && item.value.length > 1">
@@ -176,6 +176,7 @@
                   v-model="form[item.keyName]"
                   :type="item.type"
                   :label="item.label"
+                  @input="listenInput(item.keyName)"
                   :placeholder="item.placeholder">
                   <div v-if="item.button">{{item.button}}</div>
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
@@ -270,10 +271,38 @@
       },
       // 监听 input
       listenInput(name) {
-        // switch (name) {
-        //   case '':
-        //     break;
-        // }
+        let value = 0, num4 = 0, num5 = 0, num6 = 0;
+        switch (name) {
+          case 'other_fee':
+            for (let key of this.form.other_fee) {
+              value = value + Number(key.value || 0);
+            }
+            break;
+          case 'property_costs':
+          case 'public_fee':
+          case 'repair_fees':
+            num4 = Number(this.form.property_costs || 0);
+            num5 = Number(this.form.public_fee || 0);
+            num6 = Number(this.form.repair_fees || 0);
+            break;
+          case 'water_card_balance':
+          case 'electric_card_balance':
+          case 'gas_card_balance':
+            let num1 = Number(this.form.water_card_balance || 0);
+            let num2 = Number(this.form.electric_card_balance || 0);
+            let num3 = Number(this.form.gas_card_balance || 0);
+            this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
+            break;
+          case 'water_settlement_amount':
+          case 'electric_valley_settlement_amount':
+          case 'electric_peak_settlement_amount':
+          case 'gas_settlement_amount':
+            let price1 = Number(this.form.water_settlement_amount || 0);
+            let price2 = Number(this.form.electric_valley_settlement_amount || 0);
+            let price3 = Number(this.form.electric_peak_settlement_amount || 0);
+            let price4 = Number(this.form.gas_settlement_amount || 0);
+            this.form.total_fee = value + price1 + price2 + price3 + price4 + num4 + num5 + num6;
+        }
       },
       // 预览交接单
       previewDelivery() {

@@ -4254,9 +4254,9 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
     handlerFreeDelivery('本次缴费底数', 'gas_meter'),
     handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
-    handlerFreeDelivery('物业费', 'property_costs'),
+    handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
     handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
-    handlerFreeDelivery('维修费', 'repair_fees'),
+    handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
     {
       label: '其他费用',
       placeholder: '必填 请输入',
@@ -4287,8 +4287,8 @@ handlerFreeDeliveryChange = [
         ]
       ],
     },
-    //handlerFreeDelivery('费用总计', 'total_fee'),
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
+    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
+    handlerFreeDelivery('费用总计', 'total_fee'),
   ],
   [
     {
@@ -4325,9 +4325,9 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
     handlerFreeDelivery('本次缴费底数', 'gas_meter'),
     handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
-    handlerFreeDelivery('物业费', 'property_costs'),
+    handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
     handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
-    handlerFreeDelivery('维修费', 'repair_fees'),
+    handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
     {
       label: '其他费用',
       placeholder: '必填 请输入',
@@ -4358,8 +4358,8 @@ handlerFreeDeliveryChange = [
         ]
       ],
     },
-    //handlerFreeDelivery('费用总计', 'total_fee'),
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
+    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
+    handlerFreeDelivery('费用总计', 'total_fee'),
   ],
   [
     {
@@ -4377,10 +4377,9 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('水卡余额', 'water_card_balance',),
     handlerFreeDelivery('电卡余额', 'electric_card_balance',),
     handlerFreeDelivery('燃气卡余额', 'gas_card_balance',),
-    handlerFreeDelivery('结算金额', 'settlement_amount',),
-    handlerFreeDelivery('物业费', 'property_costs'),
-    handlerFreeDelivery('公摊费', 'public_fee', 'number', '必填 请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
-    handlerFreeDelivery('维修费', 'repair_fees'),
+    handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
+    handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
+    handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
     {
       label: '其他费用',
       placeholder: '必填 请输入',
@@ -4411,8 +4410,8 @@ handlerFreeDeliveryChange = [
         ]
       ],
     },
-    //handlerFreeDelivery('费用总计', 'total_fee'),
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
+    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
+    handlerFreeDelivery('费用总计', 'total_fee'),
   ]
 ];
 
