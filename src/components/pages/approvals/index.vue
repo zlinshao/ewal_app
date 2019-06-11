@@ -57,7 +57,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="approvalStatus finish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
+                <div class="approvalStatus finish" v-if="tabs.tab === '3'"></div>
                 <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"
                      v-if="tabs.tab === '1' && tabs.status === 1"></div>
                 <div class="moreOperate" @click.stop="moreOperates(item.id)"
