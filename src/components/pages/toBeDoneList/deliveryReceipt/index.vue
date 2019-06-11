@@ -273,37 +273,24 @@
       },
       // 监听 input
       listenInput(name) {
-        let value = 0, num4 = 0, num5 = 0, num6 = 0;
-        switch (name) {
-          case 'other_fee':
-            for (let key of this.form.other_fee) {
-              value = value + Number(key.value || 0);
-            }
-            break;
-          case 'property_costs':
-          case 'public_fee':
-          case 'repair_fees':
-            num4 = Number(this.form.property_costs || 0);
-            num5 = Number(this.form.public_fee || 0);
-            num6 = Number(this.form.repair_fees || 0);
-            break;
-          case 'water_card_balance':
-          case 'electric_card_balance':
-          case 'gas_card_balance':
-            let num1 = Number(this.form.water_card_balance || 0);
-            let num2 = Number(this.form.electric_card_balance || 0);
-            let num3 = Number(this.form.gas_card_balance || 0);
-            this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
-            break;
-          case 'water_settlement_amount':
-          case 'electric_valley_settlement_amount':
-          case 'electric_peak_settlement_amount':
-          case 'gas_settlement_amount':
-            let price1 = Number(this.form.water_settlement_amount || 0);
-            let price2 = Number(this.form.electric_valley_settlement_amount || 0);
-            let price3 = Number(this.form.electric_peak_settlement_amount || 0);
-            let price4 = Number(this.form.gas_settlement_amount || 0);
-            this.form.total_fee = value + price1 + price2 + price3 + price4 + num4 + num5 + num6;
+        let value = 0, num1 = 0, num2 = 0, num3 = 0, num7 = 0, num8 = 0, num9 = 0, num10 = 0;
+        for (let key of this.form.other_fee) {
+          value = value + Number(key.value || 0);
+        }
+        let num4 = Number(this.form.property_costs || 0);
+        let num5 = Number(this.form.public_fee || 0);
+        let num6 = Number(this.form.repair_fees || 0);
+        if (this.form.payment_type === 3) {
+          num1 = Number(this.form.water_card_balance || 0);
+          num2 = Number(this.form.electric_card_balance || 0);
+          num3 = Number(this.form.gas_card_balance || 0);
+          this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
+        } else {
+          num7 = Number(this.form.water_settlement_amount || 0);
+          num8 = Number(this.form.electric_valley_settlement_amount || 0);
+          num9 = Number(this.form.electric_peak_settlement_amount || 0);
+          num10 = Number(this.form.gas_settlement_amount || 0);
+          this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
         }
       },
       // 预览交接单
