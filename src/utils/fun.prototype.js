@@ -323,7 +323,7 @@ export default {
           search = search.concat(val);
         }
       }
-      search = this.myUtils.arrayWeight(search);
+      search = this.myUtils.arrayWeight(search).join(',');
       return search;
     };
     // 报备类型数据匹配

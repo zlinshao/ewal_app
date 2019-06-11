@@ -339,7 +339,7 @@
         }
       },
       getQueryDetail(tab) {
-        this.params['params' + tab].taskDefinitionKeyNotIn = this.$taskDefinitionKey().join(',');
+        this.params['params' + tab].taskDefinitionKeyNotIn = this.$taskDefinitionKey();
       },
       // 已完成 / 未完成 切换
       changeTop(val) {
