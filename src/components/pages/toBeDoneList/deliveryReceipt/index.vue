@@ -655,7 +655,7 @@
                       val.hidden = false;
                     }
                   } else {
-                    this.form[item][key.keyName].bad_number = 0;
+                    this.form[item][key.keyName].bad_number = '';
                     for (let val of key.children) {
                       val.hidden = true;
                     }
