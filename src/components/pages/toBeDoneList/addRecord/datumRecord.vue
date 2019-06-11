@@ -210,13 +210,17 @@
       }
     },
     beforeRouteLeave(to, from, next) {
-      this.close_();
+      this.picStatus = true;
+      setTimeout(_ => {
+        this.picStatus = false;
+      }, 100);
       next(vm => {
       })
     },
     mounted() {
     },
     activated() {
+      this.close_();
       this.followRecord = JSON.parse(sessionStorage.datumRecord || '{}');
       let query = JSON.parse(this.$route.query.params || '{}');
       let record = this.followRecord.taskDefinitionKey;
@@ -293,7 +297,7 @@
       photos(data, type) {
         for (let pic of this.upload[type]) {
           this.oldPhoto[pic.keyName] = data[pic.keyName] || [];
-          this.changePhoto[pic.keyName] = data[pic.keyName] || [];
+          this.changePhoto[pic.keyName] = this.jsonClone(this.oldPhoto[pic.keyName]);
           if (this.oldPhoto[pic.keyName].length) {
             this.$httpZll.getUploadUrl(this.oldPhoto[pic.keyName], 'close').then(res => {
               this.album[pic.keyName] = res.data;
@@ -336,10 +340,6 @@
       },
       // 清空
       close_() {
-        this.picStatus = true;
-        setTimeout(_ => {
-          this.picStatus = false;
-        }, 100);
         this.followRecord = {};
         this.album = {};
         this.oldPhoto = {};

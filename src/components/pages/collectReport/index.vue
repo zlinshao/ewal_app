@@ -343,8 +343,8 @@
           this.form.contract_id = this.taskDetail.contract_id;
         }
         if (type === 'bulletin_rent_basic') {
-          this.form.is_sign = '';
           let query = this.$route.query;
+          this.form.is_sign = '';
           if (query.result) {
             this.form.is_sign = query.result;
           }
@@ -850,7 +850,7 @@
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
-          if (this.$attestationKey(this.drawForm)) return;
+          // if (this.$attestationKey(this.drawForm)) return;
         }
         this.form.is_draft = val;
         let bulletin = this.bulletinType;

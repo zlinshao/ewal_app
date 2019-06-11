@@ -324,6 +324,7 @@ export default {
           data = this.jsonClone(defineCollectReport);
           break;
         case 'bulletin_rent_basic':
+        case 'bulletin_booking_renting':
           title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineRentReport);
           data.slither0 = defineNewRentReport.concat(data.slither0);
@@ -683,7 +684,7 @@ export default {
           //   department_id: 395,
           //   department_name: "开发",
           //   phone: "18052001167",
-          //   staff_id: '',
+          //   staff_id: '69',
           //   staff_name: "张琳琳",
           // };
           // this.$store.dispatch('personal_storage', data);

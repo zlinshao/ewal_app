@@ -48,7 +48,7 @@
           <div class="commonBtn" v-if="outcome">
             <div class="btn back" @click="oncancel()">取消</div>
             <div class="btn" :class="btn.action" v-for="btn in outcome.outcomeOptions"
-                 @click="finishPunchClock(btn,outcome.variableName)" v-if="btn.action !== 'booking'">
+                 @click="finishPunchClock(btn,outcome.variableName)">
               {{btn.title}}
             </div>
           </div>
@@ -195,7 +195,7 @@
       oncancel() {
         this.successPunchClock = false;
       },
-      // 确定打卡
+      // 提交打卡信息
       finishPunchClock(btn, value) {
         if (btn) {
           this.form[value] = btn.action;
@@ -203,6 +203,7 @@
         this.postForm.variables = this.jsonClone(this.form);
         this.$httpZll.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
+            this.$prompt('打卡成功!', 'success');
             this.close_();
             this.$router.go(-1);
           }
