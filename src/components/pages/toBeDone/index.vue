@@ -187,8 +187,8 @@
             text: '我发起的',
           }, {
             id: '3',
-            icon: icon_lishidaikan,
-            text: '历史带看',
+            icon: icon_hetongmoban,
+            text: '租房合同模板',
           }, {
             id: '4',
             icon: icon_hetongmoban,
@@ -209,13 +209,23 @@
         bulletin_type: {},//报备类型
         showRightAdd: false,//显示新增
         searchStaffModule: false,
+        contractMoulds: {},
       }
     },
     created() {
     },
     mounted() {
+      // 合同模板
       this.$httpZll.getContractMould().then(res => {
-        console.log(res.data)
+        if (res) {
+          for (let item of res.data.data) {
+            if (item.pdf_scene === 1) {//收房
+              this.contractMoulds['4'] = item.contract_template_url;
+            } else {//租房
+              this.contractMoulds['3'] = item.contract_template_url;
+            }
+          }
+        }
       });
       this.$nextTick(_ => {
         let top = this.$refs.toBeDoneTop.offsetHeight;
@@ -491,9 +501,9 @@
             this.$store.dispatch('approval_tabs', tabs);
             this.routerLink('/approvals');
             break;
-          case '3'://历史带看
-            this.$store.dispatch('done_tabs', '2');
-            this.routerLink('/toBeDoneList');
+          case '3'://租房
+          case '4'://收房
+            this.$ddSkip(this.contractMoulds[val]);
             break;
         }
       },
