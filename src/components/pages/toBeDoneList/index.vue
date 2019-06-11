@@ -1,8 +1,5 @@
 <template>
   <div id="toBeDoneList">
-    <!--<div style="position: fixed;top: 0;bottom: 8rem;left: 0;right: 0;z-index: 1;" class="justify-around">-->
-    <!--<div v-for="item in 3" style="height: 100%;border-left: 1px solid #000;"></div>-->
-    <!--</div>-->
     <div>
       <div class="listTop" ref="listTop" @dblclick="goToTop">
         <div>
@@ -11,7 +8,7 @@
             {{item.text}}&nbsp;<span v-if="item.id === '1'">{{total['total1']}}</span>
           </p>
         </div>
-        <div class="topSearch" @click="searchHigh = !searchHigh"></div>
+      <!--<div class="topSearch" @click="searchHigh = !searchHigh"></div>-->
       </div>
       <div class="main" :style="mainHeight">
         <!--未完成-->

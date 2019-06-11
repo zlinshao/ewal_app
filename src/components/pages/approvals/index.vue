@@ -21,7 +21,7 @@
             <span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
           </p>
         </div>
-        <i @click="approvalModule = true"></i>
+      <!--<i @click="approvalModule = true"></i>-->
       </div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
