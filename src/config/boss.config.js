@@ -9,5 +9,6 @@ globalConfig = {
   get_photo: 'http://test.file.api.ewal.lejias.cn/',//获取图片
   server_done: 'http://47.101.204.100:8080/',//小飞 接口
   domain: 'http://static.lejias.cn/',
+  domain1: 'http://static.lejias.cn/',
   token: '',
 };
