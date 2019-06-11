@@ -203,22 +203,22 @@
         // 条件搜索
         highParams: {},
         highList: {
-          finish: {
-            title: '是否完成',
-            type: 'radio',
-            keyType: '',
-            value: [
-              {
-                id: 1,
-                text: '未完成',
-              },
-              {
-                id: 2,
-                text: '已完成',
-              }
-            ],
-          },
-          status: {
+          // finish: {
+          //   title: '是否完成',
+          //   type: 'radio',
+          //   keyType: '',
+          //   value: [
+          //     {
+          //       id: 1,
+          //       text: '未完成',
+          //     },
+          //     {
+          //       id: 2,
+          //       text: '已完成',
+          //     }
+          //   ],
+          // },
+          taskDefinitionKeyIn: {
             title: '待办类型',
             type: 'check',
             keyType: [],
@@ -228,7 +228,7 @@
                 text: '带看打卡',
               }, {
                 id: 2,
-                text: '资料补齐',
+                text: '物品不齐',
               }, {
                 id: 3,
                 text: '尾款跟进',
@@ -317,6 +317,8 @@
       if (tab === '2') {
         this.getFinishList('1');
       }
+       // 代办类型的的数据
+      this.getToDoTypeList();
     },
     watch: {
       'highParams.title'(val) {
@@ -381,9 +383,13 @@
       },
       // 请求列表
       getFinishList(tab, close = '') {
+        // debugger
         let url = '';
         this.fullLoading['load' + tab] = true;
+        this.params['params' + tab] = Object.assign({}, this.highParams);  //搜索的参数（lili）
+        console.log(this.params['params' + tab])
         let params = this.params['params' + tab];
+        console.log(params)
         if (tab === '1') {
           url = 'runtime/tasks';
         } else {
@@ -463,7 +469,42 @@
         } else {
           this.checkChooseCommon(val, this.highParams[key]);
         }
+        let times=this.setTimeFun(this.highParams.times);
+        this.highParams.dueBefore=times.dueBefore;
+        this.highParams.dueAfter=times.dueAfter;
         this.highParams = Object.assign({}, this.highParams);
+        
+        console.log(this.highParams);
+      },
+      // 将筛选条件中的剩余时间进行处理成时间格式
+       setTimeFun(val) {
+          let date={
+            dueBefore:'',
+            dueAfter:''
+          }
+        switch (val) {
+          case 1:
+            date.begin=''
+            date.end=new Date().getTime() + 1 * 60 * 60 * 1000;
+            break;
+          case 2:
+            date.begin=new Date().getTime() + 1 * 60 * 60 * 1000;
+            date.end=new Date().getTime() + 6 * 60 * 60 * 1000;
+            break;
+          case 3:
+            date.begin=new Date().getTime() + 6 * 60 * 60 * 1000;
+            date.end=new Date().getTime() + 12 * 60 * 60 * 1000;
+            break;
+          case 4:
+            date.begin=new Date().getTime() + 12 * 60 * 60 * 1000;
+            date.end=new Date().getTime() + 24 * 60 * 60 * 1000;
+            break;
+          case 5:
+            date.begin=new Date().getTime() + 24 * 60 * 60 * 1000;
+            date.end = '';
+            break;
+        }
+        return date;
       },
       // 搜索按钮
       searchBtn(val) {
@@ -500,6 +541,25 @@
           //   break;
         }
       },
+
+      // 代办类型的的数据
+      getToDoTypeList(){
+        let param={
+          assignee:'',
+          taskDefinitionKeyNotIn:''
+        }
+        this.$httpZll.taskCatalog(param).then(res=> {
+          debugger
+          console.log(res);
+
+          if(res){
+
+          }
+           
+         
+        });
+      },
+
     },
   }
 </script>

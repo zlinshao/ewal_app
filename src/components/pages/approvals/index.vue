@@ -393,6 +393,7 @@
       },
       // 筛选条件
       checkChoose(val, key) {
+        // debugger
         let type = this.highList[key];
         if (type.type === 'radio') {
           this.highParams[key] = this.highParams[key] === val.id ? '' : val.id;
@@ -526,6 +527,7 @@
       },
       // params 配置
       paramsHandle(tab, status) {
+        // debugger
         this.showOnSearch();
         this.showStatus = (tab === '1' && !status) || (tab === '2' && !status) || tab === '4';
         this.apiHandle(tab, status);
@@ -539,6 +541,9 @@
               active: true,
             };
             this.params['params' + tab].assignee = this.personal.staff_id;
+            this.params['params' + tab] = Object.assign({}, this.highParams);  //搜索的参数（lili）
+            console.log(this.highParams);
+            console.log(this.params['params' + tab]);
             break;
           case '2':
             switch (status) {

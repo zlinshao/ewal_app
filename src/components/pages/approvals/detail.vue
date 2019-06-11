@@ -148,25 +148,35 @@
       </div>
     </van-popup>
     <!--历史审批流程-->
-<!--    <div class="records" @click="recordPopup = true"><p></p> </div>-->
+   <div class="records" @click="recordPopup = true"><p></p> </div>
     <van-popup v-model="recordPopup" overlay-class="overlay-color" position="right" :overlay="true" class="recordPopup">
       <div class="content">
         <div class="contentMain">
           <div>
             <div class="startApply">发起申请</div>
             <ul>
-              <li v-for="(item,index) in 20" :class="{'lastBorder':index === 18}">
-                <div class="process">
+              <li v-for="(item,index) in 5" :class="{'lastBorder':index ==3}">
+                <!-- 非抄送人部分 -->
+                <div class="process" v-if='true'>
                   <div class="personal">
                     <p>
                       <img :src="personal.avatar" alt="">
-                      <span>发货的&nbsp;(&nbsp;同意&nbsp;)&nbsp;</span>
+                      <span>{{"张无忌"}}&nbsp;{{'（已同意）'}}&nbsp;</span>
                       <i><b></b></i>
                     </p>
-                    <h2 class="date">2019-03-23 18:03</h2>
+                    <h2 class="date">{{'2019-03-23 18:03'}}</h2>
                   </div>
-                  <div class="children" v-if="index !== 19">
-                    <div v-for="item in 4">
+                  <div class="children" v-if="true">
+                    <div class="children_info">
+                        <div>
+                            <span>
+                              <span v-if='false'>{{'转交人：磨刀刀'}}</span>
+                              <img :src="personal.avatar" alt="" v-if='true'>
+                            </span>
+                            <span>{{'耗时：30分钟'}}</span>
+                        </div>
+                    </div>
+                    <div v-for="item in 2">
                       <i></i>
                       <div>
                         <h3>
@@ -183,6 +193,28 @@
                     </div>
                   </div>
                 </div>
+              </li>
+                <!-- 抄送人部分 -->
+              <li>
+                <div class="process" >
+                  <div class="personal">
+                    <p class="copy_personal">
+                      <img :src="personal.avatar" alt="" v-if='true'>
+                      <img :src="personal.avatar" alt="" v-if='false'>
+                      <span>{{"8人"}}&nbsp;{{'（抄送人）'}}&nbsp;</span>
+                      <i><b></b></i>
+                    </p>
+                  </div>
+                  <div class="copy_children">
+                      <div class="childrens">
+                        <div v-for='item in 8'>
+                            <img :src="personal.avatar" alt="">
+                            <span>{{'抄送人'}}</span>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+
               </li>
             </ul>
           </div>
