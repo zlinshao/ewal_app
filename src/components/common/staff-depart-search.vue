@@ -36,7 +36,7 @@
         </i>
       </span>
     </div>
-    <div class="commonBtn radioChecksFoot" v-show="choose_items.length > 0 || choose_items.length > 0">
+    <div class="commonBtn" v-show="choose_items.length > 0 || choose_items.length > 0">
       <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="footerBtn(item.type)">
         {{item.label}}
       </p>

@@ -7,12 +7,13 @@ function $httpPrompt(msg, type) {
 }
 
 let url = globalConfig.server;//文件上传
-let url_login = globalConfig.login;//文件上传
+let url_login = globalConfig.login;//登陆
 let url_code = globalConfig.server_code;//报备标识码
 let market = globalConfig.server_market; //报备
 let url_hr = globalConfig.server_hr;//人资组织机构
 let url_done = globalConfig.server_done;//小飞 待办
 let url_identity = globalConfig.server_identity;//身份认证 / 电子合同编号（马国明）
+let mould = globalConfig.contract_mould;//合同模板（马国明）
 
 class httpZll extends httpService {
 
@@ -25,11 +26,24 @@ class httpZll extends httpService {
     })
   }
 
-  // 获取 登录信息
-  static getUserInfo(code) {
+  // 获取 登录token
+  static getTokenInfo(code) {
     return new Promise((resolve, reject) => {
       this.get(`${url_login}api/sns/dingtalk/fromClient`, {code: code}).then(res => {
         resolve(res);
+      })
+    })
+  }
+
+  // 获取个人信息
+  static getUserInfo(code) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_login}api/auth/user`, {code: code}).then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          $httpPrompt(res.message, 'fail');
+        }
       })
     })
   }
@@ -89,11 +103,12 @@ class httpZll extends httpService {
   // 新建小区
   static newAddVillage(data) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/community`, data, 'prompt').then(res => {
+      this.post(`${market}/v1.0/market/task/AddCommunity`, data, 'prompt').then(res => {
         if (res.success) {
           $httpPrompt(res.message, 'success');
           resolve(res);
         } else {
+          resolve(false);
           $httpPrompt(res.message);
         }
       });
@@ -107,6 +122,7 @@ class httpZll extends httpService {
         if (res.success) {
           resolve(res);
         } else {
+          resolve(false);
           $httpPrompt(res.message);
         }
       });
@@ -127,19 +143,40 @@ class httpZll extends httpService {
     });
   }
 
+  // 合同搜索
+  static getContractList(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/contract`, params, 'prompt').then(res => {
+        if (Number(res.code) === 200) {
+          resolve(res.data);
+        } else {
+          $httpPrompt(res.message);
+        }
+      })
+    })
+  }
+
+  // 员工id获取详情信息
+  static getUserIdStaffDetail(params, id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_hr}staff/user/${id}`, params, 'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
   // 员工搜索
-  static searchStaffList(val) {
-    let params = {
-      search: val,
-      org_id: '',
-    };
+  static searchStaffList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}staff/user`, params, 'prompt').then(res => {
         if (res.code.endsWith('0')) {
           resolve(res);
         } else {
-          $httpPrompt(res.message);
           resolve(false);
+          $httpPrompt(res.msg);
         }
       });
     });
@@ -161,11 +198,25 @@ class httpZll extends httpService {
     return new Promise((resolve, reject) => {
       this.post(`${market}v1.0/market/task/${name}`, data, 'prompt').then(res => {
         if (res.success) {
+          resolve(res);
           $httpPrompt(res.message, 'success');
         } else {
+          resolve(false);
           $httpPrompt(res.message);
         }
-        resolve(res);
+      });
+    });
+  }
+
+  // 获取合同模板
+  static getContractMould(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${mould}fdd/pdf`, params, 'prompt', close).then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          resolve(false);
+        }
       });
     });
   }
@@ -178,6 +229,7 @@ class httpZll extends httpService {
           $httpPrompt(res.message, 'success');
           resolve(res);
         } else {
+          resolve(false);
           $httpPrompt(res.message);
         }
       });
@@ -195,7 +247,12 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}${url}`, params, 'prompt', close).then(res => {
-        resolve(res);
+        if (199 < res.httpCode < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
@@ -205,9 +262,10 @@ class httpZll extends httpService {
     let params = {
       size: 12,
       tenantId: 'market',
-      // assignee: '69',//登陆人
+      assignee: '',//登陆人
       order: 'desc',
       taskDefinitionKeyIn: '',
+      rootProcessDefinitionKeyIn: '',
       includeProcessVariables: true,
       includeTaskLocalVariables: true,
     };
@@ -216,13 +274,64 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
-        resolve(res);
+        if (199 < res.httpCode < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
+      });
+    });
+  }
+
+  // 转交直接换人
+  static postApprovalDeliver(id, assignee) {
+    let params = {
+      action: 'delegate',
+      assignee: assignee,
+    };
+    return new Promise((resolve, reject) => {
+      this.post(`${url_done}runtime/tasks/${id}`, params, 'prompt').then(res => {
+        if (199 < res.httpCode < 300) {
+          resolve(true);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
+      });
+    });
+  }
+
+  // 转交/代签
+  static postToBeDoneDeliver(id, data, val) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {
+        if (199 < res.httpCode < 300) {
+          resolve(true);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
+      });
+    });
+  }
+
+  // 结束任务
+  static finishToBeDoneTask(id, data) {
+    return new Promise((resolve, reject) => {
+      this.delete(`${url_done}runtime/process-instances/${id}`, data, 'prompt').then(res => {
+        if (199 < res.httpCode < 300) {
+          resolve(true);
+          $httpPrompt('任务删除成功!', 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
 
   // 任务跟进详情
-  // v1.0/market/task-follow-up/list?task_id
   static followRecordList(id) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/task-follow-up/list?task_id=${id}`, {}, 'prompt').then(res => {
@@ -236,11 +345,72 @@ class httpZll extends httpService {
     });
   }
 
-  // 完成当前任务
+  // 交接单
+  static postDeliveryReceipt(data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/handover`, data, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+          $httpPrompt(res.message, 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+
+      });
+    });
+  }
+
+  // 获取房屋最新交接单
+  static getNewDeliveryDraft(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/handover/info`, params, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  // 获取交接单草稿
+  static getDeliveryDraft(id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/handover/draft?task_id=${id}`, {}, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  // 预览交接单
+  static postPreviewDelivery(data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/handover/preview`, data, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+      });
+    });
+  }
+
+  // 完成任务
   static finishBeforeTask(id, data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {
-        resolve(res);
+        if (199 < res.httpCode < 300) {
+          resolve(true);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
@@ -249,7 +419,12 @@ class httpZll extends httpService {
   static getNewTaskId(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
-        resolve(res);
+        if (199 < res.httpCode < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
@@ -265,7 +440,12 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}${url}`, params, 'prompt').then(res => {
-        resolve(res);
+        if (199 < res.httpCode < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
       });
     });
   }
@@ -322,8 +502,8 @@ class httpZll extends httpService {
           resolve(res);
           $httpPrompt(res.message, 'success');
         } else {
-          $httpPrompt(res.message);
           resolve(false);
+          $httpPrompt(res.message);
         }
       })
     })
@@ -337,8 +517,46 @@ class httpZll extends httpService {
           resolve(res);
           $httpPrompt(res.message, 'success');
         } else {
-          $httpPrompt(res.message);
           resolve(false);
+          $httpPrompt(res.message);
+        }
+      })
+    })
+  }
+
+  // 历史流程节点
+  static getHistoryProcess(id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_done}history/process-instances/${id}/log`).then(res => {
+
+      })
+    })
+  }
+
+  // 评论
+  static setBulletinComment(data, id) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_done}history/process-instances/${id}/comments`, data).then(res => {
+        if (199 < res.httpCode < 300) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
+      })
+    })
+  }
+
+  // 暂缓任务
+  static putActionTask(id, data) {
+    return new Promise((resolve, reject) => {
+      this.put(`${url_done}runtime/process-instances/${id}`, data, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+          $httpPrompt(res.message, 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
         }
       })
     })
@@ -348,12 +566,12 @@ class httpZll extends httpService {
   static getBankNameAttestation(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/helper/bank_name`, params, 'prompt').then((res) => {
-        if (Number(res.code) === 200) {
-          $httpPrompt(res.message);
+        if (res.success) {
           resolve(res);
+          $httpPrompt(res.message, 'success');
         } else {
-          $httpPrompt(res.message);
           resolve(false);
+          $httpPrompt(res.message);
         }
       })
     })
@@ -364,7 +582,7 @@ class httpZll extends httpService {
   static getElectronicContract(data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_identity}fdd/number/take`, data).then((res) => {
-        if (res.code === '20000') {
+        if (res.code.endsWith('0')) {
           resolve(res);
         } else {
           resolve(false);
@@ -412,12 +630,41 @@ class httpZll extends httpService {
         if (Number(res.code) === 200) {
           resolve(res);
         } else {
-          $httpPrompt(res.msg);
           resolve(false);
+          $httpPrompt(res.msg);
         }
       })
     })
   };
+
+  // 收款账户
+  static getFinancialAccount(id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_code}api/allocation/org_account?org_id=${id}`).then(res => {
+        if (Number(res.code) === 200) {
+          resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.msg);
+        }
+      })
+    })
+  }
+
+  // 补充协议
+  static postSupplyAgreement(data, type) {
+    return new Promise((resolve, reject) => {
+      this.post(`${market}v1.0/market/bulletin/agreement/${type}`, data, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+          $httpPrompt(res.message, 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.message);
+        }
+      });
+    });
+  }
 
   // 收房报备 发布
   static submitReport(data, to) {
@@ -427,8 +674,8 @@ class httpZll extends httpService {
           resolve(res);
           $httpPrompt(res.message, 'success');
         } else {
-          $httpPrompt(res.message);
           resolve(false);
+          $httpPrompt(res.message);
         }
       });
     });
@@ -442,8 +689,8 @@ class httpZll extends httpService {
           resolve(res);
           $httpPrompt(res.message, 'success');
         } else {
-          $httpPrompt(res.message);
           resolve(false);
+          $httpPrompt(res.message);
         }
       });
 
@@ -454,7 +701,7 @@ class httpZll extends httpService {
   static getBulletinDraft(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/bulletin`, params, 'prompt').then(res => {
-        if (Number(res.code) === 200) {
+        if (res.success) {
           resolve(res);
         } else {
           resolve(false);
@@ -466,8 +713,8 @@ class httpZll extends httpService {
   // 图片id获取图片地址
   static getUploadUrl(ids, close) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/output/file`, {ids: ids}, '', close).then(res => {
-        if (res.success) {
+      this.post(`${url}api/v1/get_urls`, {ids: ids}, '', close).then(res => {
+        if (res.code.endsWith('0')) {
           resolve(res);
         } else {
           resolve(false);

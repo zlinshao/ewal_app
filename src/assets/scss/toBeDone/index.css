@@ -155,6 +155,7 @@
       align-items: center;
       justify-content: space-between; }
       #toBeDone .main ul li .mainTitle label {
+        font-size: .33rem;
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -204,11 +205,15 @@
         display: flex;
         display: -webkit-flex;
         align-items: center; }
-        #toBeDone .main ul li .handleBtn div i {
-          width: .33rem;
-          height: .33rem;
-          margin-right: .1rem; }
-      #toBeDone .main ul li .handleBtn .contract p i, #toBeDone .main ul li .handleBtn .deliver p i, #toBeDone .main ul li .handleBtn .collectReport p i {
+        #toBeDone .main ul li .handleBtn div b, #toBeDone .main ul li .handleBtn div p {
+          display: flex;
+          display: -webkit-flex;
+          align-items: center; }
+          #toBeDone .main ul li .handleBtn div b i, #toBeDone .main ul li .handleBtn div p i {
+            width: .33rem;
+            height: .33rem;
+            margin-right: .1rem; }
+      #toBeDone .main ul li .handleBtn .contract p i, #toBeDone .main ul li .handleBtn .contract b i, #toBeDone .main ul li .handleBtn .deliver p i, #toBeDone .main ul li .handleBtn .deliver b i, #toBeDone .main ul li .handleBtn .collectReport p i, #toBeDone .main ul li .handleBtn .collectReport b i {
         width: .4rem;
         height: .4rem; }
       #toBeDone .main ul li .handleBtn .contract p {

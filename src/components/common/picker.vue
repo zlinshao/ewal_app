@@ -1,7 +1,6 @@
 <template>
   <div>
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="pickerModule" position="bottom"
-               :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="pickerModule" position="bottom" :overlay="true">
       <van-picker
         show-toolbar
         :title="'请选择' + pickerConfig.title"
@@ -52,7 +51,6 @@
         handler(val, oldVal) {
           this.pickerConfig = this.jsonClone(val);
         },
-        immediate: true,
         deep: true,
       },
     },
@@ -64,10 +62,16 @@
         let idx = picker.index;
         let key = picker.keyName;
         if (parentKey) {
-          this.forms[parentKey][idx][key] = picker.ids[index];
-          this.formatData[parentKey][idx][key] = value;
+          if (picker.keyName === 'remittance_account') {
+            this.forms[parentKey][idx]['account_id'] = picker.ids[index];
+            this.forms[parentKey][idx][key] = value.split('<br>').join(' ');
+            this.formatData[parentKey][idx][key] = value.split('<br>').join(' ');
+          } else {
+            this.forms[parentKey][idx][key] = picker.ids[index];
+            this.formatData[parentKey][idx][key] = value;
+          }
         } else {
-          if (picker.status.includes('arrs')) {
+          if (picker.status.includes('column')) {
             if (key === 'house_type') {
               index[0] = index[0] + 1;
               this.forms[key] = index;
@@ -84,7 +88,8 @@
                 this.formatData[key] = value;
                 break;
               case 'arr':
-                this.forms[key] = index;
+                this.forms[key] = value;
+                this.formatData[key] = value;
                 break;
               case 'objInt':
                 this.forms[key] = picker.ids[index];
@@ -95,7 +100,7 @@
         }
         let form = this.forms;
         let formatData = this.formatData;
-        this.$emit('close', form, formatData);
+        this.$emit('close', form, formatData, picker);
       },
     },
   }

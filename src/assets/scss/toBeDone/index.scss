@@ -24,6 +24,7 @@
         .mainTitle {
           @include flex('items-bet');
           label {
+            font-size: .33rem;
             @include line-clamp();
           }
           p {
@@ -61,14 +62,17 @@
           div {
             width: 100%;
             @include flex('items-center');
-            i {
-              width: .33rem;
-              height: .33rem;
-              margin-right: .1rem;
+            b, p {
+              @include flex('items-center');
+              i {
+                width: .33rem;
+                height: .33rem;
+                margin-right: .1rem;
+              }
             }
           }
           .contract, .deliver, .collectReport {
-            p {
+            p, b {
               i {
                 width: .4rem;
                 height: .4rem;

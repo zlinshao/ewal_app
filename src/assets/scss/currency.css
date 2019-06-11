@@ -225,6 +225,20 @@
   text-align: right;
   color: #4A4A4A; }
 
+.van-toast {
+  text-align: center; }
+
+.overlay-color {
+  background: rgba(0, 0, 0, 0.2); }
+
+.van-ellipsis {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: pre-wrap;
+  line-height: 16px; }
+
 .van-checkbox {
   display: flex;
   display: -webkit-flex;
@@ -276,7 +290,7 @@
   font-size: .23rem; }
 
 .footerStatic {
-  position: static !important; }
+  position: relative !important; }
 
 .zl-button, .zl-confirmation {
   color: #FFFFFF;
@@ -414,9 +428,21 @@
   display: -webkit-flex;
   align-items: center;
   flex-wrap: wrap;
+  padding-bottom: .2rem;
   border-bottom: .1rem solid #F8F8F8; }
-  .popupModule .pickerInput > div {
-    width: 33.33%; }
+  .popupModule .pickerInput .listParent {
+    width: 100%;
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap; }
+  .popupModule .pickerInput .chooseList {
+    width: 33.33%;
+    padding: .2rem 0;
+    -webkit-border-radius: 0.16rem;
+    -moz-border-radius: 0.16rem;
+    border-radius: 0.16rem; }
+  .popupModule .pickerInput .slotChoose {
+    background-color: rgba(74, 116, 254, 0.2); }
 .popupModule .electricalList {
   display: flex;
   display: -webkit-flex;
@@ -474,7 +500,7 @@
     display: -webkit-flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: .3rem; }
+    margin-bottom: .15rem; }
     .radioChecks div p {
       font-size: .26rem;
       width: 88%;
@@ -504,7 +530,7 @@
       height: .6rem;
       border-radius: 50%;
       margin: 0 auto;
-      background-color: #4570FE;
+      background: linear-gradient(180deg, #7ba9ff 0%, #4570fe 100%);
       display: flex;
       display: -webkit-flex;
       align-items: center;
@@ -558,14 +584,19 @@
   justify-content: space-around;
   align-items: center; }
   .commonBtn .btn {
+    white-space: nowrap;
     color: #FFFFFF;
-    padding: .2rem .6rem;
+    padding: .15rem .6rem;
     -webkit-border-radius: 1rem;
     -moz-border-radius: 1rem;
     border-radius: 1rem;
     background: url("../image/footer/queding.png") no-repeat scroll center;
     background-size: 100% 100%; }
-  .commonBtn .deliver {
+  .commonBtn .deliver, .commonBtn .save {
+    background: url("../image/footer/zhuanjiao.png") no-repeat scroll center;
+    background-size: 100% 100%; }
+  .commonBtn .booking {
+    color: #212121;
     background: url("../image/footer/yuding.png") no-repeat scroll center;
     background-size: 100% 100%; }
   .commonBtn .reset {

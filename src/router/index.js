@@ -10,12 +10,15 @@ import ToBeDone from '@/components/pages/toBeDone/index.vue'//市场部待办
 import ToBeDoneList from '@/components/pages/toBeDoneList/index.vue'//所有待办
 import DatumRecord from '@/components/pages/toBeDoneList/addRecord/datumRecord.vue'//增加资料跟进记录
 import PunchClock from '@/components/pages/punchClock/index.vue'//待办
-// import GoSignContract from '@/components/pages/punchClock/finish.vue'//去签署
 import DeliveryReceipt from '@/components/pages/toBeDoneList/deliveryReceipt/index.vue'//交接单
 import Approvals from '@/components/pages/approvals/index.vue'//审批
 import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
 import CreatedTask from '@/components/pages/createdTask/index.vue'//新建 带看任务
 import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建小区
+import ContractSearch from '@/components/pages/contractSearch/index.vue'//合同搜索
+
+// 补充协议
+import SupplyAgreement from '@/components/pages/supplyAgreement/index.vue'
 
 //房源管理
 import HouseResource from '@/components/pages/houseResource/index.vue';
@@ -60,9 +63,21 @@ export default new Router({
     },
     {
       path: '/createdTask',
-      name: '新建-收房带看任务',
+      name: '新建-带看任务',
       component: CreatedTask,
-      meta: {title: '新建-收房带看任务', index: 1},
+      meta: {title: '新建-带看任务', index: 1},
+    },
+    {
+      path: '/contractSearch',
+      name: '选择房屋',
+      component: ContractSearch,
+      meta: {title: '选择房屋', index: 2},
+    },
+    {
+      path: '/supplyAgreement',
+      name: '补充协议',
+      component: SupplyAgreement,
+      meta: {title: '补充协议', index: 1},
     },
     {
       path: '/createdVillage',
@@ -73,28 +88,21 @@ export default new Router({
     {
       path: '/toBeDoneList',
       name: '待办',
-      hidden: 'index',
+      hidden: 'index.vue',
       component: ToBeDoneList,
       meta: {title: '待办', index: 4},
     },
     {
       path: '/punchClock',
       name: '带看打卡',
-      hidden: 'index',
+      hidden: 'index.vue',
       component: PunchClock,
       meta: {title: '带看打卡', index: 3},
     },
-    // {
-    //   path: '/goSignContract',
-    //   name: '去签署',
-    //   hidden: 'index',
-    //   component: GoSignContract,
-    //   meta: {title: '去签署', index: 4},
-    // },
     {
       path: '/approvals',
       name: '审批',
-      hidden: 'index',
+      hidden: 'index.vue',
       component: Approvals,
       meta: {title: '审批', index: 5},
     },
@@ -106,9 +114,9 @@ export default new Router({
     },
     {
       path: '/deliveryReceipt',
-      name: '收房交接',
+      name: '交接',
       component: DeliveryReceipt,
-      meta: {title: '收房交接', index: 6},
+      meta: {title: '交接', index: 6},
     },
     {
       path: '/datumRecord',
@@ -118,25 +126,15 @@ export default new Router({
     },
     {
       path: '/toBeDone',
-      name: '收房待办',
-      hidden: 'index',
+      name: '待办',
       component: ToBeDone,
-      params: {type: 'collect'},
-      meta: {title: '收房待办', index: 2},
-    },
-    {
-      path: '/toBeDone',
-      name: '租房',
-      hidden: 'index',
-      component: ToBeDone,
-      params: {type: 'rent'},
-      meta: {title: '租房', index: 2},
+      meta: {title: '待办', index: 2},
     },
     {
       path: '/collectReport',
-      name: '收房报备',
+      name: '报备',
       component: CollectReport,
-      meta: {title: '收房报备', index: 3},
+      meta: {title: '报备', index: 3},
     },
     {
       path: '/houseResource',

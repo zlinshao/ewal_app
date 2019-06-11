@@ -74,7 +74,7 @@
                 <b :class="{'choose': params.house_lift.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
-            <div class="commonBtn radioChecksFoot">
+            <div class="commonBtn">
               <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,1)">
                 {{item.label}}
               </p>
@@ -122,7 +122,7 @@
                 <van-field placeholder="请输入" type="number" @input="handlePriceTop"></van-field>
               </p>
             </div>
-            <div class="commonBtn radioChecksFoot">
+            <div class="commonBtn">
               <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,2)">
                 {{item.label}}
               </p>
@@ -180,7 +180,7 @@
 
   export default {
     name: "index",
-    components: { ExpandContainer ,StaffDepartSearch},
+    components: {ExpandContainer, StaffDepartSearch},
     data() {
       return {
         staff_depart_visible: false, //员工部门选择
@@ -204,62 +204,62 @@
 
         //房屋筛选
         filter_list: [
-          {id: 1,val: '房屋状态',active: false},
-          {id: 2,val: '房屋属性',active: false},
-          {id: 3,val: '部门员工',active: false},
-          {id: 4,val: '筛选',active: false},
+          {id: 1, val: '房屋状态', active: false},
+          {id: 2, val: '房屋属性', active: false},
+          {id: 3, val: '部门员工', active: false},
+          {id: 4, val: '筛选', active: false},
         ],
         current_filter: 0,
         house_status: [
-          {id: 0,val: '不限'},
-          {id: 1,val: '未出租'},
-          {id: 2,val: '已预订'},
-          {id: 3,val: '已出租'},
-          {id: 4,val: '待入住'},
-          {id: 5,val: '已结束'},
+          {id: 0, val: '不限'},
+          {id: 1, val: '未出租'},
+          {id: 2, val: '已预订'},
+          {id: 3, val: '已出租'},
+          {id: 4, val: '待入住'},
+          {id: 5, val: '已结束'},
         ],
         status_choose: '',
 
         house_type: [
-          {id: 0,val: '不限'},
-          {id: 1,val: '一室'},
-          {id: 2,val: '两室'},
-          {id: 3,val: '两室+'},
+          {id: 0, val: '不限'},
+          {id: 1, val: '一室'},
+          {id: 2, val: '两室'},
+          {id: 3, val: '两室+'},
         ],
         house_decorate: [
-          {id: 0,val: '不限'},
-          {id: 1,val: '毛坯'},
-          {id: 2,val: '简装'},
-          {id: 3,val: '精装'},
-          {id: 4,val: '豪装'},
+          {id: 0, val: '不限'},
+          {id: 1, val: '毛坯'},
+          {id: 2, val: '简装'},
+          {id: 3, val: '精装'},
+          {id: 4, val: '豪装'},
         ],
         house_orientation: [
-          {id: 0,val: '不限'},
-          {id: 1,val: '东'},
-          {id: 2,val: '南'},
-          {id: 3,val: '西'},
-          {id: 4,val: '北'},
+          {id: 0, val: '不限'},
+          {id: 1, val: '东'},
+          {id: 2, val: '南'},
+          {id: 3, val: '西'},
+          {id: 4, val: '北'},
         ],
         house_floor: [
-          {id: 0,val: '不限'},
+          {id: 0, val: '不限'},
         ],
         house_lift: [
-          {id: 0,val: '不限'},
-          {id: 1,val: '有电梯'},
-          {id: 2,val: '无电梯'},
+          {id: 0, val: '不限'},
+          {id: 1, val: '有电梯'},
+          {id: 2, val: '无电梯'},
         ],
         residue_time: [
-          {id: 0,val: '不限'},
-          {id: 1,val: '一年以下'},
-          {id: 2,val: '1-2年'},
-          {id: 3,val: '2年以上'},
+          {id: 0, val: '不限'},
+          {id: 1, val: '一年以下'},
+          {id: 2, val: '1-2年'},
+          {id: 3, val: '2年以上'},
         ],
         house_warning_status: [
-          {id: 0,val: '不限'},
-          {id: 1,val: '正常'},
-          {id: 2,val: '黄色预警'},
-          {id: 3,val: '橙色预警'},
-          {id: 4,val: '红色预警'},
+          {id: 0, val: '不限'},
+          {id: 1, val: '正常'},
+          {id: 2, val: '黄色预警'},
+          {id: 3, val: '橙色预警'},
+          {id: 4, val: '红色预警'},
         ],
         //城市选择
         cityList: [],
@@ -275,7 +275,7 @@
           status: [],
           city: [],
           room: [], //房型
-          decoration:[], //装修
+          decoration: [], //装修
           house_toward: [], //朝向
           floor: [],// 楼层
           house_lift: [], //电梯
@@ -295,18 +295,37 @@
         this.mainHeight = this.mainListHeight(top + 50);
       });
       this.$httpZll.getCityList().then(res => {
-        this.cityList = res.data;
-        this.getBeforeCity(res.data).then(res => {
-          this.params.city = res.city;
-          this.city_name = res.name;
-        })
+        this.cityList = [];
+        if (res.data.length === 1) {
+          let obj = {};
+          this.city_name = res.data[0].name;
+          this.params.city = res.data[0].province.code;
+          obj.name = this.city_name;
+          obj.code = this.params.city;
+          this.cityList.push(obj)
+        } else {
+          for (let item of res.data) {
+            let obj = {};
+            if (String(item.code) === String(this.personal.city_id)) {
+              this.city_name = item.name;
+              this.params.city = item.province.code;
+              obj.name = item.name;
+              obj.code = item.code;
+              this.cityList.push(obj);
+            }
+          }
+        }
       });
       this.handleGetHouseResource();
     },
     watch: {},
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
+    },
     methods: {
-      handleGetStaffDepartInfo(val,type) {
+      handleGetStaffDepartInfo(val, type) {
         if (val !== 'close') {
           this.params.org_user_id = [];
           this.params.is_org_user = type === 'staff' ? 2 : 1;
@@ -340,10 +359,10 @@
       //请求房屋详情
       handleHouseDetail(item) {
         // this.routerLink('/houseDetail',{id: item.id});
-        this.routerLink('/houseDetail',{id: 248073});
+        this.routerLink('/houseDetail', {id: 248073});
       },
       //按钮
-      searchBtn(type,idx) {
+      searchBtn(type, idx) {
         console.log(type);
         if (idx === 1) {
           switch (type) {
@@ -372,9 +391,9 @@
         }
       },
       //选择房屋属性
-      chooseHouseProperty(item,type) {
+      chooseHouseProperty(item, type) {
         if (this.params[type].indexOf(item.id) !== -1) {
-          this.params[type].splice(this.params[type].indexOf(item.id),1);
+          this.params[type].splice(this.params[type].indexOf(item.id), 1);
         } else {
           this.params[type].push(item.id);
         }
@@ -384,7 +403,7 @@
         this.status_choose = item.id;
         console.log(item);
         if (this.params.status.indexOf(item.id) !== -1) {
-          this.params.status.splice(this.params.status.indexOf(item.id),1);
+          this.params.status.splice(this.params.status.indexOf(item.id), 1);
         } else {
           this.params.status.push(item.id);
         }
@@ -405,7 +424,7 @@
       //获取房源列表
       handleGetHouseResource() {
         this.fullLoading = true;
-        this.$httpZll.get(this.server + 'v1.0/market/house',this.params,'加载中...').then(res => {
+        this.$httpZll.get(this.server + 'v1.0/market/house', this.params, '加载中...').then(res => {
           this.fullLoading = false;
           if (res.code === 200) {
             for (let item of res.data.data) {
@@ -424,7 +443,7 @@
           this.params.page = 1;
           this.handleGetHouseResource();
         } else {
-          if(this.fullLoading) return;
+          if (this.fullLoading) return;
           if (this.house_list.length === this.paging) return;
           this.params.page++;
           this.handleGetHouseResource();

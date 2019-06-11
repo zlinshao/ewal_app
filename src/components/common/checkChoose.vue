@@ -1,7 +1,7 @@
 <template>
   <div id="checkChoose">
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.4)'}" v-model="checksModule"
-               position="bottom" :overlay="true" class="popupModule">
+    <van-popup overlay-class="overlay-color" v-model="checksModule" position="bottom" :overlay="true"
+               class="popupModule">
       <div class="popupTop">
         <p>请完成相关选项</p>
         <h3 @click="finish()">完成</h3>

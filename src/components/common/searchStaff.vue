@@ -1,7 +1,6 @@
 <template>
   <div id="searchStaff">
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="searchModule" position="bottom"
-               :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="searchModule" position="bottom" :overlay="true">
       <div class="searchModule" :style="mainListHeight(150)">
         <div class="popupTop">
           <p>请选择员工</p>
@@ -36,7 +35,7 @@
           <p class="items-center" v-for="(item,index) in staffOldValue">
             {{item.name}}
             <i @click="deleteStaff(index)">
-              <img src="../../assets/image/common/deletestaff.png">
+              <img src="../../assets/image/common/deletestaff.png" alt="">
             </i>
           </p>
         </div>
@@ -77,6 +76,7 @@
       searchModule(val) {
         if (!val) {
           this.$emit('close', 'close');
+          this.fullLoading = false;
         } else {
           if (this.config) {
             this.staffOldValue = this.jsonClone(this.config.preFill || []);
@@ -96,7 +96,11 @@
       searchStaff(val = '') {
         this.fullLoading = false;
         this.searchList = [];
-        this.$httpZll.searchStaffList(val).then(res => {
+        let params = {
+          search: val,
+          org_id: '',
+        };
+        this.$httpZll.searchStaffList(params).then(res => {
           this.fullLoading = true;
           this.searchList = res.data.data;
         })
@@ -146,6 +150,7 @@
         }
         this.staffList.name = names.join(',');
       },
+      // 确定
       finish() {
         this.cancel(this.staffList, this.staffOldValue);
       },
@@ -157,7 +162,7 @@
       // 清空
       close_() {
         this.searchList = [];
-        this.fullLoading = true;
+        this.fullLoading = false;
       }
     },
   }

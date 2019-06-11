@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="timeShow" position="bottom" :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="timeShow" position="bottom" :overlay="true">
       <van-datetime-picker
         v-model="currentDate"
         :type="dateType"
@@ -85,9 +85,11 @@
         this.timeShow = false;
         let data = {};
         data.dateVal = this.timeValue;
-        data.dateIdx = this.formatData.dateIdx;
+        data.dateIdx = this.formatData.dateIdx || '';
         data.dateKey = this.formatData.dateKey;
-        this.$emit('onDate', data);
+        data.dateIdx = this.formatData.dateIdx;
+        data.parentKey = this.formatData.parentKey;
+        this.$emit('close', data);
       },
       // select关闭
       onCancel() {

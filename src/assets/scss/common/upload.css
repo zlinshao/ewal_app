@@ -129,6 +129,7 @@
 
 #upLoad {
   width: 100%;
+  margin-bottom: .2rem;
   display: flex;
   display: -webkit-flex; }
   #upLoad video {
@@ -189,10 +190,12 @@
         height: .16rem; }
   #upLoad .uploadPic {
     cursor: pointer;
+    background-color: #F0F0F0;
+    padding: .33rem;
     margin-top: .2rem;
-    opacity: .7;
-    background-color: #FFFFFF;
-    padding: .18rem;
-    border: .01rem solid #EBEEF5; }
+    opacity: .7; }
+    #upLoad .uploadPic img {
+      width: .3rem;
+      height: .3rem; }
 
 /*# sourceMappingURL=upload.css.map */

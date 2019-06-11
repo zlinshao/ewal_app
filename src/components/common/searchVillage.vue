@@ -1,14 +1,13 @@
 <template>
   <div id="searchVillage">
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="searchModule" position="bottom"
-               :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="searchModule" position="bottom" :overlay="true">
       <div class="searchModule" :style="mainListHeight(150)">
         <div class="popupTop">
           <p>请选择小区</p>
         </div>
         <div class="searchInput">
           <div class="input">
-            <p @click="chooseClickCity(params.city)">
+            <p @click="chooseClickCity()">
               {{city_name}}
               <i></i>
             </p>
@@ -27,7 +26,7 @@
         </div>
         <div class="popupSearch">
           <ul v-if="searchList.length ">
-            <li v-for="item in searchList" @click="onConfirm(item)">{{item.address}}</li>
+            <li v-for="item in searchList" @click="onConfirm(item)">{{item.village_name}}</li>
           </ul>
           <div class="flex-center" v-else>
             <span v-if="fullLoading">暂无相关数据...</span>
@@ -55,18 +54,35 @@
         cityList: [],
         city_name: '',
         params: {
+          page: 1,
+          limit: 20,
           name: '',
-          city: [],
+          city: '',
         },
       }
     },
     mounted() {
       this.$httpZll.getCityList().then(res => {
-        this.cityList = res.data;
-        this.getBeforeCity(res.data).then(res => {
-          this.params.city = res.city;
-          this.city_name = res.name;
-        })
+        this.cityList = [];
+        if (res.data.length === 1) {
+          let obj = {};
+          this.city_name = res.data[0].name;
+          this.params.city = res.data[0].province.code;
+          obj.name = this.city_name;
+          obj.code = this.params.city;
+          this.cityList.push(obj)
+        } else {
+          for (let item of res.data) {
+            let obj = {};
+            if (String(item.code) === String(this.personal.city_id)) {
+              this.city_name = item.name;
+              this.params.city = item.province.code;
+              obj.name = item.name;
+              obj.code = item.code;
+              this.cityList.push(obj);
+            }
+          }
+        }
       });
     },
     activated() {
@@ -80,25 +96,27 @@
         this.searchModule = val;
       },
       searchModule(val) {
+        this.close_();
         if (!val) {
           this.$emit('close', 'close');
         }
       },
     },
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
+    },
     methods: {
       // 选择城市
       chooseClickCity(item) {
         this.chooseCity = !this.chooseCity;
-        if (this.params.city === item) return;
-        this.params.city = [];
-        if (Array.isArray(item.code)) {
+        if (item) {
+          if (item.name === this.city_name) return;
+          this.city_name = item.name;
           this.params.city = item.code;
-        } else {
-          this.params.city.push(item.code);
+          this.close_();
         }
-        this.city_name = item.name;
-        this.searchList = [];
       },
       // 搜索
       onSearch() {
@@ -113,13 +131,13 @@
         let data = {};
         data.id = val.id;
         data.name = val.village_name;
-        this.params.name = '';
-        this.searchList = [];
         this.$emit('close', data, val);
       },
       close_() {
+        this.params.name = '';
+        this.params.page = 1;
         this.searchList = [];
-        this.fullLoading = true;
+        this.fullLoading = false;
       },
     },
   }

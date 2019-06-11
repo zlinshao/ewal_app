@@ -1,13 +1,12 @@
 <template>
   <div id="remarkTerms">
-    <van-popup :overlay-style="{'background':'rgba(0,0,0,.2)'}" v-model="popupModule" position="bottom"
-               :overlay="true">
+    <van-popup overlay-class="overlay-color" v-model="popupModule" position="bottom" :overlay="true">
       <div class="remarkTerms">
         <div class="top">
           <h1>请完成相关选项</h1>
           <p @click="onConfirm">完成</p>
         </div>
-        <van-checkbox-group v-model="forms.remark_terms">
+        <van-checkbox-group v-model="forms.remark_terms" :disabled="bulletinType.bulletin === 'bulletin_rent_basic'">
           <van-checkbox
             v-for="item in Object.keys(remark_terms)"
             :key="item"
@@ -27,6 +26,7 @@
     data() {
       return {
         popupModule: false,
+        bulletinType: {},
         forms: {},
         formatData: {},
         remark_terms: dicties.remark_terms,
@@ -38,6 +38,7 @@
     },
     watch: {
       module(val) {
+        this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
         setTimeout(() => {
           this.popupModule = val;
         }, 300);
@@ -77,12 +78,15 @@
   #remarkTerms {
     .remarkTerms {
       padding: .3rem .36rem .3rem .42rem;
+
       .top {
         @include flex('items-bet');
         padding: .1rem .1rem .5rem;
+
         h1 {
           color: #9B9B9B;
         }
+
         p {
           color: #4570FE;
         }

@@ -3,12 +3,12 @@
     <div class="circleOut" ref="out">
       <div class="circleIn" ref="into">
         <div class="circleItem" v-for="(item,index) in buttonList" @click="toBulletin(item)" ref="item">
-          <img :src="item.icon" class="circleIcon" :class="[item.type]" :style="{transform: itemAngle}">
+          <img :src="item.icon" class="circleIcon" :class="[item.type]" :style="{transform: itemAngle}" alt="">
         </div>
       </div>
-      <img src="../assets/image/home/circle_logo.png" class="logo" ref="lejialogo">
+      <img src="../assets/image/home/circle_logo.png" class="logo" ref="lejialogo" alt="">
     </div>
-    <img src="../assets/image/home/zhuanpan_zhicheng.png" class="zhicheng">
+    <img src="../assets/image/home/zhuanpan_zhicheng.png" class="zhicheng" alt="">
     <!--<audio src="../assets/image/circlePanel/kaka.mp3" ref="audio"></audio>-->
   </div>
 </template>
@@ -39,53 +39,50 @@
         buttonList: [
           {
             url: 'toBeDone',
-            name: '收房',
-            status: bulletinRouterStatus.newCollect,
+            name: '收房待办',
+            status: bulletinRouterStatus.bulletin_collect_basic,
             icon: ic_shoufang,
           },
           {
             url: 'toBeDone',
-            name: '租房',
-            status: bulletinRouterStatus.newRent,
+            name: '租房待办',
+            status: bulletinRouterStatus.bulletin_rent_basic,
             icon: ic_zufang,
           },
           {
-            url: 'collectReport',
-            name: '渠道费',
-            status: {
-              bulletin: 'agency',
-              to: 'agency',
-            },
+            url: 'toBeDone',
+            name: '渠道费待办',
+            status: bulletinRouterStatus.bulletin_agency,
             icon: ic_qudao,
           },
           {
             url: 'toBeDone',
-            name: '尾款',
-            type: 'final',
+            name: '尾款待办',
+            status: bulletinRouterStatus.newRetainage,
             icon: ic_weikuan,
           },
           {
-            url: 'toBeDone',
+            url: '',
             name: '调租',
-            type: '',
+            status: bulletinRouterStatus.newChange,
             icon: ic_tiaozu,
           },
           {
-            url: 'toBeDone',
+            url: '',
             name: '转租',
-            type: '',
+            status: bulletinRouterStatus.newSublet,
             icon: ic_zhuanzu,
           },
           {
-            url: 'toBeDone',
+            url: '',
             name: '特殊事项',
-            type: 'special',
+            status: bulletinRouterStatus.newSpecial,
             icon: ic_teshu,
           },
           {
-            url: 'toBeDone',
+            url: '',
             name: '退租',
-            type: '',
+            status: bulletinRouterStatus.newCheckout,
             icon: ic_tuizu,
           },
           // {
@@ -186,8 +183,37 @@
       }, passive);
     },
     methods: {
+      // 报备跳转
       toBulletin(item) {
-        this.$store.dispatch('bulletin_type', item.status);
+        if (!item.url) return;
+        sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
+        let routes = this.$router.options.routes, name = '', bulletin = '';
+        switch (item.status.to) {
+          case 'collect':
+            name = '收房待办';
+            bulletin = '收房报备';
+            break;
+          case 'rent':
+            name = '租房待办';
+            bulletin = '租房报备';
+            break;
+          case 'agency':
+            name = '渠道费待办';
+            bulletin = '渠道费报备';
+            break;
+          case 'retainage':
+            name = '尾款待办';
+            bulletin = '尾款报备';
+            break;
+        }
+        for (let value of routes) {
+          if (value.path === '/toBeDone') {
+            value.meta.title = name;
+          }
+          if (value.path === '/collectReport') {
+            value.meta.title = bulletin;
+          }
+        }
         this.routerLink(item.url);
       },
       getBasePoint() {
@@ -272,8 +298,10 @@
         @include radius($inSize);
         @include bgImage('../assets/image/home/zhuanpan.png');
       }
+
       //转盘中心LJ logo
       $logoSize: 1.4rem;
+
       .logo {
         position: absolute;
         top: ($outSize)/2 - $logoSize/2;
@@ -283,6 +311,7 @@
         z-index: 1;
       }
     }
+
     //新租 续租等按钮
     .circleItem {
       position: absolute;
@@ -295,10 +324,12 @@
         width: .72rem;
         height: 1.2rem;
       }
+
       .final, .special {
         width: .8rem;
       }
     }
+
     //风车支柱class
     .zhicheng {
       position: absolute;

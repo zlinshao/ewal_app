@@ -13,46 +13,54 @@
       </ul>
     </div>
     <div class="main">
-      <div ref="mainTop" class="mainTop items-bet">
+      <div ref="mainTop" class="mainTop">
         <div class="flex">
           <p v-for="item in buttons['tab'+tabs.tab]" @click="tabsTag(item.value)"
              :class="[twoLevel['tab'+tabs.tab] === item.value ? 'hover' : '']">
-            {{item.text}}<span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
+            {{item.text}}
+            <span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
           </p>
         </div>
-        <i></i>
+      <!--<i @click="approvalModule = true"></i>-->
       </div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
           <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]">
             <div class="contentList">
-              <div class="listUp" :class="[task_ids.includes(item.task_id) ? 'leftShift' : '']"
+              <div class="listUp" :class="[ids.includes(item.id) ? 'leftShift' : '']"
                    @click="routerLinkDetail(item)">
-                <div class="listTitle">{{item.house_address}}</div>
+                <div class="listTitle">{{item.title || '******'}}</div>
                 <div class="listMiddle">
-                  <p v-if="item.status.length">{{item.status[0]}}</p>
-                  <p v-else>{{item.name}}</p>
+                  <p>{{item.bulletin_name}}</p>
                   <div>
                     <b>
-                      <img :src="item.bulletin_staff_avatar" v-if="item.bulletin_staff_avatar">
-                      <img src="../../../assets/image/common/noHead.png" v-else>
+                      <img :src="item.bulletin_staff_avatar" v-if="item.bulletin_staff_avatar" alt="">
+                      <img src="../../../assets/image/common/noHead.png" alt="" v-else>
                     </b>
                     <span v-if="item.bulletin_staff_name">{{item.bulletin_staff_name}}</span>
-                    <span v-else>---</span>
+                    <span v-else>******</span>
                   </div>
                 </div>
                 <div class="listBottom">
-                  <div>
+                  <div v-if="showStatus">
                     <i class="icon-1"></i>
-                    <span>待产管审核</span>
+                    <span v-if="item.status.length">{{item.status[0]}}</span>
+                    <span v-else>{{item.name}}</span>
                   </div>
-                  <div>
-                    <i class="icon-2"></i>
-                    <span>以等待{{item.duration}}分钟</span>
-                  </div>
+                <!--<div>-->
+                <!--  <i class="icon-2"></i>-->
+                <!--  <span v-if="showStatus">-->
+                <!--    已等待{{item.duration}}分钟-->
+                <!--  </span>-->
+                <!--  <span v-else>-->
+                <!--     耗时{{item.duration}}分钟-->
+                <!--  </span>-->
+                <!--</div>-->
                 </div>
-                <div class="approvalStatus publish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
-                <div class="moreOperate" @click.stop="moreOperates(item.task_id)"
+                <div class="approvalStatus finish" v-if="tabs.tab === '3'"></div>
+                <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"
+                     v-if="tabs.tab === '1' && tabs.status === 1"></div>
+                <div class="moreOperate" @click.stop="moreOperates(item.id)"
                      v-if="tabs.tab === '2' && tabs.status !== 0"></div>
               </div>
               <div class="listDown" v-if="item.outcome">
@@ -77,6 +85,41 @@
         </scroll-load>
       </div>
     </div>
+
+    <van-popup :overlay-style="{'top': '3.68rem'}" overlay-class="overlay-color" v-model="approvalModule"
+               position="right" :overlay="true">
+      <div class="searchApproval">
+        <div class="searchInput">
+          <div class="input">
+            <div>
+              <input type="text" v-model="highParams.title" @keyup.enter="onSearch(tabs.tab)" placeholder="请输入搜索内容">
+              <span v-if="highParams.title" @click="highParams.title = ''"></span>
+            </div>
+            <p v-if="highParams.title" class="searchBtn" @click="onSearch(tabs.tab)">搜索</p>
+            <p v-if="!highParams.title" @click="showOnSearch()">取消</p>
+          </div>
+        </div>
+        <div class="radioChecksLabel" v-for="item of Object.keys(highList)">
+          <label>{{highList[item].title}}</label>
+          <div class="radioChecks">
+            <div v-for="val in highList[item].value" class="contents">
+              <p @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
+                 :class="{'chooseCheck': highParams[item].includes(val.id)}">
+                {{val.text}}
+              </p>
+              <p @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}" v-else>
+                {{val.text}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="commonBtn">
+          <p :class="['btn ' + item.type || '']" v-for="item of buttonFoot" @click="searchBtn(item.type)">
+            {{item.label}}
+          </p>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -85,14 +128,74 @@
   import woshenpide from '../../../assets/image/approvals/woshenpide.png'
   import chaosongwode from '../../../assets/image/approvals/chaosongwode.png'
   import zanbuchuli from '../../../assets/image/approvals/zanbuchuli.png'
-  import {Dialog} from 'vant'
 
   export default {
     name: "index",
     data() {
       return {
         leftShift: false,
-        mainHeight: '',
+        showStatus: false,
+        approvalModule: false,
+        mainHeight: {},
+        moduleHeight: {},
+        // 搜索 审批类型
+        highParams: {},
+        highList: {
+          status: {
+            title: '待办类型',
+            type: 'check',
+            keyType: [],
+            value: [
+              {
+                id: 1,
+                text: '收房报备',
+              }, {
+                id: 2,
+                text: '续收报备',
+              }, {
+                id: 3,
+                text: '补充协议',
+              }, {
+                id: 4,
+                text: '租房预定',
+              }, {
+                id: 5,
+                text: '租房签约',
+              }, {
+                id: 6,
+                text: '续租签约',
+              }, {
+                id: 7,
+                text: '转租调租',
+              }, {
+                id: 8,
+                text: '退租报备',
+              }, {
+                id: 9,
+                text: '房屋款项',
+              }, {
+                id: 10,
+                text: '中介报备',
+              }, {
+                id: 11,
+                text: '其他',
+              },
+            ],
+          },
+        },
+        buttonFoot: [
+          {
+            label: '取消',
+            type: 'back'
+          },
+          {
+            label: '重置',
+            type: 'reset'
+          },
+          {
+            label: '确定',
+          },
+        ],
         //加载是否结束
         fullLoading: {
           load1: true,
@@ -254,38 +357,76 @@
             },
           ]
         },
-        task_ids: [],
+        ids: [],
       }
     },
+    created() {
+      this.resetting();
+    },
     mounted() {
-      console.log(this.tabs);
     },
     activated() {
+      this.resetting();
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
-      this.mainHeight = this.mainListHeight((approvalTop + mainTop));
+      let top = approvalTop + mainTop;
+      this.mainHeight = this.mainListHeight(top);
+      this.moduleHeight = this.mainListHeight(top + 40);
     },
-    watch: {},
+    watch: {
+      'highParams.title'(val) {
+        this.highParams.title = val.replace(/\s+/g, '');
+      },
+    },
     computed: {
       // 1我审批的 2我发起的 3抄送我的 4暂不处理
       tabs() {
         return this.$store.state.app.approvalTab;
       },
+      personal() {
+        return this.$store.state.app.personal;
+      },
     },
     methods: {
+      showOnSearch() {
+        this.approvalModule = false;
+      },
+      // 筛选条件
+      checkChoose(val, key) {
+        let type = this.highList[key];
+        if (type.type === 'radio') {
+          this.highParams[key] = this.highParams[key] === val.id ? '' : val.id;
+        } else {
+          this.checkChooseCommon(val, this.highParams[key]);
+        }
+        this.highParams = Object.assign({}, this.highParams);
+      },
+      // 搜索按钮
+      searchBtn(val) {
+        switch (val) {
+          case 'back':
+            this.showOnSearch();
+            break;
+          case 'reset':
+            this.resetting();
+            break;
+          default:
+            this.onSearch(this.tabs.tab);
+            break;
+        }
+      },
       // 显示 更多操作
       moreOperates(id) {
-        if (this.task_ids.includes(id)) {
-          let index = this.task_ids.indexOf(id);
-          this.task_ids.splice(index, 1);
+        if (this.ids.includes(id)) {
+          let index = this.ids.indexOf(id);
+          this.ids.splice(index, 1);
         } else {
-          this.task_ids.push(id);
+          this.ids.push(id);
         }
       },
       // 点击更多 操作
       onMoreOperates(action, name = '', item = {}) {
         let params = {}, user_id = '';
-        user_id = item.signer && item.signer.fadada_user_id || this.$prompt('用户ID不存在！');
         switch (action.action) {
           case 'preview'://合同预览
             if (!item.contract_view_url) {
@@ -295,53 +436,38 @@
             this.$ddSkip(item.contract_view_url);
             break;
           case 'again'://重新提交
-            this.handleBulletinType(item);
+            this.$handleBulletinType(item);
             item.task_action = action.route;
             this.againSave(item);
             break;
           case 'modify'://合同修改
-            this.handleBulletinType(item);
+            this.$handleBulletinType(item);
             this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
-            this.handlerSign(item, user_id, 2);
+            user_id = this.$getFadadaUserId(item);
+            this.$handlerSign(item, user_id, 2).then(_ => {
+              this.onSearch(this.tabs.tab);
+            });
             break;
           case 'phone'://客户手机签署
-            this.handlerSign(item, user_id, 1);
+            user_id = this.$getFadadaUserId(item);
+            this.$handlerSign(item, user_id, 1).then(_ => {
+              this.onSearch(this.tabs.tab);
+            });
             break;
           case 'contract'://发送电子合同
+            user_id = this.$getFadadaUserId(item);
             this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
               if (res) {
                 params = {
                   fdd_user_id: user_id,
                   is_number: 1,
                 };
-                this.$httpZll.sendElectronicContract(item.contract_number, params).then(data => {
-
-                })
+                this.$httpZll.sendElectronicContract(item.contract_number, params).then(_ => {
+                });
               }
             });
-            break;
-        }
-      },
-      // 签署
-      handlerSign(item, user_id, type) {
-        let title = ['电子合同', ''];
-        let params = {
-          customer_id: user_id,
-          type: type,
-          index: 1,
-        };
-        title[1] = type === 2 ? '是否确认签署电子合同?' : '是否确认发送客户签署电子合同?';
-        this.$signPostApi(item, params, title);
-      },
-      // 报备类型
-      handleBulletinType(item) {
-        switch (item.bulletin_type) {
-          case 'bulletin_collect_basic':
-            this.$store.dispatch('bulletin_type', bulletinRouterStatus.newCollect);
-            break;
-          case '':
             break;
         }
       },
@@ -361,16 +487,16 @@
       },
       // 报备详情
       routerLinkDetail(item) {
-        this.$store.dispatch('bulletin_type', {bulletin: item.bulletin_type});
-        this.routerLink('/approvalDetail', item);
+        sessionStorage.setItem('approvalDetail', JSON.stringify(item));
+        this.routerLink('/approvalDetail', this.tabs);
       },
       // 接口配置
       apiHandle(tab, status) {
         switch (tab) {
-          case '1':
+          case '1'://我审批的
             this.urlApi = status === 1 ? 'history/tasks' : 'runtime/tasks';
             break;
-          case '2':
+          case '2'://我发起的
             switch (status) {
               case 0:
                 this.urlApi = 'runtime/process-instances';
@@ -386,30 +512,33 @@
                 break;
             }
             break;
-          case '3':
+          case '3'://抄送我的
             if (status === 0) {
               this.urlApi = 'runtime/tasks';
             } else {
               this.urlApi = 'history/tasks';
             }
             break;
-          case '4':
+          case '4'://暂不处理
             this.urlApi = 'runtime/process-instances';
             break;
         }
       },
       // params 配置
-      paramsHandle(tab, status, req) {
+      paramsHandle(tab, status) {
+        this.showOnSearch();
+        this.showStatus = (tab === '1' && !status) || (tab === '2' && !status) || tab === '4';
         this.apiHandle(tab, status);
         switch (tab) {
           case '1':
             this.params['params' + tab] = {
               page: 1,
-              // assignee: '69',//登陆人
               taskDefinitionKeyIn: approvalSearch.approvals1.join(','),
               category: 'approval',
-              finished: Boolean(status)
+              finished: Boolean(status),
+              active: true,
             };
+            this.params['params' + tab].assignee = this.personal.staff_id;
             break;
           case '2':
             switch (status) {
@@ -417,19 +546,17 @@
               case 1:
                 this.params['params' + tab] = {
                   page: 1,
-                  // taskOwner: '69',//登陆人
-                  processDefinitionKey: 'MG-BulletinApproval',
-                  // processInstanceName: 'Collect',//区分报备类型
+                  processDefinitionKeys: 'MG-BulletinApproval,Market-VillageExpand',
                   finished: Boolean(status),
                 };
+                this.params['params' + tab].taskOwner = this.personal.staff_id;
                 break;
               case 2:
                 this.params['params' + tab] = {
                   page: 1,
-                  // assignee: '69',//登陆人
                   taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
-                  // processInstanceName: 'Collect',//区分报备类型
                 };
+                 this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
               case 3:
                 this.params['params' + tab] = {
@@ -437,56 +564,60 @@
                   cancelled: true,//待重签
                   taskDefinitionKeyIn: approvalSearch.approvals23.join(','),
                   active: true,
-                  // processInstanceName: 'Collect',//区分报备类型
                 };
+                 this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
             }
             break;
           case '3':
             this.params['params' + tab] = {
               page: 1,
-              // assignee: '69',//登陆人
               category: 'cc',
               finished: Boolean(status),
             };
+             this.params['params' + tab].assignee = this.personal.staff_id;
+            break;
+          case '4':
+            this.params['params' + tab].taskAssignee = this.personal.staff_id;
             break;
         }
-        if (req) return;
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 滚动加载
       scrollLoad(val) {
         let tab = this.tabs.tab;
         let status = this.tabs.status;
-        this.paramsHandle(tab, status, 'break');
+        this.twoLevel['tab' + tab] = status;
         if (!val) {
-          this.params['params' + tab].page = 1;
+          this.paramsHandle(tab, status);
         } else {
           if (this.fullLoading['load' + tab]) return;
           let length = this.approvalList['list' + tab]['data' + this.twoLevel['tab' + tab]].length;
           if (length === this.total['total' + tab]) return;
           this.params['params' + tab].page++;
+          this.getApproval(this.urlApi, this.params['params' + tab], tab);
         }
-        this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
       // 列表
       getApproval(url, params, tab) {
-        this.task_ids = [];
+        this.ids = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
-          let twoLevel = this.twoLevel['tab' + tab];
-          this.total['total' + tab] = res.total;
-          if (!twoLevel) {
-            this.paging['paging' + tab] = res.total;
-          }
-          let data = this.groupHandlerListData(res.data);
-          this.outcomes(data, this.tabs);
-          if (this.params['params' + tab].page === 1) {
-            this.approvalList['list' + tab]['data' + twoLevel] = data;
-          } else {
-            for (let item of data) {
-              this.approvalList['list' + tab]['data' + twoLevel].push(item);
+          if (res) {
+            let twoLevel = this.twoLevel['tab' + tab];
+            this.total['total' + tab] = res.total;
+            if (!twoLevel) {
+              this.paging['paging' + tab] = res.total;
+            }
+            let data = this.groupHandlerListData(res.data, this.urlApi);
+            this.outcomes(data, this.tabs);
+            if (this.params['params' + tab].page === 1) {
+              this.approvalList['list' + tab]['data' + twoLevel] = data;
+            } else {
+              for (let item of data) {
+                this.approvalList['list' + tab]['data' + twoLevel].push(item);
+              }
             }
           }
         });
@@ -536,7 +667,7 @@
       },
       // 头部切换
       changeApproval(val) {
-        this.task_ids = [];
+        this.ids = [];
         let tab = val.id;
         let status = this.twoLevel['tab' + tab];
         this.tabs.tab = tab;
@@ -557,6 +688,15 @@
         this.$store.dispatch('approval_tabs', this.tabs);
         this.onSearch(tab);
       },
+      // 重置搜索
+      resetting() {
+        let list = this.jsonClone(this.highList);
+        for (let item of Object.keys(list)) {
+          this.highParams[item] = list[item].keyType;
+        }
+        this.highParams.title = '';
+        this.highParams = Object.assign({}, this.highParams);
+      },
     },
   }
 </script>
@@ -570,6 +710,7 @@
 
   #approvals {
     .approvalTop {
+      height: 2.8rem;
       background: #E6F4F9;
       border-top: .16rem solid #F8F8F8;
 
@@ -610,7 +751,9 @@
 
     .main {
       .mainTop {
-        padding: .2rem .36rem;
+        height: .88rem;
+        @include flex('items-bet');
+        padding: 0 .36rem;
 
         p {
           position: relative;
@@ -625,7 +768,7 @@
             font-size: .24rem;
             color: #FFFFFF;
             text-align: center;
-            line-height: .3rem;
+            line-height: .33rem;
             @include radius(50%);
             background-color: #F4511E;
           }
@@ -687,6 +830,7 @@
                 }
 
                 span {
+                  white-space: nowrap;
                   margin-left: .12rem;
                   font-size: .28rem;
                   color: #686874;
@@ -739,6 +883,12 @@
               bottom: 0;
               width: 1.3rem;
               height: 1.3rem;
+            }
+
+            .finish {
+              width: 1.6rem;
+              height: 1.6rem;
+              @include approvalsImg('yiwancheng');
             }
 
             .publish {
@@ -862,5 +1012,28 @@
       }
     }
 
+    .van-popup.van-popup--right {
+      top: 2.8rem;
+      width: 100%;
+      @include transform(translate3d(0, 0, 0));
+      @include transition(all 0s);
+      @include scroll;
+    }
+
+    .searchApproval {
+      padding: .1rem;
+
+      .searchInput {
+        margin-top: .3rem;
+      }
+
+      label {
+        padding: .3rem;
+      }
+
+      .commonBtn {
+        padding: .42rem 0;
+      }
+    }
   }
 </style>

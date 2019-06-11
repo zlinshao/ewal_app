@@ -1,8 +1,5 @@
 <template>
   <div id="toBeDoneList">
-    <!--<div style="position: fixed;top: 0;bottom: 8rem;left: 0;right: 0;z-index: 1;" class="justify-around">-->
-    <!--<div v-for="item in 3" style="height: 100%;border-left: 1px solid #000;"></div>-->
-    <!--</div>-->
     <div>
       <div class="listTop" ref="listTop" @dblclick="goToTop">
         <div>
@@ -11,7 +8,7 @@
             {{item.text}}&nbsp;<span v-if="item.id === '1'">{{total['total1']}}</span>
           </p>
         </div>
-        <div class="topSearch" @click="searchHigh = !searchHigh"></div>
+      <!--<div class="topSearch" @click="searchHigh = !searchHigh"></div>-->
       </div>
       <div class="main" :style="mainHeight">
         <!--未完成-->
@@ -70,13 +67,15 @@
       </div>
     </div>
     <div class="commonFooterTag">
-      <p v-for="item in 4" :class="['p-'+item]" @click="footerTag(item)"></p>
+      <!-- <p v-for="item in 4" :class="['p-'+item]" @click="footerTag(item)"></p> -->
+      <p :class="['p-'+1]" @click="footerTag(1)"></p>
+      <p :class="['p-'+4]" @click="footerTag(4)"></p>
     </div>
 
     <!--右侧栏-->
-    <div class="addToBeDone" @click="showAddPopup = true"></div>
-    <van-popup v-model="showAddPopup" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
-               position="right" :overlay="true" class="showAddPopup">
+    <!--<div class="addToBeDone" @click="showAddPopup = true"></div>-->
+    <van-popup v-model="showAddPopup" overlay-class="overlay-color" position="right" :overlay="true"
+               class="showAddPopup">
       <p class="addTitle">
         <span class="writingMode">新建任务</span>
       </p>
@@ -91,8 +90,8 @@
       <div class="popupBottom"></div>
     </van-popup>
     <!--搜索-->
-    <van-popup v-model="searchHigh" :overlay-style="{'background':'rgba(0,0,0,.4)'}"
-               position="top" :overlay="true" class="searchHigh" :style="mainListHeight(80)">
+    <van-popup v-model="searchHigh" overlay-class="overlay-color" position="top" :overlay="true" class="searchHigh"
+               :style="mainListHeight(80)">
       <div class="searchInput">
         <div class="input">
           <div>
@@ -100,7 +99,7 @@
             <span v-if="highParams.title" @click="highParams.title = ''"></span>
           </div>
           <p v-if="highParams.title" class="searchBtn" @click="getFinishList(tabs)">搜索</p>
-          <p v-if="!highParams.title" @click="searchHigh = false">取消</p>
+          <p @click="searchHigh = false" v-else>取消</p>
         </div>
       </div>
       <div class="scroll_bar">
@@ -119,8 +118,8 @@
           </div>
         </div>
       </div>
-      <div class="commonBtn radioChecksFoot">
-        <p :class="['btn ' + item.type || '']" v-for="item of searchObj.buttons" @click="searchBtn(item.type)">
+      <div class="commonBtn">
+        <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type)">
           {{item.label}}
         </p>
       </div>
@@ -179,7 +178,6 @@
           total1: 0,
           total2: 0,
         },
-
         //右侧栏
         showAddPopup: false,
         addShowList: [
@@ -279,21 +277,19 @@
             ],
           },
         },
-        searchObj: {
-          buttons: [
-            {
-              label: '取消',
-              type: 'back'
-            },
-            {
-              label: '重置',
-              type: 'reset'
-            },
-            {
-              label: '确定',
-            },
-          ]
-        },
+        buttons: [
+          {
+            label: '取消',
+            type: 'back'
+          },
+          {
+            label: '重置',
+            type: 'reset'
+          },
+          {
+            label: '确定',
+          },
+        ],
         // 未完成
         noFinishModule: false,
         noModuleDetail: {},
@@ -306,9 +302,9 @@
       this.resetting();
     },
     mounted() {
-
     },
     activated() {
+      this.resetting();
       let listTop = this.$refs.listTop.offsetHeight;
       this.mainHeight = this.mainListHeight(listTop);
       let tab = this.tabs;
@@ -319,28 +315,28 @@
         this.getFinishList('1');
       }
     },
-    watch: {},
+    watch: {
+      'highParams.title'(val) {
+        this.highParams.title = val.replace(/\s+/g, '');
+      },
+    },
     computed: {
       tabs() {
         return this.$store.state.app.doneTab;
-      }
+      },
+      personal() {
+        return this.$store.state.app.personal;
+      },
     },
     methods: {
       // 新建带看
       createRouter(val) {
-        if (val.id) {
+        if (val.id === 'CollectTakeLook' || val.id === 'RentTakeLook') {
           this.routerLink('/createdTask', val);
         }
       },
       getQueryDetail(tab) {
-        let search = [];
-        for (let item of Object.keys(approvalSearch)) {
-          for (let val of approvalSearch[item]) {
-            search = search.concat(val);
-          }
-        }
-        search = this.myUtils.arrayWeight(search).join(',');
-        this.params['params' + tab].taskDefinitionKeyNotIn = search;
+        this.params['params' + tab].taskDefinitionKeyNotIn = this.$taskDefinitionKey();
       },
       // 已完成 / 未完成 切换
       changeTop(val) {
@@ -351,9 +347,6 @@
         if (!this.finishList['list' + val].length) {
           this.getFinishList(val);
         }
-        // this.finishList['list' + val] = [];
-        // this.params['params' + val].page = 1;
-        // this.getFinishList(val);
       },
       // 清空 列表
       close_(tab) {
@@ -385,25 +378,28 @@
           url = 'runtime/tasks';
         } else {
           url = 'history/tasks';
-          // params.finished = true;
+          params.finished = true;
         }
+        params.assignee = this.personal.staff_id;
         this.$httpZll.getToBeDoneListApi(url, params, close).then(res => {
           this.fullLoading['load' + tab] = false;
-          this.total['total' + tab] = res.total || 0;
-          let data = this.groupHandlerListData(res.data);
-          if (params.page === 1) {
-            this.finishList['list' + tab] = data;
-          } else {
-            for (let item of data) {
-              this.finishList['list' + tab].push(item);
+          if (res) {
+            this.total['total' + tab] = res.total || 0;
+            let data = this.groupHandlerListData(res.data);
+            if (params.page === 1) {
+              this.finishList['list' + tab] = data;
+            } else {
+              for (let item of data) {
+                this.finishList['list' + tab].push(item);
+              }
             }
-          }
-          if (tab === '1') {
-            this.listLength = [];
-            let index = 1;
-            for (let i of this.finishList['list1']) {
-              this.listLength.push(index);
-              index = index + 3;
+            if (tab === '1') {
+              this.listLength = [];
+              let index = 1;
+              for (let i of this.finishList['list1']) {
+                this.listLength.push(index);
+                index = index + 3;
+              }
             }
           }
         })
@@ -419,21 +415,21 @@
                 this.noModuleDetail = val;
                 break;
               case 'InputHandoverOrder'://交接单
-                this.$store.dispatch('all_detail', val);
-                this.routerLink('/deliveryReceipt');
+                sessionStorage.setItem('deliveryReceipt', JSON.stringify(val));
+                this.routerLink('/deliveryReceipt', {task_id: val.task_id});
                 break;
             }
             break;
           case 'finish':
-            this.finishModule = true;
-            this.moduleDetail = val;
+            // this.finishModule = true;
+            // this.moduleDetail = val;
             break;
         }
       },
       // 未完成 模态框
       noFinisHidden(val) {
         this.cancel();
-        if (val === 'again') {
+        if (val !== 'close') {
           this.scrollLoad(false);
         }
       },
@@ -481,6 +477,7 @@
           this.highParams[item] = list[item].keyType;
         }
         this.highParams.title = '';
+        this.highParams = Object.assign({}, this.highParams);
       },
       // 底部按钮跳转
       footerTag(val) {
@@ -488,9 +485,9 @@
           case 1:
             this.routerReplace('/index');
             break;
-          case 3:
-            this.routerReplace('/houseResource');
-            break;
+          // case 3:
+          //   this.routerReplace('/houseResource');
+          //   break;
         }
       },
     },

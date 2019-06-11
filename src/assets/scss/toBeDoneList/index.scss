@@ -146,6 +146,7 @@
             }
           }
           div {
+            white-space: nowrap;
             text-align: right;
           }
         }
@@ -228,7 +229,7 @@
     padding: .3rem;
     border-top: .1rem solid #F8F8F8;
   }
-  .radioChecksFoot {
+  .commonBtn {
     padding: .3rem 0;
   }
 }

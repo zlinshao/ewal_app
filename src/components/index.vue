@@ -68,46 +68,49 @@
             name: '审批',
             icon: ic_shenpi,
           }, {
-            url: '/contract',
+            // url: '/contract',
+            url: '',
             name: '合同',
             icon: ic_hetong,
           }, {
-            url: '/questionnaire',
+            // url: '/questionnaire',
+            url: '',
             name: '问卷',
             icon: ic_wenjuan,
           }, {
-            url: '/exam',
+            // url: '/exam',
+            url: '',
             name: '考试',
             icon: ic_kaoshi,
           }
         ],
         vacancyHouse: [
           {
-            num: '7',
+            num: '0',
             scope: '小于7天',
           }, {
-            num: '100',
+            num: '0',
             scope: '8-14天',
           }, {
-            num: '45',
+            num: '0',
             scope: '15-21天',
           }, {
-            num: '10',
+            num: '0',
             scope: '大于21天',
           },
         ],
         trans: [
           {
-            num: '7',
+            num: '0',
             scope: '带看',
           }, {
-            num: '7',
+            num: '0',
             scope: '资料',
           }, {
-            num: '7',
+            num: '0',
             scope: '维保',
           }, {
-            num: '7',
+            num: '0',
             class: 'lastRailroadCar',
             scope: '空置跟进',
           }
@@ -116,13 +119,16 @@
           {
             id: '1',
             icon: tab_home_pre1,
-          }, {
-            id: '2',
-            icon: tab_home2,
-          }, {
-            id: '3',
-            icon: tab_home3,
-          }, {
+          },
+          // {
+          //   id: '2',
+          //   icon: tab_home2,
+          // },
+          // {
+          //   id: '3',
+          //   icon: tab_home3,
+          // },
+          {
             id: '4',
             icon: tab_home4,
           },
@@ -139,6 +145,7 @@
     methods: {
       // 头部
       topTabsTag(url) {
+        if (!url) return;
         this.routerLink(url);
       },
       // 底部
@@ -147,9 +154,9 @@
           case '4':
             this.routerLink('/toBeDoneList');
             break;
-          case '3':
-            this.routerLink('/houseResource');
-            break;
+          // case '3':
+          //   this.routerLink('/houseResource');
+          //   break;
         }
       },
     },
