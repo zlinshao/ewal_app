@@ -223,6 +223,7 @@
       this.close_();
       this.followRecord = JSON.parse(sessionStorage.datumRecord || '{}');
       let query = JSON.parse(this.$route.query.params || '{}');
+      console.log(query)
       let record = this.followRecord.taskDefinitionKey;
       for (let key of Object.keys(query)) {
         this.form[key] = query[key];
@@ -232,6 +233,8 @@
           house_goods: [],
         };
         this.form.house_id = query.house_id;
+        console.log(1)
+        console.log(this.form)
       } else {
         this.albumDetail(query, this.followRecord.bulletin_type);
       }
@@ -244,6 +247,8 @@
         let type = this.followRecord.bulletin_type;
         this.form.contract_type = type === 'bulletin_collect_basic' ? 1 : 2;
         this.form.complete_content = {};
+        console.log(2)
+        console.log(this.form)
         let api = '';
         let key = this.followRecord.taskDefinitionKey;
         if (key === 'CompleteAsset') {
@@ -252,6 +257,8 @@
         } else {
           this.picChanges();
         }
+        console.log(3)
+        console.log(this.form)
         this.$httpZll.setPolishingBulletin(this.form.task_id, this.form, api).then(res => {
           if (res) {
             this.$router.go(-1);
