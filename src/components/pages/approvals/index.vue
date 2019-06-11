@@ -29,7 +29,7 @@
             <div class="contentList">
               <div class="listUp" :class="[ids.includes(item.id) ? 'leftShift' : '']"
                    @click="routerLinkDetail(item)">
-                <div class="listTitle">{{item.house_address || '******'}}</div>
+                <div class="listTitle">{{item.title || '******'}}</div>
                 <div class="listMiddle">
                   <p>{{item.bulletin_name}}</p>
                   <div>

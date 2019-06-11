@@ -465,9 +465,8 @@ defineNewAddVillage = [
   },
   {
     label: '街道地址',
-    placeholder: '已禁用',
+    placeholder: '必填 请输入',
     keyName: 'address',
-    disabled: 'disabled',
     keyType: '',
     type: 'text',
     status: '',
@@ -601,7 +600,7 @@ defineNewAddVillage = [
   },
   {
     label: '上传',
-    picker: 'upload',
+    picker: 'album',
     photos: [
       {
         label: '小区照片',
