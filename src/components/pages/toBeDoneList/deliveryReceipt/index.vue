@@ -894,6 +894,7 @@
 
         li {
           .addChange {
+            margin-left: 2rem;
             span {
               display: inline-block;
               text-align: center;
