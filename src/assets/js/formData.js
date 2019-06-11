@@ -403,7 +403,7 @@ defineNewAddVillage = [
     keyName: 'province',
     keyType: '',
     type: 'text',
-    status: 'obj',
+    status: 'objInt',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
@@ -415,7 +415,7 @@ defineNewAddVillage = [
     keyName: 'city',
     keyType: '',
     type: 'text',
-    status: 'obj',
+    status: 'objInt',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
@@ -424,10 +424,10 @@ defineNewAddVillage = [
     label: '区/县',
     placeholder: '必填 请选择',
     readonly: 'readonly',
-    keyName: 'district',
+    keyName: 'area',
     keyType: '',
     type: 'text',
-    status: 'obj',
+    status: 'objInt',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
@@ -439,7 +439,7 @@ defineNewAddVillage = [
     keyName: 'region',
     keyType: '',
     type: 'text',
-    status: 'obj',
+    status: 'objInt',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
