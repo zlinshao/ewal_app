@@ -71,8 +71,8 @@
     </div>
     <div class="commonFooterTag">
       <!-- <p v-for="item in 4" :class="['p-'+item]" @click="footerTag(item)"></p> -->
-      <p  :class="['p-'+1]" @click="footerTag(1)"></p>
-      <p  :class="['p-'+4]" @click="footerTag(4)"></p>
+      <p :class="['p-'+1]" @click="footerTag(1)"></p>
+      <p :class="['p-'+4]" @click="footerTag(4)"></p>
     </div>
 
     <!--右侧栏-->
@@ -339,14 +339,7 @@
         }
       },
       getQueryDetail(tab) {
-        let search = [];
-        for (let item of Object.keys(approvalSearch)) {
-          for (let val of approvalSearch[item]) {
-            search = search.concat(val);
-          }
-        }
-        search = this.myUtils.arrayWeight(search).join(',');
-        this.params['params' + tab].taskDefinitionKeyNotIn = search;
+        this.params['params' + tab].taskDefinitionKeyNotIn = this.$taskDefinitionKey().join(',');
       },
       // 已完成 / 未完成 切换
       changeTop(val) {

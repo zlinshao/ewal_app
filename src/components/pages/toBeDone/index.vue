@@ -214,6 +214,9 @@
     created() {
     },
     mounted() {
+      this.$httpZll.getContractMould().then(res => {
+        console.log(res.data)
+      });
       this.$nextTick(_ => {
         let top = this.$refs.toBeDoneTop.offsetHeight;
         this.mainHeight = this.mainListHeight(top);

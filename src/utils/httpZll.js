@@ -13,6 +13,7 @@ let market = globalConfig.server_market; //报备
 let url_hr = globalConfig.server_hr;//人资组织机构
 let url_done = globalConfig.server_done;//小飞 待办
 let url_identity = globalConfig.server_identity;//身份认证 / 电子合同编号（马国明）
+let mould = globalConfig.contract_mould;//合同模板（马国明）
 
 class httpZll extends httpService {
 
@@ -102,7 +103,7 @@ class httpZll extends httpService {
   // 新建小区
   static newAddVillage(data) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/bulletin/village`, data, 'prompt').then(res => {
+      this.post(`${market}/v1.0/market/task/AddCommunity`, data, 'prompt').then(res => {
         if (res.success) {
           $httpPrompt(res.message, 'success');
           resolve(res);
@@ -195,6 +196,15 @@ class httpZll extends httpService {
           resolve(false);
           $httpPrompt(res.message);
         }
+      });
+    });
+  }
+
+  // 获取合同模板
+  static getContractMould(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${mould}fdd/pdf`, params, 'prompt', close).then(res => {
+        resolve(res);
       });
     });
   }

@@ -140,6 +140,17 @@
       },
     },
     methods: {
+      // 提交
+      okAddVillage() {
+        this.form.village_name = this.formatData.village_name;
+        // if (this.$attestationKey(this.drawSlither)) return;
+        this.$httpZll.newAddVillage(this.form).then(res => {
+          if (res.success) {
+            this.resetting();
+            this.$router.go(-1);
+          }
+        })
+      },
       // 定位
       getVillageLocation() {
         let that = this;
@@ -250,17 +261,6 @@
       },
       getImgData(val) {
         this.form[val[0]] = val[1];
-      },
-      // 提交
-      okAddVillage() {
-        this.form.village_name = this.formatData.village_name;
-        if (this.$attestationKey(this.drawSlither)) return;
-        this.$httpZll.newAddVillage(this.form).then(res => {
-          if (res.success) {
-            this.resetting();
-            this.$router.go(-1);
-          }
-        })
       },
       // 初始化数据
       resetting() {

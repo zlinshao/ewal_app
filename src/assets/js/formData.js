@@ -474,15 +474,6 @@ defineNewAddVillage = [
     slot: '',
   },
   {
-    label: '求租人电话',
-    placeholder: '必填 请输入',
-    keyName: 'lessor_phone',
-    keyType: '',
-    type: 'number',
-    status: '',
-    slot: '',
-  },
-  {
     label: '建筑年限',
     placeholder: '必填 请选择',
     readonly: 'readonly',
@@ -576,6 +567,18 @@ defineNewAddVillage = [
     keyType: '',
     type: 'text',
     status: '',
+    slot: '',
+  },
+  {
+    label: '所属区域',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'position',
+    keyType: '',
+    type: 'text',
+    status: 'objInt',
+    showForm: 'formatData',//picker 显示form 或 formatData
+    picker: 'picker',
     slot: '',
   },
   {
