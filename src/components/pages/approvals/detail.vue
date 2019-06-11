@@ -14,6 +14,7 @@
       <h1 v-if="topOperates.length">
         <i v-for="item in topOperates" :class="['icon-'+item.id]" @click="iconButton(item.id)"></i>
       </h1>
+      <div class="approvalStaff">审批人&nbsp;:&nbsp;{{approvalStaff}}</div>
     </div>
     <div class="main" :style="mainHeight">
       <div class="detailInfo" @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
@@ -257,6 +258,7 @@
         ],
         searchStaffModule: false,
         changeFormData: {},//附属房东变化
+        approvalStaff: '',//审批人
       }
     },
     created() {
@@ -368,7 +370,6 @@
                 {id: '2'},
               ]
             } else if (status === 2) {//合同修改
-
               for (let come of detail.outcome.outcomeOptions) {
                 if (come.action === 'modify') {
                   btn.push(come);
@@ -418,6 +419,12 @@
               this.topOperates = [
                 {id: '2'},
               ]
+            }
+            let info = detail.taskInfo;
+            if (info && info[0]) {
+              this.$httpZll.getUserIdStaffDetail({staff: 1}, info[0].assignee).then(res => {
+                this.approvalStaff = res.data.name
+              })
             }
           }
         } else if (tab === 3) {//抄送我的
@@ -839,4 +846,11 @@
 <style lang="scss" scoped>
   @import "../../../assets/scss/approvals/detail.scss";
 
+  .approvalStaff {
+    position: absolute;
+    bottom: .24rem;
+    left: 1rem;
+    z-index: 10;
+    color: #FFFFFF;
+  }
 </style>

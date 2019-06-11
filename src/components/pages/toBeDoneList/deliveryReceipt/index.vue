@@ -115,6 +115,7 @@
                   :key="index"
                   :type="item.type"
                   :label="item.label"
+                  @input="listenInput(item.keyName)"
                   :placeholder="item.placeholder">
                   <div class="zl-button" v-if="item.button">{{item.button}}</div>
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
@@ -266,6 +267,13 @@
     methods: {
       changeTag(index) {
         this.slither = index;
+      },
+      // 监听 input
+      listenInput(name) {
+        // switch (name) {
+        //   case '':
+        //     break;
+        // }
       },
       // 预览交接单
       previewDelivery() {
@@ -895,6 +903,7 @@
         li {
           .addChange {
             margin-left: 2rem;
+
             span {
               display: inline-block;
               text-align: center;
