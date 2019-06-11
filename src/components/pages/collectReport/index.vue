@@ -967,11 +967,8 @@
             }
           } else {
             let res = data.data;
-            if (!this.isGetTake) {
-              this.handlePreFill(res);
-            } else {
-              this.childBulletin(res, 'draft');
-            }
+            this.childBulletin(res, 'draft');
+            this.handlePreFill(res);
           }
           if (!this.isGetTake) {
             this.electronicContract();
