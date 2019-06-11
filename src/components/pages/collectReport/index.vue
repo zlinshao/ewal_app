@@ -956,7 +956,7 @@
           }
         }
         this.$httpZll.getBulletinDraft(params).then(data => {
-          this.form = collectBulletinDraft;//收房预填
+          // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
           if (!data) {

@@ -47,15 +47,15 @@
                     <span v-if="item.status.length">{{item.status[0]}}</span>
                     <span v-else>{{item.name}}</span>
                   </div>
-                  <div>
-                    <i class="icon-2"></i>
-                    <span v-if="showStatus">
-                      已等待{{item.duration}}分钟
-                    </span>
-                    <span v-else>
-                       耗时{{item.duration}}分钟
-                    </span>
-                  </div>
+<!--                  <div>-->
+<!--                    <i class="icon-2"></i>-->
+<!--                    <span v-if="showStatus">-->
+<!--                      已等待{{item.duration}}分钟-->
+<!--                    </span>-->
+<!--                    <span v-else>-->
+<!--                       耗时{{item.duration}}分钟-->
+<!--                    </span>-->
+<!--                  </div>-->
                 </div>
                 <div class="approvalStatus finish" v-if="tabs.tab === '3'"></div>
                 <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"

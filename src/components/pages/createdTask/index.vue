@@ -387,7 +387,7 @@
         this.form.primary = id;
         this.form.take_peoples = [id];
         this.formatData.take_peoples = [name];
-        this.form = collectCreatedDrafts;
+        // this.form = collectCreatedDrafts;
         // this.form = rentCreatedDrafts;
       }
     },
