@@ -4505,7 +4505,7 @@ function handlerKitchenBalconyBathroom(value, num) {
     deliveryMorePickers('卫生间灯', value, 'bathroom_light', undefined, num),
     deliveryMorePickers('浴霸灯', value, 'bath_heater_light', undefined, num),
     deliveryMorePickers('洗面池', value, 'wash_basin', undefined, num),
-    deliveryMorePickers('马桶盖', value, 'toilet_lid', undefined, num),
+    deliveryMorePickers('马桶盖', value, 'toilet_lid', childKeysHaveBad, num),
     deliveryMorePickers('晾衣架', value, 'drying_rack', undefined, num),
     deliveryMorePickersRemark('厨房/阳台/卫生间备注'),
   ]
@@ -4546,7 +4546,6 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
     children: [
       {
         label: '损坏照片',
-        placeholder: '必填',
         keyName: key,
         keyType: [],
         slither: parent,
@@ -4586,7 +4585,6 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad
     children: [
       {
         label: '损坏照片',
-        placeholder: '必填',
         keyName: key,
         keyType: [],
         slither: parent,

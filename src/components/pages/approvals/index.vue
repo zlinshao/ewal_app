@@ -547,7 +547,7 @@
               case 1:
                 this.params['params' + tab] = {
                   page: 1,
-                  processDefinitionKey: 'MG-BulletinApproval',
+                  processDefinitionKeys: ['MG-BulletinApproval','Market-VillageExpand'],
                   finished: Boolean(status),
                 };
                 this.params['params' + tab].taskOwner = this.personal.staff_id;
