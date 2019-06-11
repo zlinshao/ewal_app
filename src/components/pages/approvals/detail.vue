@@ -423,7 +423,11 @@
             let info = detail.taskInfo;
             if (info && info[0]) {
               this.$httpZll.getUserIdStaffDetail({staff: 1}, info[0].assignee).then(res => {
-                this.approvalStaff = res.data.name
+                if (res) {
+                  this.approvalStaff = res.data.name
+                } else {
+                  this.approvalStaff = '******';
+                }
               })
             }
           }
