@@ -19,15 +19,15 @@
                 <p>{{item.title}}</p>
                 <div class="toBeDoneType">{{item.name}}</div>
                 <div class="progress">
-                  <div :style="{'height': '30%'}">
-                    <span>30<b>%</b></span>
+                  <div :style="{'height': '50%'}">
+                    <span>50<b>%</b></span>
                   </div>
                 </div>
-                <div class="surplus">剩余</div>
-                <div>
-                  <span class="unit">{{item.due_date_hours}}<b>h</b></span>
-                  <span class="unit">{{item.due_date_minutes}}<b>m</b></span>
-                </div>
+                <!--<div class="surplus">剩余</div>-->
+                <!--<div>-->
+                  <!--<span class="unit">{{item.due_date_hours}}<b>h</b></span>-->
+                  <!--<span class="unit">{{item.due_date_minutes}}<b>m</b></span>-->
+                <!--</div>-->
               </div>
             </li>
             <li class="noMore" v-if="finishList['list1'].length === total['total1'] && finishList['list1'].length > 6">
@@ -51,7 +51,7 @@
                   <p><span>{{item.name}}</span></p>
                   <div>
                     <h2>完成时间</h2>
-                    <h3>2019-03-05 18:45</h3>
+                    <h3>{{item.endTime || ''}}</h3>
                   </div>
                 </div>
               </div>

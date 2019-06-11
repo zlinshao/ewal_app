@@ -155,15 +155,15 @@
         formatData: {},
         // 自定义按钮
         normalOperates: [
-          {
-            icon: icon_daiqian,
-            text: '代签',
-            action: 'allograph',
-          }, {
-            icon: icon_zhuanjiao,
-            text: '转交',
-            action: 'deliver',
-          }
+          // {
+          //   icon: icon_daiqian,
+          //   text: '代签',
+          //   action: 'allograph',
+          // }, {
+          //   icon: icon_zhuanjiao,
+          //   text: '转交',
+          //   action: 'deliver',
+          // }
         ],
         // 状态变化按钮
         changeOperates: {
