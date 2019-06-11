@@ -389,12 +389,12 @@ approvalSearch = {
   toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentBooking'],
   toBeDoneRetainage: ['RentRetainage'],
   toBeDoneAgency: ['BulletinAgency'],
-  approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved'],
+  approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
 };
 
-// 新建小区
+// 拓展新盘
 defineNewAddVillage = [
   {
     label: '省',

@@ -69,7 +69,10 @@
                       <div :class="key" v-else>{{val}}</div>
                     </div>
                   </div>
-                  <span v-else>{{formatData[key]}}</span>
+                  <span v-else>
+                    <span v-if="formatData[key].name">{{formatData[key].name}}</span>
+                    <span v-else>{{formatData[key]}}</span>
+                  </span>
                 </div>
               </li>
             </ul>
@@ -148,7 +151,7 @@
       </div>
     </van-popup>
     <!--历史审批流程-->
-<!--    <div class="records" @click="recordPopup = true"><p></p> </div>-->
+    <!--    <div class="records" @click="recordPopup = true"><p></p> </div>-->
     <van-popup v-model="recordPopup" overlay-class="overlay-color" position="right" :overlay="true" class="recordPopup">
       <div class="content">
         <div class="contentMain">
@@ -323,6 +326,7 @@
       getOperates(detail, query) {
         this.closeOperates();
         let btn = [];
+        let types = ['bulletin_retainage', 'bulletin_village'];
         let tab = Number(query.tab), status = Number(query.status);
         if (tab === 1) {//我审批
           if (status) {//已审批
@@ -331,7 +335,7 @@
             ]
           } else {//待审批
             this.setOperates(detail.outcome);
-            if (detail.bulletin_type === 'bulletin_retainage') {
+            if (types.includes(detail.bulletin_type)) {
               this.topOperates = [
                 {id: '2'},
                 {id: '3'},

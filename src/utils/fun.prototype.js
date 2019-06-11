@@ -317,7 +317,7 @@ export default {
     };
     // 报备类型数据匹配
     Vue.prototype.$bulletinType = function (type) {
-      let data, title;
+      let data = {}, title;
       switch (type) {
         case 'bulletin_collect_basic':
           title = ['房屋信息', '物品信息', '客户信息', '合同信息'];
@@ -352,6 +352,10 @@ export default {
         case 'bulletin_checkout'://退租
           title = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
           data = this.jsonClone(defineCheckoutReport);
+          break;
+        case 'bulletin_village'://拓展新盘
+          title = ['拓展新盘'];
+          data.slither0 = this.jsonClone(defineNewAddVillage);
           break;
         case 'supplement_lord_time': //延长收房时长
         case 'supplement_lord_change_bank': //房东跟还银行卡
@@ -679,7 +683,7 @@ export default {
           //   department_id: 395,
           //   department_name: "开发",
           //   phone: "18052001167",
-          //   staff_id: '69',
+          //   staff_id: '',
           //   staff_name: "张琳琳",
           // };
           // this.$store.dispatch('personal_storage', data);
@@ -741,6 +745,7 @@ export default {
             this.$prompt('获取部门失败!', 'fail');
             return;
           }
+          console.log(data);
           this.$store.dispatch('personal_storage', data);
           resolve(true);
         }
