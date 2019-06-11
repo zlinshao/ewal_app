@@ -326,7 +326,7 @@
       getOperates(detail, query) {
         this.closeOperates();
         let btn = [];
-        let types = ['bulletin_retainage', 'bulletin_village'];
+        let types = ['bulletin_retainage', 'Market-VillageExpand'];
         let tab = Number(query.tab), status = Number(query.status);
         if (tab === 1) {//我审批
           if (status) {//已审批
@@ -666,8 +666,14 @@
             this.allDetail.task_id = this.detailData.task_id;
             this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
-            this.formatData = res.data.content;
-            this.handleDetail(res.data.content);
+            let content;
+            if (res.data.content.bulletin_content) {
+              content = JSON.parse(res.data.content.bulletin_content || '{}');
+            } else {
+              content = res.data.content;
+            }
+            this.formatData = content;
+            this.handleDetail(content);
           }
         })
       },
@@ -749,7 +755,11 @@
             this.formatData[pic] = res.album[pic];
           }
         }
-
+        // for (let pic of Object.keys(res.album)) {
+        //   this.$httpZll.getUploadUrl(res.album[pic]).then(res => {
+        //     this.formatData.album[pic] = res.data;
+        //   })
+        // }
       },
       // 变化数据 预填数据处理
       changeHandle(res, item, val, all, data) {
@@ -780,7 +790,6 @@
               for (let sub of children) {
                 this.changeFormData[item][sub.keyName] = sub.label;
               }
-              console.log(this.changeFormData);
             }
           }
         }

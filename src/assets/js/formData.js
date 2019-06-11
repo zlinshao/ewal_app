@@ -394,7 +394,7 @@ approvalSearch = {
   approvals23: ['InputBulletinData'],
 };
 
-// 拓展新盘
+// 新增小区
 defineNewAddVillage = [
   {
     label: '省',
@@ -403,7 +403,7 @@ defineNewAddVillage = [
     keyName: 'province',
     keyType: '',
     type: 'text',
-    status: 'objInt',
+    status: 'obj',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
@@ -415,7 +415,7 @@ defineNewAddVillage = [
     keyName: 'city',
     keyType: '',
     type: 'text',
-    status: 'objInt',
+    status: 'obj',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
@@ -424,22 +424,22 @@ defineNewAddVillage = [
     label: '区/县',
     placeholder: '必填 请选择',
     readonly: 'readonly',
-    keyName: 'area',
+    keyName: 'district',
     keyType: '',
     type: 'text',
-    status: 'objInt',
+    status: 'obj',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',
   },
   {
-    label: '区域',
+    label: '街道',
     placeholder: '必填 请选择',
     readonly: 'readonly',
     keyName: 'region',
     keyType: '',
     type: 'text',
-    status: 'objInt',
+    status: 'obj',
     showForm: 'formatData',//picker 显示form 或 formatData
     picker: 'picker',
     slot: '',

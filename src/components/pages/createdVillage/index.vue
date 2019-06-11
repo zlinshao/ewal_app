@@ -198,7 +198,7 @@
           let name = this.pickers.keyName;
           if (name === 'province') {
             this.closeSelect();
-            this.$httpZll.getAllCityList({province: value.province}).then(res => {
+            this.$httpZll.getAllCityList({province: value.province.id}).then(res => {
               let data = {};
               for (let val of res.data) {
                 data[val.city_id] = val.city_name;
@@ -207,26 +207,26 @@
             });
           }
           if (name === 'city') {
-            this.village = show.city;
+            this.village = value.city.name;
             this.getVillageLocation();
             this.closeSelect('city');
-            this.$httpZll.getAllCityList({province: this.form.province, city: value.city}).then(res => {
-              let data = {};
-              for (let val of res.data) {
-                data[val.city_id] = val.city_name;
-              }
-              dicties.area = data;
-            });
-          }
-          if (name === 'area') {
-            this.$httpZll.getAllCityList({
-              province: this.form.province,
-              city: this.form.city,
-              area: value.area
-            }).then(res => {
+            this.$httpZll.getAllCityList({province: this.form.province.id, city: value.city.id}).then(res => {
               let data = {};
               for (let val of res.data) {
                 data[val.area_id] = val.area_name;
+              }
+              dicties.district = data;
+            });
+          }
+          if (name === 'district') {
+            this.$httpZll.getAllCityList({
+              province: this.form.province.id,
+              city: this.form.city.id,
+              area: value.district.id
+            }).then(res => {
+              let data = {};
+              for (let val of res.data) {
+                data[val.region_id] = val.region_name;
               }
               dicties.region = data;
             });
