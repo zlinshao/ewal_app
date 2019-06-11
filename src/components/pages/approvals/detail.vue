@@ -666,7 +666,7 @@
             this.allDetail.task_id = this.detailData.task_id;
             this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
-            let content;
+            let content = {};
             if (res.data.content.bulletin_content) {
               content = JSON.parse(res.data.content.bulletin_content || '{}');
             } else {
@@ -750,16 +750,17 @@
               break;
           }
         }
-        if (res.album) {
-          for (let pic of Object.keys(res.album)) {
-            this.formatData[pic] = res.album[pic];
-          }
-        }
-        // for (let pic of Object.keys(res.album)) {
-        //   this.$httpZll.getUploadUrl(res.album[pic]).then(res => {
-        //     this.formatData.album[pic] = res.data;
-        //   })
+        // if (res.album) {
+        //   for (let pic of Object.keys(res.album)) {
+        //     this.formatData[pic] = res.album[pic];
+        //   }
         // }
+        for (let pic of Object.keys(res.album)) {
+          this.$httpZll.getUploadUrl(res.album[pic]).then(res => {
+            this.formatData.album[pic] = res.data;
+          })
+        }
+        console.log(this.formatData)
       },
       // 变化数据 预填数据处理
       changeHandle(res, item, val, all, data) {

@@ -485,6 +485,18 @@ defineNewAddVillage = [
     slot: '',
   },
   {
+    label: '所属区域',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'position',
+    keyType: '',
+    type: 'text',
+    status: 'objInt',
+    showForm: 'formatData',//picker 显示form 或 formatData
+    picker: 'picker',
+    slot: '',
+  },
+  {
     label: '房屋类型',
     placeholder: '必填 请选择',
     readonly: 'readonly',
@@ -566,18 +578,6 @@ defineNewAddVillage = [
     keyType: '',
     type: 'text',
     status: '',
-    slot: '',
-  },
-  {
-    label: '所属区域',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'position',
-    keyType: '',
-    type: 'text',
-    status: 'objInt',
-    showForm: 'formatData',//picker 显示form 或 formatData
-    picker: 'picker',
     slot: '',
   },
   {
