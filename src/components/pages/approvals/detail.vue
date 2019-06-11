@@ -137,21 +137,17 @@
       <div>
         <div class="deliver">
           <label>转交人</label>
-          <input placeholder="必填 请输入" v-model="staff_name" readonly
+          <input placeholder="必填 请输入" v-model="deliverForm.assignee" readonly
                  @focus="searchStaffModule = true"/>
         </div>
-        <div>
-          <label>转交原因</label>
-          <textarea placeholder="必填 请输入" v-model="deliverForm.content"></textarea>
-        </div>
-        <div v-for="item in deliverUpload">
-          <label style="padding-top: .2rem">{{item.text}}</label>
-          <Upload :file="item" :close="!deliverPopup" @success="getImgDeliver"></Upload>
+        <div class="deliver">
+          <label>部门</label>
+          <input placeholder="必填 请输入" v-model="deliverForm.department_name" disabled/>
         </div>
       </div>
       <div class="commonBtn">
         <p class="btn back" @click="cancel('deliver')">取消</p>
-        <p class="btn">确定</p>
+        <p class="btn" @click="approvalDeliver">确定</p>
       </div>
     </van-popup>
     <!--历史审批流程-->
@@ -248,13 +244,11 @@
             keyName: 'attachments',
           }
         ],
-
-        staff_name: '',
         deliverForm: {
-          staff_id: '',
-          content: '',
-          house_video: [],
+          assignee: '',
+          department_name: '',
         },
+        assignee: '',
         deliverUpload: [
           {
             text: '房屋影像',
@@ -312,6 +306,21 @@
             this.slither--;
           }
         }
+      },
+      // 转交
+      approvalDeliver() {
+        if (!this.assignee) {
+          this.$prompt('请选择转交人', 'fail');
+          return;
+        }
+        this.$httpZll.postApprovalDeliver(this.detailData.task_id, this.assignee).then(res => {
+          if (res) {
+            this.$prompt('转交成功!', 'success');
+            setTimeout(_ => {
+              this.$router.go(-1);
+            }, 500);
+          }
+        })
       },
       // 历史流程
       historyProcess(detail) {
@@ -598,16 +607,14 @@
       getStaffInfo(val) {
         this.searchStaffModule = false;
         if (val !== 'close') {
-          this.staff_name = val.staff_name;
-          this.deliverForm.staff_id = val.staff_id;
+          this.assignee = val.staff_id;
+          this.deliverForm.assignee = val.staff_name;
+          this.deliverForm.department_name = val.department_name;
         }
       },
       // 图片上传
       getImgData(val) {
         this.commentForm.content[val[0]] = val[1];
-      },
-      getImgDeliver(val) {
-        this.deliverForm[val[0]] = val[1];
       },
       // 视频播放
       videoPlay(event = '') {
@@ -649,7 +656,6 @@
         for (let val of Object.keys(data)) {
           obj[val] = {};
           for (let item of data[val]) {
-            console.log(item);
             if (item.picker === 'upload' || item.picker === 'album') {
               for (let pic of item.photos) {
                 obj[val][pic.keyName] = pic.label;
@@ -666,7 +672,6 @@
             }
           }
         }
-        console.log(obj);
         this.drawSlither = obj;
       },
       // 获取详情数据

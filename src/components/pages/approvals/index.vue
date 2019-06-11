@@ -471,7 +471,6 @@
             break;
         }
       },
-
       // 重新提交
       againSave(val) {
         this.againTaskDetail(val).then(_ => {
@@ -579,7 +578,7 @@
              this.params['params' + tab].assignee = this.personal.staff_id;
             break;
           case '4':
-            this.params['params' + tab].taskOwner = this.personal.staff_id;
+            this.params['params' + tab].taskAssignee = this.personal.staff_id;
             break;
         }
         this.getApproval(this.urlApi, this.params['params' + tab], tab);

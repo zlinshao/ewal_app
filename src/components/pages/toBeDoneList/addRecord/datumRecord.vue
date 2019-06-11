@@ -231,6 +231,7 @@
         this.form.album = {
           house_goods: [],
         };
+        this.form.house_id = query.house_id;
       } else {
         this.albumDetail(query, this.followRecord.bulletin_type);
       }

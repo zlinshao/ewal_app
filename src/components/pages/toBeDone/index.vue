@@ -100,7 +100,6 @@
   import icon_quqianyue from '@/assets/image/toBeDone/quqianyue.png'
   import icon_wofaqide from '@/assets/image/toBeDone/wofaqide.png'
   import icon_woshenpide from '@/assets/image/toBeDone/woshenpide.png'
-  import icon_lishidaikan from '@/assets/image/toBeDone/lishidaikan.png'
   import icon_hetongmoban from '@/assets/image/toBeDone/hetongmoban.png'
   import icon_shoujiqianshu from '@/assets/image/approvals/detail/kehushoujiqianshu.png'
   import icon_hetongxiugai from '@/assets/image/approvals/xiugaihetong.png'

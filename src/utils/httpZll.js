@@ -157,12 +157,10 @@ class httpZll extends httpService {
     })
   }
 
+  // 员工id获取详情信息
+
   // 员工搜索
-  static searchStaffList(val) {
-    let params = {
-      search: val,
-      org_id: '',
-    };
+  static searchStaffList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}staff/user`, params, 'prompt').then(res => {
         if (res.code.endsWith('0')) {
@@ -270,6 +268,24 @@ class httpZll extends httpService {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
         if (199 < res.httpCode < 300) {
           resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
+      });
+    });
+  }
+
+  // 转交直接换人
+  static postApprovalDeliver(id, assignee) {
+    let params = {
+      action: 'delegate',
+      assignee: assignee,
+    };
+    return new Promise((resolve, reject) => {
+      this.post(`${url_done}runtime/tasks/${id}`, params, 'prompt').then(res => {
+        if (199 < res.httpCode < 300) {
+          resolve(true);
         } else {
           resolve(false);
           $httpPrompt(res.code);
