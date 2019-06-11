@@ -39,14 +39,15 @@
                              v-else-if="val.info.ext.includes('video')" :alt="val.uri">
                         <!--其它类型-->
                         <img src="../../../assets/image/file/xls.png" :alt="val.uri"
-                             v-else-if="val.info.ext.includes('xls')">
+                             v-else-if="val.info.ext.includes('xls')" @click="$openFiles($event)">
                         <img src="../../../assets/image/file/doc.png" :alt="val.uri"
-                             v-else-if="val.info.ext.includes('doc')">
+                             v-else-if="val.info.ext.includes('doc')" @click="$openFiles($event)">
                         <img src="../../../assets/image/file/txt.png" :alt="val.uri"
-                             v-else-if="val.info.ext.includes('text')">
+                             v-else-if="val.info.ext.includes('text')" @click="$openFiles($event)">
                         <img src="../../../assets/image/file/pdf.png" :alt="val.uri"
-                             v-else-if="val.info.ext.includes('pdf')">
-                        <img src="../../../assets/image/file/file.png" :alt="val.uri" v-else>
+                             v-else-if="val.info.ext.includes('pdf')" @click="$openFiles($event)">
+                        <img src="../../../assets/image/file/file.png" :alt="val.uri" v-else
+                             @click="$openFiles($event)">
                       </span>
                       <div v-else-if="val.period">
                         <h4 :class="[idx !== 0?'h4':'']">
@@ -71,6 +72,9 @@
                   </div>
                   <span v-else>
                     <span v-if="formatData[key].name">{{formatData[key].name}}</span>
+                    <span v-else-if="key === 'album'" v-for="pic in Object.keys(formatData[key])" class="spanPhotos">1
+                      <img v-for="photo in formatData[key][pic]" :src="photo.uri" alt="">
+                    </span>
                     <span v-else>{{formatData[key]}}</span>
                   </span>
                 </div>
@@ -614,6 +618,11 @@
           // alert('不支持的视频文件！');
         }
       },
+      // 查看文件
+      $openFiles(event) {
+        let url = event.target.alt;
+        this.$ddSkip(url);
+      },
       // 所有单选 picker
       objIntArray(data) {
         let arr = [];
@@ -640,7 +649,8 @@
         for (let val of Object.keys(data)) {
           obj[val] = {};
           for (let item of data[val]) {
-            if (item.picker === 'upload') {
+            console.log(item);
+            if (item.picker === 'upload' || item.picker === 'album') {
               for (let pic of item.photos) {
                 obj[val][pic.keyName] = pic.label;
               }
@@ -656,6 +666,7 @@
             }
           }
         }
+        console.log(obj);
         this.drawSlither = obj;
       },
       // 获取详情数据
@@ -750,17 +761,20 @@
               break;
           }
         }
-        // if (res.album) {
-        //   for (let pic of Object.keys(res.album)) {
-        //     this.formatData[pic] = res.album[pic];
-        //   }
-        // }
-        for (let pic of Object.keys(res.album)) {
-          this.$httpZll.getUploadUrl(res.album[pic]).then(res => {
-            this.formatData.album[pic] = res.data;
-          })
+        if (res.album) {
+          for (let pic of Object.keys(res.album)) {
+            if (res.album[pic].length) {
+              if (typeof res.album[pic][0] !== 'object') {
+                this.$httpZll.getUploadUrl(res.album[pic], 'close').then(res => {
+                  this.formatData[pic] = res.data;
+                  this.formatData = Object.assign({}, this.formatData);
+                })
+              } else {
+                this.formatData[pic] = res.album[pic];
+              }
+            }
+          }
         }
-        console.log(this.formatData)
       },
       // 变化数据 预填数据处理
       changeHandle(res, item, val, all, data) {

@@ -599,8 +599,8 @@ defineNewAddVillage = [
     slot: '',
   },
   {
-    label: '上传',
     picker: 'album',
+    keyName: 'album',
     photos: [
       {
         label: '小区照片',
