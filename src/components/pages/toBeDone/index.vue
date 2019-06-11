@@ -215,18 +215,7 @@
     created() {
     },
     mounted() {
-      // 合同模板
-      this.$httpZll.getContractMould().then(res => {
-        if (res) {
-          for (let item of res.data.data) {
-            if (item.pdf_scene === 1) {//收房
-              this.contractMoulds['4'] = item.contract_template_url;
-            } else {//租房
-              this.contractMoulds['3'] = item.contract_template_url;
-            }
-          }
-        }
-      });
+      this.getContract();// 合同模板
       this.$nextTick(_ => {
         let top = this.$refs.toBeDoneTop.offsetHeight;
         this.mainHeight = this.mainListHeight(top);
@@ -246,10 +235,24 @@
     },
     computed: {
       personal() {
-        return this.$store.state.app.personal;
+        return this.$store.state.app.personalDetail;
       },
     },
     methods: {
+      // 获取合同模板
+      getContract() {
+        this.$httpZll.getContractMould({scene_depart: this.personal.city_name}).then(res => {
+          if (res) {
+            for (let item of res.data.data) {
+              if (item.pdf_scene === 1) {//收房
+                this.contractMoulds['4'] = item.contract_template_url;
+              } else {//租房
+                this.contractMoulds['3'] = item.contract_template_url;
+              }
+            }
+          }
+        });
+      },
       // 右侧弹窗操作
       popupOperate() {
         let type = this.bulletin_type.bulletin;
