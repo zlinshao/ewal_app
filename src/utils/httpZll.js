@@ -7,7 +7,7 @@ function $httpPrompt(msg, type) {
 }
 
 let url = globalConfig.server;//文件上传
-let url_login = globalConfig.login;//文件上传
+let url_login = globalConfig.login;//登陆
 let url_code = globalConfig.server_code;//报备标识码
 let market = globalConfig.server_market; //报备
 let url_hr = globalConfig.server_hr;//人资组织机构
@@ -715,7 +715,7 @@ class httpZll extends httpService {
   // 图片id获取图片地址
   static getUploadUrl(ids, close) {
     return new Promise((resolve, reject) => {
-      this.post(`${url_login}api/v1/get_urls`, {ids: ids}, '', close).then(res => {
+      this.post(`${url}api/v1/get_urls`, {ids: ids}, '', close).then(res => {
         if (res.code.endsWith('0')) {
           resolve(res);
         } else {
