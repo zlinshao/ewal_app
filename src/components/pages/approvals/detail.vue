@@ -14,7 +14,7 @@
       <h1 v-if="topOperates.length">
         <i v-for="item in topOperates" :class="['icon-'+item.id]" @click="iconButton(item.id)"></i>
       </h1>
-      <div class="approvalStaff">审批人&nbsp;:&nbsp;{{approvalStaff}}</div>
+      <div class="approvalStaff" v-if="tabs.tab === '2' && tabs.status === 0">审批人&nbsp;:&nbsp;{{approvalStaff}}</div>
     </div>
     <div class="main" :style="mainHeight">
       <div class="detailInfo" @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
