@@ -252,10 +252,12 @@
     },
     activated() {
       this.allDetail = JSON.parse(sessionStorage.deliveryReceipt);
-      this.getDraft(this.allDetail.task_id);
-      // this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
+      // if (this.allDetail.bulletin_type === 'bulletin_rent_basic') {
+      //   this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
       //
-      // });
+      //   });
+      // }
+      this.getDraft(this.allDetail.task_id);
       this.allReportNum = Object.keys(defineArticleReceipt).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";

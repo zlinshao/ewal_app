@@ -313,6 +313,9 @@
       'form.money_sum'(val) {
         if (val && this.form.current_pay_info && this.form.current_pay_info.length === 1) {
           this.form.current_pay_info[0].money_sep = val;
+          let bulletin = this.bulletinType.bulletin;
+          let pay_first = new Date(this.form.begin_date);
+          this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
         }
       },
     },
