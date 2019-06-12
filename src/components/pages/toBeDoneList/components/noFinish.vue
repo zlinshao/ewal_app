@@ -39,7 +39,7 @@
                   </span>
                 </b>
               </span>
-              <span v-else>{{allDetail[item] || ''}}</span>
+<!--              <span v-else>{{allDetail[item] || ''}}</span>-->
             </div>
           </div>
           <div class="record" v-for="item in recordList">
@@ -92,7 +92,7 @@
           house_address: '房屋地址',
           house_goods: '待办内容',
           due_date: '结束时间',
-          remaining_time: '剩余时间',
+          // remaining_time: '剩余时间',
           bulletin_staff_name: '跟进人',
         },
         makeGoods: {

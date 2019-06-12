@@ -327,7 +327,7 @@
     methods: {
       // 报备类型
       bulletin_types(type) {
-        let bulletinData = this.$bulletinType(type.bulletin);
+        let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.taskDefinitionKey);
         this.isGetTake = type.bulletin === 'bulletin_retainage' || type.bulletin === 'bulletin_agency';
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
@@ -958,6 +958,7 @@
             params[val] = this.bulletinType[val];
           }
         }
+        let key = this.taskDetail.taskDefinitionKey;
         this.$httpZll.getBulletinDraft(params).then(data => {
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
@@ -973,7 +974,7 @@
             this.childBulletin(res, 'draft');
             this.handlePreFill(res);
           }
-          if (!this.isGetTake) {
+          if ((!this.isGetTake) && key !== 'RentBooking') {
             this.electronicContract();
           }
         });
