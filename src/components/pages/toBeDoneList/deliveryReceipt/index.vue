@@ -406,9 +406,10 @@
               let few = ['chair', 'door_lock_key', 'key'];//把
               unit = sets.includes(name) ? '台' : (few.includes(name) ? '把' : '个');
               if (value[child]) {
+                let num = value[child];
                 switch (child) {
                   case 'is_have':
-                    if (value[child]) {
+                    if (num) {
                       show[0] = '有';
                     } else {
                       show[0] = '没有';
@@ -417,25 +418,25 @@
                   case 'type':
                     for (let dict of Object.keys(dicties[name])) {
                       if (dict.includes('0')) {
-                        show[0] = dicties[name]['value_0'][value[child]];
+                        show[0] = dicties[name]['value_0'][num];
                       }
                     }
                     break;
                   case 'is_bad':
-                    if (value[child]) {
-                      show[1] = '损坏';
-                    } else {
+                    if (num) {
                       show[1] = '无损坏';
+                    } else {
+                      show[1] = '损坏';
                     }
                     break;
                   case 'bad_number':
-                    if (value[child]) {
-                      show[2] = value[child] + unit;
+                    if (num) {
+                      show[2] = num + unit;
                     }
                     break;
                   case 'number':
-                    if (value[child]) {
-                      show[3] = '共' + value[child] + unit;
+                    if (num) {
+                      show[3] = '共' + num + unit;
                     }
                     break;
                 }
