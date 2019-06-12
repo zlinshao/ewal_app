@@ -848,12 +848,17 @@
       // 图片上传
       getImgData(val) {
         this.form[val[0]] = val[1];
+        this.photoUploadStatus = val[2];
       },
       // 发布
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
           if (this.$attestationKey(this.drawForm)) return;
+          if (!this.photoUploadStatus) {
+            this.$prompt('图片上传中...');
+            return;
+          }
         }
         this.form.is_draft = val;
         let bulletin = this.bulletinType;
