@@ -27,11 +27,11 @@
           <div class="detail">
             <div v-for="item in Object.keys(showFormat)" v-if="allDetail[item] || item === 'remaining_time'">
               <label>{{showFormat[item]}}</label>
-              <span v-if="item === 'remaining_time'">
-                <span class="unit">{{allDetail.due_date_hours}}<b>h</b></span>
-                <span class="unit">{{allDetail.due_date_minutes}}<b>m</b></span>
-              </span>
-              <span v-else-if="item === 'house_goods'">
+<!--              <span v-if="item === 'remaining_time'">-->
+<!--                <span class="unit">{{allDetail.due_date_hours}}<b>h</b></span>-->
+<!--                <span class="unit">{{allDetail.due_date_minutes}}<b>m</b></span>-->
+<!--              </span>-->
+              <span v-if="item === 'house_goods'">
                 <b v-if="allDetail[item]">
                   <span v-for="house in Object.keys(allDetail[item])" style="display: block;">
                     <span v-if="house !== 'is_fill'">缺少{{makeGoods[house]}}{{allDetail[item][house]}}个</span>
@@ -92,7 +92,7 @@
           house_address: '房屋地址',
           house_goods: '待办内容',
           due_date: '结束时间',
-          remaining_time: '剩余时间',
+          // remaining_time: '剩余时间',
           bulletin_staff_name: '跟进人',
         },
         makeGoods: {
