@@ -414,7 +414,7 @@
               let few = ['chair', 'door_lock_key', 'key'];//把
               unit = sets.includes(name) ? '台' : (few.includes(name) ? '把' : '个');
               if (value[child]) {
-                let num = value[child];
+                let num = Number(value[child]);
                 switch (child) {
                   case 'is_have':
                     if (num) {
