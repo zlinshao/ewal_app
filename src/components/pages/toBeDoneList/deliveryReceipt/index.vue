@@ -250,6 +250,14 @@
     },
     mounted() {
     },
+    beforeRouteLeave(to, from, next) {
+      this.closePhoto = true;
+      setTimeout(_ => {
+        this.closePhoto = false;
+      }, 100);
+      next(vm => {
+      })
+    },
     activated() {
       this.allDetail = JSON.parse(sessionStorage.deliveryReceipt);
       // if (this.allDetail.bulletin_type === 'bulletin_rent_basic') {
@@ -626,7 +634,8 @@
               key.forEach((bed) => {
                 if (bed.children) {
                   for (let room of bed.children) {
-                    if (this.form[item][index][bed.keyName].is_bad === 1) {
+                    let num = this.form[item][index][bed.keyName].is_bad;
+                    if (num === 1 || num === '1') {
                       room.hidden = false;
                     } else {
                       for (let child of bed.childKeys) {
@@ -640,7 +649,8 @@
             } else {
               if (key.status === 'child') {
                 if (key.children) {
-                  if (this.form[item][key.keyName].is_bad === 1) {
+                  let num = this.form[item][key.keyName].is_bad;
+                  if (num === 1 || num === '1') {
                     for (let val of key.children) {
                       val.hidden = false;
                     }
@@ -719,10 +729,6 @@
       // 重置
       resetting(val) {
         this.slither = 0;
-        this.closePhoto = true;
-        setTimeout(_ => {
-          this.closePhoto = false;
-        }, 100);
         defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
         this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
