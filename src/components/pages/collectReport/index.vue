@@ -283,11 +283,13 @@
         allChildren: {},                    //附属租客
 
         isGetTake: false,                   //尾款
+        photoUploadStatus: true,            //图片上传状态
       }
     },
     created() {
     },
     activated() {
+      this.photoUploadStatus = true;
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
       this.bulletin_types(this.bulletinType);
@@ -848,12 +850,19 @@
       // 图片上传
       getImgData(val) {
         this.form[val[0]] = val[1];
+        this.photoUploadStatus = val[2];
       },
       // 发布
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
           if (this.$attestationKey(this.drawForm)) return;
+        }
+        if (val === 1) {
+          if (!this.photoUploadStatus) {
+            this.$prompt('图片上传中...');
+            return;
+          }
         }
         this.form.is_draft = val;
         let bulletin = this.bulletinType;
