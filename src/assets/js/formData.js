@@ -2451,7 +2451,6 @@ defineRentReport = {
       label: '签约时长',
       keyName: 'month',
       placeholder: '必填 请输入',
-      prompts: '不包含空置期',
       moreString: [
         {
           placeholder: '必填 月数',
@@ -4545,9 +4544,8 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
     children: [
       {
         label: '损坏照片',
-        keyName: key,
+        keyName: parent + '__' + key,
         keyType: [],
-        slither: parent,
         status: 'upload',
         picker: 0,
         hidden: true,
@@ -4584,9 +4582,8 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad
     children: [
       {
         label: '损坏照片',
-        keyName: key,
+        keyName: parent + '__' + key,
         keyType: [],
-        slither: parent,
         status: 'upload',
         hidden: true,
         slot: '',

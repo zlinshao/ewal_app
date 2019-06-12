@@ -22,7 +22,7 @@
                             @click='removeChange(slither,item.keyName,index)'/>
                 </p>
                 <div class="addChange" v-if="(index+1) === drawSlither[slither].length">
-                  <span @click="addChange(slither,item,index,item)">+</span>
+                  <span @click="addChange(slither,'',index)">+</span>
                 </div>
               </div>
               <div v-for="room in item">
@@ -333,17 +333,17 @@
           } else if (item === 'bedroom') {
             res[item].forEach((bed, index) => {
               if (index !== 0) {
-                let obj = {}, pic = [];
+                let obj = {}, pic = {};
                 let draw = this.jsonClone(this.drawSlither[item][0]);
                 for (let room of draw) {
                   if (room.children) {
-                    obj[room.keyName] = '';
-                    pic[room.keyName] = [];
                     room.picker = room.picker + index;
                     for (let child of room.children) {
                       if (child.status === 'upload') {
-                        child.keyName = child.keyName + '-' + index;
                         child.picker = index;
+                        child.keyName = child.keyName + '-' + index;
+                        pic[child.keyName] = [];
+                        obj[child.keyName] = '';
                       }
                     }
                   }
@@ -491,24 +491,23 @@
         }
       },
       // 变化增加
-      addChange(slither, name, index, value) {
-        let obj = {}, str = {}, arr = [], pic = {};
-        let cloneVal = this.jsonClone(value);
+      addChange(slither, name, index) {
+        let obj = {};
         if (slither === 'bedroom') {
+          let idx = index + 1, str = {}, arr = [], pic = {};
+          let cloneVal = this.jsonClone(this.drawSlither[slither][0]);
           for (let val of cloneVal) {
             if (val.children) {
-              val.picker = val.picker + index;
+              val.picker = val.picker + idx;
               for (let child of val.children) {
-                child.picker = index + 1;
+                child.picker = idx;
+                child.keyName = child.keyName + '-' + idx;
                 child.hidden = true;
-                if (child.status === 'upload') {
-                  child.keyName = child.keyName + '-' + (index + 1);
-                }
+                pic[child.keyName] = {};
+                str[child.keyName] = '';
               }
             }
-            pic[val.keyName] = {};
             obj[val.keyName] = val.keyType;
-            str[val.keyName] = '';
             arr.push(val);
           }
           this.drawSlither[slither].push(arr);
@@ -530,10 +529,14 @@
           this.form[slither].splice(index, 1);
           this.formatData[slither].splice(index, 1);
           this.album[slither].splice(index, 1);
+          console.log(this.drawSlither[slither]);
+          console.log(this.form[slither]);
+          console.log(this.formatData[slither]);
+          console.log(this.album[slither]);
           return;
         }
-        this.drawSlither[slither][index].value.splice(num, 1);
         this.form[name].splice(num, 1);
+        this.drawSlither[slither][index].value.splice(num, 1);
         this.formatData[name].splice(num, 1);
         this.album[name].splice(num, 1);
       },
@@ -687,15 +690,16 @@
         this.popupModule = false;
         this.deliveryModule = false;
       },
-      // 图片 次卧
+      // 图片 损坏次卧
       getImgDataBed(val, file) {
-        let key = file.slither;
-        let name = file.keyName.split('-')[0];
-        this.form[key][file.picker][name]['photo'] = val[1];
+        let names = file.keyName.split('__');
+        let name1 = names[1].split('-')[0];
+        this.form[names[0]][file.picker][name1]['photo'] = val[1];
       },
+      // 损坏照片
       getImgDataObj(val, file) {
-        let key = file.slither;
-        this.form[key][file.keyName]['photo'] = val[1];
+        let names = file.keyName.split('__');
+        this.form[names[0]][names[1]]['photo'] = val[1];
       },
       // 图片
       getImgData(val) {
