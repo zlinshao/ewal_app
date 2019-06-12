@@ -14,6 +14,7 @@
       <h1 v-if="topOperates.length">
         <i v-for="item in topOperates" :class="['icon-'+item.id]" @click="iconButton(item.id)"></i>
       </h1>
+      <div class="approvalStaff" v-if="tabs.tab === '2' && tabs.status === 0">审批人&nbsp;:&nbsp;{{approvalStaff}}</div>
     </div>
     <div class="main" :style="mainHeight">
       <div class="detailInfo" @touchstart="tapStart" @touchmove="tapMove" @touchend="tapEnd">
@@ -39,14 +40,15 @@
                              v-else-if="val.info.ext.includes('video')" :alt="val.uri">
                         <!--其它类型-->
                         <img src="../../../assets/image/file/xls.png" :alt="val.uri"
-                             v-else-if="val.info.ext.includes('xls')">
+                             v-else-if="val.info.ext.includes('xls')" @click="$openFiles($event)">
                         <img src="../../../assets/image/file/doc.png" :alt="val.uri"
-                             v-else-if="val.info.ext.includes('doc')">
+                             v-else-if="val.info.ext.includes('doc')" @click="$openFiles($event)">
                         <img src="../../../assets/image/file/txt.png" :alt="val.uri"
-                             v-else-if="val.info.ext.includes('text')">
+                             v-else-if="val.info.ext.includes('text')" @click="$openFiles($event)">
                         <img src="../../../assets/image/file/pdf.png" :alt="val.uri"
-                             v-else-if="val.info.ext.includes('pdf')">
-                        <img src="../../../assets/image/file/file.png" :alt="val.uri" v-else>
+                             v-else-if="val.info.ext.includes('pdf')" @click="$openFiles($event)">
+                        <img src="../../../assets/image/file/file.png" :alt="val.uri" v-else
+                             @click="$openFiles($event)">
                       </span>
                       <div v-else-if="val.period">
                         <h4 :class="[idx !== 0?'h4':'']">
@@ -69,7 +71,13 @@
                       <div :class="key" v-else>{{val}}</div>
                     </div>
                   </div>
-                  <span v-else>{{formatData[key]}}</span>
+                  <span v-else>
+                    <span v-if="formatData[key].name">{{formatData[key].name}}</span>
+                    <span v-else-if="key === 'album'" v-for="pic in Object.keys(formatData[key])" class="spanPhotos">1
+                      <img v-for="photo in formatData[key][pic]" :src="photo.uri" alt="">
+                    </span>
+                    <span v-else>{{formatData[key]}}</span>
+                  </span>
                 </div>
               </li>
             </ul>
@@ -130,25 +138,25 @@
       <div>
         <div class="deliver">
           <label>转交人</label>
-          <input placeholder="必填 请输入" v-model="staff_name" readonly
+          <input placeholder="必填 请输入" v-model="deliverForm.assignee" readonly
                  @focus="searchStaffModule = true"/>
         </div>
-        <div>
-          <label>转交原因</label>
-          <textarea placeholder="必填 请输入" v-model="deliverForm.content"></textarea>
-        </div>
-        <div v-for="item in deliverUpload">
-          <label style="padding-top: .2rem">{{item.text}}</label>
-          <Upload :file="item" :close="!deliverPopup" @success="getImgDeliver"></Upload>
+        <div class="deliver">
+          <label>部门</label>
+          <input placeholder="必填 请输入" v-model="deliverForm.department_name" disabled/>
         </div>
       </div>
       <div class="commonBtn">
         <p class="btn back" @click="cancel('deliver')">取消</p>
-        <p class="btn">确定</p>
+        <p class="btn" @click="approvalDeliver">确定</p>
       </div>
     </van-popup>
     <!--历史审批流程-->
+<<<<<<< HEAD
    <div class="records" @click="recordPopup = true"><p></p> </div>
+=======
+    <!--    <div class="records" @click="recordPopup = true"><p></p> </div>-->
+>>>>>>> df451f5175b787b2ef7169f33b29bd9343f06bdd
     <van-popup v-model="recordPopup" overlay-class="overlay-color" position="right" :overlay="true" class="recordPopup">
       <div class="content">
         <div class="contentMain">
@@ -273,13 +281,11 @@
             keyName: 'attachments',
           }
         ],
-
-        staff_name: '',
         deliverForm: {
-          staff_id: '',
-          content: '',
-          house_video: [],
+          assignee: '',
+          department_name: '',
         },
+        assignee: '',
         deliverUpload: [
           {
             text: '房屋影像',
@@ -288,6 +294,7 @@
         ],
         searchStaffModule: false,
         changeFormData: {},//附属房东变化
+        approvalStaff: '',//审批人
       }
     },
     created() {
@@ -338,6 +345,21 @@
           }
         }
       },
+      // 转交
+      approvalDeliver() {
+        if (!this.assignee) {
+          this.$prompt('请选择转交人', 'fail');
+          return;
+        }
+        this.$httpZll.postApprovalDeliver(this.detailData.task_id, this.assignee).then(res => {
+          if (res) {
+            this.$prompt('转交成功!', 'success');
+            setTimeout(_ => {
+              this.$router.go(-1);
+            }, 500);
+          }
+        })
+      },
       // 历史流程
       historyProcess(detail) {
         this.$httpZll.getHistoryProcess(detail.process_id).then(res => {
@@ -355,6 +377,7 @@
       getOperates(detail, query) {
         this.closeOperates();
         let btn = [];
+        let types = ['bulletin_retainage', 'Market-VillageExpand'];
         let tab = Number(query.tab), status = Number(query.status);
         if (tab === 1) {//我审批
           if (status) {//已审批
@@ -363,7 +386,7 @@
             ]
           } else {//待审批
             this.setOperates(detail.outcome);
-            if (detail.bulletin_type === 'bulletin_retainage') {
+            if (types.includes(detail.bulletin_type)) {
               this.topOperates = [
                 {id: '2'},
                 {id: '3'},
@@ -383,7 +406,6 @@
                 {id: '2'},
               ]
             } else if (status === 2) {//合同修改
-
               for (let come of detail.outcome.outcomeOptions) {
                 if (come.action === 'modify') {
                   btn.push(come);
@@ -433,6 +455,16 @@
               this.topOperates = [
                 {id: '2'},
               ]
+            }
+            let info = detail.taskInfo;
+            if (info && info[0]) {
+              this.$httpZll.getUserIdStaffDetail({staff: 1}, info[0].assignee).then(res => {
+                if (res) {
+                  this.approvalStaff = res.data.name
+                } else {
+                  this.approvalStaff = '******';
+                }
+              })
             }
           }
         } else if (tab === 3) {//抄送我的
@@ -622,16 +654,14 @@
       getStaffInfo(val) {
         this.searchStaffModule = false;
         if (val !== 'close') {
-          this.staff_name = val.staff_name;
-          this.deliverForm.staff_id = val.staff_id;
+          this.assignee = val.staff_id;
+          this.deliverForm.assignee = val.staff_name;
+          this.deliverForm.department_name = val.department_name;
         }
       },
       // 图片上传
       getImgData(val) {
         this.commentForm.content[val[0]] = val[1];
-      },
-      getImgDeliver(val) {
-        this.deliverForm[val[0]] = val[1];
       },
       // 视频播放
       videoPlay(event = '') {
@@ -641,6 +671,11 @@
           this.videoSrc = '';
           // alert('不支持的视频文件！');
         }
+      },
+      // 查看文件
+      $openFiles(event) {
+        let url = event.target.alt;
+        this.$ddSkip(url);
       },
       // 所有单选 picker
       objIntArray(data) {
@@ -668,7 +703,7 @@
         for (let val of Object.keys(data)) {
           obj[val] = {};
           for (let item of data[val]) {
-            if (item.picker === 'upload') {
+            if (item.picker === 'upload' || item.picker === 'album') {
               for (let pic of item.photos) {
                 obj[val][pic.keyName] = pic.label;
               }
@@ -694,8 +729,14 @@
             this.allDetail.task_id = this.detailData.task_id;
             this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
-            this.formatData = res.data.content;
-            this.handleDetail(res.data.content);
+            let content = {};
+            if (res.data.content.bulletin_content) {
+              content = JSON.parse(res.data.content.bulletin_content || '{}');
+            } else {
+              content = res.data.content;
+            }
+            this.formatData = content;
+            this.handleDetail(content);
           }
         })
       },
@@ -774,10 +815,18 @@
         }
         if (res.album) {
           for (let pic of Object.keys(res.album)) {
-            this.formatData[pic] = res.album[pic];
+            if (res.album[pic].length) {
+              if (typeof res.album[pic][0] !== 'object') {
+                this.$httpZll.getUploadUrl(res.album[pic], 'close').then(res => {
+                  this.formatData[pic] = res.data;
+                  this.formatData = Object.assign({}, this.formatData);
+                })
+              } else {
+                this.formatData[pic] = res.album[pic];
+              }
+            }
           }
         }
-
       },
       // 变化数据 预填数据处理
       changeHandle(res, item, val, all, data) {
@@ -808,7 +857,6 @@
               for (let sub of children) {
                 this.changeFormData[item][sub.keyName] = sub.label;
               }
-              console.log(this.changeFormData);
             }
           }
         }
@@ -838,4 +886,11 @@
 <style lang="scss" scoped>
   @import "../../../assets/scss/approvals/detail.scss";
 
+  .approvalStaff {
+    position: absolute;
+    bottom: .24rem;
+    left: 1rem;
+    z-index: 10;
+    color: #FFFFFF;
+  }
 </style>

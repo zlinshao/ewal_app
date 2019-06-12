@@ -313,6 +313,9 @@
       'form.money_sum'(val) {
         if (val && this.form.current_pay_info && this.form.current_pay_info.length === 1) {
           this.form.current_pay_info[0].money_sep = val;
+          let bulletin = this.bulletinType.bulletin;
+          let pay_first = new Date(this.form.begin_date);
+          this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
         }
       },
     },
@@ -343,8 +346,8 @@
           this.form.contract_id = this.taskDetail.contract_id;
         }
         if (type === 'bulletin_rent_basic') {
-          this.form.is_sign = '';
           let query = this.$route.query;
+          this.form.is_sign = '';
           if (query.result) {
             this.form.is_sign = query.result;
           }
@@ -850,7 +853,7 @@
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
-          if (this.$attestationKey(this.drawForm)) return;
+          // if (this.$attestationKey(this.drawForm)) return;
         }
         this.form.is_draft = val;
         let bulletin = this.bulletinType;
@@ -967,11 +970,8 @@
             }
           } else {
             let res = data.data;
-            if (!this.isGetTake) {
-              this.handlePreFill(res);
-            } else {
-              this.childBulletin(res, 'draft');
-            }
+            this.childBulletin(res, 'draft');
+            this.handlePreFill(res);
           }
           if (!this.isGetTake) {
             this.electronicContract();

@@ -21,7 +21,7 @@
             <span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
           </p>
         </div>
-        <i @click="approvalModule = true"></i>
+      <!--<i @click="approvalModule = true"></i>-->
       </div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
@@ -29,7 +29,7 @@
             <div class="contentList">
               <div class="listUp" :class="[ids.includes(item.id) ? 'leftShift' : '']"
                    @click="routerLinkDetail(item)">
-                <div class="listTitle">{{item.house_address || '******'}}</div>
+                <div class="listTitle">{{item.title || '******'}}</div>
                 <div class="listMiddle">
                   <p>{{item.bulletin_name}}</p>
                   <div>
@@ -47,17 +47,17 @@
                     <span v-if="item.status.length">{{item.status[0]}}</span>
                     <span v-else>{{item.name}}</span>
                   </div>
-                  <div>
-                    <i class="icon-2"></i>
-                    <span v-if="showStatus">
-                      已等待{{item.duration}}分钟
-                    </span>
-                    <span v-else>
-                       耗时{{item.duration}}分钟
-                    </span>
-                  </div>
+                <!--<div>-->
+                <!--  <i class="icon-2"></i>-->
+                <!--  <span v-if="showStatus">-->
+                <!--    已等待{{item.duration}}分钟-->
+                <!--  </span>-->
+                <!--  <span v-else>-->
+                <!--     耗时{{item.duration}}分钟-->
+                <!--  </span>-->
+                <!--</div>-->
                 </div>
-                <div class="approvalStatus finish" v-if="tabs.tab === '2' && tabs.status === 1"></div>
+                <div class="approvalStatus finish" v-if="tabs.tab === '3'"></div>
                 <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"
                      v-if="tabs.tab === '1' && tabs.status === 1"></div>
                 <div class="moreOperate" @click.stop="moreOperates(item.id)"
@@ -458,6 +458,7 @@
             });
             break;
           case 'contract'://发送电子合同
+            user_id = this.$getFadadaUserId(item);
             this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
               if (res) {
                 params = {
@@ -471,7 +472,6 @@
             break;
         }
       },
-
       // 重新提交
       againSave(val) {
         this.againTaskDetail(val).then(_ => {
@@ -551,7 +551,7 @@
               case 1:
                 this.params['params' + tab] = {
                   page: 1,
-                  processDefinitionKey: 'MG-BulletinApproval',
+                  processDefinitionKeys: 'MG-BulletinApproval,Market-VillageExpand',
                   finished: Boolean(status),
                 };
                 this.params['params' + tab].taskOwner = this.personal.staff_id;
@@ -583,7 +583,7 @@
              this.params['params' + tab].assignee = this.personal.staff_id;
             break;
           case '4':
-            this.params['params' + tab].taskOwner = this.personal.staff_id;
+            this.params['params' + tab].taskAssignee = this.personal.staff_id;
             break;
         }
         this.getApproval(this.urlApi, this.params['params' + tab], tab);

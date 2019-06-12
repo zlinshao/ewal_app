@@ -18,6 +18,7 @@
 }
 
 #approvalDetail {
+<<<<<<< HEAD
     background-color: #f8f8f8;
     /*头部*/
     .detailTop {
@@ -44,6 +45,179 @@
                 padding: .12rem .3rem;
                 @include radius(1rem);
                 background-color: #43A046;
+=======
+  background-color: #f8f8f8;
+  /*头部*/
+  .detailTop {
+    position: relative;
+    color: #FFFFFF;
+    @include flex('items-bet');
+    margin: 0 .3rem;
+    padding: .3rem .3rem .8rem;
+    background-color: #4570FE;
+    @include radius(.1rem .1rem 0 0);
+    z-index: 3;
+
+    div {
+      @include flex('items-center');
+
+      img {
+        width: .6rem;
+        height: .6rem;
+        @include radius(50%);
+      }
+
+      span {
+        margin: 0 .2rem 0 .1rem;
+      }
+
+      p {
+        font-size: .22rem;
+        padding: .12rem .3rem;
+        @include radius(1rem);
+        background-color: #43A046;
+      }
+    }
+
+    p {
+      @include flex('items-center');
+
+      i {
+        width: .3rem;
+        height: .3rem;
+        margin-right: .06rem;
+        @include detailImg('xiaohaoshijian');
+      }
+    }
+
+    h1 {
+      position: absolute;
+      bottom: -.4rem;
+      right: 0;
+      @include flex('items-center');
+
+      i {
+        width: .8rem;
+        height: .8rem;
+        margin-right: .3rem;
+        @include radius(50%);
+      }
+
+      .icon-1 {
+        @include detailImg('bianji');
+      }
+
+      .icon-2 {
+        @include detailImg('pinglun');
+      }
+
+      .icon-3 {
+        @include detailImg('zhuanfa');
+      }
+
+      .icon-4 {
+        @include detailImg('detaihetongyulan');
+      }
+
+      .icon-5 {
+        @include detailImg('bendiqianshu');
+      }
+
+      .icon-6 {
+        @include detailImg('kehushoujiqianshu');
+      }
+    }
+  }
+
+  /*详情*/
+  .main {
+    background-color: #FFFFFF;
+    @include boxShaw(0 -4px 10px 0 rgba(69, 112, 254, 0.2));
+    @include flex('bet-column');
+
+    .detailInfo {
+      @include flex();
+      height: 100%;
+      padding: 1rem 0 .3rem;
+      position: relative;
+
+      .detailTitle {
+        position: absolute;
+        top: .5rem;
+        left: .3rem;
+        color: #4570FE;
+
+        i {
+          position: absolute;
+          height: .5rem;
+          border-left: 1px solid #448aff;
+          top: -.5rem;
+          left: .3rem;
+        }
+
+        span {
+          background: rgba(69, 112, 254, .1);
+          padding: .3rem .16rem;
+          border-radius: 0 0 1rem 1rem
+        }
+      }
+
+      .detail {
+        width: 100%;
+        height: 100%;
+
+        > div {
+          @include flex();
+          height: 100%;
+          transition: transform .3s;
+
+          ul {
+            @include scroll;
+            width: 100%;
+            height: 100%;
+            padding-left: .6rem;
+
+            li {
+              .spanPhotos {
+                display: block;
+              }
+
+              img {
+                width: 1rem;
+                height: 1rem;
+                margin: .1rem .1rem 0 0;
+                @include radius(.1rem);
+              }
+
+              h1 {
+                min-width: 38%;
+                max-width: 38%;
+                color: #4A4A4A;
+                text-align: right;
+                padding-right: .36rem;
+              }
+
+              > div {
+                @include flex();
+                padding: .1rem .2rem .1rem 0;
+
+                > div {
+                  @include flex();
+                  flex-wrap: wrap;
+                  width: 64%;
+                  color: #000;
+
+                  h3 {
+                    color: #4A4A4A;
+                    padding-bottom: .1rem;
+                  }
+
+                  .h3, .h4 {
+                    padding-top: .2rem;
+                  }
+                }
+              }
+>>>>>>> 1c296cace398a31a0a2fbabb6fb226d83063128e
             }
         }
         p {

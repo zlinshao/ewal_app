@@ -81,6 +81,8 @@
 </template>
 
 <script>
+  import noHead from '@/assets/image/common/noHead.png'
+
   export default {
     name: "index",
     data() {
@@ -91,7 +93,6 @@
         infraMetas: false,            //是否在打卡范围
         villageInfo: {
           location: [],
-          subway_road: '',
           village_name: '',
         },//小区信息
         successPunchClock: false,     //打卡成功
@@ -184,13 +185,17 @@
       }
     },
     watch: {},
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
+    },
     methods: {
       // 取消
       oncancel() {
         this.successPunchClock = false;
       },
-      // 确定打卡
+      // 提交打卡信息
       finishPunchClock(btn, value) {
         if (btn) {
           this.form[value] = btn.action;
@@ -198,6 +203,7 @@
         this.postForm.variables = this.jsonClone(this.form);
         this.$httpZll.postFinishPunchClock(this.postForm).then(res => {
           if (res.success) {
+            this.$prompt('打卡成功!', 'success');
             this.close_();
             this.$router.go(-1);
           }
@@ -210,7 +216,7 @@
       },
       // 带看小区信息 详情
       villageDetail(api, bulletin) {
-        this.successPunchClock = false;
+        this.oncancel();
         this.$httpZll.get(api).then(res => {
           if (res.success) {
             let village = {};
@@ -274,12 +280,18 @@
           let con = that.$refs.con.offsetHeight;
           that.mainHeight = that.mainListHeight(con);
         } else {
-          this.$prompt('超出打卡范围（范围300米）')
+          this.successPunchClock = true;
+          this.form.punch_clock_time = this.today;
+          let that = this;
+          let con = that.$refs.con.offsetHeight;
+          that.mainHeight = that.mainListHeight(con);
+
+          this.$prompt('超出打卡范围（范围300米）');
         }
       },
       // 获取 打卡地点 员工位置
       getLocation(val) {
-        let location;
+        let location, head = this.personal.avatar || noHead;
         this.getBeforeCity().then(res => {
           location = res.location;
           let map = new AMap.Map('container', {
@@ -300,7 +312,7 @@
           // 员工位置
           let staffContent =
             `<div class="icon_location staffContent">
-               <img src="https://aos-cdn-image.amap.com/pp/avatar/04e/7b/9a/165076233.jpeg?ver=1519641744&imgoss=1" alt="">
+              <img src="${head}" alt="">
             </div>`;
           let staffMarker = new AMap.Marker({
             position: location,
