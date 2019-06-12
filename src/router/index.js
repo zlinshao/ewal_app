@@ -114,9 +114,9 @@ export default new Router({
     },
     {
       path: '/deliveryReceipt',
-      name: '收房交接',
+      name: '交接',
       component: DeliveryReceipt,
-      meta: {title: '收房交接', index: 6},
+      meta: {title: '交接', index: 6},
     },
     {
       path: '/datumRecord',

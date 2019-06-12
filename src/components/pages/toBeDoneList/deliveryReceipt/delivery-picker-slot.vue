@@ -184,7 +184,6 @@
           }
         });
         this.pickerConfig = Object.assign({}, config);
-        console.log(config)
         if (this.is_bad === 1) {
           this.addColumns();
         }

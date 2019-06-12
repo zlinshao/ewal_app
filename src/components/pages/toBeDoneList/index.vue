@@ -1,8 +1,5 @@
 <template>
   <div id="toBeDoneList">
-    <!--<div style="position: fixed;top: 0;bottom: 8rem;left: 0;right: 0;z-index: 1;" class="justify-around">-->
-    <!--<div v-for="item in 3" style="height: 100%;border-left: 1px solid #000;"></div>-->
-    <!--</div>-->
     <div>
       <div class="listTop" ref="listTop" @dblclick="goToTop">
         <div>
@@ -11,7 +8,7 @@
             {{item.text}}&nbsp;<span v-if="item.id === '1'">{{total['total1']}}</span>
           </p>
         </div>
-        <div class="topSearch" @click="searchHigh = !searchHigh"></div>
+      <!--<div class="topSearch" @click="searchHigh = !searchHigh"></div>-->
       </div>
       <div class="main" :style="mainHeight">
         <!--未完成-->
@@ -22,15 +19,15 @@
                 <p>{{item.title}}</p>
                 <div class="toBeDoneType">{{item.name}}</div>
                 <div class="progress">
-                  <div :style="{'height': '30%'}">
-                    <span>30<b>%</b></span>
+                  <div :style="{'height': '50%'}">
+                    <span>50<b>%</b></span>
                   </div>
                 </div>
-                <div class="surplus">剩余</div>
-                <div>
-                  <span class="unit">{{item.due_date_hours}}<b>h</b></span>
-                  <span class="unit">{{item.due_date_minutes}}<b>m</b></span>
-                </div>
+                <!--<div class="surplus">剩余</div>-->
+                <!--<div>-->
+                  <!--<span class="unit">{{item.due_date_hours}}<b>h</b></span>-->
+                  <!--<span class="unit">{{item.due_date_minutes}}<b>m</b></span>-->
+                <!--</div>-->
               </div>
             </li>
             <li class="noMore" v-if="finishList['list1'].length === total['total1'] && finishList['list1'].length > 6">
@@ -54,7 +51,7 @@
                   <p><span>{{item.name}}</span></p>
                   <div>
                     <h2>完成时间</h2>
-                    <h3>2019-03-05 18:45</h3>
+                    <h3>{{item.endTime || ''}}</h3>
                   </div>
                 </div>
               </div>
@@ -339,7 +336,7 @@
         }
       },
       getQueryDetail(tab) {
-        this.params['params' + tab].taskDefinitionKeyNotIn = this.$taskDefinitionKey().join(',');
+        this.params['params' + tab].taskDefinitionKeyNotIn = this.$taskDefinitionKey();
       },
       // 已完成 / 未完成 切换
       changeTop(val) {

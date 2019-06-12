@@ -53,7 +53,7 @@
               <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
             </div>
             <!--上传-->
-            <div v-else-if="item.picker === 'upload' && item.photos" class="uploadForm">
+            <div v-else-if="item.picker === 'album' && item.photos" class="uploadForm">
               <div v-for="upload in item.photos" class="flex">
                 <Upload :file="upload" :close="!villagePhoto" @success="getImgData"></Upload>
               </div>
@@ -213,7 +213,7 @@
             this.$httpZll.getAllCityList({province: this.form.province.id, city: value.city.id}).then(res => {
               let data = {};
               for (let val of res.data) {
-                data[val.city_id] = val.city_name;
+                data[val.area_id] = val.area_name;
               }
               dicties.district = data;
             });
@@ -226,7 +226,7 @@
             }).then(res => {
               let data = {};
               for (let val of res.data) {
-                data[val.area_id] = val.area_name;
+                data[val.region_id] = val.region_name;
               }
               dicties.region = data;
             });
@@ -260,7 +260,7 @@
         this.$router.go(-1);
       },
       getImgData(val) {
-        this.form[val[0]] = val[1];
+        this.form.album[val[0]] = val[1];
       },
       // 初始化数据
       resetting() {
