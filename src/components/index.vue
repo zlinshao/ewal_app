@@ -124,10 +124,10 @@
           //   id: '2',
           //   icon: tab_home2,
           // },
-          // {
-          //   id: '3',
-          //   icon: tab_home3,
-          // },
+          {
+            id: '3',
+            icon: tab_home3,
+          },
           {
             id: '4',
             icon: tab_home4,
@@ -154,9 +154,9 @@
           case '4':
             this.routerLink('/toBeDoneList');
             break;
-          // case '3':
-          //   this.routerLink('/houseResource');
-          //   break;
+          case '3':
+            this.routerLink('/houseResource');
+            break;
         }
       },
     },
