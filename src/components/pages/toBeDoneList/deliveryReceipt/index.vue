@@ -424,9 +424,9 @@
                     break;
                   case 'is_bad':
                     if (num) {
-                      show[1] = '无损坏';
-                    } else {
                       show[1] = '损坏';
+                    } else {
+                      show[1] = '无损坏';
                     }
                     break;
                   case 'bad_number':
