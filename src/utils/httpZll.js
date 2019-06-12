@@ -7,7 +7,7 @@ function $httpPrompt(msg, type) {
 }
 
 let url = globalConfig.server;//文件上传
-let url_login = globalConfig.login;//文件上传
+let url_login = globalConfig.login;//登陆
 let url_code = globalConfig.server_code;//报备标识码
 let market = globalConfig.server_market; //报备
 let url_hr = globalConfig.server_hr;//人资组织机构
@@ -156,12 +156,20 @@ class httpZll extends httpService {
     })
   }
 
+  // 员工id获取详情信息
+  static getUserIdStaffDetail(params, id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_hr}staff/user/${id}`, params, 'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
   // 员工搜索
-  static searchStaffList(val) {
-    let params = {
-      search: val,
-      org_id: '',
-    };
+  static searchStaffList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}staff/user`, params, 'prompt').then(res => {
         if (res.code.endsWith('0')) {
@@ -204,7 +212,11 @@ class httpZll extends httpService {
   static getContractMould(params) {
     return new Promise((resolve, reject) => {
       this.get(`${mould}fdd/pdf`, params, 'prompt', close).then(res => {
-        resolve(res);
+        if (res.code.endsWith('0')) {
+          resolve(res);
+        } else {
+          resolve(false);
+        }
       });
     });
   }
@@ -264,6 +276,24 @@ class httpZll extends httpService {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
         if (199 < res.httpCode < 300) {
           resolve(res);
+        } else {
+          resolve(false);
+          $httpPrompt(res.code);
+        }
+      });
+    });
+  }
+
+  // 转交直接换人
+  static postApprovalDeliver(id, assignee) {
+    let params = {
+      action: 'delegate',
+      assignee: assignee,
+    };
+    return new Promise((resolve, reject) => {
+      this.post(`${url_done}runtime/tasks/${id}`, params, 'prompt').then(res => {
+        if (199 < res.httpCode < 300) {
+          resolve(true);
         } else {
           resolve(false);
           $httpPrompt(res.code);
@@ -683,8 +713,8 @@ class httpZll extends httpService {
   // 图片id获取图片地址
   static getUploadUrl(ids, close) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/output/file`, {ids: ids}, '', close).then(res => {
-        if (res.success) {
+      this.post(`${url}api/v1/get_urls`, {ids: ids}, '', close).then(res => {
+        if (res.code.endsWith('0')) {
           resolve(res);
         } else {
           resolve(false);

@@ -156,6 +156,7 @@
                       :key="i"
                       v-model="form[item.keyName][num][str.keyName]"
                       :type="str.type"
+                      @input="listenInput(item.keyName)"
                       :placeholder="str.placeholder">
                     </zl-input>
                     <div v-if="item.button && item.value.length > 1">
@@ -175,6 +176,7 @@
                   v-model="form[item.keyName]"
                   :type="item.type"
                   :label="item.label"
+                  @input="listenInput(item.keyName)"
                   :placeholder="item.placeholder">
                   <div v-if="item.button">{{item.button}}</div>
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
@@ -250,10 +252,12 @@
     },
     activated() {
       this.allDetail = JSON.parse(sessionStorage.deliveryReceipt);
-      this.getDraft(this.allDetail.task_id);
-      // this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
+      // if (this.allDetail.bulletin_type === 'bulletin_rent_basic') {
+      //   this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
       //
-      // });
+      //   });
+      // }
+      this.getDraft(this.allDetail.task_id);
       this.allReportNum = Object.keys(defineArticleReceipt).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
@@ -266,6 +270,28 @@
     methods: {
       changeTag(index) {
         this.slither = index;
+      },
+      // 监听 input
+      listenInput(name) {
+        let value = 0, num1 = 0, num2 = 0, num3 = 0, num7 = 0, num8 = 0, num9 = 0, num10 = 0;
+        for (let key of this.form.other_fee) {
+          value = value + Number(key.value || 0);
+        }
+        let num4 = Number(this.form.property_costs || 0);
+        let num5 = Number(this.form.public_fee || 0);
+        let num6 = Number(this.form.repair_fees || 0);
+        if (this.form.payment_type === 3) {
+          num1 = Number(this.form.water_card_balance || 0);
+          num2 = Number(this.form.electric_card_balance || 0);
+          num3 = Number(this.form.gas_card_balance || 0);
+          this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
+        } else {
+          num7 = Number(this.form.water_settlement_amount || 0);
+          num8 = Number(this.form.electric_valley_settlement_amount || 0);
+          num9 = Number(this.form.electric_peak_settlement_amount || 0);
+          num10 = Number(this.form.gas_settlement_amount || 0);
+          this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
+        }
       },
       // 预览交接单
       previewDelivery() {
@@ -618,7 +644,7 @@
                       val.hidden = false;
                     }
                   } else {
-                    this.form[item][key.keyName].bad_number = 0;
+                    this.form[item][key.keyName].bad_number = '';
                     for (let val of key.children) {
                       val.hidden = true;
                     }
@@ -894,6 +920,8 @@
 
         li {
           .addChange {
+            margin-left: 2rem;
+
             span {
               display: inline-block;
               text-align: center;

@@ -100,7 +100,6 @@
   import icon_quqianyue from '@/assets/image/toBeDone/quqianyue.png'
   import icon_wofaqide from '@/assets/image/toBeDone/wofaqide.png'
   import icon_woshenpide from '@/assets/image/toBeDone/woshenpide.png'
-  import icon_lishidaikan from '@/assets/image/toBeDone/lishidaikan.png'
   import icon_hetongmoban from '@/assets/image/toBeDone/hetongmoban.png'
   import icon_shoujiqianshu from '@/assets/image/approvals/detail/kehushoujiqianshu.png'
   import icon_hetongxiugai from '@/assets/image/approvals/xiugaihetong.png'
@@ -156,15 +155,15 @@
         formatData: {},
         // 自定义按钮
         normalOperates: [
-          {
-            icon: icon_daiqian,
-            text: '代签',
-            action: 'allograph',
-          }, {
-            icon: icon_zhuanjiao,
-            text: '转交',
-            action: 'deliver',
-          }
+          // {
+          //   icon: icon_daiqian,
+          //   text: '代签',
+          //   action: 'allograph',
+          // }, {
+          //   icon: icon_zhuanjiao,
+          //   text: '转交',
+          //   action: 'deliver',
+          // }
         ],
         // 状态变化按钮
         changeOperates: {
@@ -187,8 +186,8 @@
             text: '我发起的',
           }, {
             id: '3',
-            icon: icon_lishidaikan,
-            text: '历史带看',
+            icon: icon_hetongmoban,
+            text: '租房合同模板',
           }, {
             id: '4',
             icon: icon_hetongmoban,
@@ -209,14 +208,13 @@
         bulletin_type: {},//报备类型
         showRightAdd: false,//显示新增
         searchStaffModule: false,
+        contractMoulds: {},
       }
     },
     created() {
     },
     mounted() {
-      this.$httpZll.getContractMould().then(res => {
-        console.log(res.data)
-      });
+      this.getContract();// 合同模板
       this.$nextTick(_ => {
         let top = this.$refs.toBeDoneTop.offsetHeight;
         this.mainHeight = this.mainListHeight(top);
@@ -236,10 +234,24 @@
     },
     computed: {
       personal() {
-        return this.$store.state.app.personal;
+        return this.$store.state.app.personalDetail;
       },
     },
     methods: {
+      // 获取合同模板
+      getContract() {
+        this.$httpZll.getContractMould({scene_depart: this.personal.city_name}).then(res => {
+          if (res) {
+            for (let item of res.data.data) {
+              if (item.pdf_scene === 1) {//收房
+                this.contractMoulds['4'] = item.contract_template_url;
+              } else {//租房
+                this.contractMoulds['3'] = item.contract_template_url;
+              }
+            }
+          }
+        });
+      },
       // 右侧弹窗操作
       popupOperate() {
         let type = this.bulletin_type.bulletin;
@@ -491,9 +503,9 @@
             this.$store.dispatch('approval_tabs', tabs);
             this.routerLink('/approvals');
             break;
-          case '3'://历史带看
-            this.$store.dispatch('done_tabs', '2');
-            this.routerLink('/toBeDoneList');
+          case '3'://租房
+          case '4'://收房
+            this.$ddSkip(this.contractMoulds[val]);
             break;
         }
       },

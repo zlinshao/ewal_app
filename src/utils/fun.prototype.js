@@ -133,6 +133,7 @@ export default {
           if (key.name === 'ewal_contract') {
             let contract = JSON.parse(key.value);
             obj.contract_id = contract.v3_contract_id;
+            obj.house_id = contract.house_id;
           }
           if (key.name.includes('_approved')) {
             obj.approvedStatus = key.value || '';
@@ -249,11 +250,11 @@ export default {
           }
         } else if (item.picker === 'album') {
           // 新建小区
-          form[item.keyName] = item.keyType;
-          album[item.keyName] = item.keyType;
+          form[item.picker] = {};
+          album[item.picker] = {};
           for (let pic of item.photos) {
-            form[item.keyName][pic.keyName] = [];
-            album[item.keyName][pic.keyName] = [];
+            form[item.picker][pic.keyName] = [];
+            album[item.picker][pic.keyName] = [];
           }
         } else if (item.lists) {
           // 家电家具
@@ -365,8 +366,8 @@ export default {
           title = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
           data = this.jsonClone(defineCheckoutReport);
           break;
-        case 'bulletin_village'://拓展新盘
-          title = ['拓展新盘'];
+        case 'Market-VillageExpand'://新增小区
+          title = ['新增小区'];
           data.slither0 = this.jsonClone(defineNewAddVillage);
           break;
         case 'supplement_lord_time': //延长收房时长
@@ -688,19 +689,6 @@ export default {
       return new Promise((resolve, reject) => {
         that.$httpZll.getDDConfig().then((res) => {
           let _config = res;
-          let data = {
-            avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
-            city_id: "320100",
-            city_name: "南京市",
-            department_id: 395,
-            department_name: "开发",
-            phone: "18052001167",
-            staff_id: '69',
-            staff_name: "张琳琳",
-          };
-          globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU3OTdkZWJjOWRhODc0OGY5Yjk2ZWM2MjI5ZThjOTFiOTQ2ZWU2NTA4ZjM1MzdiMGI5NzdjZDcxYzQyM2IwYWE0Mzk4ZjA0MzljMTBhNjI5In0.eyJhdWQiOiIxIiwianRpIjoiZTc5N2RlYmM5ZGE4NzQ4ZjliOTZlYzYyMjllOGM5MWI5NDZlZTY1MDhmMzUzN2IwYjk3N2NkNzFjNDIzYjBhYTQzOThmMDQzOWMxMGE2MjkiLCJpYXQiOjE1NTk4ODg2MjUsIm5iZiI6MTU1OTg4ODYyNSwiZXhwIjoxNTYxMTg0NjI1LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.vEbN37TYOYd9moQViB0hSoG0LVcnbzrntBEvIrrJ00TndWWF7m8Bu4JU0tU6Dcw1LHMFuv7HkqmDVddlwJmdgFtpYOdKAHL1s1vDkUbmoKDai8ZnvZR514x7rwkMW3qrr1lJ7z4s7le7UG6_tWFeRiR02D8LPbgQVyfT3xQ3OTG9cs-ZuYYbgGZRKf1Mm891WKqtxvXHokEQCmsEWxaKJwCMVmjOUq4WH1PPHWHWfA__Q4T6ea7X0CvmWuJU1RBXr-zBflHxGuRgVDth2eSiaJly6E2x_hsFOKptN4hEMHn7vlDZyvKmGvCUbW9zs8E94by8HQEy6YhNT70I1qFFSpOVI83i8_kAXDhEsiTbcImQYWTlTP2d4sT9tFDBpdDCgYV35-pSRdk5adukMvQkji0kwt2Q16xw_W9bQsY0HJY3X9D2w7t9mljzASrILFi-sq096q2JlKNdi8J3PxRPKuOVWPlfwvD1V-rKQmwGOhj_LbKUFfGNiUZBBsMeyYRb7oaGTpuHOzQhkIDLpXgMV1CG08s2Czc3PPfLGACjj-Cdgbf08LG5orzsrCF-ZRkLxZQ-wTxeuRjxF6WOG6kIYT2Y7SKbOpys4RWQMxMRfB_tsUlxEKueyrfNka9vGmy7C25qz7RO7ffVE9TRxyE2C15AkWP4FDb4FtKrcqoM1Kk';
-          this.$store.dispatch('personal_storage', data);
-          resolve(true);
           // dd.config({
           //   agentId: _config.agentId, // 必填，微应用ID
           //   corpId: _config.corpId,//必填，企业ID
@@ -710,24 +698,37 @@ export default {
           //   jsApiList: ['biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
           // });
           // console.log(res);
-          // dd.ready(() => {
-          //   dd.runtime.permission.requestAuthCode({
-          //     corpId: _config.corpId,
-          //     onSuccess(info) {
-          //       that.$httpZll.getTokenInfo(info.code).then((res) => {
-          //         that.personalData(res, resolve);
-          //       })
-          //     },
-          //     onFail(err) {
-          //       alert('dd error: ' + JSON.stringify(err));
-          //       // alert('您不在系统内，请联系管理员添加！');
-          //       that.closeDD();
-          //     }
-          //   });
-          // });
-          // dd.error((err) => {
-          //   alert('dd error: ' + JSON.stringify(err));
-          // });
+          dd.ready(() => {
+            dd.runtime.permission.requestAuthCode({
+              corpId: _config.corpId,
+              onSuccess(info) {
+                that.$httpZll.getTokenInfo(info.code).then((res) => {
+                  that.personalData(res, resolve);
+                })
+              },
+              onFail(err) {
+                alert('dd error: ' + JSON.stringify(err));
+                // alert('您不在系统内，请联系管理员添加！');
+                that.closeDD();
+              }
+            });
+          });
+          dd.error((err) => {
+            alert('dd error: ' + JSON.stringify(err));
+          });
+          // let data = {
+          //   avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
+          //   city_id: "320100",
+          //   city_name: "南京市",
+          //   department_id: 395,
+          //   department_name: "开发",
+          //   phone: "18052001167",
+          //   staff_id: '69',
+          //   staff_name: "张琳琳",
+          // };
+          // globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU3OTdkZWJjOWRhODc0OGY5Yjk2ZWM2MjI5ZThjOTFiOTQ2ZWU2NTA4ZjM1MzdiMGI5NzdjZDcxYzQyM2IwYWE0Mzk4ZjA0MzljMTBhNjI5In0.eyJhdWQiOiIxIiwianRpIjoiZTc5N2RlYmM5ZGE4NzQ4ZjliOTZlYzYyMjllOGM5MWI5NDZlZTY1MDhmMzUzN2IwYjk3N2NkNzFjNDIzYjBhYTQzOThmMDQzOWMxMGE2MjkiLCJpYXQiOjE1NTk4ODg2MjUsIm5iZiI6MTU1OTg4ODYyNSwiZXhwIjoxNTYxMTg0NjI1LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.vEbN37TYOYd9moQViB0hSoG0LVcnbzrntBEvIrrJ00TndWWF7m8Bu4JU0tU6Dcw1LHMFuv7HkqmDVddlwJmdgFtpYOdKAHL1s1vDkUbmoKDai8ZnvZR514x7rwkMW3qrr1lJ7z4s7le7UG6_tWFeRiR02D8LPbgQVyfT3xQ3OTG9cs-ZuYYbgGZRKf1Mm891WKqtxvXHokEQCmsEWxaKJwCMVmjOUq4WH1PPHWHWfA__Q4T6ea7X0CvmWuJU1RBXr-zBflHxGuRgVDth2eSiaJly6E2x_hsFOKptN4hEMHn7vlDZyvKmGvCUbW9zs8E94by8HQEy6YhNT70I1qFFSpOVI83i8_kAXDhEsiTbcImQYWTlTP2d4sT9tFDBpdDCgYV35-pSRdk5adukMvQkji0kwt2Q16xw_W9bQsY0HJY3X9D2w7t9mljzASrILFi-sq096q2JlKNdi8J3PxRPKuOVWPlfwvD1V-rKQmwGOhj_LbKUFfGNiUZBBsMeyYRb7oaGTpuHOzQhkIDLpXgMV1CG08s2Czc3PPfLGACjj-Cdgbf08LG5orzsrCF-ZRkLxZQ-wTxeuRjxF6WOG6kIYT2Y7SKbOpys4RWQMxMRfB_tsUlxEKueyrfNka9vGmy7C25qz7RO7ffVE9TRxyE2C15AkWP4FDb4FtKrcqoM1Kk';
+          // this.$store.dispatch('personal_storage', data);
+          // resolve(true);
         });
       });
     };

@@ -96,7 +96,11 @@
       searchStaff(val = '') {
         this.fullLoading = false;
         this.searchList = [];
-        this.$httpZll.searchStaffList(val).then(res => {
+        let params = {
+          search: val,
+          org_id: '',
+        };
+        this.$httpZll.searchStaffList(params).then(res => {
           this.fullLoading = true;
           this.searchList = res.data.data;
         })

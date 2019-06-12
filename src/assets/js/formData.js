@@ -394,7 +394,7 @@ approvalSearch = {
   approvals23: ['InputBulletinData'],
 };
 
-// 拓展新盘
+// 新增小区
 defineNewAddVillage = [
   {
     label: '省',
@@ -433,7 +433,7 @@ defineNewAddVillage = [
     slot: '',
   },
   {
-    label: '区域',
+    label: '街道',
     placeholder: '必填 请选择',
     readonly: 'readonly',
     keyName: 'region',
@@ -465,9 +465,8 @@ defineNewAddVillage = [
   },
   {
     label: '街道地址',
-    placeholder: '已禁用',
+    placeholder: '必填 请输入',
     keyName: 'address',
-    disabled: 'disabled',
     keyType: '',
     type: 'text',
     status: '',
@@ -483,6 +482,18 @@ defineNewAddVillage = [
     status: 'arr',
     picker: 'picker',
     showForm: 'formatData',//picker 显示form 或 formatData
+    slot: '',
+  },
+  {
+    label: '所属区域',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'position',
+    keyType: '',
+    type: 'text',
+    status: 'objInt',
+    showForm: 'formatData',//picker 显示form 或 formatData
+    picker: 'picker',
     slot: '',
   },
   {
@@ -570,18 +581,6 @@ defineNewAddVillage = [
     slot: '',
   },
   {
-    label: '所属区域',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'position',
-    keyType: '',
-    type: 'text',
-    status: 'objInt',
-    showForm: 'formatData',//picker 显示form 或 formatData
-    picker: 'picker',
-    slot: '',
-  },
-  {
     label: '详情',
     placeholder: '必填 请输入',
     keyName: 'content',
@@ -600,8 +599,8 @@ defineNewAddVillage = [
     slot: '',
   },
   {
-    label: '上传',
-    picker: 'upload',
+    picker: 'album',
+    keyName: 'album',
     photos: [
       {
         label: '小区照片',
@@ -4255,9 +4254,9 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
     handlerFreeDelivery('本次缴费底数', 'gas_meter'),
     handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
-    handlerFreeDelivery('物业费', 'property_costs'),
+    handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
     handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
-    handlerFreeDelivery('维修费', 'repair_fees'),
+    handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
     {
       label: '其他费用',
       placeholder: '必填 请输入',
@@ -4288,8 +4287,8 @@ handlerFreeDeliveryChange = [
         ]
       ],
     },
-    //handlerFreeDelivery('费用总计', 'total_fee'),
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
+    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
+    handlerFreeDelivery('费用总计', 'total_fee'),
   ],
   [
     {
@@ -4326,9 +4325,9 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
     handlerFreeDelivery('本次缴费底数', 'gas_meter'),
     handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
-    handlerFreeDelivery('物业费', 'property_costs'),
+    handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
     handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
-    handlerFreeDelivery('维修费', 'repair_fees'),
+    handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
     {
       label: '其他费用',
       placeholder: '必填 请输入',
@@ -4359,8 +4358,8 @@ handlerFreeDeliveryChange = [
         ]
       ],
     },
-    //handlerFreeDelivery('费用总计', 'total_fee'),
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
+    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
+    handlerFreeDelivery('费用总计', 'total_fee'),
   ],
   [
     {
@@ -4378,10 +4377,9 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('水卡余额', 'water_card_balance',),
     handlerFreeDelivery('电卡余额', 'electric_card_balance',),
     handlerFreeDelivery('燃气卡余额', 'gas_card_balance',),
-    handlerFreeDelivery('结算金额', 'settlement_amount',),
-    handlerFreeDelivery('物业费', 'property_costs'),
-    handlerFreeDelivery('公摊费', 'public_fee', 'number', '必填 请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
-    handlerFreeDelivery('维修费', 'repair_fees'),
+    handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
+    handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
+    handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
     {
       label: '其他费用',
       placeholder: '必填 请输入',
@@ -4412,8 +4410,8 @@ handlerFreeDeliveryChange = [
         ]
       ],
     },
-    //handlerFreeDelivery('费用总计', 'total_fee'),
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea')
+    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
+    handlerFreeDelivery('费用总计', 'total_fee'),
   ]
 ];
 
@@ -4506,7 +4504,7 @@ function handlerKitchenBalconyBathroom(value, num) {
     deliveryMorePickers('卫生间灯', value, 'bathroom_light', undefined, num),
     deliveryMorePickers('浴霸灯', value, 'bath_heater_light', undefined, num),
     deliveryMorePickers('洗面池', value, 'wash_basin', undefined, num),
-    deliveryMorePickers('马桶盖', value, 'toilet_lid', undefined, num),
+    deliveryMorePickers('马桶盖', value, 'toilet_lid', childKeysHaveBad, num),
     deliveryMorePickers('晾衣架', value, 'drying_rack', undefined, num),
     deliveryMorePickersRemark('厨房/阳台/卫生间备注'),
   ]
@@ -4547,7 +4545,6 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
     children: [
       {
         label: '损坏照片',
-        placeholder: '必填',
         keyName: key,
         keyType: [],
         slither: parent,
@@ -4587,7 +4584,6 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad
     children: [
       {
         label: '损坏照片',
-        placeholder: '必填',
         keyName: key,
         keyType: [],
         slither: parent,
