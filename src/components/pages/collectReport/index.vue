@@ -283,11 +283,13 @@
         allChildren: {},                    //附属租客
 
         isGetTake: false,                   //尾款
+        photoUploadStatus: true,            //图片上传状态
       }
     },
     created() {
     },
     activated() {
+      this.photoUploadStatus = true;
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
       this.bulletin_types(this.bulletinType);
@@ -323,6 +325,9 @@
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
       },
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
     },
     methods: {
       // 报备类型
@@ -625,7 +630,7 @@
           let name = picker.keyName;
           let parentKey = picker.parentKey || '';
           // input 显示隐藏
-          if (picker.controlShow) {
+          if (picker.controlShow || name === 'is_electronic_contract') {
             this.inputStatus(name, form);
           }
           // 付款方式变化处理
@@ -659,12 +664,12 @@
         switch (name) {
           case 'is_electronic_contract':
             let num = Number(form['is_electronic_contract']);
-            if (num === 0) {
-              this.contractDis();
-              this.form.contract_number = 'LJSF';
-            } else {
+            if (num) {
               this.contractDis('disabled');
               this.form.contract_number = this.electronicContractNumber;
+            } else {
+              this.contractDis(false);
+              this.form.contract_number = 'LJSF';
             }
             break;
           case 'signatory_identity':
@@ -697,9 +702,9 @@
       // 获取电子合同编号
       electronicContract() {
         let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
+        // this.personal.city_id || '320100'
         let data = {
-          city_id: this.form.community && this.form.community.city || '320100',
-          // city_id: '320100',
+          city_id: '120000',
           version: version,
         };
         this.$httpZll.getElectronicContract(data).then(res => {
@@ -848,12 +853,19 @@
       // 图片上传
       getImgData(val) {
         this.form[val[0]] = val[1];
+        this.photoUploadStatus = val[2];
       },
       // 发布
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
-          // if (this.$attestationKey(this.drawForm)) return;
+          if (this.$attestationKey(this.drawForm)) return;
+        }
+        if (val === 1) {
+          if (!this.photoUploadStatus) {
+            this.$prompt('图片上传中...');
+            return;
+          }
         }
         this.form.is_draft = val;
         let bulletin = this.bulletinType;

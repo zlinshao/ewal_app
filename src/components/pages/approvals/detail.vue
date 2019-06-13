@@ -884,7 +884,7 @@
         data[item] = this.jsonClone(res[item]);
         res[item].forEach((key, idx) => {
           for (let key of val) {
-            data[item][idx][key] = dicties[key][res[item][idx][key]];
+            data[item][idx][key] = dicties[key][res[item][idx][key]] || (res[item][idx][key][0] + '个月付');
           }
         });
       },
