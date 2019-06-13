@@ -22,7 +22,7 @@
                             @click='removeChange(slither,item.keyName,index)'/>
                 </p>
                 <div class="addChange" v-if="(index+1) === drawSlither[slither].length">
-                  <span @click="addChange(slither,item,index,item)">+</span>
+                  <span @click="addChange(slither,'',index,item)">+</span>
                 </div>
               </div>
               <div v-for="room in item">
@@ -55,7 +55,7 @@
                       <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
                     </div>
                     <div v-else>
-                      <Upload :file="child" :getImg="album[slither][index][room.keyName]" :close="!closePhoto"
+                      <Upload :file="child" :getImg="album[slither][index][child.keyName]" :close="!closePhoto"
                               @success="getImgDataBed"></Upload>
                     </div>
                   </div>
@@ -259,12 +259,12 @@
       })
     },
     activated() {
-      this.allDetail = JSON.parse(sessionStorage.deliveryReceipt);
       // if (this.allDetail.bulletin_type === 'bulletin_rent_basic') {
       //   this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
       //
       //   });
       // }
+      this.allDetail = JSON.parse(sessionStorage.deliveryReceipt);
       this.getDraft(this.allDetail.task_id);
       this.allReportNum = Object.keys(defineArticleReceipt).length;
       let top = this.$refs.top.offsetHeight + 30;
@@ -333,17 +333,17 @@
           } else if (item === 'bedroom') {
             res[item].forEach((bed, index) => {
               if (index !== 0) {
-                let obj = {}, pic = [];
+                let obj = {}, pic = {};
                 let draw = this.jsonClone(this.drawSlither[item][0]);
                 for (let room of draw) {
                   if (room.children) {
-                    obj[room.keyName] = '';
-                    pic[room.keyName] = [];
                     room.picker = room.picker + index;
                     for (let child of room.children) {
                       if (child.status === 'upload') {
-                        child.keyName = child.keyName + '-' + index;
                         child.picker = index;
+                        child.keyName = child.keyName + '-' + index;
+                        pic[child.keyName] = [];
+                        obj[child.keyName] = '';
                       }
                     }
                   }
@@ -389,7 +389,7 @@
       // 请求数据处理
       getHandleData(res, item, name, index) {
         let value;
-        if (typeof index === 'number') {
+        if (item === 'bedroom') {
           value = res[item][index][name];
         } else {
           value = res[item][name];
@@ -400,8 +400,12 @@
             if (child === 'photo') {
               if (value[child].length) {
                 this.$httpZll.getUploadUrl(value[child]).then(res => {
-                  if (typeof index === 'number') {
-                    this.album[item][index][name] = res.data;
+                  if (item === 'bedroom') {
+                    if (Number(index) !== 0) {
+                      this.album[item][index][item + '__' + name + '-' + index] = res.data;
+                    } else {
+                      this.album[item][index][item + '__' + name] = res.data;
+                    }
                   } else {
                     this.album[item][name] = res.data;
                   }
@@ -414,7 +418,8 @@
               let few = ['chair', 'door_lock_key', 'key'];//把
               unit = sets.includes(name) ? '台' : (few.includes(name) ? '把' : '个');
               if (value[child]) {
-                let num = value[child];
+                let num = Number(value[child]);
+                console.log(num);
                 switch (child) {
                   case 'is_have':
                     if (num) {
@@ -454,7 +459,8 @@
                     temp.push(i);
                   }
                 }
-                if (typeof index === 'number') {
+                if (item === 'bedroom') {
+                  console.log(temp);
                   this.formatData[item][index][name] = temp.join('/');
                 } else {
                   this.formatData[item][name] = temp.join('/');
@@ -491,24 +497,25 @@
         }
       },
       // 变化增加
-      addChange(slither, name, index, value) {
-        let obj = {}, str = {}, arr = [], pic = {};
-        let cloneVal = this.jsonClone(value);
+      addChange(slither, name, index, item) {
+        let obj = {};
+        let cloneVal = this.jsonClone(item);
         if (slither === 'bedroom') {
+          let idx = index + 1, str = {}, arr = [], pic = {};
           for (let val of cloneVal) {
             if (val.children) {
-              val.picker = val.picker + index;
+              val.picker = val.picker + idx;
               for (let child of val.children) {
-                child.picker = index + 1;
-                child.hidden = true;
                 if (child.status === 'upload') {
-                  child.keyName = child.keyName + '-' + (index + 1);
+                  child.picker = idx;
+                  child.keyName = child.keyName + '-' + idx;
                 }
+                child.hidden = true;
+                pic[child.keyName] = [];
+                str[child.keyName] = '';
               }
             }
-            pic[val.keyName] = {};
             obj[val.keyName] = val.keyType;
-            str[val.keyName] = '';
             arr.push(val);
           }
           this.drawSlither[slither].push(arr);
@@ -530,10 +537,27 @@
           this.form[slither].splice(index, 1);
           this.formatData[slither].splice(index, 1);
           this.album[slither].splice(index, 1);
+          this.form[slither].forEach((pic, index) => {
+            for (let key of Object.keys(pic)) {
+              if (pic[key].photo && pic[key].photo.length) {
+                this.$httpZll.getUploadUrl(pic[key].photo, 'close').then(res => {
+                  for (let album of Object.keys(this.album[slither][index])) {
+                    console.log(key);
+                    console.log(album);
+                    if (album.includes(key)) {
+                      this.album[slither][index][album] = res.data;
+                    }
+                  }
+                  this.album = Object.assign({}, this.album);
+                  console.log(this.album);
+                })
+              }
+            }
+          });
           return;
         }
-        this.drawSlither[slither][index].value.splice(num, 1);
         this.form[name].splice(num, 1);
+        this.drawSlither[slither][index].value.splice(num, 1);
         this.formatData[name].splice(num, 1);
         this.album[name].splice(num, 1);
       },
@@ -635,14 +659,7 @@
                 if (bed.children) {
                   for (let room of bed.children) {
                     let num = this.form[item][index][bed.keyName].is_bad;
-                    if (num === 1 || num === '1') {
-                      room.hidden = false;
-                    } else {
-                      for (let child of bed.childKeys) {
-                        this.form[item][index][bed.keyName][child] = '';
-                      }
-                      room.hidden = true;
-                    }
+                    room.hidden = !(num === 1 || num === '1');
                   }
                 }
               })
@@ -655,7 +672,6 @@
                       val.hidden = false;
                     }
                   } else {
-                    this.form[item][key.keyName].bad_number = '';
                     for (let val of key.children) {
                       val.hidden = true;
                     }
@@ -687,15 +703,16 @@
         this.popupModule = false;
         this.deliveryModule = false;
       },
-      // 图片 次卧
+      // 图片 损坏次卧
       getImgDataBed(val, file) {
-        let key = file.slither;
-        let name = file.keyName.split('-')[0];
-        this.form[key][file.picker][name]['photo'] = val[1];
+        let names = file.keyName.split('__');
+        let name1 = names[1].split('-')[0];
+        this.form[names[0]][file.picker][name1]['photo'] = val[1];
       },
+      // 损坏照片
       getImgDataObj(val, file) {
-        let key = file.slither;
-        this.form[key][file.keyName]['photo'] = val[1];
+        let names = file.keyName.split('__');
+        this.form[names[0]][names[1]]['photo'] = val[1];
       },
       // 图片
       getImgData(val) {

@@ -123,7 +123,7 @@ collectBulletinDraft = {
     "name": "东"
   },
   "gas_stove": "1",
-  "is_agency": "0",
+  "is_agency": "1",
   "lock_type": "1",
   "microwave": "1",
   "sign_date": "2019-06-09",
@@ -139,7 +139,7 @@ collectBulletinDraft = {
   ],
   "staff_name": "张琳琳",
   "television": "1",
-  "agency_name": "",
+  "agency_name": "范德萨",
   "clothe_rack": "1",
   "contact_way": "1",
   "house_video": [
@@ -148,8 +148,8 @@ collectBulletinDraft = {
   "is_elevator": "0",
   "pay_way_bet": "1",
   "account_name": "贾少君",
-  "agency_phone": "",
-  "agency_price": "",
+  "agency_phone": "12312312",
+  "agency_price": "1222",
   "can_decorate": "0",
   "customer_sex": "m",
   "dining_table": "1",
@@ -200,7 +200,7 @@ collectBulletinDraft = {
   "pay_second_date": "2019-07-22",
   "qiu_quan_number": "gfdgds",
   "wardrobe_remark": "",
-  "agency_user_name": "",
+  "agency_user_name": "范德萨",
   "non_landlord_fee": [
     "2",
     "6"
@@ -2066,6 +2066,7 @@ defineCollectReport = {
     },
     {
       label: '合同编号',
+      disabled: 'disabled',
       placeholder: '必填 请填写',
       keyName: 'contract_number',
       keyType: 'LJSHE',
@@ -2984,7 +2985,6 @@ defineRentReport = {
       label: '签约时长',
       keyName: 'month',
       placeholder: '必填 请输入',
-      prompts: '不包含空置期',
       moreString: [
         {
           placeholder: '必填 月数',
@@ -3268,7 +3268,7 @@ defineRentReport = {
     },
     {
       label: '居住人数',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'num_of_residents',
       keyType: '',
       type: 'number',
@@ -3980,7 +3980,7 @@ defineChangeReport = {
     },
     {
       label: '居住人数',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'num_of_residents',
       keyType: '',
       type: 'text',
@@ -4897,6 +4897,7 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('水卡余额', 'water_card_balance',),
     handlerFreeDelivery('电卡余额', 'electric_card_balance',),
     handlerFreeDelivery('燃气卡余额', 'gas_card_balance',),
+    handlerFreeDelivery('结算金额', 'settlement_amount',),
     handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
     handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
     handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
@@ -5065,9 +5066,8 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
     children: [
       {
         label: '损坏照片',
-        keyName: key,
+        keyName: parent + '__' + key,
         keyType: [],
-        slither: parent,
         status: 'upload',
         picker: 0,
         hidden: true,
@@ -5104,9 +5104,8 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad
     children: [
       {
         label: '损坏照片',
-        keyName: key,
+        keyName: parent + '__' + key,
         keyType: [],
-        slither: parent,
         status: 'upload',
         hidden: true,
         slot: '',

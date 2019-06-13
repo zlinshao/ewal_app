@@ -325,6 +325,9 @@
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
       },
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
     },
     methods: {
       // 报备类型
@@ -336,8 +339,11 @@
         this.resetting();
         this.distinguishForm(type.bulletin);
         if (type.bulletin === 'bulletin_agency') {
-          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 1 : 2;
+          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 0 : 1;
           this.form.collect_or_rent = type;
+          if (type === 0) {
+            this.form.house_id = this.taskDetail.house_id;
+          }
           this.formatData.collect_or_rent = dicties['collect_or_rent'][type];
         }
       },
@@ -627,7 +633,7 @@
           let name = picker.keyName;
           let parentKey = picker.parentKey || '';
           // input 显示隐藏
-          if (picker.controlShow) {
+          if (picker.controlShow || name === 'is_electronic_contract') {
             this.inputStatus(name, form);
           }
           // 付款方式变化处理
@@ -661,12 +667,12 @@
         switch (name) {
           case 'is_electronic_contract':
             let num = Number(form['is_electronic_contract']);
-            if (num === 0) {
-              this.contractDis();
-              this.form.contract_number = 'LJSF';
-            } else {
+            if (num) {
               this.contractDis('disabled');
               this.form.contract_number = this.electronicContractNumber;
+            } else {
+              this.contractDis(false);
+              this.form.contract_number = 'LJSF';
             }
             break;
           case 'signatory_identity':
@@ -699,9 +705,9 @@
       // 获取电子合同编号
       electronicContract() {
         let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
+        // this.personal.city_id || '320100'
         let data = {
-          city_id: this.form.community && this.form.community.city || '320100',
-          // city_id: '320100',
+          city_id: '120000',
           version: version,
         };
         this.$httpZll.getElectronicContract(data).then(res => {

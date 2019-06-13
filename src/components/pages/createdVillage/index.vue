@@ -170,6 +170,7 @@
         //构造地点查询类
         AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
         function select(e) {
+          console.log(e.poi);
           that.formatData.village_name = e.poi.name;
           that.form.village_name = e.poi.name;
           that.form.address = e.poi.address;
