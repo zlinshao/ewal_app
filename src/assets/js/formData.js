@@ -2556,19 +2556,6 @@ defineRentReport = {
             changeBtn: '付款变化',
             slot: '',
           },
-          // {
-          //   label: '付款方式',
-          //   placeholder: '必填 请选择',
-          //   readonly: 'readonly',
-          //   keyName: 'pay_way',
-          //   keyType: '',
-          //   type: 'text',
-          //   status: 'objInt',
-          //   showForm: 'formatData',//picker 显示form 或 formatData
-          //   picker: 'picker',
-          //   changeBtn: '付款变化',
-          //   slot: '',
-          // },
           {
             label: '月单价',
             placeholder: '必填 月单价',
@@ -2748,7 +2735,7 @@ defineRentReport = {
     },
     {
       label: '居住人数',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'num_of_residents',
       keyType: '',
       type: 'number',
@@ -3460,7 +3447,7 @@ defineChangeReport = {
     },
     {
       label: '居住人数',
-      placeholder: '必填 请输入',
+      placeholder: '请输入',
       keyName: 'num_of_residents',
       keyType: '',
       type: 'text',
