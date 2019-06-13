@@ -166,6 +166,7 @@ export default {
     };
     //自动获取用户IP，返回当前城市
     Vue.prototype.getBeforeCity = function (data = []) {
+      let personal = this.$store.state.app.personalDetail;
       return new Promise((resolve, reject) => {
         let obj = {};
         obj.name = '';
@@ -196,9 +197,9 @@ export default {
             resolve(obj);
           });
           AMap.event.addListener(geolocation, 'error', function (err) {
-            obj.code = 320100;
-            obj.name = '南京';
-            obj.location = [118.734235, 31.984095];
+            obj.code = personal.city_id;
+            obj.name = personal.city_name;
+            obj.location = personal.location;
             resolve(obj);
           });
         });
@@ -720,8 +721,9 @@ export default {
           });
           // let data = {
           //   avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
-          //   city_id: "120000",
-          //   city_name: "天津市",
+          // data.city_id = 120000;
+          // data.city_name = '天津市';
+          // data.location = [117.201538, 39.085294];
           //   department_id: 395,
           //   department_name: "开发",
           //   phone: "18052001167",
@@ -753,6 +755,7 @@ export default {
             } else {
               data.city_id = '120000';
               data.city_name = '天津市';
+              data.location = [117.201538, 39.085294];
             }
             data.department_name = org.name;
             data.department_id = org.id;

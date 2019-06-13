@@ -108,15 +108,10 @@
     },
     activated() {
       let city = this.cityList;
-      if (city.length === 1) {
-        this.city_name = city[0].name;
-        this.params.city_name = city[0].name + '市';
-      } else {
-        for (let item of city) {
-          if (String(item.code) === String(this.personal.city_id)) {
-            this.city_name = item.name;
-            this.params.city_name = item.name + '市';
-          }
+      for (let item of city) {
+        if (String(item.code) === String(this.personal.city_id)) {
+          this.city_name = item.name;
+          this.params.city_name = item.name + '市';
         }
       }
     },
