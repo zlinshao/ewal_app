@@ -698,24 +698,24 @@ export default {
           //   jsApiList: ['biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
           // });
           // console.log(res);
-          dd.ready(() => {
-            dd.runtime.permission.requestAuthCode({
-              corpId: _config.corpId,
-              onSuccess(info) {
-                that.$httpZll.getTokenInfo(info.code).then((res) => {
-                  that.personalData(res, resolve);
-                })
-              },
-              onFail(err) {
-                alert('dd error: ' + JSON.stringify(err));
-                // alert('您不在系统内，请联系管理员添加！');
-                that.closeDD();
-              }
-            });
-          });
-          dd.error((err) => {
-            alert('dd error: ' + JSON.stringify(err));
-          });
+          // dd.ready(() => {
+          //   dd.runtime.permission.requestAuthCode({
+          //     corpId: _config.corpId,
+          //     onSuccess(info) {
+          //       that.$httpZll.getTokenInfo(info.code).then((res) => {
+          //         that.personalData(res, resolve);
+          //       })
+          //     },
+          //     onFail(err) {
+          //       alert('dd error: ' + JSON.stringify(err));
+          //       // alert('您不在系统内，请联系管理员添加！');
+          //       that.closeDD();
+          //     }
+          //   });
+          // });
+          // dd.error((err) => {
+          //   alert('dd error: ' + JSON.stringify(err));
+          // });
           let data = {
             avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
             city_id: "120000",
