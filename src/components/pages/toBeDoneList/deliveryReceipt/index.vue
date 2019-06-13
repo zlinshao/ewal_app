@@ -22,7 +22,7 @@
                             @click='removeChange(slither,item.keyName,index)'/>
                 </p>
                 <div class="addChange" v-if="(index+1) === drawSlither[slither].length">
-                  <span @click="addChange(slither,'',index)">+</span>
+                  <span @click="addChange(slither,'',index,item)">+</span>
                 </div>
               </div>
               <div v-for="room in item">
@@ -491,11 +491,11 @@
         }
       },
       // 变化增加
-      addChange(slither, name, index) {
+      addChange(slither, name, index,item) {
         let obj = {};
+        let cloneVal = this.jsonClone(item);
         if (slither === 'bedroom') {
           let idx = index + 1, str = {}, arr = [], pic = {};
-          let cloneVal = this.jsonClone(this.drawSlither[slither][0]);
           for (let val of cloneVal) {
             if (val.children) {
               val.picker = val.picker + idx;
@@ -529,10 +529,35 @@
           this.form[slither].splice(index, 1);
           this.formatData[slither].splice(index, 1);
           this.album[slither].splice(index, 1);
-          console.log(this.drawSlither[slither]);
-          console.log(this.form[slither]);
-          console.log(this.formatData[slither]);
-          console.log(this.album[slither]);
+          // this.drawSlither[slither].forEach((res, index) => {
+          //   for (let item of res) {
+          //     if (item.children) {
+          //       for (let child of item.children) {
+          //         if (child.status === 'upload') {
+          //           if (index !== 0) {
+          //             child.keyName = child.keyName.split('-')[0] + '-' + index;
+          //           } else {
+          //             child.keyName = child.keyName.split('-')[0];
+          //           }
+          //         }
+          //       }
+          //     }
+          //   }
+          // });
+          // let album = this.jsonClone(this.album);
+          // this.album[slither].forEach((res, index) => {
+          //   for (let child of Object.keys(res)) {
+          //     let names = '';
+          //     if (index !== 0) {
+          //       names = child.split('-')[0] + '-' + index;
+          //     } else {
+          //       names = child.split('-')[0];
+          //     }
+          //     console.log(names);
+          //     this.album[slither][index][names] = this.album[slither][index][child]
+          //   }
+          // });
+          // console.log(this.album[slither]);
           return;
         }
         this.form[name].splice(num, 1);

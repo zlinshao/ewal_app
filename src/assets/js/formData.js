@@ -4376,6 +4376,7 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('水卡余额', 'water_card_balance',),
     handlerFreeDelivery('电卡余额', 'electric_card_balance',),
     handlerFreeDelivery('燃气卡余额', 'gas_card_balance',),
+    handlerFreeDelivery('结算金额', 'settlement_amount',),
     handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
     handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
     handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
