@@ -240,8 +240,7 @@
     methods: {
       // 获取合同模板
       getContract() {
-        // this.personal.city_name
-        this.$httpZll.getContractMould({scene_depart: '天津市'}).then(res => {
+        this.$httpZll.getContractMould({scene_depart: this.personal.city_name}).then(res => {
           if (res) {
             for (let item of res.data.data) {
               if (item.pdf_scene === 1) {//收房
