@@ -55,7 +55,7 @@
                       <div class="prompts" v-if="child.prompts">{{child.prompts}}</div>
                     </div>
                     <div v-else>
-                      <Upload :file="child" :getImg="album[slither][index][room.keyName]" :close="!closePhoto"
+                      <Upload :file="child" :getImg="album[slither][index][child.keyName]" :close="!closePhoto"
                               @success="getImgDataBed"></Upload>
                     </div>
                   </div>
@@ -491,7 +491,7 @@
         }
       },
       // 变化增加
-      addChange(slither, name, index,item) {
+      addChange(slither, name, index, item) {
         let obj = {};
         let cloneVal = this.jsonClone(item);
         if (slither === 'bedroom') {
@@ -500,10 +500,12 @@
             if (val.children) {
               val.picker = val.picker + idx;
               for (let child of val.children) {
-                child.picker = idx;
-                child.keyName = child.keyName + '-' + idx;
+                if (child.status === 'upload') {
+                  child.picker = idx;
+                  child.keyName = child.keyName + '-' + idx;
+                }
                 child.hidden = true;
-                pic[child.keyName] = {};
+                pic[child.keyName] = [];
                 str[child.keyName] = '';
               }
             }
@@ -544,20 +546,23 @@
           //     }
           //   }
           // });
-          // let album = this.jsonClone(this.album);
-          // this.album[slither].forEach((res, index) => {
-          //   for (let child of Object.keys(res)) {
-          //     let names = '';
-          //     if (index !== 0) {
-          //       names = child.split('-')[0] + '-' + index;
-          //     } else {
-          //       names = child.split('-')[0];
-          //     }
-          //     console.log(names);
-          //     this.album[slither][index][names] = this.album[slither][index][child]
-          //   }
-          // });
-          // console.log(this.album[slither]);
+          this.form[slither].forEach((pic, index) => {
+            for (let key of Object.keys(pic)) {
+              if (pic[key].photo && pic[key].photo.length) {
+                this.$httpZll.getUploadUrl(pic[key].photo, 'close').then(res => {
+                  for (let album of Object.keys(this.album[slither][index])) {
+                    console.log(key);
+                    console.log(album);
+                    if (album.includes(key)) {
+                      this.album[slither][index][album] = res.data;
+                    }
+                  }
+                  this.album = Object.assign({}, this.album);
+                  console.log(this.album);
+                })
+              }
+            }
+          });
           return;
         }
         this.form[name].splice(num, 1);

@@ -237,6 +237,7 @@
             this.formatData[parentKey][key] = value.join('/');
           }
         });
+        this.formatData = Object.assign({}, this.formatData);
       },
       finishData() {
         this.$emit('close', this.forms, this.formatData);
