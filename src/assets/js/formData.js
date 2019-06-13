@@ -123,7 +123,7 @@ collectBulletinDraft = {
     "name": "东"
   },
   "gas_stove": "1",
-  "is_agency": "0",
+  "is_agency": "1",
   "lock_type": "1",
   "microwave": "1",
   "sign_date": "2019-06-09",
@@ -139,7 +139,7 @@ collectBulletinDraft = {
   ],
   "staff_name": "张琳琳",
   "television": "1",
-  "agency_name": "",
+  "agency_name": "范德萨",
   "clothe_rack": "1",
   "contact_way": "1",
   "house_video": [
@@ -148,8 +148,8 @@ collectBulletinDraft = {
   "is_elevator": "0",
   "pay_way_bet": "1",
   "account_name": "贾少君",
-  "agency_phone": "",
-  "agency_price": "",
+  "agency_phone": "12312312",
+  "agency_price": "1222",
   "can_decorate": "0",
   "customer_sex": "m",
   "dining_table": "1",
@@ -200,7 +200,7 @@ collectBulletinDraft = {
   "pay_second_date": "2019-07-22",
   "qiu_quan_number": "gfdgds",
   "wardrobe_remark": "",
-  "agency_user_name": "",
+  "agency_user_name": "范德萨",
   "non_landlord_fee": [
     "2",
     "6"
