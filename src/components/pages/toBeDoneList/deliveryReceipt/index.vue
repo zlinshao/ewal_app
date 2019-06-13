@@ -419,7 +419,6 @@
               unit = sets.includes(name) ? '台' : (few.includes(name) ? '把' : '个');
               if (value[child]) {
                 let num = Number(value[child]);
-                console.log(num);
                 switch (child) {
                   case 'is_have':
                     if (num) {
@@ -460,7 +459,6 @@
                   }
                 }
                 if (item === 'bedroom') {
-                  console.log(temp);
                   this.formatData[item][index][name] = temp.join('/');
                 } else {
                   this.formatData[item][name] = temp.join('/');
@@ -542,14 +540,11 @@
               if (pic[key].photo && pic[key].photo.length) {
                 this.$httpZll.getUploadUrl(pic[key].photo, 'close').then(res => {
                   for (let album of Object.keys(this.album[slither][index])) {
-                    console.log(key);
-                    console.log(album);
                     if (album.includes(key)) {
                       this.album[slither][index][album] = res.data;
                     }
                   }
                   this.album = Object.assign({}, this.album);
-                  console.log(this.album);
                 })
               }
             }
