@@ -4431,7 +4431,7 @@ defineRetainageReport = {
       showForm: 'formatData',
     },
     {
-      label: '总金额',
+      label: '已收总金额',
       placeholder: '必填 请输入',
       keyName: 'money_sum',
       keyType: '',
