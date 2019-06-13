@@ -325,6 +325,9 @@
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
       },
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
     },
     methods: {
       // 报备类型
@@ -700,8 +703,7 @@
       electronicContract() {
         let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
         let data = {
-          city_id: this.form.community && this.form.community.city || '320100',
-          // city_id: '320100',
+          city_id: this.personal.city_id || '320100',
           version: version,
         };
         this.$httpZll.getElectronicContract(data).then(res => {
