@@ -8,6 +8,7 @@ import store from './store/index.js'
 import Boss from './config/boss.config.js'
 import remAndPhoneConfig from './config/remConfig.js'
 import fun from './utils/fun.prototype.js'
+import _ from 'lodash';
 import myUtils from './utils/myUtils.js'
 import httpZll from './utils/httpZll.js'
 import httpTj from './utils/httpTj.js'
@@ -23,6 +24,7 @@ Vue.use(Vant);
 Vue.use(Vuex);
 Vue.use(Boss);
 Vue.use(fun);
+Vue.use(_);
 remAndPhoneConfig();
 Vue.prototype.myUtils = myUtils;
 Vue.config.productionTip = false;
