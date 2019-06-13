@@ -389,7 +389,7 @@
       // 请求数据处理
       getHandleData(res, item, name, index) {
         let value;
-        if (typeof index === 'number') {
+        if (item === 'bedroom') {
           value = res[item][index][name];
         } else {
           value = res[item][name];
@@ -400,8 +400,12 @@
             if (child === 'photo') {
               if (value[child].length) {
                 this.$httpZll.getUploadUrl(value[child]).then(res => {
-                  if (typeof index === 'number') {
-                    this.album[item][index][name] = res.data;
+                  if (item === 'bedroom') {
+                    if (Number(index) !== 0) {
+                      this.album[item][index][item + '__' + name + '-' + index] = res.data;
+                    } else {
+                      this.album[item][index][item + '__' + name] = res.data;
+                    }
                   } else {
                     this.album[item][name] = res.data;
                   }
@@ -415,6 +419,7 @@
               unit = sets.includes(name) ? '台' : (few.includes(name) ? '把' : '个');
               if (value[child]) {
                 let num = Number(value[child]);
+                console.log(num);
                 switch (child) {
                   case 'is_have':
                     if (num) {
@@ -454,7 +459,8 @@
                     temp.push(i);
                   }
                 }
-                if (typeof index === 'number') {
+                if (item === 'bedroom') {
+                  console.log(temp);
                   this.formatData[item][index][name] = temp.join('/');
                 } else {
                   this.formatData[item][name] = temp.join('/');
@@ -531,21 +537,6 @@
           this.form[slither].splice(index, 1);
           this.formatData[slither].splice(index, 1);
           this.album[slither].splice(index, 1);
-          // this.drawSlither[slither].forEach((res, index) => {
-          //   for (let item of res) {
-          //     if (item.children) {
-          //       for (let child of item.children) {
-          //         if (child.status === 'upload') {
-          //           if (index !== 0) {
-          //             child.keyName = child.keyName.split('-')[0] + '-' + index;
-          //           } else {
-          //             child.keyName = child.keyName.split('-')[0];
-          //           }
-          //         }
-          //       }
-          //     }
-          //   }
-          // });
           this.form[slither].forEach((pic, index) => {
             for (let key of Object.keys(pic)) {
               if (pic[key].photo && pic[key].photo.length) {
@@ -668,14 +659,7 @@
                 if (bed.children) {
                   for (let room of bed.children) {
                     let num = this.form[item][index][bed.keyName].is_bad;
-                    if (num === 1 || num === '1') {
-                      room.hidden = false;
-                    } else {
-                      for (let child of bed.childKeys) {
-                        this.form[item][index][bed.keyName][child] = '';
-                      }
-                      room.hidden = true;
-                    }
+                    room.hidden = !(num === 1 || num === '1');
                   }
                 }
               })
@@ -688,7 +672,6 @@
                       val.hidden = false;
                     }
                   } else {
-                    this.form[item][key.keyName].bad_number = '';
                     for (let val of key.children) {
                       val.hidden = true;
                     }
