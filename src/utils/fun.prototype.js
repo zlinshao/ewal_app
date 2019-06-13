@@ -184,7 +184,6 @@ export default {
           mapObj.addControl(geolocation);
           geolocation.getCurrentPosition();
           AMap.event.addListener(geolocation, 'complete', function (res) {
-            console.log(res);
             let address = res.addressComponent;
             obj.location[0] = res.position.lng;
             obj.location[1] = res.position.lat;
@@ -726,6 +725,9 @@ export default {
           //   location: [117.201538, 39.085294],//天津
           //   // location: [118.734235, 31.984095],//南京
           //   department_id: 395,
+          //   city_id: '120000',
+          //   city_name: '天津市', location: [117.201538, 39.085294],
+          //   department_id: '395',
           //   department_name: "开发",
           //   phone: "18052001167",
           //   staff_id: '69',
@@ -765,7 +767,6 @@ export default {
             this.$prompt('获取部门失败!', 'fail');
             return;
           }
-          console.log(data);
           this.$store.dispatch('personal_storage', data);
           resolve(true);
         }
