@@ -720,10 +720,9 @@ export default {
           });
           // let data = {
           //   avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
-          // data.city_id = 120000;
-          // data.city_name = '天津市';
-          // data.location = [117.201538, 39.085294];
-          //   department_id: 395,
+          //   city_id: '120000',
+          //   city_name: '天津市', location: [117.201538, 39.085294],
+          //   department_id: '395',
           //   department_name: "开发",
           //   phone: "18052001167",
           //   staff_id: '69',

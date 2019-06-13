@@ -315,9 +315,6 @@
       'form.money_sum'(val) {
         if (val && this.form.current_pay_info && this.form.current_pay_info.length === 1) {
           this.form.current_pay_info[0].money_sep = val;
-          let bulletin = this.bulletinType.bulletin;
-          let pay_first = new Date(this.form.begin_date);
-          this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
         }
       },
     },
@@ -576,7 +573,9 @@
         if (draw.children.length === 1) {
           if (draw.keyName === 'period_price_way_arr') {
             this.form[draw.keyName][0].period = this.form.month;
-            console.log(this.form[draw.keyName][0])
+            let bulletin = this.bulletinType.bulletin;
+            let pay_first = new Date(this.form.begin_date);
+            this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
           }
           if (draw.keyName === 'current_pay_info') {
             this.form[draw.keyName][0].money_sep = this.form.money_sum;
@@ -1009,12 +1008,14 @@
       },
       // 尾款待办信息
       childBulletin(res, draft) {
+        console.log(this.form);
+        console.log(res);
         for (let item of Object.keys(this.form)) {
+          console.log(item);
           switch (item) {
             case 'month':
             case 'address':
             case 'house_id':
-            case 'house_address':
             case 'customer_name':
               this.form[item] = res[item] || this.form[item];
               break;
