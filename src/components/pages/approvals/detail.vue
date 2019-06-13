@@ -152,7 +152,7 @@
       </div>
     </van-popup>
     <!--历史审批流程-->
-    <div class="records" @click="recordPopup = true"><p></p> </div>
+    <!-- <div class="records" @click="recordPopup = true"><p></p> </div> -->
     <van-popup v-model="recordPopup" overlay-class="overlay-color" position="right" :overlay="true" class="recordPopup">
       <div class="history_content">
         <div class="contentMain">
@@ -884,7 +884,7 @@
         data[item] = this.jsonClone(res[item]);
         res[item].forEach((key, idx) => {
           for (let key of val) {
-            data[item][idx][key] = dicties[key][res[item][idx][key]] || (res[item][idx][key][0] + '个月付');
+            data[item][idx][key] = dicties[key][res[item][idx][key]];
           }
         });
       },

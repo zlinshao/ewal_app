@@ -240,8 +240,7 @@
     methods: {
       // 获取合同模板
       getContract() {
-        // this.personal.city_name
-        this.$httpZll.getContractMould({scene_depart: '天津市'}).then(res => {
+        this.$httpZll.getContractMould({scene_depart: this.personal.city_name}).then(res => {
           if (res) {
             for (let item of res.data.data) {
               if (item.pdf_scene === 1) {//收房
@@ -264,11 +263,10 @@
                 url: '/createdTask',
                 id: 'CollectTakeLook',
                 text: '收房带看',
-              },
-              // {
-              //   url: '/supplyAgreement',
-              //   text: '补充协议',
-              // }
+              }, {
+                url: '/supplyAgreement',
+                text: '补充协议',
+              }
             ];
             break;
           case 'bulletin_rent_basic':
@@ -278,11 +276,10 @@
                 url: '/createdTask',
                 id: 'RentTakeLook',
                 text: '租房带看',
+              }, {
+                url: '/supplyAgreement',
+                text: '补充协议',
               },
-              // {
-              //   url: '/supplyAgreement',
-              //   text: '补充协议',
-              // },
               // {
               //   url: '/collectReport',
               //   text: '未收先租',

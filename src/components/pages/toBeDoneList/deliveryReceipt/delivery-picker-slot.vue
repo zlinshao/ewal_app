@@ -111,7 +111,6 @@
     },
     computed: {},
     methods: {
-      // 重置筛选
       closePickerConfig() {
         return new Promise((resolve, reject) => {
           this.pickerConfig = {
@@ -172,15 +171,15 @@
         }
         config.childKeys.forEach((key, idx) => {
           if (key === 'is_bad') {
-            this.is_bad = Number(obj[key]) || 0;
+            this.is_bad = obj[key] || 0;
           }
           if (Number(config.ids[idx].values[0]) === 0) {
-            config.columns[idx].defaultIndex = Number(obj[key]);
+            config.columns[idx].defaultIndex = obj[key];
           } else {
             if (obj[key] > 0) {
-              config.columns[idx].defaultIndex = Number(obj[key]) - 1;
+              config.columns[idx].defaultIndex = obj[key] - 1;
             } else {
-              config.columns[idx].defaultIndex = Number(obj[key]);
+              config.columns[idx].defaultIndex = obj[key];
             }
           }
         });
@@ -237,7 +236,6 @@
             this.formatData[parentKey][key] = value.join('/');
           }
         });
-        this.formatData = Object.assign({}, this.formatData);
       },
       finishData() {
         this.$emit('close', this.forms, this.formatData);

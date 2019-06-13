@@ -2066,7 +2066,6 @@ defineCollectReport = {
     },
     {
       label: '合同编号',
-      disabled: 'disabled',
       placeholder: '必填 请填写',
       keyName: 'contract_number',
       keyType: 'LJSHE',
@@ -2452,6 +2451,7 @@ defineRentReport = {
       label: '签约时长',
       keyName: 'month',
       placeholder: '必填 请输入',
+      prompts: '不包含空置期',
       moreString: [
         {
           placeholder: '必填 月数',
@@ -2556,6 +2556,19 @@ defineRentReport = {
             changeBtn: '付款变化',
             slot: '',
           },
+          // {
+          //   label: '付款方式',
+          //   placeholder: '必填 请选择',
+          //   readonly: 'readonly',
+          //   keyName: 'pay_way',
+          //   keyType: '',
+          //   type: 'text',
+          //   status: 'objInt',
+          //   showForm: 'formatData',//picker 显示form 或 formatData
+          //   picker: 'picker',
+          //   changeBtn: '付款变化',
+          //   slot: '',
+          // },
           {
             label: '月单价',
             placeholder: '必填 月单价',
@@ -2735,7 +2748,7 @@ defineRentReport = {
     },
     {
       label: '居住人数',
-      placeholder: '请输入',
+      placeholder: '必填 请输入',
       keyName: 'num_of_residents',
       keyType: '',
       type: 'number',
@@ -3447,7 +3460,7 @@ defineChangeReport = {
     },
     {
       label: '居住人数',
-      placeholder: '请输入',
+      placeholder: '必填 请输入',
       keyName: 'num_of_residents',
       keyType: '',
       type: 'text',
@@ -4364,7 +4377,6 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('水卡余额', 'water_card_balance',),
     handlerFreeDelivery('电卡余额', 'electric_card_balance',),
     handlerFreeDelivery('燃气卡余额', 'gas_card_balance',),
-    handlerFreeDelivery('结算金额', 'settlement_amount',),
     handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
     handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
     handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
@@ -4533,8 +4545,9 @@ function deliveryMorePickers(name, parent, key, childKeys = ['is_bad', 'bad_numb
     children: [
       {
         label: '损坏照片',
-        keyName: parent + '__' + key,
+        keyName: key,
         keyType: [],
+        slither: parent,
         status: 'upload',
         picker: 0,
         hidden: true,
@@ -4571,8 +4584,9 @@ function deliveryMorePickersBrand(name, parent, key, childKeys = ['is_bad', 'bad
     children: [
       {
         label: '损坏照片',
-        keyName: parent + '__' + key,
+        keyName: key,
         keyType: [],
+        slither: parent,
         status: 'upload',
         hidden: true,
         slot: '',
