@@ -705,9 +705,8 @@
       // 获取电子合同编号
       electronicContract() {
         let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
-        // this.personal.city_id || '320100'
         let data = {
-          city_id: '120000',
+          city_id: this.personal.city_id,
           version: version,
         };
         this.$httpZll.getElectronicContract(data).then(res => {

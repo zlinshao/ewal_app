@@ -720,8 +720,8 @@ export default {
           });
           // let data = {
           //   avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
-          //   city_id: "320100",
-          //   city_name: "南京市",
+          //   city_id: "120000",
+          //   city_name: "天津市",
           //   department_id: 395,
           //   department_name: "开发",
           //   phone: "18052001167",
@@ -751,8 +751,8 @@ export default {
               data.city_id = city.city_id;
               data.city_name = city.city_name;
             } else {
-              data.city_id = '320100';
-              data.city_name = '南京市';
+              data.city_id = '120000';
+              data.city_name = '天津市';
             }
             data.department_name = org.name;
             data.department_id = org.id;
