@@ -184,7 +184,6 @@ export default {
           mapObj.addControl(geolocation);
           geolocation.getCurrentPosition();
           AMap.event.addListener(geolocation, 'complete', function (res) {
-            console.log(res);
             let address = res.addressComponent;
             obj.location[0] = res.position.lng;
             obj.location[1] = res.position.lat;
@@ -764,7 +763,6 @@ export default {
             this.$prompt('获取部门失败!', 'fail');
             return;
           }
-          console.log(data);
           this.$store.dispatch('personal_storage', data);
           resolve(true);
         }
