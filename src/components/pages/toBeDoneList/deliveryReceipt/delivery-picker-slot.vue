@@ -227,7 +227,6 @@
         let parentKey = config.parentKey;//最外层字段名
         let key = config.keyName;//父级 字段名
         let child = config.childKeys;//子集 字段名
-        console.log(value);
         child.forEach((res, idx) => {
           let status = typeof ids[idx].values[index[idx]] !== 'undefined';
           if (config.parentKey === 'bedroom') {
