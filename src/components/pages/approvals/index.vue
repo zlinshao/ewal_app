@@ -21,7 +21,7 @@
             <span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
           </p>
         </div>
-      <!--<i @click="approvalModule = true"></i>-->
+      <i @click="approvalModule = true"></i>
       </div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
@@ -85,17 +85,17 @@
         </scroll-load>
       </div>
     </div>
-
+    <!-- 搜索 -->
     <van-popup :overlay-style="{'top': '3.68rem'}" overlay-class="overlay-color" v-model="approvalModule"
                position="right" :overlay="true">
       <div class="searchApproval">
         <div class="searchInput">
           <div class="input">
             <div>
-              <input type="text" v-model="highParams.title" @keyup.enter="onSearch(tabs.tab)" placeholder="请输入搜索内容">
+              <input type="text" v-model="highParams.title" @keyup.enter="searchBtn()" placeholder="请输入搜索内容">
               <span v-if="highParams.title" @click="highParams.title = ''"></span>
             </div>
-            <p v-if="highParams.title" class="searchBtn" @click="onSearch(tabs.tab)">搜索</p>
+            <p v-if="highParams.title" class="searchBtn" @click="searchBtn()">搜索</p>
             <p v-if="!highParams.title" @click="showOnSearch()">取消</p>
           </div>
         </div>
@@ -140,46 +140,48 @@
         moduleHeight: {},
         // 搜索 审批类型
         highParams: {},
+        newHighParams:{}, 
         highList: {
-          status: {
+          rootProcessDefinitionKeyIn: {
             title: '待办类型',
             type: 'check',
             keyType: [],
             value: [
               {
-                id: 1,
+                id: 'MarketCollect',
                 text: '收房报备',
               }, {
-                id: 2,
-                text: '续收报备',
-              }, {
-                id: 3,
-                text: '补充协议',
-              }, {
-                id: 4,
-                text: '租房预定',
-              }, {
-                id: 5,
-                text: '租房签约',
-              }, {
-                id: 6,
-                text: '续租签约',
-              }, {
-                id: 7,
-                text: '转租调租',
-              }, {
-                id: 8,
-                text: '退租报备',
-              }, {
-                id: 9,
-                text: '房屋款项',
-              }, {
-                id: 10,
-                text: '中介报备',
-              }, {
-                id: 11,
-                text: '其他',
-              },
+                id: 'MarketRent ',
+                text: '租房报备',
+              }
+              // , {
+              //   id: 3,
+              //   text: '补充协议',
+              // }, {
+              //   id: 4,
+              //   text: '租房预定',
+              // }, {
+              //   id: 5,
+              //   text: '租房签约',
+              // }, {
+              //   id: 6,
+              //   text: '续租签约',
+              // }, {
+              //   id: 7,
+              //   text: '转租调租',
+              // }, {
+              //   id: 8,
+              //   text: '退租报备',
+              // }, {
+              //   id: 9,
+              //   text: '房屋款项',
+              // }, {
+              //   id: 10,
+              //   text: '中介报备',
+              // }, {
+              //   id: 11,
+              //   text: '其他',
+              // },
             ],
           },
         },
@@ -411,6 +413,12 @@
             this.resetting();
             break;
           default:
+            // 搜索的参数处理
+             this.newHighParams = this.jsonClone(this.highParams);
+             //待办类型由数组转化为字符串
+            if(this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length>0){   
+              this.newHighParams.rootProcessDefinitionKeyIn= this.highParams.rootProcessDefinitionKeyIn.join(',');
+            }
             this.onSearch(this.tabs.tab);
             break;
         }
@@ -600,6 +608,8 @@
       },
       // 列表
       getApproval(url, params, tab) {
+        // 搜索的参数
+        params = Object.assign({}, params,this.newHighParams);
         this.ids = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
@@ -677,6 +687,7 @@
           this.urlApi = 'runtime/process-instances';
         }
         this.approvalList['list' + tab]['data' + status] = [];
+        this.resetting();//清除搜索参数
         this.paramsHandle(tab, status);
       },
       // 二级切换
@@ -686,6 +697,7 @@
         this.tabs.status = status;
         this.twoLevel['tab' + tab] = status;
         this.$store.dispatch('approval_tabs', this.tabs);
+        this.resetting();//清除搜索参数
         this.onSearch(tab);
       },
       // 重置搜索

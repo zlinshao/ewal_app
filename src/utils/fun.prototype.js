@@ -131,11 +131,9 @@ export default {
             }
           }
           if (key.name === 'ewal_contract') {
-            if (key.value) {
-              let contract = JSON.parse(key.value);
-              obj.contract_id = contract.v3_contract_id;
-              obj.house_id = contract.house_id;
-            }
+            let contract = JSON.parse(key.value);
+            obj.contract_id = contract.v3_contract_id;
+            obj.house_id = contract.house_id;
           }
           if (key.name.includes('_approved')) {
             obj.approvedStatus = key.value || '';

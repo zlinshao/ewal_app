@@ -1,235 +1,285 @@
 @import "../common.scss";
-
 @mixin toBeDoneListImg($n) {
-  @include bgImage('../../../assets/image/toBeDoneList/' + $n + '.png');
+    @include bgImage('../../../assets/image/toBeDoneList/' + $n + '.png');
 }
 
 #toBeDoneList {
-  background-color: #E6F4F9;
-  .listTop {
-    @include flex('items-bet');
-    height: 1rem;
-    padding: 0 .3rem;
-    background-color: #448aff;
-    div {
-      @include flex('items-center');
-      p {
-        color: #FFFFFF;
-      }
-      p + p {
-        margin-left: .3rem;
-      }
+    background-color: #E6F4F9;
+    .listTop {
+        @include flex('items-bet');
+        height: 1rem;
+        padding: 0 .3rem;
+        background-color: #448aff;
+        div {
+            @include flex('items-center');
+            p {
+                color: #FFFFFF;
+            }
+            p+p {
+                margin-left: .3rem;
+            }
+        }
+        .topSearch {
+            width: .5rem;
+            height: .5rem;
+            @include bgImage('../../../assets/image/common/searchyellow.png');
+        }
     }
-    .topSearch {
-      width: .5rem;
-      height: .5rem;
-      @include bgImage('../../../assets/image/common/searchyellow.png');
-    }
-  }
-
-  .main {
-    div, p, h1, h2, h3 {
-      font-family: "Microsoft YaHei UI";
-    }
-    span, b {
-      @include numberFont;
-    }
-    .finish, .noFinish {
-      height: 100%;
-      > div {
-        padding-bottom: .88rem;
-      }
-    }
-    // noFinish
-    .noFinish {
-      .noFinishMain {
-        width: 33.33%;
-        padding: 0 .1rem;
-        margin-top: .5rem;
-        > div {
-          text-align: center;
-          padding: .3rem .1rem;
-          @include radius(0 .3rem 0 .3rem);
-          height: 100%;
-          background: #FFFFFF;
-          div {
-            font-size: .24rem;
-          }
-          .toBeDoneType {
-            margin: .2rem 0 .2rem;
-          }
-          .surplus {
-            margin: .2rem 0;
-          }
-          .progress {
-            margin: 0 auto;
-            width: 1.2rem;
-            height: 1.2rem;
-            background: #FFFFFF;
-            @include radius(50%);
-            @include flex('items-end');
-            overflow: hidden;
-            position: relative;
-            div {
-              width: 100%;
-              background-color: #448aff;
-              span {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                font-size: .5rem;
-                font-weight: normal;
-                @include transform(translateY(-50%) translateX(-50%));
-                b {
-                  font-size: .25rem;
-                  position: absolute;
-                  top: -.1rem;
-                  right: -.15rem;
+    .main {
+        div,
+        p,
+        h1,
+        h2,
+        h3 {
+            font-family: "Microsoft YaHei UI";
+        }
+        span,
+        b {
+            @include numberFont;
+        }
+        .finish,
+        .noFinish {
+            height: 100%;
+            >div {
+                padding-bottom: .88rem;
+            }
+        }
+        // noFinish
+        .noFinish {
+            .noFinishMain {
+                width: 33.33%;
+                padding: 0 .1rem;
+                margin-top: .5rem;
+                >div {
+                    text-align: center;
+                    padding: .3rem .1rem;
+                    @include radius(0 .3rem 0 .3rem);
+                    height: 100%;
+                    background: #FFFFFF;
+                    div {
+                        font-size: .24rem;
+                    }
+                    .toBeDoneType {
+                        margin: .2rem 0 .2rem;
+                    }
+                    .surplus {
+                        margin: .2rem 0;
+                    }
+                    .progress {
+                        margin: 0 auto;
+                        width: 1.2rem;
+                        height: 1.2rem;
+                        background: #FFFFFF;
+                        @include radius(50%);
+                        @include flex('items-end');
+                        overflow: hidden;
+                        position: relative;
+                        div {
+                            width: 100%;
+                            background-color: #448aff;
+                            span {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                font-size: .5rem;
+                                font-weight: normal;
+                                @include transform(translateY(-50%) translateX(-50%));
+                                b {
+                                    font-size: .25rem;
+                                    position: absolute;
+                                    top: -.1rem;
+                                    right: -.15rem;
+                                }
+                            }
+                        }
+                    }
+                    .unit {
+                        position: relative;
+                        margin-right: .2rem;
+                        @include numberFont('blod');
+                        b {
+                            font-size: .25rem;
+                            position: absolute;
+                            top: -.1rem;
+                            right: -.2rem;
+                        }
+                    }
                 }
-              }
+                .mainTransform {
+                    @include transform(translateY(-.3rem));
+                }
             }
-          }
-          .unit {
-            position: relative;
-            margin-right: .2rem;
-            @include numberFont('blod');
-            b {
-              font-size: .25rem;
-              position: absolute;
-              top: -.1rem;
-              right: -.2rem;
+        }
+        // finish
+        .finish {
+            .finishMain {
+                margin: .2rem .2rem 0;
+                background: #FFFFFF;
+                @include radius(.1rem);
+                >div {
+                    padding-bottom: .36rem;
+                    @include bgImage("../../../assets/image/toBeDoneList/yiwanchengzhiwen.png");
+                    background-position: right;
+                    background-size: contain;
+                }
+                .finish1 {
+                    padding-left: .3rem;
+                    @include flex('justify-bet');
+                    h1 {
+                        padding: .3rem 0;
+                        font-weight: bold;
+                        @include ellipsis;
+                    }
+                    span {
+                        width: 1.8rem;
+                        height: .7rem;
+                        @include bgImage('../../../assets/image/toBeDoneList/daibanyiwancheng.png');
+                    }
+                }
+                .finish2 {
+                    padding: 0 .3rem;
+                    @include flex('justify-bet');
+                    align-items: flex-end;
+                    p {
+                        @include flex();
+                        span {
+                            font-size: .24rem;
+                            padding: .1rem .2rem;
+                            background: #00ACC1;
+                            @include radius(1rem);
+                        }
+                    }
+                    div {
+                        white-space: nowrap;
+                        text-align: right;
+                    }
+                }
             }
-          }
         }
-        .mainTransform {
-          @include transform(translateY(-.3rem));
+        // zan wu xiang guan shu ju
+        .noMore,
+        .noData {
+            @include flex('flex-center');
+            width: 100%;
+            padding: .2rem;
+            background-color: transparent;
         }
-      }
+        .noData {
+            height: 8rem;
+        }
     }
-    // finish
-    .finish {
-      .finishMain {
-        margin: .2rem .2rem 0;
-        background: #FFFFFF;
-        @include radius(.1rem);
-        > div {
-          padding-bottom: .36rem;
-          @include bgImage("../../../assets/image/toBeDoneList/yiwanchengzhiwen.png");
-          background-position: right;
-          background-size: contain;
+    .showAddPopup {
+        .addTitle {
+            margin-top: 10%;
         }
-        .finish1 {
-          padding-left: .3rem;
-          @include flex('justify-bet');
-          h1 {
-            padding: .3rem 0;
-            font-weight: bold;
-            @include ellipsis;
-          }
-          span {
-            width: 1.8rem;
-            height: .7rem;
-            @include bgImage('../../../assets/image/toBeDoneList/daibanyiwancheng.png');
-          }
+        .mainModule {
+            .module1,
+            .module3 {
+                width: 2.4rem;
+                height: 2.4rem;
+                right: 3rem;
+            }
+            .module2,
+            .module5 {
+                width: 2rem;
+                height: 2rem;
+            }
+            .module1 {
+                bottom: 60%;
+                background-color: #FED836;
+                i {
+                    @include toBeDoneListImg("shoufangdaikan");
+                }
+            }
+            .module2 {
+                bottom: 40%;
+                right: 4.7rem;
+                color: #FFFFFF;
+                background-color: #001A6E;
+                i {
+                    @include toBeDoneListImg("zufangdaikan");
+                }
+            }
+            .module3 {
+                bottom: 30%;
+                z-index: -1;
+                background-color: #9CE054;
+                i {
+                    @include toBeDoneListImg("baojierenwu");
+                }
+            }
+            .module4 {
+                width: .6rem;
+                height: .6rem;
+                bottom: 22%;
+                left: 1.5rem;
+                background-color: #001A6E;
+            }
+            .module5 {
+                left: 1.8rem;
+                bottom: 6%;
+                background-color: #00ACC1;
+                i {
+                    height: .7rem;
+                    @include toBeDoneListImg("weixiurenwu");
+                }
+            }
         }
-        .finish2 {
-          padding: 0 .3rem;
-          @include flex('justify-bet');
-          align-items: flex-end;
-          p {
-            @include flex();
+        .popupBottom {
+            height: .3rem;
+            @include toBeDoneListImg("xinjianrenwudibu");
+        }
+    }
+    .searchHigh {
+        @include flex('bet-column');
+        padding: .3rem;
+        border-top: .1rem solid #F8F8F8;
+    }
+    .commonBtn {
+        padding: .3rem 0;
+    }
+    .radioChecksLabel {
+        .radioChecks {
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            margin-left: -.2rem;
+            .contents {
+                width: auto;
+                margin-left: .2rem;
+                p {
+                    width: 100%;
+                    padding: .15rem .4rem;
+                }
+            }
+        }
+        .radioChecks::after {
+            content: '';
+            flex: auto;
+        }
+    }
+    .radioChecksLabel3 {
+        label {
+            display: inline-block;
+            padding: .2rem .1rem;
+        }
+        .contents3 {
+            width: 100%;
+            .complete2 {
+                width: 5%;
+                margin: 0 2%;
+                background-color: #fff;
+            }
+            input {
+                background-color: #EEEDEE;
+                height: .6rem;
+                width: 45%;
+                text-align: center;
+                border-radius: 0.3rem;
+            }
             span {
-              font-size: .24rem;
-              padding: .1rem .2rem;
-              background: #00ACC1;
-              @include radius(1rem);
+                margin: 0 .2rem;
             }
-          }
-          div {
-            white-space: nowrap;
-            text-align: right;
-          }
         }
-      }
     }
-    // zan wu xiang guan shu ju
-    .noMore, .noData {
-      @include flex('flex-center');
-      width: 100%;
-      padding: .2rem;
-      background-color: transparent;
-    }
-    .noData {
-      height: 8rem;
-    }
-  }
-
-  .showAddPopup {
-    .addTitle {
-      margin-top: 10%;
-    }
-    .mainModule {
-      .module1, .module3 {
-        width: 2.4rem;
-        height: 2.4rem;
-        right: 3rem;
-      }
-      .module2, .module5 {
-        width: 2rem;
-        height: 2rem;
-      }
-      .module1 {
-        bottom: 60%;
-        background-color: #FED836;
-        i {
-          @include toBeDoneListImg("shoufangdaikan");
-        }
-      }
-      .module2 {
-        bottom: 40%;
-        right: 4.7rem;
-        color: #FFFFFF;
-        background-color: #001A6E;
-        i {
-          @include toBeDoneListImg("zufangdaikan");
-        }
-      }
-      .module3 {
-        bottom: 30%;
-        z-index: -1;
-        background-color: #9CE054;
-        i {
-          @include toBeDoneListImg("baojierenwu");
-        }
-      }
-      .module4 {
-        width: .6rem;
-        height: .6rem;
-        bottom: 22%;
-        left: 1.5rem;
-        background-color: #001A6E;
-      }
-      .module5 {
-        left: 1.8rem;
-        bottom: 6%;
-        background-color: #00ACC1;
-        i {
-          height: .7rem;
-          @include toBeDoneListImg("weixiurenwu");
-        }
-      }
-    }
-    .popupBottom {
-      height: .3rem;
-      @include toBeDoneListImg("xinjianrenwudibu");
-    }
-  }
-  .searchHigh {
-    @include flex('bet-column');
-    padding: .3rem;
-    border-top: .1rem solid #F8F8F8;
-  }
-  .commonBtn {
-    padding: .3rem 0;
-  }
 }

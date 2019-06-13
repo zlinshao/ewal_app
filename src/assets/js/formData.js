@@ -175,7 +175,7 @@ collectBulletinDraft = {
   "contact_phone": "18052001167",
   "customer_name": "张琳琳",
   "department_id": "395",
-  "address": "峨眉路12号33-44-55",
+  "house_address": "峨眉路12号33-44-55",
   "id_card_photo": [
     "4229834",
     "4229835",
@@ -1017,7 +1017,7 @@ defineSupplyAgreement = {
       label: '房屋地址',// 标题
       placeholder: '必填 请选择',// placeholder
       readonly: 'readonly',// 只读 picker必须有值
-      keyName: 'address',// 字段名
+      keyName: 'house_address',// 字段名
       keyType: '',// 数据类型
       type: 'text',// input 类型
       picker: 'searchHouse',

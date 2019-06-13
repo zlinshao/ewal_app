@@ -185,27 +185,6 @@
       return {
         staff_depart_visible: false, //员工部门选择
 
-
-        indexBottom: [
-          {
-            id: '1',
-            icon: tab_home_pre1,
-          },
-          // {
-          //   id: '2',
-          //   icon: tab_home2,
-          // },
-          {
-            id: '3',
-            icon: tab_home3,
-          },
-          {
-            id: '4',
-            icon: tab_home4,
-          },
-        ],
-
-
         buttons: [
           {
             label: '重置',
