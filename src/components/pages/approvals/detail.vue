@@ -731,7 +731,6 @@
             case 'decorate'://装修
             case 'property_type'://房屋类型
             case 'direction'://朝向
-            case 'house_address':
               this.formatData[item] = res[item].name;
               break;
             case 'floors':
