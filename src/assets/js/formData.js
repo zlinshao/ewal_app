@@ -2066,6 +2066,7 @@ defineCollectReport = {
     },
     {
       label: '合同编号',
+      disabled: 'disabled',
       placeholder: '必填 请填写',
       keyName: 'contract_number',
       keyType: 'LJSHE',

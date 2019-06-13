@@ -630,7 +630,7 @@
           let name = picker.keyName;
           let parentKey = picker.parentKey || '';
           // input 显示隐藏
-          if (picker.controlShow) {
+          if (picker.controlShow || name === 'is_electronic_contract') {
             this.inputStatus(name, form);
           }
           // 付款方式变化处理
@@ -664,12 +664,12 @@
         switch (name) {
           case 'is_electronic_contract':
             let num = Number(form['is_electronic_contract']);
-            if (num === 0) {
-              this.contractDis();
-              this.form.contract_number = 'LJSF';
-            } else {
+            if (num) {
               this.contractDis('disabled');
               this.form.contract_number = this.electronicContractNumber;
+            } else {
+              this.contractDis(false);
+              this.form.contract_number = 'LJSF';
             }
             break;
           case 'signatory_identity':
