@@ -18,7 +18,6 @@
 }
 
 #approvalDetail {
-<<<<<<< HEAD
     background-color: #f8f8f8;
     /*头部*/
     .detailTop {
@@ -45,179 +44,6 @@
                 padding: .12rem .3rem;
                 @include radius(1rem);
                 background-color: #43A046;
-=======
-  background-color: #f8f8f8;
-  /*头部*/
-  .detailTop {
-    position: relative;
-    color: #FFFFFF;
-    @include flex('items-bet');
-    margin: 0 .3rem;
-    padding: .3rem .3rem .8rem;
-    background-color: #4570FE;
-    @include radius(.1rem .1rem 0 0);
-    z-index: 3;
-
-    div {
-      @include flex('items-center');
-
-      img {
-        width: .6rem;
-        height: .6rem;
-        @include radius(50%);
-      }
-
-      span {
-        margin: 0 .2rem 0 .1rem;
-      }
-
-      p {
-        font-size: .22rem;
-        padding: .12rem .3rem;
-        @include radius(1rem);
-        background-color: #43A046;
-      }
-    }
-
-    p {
-      @include flex('items-center');
-
-      i {
-        width: .3rem;
-        height: .3rem;
-        margin-right: .06rem;
-        @include detailImg('xiaohaoshijian');
-      }
-    }
-
-    h1 {
-      position: absolute;
-      bottom: -.4rem;
-      right: 0;
-      @include flex('items-center');
-
-      i {
-        width: .8rem;
-        height: .8rem;
-        margin-right: .3rem;
-        @include radius(50%);
-      }
-
-      .icon-1 {
-        @include detailImg('bianji');
-      }
-
-      .icon-2 {
-        @include detailImg('pinglun');
-      }
-
-      .icon-3 {
-        @include detailImg('zhuanfa');
-      }
-
-      .icon-4 {
-        @include detailImg('detaihetongyulan');
-      }
-
-      .icon-5 {
-        @include detailImg('bendiqianshu');
-      }
-
-      .icon-6 {
-        @include detailImg('kehushoujiqianshu');
-      }
-    }
-  }
-
-  /*详情*/
-  .main {
-    background-color: #FFFFFF;
-    @include boxShaw(0 -4px 10px 0 rgba(69, 112, 254, 0.2));
-    @include flex('bet-column');
-
-    .detailInfo {
-      @include flex();
-      height: 100%;
-      padding: 1rem 0 .3rem;
-      position: relative;
-
-      .detailTitle {
-        position: absolute;
-        top: .5rem;
-        left: .3rem;
-        color: #4570FE;
-
-        i {
-          position: absolute;
-          height: .5rem;
-          border-left: 1px solid #448aff;
-          top: -.5rem;
-          left: .3rem;
-        }
-
-        span {
-          background: rgba(69, 112, 254, .1);
-          padding: .3rem .16rem;
-          border-radius: 0 0 1rem 1rem
-        }
-      }
-
-      .detail {
-        width: 100%;
-        height: 100%;
-
-        > div {
-          @include flex();
-          height: 100%;
-          transition: transform .3s;
-
-          ul {
-            @include scroll;
-            width: 100%;
-            height: 100%;
-            padding-left: .6rem;
-
-            li {
-              .spanPhotos {
-                display: block;
-              }
-
-              img {
-                width: 1rem;
-                height: 1rem;
-                margin: .1rem .1rem 0 0;
-                @include radius(.1rem);
-              }
-
-              h1 {
-                min-width: 38%;
-                max-width: 38%;
-                color: #4A4A4A;
-                text-align: right;
-                padding-right: .36rem;
-              }
-
-              > div {
-                @include flex();
-                padding: .1rem .2rem .1rem 0;
-
-                > div {
-                  @include flex();
-                  flex-wrap: wrap;
-                  width: 64%;
-                  color: #000;
-
-                  h3 {
-                    color: #4A4A4A;
-                    padding-bottom: .1rem;
-                  }
-
-                  .h3, .h4 {
-                    padding-top: .2rem;
-                  }
-                }
-              }
->>>>>>> 1c296cace398a31a0a2fbabb6fb226d83063128e
             }
         }
         p {
@@ -301,6 +127,15 @@
                         height: 100%;
                         padding-left: .6rem;
                         li {
+                            .spanPhotos {
+                                display: block;
+                            }
+                            img {
+                                width: 1rem;
+                                height: 1rem;
+                                margin: .1rem .1rem 0 0;
+                                @include radius(.1rem);
+                            }
                             h1 {
                                 min-width: 38%;
                                 max-width: 38%;
@@ -323,12 +158,6 @@
                                     .h3,
                                     .h4 {
                                         padding-top: .2rem;
-                                    }
-                                    img {
-                                        width: 1rem;
-                                        height: 1rem;
-                                        margin: .1rem .1rem 0 0;
-                                        @include radius(.1rem);
                                     }
                                 }
                             }
@@ -644,6 +473,179 @@
         }
         .commonBtn {
             padding: .8rem .1rem .2rem;
+        }
+    }
+    // 历史审批流程
+    .history_content {
+        height: 100%;
+        // @include flex('bet-column');
+        // 审批内容
+        .contentMain {
+            margin-top: 1rem;
+            // 发起申请
+            .startApply {
+                display: inline-block;
+                margin: 0 0 .5rem 1rem;
+                font-size: .22rem;
+                padding: .1rem .3rem;
+                @include radius(1rem);
+                background: rgba(69, 112, 254, .2);
+                color: #4570FE;
+            }
+            .list {
+                margin-left: .2rem;
+                .process {
+                    //审批
+                    .approval {
+                        .header_info {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-right: .2rem;
+                            >span {
+                                img {
+                                    vertical-align: middle;
+                                    width: .6rem;
+                                    height: .6rem;
+                                    @include radius(50%);
+                                }
+                                span {
+                                    font-size: .3rem;
+                                    color: #4A4A4A;
+                                    margin-left: .1rem;
+                                }
+                                i {
+                                    position: absolute;
+                                    @include flex('flex-center');
+                                    @include radius(50%);
+                                    bottom: -.04rem;
+                                    left: .36rem;
+                                    width: .3rem;
+                                    height: .3rem;
+                                    padding: .025rem;
+                                    background-color: #FFFFFF;
+                                    b {
+                                        width: 100%;
+                                        height: 100%;
+                                        background: #fd9007;
+                                        @include radius(50%);
+                                    }
+                                }
+                            }
+                            .date {
+                                color: #9B9B9B;
+                                font-size: .3rem;
+                            }
+                        }
+                        .content_info {
+                            border-left: 1px solid #9B9B9B;
+                            padding: 0rem .3rem 1rem .3rem;
+                            margin: .1rem 0 .1rem .3rem;
+                            .info_span {
+                                display: flex;
+                                justify-content: space-between;
+                                img {
+                                    width: 1.1rem;
+                                    height: .7rem;
+                                    border-radius: .1rem;
+                                }
+                                .right {
+                                    font-size: .24rem;
+                                    color: rgba(244, 81, 30, 1);
+                                    flex: 1;
+                                    text-align: right;
+                                }
+                            }
+                        }
+                    }
+                    // 修改、评论
+                    .modify {
+                        .header_info {
+                            display: flex;
+                            justify-content: space-between;
+                            >span {
+                                margin-left: .25rem;
+                                .icon {
+                                    display: inline-block;
+                                    width: .1rem;
+                                    height: .1rem;
+                                    border-radius: .1rem;
+                                    background-color: #4570FE;
+                                    margin-left: 0rem;
+                                }
+                                .user_name {
+                                    margin-left: 0.24rem;
+                                }
+                            }
+                        }
+                        .content_info {
+                            >h4 {
+                                .modify_message {
+                                    color: #4570FE;
+                                    font-size: .26rem;
+                                    margin-bottom: 0.2rem;
+                                    span {
+                                        font-size: .26rem;
+                                    }
+                                }
+                                .modify_photo {
+                                    margin-bottom: 0.1rem;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    flex-wrap: wrap;
+                                    margin-left: -10px;
+                                    img {
+                                        width: 1.1rem;
+                                        height: .7rem;
+                                        border-radius: .1rem;
+                                    }
+                                }
+                                .modify_photo::after {
+                                    content: "";
+                                    flex: auto;
+                                }
+                                .modify_photo>img {
+                                    margin-left: 10px;
+                                    margin-bottom: 10px;
+                                    width: -webkit-calc((100% - 10px*4)/ 4);
+                                    width: calc((100% - 10px*4)/ 4);
+                                }
+                            }
+                        }
+                    }
+                    //抄送
+                    .cc {
+                        .content_info {
+                            display: flex;
+                            justify-content: flex-start;
+                            flex-direction: row;
+                            flex-wrap: wrap;
+                            border-left: 0px solid #9B9B9B;
+                            >span {
+                                display: block;
+                                margin: 0 .3rem .3rem 0;
+                                text-align: center;
+                                img {
+                                    vertical-align: middle;
+                                    width: .6rem;
+                                    height: .6rem;
+                                    @include radius(50%);
+                                }
+                                .cc_name {
+                                    display: block;
+                                    font-size: .24rem;
+                                    color: #4A4A4A;
+                                    margin-top: 0.1rem;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .commonBtn {
+            padding: .36rem;
+            border-top: 1px solid rgba(216, 216, 216, .5);
         }
     }
 }

@@ -238,32 +238,48 @@
     .commonBtn {
         padding: .3rem 0;
     }
-    .complete_dates {
-        .complete_date {
-            .begin {}
-            .middle {}
-            .end {}
+    .radioChecksLabel {
+        .radioChecks {
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            margin-left: -.2rem;
+            .contents {
+                width: auto;
+                margin-left: .2rem;
+                p {
+                    width: 100%;
+                    padding: .15rem .4rem;
+                }
+            }
+        }
+        .radioChecks::after {
+            content: '';
+            flex: auto;
         }
     }
-    .complete1{
-      width:45%；
-
-    }
-    .radioChecksLabel:nth-child(3){
-       .radioChecks{
-         .contents{
-           width:46%;
-           p{
-             border-radius: 0.5rem;
-           }
-          
-         }
-         .contents:nth-child(2){
-           width:5%;
-           p{
-             background-color: #ffffff;
-           }
-         }
-       }
+    .radioChecksLabel3 {
+        label {
+            display: inline-block;
+            padding: .2rem .1rem;
+        }
+        .contents3 {
+            width: 100%;
+            .complete2 {
+                width: 5%;
+                margin: 0 2%;
+                background-color: #fff;
+            }
+            input {
+                background-color: #EEEDEE;
+                height: .6rem;
+                width: 45%;
+                text-align: center;
+                border-radius: 0.3rem;
+            }
+            span {
+                margin: 0 .2rem;
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@
             {{item.text}}&nbsp;<span v-if="item.id === '1'">{{total['total1']}}</span>
           </p>
         </div>
-      <!--<div class="topSearch" @click="searchHigh = !searchHigh"></div>-->
+      <div class="topSearch" @click="searchHigh = !searchHigh"></div>
       </div>
       <div class="main" :style="mainHeight">
         <!--未完成-->
@@ -91,56 +91,55 @@
     </van-popup>
     <!--搜索-->
     <van-popup v-model="searchHigh" overlay-class="overlay-color" position="top" :overlay="true" class="searchHigh"
-               :style="mainListHeight(80)">
+               :style="mainListHeight(120)">
       <div class="searchInput">
         <div class="input">
           <div>
-            <input type="text" v-model="highParams.title" @keyup.enter="getFinishList(tabs)" placeholder="请输入搜索内容">
+            <input type="text" v-model="highParams.title" @keyup.enter="searchBtn()" placeholder="请输入搜索内容">
             <span v-if="highParams.title" @click="highParams.title = ''"></span>
           </div>
-          <p v-if="highParams.title" class="searchBtn" @click="getFinishList(tabs)">搜索</p>
+          <p v-if="highParams.title" class="searchBtn" @click="searchBtn()">搜索</p>
           <p @click="searchHigh = false" v-else>取消</p>
         </div>
       </div>
       <div class="scroll_bar">
-        <!-- 未完成 -->
-        <!-- <div class="radioChecksLabel" v-for="item of Object.keys(highList)" v-if='tabs==1'>
-          <label>{{highList[item].title}}</label>
-          <div class="radioChecks">
-            <div v-for="val in highList[item].value" class="contents">
-              <p @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
+        <!-- 未完成、已完成 搜索-->
+        <!-- <div class="radioChecksLabel1" v-for="item of Object.keys(highList)" >
+          <label v-if="(highList[item].type != 'radio'&& tabs==2) || (tabs==1)">{{highList[item].title}}</label>
+          <div class="radioChecks1">
+            <div v-for="val in highList[item].value" class="contents1">
+              <span @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
                  :class="{'chooseCheck': highParams[item].includes(val.id)}">
                 {{val.text}}
-              </p>
-              <p @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}" v-else>
+              </span>
+              <span @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}" v-if="highList[item].type === 'radio'&& tabs==1">
                 {{val.text}}
-              </p>
+              </span>
             </div>
           </div>
         </div> -->
-        <!-- 已完成 -->
         <div class="radioChecksLabel" v-for="item of Object.keys(highList)" >
           <label v-if="(highList[item].type != 'radio'&& tabs==2) || (tabs==1)">{{highList[item].title}}</label>
           <div class="radioChecks">
-            <div v-for="val in highList[item].value" class="contents">
-              <p @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
-                 :class="{'chooseCheck': highParams[item].includes(val.id)}">
-                {{val.text}}
-              </p>
-              <p @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}" v-if="highList[item].type === 'radio'&& tabs==1">
-                {{val.text}}
-              </p>
-            </div>
+              <div v-for="val in highList[item].value" class="contents">
+                <p @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
+                  :class="{'chooseCheck': highParams[item].includes(val.id)}">
+                  {{val.text}}
+                </p>
+                <p @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}" v-if="highList[item].type === 'radio'&& tabs==1">
+                  {{val.text}}
+                </p>
+              </div>
           </div>
         </div>
-        <!-- 剩余时间 -->
-        <div class="radioChecksLabel"  v-if="tabs==2" >
+        <!-- 完成时间 -->
+        <div class="radioChecksLabel3"  v-if="tabs==2" >
           <label>完成时间</label>
           <div class="radioChecks">
-            <div  class="contents">
-              <p @click="chooseDate(1)"> {{taskCompleteBefore}}</p>
-              <p> 至</p>
-              <p @click="chooseDate(2)"> {{taskCompleteAfter}}</p>
+            <div  class="contents3">
+                <input v-model="taskCompleteBefore" @focus="chooseDate(1)"  readonly="readonly" placeholder="开始时间">
+                <span>至</span>
+                <input  v-model="taskCompleteAfter"  @focus="chooseDate(2)" readonly="readonly" placeholder="结束时间">
             </div>
           </div>
         </div>
@@ -229,6 +228,7 @@
         searchHigh: false,
         // 条件搜索
         highParams: {},
+        newHighParams:{},
         highList: {
           taskDefinitionKeyIn: {
             title: '待办类型',
@@ -287,8 +287,8 @@
           dateKey:'',  //字段名
           dateVal:''  //日期回显时
         },
-        taskCompleteBefore:'开始时间',
-        taskCompleteAfter:'结束时间'
+        taskCompleteBefore:'',
+        taskCompleteAfter:''
         
 
       }
@@ -358,7 +358,6 @@
       },
       // 滚动加载
       scrollLoad(val) {
-        // debugger
         let tab = this.tabs;
         if (!val) {
           this.params['params' + tab].page = 1;
@@ -373,16 +372,9 @@
       getFinishList(tab, close = '') {
         let url = '';
         this.fullLoading['load' + tab] = true;
-        let searParams
-         //搜索的参数处理
-        this.params['params' + tab] = Object.assign({},this.params['params' + tab], this.highParams); 
-        // if( this.params['params' + tab] .taskDefinitionKeyIn){   //将待办类型转为字符串
-        //   this.params['params' + tab] .taskDefinitionKeyIn= this.params['params' + tab] .taskDefinitionKeyIn.join(',');
-        // }
-        // if(this.params['params' + tab].times){    //将剩余时间的times删除
-        //   delete this.params['params' + tab].times;
-        // }
+      
         let params = this.params['params' + tab];
+         params = Object.assign({},params, this.newHighParams); 
         if (tab === '1') {  
           url = 'runtime/tasks'; //未完成
         } else {    
@@ -462,13 +454,7 @@
         } else {
           this.checkChooseCommon(val, this.highParams[key]);
         }
-        let times=this.setTimeFun(this.highParams.times);
-        this.highParams.dueBefore=times.dueBefore;
-        this.highParams.dueAfter=times.dueAfter;
         this.highParams = Object.assign({}, this.highParams);
-      
-        
-        console.log(this.highParams);
       },
      
       // 搜索按钮
@@ -481,14 +467,13 @@
             this.resetting();
             break;
           default:
+            this.hightParamsHandle();
           // 搜索的时候清空列表数据，页数为1
-           this.params['params' + this.tabs].page=1;
+            this.params['params' + this.tabs].page=1;
             if(this.tabs==1){
               this.finishList['list1']=[];
             }else{
               this.finishList['list2']=[];
-              this.highParams.taskCompleteBefore=this.taskCompleteBefore;
-              this.highParams.taskCompleteAfter=this.taskCompleteAfter;
             }
             this.getFinishList(this.tabs);
             this.cancel();
@@ -502,14 +487,9 @@
           this.highParams[item] = list[item].keyType;
         }
         this.highParams.title = '';
-        //清空剩余时间
-        if(this.tabs==1){
-          this.highParams.dueBefore='';
-          this.highParams.dueAfter='';
-        }else{
-          this.taskCompleteBefore='';
-          this.taskCompleteAfter='';
-        }
+        this.taskCompleteBefore='';
+        this.taskCompleteAfter='';
+        this.newHighParams={};
         this.highParams = Object.assign({}, this.highParams);
       },
       // 底部按钮跳转
@@ -574,20 +554,14 @@
             date.dueBefore=new Date().getTime() + 24 * 60 * 60 * 1000;
             date.dueAfter = '';
             break;
+          case '':
+            date.dueBefore='';
+            date.dueAfter = '';
+            break;
         }
         return date;
       },
-      // 日期组件的事件
-      onConTime(val) {
-        this.timeModule = false;
-        if (val !== 'close') {
-          if(val.dateKey=='taskCompleteBefore'){
-            this.taskCompleteBefore=val.dateVal;
-          }else if(val.dateKey=='taskCompleteAfter'){
-             this.taskCompleteAfter=val.dateVal;
-          }
-        }
-      },
+     
       // 完成时间
       chooseDate(val){
         this.timeModule = true;
@@ -601,9 +575,45 @@
             this.formatData.dateVal=this.taskCompleteAfter;
             break;
         }
-      }
+      },
+       // 日期组件的事件
+      onConTime(val) {
+        this.timeModule = false;
+        if (val !== 'close') {
+          if(val.dateKey=='taskCompleteBefore'){
+            this.taskCompleteBefore=val.dateVal;
+          }else if(val.dateKey=='taskCompleteAfter'){
+            this.taskCompleteAfter=val.dateVal;
+          }
+        }
+      },
 
-    
+      //高级搜索的参数配置
+      hightParamsHandle(){
+        this.newHighParams = {};
+        //待办类型由数组转化为字符串
+        let taskDefinitionKeyIn='';
+        if(this.highParams.taskDefinitionKeyIn && this.highParams.taskDefinitionKeyIn.length>0){   
+          taskDefinitionKeyIn= this.highParams.taskDefinitionKeyIn.join(',');
+        }
+        if(this.tabs==1){
+            let times=this.setTimeFun(this.highParams.times);   //剩余时间的处理
+            this.newHighParams={
+              dueBefore:times.dueBefore,
+              dueAfter:times.dueAfter,
+              taskDefinitionKeyIn:taskDefinitionKeyIn,
+              title:this.highParams.title,
+            }
+        }else if(this.tabs==2){
+          this.newHighParams={
+              taskCompleteBefore:this.taskCompleteBefore,
+              taskCompleteAfter:this.taskCompleteAfter,
+              taskDefinitionKeyIn:taskDefinitionKeyIn,
+              title:this.highParams.title,
+          }
+        }
+        // this.params['params' + this.tabs] = Object.assign({},this.params['params' + this.tabs], this.newHighParams); 
+      },
 
     },
   }

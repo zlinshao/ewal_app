@@ -152,80 +152,97 @@
       </div>
     </van-popup>
     <!--历史审批流程-->
-<<<<<<< HEAD
-   <div class="records" @click="recordPopup = true"><p></p> </div>
-=======
-    <!--    <div class="records" @click="recordPopup = true"><p></p> </div>-->
->>>>>>> df451f5175b787b2ef7169f33b29bd9343f06bdd
+    <div class="records" @click="recordPopup = true"><p></p> </div>
     <van-popup v-model="recordPopup" overlay-class="overlay-color" position="right" :overlay="true" class="recordPopup">
-      <div class="content">
+      <div class="history_content">
         <div class="contentMain">
-          <div>
-            <div class="startApply">发起申请</div>
-            <ul>
-              <li v-for="(item,index) in 5" :class="{'lastBorder':index ==3}">
-                <!-- 非抄送人部分 -->
-                <div class="process" v-if='true'>
-                  <div class="personal">
-                    <p>
-                      <img :src="personal.avatar" alt="">
-                      <span>{{"张无忌"}}&nbsp;{{'（已同意）'}}&nbsp;</span>
-                      <i><b></b></i>
-                    </p>
-                    <h2 class="date">{{'2019-03-23 18:03'}}</h2>
-                  </div>
-                  <div class="children" v-if="true">
-                    <div class="children_info">
-                        <div>
-                            <span>
-                              <span v-if='false'>{{'转交人：磨刀刀'}}</span>
-                              <img :src="personal.avatar" alt="" v-if='true'>
-                            </span>
-                            <span>{{'耗时：30分钟'}}</span>
-                        </div>
-                    </div>
-                    <div v-for="item in 2">
-                      <i></i>
-                      <div>
-                        <h3>
-                          <span>磨刀刀—修改报备资料</span>
-                          <span class="date">2019-03-23 18:03</span>
-                        </h3>
-                        <h4>
-                          <span>产权地址修改为：中华路309号鸿源1-5</span>
-                          <span>
-                            <img :src="personal.avatar" alt="">
-                          </span>
-                        </h4>
+          <span class="startApply">发起申请</span>
+          <ul class="list">
+              <li v-for="(item,index) in historyProList" >
+                <div class="process">
+                  <!-- 审批 -->
+                  <div  v-if="item.type=='approval'" class="approval">
+                      <div class="header_info">
+                        <span >
+                          <img :src="personal.avatar" alt="">
+                          <span>{{item.user?item.user.name:'无名字'}}&nbsp;（{{item.result?item.result:'审批中'}}）&nbsp;</span>
+                          <!-- <b><b></b></i> -->
+                        </span>
+                        <span class="date">{{item.time}}</span>
                       </div>
+                      <div class="content_info">
+                        <span class="info_span">
+                          <!-- <img :src="personal.avatar" alt=""> -->
+                          <span class="right">{{item.result?'耗时':'等待'}}:&nbsp; {{item.duration}}分钟</span>
+                        </span>
+                      </div>
+                  </div>
+                  <!--修改的result为数组多条,修改的内容里有图片-->
+                  <div v-if="item.type=='modify'" class="modify  approval">
+                    <div class="header_info">
+                      <span>
+                          <span class="icon"></span>
+                        <!-- <span class="icon_span">
+                        </span> -->
+                        <span class="user_name">{{item.user? item.user.name:"无名"}}—{{item.name}}</span>
+                      </span>
+                      <span class="date">{{item.time}}</span>
+                    </div>
+                    <div class="content_info">
+                      <h4 v-if='item.result.length>0' v-for="(result,index) in item.result">
+                        <p  class="modify_message" v-if='result.new'>
+                          <span>  {{result.name}}修改为：</span>
+                          <span  v-if="typeof(result.new)=='string'">{{result.new}}</span>
+                        </p>
+                        <!-- <p  class="comment_photo" v-if="typeof(result.new)!='string' "> -->
+                        <p  class="modify_photo"  >
+                          <!-- <img :src="photo"  v-for="(photo,index) in result.new"> -->
+                          <img :src="personal.avatar"  v-for="photo in 6">
+                        </p>
+                      </h4>
                     </div>
                   </div>
-                </div>
-              </li>
-                <!-- 抄送人部分 -->
-              <li>
-                <div class="process" >
-                  <div class="personal">
-                    <p class="copy_personal">
-                      <img :src="personal.avatar" alt="" v-if='true'>
-                      <img :src="personal.avatar" alt="" v-if='false'>
-                      <span>{{"8人"}}&nbsp;{{'（抄送人）'}}&nbsp;</span>
-                      <i><b></b></i>
-                    </p>
+                  <!--评论：result为对象,评论的内容里有图片 -->
+                  <div v-if="item.type=='comment'" class="modify approval">
+                    <div class="header_info">
+                      <span>
+                          <span class="icon"></span>
+                         <!-- <span class="icon_span">
+                        </span> -->
+                        <span class="user_name">{{item.user? item.user.name:"无名"}}—{{item.name}}</span>
+                      </span>
+                      <span class="date">{{item.time}}</span>
+                    </div>
+                    <div class="content_info">
+                      <h4 v-if='item.result'>
+                        <p class="modify_message">{{item.result.message}}</p>
+                        <p class="modify_photo" v-if='item.result.attachments.length>0'>
+                          <!-- <img :src="photo" v-for="(photo,index) in item.result.attachments"> -->
+                          <img  :src="photo.uri" v-for="(photo,index) in  item.result.attachments">
+                        </p>
+                      </h4>
+                    </div>
                   </div>
-                  <div class="copy_children">
-                      <div class="childrens">
-                        <div v-for='item in 8'>
-                            <img :src="personal.avatar" alt="">
-                            <span>{{'抄送人'}}</span>
-                        </div>
+                  <!-- 抄送 : result为数组-->
+                  <div  v-if="item.type=='cc'" class="cc approval">
+                      <div class="header_info">
+                        <span >
+                          <img src="../../../assets/image/approvals/detail/cc_process.png" alt="">
+                          <!-- <img src="../../../assets/image/approvals/detail/cc_process_un.png" alt=""> -->
+                          <span>{{item.result.length>0?item.result.length:'0'}}人&nbsp;({{item.name}})&nbsp;</span>
+                        </span>
+                      </div>
+                      <div class="content_info">
+                        <span  v-for='result in item.result'>
+                          <img :src="result.avatar">
+                          <span class="cc_name"> {{result.name}}</span>
+                        </span>
                       </div>
                   </div>
                 </div>
 
               </li>
-            </ul>
-          </div>
+          </ul>
         </div>
         <div class="commonBtn">
           <p class="btn back" @click="cancel('record')">取消</p>
@@ -295,6 +312,7 @@
         searchStaffModule: false,
         changeFormData: {},//附属房东变化
         approvalStaff: '',//审批人
+        historyProList:[], //历史流程
       }
     },
     created() {
@@ -363,7 +381,31 @@
       // 历史流程
       historyProcess(detail) {
         this.$httpZll.getHistoryProcess(detail.process_id).then(res => {
+          if(res){
+            this.historyProList=res;
+            // 图片id获取图片地址
+            this.historyProList.forEach((element,index)=>{
+              // 评论的result是对象
+              if(element.type=='comment'){
+                if(element.result.attachments.length>0){
+                    this.$httpZll.getUploadUrl(element.result.attachments, 'close').then(res => {
+                      this.historyProList[index].result.attachments=res.data;
+                    })
+                }
+              }
+              // // 评论的result是数组
+              // if(element.type=='comment'){
+              //   if(element.result.length>0){
+              //     if(element.hasOwnProperty('result') == Array){
+              //       this.$httpZll.getUploadUrl(element.result.attachments, 'close').then(res => {
+              //         this.historyProList[index].result.attachments=res.data;
+              //       })
 
+              //     }
+              //   }
+              // }
+            })
+          }
         })
       },
       // 按钮数据初始化
