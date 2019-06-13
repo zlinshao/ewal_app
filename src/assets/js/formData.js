@@ -1366,7 +1366,7 @@ defineCollectReport = {
       placeholder: '必填 请选择',// placeholder
       // readonly: 'readonly',// 只读 picker必须有值
       disabled: 'disabled',// 禁用
-      keyName: 'address',// 字段名
+      keyName: 'house_address',// 字段名
       keyType: '',// 数据类型
       type: 'text',// input 类型
       // hidden: false,// true隐藏 false显示

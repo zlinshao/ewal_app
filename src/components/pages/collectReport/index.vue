@@ -1008,14 +1008,12 @@
       },
       // 尾款待办信息
       childBulletin(res, draft) {
-        console.log(this.form);
-        console.log(res);
         for (let item of Object.keys(this.form)) {
-          console.log(item);
           switch (item) {
             case 'month':
             case 'address':
             case 'house_id':
+            case 'house_address':
             case 'customer_name':
               this.form[item] = res[item] || this.form[item];
               break;
@@ -1060,7 +1058,7 @@
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'house_id':
-              this.formatData.house_id = res.address;
+              this.formatData.house_id = res.address || res.house_address;
               break;
             case 'community':
               this.formatData[item] = res[item].village_name;

@@ -709,7 +709,7 @@
         for (let item of Object.keys(res)) {
           switch (item) {
             case 'house_id':
-              this.formatData.house_id = res.address;
+              this.formatData.house_id = res.address || res.house_address;
               break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
