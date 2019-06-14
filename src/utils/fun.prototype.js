@@ -88,7 +88,7 @@ export default {
     // 复选
     Vue.prototype.checkChooseCommon = function (item, value, type = 'id') {
       if (value.length) {
-        if (value.includes(item)) {
+        if (value.includes(item.id)) {
           let index = value.indexOf(item);
           value.splice(index, 1);
         } else {
