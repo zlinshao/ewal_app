@@ -103,21 +103,6 @@
         </div>
       </div>
       <div class="scroll_bar">
-        <!-- 未完成、已完成 搜索-->
-        <!-- <div class="radioChecksLabel1" v-for="item of Object.keys(highList)" >
-          <label v-if="(highList[item].type != 'radio'&& tabs==2) || (tabs==1)">{{highList[item].title}}</label>
-          <div class="radioChecks1">
-            <div v-for="val in highList[item].value" class="contents1">
-              <span @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
-                 :class="{'chooseCheck': highParams[item].includes(val.id)}">
-                {{val.text}}
-              </span>
-              <span @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}" v-if="highList[item].type === 'radio'&& tabs==1">
-                {{val.text}}
-              </span>
-            </div>
-          </div>
-        </div> -->
         <div class="radioChecksLabel" v-for="item of Object.keys(highList)" >
           <label v-if="(highList[item].type != 'radio'&& tabs==2) || (tabs==1)">{{highList[item].title}}</label>
           <div class="radioChecks">
