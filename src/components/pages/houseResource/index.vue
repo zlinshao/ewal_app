@@ -369,7 +369,7 @@
       handleKongBottom(val) {
         this.params.kong[0] = val;
       },
-      handleKongTop() {
+      handleKongTop(val) {
         this.params.kong[1] = val;
       },
       handlePriceBottom() {

@@ -181,7 +181,7 @@
           zoom: 13
         });
         let infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(5, -20)});
-        var marker = new AMap.Marker({
+        let marker = new AMap.Marker({
           position,
           map: that.map
         });
@@ -207,15 +207,16 @@
         this.routerLink('/houseProperty',this.$route.query);
       },
       handleGetHouseDetail() {
+        debugger
         if (!this.$route.query) {
           return false;
         }
-        var house_id = this.$route.query.id;
+        let house_id = this.$route.query.id;
         this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
           if (res.code === 200) {
             this.detail = res.data;
             this.village_list = res.data.village_data;
-            var location = [];
+            let location = [];
             location[0] = this.detail.location && this.detail.location.longitude;
             location[1] = this.detail.location && this.detail.location.latitude;
             this.$nextTick(() => {
