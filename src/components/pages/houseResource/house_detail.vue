@@ -17,7 +17,7 @@
             </div>
             <div class="address">
               {{detail.address}}
-<!--              仙林大学城仙鹤门二号路1号-->
+              <!--              仙林大学城仙鹤门二号路1号-->
             </div>
           </div>
           <!--标签-->
