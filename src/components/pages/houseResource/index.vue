@@ -24,61 +24,61 @@
         <div class="search-type flex-center">
           <span v-for="tmp in filter_list" :key="tmp.id" @click="handleFilterHouse(tmp)">
             {{ tmp.val }}
-            <van-icon name="arrow-down" v-show="tmp.active"></van-icon>
-            <van-icon name="arrow-up" v-show="!tmp.active"></van-icon>
+            <van-icon name="arrow-down" v-show="!tmp.active"></van-icon>
+            <van-icon name="arrow-up" v-show="tmp.active"></van-icon>
           </span>
         </div>
       </div>
       <ExpandContainer :offset-top="offset_top" @close="handleCloseExpand">
         <div class="filter-content scroll_bar">
           <div class="chooseBtn" v-if="current_filter === 1">
-            <p class="choose-btn-item" v-for="item in house_status" @click="chooseHouseStatus(item)">
+            <p v-for="item in house_status" @click="chooseHouseStatus(item)">
               <b :class="{'choose': status_choose === item.id}">{{ item.val }}</b>
             </p>
           </div>
           <div v-if="current_filter === 2" class="house-type">
             <h4>房型</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_type" @click="chooseHouseProperty(item,'room')">
+              <p v-for="item in house_type" @click="chooseHouseProperty(item,'room')">
                 <b :class="{'choose': params.room.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>装修</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_decorate" @click="chooseHouseProperty(item,'decoration')">
+              <p v-for="item in house_decorate" @click="chooseHouseProperty(item,'decoration')">
                 <b :class="{'choose': params.decoration.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>朝向</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_orientation" @click="chooseHouseProperty(item,'house_toward')">
+              <p v-for="item in house_orientation" @click="chooseHouseProperty(item,'house_toward')">
                 <b :class="{'choose': params.house_toward.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>楼层</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_floor" @click="chooseHouseProperty(item,'floor')">
+              <p v-for="item in house_floor" @click="chooseHouseProperty(item,'floor')">
                 <b :class="{'choose': params.floor.includes(item.id)}">{{ item.val }}</b>
               </p>
-              <p class="choose-btn-item">
+              <p>
                 <van-field placeholder="最低层" type="number" @input="handleInputBottom"></van-field>
               </p>
               <a style="margin-top: .2rem">-</a>
-              <p class="choose-btn-item">
+              <p>
                 <van-field placeholder="最高层" type="number" @input="handleInputTop"></van-field>
               </p>
             </div>
             <h4>电梯</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_lift" @click="chooseHouseProperty(item,'house_lift')">
+              <p v-for="item in house_lift" @click="chooseHouseProperty(item,'house_lift')">
                 <b :class="{'choose': params.house_lift.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
-            <!--<div class="commonBtn">
+            <div class="commonBtn">
               <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,1)">
                 {{item.label}}
               </p>
-            </div>-->
+            </div>
           </div>
           <div v-if="current_filter === 3" class="house-type">
             <StaffDepartSearch :visible="staff_depart_visible" @close="handleGetStaffDepartInfo"></StaffDepartSearch>
@@ -86,52 +86,47 @@
           <div v-if="current_filter === 4" class="house-type">
             <h4>房屋剩余时长</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in residue_time" @click="chooseHouseProperty(item,'rent_days')">
+              <p v-for="item in residue_time" @click="chooseHouseProperty(item,'rent_days')">
                 <b :class="{'choose': params.rent_days.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>预警状态</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_warning_status" @click="chooseHouseProperty(item,'warning_status')">
+              <p v-for="item in house_warning_status" @click="chooseHouseProperty(item,'warning_status')">
                 <b :class="{'choose': params.warning_status.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>当前空置时长</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_floor" @click="chooseHouseProperty(item,'kong')">
+              <p v-for="item in house_floor" @click="chooseHouseProperty(item,'kong')">
                 <b :class="{'choose': params.kong.includes(item.id)}">{{ item.val }}</b>
               </p>
-              <p class="choose-btn-item">
+              <p>
                 <van-field placeholder="请输入" type="number" @input="handleKongBottom"></van-field>
               </p>
               <a style="margin-top: .2rem">-</a>
-              <p class="choose-btn-item">
+              <p>
                 <van-field placeholder="请输入" type="number" @input="handleKongTop"></van-field>
               </p>
             </div>
             <h4>出租价格</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_floor" @click="chooseHouseProperty(item,'rent_price')">
+              <p v-for="item in house_floor" @click="chooseHouseProperty(item,'rent_price')">
                 <b :class="{'choose': params.rent_price.includes(item.id)}">{{ item.val }}</b>
               </p>
-              <p class="choose-btn-item">
+              <p>
                 <van-field placeholder="请输入" type="number" @input="handlePriceBottom"></van-field>
               </p>
               <a style="margin-top: .2rem">-</a>
-              <p class="choose-btn-item">
+              <p>
                 <van-field placeholder="请输入" type="number" @input="handlePriceTop"></van-field>
               </p>
             </div>
-            <!--<div class="commonBtn">
+            <div class="commonBtn">
               <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,2)">
                 {{item.label}}
               </p>
-            </div>-->
-          </div>
-          <div class="commonBtn" v-if="current_filter!=3">
-            <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,current_filter)">
-              {{item.label}}
-            </p>
+            </div>
           </div>
         </div>
       </ExpandContainer>
@@ -140,16 +135,14 @@
         <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
           <div class="house flex" v-for="(item,key) in house_list" :key="key" @click="handleHouseDetail(item)">
             <div class="leftPic">
-<!--              <img src="./detail.png" alt="">-->
-              <img v-if="item.album_photo.length>0" :src="item.album_photo[0].uri" alt="">
-              <img v-else src="./detail.png">
+              <img src="./detail.png" alt="">
               <a class="writingMode status1">{{ item.house_status_name }}</a>
               <!--<a class="writingMode status2">未出租</a>-->
             </div>
             <div class="rightInfo">
-              <h2 class="house-name">{{ item.name }} <a class="notice" :class="['notice' + item.warning_status]"></a></h2>
+              <h2>{{ item.name }} <a class="notice" :class="['notice' + item.warning_status]"></a></h2>
               <div class="info flex">
-                <a>{{ parseInt(item.area) || 0}}㎡</a><i></i>
+                <a>{{ item.area || 0}}㎡</a><i></i>
                 <a>{{ item.floor && item.floor.this || 0 }}/{{ item.floor && item.floor.all || 0 }}</a><i></i>
                 <a>{{ item.hk || '/'}}</a><i></i>
                 <a>{{ item.house_toward || '/'}}</a><i></i>
@@ -176,7 +169,7 @@
       </div>
     </div>
     <div class="commonFooterTag">
-      <p v-for="item in indexBottom" :class="item.icon" @click="footerTag(item.id)"></p>
+      <p v-for="item in 4" :class="['p-'+item]" @click="footerTag(item)"></p>
     </div>
   </div>
 </template>
@@ -191,27 +184,6 @@
     data() {
       return {
         staff_depart_visible: false, //员工部门选择
-
-
-        indexBottom: [
-          {
-            id: 1,
-            icon: 'p-1',
-          },
-          // {
-          //   id: '2',
-          //   icon: tab_home2,
-          // },
-          {
-            id: 3,
-            icon: 'p-3',
-          },
-          {
-            id: 4,
-            icon: 'p-4',
-          },
-        ],
-
 
         buttons: [
           {
@@ -317,33 +289,17 @@
         house_list: [], //房屋列表
       }
     },
-    async mounted() {
+    mounted() {
       this.$nextTick(function () {
         let top = this.$refs.topSearch.offsetHeight;
         this.mainHeight = this.mainListHeight(top + 50);
       });
-      await this.$httpZll.getCityList().then(res => {
-        this.cityList = [];
-        if (res.data.length === 1) {
-          let obj = {};
-          this.city_name = res.data[0].name;
-          this.params.city = res.data[0].province.code;
-          obj.name = this.city_name;
-          obj.code = this.params.city;
-          this.cityList.push(obj);
-        } else {
-          for (let item of res.data) {
-            let obj = {};
-            if (String(item.code) === String(this.personal.city_id)) {
-              this.city_name = item.name;
-              this.params.city = item.province.code;
-              obj.name = item.name;
-              obj.code = item.code;
-              this.cityList.push(obj);
-            }
-          }
+      for (let item of this.cityList) {
+        if (String(item.code) === String(this.personal.city_id)) {
+          this.city_name = item.name;
+          this.params.city = item.code;
         }
-      });
+      }
       this.handleGetHouseResource();
     },
     watch: {},
@@ -360,7 +316,7 @@
           for (let item of val) {
             this.params.org_user_id.push(item.id);
           }
-          this.handleGetHouseResource(true);
+          this.handleGetHouseResource();
         }
         this.staff_depart_visible = false;
         this.offset_top = 0;
@@ -392,18 +348,7 @@
       //按钮
       searchBtn(type, idx) {
         console.log(type);
-
-        if(idx===1) {
-          switch (type) {
-            case 'reset':
-              this.params.status = [];
-              this.status_choose = null;
-              break;
-            case 'confirm':
-              this.onSearch();
-              break;
-          }
-        } else if (idx === 2) {
+        if (idx === 1) {
           switch (type) {
             case 'reset':
               this.params.house_lift = [];
@@ -416,10 +361,7 @@
               this.onSearch();
               break;
           }
-        } else if(idx===3) {
-
-        }else {
-          this.filter_list[3].active = false;
+        } else {
           switch (type) {
             case 'reset':
               this.params.rent_price = [];
@@ -443,18 +385,12 @@
       //选择房屋状态
       chooseHouseStatus(item) {
         this.status_choose = item.id;
-        //console.log(item);
-        if(item.id==0) {
-          this.params.status = null;
-        }else {
-          this.params.status = [item.id];
-        }
-
-        /*if (this.params.status.indexOf(item.id) !== -1) {
+        console.log(item);
+        if (this.params.status.indexOf(item.id) !== -1) {
           this.params.status.splice(this.params.status.indexOf(item.id), 1);
         } else {
           this.params.status.push(item.id);
-        }*/
+        }
       },
       handleCloseExpand() {
         this.offset_top = 0;
@@ -467,30 +403,17 @@
         this.offset_top = 0;
         this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
         this.house_list = [];
-        this.handleGetHouseResource();
+        this.handleGetHouseResource(this.params);
       },
-      /*
-      * 获取房源列表
-      * params: cleanData  是否清除列表 默认false
-      * */
-      handleGetHouseResource(cleanData = false) {
-        if(cleanData) {
-          this.house_list = [];
-        }
+      //获取房源列表
+      handleGetHouseResource() {
         this.fullLoading = true;
         this.$httpZll.get(this.server + 'v1.0/market/house', this.params, '加载中...').then(res => {
           this.fullLoading = false;
           if (res.code === 200) {
-           /* for (let item of res.data.data) {
-              debugger
+            for (let item of res.data.data) {
               this.house_list.push(item);
-            }*/
-            /**
-             * 防止后端给的data为对象类型
-             */
-           _.forEach(res.data.data,(o)=> {
-             this.house_list.push(o);
-           })
+            }
             this.paging = res.data.all_count;
           } else {
             this.house_list = [];
@@ -513,20 +436,9 @@
       //房屋筛选
       handleFilterHouse(tmp) {
         this.offset_top = this.current_filter === tmp.id ? 0 : 117;
-        //this.filter_list[tmp.id - 1].active = this.offset_top <= 0;
-        this.filter_list.forEach(o=> {
-          o.active = false;
-        });
-        this.filter_list[tmp.id - 1].active = !this.filter_list[tmp.id - 1].active;
+        this.filter_list[tmp.id - 1].active = this.offset_top <= 0;
         this.staff_depart_visible = tmp.id === 3;
         this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
-        if(!this.current_filter) {//上拉按钮朝上
-          this.filter_list[tmp.id - 1].active = false;
-        }
-        if(this.current_filter!=3) {//不选部门员工下拉搜索框时重置参数
-          this.params.org_user_id = [];
-          this.params.is_org_user = 0;
-        }
       },
       // 选择城市
       chooseClickCity(item) {

@@ -313,9 +313,6 @@
       'form.money_sum'(val) {
         if (val && this.form.current_pay_info && this.form.current_pay_info.length === 1) {
           this.form.current_pay_info[0].money_sep = val;
-          let bulletin = this.bulletinType.bulletin;
-          let pay_first = new Date(this.form.begin_date);
-          this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
         }
       },
     },
@@ -323,19 +320,25 @@
       keyUpStatus() {// 底部定位
         return this.$store.state.app.key_up_status;
       },
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
     },
     methods: {
       // 报备类型
       bulletin_types(type) {
-        let bulletinData = this.$bulletinType(type.bulletin);
+        let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.taskDefinitionKey);
         this.isGetTake = type.bulletin === 'bulletin_retainage' || type.bulletin === 'bulletin_agency';
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
         this.distinguishForm(type.bulletin);
         if (type.bulletin === 'bulletin_agency') {
-          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 1 : 2;
+          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 0 : 1;
           this.form.collect_or_rent = type;
+          if (type === 0) {
+            this.form.house_id = this.taskDetail.house_id;
+          }
           this.formatData.collect_or_rent = dicties['collect_or_rent'][type];
         }
       },
@@ -568,7 +571,9 @@
         if (draw.children.length === 1) {
           if (draw.keyName === 'period_price_way_arr') {
             this.form[draw.keyName][0].period = this.form.month;
-            console.log(this.form[draw.keyName][0])
+            let bulletin = this.bulletinType.bulletin;
+            let pay_first = new Date(this.form.begin_date);
+            this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
           }
           if (draw.keyName === 'current_pay_info') {
             this.form[draw.keyName][0].money_sep = this.form.money_sum;
@@ -625,7 +630,7 @@
           let name = picker.keyName;
           let parentKey = picker.parentKey || '';
           // input 显示隐藏
-          if (picker.controlShow) {
+          if (picker.controlShow || name === 'is_electronic_contract') {
             this.inputStatus(name, form);
           }
           // 付款方式变化处理
@@ -659,12 +664,12 @@
         switch (name) {
           case 'is_electronic_contract':
             let num = Number(form['is_electronic_contract']);
-            if (num === 0) {
-              this.contractDis();
-              this.form.contract_number = 'LJSF';
-            } else {
+            if (num) {
               this.contractDis('disabled');
               this.form.contract_number = this.electronicContractNumber;
+            } else {
+              this.contractDis(false);
+              this.form.contract_number = 'LJSF';
             }
             break;
           case 'signatory_identity':
@@ -698,8 +703,7 @@
       electronicContract() {
         let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
         let data = {
-          city_id: this.form.community && this.form.community.city || '320100',
-          // city_id: '320100',
+          city_id: this.personal.city_id,
           version: version,
         };
         this.$httpZll.getElectronicContract(data).then(res => {
@@ -848,12 +852,19 @@
       // 图片上传
       getImgData(val) {
         this.form[val[0]] = val[1];
+        this.photoUploadStatus = val[2];
       },
       // 发布
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
-          // if (this.$attestationKey(this.drawForm)) return;
+          if (this.$attestationKey(this.drawForm)) return;
+        }
+        if (val === 1) {
+          if (!this.photoUploadStatus) {
+            this.$prompt('图片上传中...');
+            return;
+          }
         }
         this.form.is_draft = val;
         let bulletin = this.bulletinType;
@@ -958,6 +969,7 @@
             params[val] = this.bulletinType[val];
           }
         }
+        let key = this.taskDetail.taskDefinitionKey;
         this.$httpZll.getBulletinDraft(params).then(data => {
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
@@ -973,7 +985,7 @@
             this.childBulletin(res, 'draft');
             this.handlePreFill(res);
           }
-          if (!this.isGetTake) {
+          if ((!this.isGetTake) && key !== 'RentBooking') {
             this.electronicContract();
           }
         });
@@ -1045,7 +1057,7 @@
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'house_id':
-              this.formatData.house_id = res.address;
+              this.formatData.house_id = res.address || res.house_address;
               break;
             case 'community':
               this.formatData[item] = res[item].village_name;

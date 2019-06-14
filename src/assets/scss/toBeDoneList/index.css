@@ -150,13 +150,20 @@
       height: .5rem;
       background: url("../../../assets/image/common/searchyellow.png") no-repeat scroll center;
       background-size: 100% 100%; }
-  #toBeDoneList .main div, #toBeDoneList .main p, #toBeDoneList .main h1, #toBeDoneList .main h2, #toBeDoneList .main h3 {
+  #toBeDoneList .main div,
+  #toBeDoneList .main p,
+  #toBeDoneList .main h1,
+  #toBeDoneList .main h2,
+  #toBeDoneList .main h3 {
     font-family: "Microsoft YaHei UI"; }
-  #toBeDoneList .main span, #toBeDoneList .main b {
+  #toBeDoneList .main span,
+  #toBeDoneList .main b {
     font-family: "dingziti"; }
-  #toBeDoneList .main .finish, #toBeDoneList .main .noFinish {
+  #toBeDoneList .main .finish,
+  #toBeDoneList .main .noFinish {
     height: 100%; }
-    #toBeDoneList .main .finish > div, #toBeDoneList .main .noFinish > div {
+    #toBeDoneList .main .finish > div,
+    #toBeDoneList .main .noFinish > div {
       padding-bottom: .88rem; }
   #toBeDoneList .main .noFinish .noFinishMain {
     width: 33.33%;
@@ -271,7 +278,8 @@
       #toBeDoneList .main .finish .finishMain .finish2 div {
         white-space: nowrap;
         text-align: right; }
-  #toBeDoneList .main .noMore, #toBeDoneList .main .noData {
+  #toBeDoneList .main .noMore,
+  #toBeDoneList .main .noData {
     display: flex;
     display: -webkit-flex;
     align-items: center;
@@ -283,11 +291,13 @@
     height: 8rem; }
   #toBeDoneList .showAddPopup .addTitle {
     margin-top: 10%; }
-  #toBeDoneList .showAddPopup .mainModule .module1, #toBeDoneList .showAddPopup .mainModule .module3 {
+  #toBeDoneList .showAddPopup .mainModule .module1,
+  #toBeDoneList .showAddPopup .mainModule .module3 {
     width: 2.4rem;
     height: 2.4rem;
     right: 3rem; }
-  #toBeDoneList .showAddPopup .mainModule .module2, #toBeDoneList .showAddPopup .mainModule .module5 {
+  #toBeDoneList .showAddPopup .mainModule .module2,
+  #toBeDoneList .showAddPopup .mainModule .module5 {
     width: 2rem;
     height: 2rem; }
   #toBeDoneList .showAddPopup .mainModule .module1 {
@@ -338,5 +348,36 @@
     border-top: .1rem solid #F8F8F8; }
   #toBeDoneList .commonBtn {
     padding: .3rem 0; }
+  #toBeDoneList .radioChecksLabel .radioChecks {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-left: -.2rem; }
+    #toBeDoneList .radioChecksLabel .radioChecks .contents {
+      width: auto;
+      margin-left: .2rem; }
+      #toBeDoneList .radioChecksLabel .radioChecks .contents p {
+        width: 100%;
+        padding: .15rem .4rem; }
+  #toBeDoneList .radioChecksLabel .radioChecks::after {
+    content: '';
+    flex: auto; }
+  #toBeDoneList .radioChecksLabel3 label {
+    display: inline-block;
+    padding: .2rem .1rem; }
+  #toBeDoneList .radioChecksLabel3 .contents3 {
+    width: 100%; }
+    #toBeDoneList .radioChecksLabel3 .contents3 .complete2 {
+      width: 5%;
+      margin: 0 2%;
+      background-color: #fff; }
+    #toBeDoneList .radioChecksLabel3 .contents3 input {
+      background-color: #EEEDEE;
+      height: .6rem;
+      width: 45%;
+      text-align: center;
+      border-radius: 0.3rem; }
+    #toBeDoneList .radioChecksLabel3 .contents3 span {
+      margin: 0 .2rem; }
 
 /*# sourceMappingURL=index.css.map */

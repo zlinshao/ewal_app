@@ -164,6 +164,7 @@ export default {
     };
     //自动获取用户IP，返回当前城市
     Vue.prototype.getBeforeCity = function (data = []) {
+      let personal = this.$store.state.app.personalDetail;
       return new Promise((resolve, reject) => {
         let obj = {};
         obj.name = '';
@@ -181,7 +182,6 @@ export default {
           mapObj.addControl(geolocation);
           geolocation.getCurrentPosition();
           AMap.event.addListener(geolocation, 'complete', function (res) {
-            console.log(res);
             let address = res.addressComponent;
             obj.location[0] = res.position.lng;
             obj.location[1] = res.position.lat;
@@ -194,9 +194,9 @@ export default {
             resolve(obj);
           });
           AMap.event.addListener(geolocation, 'error', function (err) {
-            obj.code = 320100;
-            obj.name = '南京';
-            obj.location = [118.734235, 31.984095];
+            obj.code = personal.city_id;
+            obj.name = personal.city_name;
+            obj.location = personal.location;
             resolve(obj);
           });
         });
@@ -207,7 +207,7 @@ export default {
       for (let item of data) {
         if (item.keyName) {
           if (item.placeholder && item.placeholder.includes('必填')) {
-            if (!item.keyType) {
+            if (!item.keyType && item.keyType !== 0) {
               if (this.form[item.keyName] === item.keyType) {
                 this.$prompt(item.label + item.placeholder);
                 return true
@@ -718,9 +718,11 @@ export default {
           // });
           let data = {
             avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
-            city_id: "320100",
-            city_name: "南京市",
-            department_id: 395,
+            city_id: "120000",
+            city_name: "天津市",
+            location: [117.201538, 39.085294],//天津
+            // location: [118.734235, 31.984095],//南京
+            department_id: '395',
             department_name: "开发",
             phone: "18052001167",
             staff_id: '69',
@@ -749,8 +751,9 @@ export default {
               data.city_id = city.city_id;
               data.city_name = city.city_name;
             } else {
-              data.city_id = '320100';
-              data.city_name = '南京市';
+              data.city_id = '120000';
+              data.city_name = '天津市';
+              data.location = [117.201538, 39.085294];
             }
             data.department_name = org.name;
             data.department_id = org.id;
@@ -759,7 +762,6 @@ export default {
             this.$prompt('获取部门失败!', 'fail');
             return;
           }
-          console.log(data);
           this.$store.dispatch('personal_storage', data);
           resolve(true);
         }

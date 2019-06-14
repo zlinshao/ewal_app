@@ -6,8 +6,8 @@
           {{taskDefinitionKey[allDetail.taskDefinitionKey]}}
         </h1>
         <h2>
-          <span class="numberFont">54<b>%</b></span>
-          <i style="height: 54%;"></i>
+          <span class="numberFont">50<b>%</b></span>
+          <i style="height: 04%;"></i>
         </h2>
       </div>
       <!--转交-->
@@ -39,7 +39,7 @@
                   </span>
                 </b>
               </span>
-              <span v-else>{{allDetail[item] || ''}}</span>
+<!--              <span v-else>{{allDetail[item] || ''}}</span>-->
             </div>
           </div>
           <div class="record" v-for="item in recordList">
