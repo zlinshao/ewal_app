@@ -17,7 +17,7 @@
             </div>
             <div class="address">
               {{detail.address}}
-<!--              仙林大学城仙鹤门二号路1号-->
+              <!--              仙林大学城仙鹤门二号路1号-->
             </div>
           </div>
           <!--标签-->
@@ -120,19 +120,20 @@
             </van-steps>
           </div>
           <!--推荐房源-->
-          <div class="more-house">
+          <!--<div class="more-house">
             <h3>推荐房源</h3>
             <div v-for="(item,index) in detail.recommend_data" class="flex" :key="index">
-              <img src="./detail.png" alt="">
+              <img v-if="item.cover" alt="">
+              <img v-else src="./detail.png" alt="">
               <div>
                 <div class="flex">
-                  <h4>仙居雅苑2333-202</h4>
+                  <h4>{{item.name}}</h4>
                   <a class="price">{{item.price}}元/月</a>
                 </div>
-                <span>85㎡ {{item.house_type}}</span>
+                <span>{{item.area}}㎡ {{item.house_type}}</span>
               </div>
             </div>
-          </div>
+          </div>-->
           <div class="footer">
             <div @click="handleGoContract">
               <a></a>
@@ -227,7 +228,7 @@
           return false;
         }
         let house_id = this.$route.query.id;
-        this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
+        this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {/*city:'南京'*/}, '获取中...').then(res => {
           if (res.code === 200) {
             this.detail = res.data;
             this.village_list = res.data.village_data||[];
