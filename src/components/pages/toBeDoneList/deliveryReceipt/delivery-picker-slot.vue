@@ -226,17 +226,13 @@
         let parentKey = config.parentKey;//最外层字段名
         let key = config.keyName;//父级 字段名
         let child = config.childKeys;//子集 字段名
+        value = value.filter(item => item !== '');
         child.forEach((res, idx) => {
-          let status = typeof ids[idx].values[index[idx]] !== 'undefined';
-          if (config.parentKey === 'bedroom') {
-            if (status) {
-              this.forms[parentKey][config.index][key][res] = Number(ids[idx].values[index[idx]]);
-            }
+          if (typeof config.index === 'number') {
+            this.forms[parentKey][config.index][key][res] = Number(ids[idx].values[index[idx]]);
             this.formatData[parentKey][config.index][key] = value.join('/');
           } else {
-            if (status) {
-              this.forms[parentKey][key][res] = Number(ids[idx].values[index[idx]]);
-            }
+            this.forms[parentKey][key][res] = Number(ids[idx].values[index[idx]]);
             this.formatData[parentKey][key] = value.join('/');
           }
         });

@@ -143,14 +143,14 @@
       }
     },
     mounted() {
-    },
-    activated() {
       for (let item of this.cityList) {
         if (String(item.code) === String(this.personal.city_id)) {
           this.city_name = item.name;
           this.params.city_name = item.name + '市';
         }
       }
+    },
+    activated() {
       this.close_();
       this.bulletin_type = JSON.parse(sessionStorage.bulletin_type || {});
     },

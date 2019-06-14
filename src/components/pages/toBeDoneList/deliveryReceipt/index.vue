@@ -389,7 +389,7 @@
       // 请求数据处理
       getHandleData(res, item, name, index) {
         let value;
-        if (item === 'bedroom') {
+        if (typeof index === 'number') {
           value = res[item][index][name];
         } else {
           value = res[item][name];
@@ -400,12 +400,8 @@
             if (child === 'photo') {
               if (value[child].length) {
                 this.$httpZll.getUploadUrl(value[child]).then(res => {
-                  if (item === 'bedroom') {
-                    if (Number(index) !== 0) {
-                      this.album[item][index][item + '__' + name + '-' + index] = res.data;
-                    } else {
-                      this.album[item][index][item + '__' + name] = res.data;
-                    }
+                  if (typeof index === 'number') {
+                    this.album[item][index][name] = res.data;
                   } else {
                     this.album[item][name] = res.data;
                   }
@@ -458,7 +454,7 @@
                     temp.push(i);
                   }
                 }
-                if (item === 'bedroom') {
+                if (typeof index === 'number') {
                   this.formatData[item][index][name] = temp.join('/');
                 } else {
                   this.formatData[item][name] = temp.join('/');
@@ -667,6 +663,7 @@
                       val.hidden = false;
                     }
                   } else {
+                    this.form[item][key.keyName].bad_number = '';
                     for (let val of key.children) {
                       val.hidden = true;
                     }

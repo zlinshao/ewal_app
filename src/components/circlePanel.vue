@@ -74,7 +74,7 @@
             icon: ic_zhuanzu,
           },
           {
-            url: '',
+            url: 'collectReport',
             name: '特殊事项',
             status: bulletinRouterStatus.newSpecial,
             icon: ic_teshu,
@@ -204,6 +204,10 @@
           case 'retainage':
             name = '尾款待办';
             bulletin = '尾款报备';
+            break;
+          case 'special':
+            name = '特殊待办';
+            bulletin = '特殊报备';
             break;
         }
         for (let value of routes) {
