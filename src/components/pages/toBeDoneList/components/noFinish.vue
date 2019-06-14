@@ -39,7 +39,7 @@
                   </span>
                 </b>
               </span>
-              <span v-else>{{allDetail[item] || ''}}</span>
+<!--              <span v-else>{{allDetail[item] || ''}}</span>-->
             </div>
           </div>
           <div class="record" v-for="item in recordList">

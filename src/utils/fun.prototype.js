@@ -718,9 +718,11 @@ export default {
           // });
           let data = {
             avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
-            city_id: "320100",
-            city_name: "南京市",
-            department_id: 395,
+            city_id: "120000",
+            city_name: "天津市",
+            location: [117.201538, 39.085294],//天津
+            // location: [118.734235, 31.984095],//南京
+            department_id: '395',
             department_name: "开发",
             phone: "18052001167",
             staff_id: '69',
