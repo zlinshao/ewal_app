@@ -3997,17 +3997,7 @@ defineRetainageReport = {
 
 // 特殊事项报备
 defineSpecialReport = {
-    slither0: [
-        // {
-        //   label: '房屋地址',
-        //   placeholder: '已禁用',
-        //   disabled: 'disabled',
-        //   keyName: 'house_id',
-        //   keyType: '',
-        //   type: 'text',
-        //   slot: '',
-        // },
-        {
+    slither0: [{
             label: '收房/租房',
             placeholder: '必填 请选择',
             readonly: 'readonly',

@@ -510,7 +510,7 @@
                                     @include radius(50%);
                                 }
                                 span {
-                                    font-size: .3rem;
+                                    font-size: .28rem;
                                     color: #4A4A4A;
                                     margin-left: .1rem;
                                 }
@@ -534,7 +534,7 @@
                             }
                             .date {
                                 color: #9B9B9B;
-                                font-size: .3rem;
+                                font-size: .24rem;
                             }
                         }
                         .content_info {
@@ -615,6 +615,13 @@
                     }
                     //抄送
                     .cc {
+                        .header_info {
+                            >span {
+                                img {
+                                    border-radius: 0;
+                                }
+                            }
+                        }
                         .content_info {
                             display: flex;
                             justify-content: flex-start;

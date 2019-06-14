@@ -452,6 +452,15 @@
             this.resetting();
             break;
           default:
+            // 完成时间的判断
+            if(this.tabs==2){
+              if(this.taskCompleteBefore&&this.taskCompleteAfter){
+                if(this.taskCompleteBefore>this.taskCompleteAfter){
+                   this.$prompt("开始时间不能大于结束时间");
+                  return;
+                }
+              }
+            }
             this.hightParamsHandle();
           // 搜索的时候清空列表数据，页数为1
             this.params['params' + this.tabs].page=1;
@@ -460,6 +469,7 @@
             }else{
               this.finishList['list2']=[];
             }
+
             this.getFinishList(this.tabs);
             this.cancel();
             break;
@@ -590,7 +600,7 @@
               title:this.highParams.title,
             }
         }else if(this.tabs==2){
-          this.newHighParams={
+            this.newHighParams={
               taskCompleteBefore:this.taskCompleteBefore,
               taskCompleteAfter:this.taskCompleteAfter,
               taskDefinitionKeyIn:taskDefinitionKeyIn,

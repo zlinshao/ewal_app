@@ -165,7 +165,7 @@
                       <div class="header_info">
                         <span >
                           <img :src="personal.avatar" alt="">
-                          <span>{{item.user?item.user.name:'无名字'}}&nbsp;（{{item.result?item.result:'审批中'}}）&nbsp;</span>
+                          <span>{{item.user?item.user.name:'无名字'}}（{{item.result?item.result:'审批中'}}）</span>
                           <!-- <b><b></b></i> -->
                         </span>
                         <span class="date">{{item.time}}</span>
@@ -182,8 +182,6 @@
                     <div class="header_info">
                       <span>
                           <span class="icon"></span>
-                        <!-- <span class="icon_span">
-                        </span> -->
                         <span class="user_name">{{item.user? item.user.name:"无名"}}—{{item.name}}</span>
                       </span>
                       <span class="date">{{item.time}}</span>
@@ -194,10 +192,10 @@
                           <span>  {{result.name}}修改为：</span>
                           <span  v-if="typeof(result.new)=='string'">{{result.new}}</span>
                         </p>
-                        <!-- <p  class="comment_photo" v-if="typeof(result.new)!='string' "> -->
-                        <p  class="modify_photo"  >
-                          <!-- <img :src="photo"  v-for="(photo,index) in result.new"> -->
-                          <img :src="personal.avatar"  v-for="photo in 6">
+                        <p  class="modify_photo" v-if="typeof(result.new)!='string' ">
+                        <!-- <p  class="modify_photo"  v-for=''> -->
+                          <img :src="photo.uri"  v-for="(photo,index) in result.new">
+                          <!-- <img :src="personal.avatar"  v-for="photo in 6"> -->
                         </p>
                       </h4>
                     </div>
@@ -207,8 +205,6 @@
                     <div class="header_info">
                       <span>
                           <span class="icon"></span>
-                         <!-- <span class="icon_span">
-                        </span> -->
                         <span class="user_name">{{item.user? item.user.name:"无名"}}—{{item.name}}</span>
                       </span>
                       <span class="date">{{item.time}}</span>
@@ -393,17 +389,19 @@
                     })
                 }
               }
-              // // 评论的result是数组
-              // if(element.type=='comment'){
-              //   if(element.result.length>0){
-              //     if(element.hasOwnProperty('result') == Array){
-              //       this.$httpZll.getUploadUrl(element.result.attachments, 'close').then(res => {
-              //         this.historyProList[index].result.attachments=res.data;
-              //       })
-
-              //     }
-              //   }
-              // }
+              // 修改的result是数组
+              if(element.type=='modify'){
+                if(element.result.length>0){
+                  element.result.forEach((item,i)=>{
+                    if(item.new.indexOf('[')!=-1 && item.new.indexOf(']')!=-1){
+                      let photo=JSON.parse(item.new);
+                      this.$httpZll.getUploadUrl(photo, 'close').then(res => {
+                          this.historyProList[index].result[i].new=res.data;
+                      })
+                    }
+                  })
+                }
+              }
             })
           }
         })
