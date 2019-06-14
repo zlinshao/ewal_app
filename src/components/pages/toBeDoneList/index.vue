@@ -8,7 +8,7 @@
             {{item.text}}&nbsp;<span v-if="item.id === '1'">{{total['total1']}}</span>
           </p>
         </div>
-      <div class="topSearch" @click="searchHigh = !searchHigh"></div>
+        <div class="topSearch" @click="searchHigh = !searchHigh"></div>
       </div>
       <div class="main" :style="mainHeight">
         <!--未完成-->
@@ -25,8 +25,8 @@
                 </div>
                 <!--<div class="surplus">剩余</div>-->
                 <!--<div>-->
-                  <!--<span class="unit">{{item.due_date_hours}}<b>h</b></span>-->
-                  <!--<span class="unit">{{item.due_date_minutes}}<b>m</b></span>-->
+                <!--<span class="unit">{{item.due_date_hours}}<b>h</b></span>-->
+                <!--<span class="unit">{{item.due_date_minutes}}<b>m</b></span>-->
                 <!--</div>-->
               </div>
             </li>
@@ -91,7 +91,7 @@
     </van-popup>
     <!--搜索-->
     <van-popup v-model="searchHigh" overlay-class="overlay-color" position="top" :overlay="true" class="searchHigh"
-               :style="mainListHeight(120)">
+               :style="maxSearchHeight">
       <div class="searchInput">
         <div class="input">
           <div>
@@ -103,28 +103,29 @@
         </div>
       </div>
       <div class="scroll_bar">
-        <div class="radioChecksLabel" v-for="item of Object.keys(highList)" >
+        <div class="radioChecksLabel" v-for="item of Object.keys(highList)">
           <label v-if="(highList[item].type != 'radio'&& tabs==2) || (tabs==1)">{{highList[item].title}}</label>
           <div class="radioChecks">
-              <div v-for="val in highList[item].value" class="contents">
-                <p @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
-                  :class="{'chooseCheck': highParams[item].includes(val.id)}">
-                  {{val.text}}
-                </p>
-                <p @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}" v-if="highList[item].type === 'radio'&& tabs==1">
-                  {{val.text}}
-                </p>
-              </div>
+            <div v-for="val in highList[item].value" class="contents">
+              <p @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
+                 :class="{'chooseCheck': highParams[item].includes(val.id)}">
+                {{val.text}}
+              </p>
+              <p @click="checkChoose(val,item)" :class="{'chooseCheck': highParams[item] === val.id}"
+                 v-if="highList[item].type === 'radio'&& tabs==1">
+                {{val.text}}
+              </p>
+            </div>
           </div>
         </div>
         <!-- 完成时间 -->
-        <div class="radioChecksLabel3"  v-if="tabs==2" >
+        <div class="radioChecksLabel3" v-if="tabs==2">
           <label>完成时间</label>
           <div class="radioChecks">
-            <div  class="contents3">
-                <input v-model="taskCompleteBefore" @focus="chooseDate(1)"  readonly="readonly" placeholder="开始时间">
-                <span>至</span>
-                <input  v-model="taskCompleteAfter"  @focus="chooseDate(2)" readonly="readonly" placeholder="结束时间">
+            <div class="contents3">
+              <input v-model="taskCompleteBefore" @focus="chooseDate(1)" readonly="readonly" placeholder="开始时间">
+              <span>至</span>
+              <input v-model="taskCompleteAfter" @focus="chooseDate(2)" readonly="readonly" placeholder="结束时间">
             </div>
           </div>
         </div>
@@ -160,6 +161,7 @@
           load2: true,
         },
         mainHeight: '',// 滚动 部分高度
+        maxSearchHeight: '',// 搜索最大高度
         listLength: [],//中间上移 index
         finishTop: [
           {
@@ -213,14 +215,13 @@
         searchHigh: false,
         // 条件搜索
         highParams: {},
-        newHighParams:{},
+        newHighParams: {},
         highList: {
           taskDefinitionKeyIn: {
             title: '待办类型',
             type: 'check',
             keyType: [],
-            value: [
-            ],
+            value: [],
           },
           times: {
             title: '剩余时间',
@@ -266,15 +267,15 @@
         finishModule: false,
         moduleDetail: {},
         // 完成时间
-        timeModule:false,
-        formatData:{
-          dateType:'date',
-          dateKey:'',  //字段名
-          dateVal:''  //日期回显时
+        timeModule: false,
+        formatData: {
+          dateType: 'date',
+          dateKey: '',  //字段名
+          dateVal: ''  //日期回显时
         },
-        taskCompleteBefore:'',
-        taskCompleteAfter:''
-        
+        taskCompleteBefore: '',
+        taskCompleteAfter: ''
+
 
       }
     },
@@ -284,13 +285,14 @@
       this.getToDoTypeFun();
     },
     mounted() {
-       
-     
+
+
     },
     activated() {
       this.resetting();
       let listTop = this.$refs.listTop.offsetHeight;
       this.mainHeight = this.mainListHeight(listTop);
+      this.maxSearchHeight = {maxHeight: (this.screenHeight - 120) + 'px'};
       let tab = this.tabs;
       this.close_(tab);
       this.getQueryDetail('1');
@@ -357,12 +359,12 @@
       getFinishList(tab, close = '') {
         let url = '';
         this.fullLoading['load' + tab] = true;
-      
+
         let params = this.params['params' + tab];
-         params = Object.assign({},params, this.newHighParams); 
-        if (tab === '1') {  
+        params = Object.assign({}, params, this.newHighParams);
+        if (tab === '1') {
           url = 'runtime/tasks'; //未完成
-        } else {    
+        } else {
           url = 'history/tasks';  //已完成
           params.finished = true;
         }
@@ -441,7 +443,7 @@
         }
         this.highParams = Object.assign({}, this.highParams);
       },
-     
+
       // 搜索按钮
       searchBtn(val) {
         switch (val) {
@@ -453,21 +455,21 @@
             break;
           default:
             // 完成时间的判断
-            if(this.tabs==2){
-              if(this.taskCompleteBefore&&this.taskCompleteAfter){
-                if(this.taskCompleteBefore>this.taskCompleteAfter){
-                   this.$prompt("开始时间不能大于结束时间");
+            if (this.tabs == 2) {
+              if (this.taskCompleteBefore && this.taskCompleteAfter) {
+                if (this.taskCompleteBefore > this.taskCompleteAfter) {
+                  this.$prompt("开始时间不能大于结束时间");
                   return;
                 }
               }
             }
             this.hightParamsHandle();
-          // 搜索的时候清空列表数据，页数为1
-            this.params['params' + this.tabs].page=1;
-            if(this.tabs==1){
-              this.finishList['list1']=[];
-            }else{
-              this.finishList['list2']=[];
+            // 搜索的时候清空列表数据，页数为1
+            this.params['params' + this.tabs].page = 1;
+            if (this.tabs == 1) {
+              this.finishList['list1'] = [];
+            } else {
+              this.finishList['list2'] = [];
             }
 
             this.getFinishList(this.tabs);
@@ -482,9 +484,9 @@
           this.highParams[item] = list[item].keyType;
         }
         this.highParams.title = '';
-        this.taskCompleteBefore='';
-        this.taskCompleteAfter='';
-        this.newHighParams={};
+        this.taskCompleteBefore = '';
+        this.taskCompleteAfter = '';
+        this.newHighParams = {};
         this.highParams = Object.assign({}, this.highParams);
       },
       // 底部按钮跳转
@@ -501,110 +503,110 @@
 
 
       //待办类型数据获取
-      getToDoTypeFun(){
+      getToDoTypeFun() {
         let params = {
-            assignee: this.personal.staff_id,
-            taskDefinitionKeyNotIn:this.$taskDefinitionKey()
+          assignee: this.personal.staff_id,
+          taskDefinitionKeyNotIn: this.$taskDefinitionKey()
         }
-        this.$httpZll.getToDoTypeList(params).then(res=>{
-          if(res){
+        this.$httpZll.getToDoTypeList(params).then(res => {
+          if (res) {
             // 将数组中的字段转换成id、text
-            let arr=res;
-            let newArr=[];
-            let obj={id:'',text:''};
+            let arr = res;
+            let newArr = [];
+            let obj = {id: '', text: ''};
             arr.forEach(element => {
-               obj.id=element.key;
-               obj.text=element.name;
-               newArr.push(obj);
-               obj={id:'',text:''};
+              obj.id = element.key;
+              obj.text = element.name;
+              newArr.push(obj);
+              obj = {id: '', text: ''};
             });
-            this.highList.taskDefinitionKeyIn.value=newArr;
+            this.highList.taskDefinitionKeyIn.value = newArr;
           }
         })
       },
-       // 将筛选条件中的剩余时间进行处理成时间格式
-       setTimeFun(val) {
-          let date={
-            dueBefore:'',
-            dueAfter:''
-          }
+      // 将筛选条件中的剩余时间进行处理成时间格式
+      setTimeFun(val) {
+        let date = {
+          dueBefore: '',
+          dueAfter: ''
+        }
         switch (val) {
           case 1:
-            date.dueBefore=''
-            date.dueAfter=new Date().getTime() + 1 * 60 * 60 * 1000;
+            date.dueBefore = ''
+            date.dueAfter = new Date().getTime() + 1 * 60 * 60 * 1000;
             break;
           case 2:
-            date.dueBefore=new Date().getTime() + 1 * 60 * 60 * 1000;
-            date.dueAfter=new Date().getTime() + 6 * 60 * 60 * 1000;
+            date.dueBefore = new Date().getTime() + 1 * 60 * 60 * 1000;
+            date.dueAfter = new Date().getTime() + 6 * 60 * 60 * 1000;
             break;
           case 3:
-            date.dueBefore=new Date().getTime() + 6 * 60 * 60 * 1000;
-            date.dueAfter=new Date().getTime() + 12 * 60 * 60 * 1000;
+            date.dueBefore = new Date().getTime() + 6 * 60 * 60 * 1000;
+            date.dueAfter = new Date().getTime() + 12 * 60 * 60 * 1000;
             break;
           case 4:
-            date.dueBefore=new Date().getTime() + 12 * 60 * 60 * 1000;
-            date.dueAfter=new Date().getTime() + 24 * 60 * 60 * 1000;
+            date.dueBefore = new Date().getTime() + 12 * 60 * 60 * 1000;
+            date.dueAfter = new Date().getTime() + 24 * 60 * 60 * 1000;
             break;
           case 5:
-            date.dueBefore=new Date().getTime() + 24 * 60 * 60 * 1000;
+            date.dueBefore = new Date().getTime() + 24 * 60 * 60 * 1000;
             date.dueAfter = '';
             break;
           case '':
-            date.dueBefore='';
+            date.dueBefore = '';
             date.dueAfter = '';
             break;
         }
         return date;
       },
-     
+
       // 完成时间
-      chooseDate(val){
+      chooseDate(val) {
         this.timeModule = true;
         switch (val) {
           case 1:   //开始时间
-            this.formatData.dateKey='taskCompleteBefore';
-            this.formatData.dateVal= this.taskCompleteBefore;
+            this.formatData.dateKey = 'taskCompleteBefore';
+            this.formatData.dateVal = this.taskCompleteBefore;
             break;
           case 2:  //结束时间
-            this.formatData.dateKey='taskCompleteAfter';
-            this.formatData.dateVal=this.taskCompleteAfter;
+            this.formatData.dateKey = 'taskCompleteAfter';
+            this.formatData.dateVal = this.taskCompleteAfter;
             break;
         }
       },
-       // 日期组件的事件
+      // 日期组件的事件
       onConTime(val) {
         this.timeModule = false;
         if (val !== 'close') {
-          if(val.dateKey=='taskCompleteBefore'){
-            this.taskCompleteBefore=val.dateVal;
-          }else if(val.dateKey=='taskCompleteAfter'){
-            this.taskCompleteAfter=val.dateVal;
+          if (val.dateKey == 'taskCompleteBefore') {
+            this.taskCompleteBefore = val.dateVal;
+          } else if (val.dateKey == 'taskCompleteAfter') {
+            this.taskCompleteAfter = val.dateVal;
           }
         }
       },
 
       //高级搜索的参数配置
-      hightParamsHandle(){
+      hightParamsHandle() {
         this.newHighParams = {};
         //待办类型由数组转化为字符串
-        let taskDefinitionKeyIn='';
-        if(this.highParams.taskDefinitionKeyIn && this.highParams.taskDefinitionKeyIn.length>0){   
-          taskDefinitionKeyIn= this.highParams.taskDefinitionKeyIn.join(',');
+        let taskDefinitionKeyIn = '';
+        if (this.highParams.taskDefinitionKeyIn && this.highParams.taskDefinitionKeyIn.length > 0) {
+          taskDefinitionKeyIn = this.highParams.taskDefinitionKeyIn.join(',');
         }
-        if(this.tabs==1){
-            let times=this.setTimeFun(this.highParams.times);   //剩余时间的处理
-            this.newHighParams={
-              dueBefore:times.dueBefore,
-              dueAfter:times.dueAfter,
-              taskDefinitionKeyIn:taskDefinitionKeyIn,
-              title:this.highParams.title,
-            }
-        }else if(this.tabs==2){
-            this.newHighParams={
-              taskCompleteBefore:this.taskCompleteBefore,
-              taskCompleteAfter:this.taskCompleteAfter,
-              taskDefinitionKeyIn:taskDefinitionKeyIn,
-              title:this.highParams.title,
+        if (this.tabs == 1) {
+          let times = this.setTimeFun(this.highParams.times);   //剩余时间的处理
+          this.newHighParams = {
+            dueBefore: times.dueBefore,
+            dueAfter: times.dueAfter,
+            taskDefinitionKeyIn: taskDefinitionKeyIn,
+            title: this.highParams.title,
+          }
+        } else if (this.tabs == 2) {
+          this.newHighParams = {
+            taskCompleteBefore: this.taskCompleteBefore,
+            taskCompleteAfter: this.taskCompleteAfter,
+            taskDefinitionKeyIn: taskDefinitionKeyIn,
+            title: this.highParams.title,
           }
         }
         // this.params['params' + this.tabs] = Object.assign({},this.params['params' + this.tabs], this.newHighParams); 

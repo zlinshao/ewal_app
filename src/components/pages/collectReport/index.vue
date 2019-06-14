@@ -1003,7 +1003,7 @@
         this.handlePreFill(res.content, 'again');
         this.electronicContract();
       },
-      // 尾款待办信息
+      // 尾款待办信息 / 渠道
       childBulletin(res, draft) {
         for (let item of Object.keys(this.form)) {
           switch (item) {

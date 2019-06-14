@@ -62,7 +62,9 @@ export default {
     };
     // 容器高度 计算
     Vue.prototype.mainListHeight = function (remove = 0) {
-      return {height: (Number(sessionStorage.windowHeight) - remove) + 'px'};
+      return {
+        height: (Number(sessionStorage.windowHeight) - remove) + 'px',
+      };
     };
     Vue.prototype.screenWidth = Number(sessionStorage.windowWidth);
     Vue.prototype.screenHeight = Number(sessionStorage.windowHeight);

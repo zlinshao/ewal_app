@@ -290,7 +290,6 @@
           {id: 4, val: '红色预警'},
         ],
         //城市选择
-        cityList: [],
         chooseCity: false,
         city_name: '',
         searchList: [],
@@ -350,6 +349,9 @@
     computed: {
       personal() {
         return this.$store.state.app.personalDetail;
+      },
+      cityList() {
+        return this.$store.state.app.allCityList;
       }
     },
     methods: {
