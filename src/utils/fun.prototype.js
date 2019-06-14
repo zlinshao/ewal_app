@@ -138,7 +138,10 @@ export default {
             obj.house_id = contract.house_id;
           }
           if (key.name.includes('_approved')) {
-            obj.approvedStatus = key.value || '';
+            console.log(2);
+            console.log(data);
+            console.log(key.value)
+            obj.approvedStatus = key.value;
           }
         }
         for (let key of Object.keys(item)) {

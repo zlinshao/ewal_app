@@ -21,7 +21,7 @@
             <span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
           </p>
         </div>
-      <i @click="approvalModule = true"></i>
+        <i @click="approvalModule = true"></i>
       </div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
@@ -47,16 +47,17 @@
                     <span v-if="item.status.length">{{item.status[0]}}</span>
                     <span v-else>{{item.name}}</span>
                   </div>
-                <!--<div>-->
-                <!--  <i class="icon-2"></i>-->
-                <!--  <span v-if="showStatus">-->
-                <!--    已等待{{item.duration}}分钟-->
-                <!--  </span>-->
-                <!--  <span v-else>-->
-                <!--     耗时{{item.duration}}分钟-->
-                <!--  </span>-->
-                <!--</div>-->
+                  <!--<div>-->
+                  <!--  <i class="icon-2"></i>-->
+                  <!--  <span v-if="showStatus">-->
+                  <!--    已等待{{item.duration}}分钟-->
+                  <!--  </span>-->
+                  <!--  <span v-else>-->
+                  <!--     耗时{{item.duration}}分钟-->
+                  <!--  </span>-->
+                  <!--</div>-->
                 </div>
+                {{item.approvedStatus}}
                 <div class="approvalStatus finish" v-if="tabs.tab === '3'"></div>
                 <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"
                      v-if="tabs.tab === '1' && tabs.status === 1"></div>
@@ -140,7 +141,7 @@
         moduleHeight: {},
         // 搜索 审批类型
         highParams: {},
-        newHighParams:{}, 
+        newHighParams: {},
         highList: {
           rootProcessDefinitionKeyIn: {
             title: '待办类型',
@@ -414,10 +415,10 @@
             break;
           default:
             // 搜索的参数处理
-             this.newHighParams = this.jsonClone(this.highParams);
-             //待办类型由数组转化为字符串
-            if(this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length>0){   
-              this.newHighParams.rootProcessDefinitionKeyIn= this.highParams.rootProcessDefinitionKeyIn.join(',');
+            this.newHighParams = this.jsonClone(this.highParams);
+            //待办类型由数组转化为字符串
+            if (this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length > 0) {
+              this.newHighParams.rootProcessDefinitionKeyIn = this.highParams.rootProcessDefinitionKeyIn.join(',');
             }
             this.onSearch(this.tabs.tab);
             break;
@@ -564,7 +565,7 @@
                   page: 1,
                   taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
                 };
-                 this.params['params' + tab].assignee = this.personal.staff_id;
+                this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
               case 3:
                 this.params['params' + tab] = {
@@ -573,7 +574,7 @@
                   taskDefinitionKeyIn: approvalSearch.approvals23.join(','),
                   active: true,
                 };
-                 this.params['params' + tab].assignee = this.personal.staff_id;
+                this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
             }
             break;
@@ -583,7 +584,7 @@
               category: 'cc',
               finished: Boolean(status),
             };
-             this.params['params' + tab].assignee = this.personal.staff_id;
+            this.params['params' + tab].assignee = this.personal.staff_id;
             break;
           case '4':
             this.params['params' + tab].taskAssignee = this.personal.staff_id;
@@ -609,7 +610,7 @@
       // 列表
       getApproval(url, params, tab) {
         // 搜索的参数
-        params = Object.assign({}, params,this.newHighParams);
+        params = Object.assign({}, params, this.newHighParams);
         this.ids = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
