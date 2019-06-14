@@ -358,8 +358,10 @@
       },
       //请求房屋详情
       handleHouseDetail(item) {
-        // this.routerLink('/houseDetail',{id: item.id});
-        this.routerLink('/houseDetail', {id: 248073});
+        console.log(item);
+        sessionStorage.setItem('fromHouseIndex','true');
+        this.routerLink('/houseDetail',{id: item.id});
+        //this.routerLink('/houseDetail', {id: 248073});
       },
       //按钮
       searchBtn(type, idx) {

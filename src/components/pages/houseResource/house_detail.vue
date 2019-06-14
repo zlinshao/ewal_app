@@ -16,7 +16,8 @@
               <h3 class="price">{{ detail && detail.house_detail && detail.house_detail.suggest_price }}元/月</h3>
             </div>
             <div class="address">
-              仙林大学城仙鹤门二号路1号
+              {{detail.address}}
+<!--              仙林大学城仙鹤门二号路1号-->
             </div>
           </div>
           <!--标签-->
@@ -90,8 +91,9 @@
             </div>
             <div class="furniture">
               <van-row>
-                <van-col span="6" v-for="tmp in house_config" :key="tmp.id">
-                  <div class="furniture" :class="{ ['fur' + tmp.id]: true, 'show_furniture': !tmp.val }"></div>
+                <van-col span="6" v-for="item in house_config" :key="item.id">
+                  <div class="furniture" :class="{ ['fur' + item.id]: true, 'show_furniture': !item.val }"></div>
+                  <div class="furniture-tip">{{item.label}}</div>
                 </van-col>
               </van-row>
             </div>
@@ -106,28 +108,28 @@
           <!--同小区成交-->
           <div class="common_city">
             <h3>同小区成交</h3>
-            <a class="clinch-btn">最新{{ village_list.length > 0 && village_list.length }}套成交</a>
+            <a class="clinch-btn">最新{{ village_list.length }}套成交</a>
             <van-steps direction="vertical" :active="-1">
               <van-step v-for="item in village_list" :key="item.id">
                 <div class="flex house-clinch">
                   <h3>{{ item.name }}</h3>
                   <a>{{ item.price }}元/月</a>
                 </div>
-                <p class="type-clinch">{{ item.area }} {{ item.hk }}</p>
+                <p class="type-clinch">{{ item.area }}㎡ {{ item.hk }}</p>
               </van-step>
             </van-steps>
           </div>
           <!--推荐房源-->
           <div class="more-house">
             <h3>推荐房源</h3>
-            <div v-for="item in 5" class="flex" :key="item">
+            <div v-for="(item,index) in detail.recommend_data" class="flex" :key="index">
               <img src="./detail.png" alt="">
               <div>
                 <div class="flex">
-                  <h4>仙居雅苑2-202</h4>
-                  <a class="price">2000元/月</a>
+                  <h4>仙居雅苑2333-202</h4>
+                  <a class="price">{{item.price}}元/月</a>
                 </div>
-                <span>85㎡ 2室1厅1卫</span>
+                <span>85㎡ {{item.house_type}}</span>
               </div>
             </div>
           </div>
@@ -155,20 +157,31 @@
 
         village_list: [], //同小区房源
 
-        house_config: [
-          {id: 1,key: 'house_config_refrigerator',label: '冰箱',val: 3},
-          {id: 2,key: 'house_config_tv',label: '电视',val: ''},
-          {id: 3,key: 'house_config_airc',label: '空凋',val: 1},
-          {id: 4,key: 'house_config_microwave',label: '微波炉',val: ''},
-          {id: 5,key: 'house_config_washing',label: '洗衣机',val: ''},
-          {id: 6,key: 'house_config_heater',label: '热水器',val: 2},
+        house_config: [//房屋配置
+          {id: 1,key: 'house_config_refrigerator',label: '冰箱',val: 0},
+          {id: 2,key: 'house_config_tv',label: '电视',val: 0},
+          {id: 3,key: 'house_config_airc',label: '空凋',val: 0},
+          {id: 4,key: 'house_config_gas',label: '燃气',val: 0},
+          {id: 5,key: 'house_config_heater',label: '热水器',val: 0},
+          {id: 6,key: 'house_config_microwave',label: '微波炉',val: 0},
+          {id: 7,key: 'house_config_washing',label: '洗衣机',val: 0},
+          {id: 8,key: 'house_config_hood',label: '油烟机',val: 0},
         ]
       }
     },
     mounted() {
-      this.handleGetHouseDetail();
+      /*this.handleGetHouseDetail();
       let top = this.$refs['house_main'].offsetTop;
-      this.mainHeight = this.mainListHeight(top + 20);
+      this.mainHeight = this.mainListHeight(top + 20);*/
+    },
+    activated() {
+      if(sessionStorage.getItem('fromHouseIndex')=='true') {//防止从图片详情及交接单页返回页请求详情接口
+        this.handleGetHouseDetail();
+        let top = this.$refs['house_main'].offsetTop;
+        this.mainHeight = this.mainListHeight(top + 20);
+        sessionStorage.setItem('fromHouseIndex','false');
+      }
+
     },
     watch: {},
     computed: {},
@@ -206,8 +219,10 @@
       handleLookAssociate() {
         this.routerLink('/houseProperty',this.$route.query);
       },
+      /**
+       * 获取房屋详情
+       */
       handleGetHouseDetail() {
-        debugger
         if (!this.$route.query) {
           return false;
         }
@@ -215,7 +230,16 @@
         this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
           if (res.code === 200) {
             this.detail = res.data;
-            this.village_list = res.data.village_data;
+            this.village_list = res.data.village_data||[];
+            if(res.data.handover_data && res.data.handover_data.house_config) {//房屋配置
+              _.forEach(res.data.handover_data.house_config,(val,key)=> {
+                _.find(this.house_config,{key:key}).val = val;
+              });
+            }else {
+              _(this.house_config).forEach((o)=> {
+                o.val = 0;
+              });
+            }
             let location = [];
             location[0] = this.detail.location && this.detail.location.longitude;
             location[1] = this.detail.location && this.detail.location.latitude;
@@ -223,7 +247,7 @@
               this.handleInitialMap(location, this.detail.house_name);
             })
           } else {
-            this.house_detail = '';
+            this.detail = {};
             this.village_list = [];
           }
         })
@@ -351,8 +375,12 @@
               div.furniture {
                 width: 40pt;
                 height: 40pt;
-                margin: .2rem;
+                margin: .2rem auto;
                 border-radius: 50%;
+              }
+              div.furniture-tip {
+                @include flex('flex-center');
+                color: #797982;
               }
               @for $i from 1 to 9 {
                 .fur#{$i} {
@@ -361,7 +389,7 @@
                 }
               }
               .show_furniture {
-                opacity: .5;
+                opacity: .3;
               }
             }
           }
