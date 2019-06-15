@@ -352,7 +352,7 @@ export default {
           data = this.jsonClone(defineRetainageReport);
           break;
         case 'bulletin_change'://调租
-          title = ['客户信息', '合同信息'];
+          title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineChangeReport);
           break;
         case 'bulletin_rent_trans'://转租
