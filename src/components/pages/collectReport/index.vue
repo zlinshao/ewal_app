@@ -290,6 +290,7 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      console.log(this.taskDetail);
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -344,28 +345,25 @@
       },
       // 区分报备类型参数
       distinguishForm(type) {
-        if (type !== 'bulletin_collect_basic') {
+        if (type !== 'bulletin_collect_basic' && type !== 'bulletin_change') {
           this.form.house_id = this.taskDetail.house_id;
           this.form.contract_id = this.taskDetail.contract_id;
         }
-        if (type === 'bulletin_rent_basic') {
-          let query = this.$route.query;
-          this.form.is_sign = '';
-          if (query.result) {
-            this.form.is_sign = query.result;
-          }
+        switch (type) {
+          case 'bulletin_rent_basic':
+            this.form.is_sign = '';
+            let query = this.$route.query;
+            if (query.result) {
+              this.form.is_sign = query.result;
+            }
+            break;
+          case'bulletin_change':
+            this.form.house_id_rent = this.taskDetail.house_id;
+            this.form.contract_id_rent = this.taskDetail.contract_id;
+            this.form.house_address = this.taskDetail.address;
+            this.formatData.house_id_rent = this.taskDetail.address;
+            break;
         }
-        // switch (type) {
-        //   case 'bulletin_rent_basic':
-        //     this.form.is_sign = '';
-        //     let query = this.$route.query;
-        //     if (query.result) {
-        //       this.form.is_sign = query.result;
-        //     }
-        //     break;
-        //   case'':
-        //     break;
-        // }
       },
       // touch 左右切换
       tapStart(event) {
@@ -397,7 +395,9 @@
       hiddenHouse(val, config) {
         this.onCancel();
         if (val !== 'close') {
-          this.form[config.keyName] = val.house_id;
+          for(let item of Object.keys(val)) {
+            this.form[item] = val[item];
+          }
           this.formatData[config.keyName] = val.address;
         }
       },
