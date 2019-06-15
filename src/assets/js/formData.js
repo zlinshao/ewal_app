@@ -3643,13 +3643,13 @@ defineSubletReport = [{
 defineChangeReport = {
   slither0: [
     {
-    label: '原房屋地址',
-    disabled: 'disabled',
-    placeholder: '已禁用',
-    keyName: 'old_house_name',
-    keyType: '',
-    type: 'text',
-    slot: '',
+      label: '原房屋地址',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'old_house_name',
+      keyType: '',
+      type: 'text',
+      slot: '',
     },
     {
       label: '现房屋地址',
@@ -4028,16 +4028,16 @@ defineChangeReport = {
   // 客户信息
   slither1: [
     {
-    label: '客户姓名',
-    placeholder: '必填 请输入',
-    keyName: 'customer_name',
-    keyType: '',
-    type: 'text',
-    button: '身份识别',
-    icon: 'identity',
-    status: '',
-    slot: '',
-  },
+      label: '客户姓名',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      button: '身份识别',
+      icon: 'identity',
+      status: '',
+      slot: '',
+    },
     {
       label: '性别',
       placeholder: '必填 请选择',
