@@ -511,8 +511,7 @@
       sePaySecondDate(key, date) {
         if (!date) return;
         let val = new Date(date);
-        let pay_way = Number(this.form[key][0].pay_way || 0) * 30;
-        let pay_second = this.myUtils.formatAddRem('dd', pay_way, val);
+        let pay_second = this.myUtils.formatAddRem('mm', 1, val);
         this.setFormDate('pay_second_date', pay_second)
       },
       // 计算押金
