@@ -511,7 +511,12 @@
       },
       // 计算押金
       countPrice() {
-        let bet = Number(this.form.pay_way_bet || 0);
+        let bet;
+        if (this.form.pay_way_bet || this.form.pay_way_bet === 0) {
+          bet = Number(this.form.pay_way_bet);
+        } else {
+          bet = 1;
+        }
         let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
         this.form.deposit = bet * price;
       },
