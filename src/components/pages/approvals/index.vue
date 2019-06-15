@@ -47,20 +47,15 @@
                     <span v-if="item.status.length">{{item.status[0]}}</span>
                     <span v-else>{{item.name}}</span>
                   </div>
-                  <!--<div>-->
-                  <!--  <i class="icon-2"></i>-->
-                  <!--  <span v-if="showStatus">-->
-                  <!--    已等待{{item.duration}}分钟-->
-                  <!--  </span>-->
-                  <!--  <span v-else>-->
-                  <!--     耗时{{item.duration}}分钟-->
-                  <!--  </span>-->
-                  <!--</div>-->
+                <div>
+                  <i class="icon-2"></i>
+                  <span v-if="showStatus">已等待{{item.duration}}分钟</span>
+                  <span v-else>耗时{{item.duration}}分钟</span>
                 </div>
-                {{item.approvedStatus}}
+                </div>
                 <div class="approvalStatus finish" v-if="tabs.tab === '3'"></div>
                 <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"
-                     v-if="tabs.tab === '1' && tabs.status === 1"></div>
+                     v-if="(tabs.tab === '1' || tabs.tab === '2') && tabs.status === 1"></div>
                 <div class="moreOperate" @click.stop="moreOperates(item.id)"
                      v-if="tabs.tab === '2' && tabs.status !== 0"></div>
               </div>
@@ -93,10 +88,10 @@
         <div class="searchInput">
           <div class="input">
             <div>
-              <input type="text" v-model="highParams.title" @keyup.enter="searchBtn()" placeholder="请输入搜索内容">
+              <input type="text" v-model="highParams.title" @keyup.enter="onSearch(tabs.tab)" placeholder="请输入搜索内容">
               <span v-if="highParams.title" @click="highParams.title = ''"></span>
             </div>
-            <p v-if="highParams.title" class="searchBtn" @click="searchBtn()">搜索</p>
+            <p v-if="highParams.title" class="searchBtn" @click="onSearch(tabs.tab)">搜索</p>
             <p v-if="!highParams.title" @click="showOnSearch()">取消</p>
           </div>
         </div>
@@ -565,7 +560,7 @@
                   page: 1,
                   taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
                 };
-                this.params['params' + tab].assignee = this.personal.staff_id;
+                 this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
               case 3:
                 this.params['params' + tab] = {
@@ -574,7 +569,7 @@
                   taskDefinitionKeyIn: approvalSearch.approvals23.join(','),
                   active: true,
                 };
-                this.params['params' + tab].assignee = this.personal.staff_id;
+                 this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
             }
             break;
