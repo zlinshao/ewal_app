@@ -141,7 +141,7 @@
           <div class="house flex" v-for="(item,key) in house_list" :key="key" @click="handleHouseDetail(item)">
             <div class="leftPic">
               <!--              <img src="./detail.png" alt="">-->
-              <img v-if="item.album_photo.length>0" :src="item.album_photo[0].uri" alt="">
+              <img v-if="item.album_photo.length>0" :src="item.album_photo[item.album_photo.length-1].uri" alt="">
               <img v-else src="./detail.png">
               <a class="writingMode status1">{{ item.house_status_name }}</a>
               <!--<a class="writingMode status2">未出租</a>-->
@@ -311,7 +311,7 @@
           rent_price: [],
           kong: [], //空置天数
           is_org_user: 0,
-          org_user_id: []
+          org_user_id: [],
         },
         house_list: [], //房屋列表
       }
@@ -321,6 +321,14 @@
         let top = this.$refs.topSearch.offsetHeight;
         this.mainHeight = this.mainListHeight(top + 50);
       });
+    },
+
+    activated() {
+      let kong = this.$route.query.kong;
+      if(kong && kong.constructor==Array) {
+        this.params.kong = kong;
+      }
+      this.handleGetHouseResource();
       let city = this.cityList;
       for (let item of city) {
         if (String(item.code) === String(this.personal.city_id)) {
@@ -329,6 +337,11 @@
         }
       }
     },
+
+    deactivated() {
+      this.params.kong = [];
+    },
+
     watch: {},
     computed: {
       personal() {
@@ -489,7 +502,7 @@
         if (!val) {
           this.house_list = [];
           this.params.page = 1;
-          this.handleGetHouseResource();
+          //this.handleGetHouseResource();
         } else {
           if (this.fullLoading) return;
           if (this.house_list.length === this.paging) return;
