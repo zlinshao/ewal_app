@@ -25,7 +25,7 @@
           <div class="contract_content" @click="onConfirm(item)">
             <div class="top">
               <h1>
-                <b>收</b>
+                <b>{{params.contract_type === 1 ? '收' : '租'}}</b>
                 <span v-if="item.house_name && item.house_name.name">{{item.house_name.name}}</span>
                 <span v-else>******</span>
               </h1>
@@ -33,7 +33,7 @@
             </div>
             <div class="main">
               <div>
-                <h1>房东</h1>
+                <h1>{{params.contract_type === 1 ? '房东' : '租客'}}</h1>
                 <h2 v-if="item.customer_info && item.customer_info[0].name">
                   <span>{{item.customer_info[0].name}}</span>
                 </h2>
@@ -133,7 +133,7 @@
           page: 1,
           limit: 50,
           status: 1,
-          contract_type: 1,
+          contract_type: 2,
           city_name: '',
           from: 'task',
           search: '',
@@ -191,9 +191,13 @@
         data.house_id = item.house_id || '';
         data.contract_id = item.contract_id || '';
         data.address = item.house_name.name || '';
-        data.content = {};
-        sessionStorage.setItem('task_detail', JSON.stringify(data));
-        this.routerReplace('/collectReport');
+        this.$httpZll.getBulletinDetail(data.contract_id).then(res => {
+          if (res) {
+            data.content = res.content.draft_content;
+            sessionStorage.setItem('task_detail', JSON.stringify(data));
+            this.routerReplace('/collectReport');
+          }
+        });
       },
       close_(val) {
         this.params.page = 1;

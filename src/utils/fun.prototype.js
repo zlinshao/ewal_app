@@ -396,6 +396,24 @@ export default {
       }
       return {data, title}
     };
+    // 图片id转换url
+    Vue.prototype.$changeAlbum = function (album, data) {
+      return new Promise((resolve, reject) => {
+        let photo = this.jsonClone(data);
+        for (let pic of Object.keys(album)) {
+          if (album[pic].length) {
+            if (typeof album[pic][0] !== 'object') {
+              this.$httpZll.getUploadUrl(album[pic], 'close').then(res => {
+                photo[pic] = res.data;
+              })
+            } else {
+              photo[pic] = album[pic];
+            }
+          }
+        }
+        resolve(photo);
+      });
+    };
     // 预填数据处理
     Vue.prototype.$changeHandle = function (res, item, val, all, data, child) {
       for (let slither of Object.keys(all)) {

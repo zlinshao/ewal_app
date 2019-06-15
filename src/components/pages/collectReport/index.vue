@@ -290,7 +290,6 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
-      console.log(this.taskDetail);
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -395,7 +394,7 @@
       hiddenHouse(val, config) {
         this.onCancel();
         if (val !== 'close') {
-          for(let item of Object.keys(val)) {
+          for (let item of Object.keys(val)) {
             this.form[item] = val[item];
           }
           this.formatData[config.keyName] = val.address;
@@ -1083,6 +1082,11 @@
             case 'floors':
               this.formatData.floors = res.floor + ' / ' + res.floors;
               break;
+            case 'current_pay_info'://付款方式变化
+              if (res[item]) {
+                this.$changeHandle(res, item, [], this.drawSlither, this.formatData);
+              }
+              break;
             default:
               this.pickerDefaultValue(this.form, item);
               break;
@@ -1095,6 +1099,7 @@
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'house_id':
+              this.form.address = res.address;
               this.formatData.house_id = res.address;
               break;
             case 'door_address'://门牌地址

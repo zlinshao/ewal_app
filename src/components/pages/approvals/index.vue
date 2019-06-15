@@ -47,11 +47,11 @@
                     <span v-if="item.status.length">{{item.status[0]}}</span>
                     <span v-else>{{item.name}}</span>
                   </div>
-                <div>
-                  <i class="icon-2"></i>
-                  <span v-if="showStatus">已等待{{item.duration}}分钟</span>
-                  <span v-else>耗时{{item.duration}}分钟</span>
-                </div>
+                  <div>
+                    <i class="icon-2"></i>
+                    <span v-if="showStatus">已等待{{item.duration}}分钟</span>
+                    <span v-else>耗时{{item.duration}}分钟</span>
+                  </div>
                 </div>
                 <div class="approvalStatus finish" v-if="tabs.tab === '3'"></div>
                 <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"
@@ -550,8 +550,9 @@
               case 1:
                 this.params['params' + tab] = {
                   page: 1,
-                  processDefinitionKeys: 'MG-BulletinApproval,Market-VillageExpand',
+                  processDefinitionKeys: 'MG-BulletinApproval,Market-VillageExpand,Agency-Supervision,Rent-Retainage',
                   finished: Boolean(status),
+                  taskCategory: 'approval',
                 };
                 this.params['params' + tab].taskOwner = this.personal.staff_id;
                 break;
@@ -560,7 +561,7 @@
                   page: 1,
                   taskDefinitionKeyIn: approvalSearch.approvals22.join(','),
                 };
-                 this.params['params' + tab].assignee = this.personal.staff_id;
+                this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
               case 3:
                 this.params['params' + tab] = {
@@ -569,7 +570,7 @@
                   taskDefinitionKeyIn: approvalSearch.approvals23.join(','),
                   active: true,
                 };
-                 this.params['params' + tab].assignee = this.personal.staff_id;
+                this.params['params' + tab].assignee = this.personal.staff_id;
                 break;
             }
             break;
