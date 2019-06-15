@@ -125,7 +125,7 @@
       onSearch() {
         this.choose_visible = false;
         if (this.params.choose === 1) {
-          this.$httpZll.searchStaffList(this.params.search).then(res => {
+          this.$httpZll.searchStaffList({search:this.params.search}).then(res => {
             console.log(res);
             if (Number(res.code) === 20000) {
               this.staff_depart_list = res.data.data;
@@ -136,7 +136,7 @@
           })
         }
         if (this.params.choose === 2){
-          var search = this.params.search;
+          let search = this.params.search;
           this.$httpHs.getOrganization({search},'加载中...').then(res => {
             console.log(res);
             if (Number(res.code) === 20000) {
