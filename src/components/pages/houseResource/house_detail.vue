@@ -1,8 +1,8 @@
 <template>
   <div id="house_detail">
     <div>
-      <div class="main-img">
-        <img :src="detail.house_detail.cover" alt="" v-if="detail && detail.house_detail && detail.house_detail.cover"
+      <div v-if="detail" class="main-img">
+        <img :src="detail.cover.uri" alt="" v-if="detail.cover"
              @click="handleLookPics(detail)">
         <img src="./detail.png" v-else alt="none" @click="handleLookPics(detail)">
       </div>
@@ -13,18 +13,18 @@
             <div class="flex">
               <h1>{{ detail && detail.house_name }}</h1>
               <a class="notice notice1"></a>
-              <h3 class="price">{{ detail && detail.house_detail && detail.house_detail.suggest_price }}元/月</h3>
+              <h3 class="price">{{detail && detail.house_detail && detail.house_detail.suggest_price }}元/月</h3>
             </div>
-            <div class="address">
-              {{detail.address}}
+            <div v-if="detail && detail.village_info" class="address">
+              {{detail.village_info.subway_road}}
               <!--              仙林大学城仙鹤门二号路1号-->
             </div>
           </div>
           <!--标签-->
-          <div class="tags flex">
-            <a v-if="detail && detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
+          <div v-if="detail" class="tags flex">
+            <a v-if="detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
             <a class="tag tag-quality"
-               v-if="detail && detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{ detail &&
+               v-if="detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{
               detail.house_detail && detail.house_detail.warning_current_days }}</a>
           </div>
           <!--属性-->
@@ -177,6 +177,8 @@
     },
     activated() {
       if(sessionStorage.getItem('fromHouseIndex')=='true') {//防止从图片详情及交接单页返回页请求详情接口
+        this.detail = null;
+        this.village_list = [];
         this.handleGetHouseDetail();
         let top = this.$refs['house_main'].offsetTop;
         this.mainHeight = this.mainListHeight(top + 20);

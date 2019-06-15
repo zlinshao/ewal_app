@@ -85,7 +85,7 @@
         this.params.house_id = this.$route.query.id;
         this.$httpHs.getContractList(this.params,'加载中...').then(res => {
           this.fullLoading = false;
-          for (var item of res.data) {
+          for (let item of res.data) {
             this.contract_list.push(item);
           }
           this.paging = res.count;

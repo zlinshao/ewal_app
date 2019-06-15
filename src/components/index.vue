@@ -14,7 +14,7 @@
       <!--空置房源-->
       <div class="vacancyHouse">
         <h1></h1>
-        <div v-for="item in vacancyHouse">
+        <div @click="redirectHouseResource(item)" v-for="item in vacancyHouse">
           <i></i>
           <p>
             <b>{{item.num}}</b>
@@ -88,15 +88,27 @@
           {
             num: '0',
             scope: '小于7天',
+            params: {
+              kong:[0,7]
+            },
           }, {
             num: '0',
             scope: '8-14天',
+            params: {
+              kong:[8,14]
+            },
           }, {
             num: '0',
             scope: '15-21天',
+            params: {
+              kong:[15,21]
+            },
           }, {
             num: '0',
             scope: '大于21天',
+            params: {
+              kong:[22,100]
+            },
           },
         ],
         trans: [
@@ -124,10 +136,10 @@
           //   id: '2',
           //   icon: tab_home2,
           // },
-          // {
-          //   id: '3',
-          //   icon: tab_home3,
-          // },
+          {
+            id: '3',
+            icon: tab_home3,
+          },
           {
             id: '4',
             icon: tab_home4,
@@ -154,10 +166,18 @@
           case '4':
             this.routerLink('/toBeDoneList');
             break;
-          // case '3':
-          //   this.routerLink('/houseResource');
-          //   break;
+          case '3':
+            this.routerLink('/houseResource');
+            break;
         }
+      },
+
+      /**
+       * 路由跳转到房源管理页面
+       * @param item item内部携带请求参数
+       */
+      redirectHouseResource(item) {
+        this.routerLink('houseResource',{kong:item.params.kong});
       },
     },
   }
