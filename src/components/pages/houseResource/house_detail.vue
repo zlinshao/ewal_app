@@ -1,8 +1,8 @@
 <template>
   <div id="house_detail">
     <div>
-      <div v-if="detail" class="main-img">
-        <img :src="detail.cover.uri" alt="" v-if="detail.cover"
+      <div class="main-img">
+        <img :src="detail.cover.uri" alt="" v-if="detail && detail.cover"
              @click="handleLookPics(detail)">
         <img src="./detail.png" v-else alt="none" @click="handleLookPics(detail)">
       </div>
@@ -21,10 +21,10 @@
             </div>
           </div>
           <!--标签-->
-          <div v-if="detail" class="tags flex">
-            <a v-if="detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
+          <div class="tags flex">
+            <a v-if="detail && detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
             <a class="tag tag-quality"
-               v-if="detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{
+               v-if="detail && detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{
               detail.house_detail && detail.house_detail.warning_current_days }}</a>
           </div>
           <!--属性-->
@@ -171,6 +171,8 @@
       }
     },
     mounted() {
+      let top = this.$refs['house_main'].offsetTop;
+      this.mainHeight = this.mainListHeight(top + 20);
       /*this.handleGetHouseDetail();
       let top = this.$refs['house_main'].offsetTop;
       this.mainHeight = this.mainListHeight(top + 20);*/
@@ -180,8 +182,8 @@
         this.detail = null;
         this.village_list = [];
         this.handleGetHouseDetail();
-        let top = this.$refs['house_main'].offsetTop;
-        this.mainHeight = this.mainListHeight(top + 20);
+        //let top = this.$refs['house_main'].offsetTop;
+        //this.mainHeight = this.mainListHeight(top + 20);
         sessionStorage.setItem('fromHouseIndex','false');
       }
 
