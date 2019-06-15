@@ -397,12 +397,8 @@
       hiddenHouse(val, config) {
         this.onCancel();
         if (val !== 'close') {
-          let bulletin = config.bulletinType;
-          // switch (bulletin.bulletin) {
-          //   case 'bulletin_rent_basic':
-          //
-          //     break;
-          // }
+          this.form[config.keyName] = val.house_id;
+          this.formatData[config.keyName] = val.address;
         }
       },
       // 日期选择
