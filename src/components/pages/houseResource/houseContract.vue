@@ -93,6 +93,8 @@
       openEContract(item) {
         if(item.e_contract) {
           window.location.href = item.e_contract;
+        }else {
+          this.$prompt('暂无详情');
         }
       },
 
