@@ -4120,6 +4120,62 @@ defineChangeReport = {
       slot: '',
     },
   ],
+  slither2:[
+    {
+      label: '是否渠道',
+      readonly: 'readonly',
+      placeholder: '必填 请选择',
+      keyName: 'is_agency',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      controlShow: '1',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+      showList: [{
+        label: '渠道名称',
+        placeholder: '必填 请输入',
+        keyName: 'agency_name',
+        keyType: '',
+        hidden: true,
+        type: 'text',
+        status: '',
+        slot: '',
+      },
+        {
+          label: '渠道价格',
+          placeholder: '必填 请输入',
+          keyName: 'agency_price',
+          keyType: '',
+          hidden: true,
+          type: 'number',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '渠道联系人',
+          placeholder: '必填 请输入',
+          keyName: 'agency_user_name',
+          keyType: '',
+          hidden: true,
+          type: 'text',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '渠道手机',
+          placeholder: '必填 请输入',
+          keyName: 'agency_phone',
+          keyType: '',
+          hidden: true,
+          type: 'number',
+          status: '',
+          slot: '',
+        },
+      ]
+    },
+  ],
 };
 
 // 渠道报备
