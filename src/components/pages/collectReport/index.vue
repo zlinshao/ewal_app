@@ -511,9 +511,9 @@
       },
       // 计算押金
       countPrice() {
-        let bet;
-        if (this.form.pay_way_bet || this.form.pay_way_bet === 0) {
-          bet = Number(this.form.pay_way_bet);
+        let bet = this.form.pay_way_bet;
+        if (bet || bet === 0) {
+          bet = Number(bet);
         } else {
           bet = 1;
         }
