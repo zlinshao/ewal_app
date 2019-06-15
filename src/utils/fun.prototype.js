@@ -62,9 +62,7 @@ export default {
     };
     // 容器高度 计算
     Vue.prototype.mainListHeight = function (remove = 0) {
-      return {
-        height: (Number(sessionStorage.windowHeight) - remove) + 'px',
-      };
+      return {height: (Number(sessionStorage.windowHeight) - remove) + 'px'};
     };
     Vue.prototype.screenWidth = Number(sessionStorage.windowWidth);
     Vue.prototype.screenHeight = Number(sessionStorage.windowHeight);
@@ -88,7 +86,7 @@ export default {
     // 复选
     Vue.prototype.checkChooseCommon = function (item, value, type = 'id') {
       if (value.length) {
-        if (value.includes(item)) {
+        if (value.includes(item.id)) {
           let index = value.indexOf(item);
           value.splice(index, 1);
         } else {
@@ -133,9 +131,11 @@ export default {
             }
           }
           if (key.name === 'ewal_contract') {
-            let contract = JSON.parse(key.value);
-            obj.contract_id = contract.v3_contract_id;
-            obj.house_id = contract.house_id;
+            if (key.value) {
+              let contract = JSON.parse(key.value);
+              obj.contract_id = contract.v3_contract_id;
+              obj.house_id = contract.house_id;
+            }
           }
           if (key.name.includes('_approved')) {
             obj.approvedStatus = key.value || '';
@@ -166,6 +166,7 @@ export default {
     };
     //自动获取用户IP，返回当前城市
     Vue.prototype.getBeforeCity = function (data = []) {
+      let personal = this.$store.state.app.personalDetail;
       return new Promise((resolve, reject) => {
         let obj = {};
         obj.name = '';
@@ -183,7 +184,6 @@ export default {
           mapObj.addControl(geolocation);
           geolocation.getCurrentPosition();
           AMap.event.addListener(geolocation, 'complete', function (res) {
-            console.log(res);
             let address = res.addressComponent;
             obj.location[0] = res.position.lng;
             obj.location[1] = res.position.lat;
@@ -196,9 +196,9 @@ export default {
             resolve(obj);
           });
           AMap.event.addListener(geolocation, 'error', function (err) {
-            obj.code = 320100;
-            obj.name = '南京';
-            obj.location = [118.734235, 31.984095];
+            obj.code = personal.city_id;
+            obj.name = personal.city_name;
+            obj.location = personal.location;
             resolve(obj);
           });
         });
@@ -209,7 +209,7 @@ export default {
       for (let item of data) {
         if (item.keyName) {
           if (item.placeholder && item.placeholder.includes('必填')) {
-            if (!item.keyType) {
+            if (!item.keyType && item.keyType !== 0) {
               if (this.form[item.keyName] === item.keyType) {
                 this.$prompt(item.label + item.placeholder);
                 return true
@@ -753,8 +753,9 @@ export default {
               data.city_id = city.city_id;
               data.city_name = city.city_name;
             } else {
-              data.city_id = '320100';
-              data.city_name = '南京市';
+              data.city_id = '120000';
+              data.city_name = '天津市';
+              data.location = [117.201538, 39.085294];
             }
             data.department_name = org.name;
             data.department_id = org.id;
@@ -763,7 +764,6 @@ export default {
             this.$prompt('获取部门失败!', 'fail');
             return;
           }
-          console.log(data);
           this.$store.dispatch('personal_storage', data);
           resolve(true);
         }

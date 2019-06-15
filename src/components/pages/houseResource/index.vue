@@ -321,29 +321,6 @@
         let top = this.$refs.topSearch.offsetHeight;
         this.mainHeight = this.mainListHeight(top + 50);
       });
-      /*await this.$httpZll.getCityList().then(res => {
-        this.cityList = [];
-        if (res.data.length === 1) {
-          let obj = {};
-          this.city_name = res.data[0].name;
-          this.params.city = res.data[0].province.code;
-          obj.name = this.city_name;
-          obj.code = this.params.city;
-          this.cityList.push(obj);
-        } else {
-          for (let item of res.data) {
-            let obj = {};
-            if (String(item.code) === String(this.personal.city_id)) {
-              this.city_name = item.name;
-              this.params.city = item.province.code;
-              obj.name = item.name;
-              obj.code = item.code;
-              this.cityList.push(obj);
-            }
-          }
-        }
-      });*/
-      // this.handleGetHouseResource();
     },
 
     activated() {
@@ -352,6 +329,13 @@
         this.params.kong = kong;
       }
       this.handleGetHouseResource();
+      let city = this.cityList;
+      for (let item of city) {
+        if (String(item.code) === String(this.personal.city_id)) {
+          this.city_name = item.name;
+          this.params.city_name = item.name + '市';
+        }
+      }
     },
 
     deactivated() {
