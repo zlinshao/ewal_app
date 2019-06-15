@@ -90,6 +90,9 @@
     computed: {
       personal() {
         return this.$store.state.app.personalDetail;
+      },
+      cityList() {
+        return this.$store.state.app.allCityList;
       }
     },
     methods: {
