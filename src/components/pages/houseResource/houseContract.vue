@@ -126,7 +126,7 @@
       scrollLoad(val) {
         if (!val) {
           this.params.contract_type = 1;
-          this.contract_list = [];
+          //this.contract_list = [];
           //this.handleGetContractList();
         } else {
           if(this.fullLoading) return;
