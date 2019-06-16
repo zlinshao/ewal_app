@@ -142,8 +142,6 @@
       }
     },
     mounted() {
-      /*let top = this.$refs['mainContainer'].offsetTop;
-      this.mainHeight.height = window.innerHeight - top + 'px';*/
     },
     async activated() {
       await this.handleGetHouseDetail();

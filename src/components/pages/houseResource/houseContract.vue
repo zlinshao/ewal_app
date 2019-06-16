@@ -99,7 +99,7 @@
       },
 
       /*
-       *  Description:
+       *  Description:获取合同列表
        *  author: tian
        *  date: 2019-06-15
        *  params: cleanData 是否清除contract_list的数据  默认false
