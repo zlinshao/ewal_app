@@ -1,6 +1,6 @@
 <template>
   <div id="house_property">
-    <div class="scroll_bar" ref="mainContainer" :style="mainHeight">
+    <div v-if="showPage" class="scroll_bar" ref="mainContainer" :style="mainHeight">
       <div class="property-list">
         <h3 class="label">房屋配置</h3>
         <van-row>
@@ -29,6 +29,7 @@
     name: "index",
     data() {
       return {
+        showPage:false,
         property_list: {
           house_config_airc: {
             label: '空调',
@@ -141,22 +142,30 @@
       }
     },
     mounted() {
-      let top = this.$refs['mainContainer'].offsetTop;
-      this.mainHeight.height = window.innerHeight - top + 'px';
-
+      /*let top = this.$refs['mainContainer'].offsetTop;
+      this.mainHeight.height = window.innerHeight - top + 'px';*/
     },
-    activated() {
-      this.handleGetHouseDetail();
+    async activated() {
+      await this.handleGetHouseDetail();
+      this.showPage = true;
+      this.$nextTick(()=> {
+        let top = this.$refs['mainContainer'].offsetTop;
+        this.mainHeight.height = window.innerHeight - top + 'px';
+      });
+    },
+
+    deactivated() {
+      this.showPage = false;
     },
     watch: {},
     computed: {},
     methods: {
-      handleGetHouseDetail() {
+      async handleGetHouseDetail() {
         if (!this.$route.query) {
           return;
         }
         let house_id = this.$route.query.id;
-        this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
+        await this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
           if (res.code === 200) {
             if (res.data.handover_data) {
               if (res.data.handover_data.house_config) {
@@ -206,8 +215,8 @@
           margin: .2rem;
           a.pro-icon {
             display: inline-block;
-            width: 25pt;
-            height: 25pt;
+            width: .5rem;
+            height: .5rem;
           }
           @for $i from 1 to 9 {
             a.pro-icon-#{$i} {
