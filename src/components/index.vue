@@ -87,24 +87,28 @@
         vacancyHouse: [
           {
             num: '0',
+            id:1,
             scope: '小于7天',
             params: {
               kong:[0,7]
             },
           }, {
             num: '0',
+            id:2,
             scope: '8-14天',
             params: {
               kong:[8,14]
             },
           }, {
             num: '0',
+            id:3,
             scope: '15-21天',
             params: {
               kong:[15,21]
             },
           }, {
             num: '0',
+            id:4,
             scope: '大于21天',
             params: {
               kong:[22,100]
@@ -148,6 +152,7 @@
       }
     },
     mounted() {
+      this.getEmptyHouseData();//获取空置房源信息
     },
     activated() {
 
@@ -179,6 +184,32 @@
       redirectHouseResource(item) {
         this.routerLink('houseResource',{kong:item.params.kong});
       },
+
+      /**
+       * 获取空置房源信息
+       */
+      getEmptyHouseData() {
+        let city_id = this.$store.state.app.personalDetail.city_id;
+        let cityList = this.$store.state.app.allCityList;
+        let city_name = '';
+        for (let item of cityList) {
+          if (String(item.code) === String(city_id)) {
+            city_name = item.name;
+            break;
+          }
+        }
+        let params = {
+          city_name
+        };
+        this.$httpHs.getEmptyHouse(params).then(res=> {
+          if(res.code==200) {
+            _.forEach(res.data,(val,key) => {
+              let endChar = key.charAt(key.length-1);
+              _.find(this.vacancyHouse,{id:parseInt(endChar)}).num = val;
+            });
+          }
+        });
+      }
     },
   }
 </script>
