@@ -45,12 +45,12 @@
             key: 3,
             val: 0
           },
-          d: {
+          house_config_gas: {
             label: '煤气',
             key: 4,
             val: 0
           },
-          e: {
+          house_config_hood: {
             label: '油烟机',
             key: 5,
             val: 0
@@ -141,8 +141,11 @@
       }
     },
     mounted() {
-      var top = this.$refs['mainContainer'].offsetTop;
+      let top = this.$refs['mainContainer'].offsetTop;
       this.mainHeight.height = window.innerHeight - top + 'px';
+
+    },
+    activated() {
       this.handleGetHouseDetail();
     },
     watch: {},
@@ -150,26 +153,24 @@
     methods: {
       handleGetHouseDetail() {
         if (!this.$route.query) {
-          return false;
+          return;
         }
-        var house_id = this.$route.query.id;
+        let house_id = this.$route.query.id;
         this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
           if (res.code === 200) {
             if (res.data.handover_data) {
               if (res.data.handover_data.house_config) {
-                for (var key in this.property_list) {
+                for (let key in this.property_list) {
                   this.property_list[key].val = res.data.handover_data.house_config[key] ? res.data.handover_data.house_config[key] : 0;
                 }
               }
-              for (var item of this.extra_property) {
+              for (let item of this.extra_property) {
                 if (res.data.handover_data[item.key]) {
-                  console.log(res.data.handover_data[item.key]);
-                  for (var tmp of item.value) {
+                  for (let tmp of item.value) {
                     tmp.val = res.data.handover_data[item.key][tmp.key] ? res.data.handover_data[item.key][tmp.key] : 0;
                   }
                 }
               }
-              console.log(this.extra_property);
             }
           } else {
             this.$prompt('获取数据失败');
