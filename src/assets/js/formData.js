@@ -332,29 +332,40 @@ bulletinRouterStatus = {
     to: 'collect',
     type: 1,
   },
+  // 续收报备
+  bulletin_collect_continued: {
+    bulletin: 'bulletin_collect_continued',
+    to: 'collect',
+    type: 2,
+  },
   // 租房报备
   bulletin_rent_basic: {
     bulletin: 'bulletin_rent_basic',
     to: 'rent',
     type: 1,
   },
-  // 续租报备
-  bulletin_rent_trans: {
-    bulletin: 'bulletin_rent_trans',
-    to: 'rent',
-    type: 3,
-  },
   // 转租报备
-  newSublet: {
+  bulletin_rent_trans: {
     bulletin: 'bulletin_rent_trans',
     to: 'rent',
     type: 2,
   },
+  // 续租报备
+  bulletin_rent_continued: {
+    bulletin: 'bulletin_rent_continued',
+    to: 'rent',
+    type: 3,
+  },
+  // 未收先租
+  bulletin_rent_RWC: {
+    bulletin: 'bulletin_rent_RWC',
+    to: 'rent',
+    type: 4,
+  },
   // 调租报备
-  newChange: {
+  bulletin_change: {
     bulletin: 'bulletin_change',
     to: 'change',
-    type: 1,
   },
   // 渠道费报备
   bulletin_agency: {
@@ -362,20 +373,19 @@ bulletinRouterStatus = {
     to: 'agency',
   },
   // 房屋尾款报备
-  newRetainage: {
+  bulletin_retainage: {
     bulletin: 'bulletin_retainage',
     to: 'retainage',
   },
   // 特殊事项报备
-  newSpecial: {
+  bulletin_special: {
     bulletin: 'bulletin_special',
     to: 'special',
   },
   //退租报备
-  newCheckout: {
+  bulletin_checkout: {
     bulletin: 'bulletin_checkout',
     to: 'checkout',
-    type: 1,
   },
 };
 
