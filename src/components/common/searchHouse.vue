@@ -94,7 +94,7 @@
         params: {
           page: 1,
           limit: 50,
-          status: 4,// 1-生效中，2-快到期，3-已过期， 4-已结束
+          status: 1,// 1-生效中，2-快到期，3-已过期， 4-已结束
           contract_type: 1,
           city_name: '',
           from: 'task',
@@ -107,19 +107,12 @@
     mounted() {
     },
     activated() {
-      let city = this.cityList;
-      if (city.length === 1) {
-        this.city_name = city[0].name;
-        this.params.city_name = city[0].name + '市';
-      } else {
-        for (let item of city) {
-          if (String(item.code) === String(this.personal.city_id)) {
-            this.city_name = item.name;
-            this.params.city_name = item.name + '市';
-          }
+      for (let item of this.cityList) {
+        if (String(item.code) === String(this.personal.city_id)) {
+          this.city_name = item.name;
+          this.params.city_name = item.name + '市';
         }
       }
-      this.paramsReset();
     },
     watch: {
       'params.search'(val) {
@@ -150,10 +143,6 @@
       }
     },
     methods: {
-      paramsReset() {
-        this.params.status = 1;
-        let type = JSON.parse(sessionStorage.bulletin_type || {});
-      },
       onSearch() {
         this.close_('no');
         this.$httpZll.getContractList(this.params).then(res => {
