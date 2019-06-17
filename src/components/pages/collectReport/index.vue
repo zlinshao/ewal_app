@@ -1199,7 +1199,16 @@
         }
         if (res.album) {
           for (let pic of Object.keys(res.album)) {
-            this.album[pic] = res.album[pic];
+            if (res.album[pic].length) {
+              if (typeof res.album[pic][0] !== 'object') {
+                this.$httpZll.getUploadUrl(res.album[pic], 'close').then(res => {
+                  this.album[pic] = res.data;
+                  this.album = Object.assign({}, this.album);
+                })
+              } else {
+                this.album[pic] = res.album[pic];
+              }
+            }
           }
         }
       },
