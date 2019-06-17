@@ -1,8 +1,8 @@
 <template>
   <div id="house_detail">
-    <div v-if="detail">
+    <div>
       <div class="main-img">
-        <img :src="detail.cover.uri" alt="" v-if="detail.cover"
+        <img :src="detail.house_detail.cover" alt="" v-if="detail && detail.house_detail && detail.house_detail.cover"
              @click="handleLookPics(detail)">
         <img src="./detail.png" v-else alt="none" @click="handleLookPics(detail)">
       </div>
@@ -11,38 +11,38 @@
           <!--头部-->
           <div class="header">
             <div class="flex">
-              <h1>{{ detail.house_name }}</h1>
+              <h1>{{ detail && detail.house_name }}</h1>
               <a class="notice notice1"></a>
-              <h3 class="price">{{ detail.house_detail && detail.house_detail.suggest_price }}元/月</h3>
+              <h3 class="price">{{ detail && detail.house_detail && detail.house_detail.suggest_price }}元/月</h3>
             </div>
-            <div v-if="detail.village_info" class="address">
-              {{detail.village_info.subway_road}}
+            <div class="address">
+              {{detail.address}}
               <!--              仙林大学城仙鹤门二号路1号-->
             </div>
           </div>
           <!--标签-->
           <div class="tags flex">
-            <a v-if="detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
+            <a v-if="detail && detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
             <a class="tag tag-quality"
-               v-if="detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{
-              detail.house_detail && detail.house_detail.warning_current_days }}天</a>
+               v-if="detail && detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{ detail &&
+              detail.house_detail && detail.house_detail.warning_current_days }}</a>
           </div>
           <!--属性-->
           <div class="property">
             <van-row>
               <van-col span="12">
-                <a class="label">面积</a><span class="val">{{ detail.area }}</span>
+                <a class="label">面积</a><span class="val">{{ detail && detail.area }}</span>
               </van-col>
               <van-col span="12">
-                <a class="label">户型</a><span class="val">{{ detail.hk }}</span>
+                <a class="label">户型</a><span class="val">{{ detail && detail.hk }}</span>
               </van-col>
             </van-row>
             <van-row>
               <van-col span="12">
-                <a class="label">楼层</a><span class="val">{{ detail.floor && detail.floor.this }}/{{ detail && detail.floor.all }}</span>
+                <a class="label">楼层</a><span class="val">{{ detail && detail.floor && detail.floor.this }}/{{ detail && detail.floor.all }}</span>
               </van-col>
               <van-col span="12">
-                <a class="label">朝向</a><span class="val">{{ detail.house_toward || '/'}}</span>
+                <a class="label">朝向</a><span class="val">{{ detail && detail.house_toward || '/'}}</span>
               </van-col>
             </van-row>
           </div>
@@ -175,11 +175,9 @@
       let top = this.$refs['house_main'].offsetTop;
       this.mainHeight = this.mainListHeight(top + 20);*/
     },
-    async activated() {
+    activated() {
       if(sessionStorage.getItem('fromHouseIndex')=='true') {//防止从图片详情及交接单页返回页请求详情接口
-        this.detail = null;
-        this.village_list = [];
-        await this.handleGetHouseDetail();
+        this.handleGetHouseDetail();
         let top = this.$refs['house_main'].offsetTop;
         this.mainHeight = this.mainListHeight(top + 20);
         sessionStorage.setItem('fromHouseIndex','false');
@@ -225,12 +223,12 @@
       /**
        * 获取房屋详情
        */
-      async handleGetHouseDetail() {
+      handleGetHouseDetail() {
         if (!this.$route.query) {
           return false;
         }
         let house_id = this.$route.query.id;
-        await this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {/*city:'南京'*/}, '获取中...').then(res => {
+        this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {/*city:'南京'*/}, '获取中...').then(res => {
           if (res.code === 200) {
             this.detail = res.data;
             this.village_list = res.data.village_data||[];

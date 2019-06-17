@@ -21,7 +21,7 @@
             <span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
           </p>
         </div>
-        <i @click="approvalModule = true"></i>
+      <i @click="approvalModule = true"></i>
       </div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
@@ -55,7 +55,7 @@
                 </div>
                 <div class="approvalStatus finish" v-if="tabs.tab === '3'"></div>
                 <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"
-                     v-if="(tabs.tab === '1' || tabs.tab === '2') && tabs.status === 1"></div>
+                     v-if="tabs.tab === '1' && tabs.status === 1"></div>
                 <div class="moreOperate" @click.stop="moreOperates(item.id)"
                      v-if="tabs.tab === '2' && tabs.status !== 0"></div>
               </div>
@@ -88,10 +88,10 @@
         <div class="searchInput">
           <div class="input">
             <div>
-              <input type="text" v-model="highParams.title" @keyup.enter="onSearch(tabs.tab)" placeholder="请输入搜索内容">
+              <input type="text" v-model="highParams.title" @keyup.enter="searchBtn()" placeholder="请输入搜索内容">
               <span v-if="highParams.title" @click="highParams.title = ''"></span>
             </div>
-            <p v-if="highParams.title" class="searchBtn" @click="onSearch(tabs.tab)">搜索</p>
+            <p v-if="highParams.title" class="searchBtn" @click="searchBtn()">搜索</p>
             <p v-if="!highParams.title" @click="showOnSearch()">取消</p>
           </div>
         </div>
@@ -136,7 +136,7 @@
         moduleHeight: {},
         // 搜索 审批类型
         highParams: {},
-        newHighParams: {},
+        newHighParams:{}, 
         highList: {
           rootProcessDefinitionKeyIn: {
             title: '待办类型',
@@ -410,10 +410,10 @@
             break;
           default:
             // 搜索的参数处理
-            this.newHighParams = this.jsonClone(this.highParams);
-            //待办类型由数组转化为字符串
-            if (this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length > 0) {
-              this.newHighParams.rootProcessDefinitionKeyIn = this.highParams.rootProcessDefinitionKeyIn.join(',');
+             this.newHighParams = this.jsonClone(this.highParams);
+             //待办类型由数组转化为字符串
+            if(this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length>0){   
+              this.newHighParams.rootProcessDefinitionKeyIn= this.highParams.rootProcessDefinitionKeyIn.join(',');
             }
             this.onSearch(this.tabs.tab);
             break;
@@ -580,7 +580,7 @@
               category: 'cc',
               finished: Boolean(status),
             };
-            this.params['params' + tab].assignee = this.personal.staff_id;
+             this.params['params' + tab].assignee = this.personal.staff_id;
             break;
           case '4':
             this.params['params' + tab].taskAssignee = this.personal.staff_id;
@@ -606,7 +606,7 @@
       // 列表
       getApproval(url, params, tab) {
         // 搜索的参数
-        params = Object.assign({}, params, this.newHighParams);
+        params = Object.assign({}, params,this.newHighParams);
         this.ids = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {

@@ -62,13 +62,13 @@
             icon: ic_weikuan,
           },
           {
-            url: 'contractSearch',
+            url: '',
             name: '调租',
             status: bulletinRouterStatus.bulletin_change,
             icon: ic_tiaozu,
           },
           {
-            url: 'contractSearch',
+            url: '',
             name: '转租',
             status: bulletinRouterStatus.bulletin_rent_trans,
             icon: ic_zhuanzu,
@@ -80,7 +80,7 @@
             icon: ic_teshu,
           },
           {
-            url: 'contractSearch',
+            url: '',
             name: '退租',
             status: bulletinRouterStatus.bulletin_checkout,
             icon: ic_tuizu,

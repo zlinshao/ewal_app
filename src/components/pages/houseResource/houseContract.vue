@@ -7,7 +7,7 @@
       </header>
       <div class="main-content" ref="mainContract" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
-          <div class="contract-item" @click="openEContract(item)" v-for="(item,key) in contract_list" :key="key">
+          <div class="contract-item" v-for="(item,key) in contract_list" :key="key">
             <div class="header flex">
               <h4>{{ item.house_name }}</h4>
               <a class="contract-icon" :class="{'contract-item-icon': item.is_effective === 1 }">{{ item.is_effective === 1 ? '生效' : '结束'}}</a>
@@ -72,47 +72,20 @@
       }
     },
     mounted() {
-      /*let top = this.$refs['mainContract'].offsetTop;
-      this.mainHeight.height = window.innerHeight - top + 'px';
-      console.log(this.mainHeight);
-      this.handleGetContractList(true);*/
-    },
-
-    activated() {
       let top = this.$refs['mainContract'].offsetTop;
       this.mainHeight.height = window.innerHeight - top + 'px';
       console.log(this.mainHeight);
-      this.handleGetContractList(true);
+      this.handleGetContractList();
     },
-
     watch: {},
     computed: {},
     methods: {
-
-      //打开电子合同
-      openEContract(item) {
-        if(item.e_contract) {
-          window.location.href = item.e_contract;
-        }else {
-          this.$prompt('暂无详情');
-        }
-      },
-
-      /*
-       *  Description:获取合同列表
-       *  author: tian
-       *  date: 2019-06-15
-       *  params: cleanData 是否清除contract_list的数据  默认false
-      **/
-      handleGetContractList(cleanData = false) {
+      handleGetContractList() {
         this.fullLoading = true;
-        if(cleanData) {
-          this.contract_list = [];
-        }
         this.params.house_id = this.$route.query.id;
         this.$httpHs.getContractList(this.params,'加载中...').then(res => {
           this.fullLoading = false;
-          for (let item of res.data) {
+          for (var item of res.data) {
             this.contract_list.push(item);
           }
           this.paging = res.count;
@@ -126,8 +99,8 @@
       scrollLoad(val) {
         if (!val) {
           this.params.contract_type = 1;
-          //this.contract_list = [];
-          //this.handleGetContractList();
+          this.contract_list = [];
+          this.handleGetContractList();
         } else {
           if(this.fullLoading) return;
           if (this.contract_list.length === this.paging) return;

@@ -344,25 +344,28 @@
       },
       // 区分报备类型参数
       distinguishForm(type) {
-        if (type !== 'bulletin_collect_basic' && type !== 'bulletin_change') {
+        if (type !== 'bulletin_collect_basic') {
           this.form.house_id = this.taskDetail.house_id;
           this.form.contract_id = this.taskDetail.contract_id;
         }
-        switch (type) {
-          case 'bulletin_rent_basic':
-            this.form.is_sign = '';
-            let query = this.$route.query;
-            if (query.result) {
-              this.form.is_sign = query.result;
-            }
-            break;
-          case'bulletin_change':
-            this.form.house_id_rent = this.taskDetail.house_id;
-            this.form.contract_id_rent = this.taskDetail.contract_id;
-            this.form.house_address = this.taskDetail.address;
-            this.formatData.house_id_rent = this.taskDetail.address;
-            break;
+        if (type === 'bulletin_rent_basic') {
+          let query = this.$route.query;
+          this.form.is_sign = '';
+          if (query.result) {
+            this.form.is_sign = query.result;
+          }
         }
+        // switch (type) {
+        //   case 'bulletin_rent_basic':
+        //     this.form.is_sign = '';
+        //     let query = this.$route.query;
+        //     if (query.result) {
+        //       this.form.is_sign = query.result;
+        //     }
+        //     break;
+        //   case'':
+        //     break;
+        // }
       },
       // touch 左右切换
       tapStart(event) {
@@ -504,17 +507,13 @@
       sePaySecondDate(key, date) {
         if (!date) return;
         let val = new Date(date);
-        let pay_second = this.myUtils.formatAddRem('mm', 1, val);
+        let pay_way = Number(this.form[key][0].pay_way || 0) * 30;
+        let pay_second = this.myUtils.formatAddRem('dd', pay_way, val);
         this.setFormDate('pay_second_date', pay_second)
       },
       // 计算押金
       countPrice() {
-        let bet = this.form.pay_way_bet;
-        if (bet || bet === 0) {
-          bet = Number(bet);
-        } else {
-          bet = 1;
-        }
+        let bet = Number(this.form.pay_way_bet || 0);
         let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
         this.form.deposit = bet * price;
       },
