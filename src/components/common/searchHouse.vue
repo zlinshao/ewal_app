@@ -108,10 +108,15 @@
     },
     activated() {
       let city = this.cityList;
-      for (let item of city) {
-        if (String(item.code) === String(this.personal.city_id)) {
-          this.city_name = item.name;
-          this.params.city_name = item.name + '市';
+      if (city.length === 1) {
+        this.city_name = city[0].name;
+        this.params.city_name = city[0].name + '市';
+      } else {
+        for (let item of city) {
+          if (String(item.code) === String(this.personal.city_id)) {
+            this.city_name = item.name;
+            this.params.city_name = item.name + '市';
+          }
         }
       }
       this.paramsReset();
@@ -146,7 +151,7 @@
     },
     methods: {
       paramsReset() {
-        this.params.status = 4;
+        this.params.status = 1;
         let type = JSON.parse(sessionStorage.bulletin_type || {});
       },
       onSearch() {

@@ -331,36 +331,48 @@ export default {
     };
     // 报备类型数据匹配
     Vue.prototype.$bulletinType = function (type) {
-      let data = {}, title;
+      let data = {}, title = [];
       switch (type) {
-        case 'bulletin_collect_basic':
+        case 'bulletin_collect_basic'://收房
           title = ['房屋信息', '物品信息', '客户信息', '合同信息'];
           data = this.jsonClone(defineCollectReport);
           break;
-        case 'bulletin_rent_basic':
-        case 'bulletin_booking_renting':
+        case 'bulletin_collect_continued'://续收
+          title = ['房屋信息', '物品信息', '客户信息', '合同信息'];
+          data = this.jsonClone(defineCollectReport);
+          break;
+        case 'bulletin_rent_basic'://租房
           title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineRentReport);
           data.slither0 = defineNewRentReport.concat(data.slither0);
           break;
-        case 'bulletin_agency':
-          title = ['渠道费报备'];
-          data = this.jsonClone(defineAgencyReport);
+        case 'bulletin_rent_trans'://转租
+          title = ['合同信息', '客户信息'];
+          data = this.jsonClone(defineRentReport);
+          data.slither0 = defineSubletReport.concat(data.slither0);
           break;
-        case 'bulletin_retainage':
-          title = ['尾款报备'];
-          data = this.jsonClone(defineRetainageReport);
+        case 'bulletin_rent_continued'://续租
+          title = ['合同信息', '客户信息'];
+          data = this.jsonClone(defineRentReport);
+          data.slither0 = defineNewRentReport.concat(data.slither0);
+          break;
+        case 'bulletin_rent_RWC'://未收先租
+          title = ['合同信息', '客户信息'];
+          data = this.jsonClone(defineRentBookingReport);
           break;
         case 'bulletin_change'://调租
           title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineChangeReport);
           break;
-        case 'bulletin_rent_trans'://转租
-          title = ['合同信息','客户信息'];
-          data = this.jsonClone(defineRentReport);
-          data.slither0 = defineSubletReport.concat(data.slither0);
+        case 'bulletin_agency'://渠道
+          title = ['渠道费报备'];
+          data = this.jsonClone(defineAgencyReport);
           break;
-        case 'bulletin_special'://特殊事项
+        case 'bulletin_retainage'://尾款
+          title = ['尾款报备'];
+          data = this.jsonClone(defineRetainageReport);
+          break;
+        case 'bulletin_special'://特殊
           title = ['特殊事项报备'];
           data = this.jsonClone(defineSpecialReport);
           break;
@@ -745,7 +757,7 @@ export default {
             department_id: '395',
             department_name: "开发",
             phone: "18052001167",
-            staff_id: '',
+            staff_id: '69',
             staff_name: "张琳琳",
           };
           globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU3OTdkZWJjOWRhODc0OGY5Yjk2ZWM2MjI5ZThjOTFiOTQ2ZWU2NTA4ZjM1MzdiMGI5NzdjZDcxYzQyM2IwYWE0Mzk4ZjA0MzljMTBhNjI5In0.eyJhdWQiOiIxIiwianRpIjoiZTc5N2RlYmM5ZGE4NzQ4ZjliOTZlYzYyMjllOGM5MWI5NDZlZTY1MDhmMzUzN2IwYjk3N2NkNzFjNDIzYjBhYTQzOThmMDQzOWMxMGE2MjkiLCJpYXQiOjE1NTk4ODg2MjUsIm5iZiI6MTU1OTg4ODYyNSwiZXhwIjoxNTYxMTg0NjI1LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.vEbN37TYOYd9moQViB0hSoG0LVcnbzrntBEvIrrJ00TndWWF7m8Bu4JU0tU6Dcw1LHMFuv7HkqmDVddlwJmdgFtpYOdKAHL1s1vDkUbmoKDai8ZnvZR514x7rwkMW3qrr1lJ7z4s7le7UG6_tWFeRiR02D8LPbgQVyfT3xQ3OTG9cs-ZuYYbgGZRKf1Mm891WKqtxvXHokEQCmsEWxaKJwCMVmjOUq4WH1PPHWHWfA__Q4T6ea7X0CvmWuJU1RBXr-zBflHxGuRgVDth2eSiaJly6E2x_hsFOKptN4hEMHn7vlDZyvKmGvCUbW9zs8E94by8HQEy6YhNT70I1qFFSpOVI83i8_kAXDhEsiTbcImQYWTlTP2d4sT9tFDBpdDCgYV35-pSRdk5adukMvQkji0kwt2Q16xw_W9bQsY0HJY3X9D2w7t9mljzASrILFi-sq096q2JlKNdi8J3PxRPKuOVWPlfwvD1V-rKQmwGOhj_LbKUFfGNiUZBBsMeyYRb7oaGTpuHOzQhkIDLpXgMV1CG08s2Czc3PPfLGACjj-Cdgbf08LG5orzsrCF-ZRkLxZQ-wTxeuRjxF6WOG6kIYT2Y7SKbOpys4RWQMxMRfB_tsUlxEKueyrfNka9vGmy7C25qz7RO7ffVE9TRxyE2C15AkWP4FDb4FtKrcqoM1Kk';

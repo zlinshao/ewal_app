@@ -58,31 +58,31 @@
           {
             url: 'toBeDone',
             name: '尾款待办',
-            status: bulletinRouterStatus.newRetainage,
+            status: bulletinRouterStatus.bulletin_retainage,
             icon: ic_weikuan,
           },
           {
-            url: 'contractSearch',
+           url: 'contractSearch',
             name: '调租',
-            status: bulletinRouterStatus.newChange,
+            status: bulletinRouterStatus.bulletin_change,
             icon: ic_tiaozu,
           },
           {
-            url: 'contractSearch',
+             url: 'contractSearch',
             name: '转租',
-            status: bulletinRouterStatus.newSublet,
+            status: bulletinRouterStatus.bulletin_rent_trans,
             icon: ic_zhuanzu,
           },
           {
             url: 'collectReport',
             name: '特殊事项',
-            status: bulletinRouterStatus.newSpecial,
+            status: bulletinRouterStatus.bulletin_special,
             icon: ic_teshu,
           },
           {
             url: 'contractSearch',
             name: '退租',
-            status: bulletinRouterStatus.newCheckout,
+            status: bulletinRouterStatus.bulletin_checkout,
             icon: ic_tuizu,
           },
           // {

@@ -73,15 +73,6 @@ class httpHs extends httpService {
       })
     })
   }
-
-  //空置房源
-  static getEmptyHouse(params,status) {
-    return new Promise((resolve,reject) => {
-      this.get(market + `v1.0/market/house/kong-days`,params,status).then(res => {
-        resolve(res);
-      })
-    })
-  }
 }
 
 export default httpHs

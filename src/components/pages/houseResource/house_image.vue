@@ -22,23 +22,14 @@
       }
     },
     mounted() {
-      /*let top = this.$refs['mainContainer'].offsetTop;
-      this.mainHeight.height = window.innerHeight - top + 'px';
-      if (this.$route.query.image) {
-        this.image_list = JSON.parse(this.$route.query.image);
-      } else {
-        this.image_list = [];
-      }*/
-      //console.log(this.image_list);
-    },
-    activated() {
-      let top = this.$refs['mainContainer'].offsetTop;
+      var top = this.$refs['mainContainer'].offsetTop;
       this.mainHeight.height = window.innerHeight - top + 'px';
       if (this.$route.query.image) {
         this.image_list = JSON.parse(this.$route.query.image);
       } else {
         this.image_list = [];
       }
+      console.log(this.image_list);
     },
     watch: {},
     computed: {

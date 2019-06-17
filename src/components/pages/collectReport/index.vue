@@ -283,13 +283,18 @@
         allChildren: {},                    //附属租客
 
         isGetTake: false,                   //尾款
+        noTaskId: false,                   //不需要task_id
       }
     },
     created() {
     },
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
+       console.log("bulletinType");
+      console.log(this.bulletinType);
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      console.log("taskDetail");
+      console.log(this.taskDetail);
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -331,7 +336,14 @@
       // 报备类型
       bulletin_types(type) {
         let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.taskDefinitionKey);
-        this.isGetTake = type.bulletin === 'bulletin_retainage' || type.bulletin === 'bulletin_agency';
+        let data = [
+          //不需要电子合同
+          ['bulletin_retainage', 'bulletin_agency'],
+          //不需要task_id
+          ['bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_change', 'bulletin_special', 'bulletin_checkout'],
+        ];
+        this.isGetTake = data[0].includes(type.bulletin);
+        this.noTaskId = data[1].includes(type.bulletin);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
@@ -344,24 +356,16 @@
       },
       // 区分报备类型参数
       distinguishForm(type) {
-        if (type !== 'bulletin_collect_basic' && type !== 'bulletin_change') {
+        if (type !== 'bulletin_collect_basic') {
           this.form.house_id = this.taskDetail.house_id;
           this.form.contract_id = this.taskDetail.contract_id;
         }
-        switch (type) {
-          case 'bulletin_rent_basic':
-            this.form.is_sign = '';
-            let query = this.$route.query;
-            if (query.result) {
-              this.form.is_sign = query.result;
-            }
-            break;
-          case'bulletin_change':
-            this.form.house_id_rent = this.taskDetail.house_id;
-            this.form.contract_id_rent = this.taskDetail.contract_id;
-            this.form.house_address = this.taskDetail.address;
-            this.formatData.house_id_rent = this.taskDetail.address;
-            break;
+        if (type === 'bulletin_rent_basic') {
+          let query = this.$route.query;
+          this.form.is_sign = '';
+          if (query.result) {
+            this.form.is_sign = query.result;
+          }
         }
       },
       // touch 左右切换
@@ -392,6 +396,10 @@
       },
       // 房屋搜索结果
       hiddenHouse(val, config) {
+        console.log('val');
+        console.log(val);
+        console.log('config');
+        console.log(config);
         this.onCancel();
         if (val !== 'close') {
           for (let item of Object.keys(val)) {
@@ -872,8 +880,10 @@
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
-            this.form.task_id = this.taskDetail.task_id;
-            this.form.process_instance_id = this.taskDetail.process_instance_id;
+            if (!this.noTaskId) {
+              this.form.task_id = this.taskDetail.task_id;
+              this.form.process_instance_id = this.taskDetail.process_instance_id;
+            }
             this.form.spot_code = this.$refs.code.spot_code;
             this.$httpZll.submitReport(this.form, bulletin.to).then(res => {
               if (res) {
@@ -896,7 +906,11 @@
               if (status) {
                 this.bulletin_types(bulletin);
                 if (!this.isGetTake) {
-                  this.getPunchClockData();
+                  if (bulletin.bulletin !== 'bulletin_special') {
+                    this.getPunchClockData();
+                  } else {
+                    this.resetting();
+                  }
                 } else {
                   this.childBulletin(this.taskDetail.content);
                 }
@@ -1199,7 +1213,16 @@
         }
         if (res.album) {
           for (let pic of Object.keys(res.album)) {
-            this.album[pic] = res.album[pic];
+            if (res.album[pic].length) {
+              if (typeof res.album[pic][0] !== 'object') {
+                this.$httpZll.getUploadUrl(res.album[pic], 'close').then(res => {
+                  this.album[pic] = res.data;
+                  this.album = Object.assign({}, this.album);
+                })
+              } else {
+                this.album[pic] = res.album[pic];
+              }
+            }
           }
         }
       },
