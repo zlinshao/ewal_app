@@ -104,7 +104,9 @@
       </div>
       <div class="scroll_bar">
         <div class="radioChecksLabel" v-for="item of Object.keys(highList)">
-          <label v-if="(highList[item].type != 'radio'&& tabs==2) || (tabs==1)">{{highList[item].title}}</label>
+            <!-- <label v-if="(tabs==1) || (highList[item].type != 'radio'&& tabs==2 >{{highList[item].title}}</label> -->
+          <label v-if="highList[item].type === 'check'&& highList[item].value.length>0">待办类型</label>
+          <label v-if="highList[item].type === 'radio' && tabs==1 ">剩余时间</label>
           <div class="radioChecks">
             <div v-for="val in highList[item].value" class="contents">
               <p @click="checkChoose(val,item)" v-if="highList[item].type === 'check'"
@@ -327,6 +329,7 @@
       // 已完成 / 未完成 切换
       changeTop(val) {
         this.goToTop();
+        this.highParamsHandle();
         if (this.tabs === val) return;
         this.resetting();
         this.$store.dispatch('done_tabs', val);
@@ -463,7 +466,6 @@
                 }
               }
             }
-            this.hightParamsHandle();
             // 搜索的时候清空列表数据，页数为1
             this.params['params' + this.tabs].page = 1;
             if (this.tabs == 1) {
@@ -507,7 +509,7 @@
         let params = {
           assignee: this.personal.staff_id,
           taskDefinitionKeyNotIn: this.$taskDefinitionKey()
-        }
+        };
         this.$httpZll.getToDoTypeList(params).then(res => {
           if (res) {
             // 将数组中的字段转换成id、text
@@ -529,14 +531,14 @@
         let date = {
           dueBefore: '',
           dueAfter: ''
-        }
+        };
         switch (val) {
           case 1:
-            date.dueBefore = ''
-            date.dueAfter = new Date().getTime() + 1 * 60 * 60 * 1000;
+            date.dueBefore = '';
+            date.dueAfter = new Date().getTime() + 60 * 60 * 1000;
             break;
           case 2:
-            date.dueBefore = new Date().getTime() + 1 * 60 * 60 * 1000;
+            date.dueBefore = new Date().getTime() + 60 * 60 * 1000;
             date.dueAfter = new Date().getTime() + 6 * 60 * 60 * 1000;
             break;
           case 3:
@@ -586,7 +588,7 @@
       },
 
       //高级搜索的参数配置
-      hightParamsHandle() {
+      highParamsHandle() {
         this.newHighParams = {};
         //待办类型由数组转化为字符串
         let taskDefinitionKeyIn = '';

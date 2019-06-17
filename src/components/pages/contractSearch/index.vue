@@ -25,7 +25,7 @@
           <div class="contract_content" @click="onConfirm(item)">
             <div class="top">
               <h1>
-                <b>收</b>
+                <b>{{params.contract_type === 1 ? '收' : '租'}}</b>
                 <span v-if="item.house_name && item.house_name.name">{{item.house_name.name}}</span>
                 <span v-else>******</span>
               </h1>
@@ -33,7 +33,7 @@
             </div>
             <div class="main">
               <div>
-                <h1>房东</h1>
+                <h1>{{params.contract_type === 1 ? '房东' : '租客'}}</h1>
                 <h2 v-if="item.customer_info && item.customer_info[0].name">
                   <span>{{item.customer_info[0].name}}</span>
                 </h2>
@@ -132,8 +132,8 @@
         params: {
           page: 1,
           limit: 50,
-          status: 1,
-          contract_type: 1,
+          status: 1, // 1-生效中，2-快到期，3-已过期， 4-已结束
+          contract_type: 2,
           city_name: '',
           from: 'task',
           search: '',
@@ -143,16 +143,15 @@
       }
     },
     mounted() {
+    },
+    activated() {
       for (let item of this.cityList) {
         if (String(item.code) === String(this.personal.city_id)) {
           this.city_name = item.name;
           this.params.city_name = item.name + '市';
         }
       }
-    },
-    activated() {
       this.close_();
-      this.bulletin_type = JSON.parse(sessionStorage.bulletin_type || {});
     },
     watch: {
       'params.search'(val) {
@@ -191,8 +190,13 @@
         data.house_id = item.house_id || '';
         data.contract_id = item.contract_id || '';
         data.address = item.house_name.name || '';
-        sessionStorage.setItem('task_detail', JSON.stringify({content: data}));
-        this.routerReplace('/collectReport');
+        this.$httpZll.getBulletinDetail(data.contract_id).then(res => {
+          if (res) {
+            data.content = res.content.draft_content;
+            sessionStorage.setItem('task_detail', JSON.stringify(data));
+            this.routerReplace('/collectReport');
+          }
+        });
       },
       close_(val) {
         this.params.page = 1;

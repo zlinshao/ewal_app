@@ -51,7 +51,6 @@
         fullLoading: false,
         chooseCity: false,
         searchList: [],
-        cityList: [],
         city_name: '',
         params: {
           page: 1,
@@ -86,6 +85,12 @@
       });
     },
     activated() {
+      for (let item of this.cityList) {
+        if (String(item.code) === String(this.personal.city_id)) {
+          this.city_name = item.name;
+          this.params.city = item.code;
+        }
+      }
     },
     watch: {
       'params.name'(val) {
@@ -105,6 +110,9 @@
     computed: {
       personal() {
         return this.$store.state.app.personalDetail;
+      },
+      cityList() {
+        return this.$store.state.app.allCityList;
       }
     },
     methods: {

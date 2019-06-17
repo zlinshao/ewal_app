@@ -806,7 +806,6 @@
             case 'decorate'://装修
             case 'property_type'://房屋类型
             case 'direction'://朝向
-            case 'house_address':
               this.formatData[item] = res[item].name;
               break;
             case 'floors':
@@ -861,11 +860,13 @@
                   this.formatData = Object.assign({}, this.formatData);
                 })
               } else {
+                console.log(this.formatData);
                 this.formatData[pic] = res.album[pic];
               }
             }
           }
         }
+
       },
       // 变化数据 预填数据处理
       changeHandle(res, item, val, all, data) {

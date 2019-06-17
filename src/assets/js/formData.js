@@ -1000,7 +1000,7 @@ defineSupplyAgreement = {
       label: '房屋地址', // 标题
       placeholder: '必填 请选择', // placeholder
       readonly: 'readonly', // 只读 picker必须有值
-      keyName: 'house_address', // 字段名
+      keyName: 'house_id', // 字段名
       keyType: '', // 数据类型
       type: 'text', // input 类型
       picker: 'searchHouse',
@@ -1088,7 +1088,7 @@ defineSupplyAgreement = {
       label: '房屋地址', // 标题
       placeholder: '必填 请选择', // placeholder
       readonly: 'readonly', // 只读 picker必须有值
-      keyName: 'address', // 字段名
+      keyName: 'house_id', // 字段名
       keyType: '', // 数据类型
       type: 'text', // input 类型
       picker: 'searchHouse',
@@ -1189,7 +1189,7 @@ defineSupplyAgreement = {
       label: '房屋地址', // 标题
       placeholder: '必填 请选择', // placeholder
       readonly: 'readonly', // 只读 picker必须有值
-      keyName: 'address', // 字段名
+      keyName: 'house_id', // 字段名
       keyType: '', // 数据类型
       type: 'text', // input 类型
       picker: 'searchHouse',
@@ -1264,7 +1264,7 @@ defineSupplyAgreement = {
       label: '房屋地址', // 标题
       placeholder: '必填 请选择', // placeholder
       readonly: 'readonly', // 只读 picker必须有值
-      keyName: 'address', // 字段名
+      keyName: 'house_id', // 字段名
       keyType: '', // 数据类型
       type: 'text', // input 类型
       picker: 'searchHouse',
@@ -1345,7 +1345,7 @@ defineCollectReport = {
     placeholder: '必填 请选择', // placeholder
     // readonly: 'readonly',// 只读 picker必须有值
     disabled: 'disabled', // 禁用
-    keyName: 'house_address', // 字段名
+    keyName: 'house_id', // 字段名
     keyType: '', // 数据类型
     type: 'text', // input 类型
     // hidden: false,// true隐藏 false显示
@@ -3596,7 +3596,7 @@ defineContinueRent = [{
   label: '原房屋地址',
   disabled: 'disabled',
   placeholder: '已禁用',
-  keyName: 'old_house_name',
+  keyName: 'house_id_rent',
   keyType: '',
   type: 'text',
   slot: '',
@@ -3605,7 +3605,7 @@ defineContinueRent = [{
     label: '现房屋地址',
     readonly: 'readonly',
     placeholder: '必填 请选择',
-    keyName: 'house_name',
+    keyName: 'house_id',
     keyType: '',
     type: 'text',
     picker: 'searchHouse',
@@ -3631,7 +3631,7 @@ defineSubletReport = [{
     label: '房屋地址',
     disabled: 'disabled',
     placeholder: '已禁用',
-    keyName: 'address',
+    keyName: 'house_id',
     keyType: '',
     type: 'text',
     status: '',
@@ -4148,7 +4148,7 @@ defineAgencyReport = {
       label: '房屋地址',
       placeholder: '已禁用',
       disabled: 'disabled',
-      keyName: 'address',
+      keyName: 'house_id',
       keyType: '',
       type: 'text',
       status: '',
@@ -4292,7 +4292,7 @@ defineRetainageReport = {
     label: '房屋地址',
     placeholder: '已禁用',
     disabled: 'disabled',
-    keyName: 'address',
+    keyName: 'house_id',
     keyType: '',
     type: 'text',
     status: '',
@@ -4504,21 +4504,31 @@ defineRetainageReport = {
 
 // 特殊事项报备
 defineSpecialReport = {
-  slither0: [{
-    label: '收房/租房',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'collect_or_rent',
-    keyType: '',
-    type: 'text',
-    status: 'objInt',
-    picker: 'picker',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    slot: '',
-  },
+  slither0: [
+    {
+      label: '收/租类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'collect_or_rent',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '房屋地址', // 标题
+      placeholder: '必填 请选择', // placeholder
+      readonly: 'readonly', // 只读 picker必须有值
+      keyName: 'house_id', // 字段名
+      keyType: '', // 数据类型
+      type: 'text', // input 类型
+      picker: 'searchHouse',
+      showForm: 'formatData', //picker 显示form 或 formatData
+    },
     {
       label: '客户姓名',
-      // placeholder: '选填 请输入',
       disabled: 'disabled',
       placeholder: '已禁用',
       keyName: 'customer_name',
@@ -4528,7 +4538,6 @@ defineSpecialReport = {
     },
     {
       label: '签约时长',
-      // placeholder: '选填 请输入',
       disabled: 'disabled',
       placeholder: '已禁用',
       keyName: 'month',
@@ -4536,32 +4545,8 @@ defineSpecialReport = {
       type: 'text',
       slot: '',
     },
-    // {
-    //     label: '签约时长',
-    //     keyName: 'month',
-    //     placeholder: '必填 请输入',
-    //     prompts: '不包含空置期',
-    //     moreString: [{
-    //             placeholder: '必填 月数',
-    //             keyName: 'month',
-    //             keyType: '',
-    //             type: 'number',
-    //             status: '',
-    //             slot: '',
-    //         },
-    //         {
-    //             placeholder: '选填 天数',
-    //             keyName: 'day',
-    //             keyType: '',
-    //             type: 'number',
-    //             status: '',
-    //             slot: '',
-    //         },
-    //     ],
-    // },
     {
       label: '月单价',
-      // placeholder: '必填 请输入',
       placeholder: '已禁用',
       disabled: 'disabled',
       keyName: 'price',

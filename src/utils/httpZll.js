@@ -156,19 +156,34 @@ class httpZll extends httpService {
         })
     }
 
+    // 报备详情
+    static getBulletinDetail(id) {
+        return new Promise((resolve, reject) => {
+            this.get(`${market}v1.0/market/process/contract/${id}`, {}, 'prompt').then(res => {
+                if (Number(res.code) === 200) {
+                    resolve(res.data);
+                } else {
+                    resolve(false);
+                    $httpPrompt(res.message);
+                }
+            })
+        })
+    }
+
     // 员工id获取详情信息
     static getUserIdStaffDetail(params, id) {
-            return new Promise((resolve, reject) => {
-                this.get(`${url_hr}staff/user/${id}`, params, 'prompt').then(res => {
-                    if (res.code.endsWith('0')) {
-                        resolve(res);
-                    } else {
-                        resolve(false);
-                    }
-                });
+        return new Promise((resolve, reject) => {
+            this.get(`${url_hr}staff/user/${id}`, params, 'prompt').then(res => {
+                if (res.code.endsWith('0')) {
+                    resolve(res);
+                } else {
+                    resolve(false);
+                }
             });
-        }
-        // 员工搜索
+        });
+    }
+
+    // 员工搜索
     static searchStaffList(params) {
         return new Promise((resolve, reject) => {
             this.get(`${url_hr}staff/user`, params, 'prompt').then(res => {
@@ -580,7 +595,6 @@ class httpZll extends httpService {
                 }
             })
         })
-
     }
 
     // 获取电子合同编号
@@ -745,18 +759,19 @@ class httpZll extends httpService {
 
     // 上传文件
     static uploadServer(data) {
-            return new Promise((resolve, reject) => {
-                this.post(`${url}api/v1/upload-direct`, data).then(res => {
-                    if (res.code === '110100') {
-                        resolve(res);
-                    } else {
-                        resolve(res);
-                        $httpPrompt(res.msg);
-                    }
-                });
+        return new Promise((resolve, reject) => {
+            this.post(`${url}api/v1/upload-direct`, data).then(res => {
+                if (res.code === '110100') {
+                    resolve(res);
+                } else {
+                    resolve(res);
+                    $httpPrompt(res.msg);
+                }
             });
-        }
-        // 待办类型
+        });
+    }
+
+    // 待办类型
     static getToDoTypeList(data) {
         return new Promise((resolve, reject) => {
             this.get(`${url_done}runtime/taskKeys`, data).then(res => {
