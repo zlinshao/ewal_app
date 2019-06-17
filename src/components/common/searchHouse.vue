@@ -151,7 +151,7 @@
     },
     methods: {
       paramsReset() {
-        this.params.status = 4;
+        this.params.status = 1;
         let type = JSON.parse(sessionStorage.bulletin_type || {});
       },
       onSearch() {

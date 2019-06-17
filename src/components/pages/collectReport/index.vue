@@ -283,6 +283,7 @@
         allChildren: {},                    //附属租客
 
         isGetTake: false,                   //尾款
+        noTaskId: false,                   //不需要task_id
       }
     },
     created() {
@@ -331,7 +332,14 @@
       // 报备类型
       bulletin_types(type) {
         let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.taskDefinitionKey);
-        this.isGetTake = type.bulletin === 'bulletin_retainage' || type.bulletin === 'bulletin_agency';
+        let data = [
+          //不需要电子合同
+          ['bulletin_retainage', 'bulletin_agency'],
+          //不需要task_id
+          ['bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_change', 'bulletin_special', 'bulletin_checkout'],
+        ];
+        this.isGetTake = data[0].includes(type.bulletin);
+        this.noTaskId = data[1].includes(type.bulletin);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
@@ -871,8 +879,10 @@
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
-            this.form.task_id = this.taskDetail.task_id;
-            this.form.process_instance_id = this.taskDetail.process_instance_id;
+            if (!this.noTaskId) {
+              this.form.task_id = this.taskDetail.task_id;
+              this.form.process_instance_id = this.taskDetail.process_instance_id;
+            }
             this.form.spot_code = this.$refs.code.spot_code;
             this.$httpZll.submitReport(this.form, bulletin.to).then(res => {
               if (res) {
@@ -895,7 +905,11 @@
               if (status) {
                 this.bulletin_types(bulletin);
                 if (!this.isGetTake) {
-                  this.getPunchClockData();
+                  if (bulletin.bulletin !== 'bulletin_special') {
+                    this.getPunchClockData();
+                  } else {
+                    this.resetting();
+                  }
                 } else {
                   this.childBulletin(this.taskDetail.content);
                 }
