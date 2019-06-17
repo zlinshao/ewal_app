@@ -132,7 +132,7 @@
         params: {
           page: 1,
           limit: 50,
-          status: 1,
+          status: 1, // 1-生效中，2-快到期，3-已过期， 4-已结束
           contract_type: 2,
           city_name: '',
           from: 'task',
@@ -143,16 +143,15 @@
       }
     },
     mounted() {
+    },
+    activated() {
       for (let item of this.cityList) {
         if (String(item.code) === String(this.personal.city_id)) {
           this.city_name = item.name;
           this.params.city_name = item.name + '市';
         }
       }
-    },
-    activated() {
       this.close_();
-      this.bulletin_type = JSON.parse(sessionStorage.bulletin_type || {});
     },
     watch: {
       'params.search'(val) {
