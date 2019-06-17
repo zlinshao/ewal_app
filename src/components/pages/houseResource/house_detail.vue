@@ -25,7 +25,7 @@
             <a v-if="detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
             <a class="tag tag-quality"
                v-if="detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{
-              detail.house_detail && detail.house_detail.warning_current_days }}</a>
+              detail.house_detail && detail.house_detail.warning_current_days }}天</a>
           </div>
           <!--属性-->
           <div class="property">
