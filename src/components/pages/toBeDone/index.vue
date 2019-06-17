@@ -279,11 +279,10 @@
               }, {
                 url: '/supplyAgreement',
                 text: '补充协议',
-              },
-              // {
-              //   url: '/collectReport',
-              //   text: '未收先租',
-              // }
+              }, {
+                url: '/collectReport',
+                text: '未收先租',
+              }
             ];
             break;
         }

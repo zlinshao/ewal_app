@@ -331,36 +331,48 @@ export default {
     };
     // 报备类型数据匹配
     Vue.prototype.$bulletinType = function (type) {
-      let data = {}, title;
+      let data = {}, title = [];
       switch (type) {
-        case 'bulletin_collect_basic':
+        case 'bulletin_collect_basic'://收房
           title = ['房屋信息', '物品信息', '客户信息', '合同信息'];
           data = this.jsonClone(defineCollectReport);
           break;
-        case 'bulletin_rent_basic':
-        case 'bulletin_booking_renting':
+        case 'bulletin_collect_continued'://续收
+          title = ['房屋信息', '物品信息', '客户信息', '合同信息'];
+          data = this.jsonClone(defineCollectReport);
+          break;
+        case 'bulletin_rent_basic'://租房
           title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineRentReport);
           data.slither0 = defineNewRentReport.concat(data.slither0);
           break;
-        case 'bulletin_agency':
-          title = ['渠道费报备'];
-          data = this.jsonClone(defineAgencyReport);
+        case 'bulletin_rent_trans'://转租
+          title = ['合同信息', '客户信息'];
+          data = this.jsonClone(defineRentReport);
+          data.slither0 = defineSubletReport.concat(data.slither0);
           break;
-        case 'bulletin_retainage':
-          title = ['尾款报备'];
-          data = this.jsonClone(defineRetainageReport);
+        case 'bulletin_rent_continued'://续租
+          title = ['合同信息', '客户信息'];
+          data = this.jsonClone(defineRentReport);
+          data.slither0 = defineNewRentReport.concat(data.slither0);
+          break;
+        case 'bulletin_rent_RWC'://未收先租
+          title = ['合同信息', '客户信息'];
+          data = this.jsonClone(defineRentBookingReport);
           break;
         case 'bulletin_change'://调租
           title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineChangeReport);
           break;
-        case 'bulletin_rent_trans'://转租
-          title = ['客户信息', '合同信息'];
-          data = this.jsonClone(defineRentReport);
-          data.slither0 = defineSubletReport.concat(data.slither0);
+        case 'bulletin_agency'://渠道
+          title = ['渠道费报备'];
+          data = this.jsonClone(defineAgencyReport);
           break;
-        case 'bulletin_special'://特殊事项
+        case 'bulletin_retainage'://尾款
+          title = ['尾款报备'];
+          data = this.jsonClone(defineRetainageReport);
+          break;
+        case 'bulletin_special'://特殊
           title = ['特殊事项报备'];
           data = this.jsonClone(defineSpecialReport);
           break;
