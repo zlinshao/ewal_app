@@ -290,7 +290,11 @@
     },
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
+       console.log("bulletinType");
+      console.log(this.bulletinType);
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      console.log("taskDetail");
+      console.log(this.taskDetail);
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -403,6 +407,10 @@
       },
       // 房屋搜索结果
       hiddenHouse(val, config) {
+        console.log('val');
+        console.log(val);
+        console.log('config');
+        console.log(config);
         this.onCancel();
         if (val !== 'close') {
           for (let item of Object.keys(val)) {
