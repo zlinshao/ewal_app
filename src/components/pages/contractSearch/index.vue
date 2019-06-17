@@ -191,8 +191,7 @@
         data.house_id = item.house_id || '';
         data.contract_id = item.contract_id || '';
         data.address = item.house_name.name || '';
-        data.content = {};
-        sessionStorage.setItem('task_detail', JSON.stringify(data));
+        sessionStorage.setItem('task_detail', JSON.stringify({content: data}));
         this.routerReplace('/collectReport');
       },
       close_(val) {

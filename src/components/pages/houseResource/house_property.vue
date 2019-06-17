@@ -1,6 +1,6 @@
 <template>
   <div id="house_property">
-    <div v-if="showPage" class="scroll_bar" ref="mainContainer" :style="mainHeight">
+    <div class="scroll_bar" ref="mainContainer" :style="mainHeight">
       <div class="property-list">
         <h3 class="label">房屋配置</h3>
         <van-row>
@@ -29,7 +29,6 @@
     name: "index",
     data() {
       return {
-        showPage:false,
         property_list: {
           house_config_airc: {
             label: '空调',
@@ -46,12 +45,12 @@
             key: 3,
             val: 0
           },
-          house_config_gas: {
+          d: {
             label: '煤气',
             key: 4,
             val: 0
           },
-          house_config_hood: {
+          e: {
             label: '油烟机',
             key: 5,
             val: 0
@@ -142,42 +141,35 @@
       }
     },
     mounted() {
-    },
-    async activated() {
-      await this.handleGetHouseDetail();
-      this.showPage = true;
-      this.$nextTick(()=> {
-        let top = this.$refs['mainContainer'].offsetTop;
-        this.mainHeight.height = window.innerHeight - top + 'px';
-      });
-    },
-
-    deactivated() {
-      this.showPage = false;
+      var top = this.$refs['mainContainer'].offsetTop;
+      this.mainHeight.height = window.innerHeight - top + 'px';
+      this.handleGetHouseDetail();
     },
     watch: {},
     computed: {},
     methods: {
-      async handleGetHouseDetail() {
+      handleGetHouseDetail() {
         if (!this.$route.query) {
-          return;
+          return false;
         }
-        let house_id = this.$route.query.id;
-        await this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
+        var house_id = this.$route.query.id;
+        this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
           if (res.code === 200) {
             if (res.data.handover_data) {
               if (res.data.handover_data.house_config) {
-                for (let key in this.property_list) {
+                for (var key in this.property_list) {
                   this.property_list[key].val = res.data.handover_data.house_config[key] ? res.data.handover_data.house_config[key] : 0;
                 }
               }
-              for (let item of this.extra_property) {
+              for (var item of this.extra_property) {
                 if (res.data.handover_data[item.key]) {
-                  for (let tmp of item.value) {
+                  console.log(res.data.handover_data[item.key]);
+                  for (var tmp of item.value) {
                     tmp.val = res.data.handover_data[item.key][tmp.key] ? res.data.handover_data[item.key][tmp.key] : 0;
                   }
                 }
               }
+              console.log(this.extra_property);
             }
           } else {
             this.$prompt('获取数据失败');
@@ -213,8 +205,8 @@
           margin: .2rem;
           a.pro-icon {
             display: inline-block;
-            width: .5rem;
-            height: .5rem;
+            width: 25pt;
+            height: 25pt;
           }
           @for $i from 1 to 9 {
             a.pro-icon-#{$i} {

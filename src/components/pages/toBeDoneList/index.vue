@@ -90,7 +90,8 @@
       <div class="popupBottom"></div>
     </van-popup>
     <!--搜索-->
-    <van-popup v-model="searchHigh" overlay-class="overlay-color" position="top" :overlay="true" class="searchHigh">
+    <van-popup v-model="searchHigh" overlay-class="overlay-color" position="top" :overlay="true" class="searchHigh"
+               :style="maxSearchHeight">
       <div class="searchInput">
         <div class="input">
           <div>
@@ -160,6 +161,7 @@
           load2: true,
         },
         mainHeight: '',// 滚动 部分高度
+        maxSearchHeight: '',// 搜索最大高度
         listLength: [],//中间上移 index
         finishTop: [
           {
@@ -290,6 +292,7 @@
       this.resetting();
       let listTop = this.$refs.listTop.offsetHeight;
       this.mainHeight = this.mainListHeight(listTop);
+      this.maxSearchHeight = {maxHeight: (this.screenHeight - 120) + 'px'};
       let tab = this.tabs;
       this.close_(tab);
       this.getQueryDetail('1');
@@ -606,7 +609,7 @@
             title: this.highParams.title,
           }
         }
-        // this.params['params' + this.tabs] = Object.assign({},this.params['params' + this.tabs], this.newHighParams);
+        // this.params['params' + this.tabs] = Object.assign({},this.params['params' + this.tabs], this.newHighParams); 
       },
 
     },

@@ -141,7 +141,7 @@
           <div class="house flex" v-for="(item,key) in house_list" :key="key" @click="handleHouseDetail(item)">
             <div class="leftPic">
               <!--              <img src="./detail.png" alt="">-->
-              <img v-if="item.album_photo.length>0" :src="item.album_photo[item.album_photo.length-1].uri" alt="">
+              <img v-if="item.album_photo.length>0" :src="item.album_photo[0].uri" alt="">
               <img v-else src="./detail.png">
               <a class="writingMode status1">{{ item.house_status_name }}</a>
               <!--<a class="writingMode status2">未出租</a>-->
@@ -311,33 +311,40 @@
           rent_price: [],
           kong: [], //空置天数
           is_org_user: 0,
-          org_user_id: [],
-          city_id:'',
+          org_user_id: []
         },
         house_list: [], //房屋列表
       }
     },
-    mounted() {
+    async mounted() {
       this.$nextTick(function () {
         let top = this.$refs.topSearch.offsetHeight;
         this.mainHeight = this.mainListHeight(top + 50);
       });
+      await this.$httpZll.getCityList().then(res => {
+        this.cityList = [];
+        if (res.data.length === 1) {
+          let obj = {};
+          this.city_name = res.data[0].name;
+          this.params.city = res.data[0].province.code;
+          obj.name = this.city_name;
+          obj.code = this.params.city;
+          this.cityList.push(obj);
+        } else {
+          for (let item of res.data) {
+            let obj = {};
+            if (String(item.code) === String(this.personal.city_id)) {
+              this.city_name = item.name;
+              this.params.city = item.province.code;
+              obj.name = item.name;
+              obj.code = item.code;
+              this.cityList.push(obj);
+            }
+          }
+        }
+      });
+      this.handleGetHouseResource();
     },
-
-    activated() {
-      let kong = this.$route.query.kong;
-      if(kong && kong.constructor==Array) {
-        this.params.kong = kong;
-      }
-      this.params.city_id = this.personal.city_id;
-      delete this.params.is_org_user;
-      this.handleGetHouseResource(true);
-    },
-
-    deactivated() {
-      this.params.kong = [];
-    },
-
     watch: {},
     computed: {
       personal() {
@@ -385,31 +392,6 @@
         this.routerLink('/houseDetail',{id: item.id});
         //this.routerLink('/houseDetail', {id: 248073});
       },
-
-      //重置params
-      resetParams() {
-        this.params = {
-          page: 1,
-          limit: 12,
-          search: '',
-          name: '',
-          status: [],
-          city: [],
-          room: [], //房型
-          decoration: [], //装修
-          house_toward: [], //朝向
-          floor: [],// 楼层
-          house_lift: [], //电梯
-          rent_days: [], //剩余时长
-          warning_status: [], //预警
-          rent_price: [],
-          kong: [], //空置天数
-          is_org_user: 0,
-          org_user_id: [],
-          city_id:'',
-        };
-      },
-
       //按钮
       searchBtn(type, idx) {
         console.log(type);
@@ -417,8 +399,7 @@
         if(idx===1) {
           switch (type) {
             case 'reset':
-              this.resetParams();
-              //this.params.status = [];
+              this.params.status = [];
               this.status_choose = null;
               break;
             case 'confirm':
@@ -428,12 +409,11 @@
         } else if (idx === 2) {
           switch (type) {
             case 'reset':
-              /*this.params.house_lift = [];
+              this.params.house_lift = [];
               this.params.house_toward = [];
               this.params.floor = [];
               this.params.decoration = [];
-              this.params.room = [];*/
-              this.resetParams();
+              this.params.room = [];
               break;
             case 'confirm':
               this.onSearch();
@@ -445,10 +425,9 @@
           this.filter_list[3].active = false;
           switch (type) {
             case 'reset':
-             /* this.params.rent_price = [];
+              this.params.rent_price = [];
               this.params.rent_days = [];
-              this.params.warning_status = [];*/
-              this.resetParams();
+              this.params.warning_status = [];
               break;
             case 'confirm':
               this.onSearch();
@@ -497,14 +476,21 @@
       * 获取房源列表
       * params: cleanData  是否清除列表 默认false
       * */
-      async handleGetHouseResource(cleanData = false) {
+      handleGetHouseResource(cleanData = false) {
         if(cleanData) {
           this.house_list = [];
         }
         this.fullLoading = true;
-        await this.$httpZll.get(this.server + 'v1.0/market/house', this.params, '加载中...').then(res => {
+        this.$httpZll.get(this.server + 'v1.0/market/house', this.params, '加载中...').then(res => {
           this.fullLoading = false;
           if (res.code === 200) {
+            /* for (let item of res.data.data) {
+               debugger
+               this.house_list.push(item);
+             }*/
+            /**
+             * 防止后端给的data为对象类型
+             */
             _.forEach(res.data.data,(o)=> {
               this.house_list.push(o);
             })
@@ -517,9 +503,9 @@
       //滚动
       scrollLoad(val) {
         if (!val) {
-          //this.house_list = [];
+          this.house_list = [];
           this.params.page = 1;
-          //this.handleGetHouseResource();
+          this.handleGetHouseResource();
         } else {
           if (this.fullLoading) return;
           if (this.house_list.length === this.paging) return;

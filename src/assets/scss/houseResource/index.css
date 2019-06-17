@@ -133,11 +133,10 @@
   margin-top: 10px;
   padding: .2rem .3rem 0 .3rem; }
   #houseResource > div.houseResource .search-type span {
-    font-size: .3rem;
     width: 100%; }
     #houseResource > div.houseResource .search-type span .van-icon {
       vertical-align: middle;
-      font-size: .3rem; }
+      font-size: 12px; }
     #houseResource > div.houseResource .search-type span:not(:last-child) {
       margin-right: 4px; }
 #houseResource > div.houseResource .search-content {
@@ -152,11 +151,10 @@
   padding: .3rem;
   min-height: 100px;
   border-bottom: 1px dashed #F2F2F2;
-  background-color: white;
-  display: flex; }
+  background-color: white; }
   #houseResource > div.houseResource .main-house-list div.house .leftPic {
-    width: 2.2rem;
-    height: 2.2rem;
+    width: 100pt;
+    height: 100pt;
     position: relative; }
     #houseResource > div.houseResource .main-house-list div.house .leftPic img {
       width: 100%;
@@ -186,32 +184,26 @@
     #houseResource > div.houseResource .main-house-list div.house .leftPic .status4 {
       background-color: #7CB342; }
   #houseResource > div.houseResource .main-house-list div.house .rightInfo {
-    flex: 1;
     margin-left: .3rem;
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column; }
-    #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name {
+    position: relative; }
+    #houseResource > div.houseResource .main-house-list div.house .rightInfo > h2 {
       font-family: 'dingzitiblod'; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice {
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo > h2 a.notice {
         display: inline-block;
         width: 18px;
         height: 16px;
         vertical-align: top; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice1 {
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo > h2 a.notice1 {
         background: url("../../../assets/image/houseResource/hs.png") no-repeat scroll center;
         background-size: 100% 100%; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice2 {
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo > h2 a.notice2 {
         background: url("../../../assets/image/houseResource/gantan-cheng.png") no-repeat scroll center;
         background-size: 100% 100%; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice3 {
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo > h2 a.notice3 {
         background: url("../../../assets/image/houseResource/gantan-hong.png") no-repeat scroll center;
         background-size: 100% 100%; }
     #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info {
-      display: flex;
-      justify-content: space-around;
-      padding: .1rem 0; }
+      padding: 15px 0; }
       #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info a {
         font-family: 'dingzitiblod';
         color: #808080;
@@ -225,7 +217,7 @@
         top: 2px; }
     #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a {
       font-size: .2rem;
-      padding: 3px 3px;
+      padding: 3px 5px;
       border-right: 3px;
       font-family: 'dingzitiblod'; }
       #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a:not(:last-child) {
@@ -237,14 +229,13 @@
       color: #EE7B78;
       background-color: #FFF2F2; }
     #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom {
-      display: flex;
-      /*justify-content: space-between;
-      align-items: center;*/
-      position: relative;
+      position: absolute;
+      bottom: 0;
+      left: 0;
       width: 100%; }
       #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom a {
-        width: .3rem;
-        height: .3rem;
+        width: 15px;
+        height: 15px;
         background: url("../../../assets/image/houseResource/fangwu.png") no-repeat scroll center;
         background-size: 100% 100%;
         margin-right: 5px;
@@ -260,7 +251,7 @@
         color: #EE7B78;
         position: absolute;
         right: 0;
-        bottom: 0; }
+        top: 0; }
   #houseResource > div.houseResource .main-house-list div.house:active {
     background-color: #F2F2F2; }
 #houseResource > div.houseResource .main-house-list .noMore, #houseResource > div.houseResource .main-house-list .noData {
@@ -278,9 +269,8 @@
     display: flex;
     display: -webkit-flex;
     align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 10px; }
-    #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item {
+    flex-wrap: wrap; }
+    #houseResource > div.houseResource .filter-content .chooseBtn p {
       margin-top: .2rem;
       padding: 0 .1rem;
       width: 25%;
@@ -288,7 +278,7 @@
       display: -webkit-flex;
       align-items: center;
       justify-content: center; }
-      #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item b {
+      #houseResource > div.houseResource .filter-content .chooseBtn p b {
         width: 100%;
         padding: .2rem 0;
         text-align: center;
@@ -296,15 +286,16 @@
         -moz-border-radius: 1rem;
         border-radius: 1rem;
         background-color: #EEEDEE; }
-      #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item div.van-cell, #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item div.van-field {
+      #houseResource > div.houseResource .filter-content .chooseBtn p div.van-cell, #houseResource > div.houseResource .filter-content .chooseBtn p div.van-field {
         width: 100%;
-        padding: .1rem 0 .1rem .2rem;
+        padding: .1rem 0;
+        padding-left: .2rem;
         text-align: center;
         -webkit-border-radius: 1rem;
         -moz-border-radius: 1rem;
         border-radius: 1rem;
         background-color: #EEEDEE; }
-      #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item .choose {
+      #houseResource > div.houseResource .filter-content .chooseBtn p .choose {
         background-color: rgba(69, 112, 254, 0.1);
         color: #4570FE; }
   #houseResource > div.houseResource .filter-content .house-type > div {

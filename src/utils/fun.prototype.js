@@ -62,7 +62,9 @@ export default {
     };
     // 容器高度 计算
     Vue.prototype.mainListHeight = function (remove = 0) {
-      return {height: (Number(sessionStorage.windowHeight) - remove) + 'px'};
+      return {
+        height: (Number(sessionStorage.windowHeight) - remove) + 'px',
+      };
     };
     Vue.prototype.screenWidth = Number(sessionStorage.windowWidth);
     Vue.prototype.screenHeight = Number(sessionStorage.windowHeight);
@@ -86,7 +88,7 @@ export default {
     // 复选
     Vue.prototype.checkChooseCommon = function (item, value, type = 'id') {
       if (value.length) {
-        if (value.includes(item.id)) {
+        if (value.includes(item)) {
           let index = value.indexOf(item);
           value.splice(index, 1);
         } else {
@@ -131,11 +133,9 @@ export default {
             }
           }
           if (key.name === 'ewal_contract') {
-            if (key.value) {
-              let contract = JSON.parse(key.value);
-              obj.contract_id = contract.v3_contract_id;
-              obj.house_id = contract.house_id;
-            }
+            let contract = JSON.parse(key.value);
+            obj.contract_id = contract.v3_contract_id;
+            obj.house_id = contract.house_id;
           }
           if (key.name.includes('_approved')) {
             obj.approvedStatus = key.value || '';
@@ -166,7 +166,6 @@ export default {
     };
     //自动获取用户IP，返回当前城市
     Vue.prototype.getBeforeCity = function (data = []) {
-      let personal = this.$store.state.app.personalDetail;
       return new Promise((resolve, reject) => {
         let obj = {};
         obj.name = '';
@@ -184,6 +183,7 @@ export default {
           mapObj.addControl(geolocation);
           geolocation.getCurrentPosition();
           AMap.event.addListener(geolocation, 'complete', function (res) {
+            console.log(res);
             let address = res.addressComponent;
             obj.location[0] = res.position.lng;
             obj.location[1] = res.position.lat;
@@ -196,9 +196,9 @@ export default {
             resolve(obj);
           });
           AMap.event.addListener(geolocation, 'error', function (err) {
-            obj.code = personal.city_id;
-            obj.name = personal.city_name;
-            obj.location = personal.location;
+            obj.code = 320100;
+            obj.name = '南京';
+            obj.location = [118.734235, 31.984095];
             resolve(obj);
           });
         });
@@ -209,7 +209,7 @@ export default {
       for (let item of data) {
         if (item.keyName) {
           if (item.placeholder && item.placeholder.includes('必填')) {
-            if (!item.keyType && item.keyType !== 0) {
+            if (!item.keyType) {
               if (this.form[item.keyName] === item.keyType) {
                 this.$prompt(item.label + item.placeholder);
                 return true
@@ -352,7 +352,7 @@ export default {
           data = this.jsonClone(defineRetainageReport);
           break;
         case 'bulletin_change'://调租
-          title = ['合同信息', '客户信息'];
+          title = ['客户信息', '合同信息'];
           data = this.jsonClone(defineChangeReport);
           break;
         case 'bulletin_rent_trans'://转租
@@ -727,7 +727,7 @@ export default {
             department_id: '395',
             department_name: "开发",
             phone: "18052001167",
-            staff_id: '',
+            staff_id: '69',
             staff_name: "张琳琳",
           };
           globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU3OTdkZWJjOWRhODc0OGY5Yjk2ZWM2MjI5ZThjOTFiOTQ2ZWU2NTA4ZjM1MzdiMGI5NzdjZDcxYzQyM2IwYWE0Mzk4ZjA0MzljMTBhNjI5In0.eyJhdWQiOiIxIiwianRpIjoiZTc5N2RlYmM5ZGE4NzQ4ZjliOTZlYzYyMjllOGM5MWI5NDZlZTY1MDhmMzUzN2IwYjk3N2NkNzFjNDIzYjBhYTQzOThmMDQzOWMxMGE2MjkiLCJpYXQiOjE1NTk4ODg2MjUsIm5iZiI6MTU1OTg4ODYyNSwiZXhwIjoxNTYxMTg0NjI1LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.vEbN37TYOYd9moQViB0hSoG0LVcnbzrntBEvIrrJ00TndWWF7m8Bu4JU0tU6Dcw1LHMFuv7HkqmDVddlwJmdgFtpYOdKAHL1s1vDkUbmoKDai8ZnvZR514x7rwkMW3qrr1lJ7z4s7le7UG6_tWFeRiR02D8LPbgQVyfT3xQ3OTG9cs-ZuYYbgGZRKf1Mm891WKqtxvXHokEQCmsEWxaKJwCMVmjOUq4WH1PPHWHWfA__Q4T6ea7X0CvmWuJU1RBXr-zBflHxGuRgVDth2eSiaJly6E2x_hsFOKptN4hEMHn7vlDZyvKmGvCUbW9zs8E94by8HQEy6YhNT70I1qFFSpOVI83i8_kAXDhEsiTbcImQYWTlTP2d4sT9tFDBpdDCgYV35-pSRdk5adukMvQkji0kwt2Q16xw_W9bQsY0HJY3X9D2w7t9mljzASrILFi-sq096q2JlKNdi8J3PxRPKuOVWPlfwvD1V-rKQmwGOhj_LbKUFfGNiUZBBsMeyYRb7oaGTpuHOzQhkIDLpXgMV1CG08s2Czc3PPfLGACjj-Cdgbf08LG5orzsrCF-ZRkLxZQ-wTxeuRjxF6WOG6kIYT2Y7SKbOpys4RWQMxMRfB_tsUlxEKueyrfNka9vGmy7C25qz7RO7ffVE9TRxyE2C15AkWP4FDb4FtKrcqoM1Kk';
@@ -753,9 +753,8 @@ export default {
               data.city_id = city.city_id;
               data.city_name = city.city_name;
             } else {
-              data.city_id = '120000';
-              data.city_name = '天津市';
-              data.location = [117.201538, 39.085294];
+              data.city_id = '320100';
+              data.city_name = '南京市';
             }
             data.department_name = org.name;
             data.department_id = org.id;
@@ -764,6 +763,7 @@ export default {
             this.$prompt('获取部门失败!', 'fail');
             return;
           }
+          console.log(data);
           this.$store.dispatch('personal_storage', data);
           resolve(true);
         }
