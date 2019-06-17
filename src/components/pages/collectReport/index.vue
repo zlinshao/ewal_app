@@ -290,7 +290,11 @@
     },
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
+       console.log("bulletinType");
+      console.log(this.bulletinType);
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      console.log("taskDetail");
+      console.log(this.taskDetail);
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -363,17 +367,6 @@
             this.form.is_sign = query.result;
           }
         }
-        // switch (type) {
-        //   case 'bulletin_rent_basic':
-        //     this.form.is_sign = '';
-        //     let query = this.$route.query;
-        //     if (query.result) {
-        //       this.form.is_sign = query.result;
-        //     }
-        //     break;
-        //   case'':
-        //     break;
-        // }
       },
       // touch 左右切换
       tapStart(event) {
@@ -403,6 +396,10 @@
       },
       // 房屋搜索结果
       hiddenHouse(val, config) {
+        console.log('val');
+        console.log(val);
+        console.log('config');
+        console.log(config);
         this.onCancel();
         if (val !== 'close') {
           for (let item of Object.keys(val)) {
@@ -515,13 +512,17 @@
       sePaySecondDate(key, date) {
         if (!date) return;
         let val = new Date(date);
-        let pay_way = Number(this.form[key][0].pay_way || 0) * 30;
-        let pay_second = this.myUtils.formatAddRem('dd', pay_way, val);
+        let pay_second = this.myUtils.formatAddRem('mm', 1, val);
         this.setFormDate('pay_second_date', pay_second)
       },
       // 计算押金
       countPrice() {
-        let bet = Number(this.form.pay_way_bet || 0);
+        let bet = this.form.pay_way_bet;
+        if (bet || bet === 0) {
+          bet = Number(bet);
+        } else {
+          bet = 1;
+        }
         let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
         this.form.deposit = bet * price;
       },
@@ -1266,6 +1267,8 @@
           this.form.signer = {};
           this.form.contract_number = this.electronicContractNumber;
         }
+        // this.form.account = '6225212583158743';
+        // this.form.account_name = '贾少君';
       }
     },
   }
