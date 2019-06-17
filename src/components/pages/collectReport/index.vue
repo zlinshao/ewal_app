@@ -290,7 +290,6 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
-      //console.log(this.taskDetail);
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -395,7 +394,7 @@
       hiddenHouse(val, config) {
         this.onCancel();
         if (val !== 'close') {
-          for(let item of Object.keys(val)) {
+          for (let item of Object.keys(val)) {
             this.form[item] = val[item];
           }
           this.formatData[config.keyName] = val.address;
@@ -505,8 +504,7 @@
       sePaySecondDate(key, date) {
         if (!date) return;
         let val = new Date(date);
-        let pay_way = Number(this.form[key][0].pay_way || 0) * 30;
-        let pay_second = this.myUtils.formatAddRem('dd', pay_way, val);
+        let pay_second = this.myUtils.formatAddRem('mm', 1, val);
         this.setFormDate('pay_second_date', pay_second)
       },
       // 计算押金
@@ -882,9 +880,13 @@
                 if (val === 1) {
                   this.form.id = res.data.id;
                 } else {
-                  this.bulletin_types(bulletin);
-                  this.$store.dispatch('approval_tabs', {tab: '2', status: 0});
-                  this.routerReplace('/approvals');
+                  if (this.form.is_sign === 0 || this.form.is_sign === '0') {
+                    this.$router.go(-1);
+                  } else {
+                    this.bulletin_types(bulletin);
+                    this.$store.dispatch('approval_tabs', {tab: '2', status: 0});
+                    this.routerReplace('/approvals');
+                  }
                 }
               }
             });
@@ -961,11 +963,13 @@
       },
       // 草稿
       getDraft() {
-        let params = {};
+        let params = {}, type = '';
         params.task_id = this.taskDetail.task_id;
         for (let val of Object.keys(this.bulletinType)) {
           if (val !== 'bulletin') {
             params[val] = this.bulletinType[val];
+          } else {
+            type = this.bulletinType[val];
           }
         }
         let key = this.taskDetail.taskDefinitionKey;
@@ -975,16 +979,20 @@
           this.form.id = '';//草稿ID
           if (!data) {
             if (!this.isGetTake) {
-              this.getPunchClockData();
+              if (type !== 'bulletin_special') {
+                this.getPunchClockData();
+              }
             } else {
               this.childBulletin(this.taskDetail.content);
             }
           } else {
             let res = data.data;
-            this.childBulletin(res, 'draft');
+            if (type !== 'bulletin_special') {
+              this.childBulletin(res, 'draft');
+            }
             this.handlePreFill(res);
           }
-          if ((!this.isGetTake) && key !== 'RentBooking') {
+          if ((!this.isGetTake) && key !== 'RentBooking' && type !== 'bulletin_special') {
             this.electronicContract();
           }
         });
@@ -1084,6 +1092,11 @@
             case 'floors':
               this.formatData.floors = res.floor + ' / ' + res.floors;
               break;
+            case 'current_pay_info'://付款方式变化
+              if (res[item]) {
+                this.$changeHandle(res, item, [], this.drawSlither, this.formatData);
+              }
+              break;
             default:
               this.pickerDefaultValue(this.form, item);
               break;
@@ -1096,6 +1109,7 @@
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'house_id':
+              this.form.address = res.address;
               this.formatData.house_id = res.address;
               break;
             case 'door_address'://门牌地址

@@ -74,7 +74,7 @@
             icon: ic_zhuanzu,
           },
           {
-            url: 'contractSearch',
+            url: 'collectReport',
             name: '特殊事项',
             status: bulletinRouterStatus.newSpecial,
             icon: ic_teshu,

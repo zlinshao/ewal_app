@@ -51,7 +51,6 @@
         fullLoading: false,
         chooseCity: false,
         searchList: [],
-        cityList: [],
         city_name: '',
         params: {
           page: 1,
@@ -64,11 +63,10 @@
     mounted() {
     },
     activated() {
-      let city = this.cityList;
-      for (let item of city) {
+      for (let item of this.cityList) {
         if (String(item.code) === String(this.personal.city_id)) {
           this.city_name = item.name;
-          this.params.city_name = item.name + '市';
+          this.params.city = item.code;
         }
       }
     },
@@ -90,6 +88,9 @@
     computed: {
       personal() {
         return this.$store.state.app.personalDetail;
+      },
+      cityList() {
+        return this.$store.state.app.allCityList;
       }
     },
     methods: {
