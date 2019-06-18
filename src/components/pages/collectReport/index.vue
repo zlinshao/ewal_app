@@ -887,7 +887,7 @@
               if (status) {
                 this.bulletin_types(bulletin);
                 if (!this.isGetTake) {
-                  if (bulletin.bulletin !== 'bulletin_special') {
+                  if (bulletin.bulletin !== 'bulletin_special' && bulletin.bulletin !== 'bulletin_rent_RWC') {
                     this.getPunchClockData();
                   } else {
                     this.resetting();
@@ -985,14 +985,12 @@
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
           if (!data) {
-            if (!this.isGetTake) {
-              if (type !== 'bulletin_special') {
-                if (type !== 'bulletin_rent_RWC') {
+            if (type !== 'bulletin_rent_RWC') {
+              if (!this.isGetTake) {
+                if (type !== 'bulletin_special') {
                   this.getPunchClockData();
                 }
-              }
-            } else {
-              if (type !== 'bulletin_rent_RWC') {
+              } else {
                 this.childBulletin(this.taskDetail.content);
               }
             }
