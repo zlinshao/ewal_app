@@ -2389,17 +2389,27 @@ defineCollectReport = {
 // 租房预定
 defineRentBookingReport = {
   // 合同信息
-  slither0: [{
-    label: '签约日期',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'sign_date',
-    keyType: '',
-    type: 'text',
-    picker: 'date',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    slot: '',
-  },
+  slither0: [
+    {
+      label: '房屋地址',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'address',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '签约日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'sign_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
     {
       label: '签约时长',
       keyName: 'month',
@@ -2910,19 +2920,20 @@ defineRentBookingReport = {
 // 租房报备
 defineRentReport = {
   // 合同信息
-  slither0: [{
-    label: '是否电子合同',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'is_electronic_contract',
-    keyType: '1',
-    type: 'text',
-    status: 'objInt',
-    controlShow: 'disabled',
-    picker: 'picker',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    slot: '',
-  },
+  slither0: [
+    {
+      label: '是否电子合同',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'is_electronic_contract',
+      keyType: '1',
+      type: 'text',
+      status: 'objInt',
+      controlShow: 'disabled',
+      picker: 'picker',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
     {
       label: '合同编号',
       disabled: 'disabled',
@@ -3589,17 +3600,19 @@ defineRentReport = {
 };
 
 // 新租
-defineNewRentReport = [{
-  label: '房屋地址',
-  placeholder: '已禁用',
-  disabled: 'disabled',
-  keyName: 'house_id',
-  keyType: '',
-  type: 'text',
-  status: '',
-  showForm: 'formatData',
-  slot: '',
-},];
+defineNewRentReport = [
+  {
+    label: '房屋地址',
+    placeholder: '已禁用',
+    disabled: 'disabled',
+    keyName: 'house_id',
+    keyType: '',
+    type: 'text',
+    status: '',
+    showForm: 'formatData',
+    slot: '',
+  }
+];
 
 // 续租
 defineContinueRent = [{
