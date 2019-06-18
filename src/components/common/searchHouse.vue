@@ -129,8 +129,6 @@
         this.close_();
         if (!val) {
           this.$emit('close', 'close');
-        } else {
-          this.paramsReset();
         }
       },
     },

@@ -850,7 +850,7 @@
       // 发布
       saveReport(val) {
         if (val !== 1 && val !== 2) {
-          // if (this.$attestationKey(this.drawForm)) return;
+          if (this.$attestationKey(this.drawForm)) return;
         }
         if (val === 1) {
           if (!this.photoUploadStatus) {
@@ -1261,6 +1261,7 @@
           item.num = this.form[item.key];
         }
         this.changeHiddenAll = false;
+        console.log(this.form);
         this.form.id = id;
         if (!this.isGetTake) {
           this.form.signer = {};
