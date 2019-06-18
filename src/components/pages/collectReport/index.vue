@@ -985,7 +985,7 @@
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
           if (!data) {
-            if (type !== 'bulletin_rent_RWC') {
+            if (type !== 'bulletin_rent_RWC') {4
               if (!this.isGetTake) {
                 this.getPunchClockData();
               } else {
