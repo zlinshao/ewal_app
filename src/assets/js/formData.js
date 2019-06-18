@@ -4544,22 +4544,6 @@ defineRetainageReport = {
 // 特殊事项报备
 defineSpecialReport = {
   slither0: [
-    // {
-    //   label: '房屋地址', // 标题
-    //   placeholder: '必填 请选择', // placeholder
-    //   // readonly: 'readonly',// 只读 picker必须有值
-    //   disabled: 'disabled', // 禁用
-    //   keyName: 'house_id', // 字段名
-    //   keyType: '', // 数据类型
-    //   type: 'text', // input 类型
-    // hidden: false,// true隐藏 false显示
-    // status: '',// date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 column多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
-    // picker: 'searchHouse',// 是否显示在弹窗内 不存在为正常输入框 值为picker正常选择 searchVillage 搜索小区
-    // showForm: 'formatData',//picker 显示form 或 formatData
-    // prompts: '',//红色提示信息
-    // pickerRead: 'no', // 在弹窗内是否为readonly// 1房屋信息 2物品信息 3合同信息 4客户信息
-    // slot: '',// 预留字段
-    // },
     {
       label: '收/租类型',
       placeholder: '必填 请选择',
@@ -4606,7 +4590,8 @@ defineSpecialReport = {
       disabled: 'disabled',
       keyName: 'price',
       keyType: '',
-      type: 'number',
+      type: 'textarea',
+      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
     {
