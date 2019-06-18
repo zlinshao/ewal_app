@@ -992,7 +992,9 @@
                 }
               }
             } else {
-              this.childBulletin(this.taskDetail.content);
+              if (type !== 'bulletin_rent_RWC') {
+                this.childBulletin(this.taskDetail.content);
+              }
             }
           } else {
             let res = data.data;
