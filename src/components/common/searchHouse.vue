@@ -125,11 +125,11 @@
       config(val) {
         this.onConfig = val;
         //特殊事项报备(ll)
-        if(val.bulletinType.bulletin === 'bulletin_special' ){
-          this.params.contract_type=val.contract_type;
+        if (val.bulletinType.bulletin === 'bulletin_special') {
+          this.params.contract_type = val.contract_type;
         }
       },
-      deep:true,
+      deep: true,
       searchModule(val) {
         this.close_();
         if (!val) {

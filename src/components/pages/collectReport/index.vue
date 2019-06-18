@@ -396,7 +396,7 @@
           }
           this.formatData[config.keyName] = val.address;
           //获取特殊事项的房屋详情
-          if(config.bulletinType.bulletin === 'bulletin_special'){
+          if (config.bulletinType.bulletin === 'bulletin_special') {
             this.getBulletinDetail(val.contract_id);
           }
         }
@@ -640,7 +640,7 @@
           }
           if (name === 'pay_way_bet') this.countPrice();
           //特殊事项变化处理
-          this.specialPickerFun(form,show,picker);
+          this.specialPickerFun(form, show, picker);
         }
       },
       // 隐藏变化数据 重置
@@ -994,12 +994,14 @@
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
           if (!data) {
-            if (type !== 'bulletin_rent_RWC') {4
+            if (type !== 'bulletin_rent_RWC') {
+              4
               if (!this.isGetTake) {
                 this.getPunchClockData();
               } else {
                 if (type !== 'bulletin_special') {
-                this.childBulletin(this.taskDetail.content);}
+                  this.childBulletin(this.taskDetail.content);
+                }
               }
             }
           } else {
@@ -1275,7 +1277,7 @@
         // this.form.account_name = '贾少君';
       },
       //获取详情数据（特殊事项ll）
-      getBulletinDetail(contract_id,echoParam){
+      getBulletinDetail(contract_id, echoParam) {
         let data = {};
         this.$httpZll.getBulletinDetail(contract_id).then(res => {
           if (res) {
@@ -1285,35 +1287,34 @@
         });
       },
       //特殊事项报备:选择收租类型时，清空其他数据(ll)
-      specialPickerFun(form,show,picker){
-        if(this.bulletinType.bulletin === 'bulletin_special'){
-         if(picker.keyName === 'collect_or_rent'){
-           this.resetting();
-           this.form.collect_or_rent = form.collect_or_rent;
-           this.formatData.collect_or_rent = show.collect_or_rent;
+      specialPickerFun(form, show, picker) {
+        if (this.bulletinType.bulletin === 'bulletin_special') {
+          if (picker.keyName === 'collect_or_rent') {
+            this.resetting();
+            this.form.collect_or_rent = form.collect_or_rent;
+            this.formatData.collect_or_rent = show.collect_or_rent;
           }
         }
       },
-    //特殊事项报备:选择房屋地址，处理合同类型
-      specialSearchHouseFun(){
-        if(this.bulletinType.bulletin === 'bulletin_special'){
-          if(this.form.collect_or_rent === ''){
-            this.$prompt( '请选择收租类型');
+      //特殊事项报备:选择房屋地址，处理合同类型
+      specialSearchHouseFun() {
+        if (this.bulletinType.bulletin === 'bulletin_special') {
+          if (this.form.collect_or_rent === '') {
+            this.$prompt('请选择收租类型');
             return;
           }
           switch (this.form.collect_or_rent) {  //0-收房，1-租房
             case '0':
-              this.searchConfig.contract_type=1;
+              this.searchConfig.contract_type = 1;
               break;
             case '1':
-              this.searchConfig.contract_type=2;
+              this.searchConfig.contract_type = 2;
               break;
           }
           //重新赋值，房屋搜所组件才能监测到searchConfig值的变化
           this.searchConfig = this.jsonClone(this.searchConfig);
         }
       },
-
 
 
     },
