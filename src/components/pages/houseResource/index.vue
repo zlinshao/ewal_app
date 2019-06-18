@@ -32,8 +32,8 @@
       <ExpandContainer :offset-top="offset_top" @close="handleCloseExpand">
         <div class="filter-content scroll_bar">
           <div class="chooseBtn" v-if="current_filter === 1">
-            <p class="choose-btn-item" v-for="item in house_status" @click="chooseHouseStatus(item)">
-              <b :class="{'choose': status_choose === item.id}">{{ item.val }}</b>
+            <p class="choose-btn-item" v-for="item in house_status" @click="chooseHouseProperty(item,'status')">
+              <b :class="{'choose': params.status.includes(item.id)}">{{ item.val }}</b>
             </p>
           </div>
           <div v-if="current_filter === 2" class="house-type">
@@ -239,20 +239,40 @@
         ],
         current_filter: 0,
         house_status: [
-          {id: 0, val: '不限'},
+          // {id: 0, val: '不限'},
           {id: 1, val: '未出租'},
           {id: 2, val: '已预订'},
-          {id: 3, val: '已出租'},
-          {id: 4, val: '待入住'},
+          {id: 4, val: '已出租'},
+          {id: 3, val: '待入住'},
           {id: 5, val: '已结束'},
         ],
         status_choose: '',
 
         house_type: [
-          {id: 0, val: '不限'},
-          {id: 1, val: '一室'},
-          {id: 2, val: '两室'},
-          {id: 3, val: '两室+'},
+          {
+            id: 0,
+            val: '不限'
+          },
+          {
+            id: 1,
+            val: '一室'
+          },
+          {
+            id: 2,
+            val: '两室'
+          },
+          {
+            id: 3,
+            val: '三室'
+          },
+          {
+            id: 4,
+            val: '四室'
+          },
+          {
+            id: 5,
+            val: '以上'
+          }
         ],
         house_decorate: [
           {id: 0, val: '不限'},
@@ -408,18 +428,16 @@
           org_user_id: [],
           city_id:'',
         };
+        //this.status_choose = null;
       },
 
       //按钮
       searchBtn(type, idx) {
-        console.log(type);
-
         if(idx===1) {
           switch (type) {
             case 'reset':
               this.resetParams();
               //this.params.status = [];
-              this.status_choose = null;
               break;
             case 'confirm':
               this.onSearch();
