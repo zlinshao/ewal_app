@@ -64,7 +64,7 @@
       </p>
       <div class="mainModule">
         <div class="module" :class="['module'+(index+1)]" v-for="(item,index) in addShowList"
-             @click="routerLink(item.url, item)">
+             @click="addRouterLink(item.url, item)">
           <div>
             <i></i>
             <p>{{item.text}}</p>
@@ -222,6 +222,10 @@
     },
     activated() {
       this.bulletin_type = JSON.parse(sessionStorage.bulletin_type);
+      if (this.bulletin_type.bulletin === 'bulletin_rent_RWC') {
+        this.bulletin_type = bulletinRouterStatus.bulletin_rent_basic;
+        sessionStorage.setItem('bulletin_type', JSON.stringify(this.bulletin_type));
+      }
       this.fullLoading = true;
       this.showRightAdd = false;
       this.toBeDoneList = [];
@@ -238,6 +242,12 @@
       },
     },
     methods: {
+      addRouterLink(url, item) {
+        if (item.status) {
+          sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
+        }
+        this.routerLink(url);
+      },
       // 获取合同模板
       getContract() {
         this.$httpZll.getContractMould({scene_depart: this.personal.city_name}).then(res => {
@@ -281,6 +291,7 @@
                 text: '补充协议',
               }, {
                 url: '/collectReport',
+                status: bulletinRouterStatus.bulletin_rent_RWC,
                 text: '未收先租',
               }
             ];
@@ -307,6 +318,9 @@
               } else {
                 if (val.tk_result) {
                   result = val.tk_result === 'bulletin' ? '1' : '0';
+                  if (val.book_url) {
+                    result = '1';
+                  }
                   this.routerLink(val.task_action, {result: result});
                 } else {
                   this.routerLink(val.task_action);

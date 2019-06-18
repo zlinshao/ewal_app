@@ -291,6 +291,9 @@ export default {
               id: '',
               name: '',
             };
+          } else if (item.status === 'arr') {
+            form[item.keyName] = item.keyType;
+            formatData[item.keyName] = item.keyType;
           } else if (item.keyName) {
             form[item.keyName] = item.keyType;
           }
@@ -359,6 +362,7 @@ export default {
         case 'bulletin_rent_RWC'://未收先租
           title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineRentBookingReport);
+          data.slither0 = defineRentBWCReport.concat(data.slither0);
           break;
         case 'bulletin_change'://调租
           title = ['合同信息', '客户信息'];
@@ -647,7 +651,13 @@ export default {
     // 任务详情
     Vue.prototype.againTaskDetail = function (val) {
       return new Promise((resolve, reject) => {
-        this.$httpZll.get(val.detail_request_url, {}, 'prompt').then(res => {
+        let url = '';
+        if (val.book_url) {
+          url = val.book_url;
+        } else {
+          url = val.detail_request_url;
+        }
+        this.$httpZll.get(url, {}, 'prompt').then(res => {
           if (res.success) {
             let data = {};
             let content = res.data.content;

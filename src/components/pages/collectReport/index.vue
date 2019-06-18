@@ -290,11 +290,7 @@
     },
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
-       console.log("bulletinType");
-      console.log(this.bulletinType);
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
-      console.log("taskDetail");
-      console.log(this.taskDetail);
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -338,7 +334,7 @@
         let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.taskDefinitionKey);
         let data = [
           //不需要电子合同
-          ['bulletin_retainage', 'bulletin_agency'],
+          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC'],
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_change', 'bulletin_special', 'bulletin_checkout'],
         ];
@@ -356,16 +352,12 @@
       },
       // 区分报备类型参数
       distinguishForm(type) {
-        if (type !== 'bulletin_collect_basic') {
+        if (type !== 'bulletin_collect_basic' && type !== 'bulletin_rent_RWC') {
           this.form.house_id = this.taskDetail.house_id;
           this.form.contract_id = this.taskDetail.contract_id;
         }
         if (type === 'bulletin_rent_basic') {
-          let query = this.$route.query;
           this.form.is_sign = '';
-          if (query.result) {
-            this.form.is_sign = query.result;
-          }
         }
       },
       // touch 左右切换
@@ -396,10 +388,6 @@
       },
       // 房屋搜索结果
       hiddenHouse(val, config) {
-        console.log('val');
-        console.log(val);
-        console.log('config');
-        console.log(config);
         this.onCancel();
         if (val !== 'close') {
           for (let item of Object.keys(val)) {
@@ -861,7 +849,6 @@
       },
       // 发布
       saveReport(val) {
-        console.log(this.form);
         if (val !== 1 && val !== 2) {
           if (this.$attestationKey(this.drawForm)) return;
         }
@@ -873,9 +860,7 @@
         }
         this.form.is_draft = val;
         let bulletin = this.bulletinType;
-        if (bulletin.type) {
-          this.form.type = bulletin.type;
-        }
+        this.saveReportHandler(bulletin);
         this.handlerSaveReport();
         switch (val) {
           case 0:// 发布
@@ -929,6 +914,18 @@
               }
             });
             break;
+        }
+      },
+      // 提交前 数据处理
+      saveReportHandler(bulletin) {
+        if (bulletin.type) {
+          this.form.type = bulletin.type;
+        }
+        if (bulletin.bulletin === 'bulletin_rent_basic') {
+          let query = this.$route.query;
+          if (query.result) {
+            this.form.is_sign = query.result;
+          }
         }
       },
       // 附属房东/租客 处理
@@ -994,7 +991,9 @@
           if (!data) {
             if (!this.isGetTake) {
               if (type !== 'bulletin_special') {
-                this.getPunchClockData();
+                if (type !== 'bulletin_rent_RWC') {
+                  this.getPunchClockData();
+                }
               }
             } else {
               this.childBulletin(this.taskDetail.content);
@@ -1262,6 +1261,7 @@
           item.num = this.form[item.key];
         }
         this.changeHiddenAll = false;
+        console.log(this.form);
         this.form.id = id;
         if (!this.isGetTake) {
           this.form.signer = {};
