@@ -409,12 +409,6 @@
             this.resetting();
             break;
           default:
-            // 搜索的参数处理
-             this.newHighParams = this.jsonClone(this.highParams);
-             //待办类型由数组转化为字符串
-            if(this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length>0){   
-              this.newHighParams.rootProcessDefinitionKeyIn= this.highParams.rootProcessDefinitionKeyIn.join(',');
-            }
             this.onSearch(this.tabs.tab);
             break;
         }
@@ -585,6 +579,12 @@
           case '4':
             this.params['params' + tab].taskAssignee = this.personal.staff_id;
             break;
+        }
+        // 搜索的参数处理
+        this.newHighParams = this.jsonClone(this.highParams);
+        //待办类型由数组转化为字符串
+        if(this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length>0){
+          this.newHighParams.rootProcessDefinitionKeyIn= this.highParams.rootProcessDefinitionKeyIn.join(',');
         }
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },

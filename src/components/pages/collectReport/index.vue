@@ -331,7 +331,7 @@
     methods: {
       // 报备类型
       bulletin_types(type) {
-        let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.taskDefinitionKey);
+        let bulletinData = this.$bulletinType(type.bulletin);
         let data = [
           //不需要电子合同
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
@@ -356,7 +356,7 @@
           this.form.house_id = this.taskDetail.house_id;
           this.form.contract_id = this.taskDetail.contract_id;
         }
-        if (type === 'bulletin_rent_basic') {
+        if (type === 'bulletin_rent_basic' || type === 'bulletin_booking_renting') {
           this.form.is_sign = '';
         }
       },
@@ -394,6 +394,10 @@
             this.form[item] = val[item];
           }
           this.formatData[config.keyName] = val.address;
+          //获取特殊事项的房屋详情
+          if(config.bulletinType.bulletin === 'bulletin_special'){
+            this.getBulletinDetail(val.contract_id);
+          }
         }
       },
       // 日期选择
@@ -592,9 +596,27 @@
             this.chooseTime(val, value, num, parentKey);
             break;
           case 'searchHouse':
-            this.searchHouseModule = true;
+            // this.searchHouseModule = true;
             this.searchConfig = val;
             this.searchConfig.bulletinType = this.bulletinType;
+            //特殊事项报备(ll)
+            if(this.bulletinType.bulletin === 'bulletin_special'){
+              if(this.form.collect_or_rent === ''){
+                this.$prompt( '请选择收租类型');
+                  return;
+              }
+              switch (this.form.collect_or_rent) {  //0-收房，1-租房
+                case '0':
+                  this.searchConfig.contract_type=1;
+                  break;
+                case '1':
+                  this.searchConfig.contract_type=2;
+                  break;
+              }
+              this.searchConfig = this.jsonClone(this.searchConfig);
+            }
+            this.searchHouseModule = true;
+
             break;
           case 'noPicker':
             this.noPickerModule = true;
@@ -989,7 +1011,8 @@
               if (!this.isGetTake) {
                 this.getPunchClockData();
               } else {
-                this.childBulletin(this.taskDetail.content);
+                if (type !== 'bulletin_special') {
+                this.childBulletin(this.taskDetail.content);}
               }
             }
           } else {
@@ -1263,7 +1286,19 @@
         }
         // this.form.account = '6225212583158743';
         // this.form.account_name = '贾少君';
+      },
+      //获取详情数据（特殊事项ll）
+      getBulletinDetail(contract_id,echoParam){
+        let data = {};
+        this.$httpZll.getBulletinDetail(contract_id).then(res => {
+          if (res) {
+            data.content = res.content.draft_content;
+            this.childBulletin(data.content);
+          }
+        });
       }
+
+
     },
   }
 </script>

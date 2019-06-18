@@ -222,7 +222,8 @@
     },
     activated() {
       this.bulletin_type = JSON.parse(sessionStorage.bulletin_type);
-      if (this.bulletin_type.bulletin === 'bulletin_rent_RWC') {
+      let type = this.bulletin_type.bulletin;
+      if (type === 'bulletin_rent_RWC' || type === 'bulletin_booking_renting') {
         this.bulletin_type = bulletinRouterStatus.bulletin_rent_basic;
         sessionStorage.setItem('bulletin_type', JSON.stringify(this.bulletin_type));
       }
@@ -452,6 +453,7 @@
             obj.type = 'MarketCollect';
             break;
           case "bulletin_rent_basic":
+          case "bulletin_booking_renting":
             obj.status = 'toBeDoneRent';
             obj.type = 'MarketRent';
             break;

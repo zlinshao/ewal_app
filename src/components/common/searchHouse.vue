@@ -95,7 +95,7 @@
           page: 1,
           limit: 50,
           status: 1,// 1-生效中，2-快到期，3-已过期， 4-已结束
-          contract_type: 1,
+          contract_type: 1,  //1-收， 2-租
           city_name: '',
           from: 'task',
           search: '',
@@ -124,7 +124,12 @@
       },
       config(val) {
         this.onConfig = val;
+        //特殊事项报备(ll)
+        if(val.bulletinType.bulletin === 'bulletin_special' ){
+          this.params.contract_type=val.contract_type;
+        }
       },
+      deep:true,
       searchModule(val) {
         this.close_();
         if (!val) {
