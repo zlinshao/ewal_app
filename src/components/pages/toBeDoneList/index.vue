@@ -69,6 +69,7 @@
     <div class="commonFooterTag">
       <!-- <p v-for="item in 4" :class="['p-'+item]" @click="footerTag(item)"></p> -->
       <p :class="['p-'+1]" @click="footerTag(1)"></p>
+      <p :class="['p-'+3]" @click="footerTag(3)"></p>
       <p :class="['p-'+4]" @click="footerTag(4)"></p>
     </div>
 
@@ -495,9 +496,9 @@
           case 1:
             this.routerReplace('/index');
             break;
-          // case 3:
-          //   this.routerReplace('/houseResource');
-          //   break;
+          case 3:
+            this.routerReplace('/houseResource');
+            break;
         }
       },
 
@@ -609,7 +610,7 @@
             title: this.highParams.title,
           }
         }
-        // this.params['params' + this.tabs] = Object.assign({},this.params['params' + this.tabs], this.newHighParams); 
+        // this.params['params' + this.tabs] = Object.assign({},this.params['params' + this.tabs], this.newHighParams);
       },
 
     },
