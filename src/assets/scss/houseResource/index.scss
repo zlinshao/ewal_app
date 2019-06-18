@@ -94,13 +94,13 @@
               height: 16px;
               vertical-align: top;
             }
-            a.notice1 {
+            a.notice2 {
               @include houseBg('hs.png');
             }
-            a.notice2 {
+            a.notice3 {
               @include houseBg('gantan-cheng.png');
             }
-            a.notice3 {
+            a.notice4 {
               @include houseBg('gantan-hong.png');
             }
           }
