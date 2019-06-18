@@ -850,7 +850,7 @@
       // 发布
       saveReport(val) {
         if (val !== 1 && val !== 2) {
-          // if (this.$attestationKey(this.drawForm)) return;
+          if (this.$attestationKey(this.drawForm)) return;
         }
         if (val === 1) {
           if (!this.photoUploadStatus) {
