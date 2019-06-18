@@ -4354,7 +4354,6 @@ defineRetainageReport = {
       keyName: 'balance',
       keyType: '',
       type: 'text',
-      status: '',
       slot: '',
     },
     {
@@ -4367,6 +4366,7 @@ defineRetainageReport = {
       status: 'objInt',
       picker: 'picker',
       showForm: 'formatData',
+      slot: '',
     },
     {
       label: '已收总金额',
@@ -4633,33 +4633,6 @@ defineSpecialReport = {
   ]
 };
 
-// 退租报备
-defineCheckoutReport = {
-  slither0: [{
-    label: '收房/租房',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'collect_or_rent',
-    keyType: '',
-    type: 'text',
-    status: 'objInt',
-    picker: 'picker',
-    showForm: 'formatData',
-    slot: '',
-  },
-    {
-      label: '客户姓名',
-      placeholder: '选填 请输入',
-      keyName: 'customer_name',
-      keyType: '',
-      type: 'text',
-      status: '',
-      picker: '',
-      slot: '',
-    },
-  ]
-};
-
 // 收房交接单
 // 物品交接
 const childKeysTypeBad = ['type', 'is_bad', 'bad_number'];
@@ -4683,18 +4656,19 @@ function handlerFreeDelivery(name, key, type = 'number', place = '必填 请输�
 // 费用交接切换
 handlerFreeDeliveryChange = [
   [],
-  [{
-    label: '缴费类型',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'payment_type',
-    keyType: 1,
-    type: 'text',
-    status: 'objInt',
-    picker: 'picker',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    slot: '',
-  },
+  [
+    {
+      label: '缴费类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_type',
+      keyType: 1,
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
     handlerFreeDelivery('水卡卡号', 'water_card_num'),
     // handlerFreeDelivery('水务公司', 'water_company', 'text'),
     handlerFreeDelivery('用水档数', 'water_level'),
@@ -4755,18 +4729,19 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
     handlerFreeDelivery('费用总计', 'total_fee'),
   ],
-  [{
-    label: '缴费类型',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'payment_type',
-    keyType: 2,
-    type: 'text',
-    status: 'objInt',
-    picker: 'picker',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    slot: '',
-  },
+  [
+    {
+      label: '缴费类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_type',
+      keyType: 2,
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
     // handlerFreeDelivery('水务公司', 'water_company', 'text'),
     handlerFreeDelivery('用水档数', 'water_level'),
     handlerFreeDelivery('用水单价', 'water_unit_price'),
@@ -4824,18 +4799,19 @@ handlerFreeDeliveryChange = [
     handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
     handlerFreeDelivery('费用总计', 'total_fee'),
   ],
-  [{
-    label: '缴费类型',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'payment_type',
-    keyType: 3,
-    type: 'text',
-    status: 'objInt',
-    picker: 'picker',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    slot: '',
-  },
+  [
+    {
+      label: '缴费类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_type',
+      keyType: 3,
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
     handlerFreeDelivery('水卡余额', 'water_card_balance',),
     handlerFreeDelivery('电卡余额', 'electric_card_balance',),
     handlerFreeDelivery('燃气卡余额', 'gas_card_balance',),
@@ -5087,6 +5063,118 @@ function deliveryMorePickersRemark(name) {
 
 // 交接单
 defineArticleReceipt = {
+  // 客厅
+  hall_goods: handlerHallGoods('hall_goods', 11),
+  // 厨房/阳台/卫生间
+  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom', 12),
+  // 主卧
+  master_bedroom: handlerBedroom('master_bedroom', 13),
+  // 次卧
+  bedroom: [handlerBedroom('bedroom', 15)],
+  // 费用交接
+  slither: handlerFreeDeliveryChange[1],
+};
+
+// 退租报备
+defineCheckoutReport = {
+  // 协议类型
+  slither0: [
+    {
+      label: '客户姓名',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '退租性质',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'check_type',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '退房日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'checkout_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '终止日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'end_at',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '费用交至日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'pay_the_fee_to_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '是否补款',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'is_supplement_money',
+      keyType: '',
+      type: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '补款日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'supplement_money_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '支付日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_money_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '补充约定',
+      placeholder: '必填 请输入',
+      keyName: 'supplementary_agreement',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+  ],
   // 客厅
   hall_goods: handlerHallGoods('hall_goods', 11),
   // 厨房/阳台/卫生间

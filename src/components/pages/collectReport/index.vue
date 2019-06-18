@@ -850,7 +850,7 @@
       // 发布
       saveReport(val) {
         if (val !== 1 && val !== 2) {
-          if (this.$attestationKey(this.drawForm)) return;
+          // if (this.$attestationKey(this.drawForm)) return;
         }
         if (val === 1) {
           if (!this.photoUploadStatus) {
@@ -875,13 +875,9 @@
                 if (val === 1) {
                   this.form.id = res.data.id;
                 } else {
-                  if (this.form.is_sign === 0 || this.form.is_sign === '0') {
-                    this.$router.go(-1);
-                  } else {
-                    this.bulletin_types(bulletin);
-                    this.$store.dispatch('approval_tabs', {tab: '2', status: 0});
-                    this.routerReplace('/approvals');
-                  }
+                  this.bulletin_types(bulletin);
+                  this.$store.dispatch('approval_tabs', {tab: '2', status: 0});
+                  this.routerReplace('/approvals');
                 }
               }
             });

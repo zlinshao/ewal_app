@@ -186,6 +186,7 @@
         })
       },
       onConfirm(item) {
+        let type = JSON.parse(sessionStorage.bulletin_type || '{}');
         let data = {};
         data.house_id = item.house_id || '';
         data.contract_id = item.contract_id || '';
@@ -194,7 +195,11 @@
           if (res) {
             data.content = res.content.draft_content;
             sessionStorage.setItem('task_detail', JSON.stringify(data));
-            this.routerReplace('/collectReport');
+            if (type.bulletin === 'bulletin_checkout') {
+              this.routerReplace('/deliveryReceipt');
+            } else {
+              this.routerReplace('/collectReport');
+            }
           }
         });
       },

@@ -264,9 +264,9 @@
       //
       //   });
       // }
-      this.allDetail = JSON.parse(sessionStorage.deliveryReceipt);
+      this.allDetail = JSON.parse(sessionStorage.deliveryReceipt || '{}');
       this.getDraft(this.allDetail.task_id);
-      this.allReportNum = Object.keys(defineArticleReceipt).length;
+      this.allReportNum = Object.keys(defineCheckoutReport).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
       this.mainWidth = {minWidth: main, maxWidth: main};
@@ -737,9 +737,15 @@
       },
       // 重置
       resetting(val) {
+        let type = JSON.parse(sessionStorage.bulletin_type || '{}');
         this.slither = 0;
-        defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
-        this.drawSlither = this.jsonClone(defineArticleReceipt);
+        if (type.bulletin === 'bulletin_checkout') {
+          defineCheckoutReport['slither'] = handlerFreeDeliveryChange[val];
+          this.drawSlither = this.jsonClone(defineCheckoutReport);
+        } else {
+          defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
+          this.drawSlither = this.jsonClone(defineArticleReceipt);
+        }
         for (let item of Object.keys(this.drawSlither)) {
           if (item !== 'slither') {
             if (item === 'bedroom') {
@@ -821,10 +827,9 @@
         if (this.allDetail.ewal_contract) {
           let contract = JSON.parse(this.allDetail.ewal_contract || '{}');
           this.form.house_id = contract.house_id;//房屋ID
-        }
-        if (this.allDetail.ewal_contract) {
-          this.form.contract_id = JSON.parse(this.allDetail.ewal_contract).v3_contract_id;//合同ID
+          this.form.contract_id = contract.v3_contract_id;//合同ID
         } else {
+          this.form.house_id = '';
           this.form.contract_id = '';
         }
         this.form.collect_or_rent = this.allDetail.bulletin_type === 'bulletin_collect_basic' ? 1 : 2;//收租标记
