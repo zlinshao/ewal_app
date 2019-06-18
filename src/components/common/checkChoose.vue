@@ -6,6 +6,7 @@
         <p>请完成相关选项</p>
         <h3 @click="finish()">完成</h3>
       </div>
+      {{checksList.checks}}
       <div class="radioChecks">
         <div v-for="item in checksList.checks">
           <p @click="checkChoose(item, checksChoose)" :class="{'chooseCheck': checksChoose.includes(item)}">
@@ -70,7 +71,17 @@
     methods: {
       // 复选
       checkChoose(item, value) {
-        this.checkChooseCommon(item, value, 'obj');
+        if (value.length) {
+          value.forEach((key, index) => {
+            if (key === item) {
+              value.splice(index, 1);
+            } else {
+              value.push(item);
+            }
+          });
+        } else {
+          value.push(item);
+        }
       },
       finish() {
         let name = this.checksList.keyName;
