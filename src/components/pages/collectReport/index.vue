@@ -334,7 +334,7 @@
         let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.taskDefinitionKey);
         let data = [
           //不需要电子合同
-          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC'],
+          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_change', 'bulletin_special', 'bulletin_checkout'],
         ];
@@ -987,9 +987,7 @@
           if (!data) {
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
-                if (type !== 'bulletin_special') {
-                  this.getPunchClockData();
-                }
+                this.getPunchClockData();
               } else {
                 this.childBulletin(this.taskDetail.content);
               }
@@ -1001,7 +999,7 @@
             }
             this.handlePreFill(res);
           }
-          if ((!this.isGetTake) && key !== 'RentBooking' && type !== 'bulletin_special') {
+          if ((!this.isGetTake) && key !== 'RentBooking') {
             this.electronicContract();
           }
         });
