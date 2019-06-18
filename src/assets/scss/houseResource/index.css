@@ -199,13 +199,13 @@
         width: 18px;
         height: 16px;
         vertical-align: top; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice1 {
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice2 {
         background: url("../../../assets/image/houseResource/hs.png") no-repeat scroll center;
         background-size: 100% 100%; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice2 {
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice3 {
         background: url("../../../assets/image/houseResource/gantan-cheng.png") no-repeat scroll center;
         background-size: 100% 100%; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice3 {
+      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice4 {
         background: url("../../../assets/image/houseResource/gantan-hong.png") no-repeat scroll center;
         background-size: 100% 100%; }
     #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info {
