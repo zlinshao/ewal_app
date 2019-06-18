@@ -188,9 +188,10 @@
         </div>
       </div>
       <div class="footer" :class="{'footerStatic': keyUpStatus}" v-if="queryData.revise !== 'revise'">
-        <p class="p1" @click="saveReport(1)">
+        <p class="p1" @click="saveReport(1)" v-if="bulletinType.bulletin !== 'bulletin_rent_RWC'">
           <span class="writingMode">草稿</span>
         </p>
+        <p class="p1" v-else></p>
         <p class="p2" @click="saveReport(2)">
           <span>重置</span>
         </p>
