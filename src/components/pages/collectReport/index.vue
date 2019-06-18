@@ -331,7 +331,7 @@
     methods: {
       // 报备类型
       bulletin_types(type) {
-        let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.taskDefinitionKey);
+        let bulletinData = this.$bulletinType(type.bulletin);
         let data = [
           //不需要电子合同
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
@@ -356,7 +356,7 @@
           this.form.house_id = this.taskDetail.house_id;
           this.form.contract_id = this.taskDetail.contract_id;
         }
-        if (type === 'bulletin_rent_basic') {
+        if (type === 'bulletin_rent_basic' || type === 'bulletin_booking_renting') {
           this.form.is_sign = '';
         }
       },

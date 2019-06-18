@@ -344,6 +344,12 @@ bulletinRouterStatus = {
     to: 'rent',
     type: 1,
   },
+  // 预定报备
+  bulletin_booking_renting: {
+    bulletin: 'bulletin_booking_renting',
+    to: 'rent',
+    type: 1,
+  },
   // 转租报备
   bulletin_rent_trans: {
     bulletin: 'bulletin_rent_trans',
