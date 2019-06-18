@@ -14,7 +14,7 @@
       <!--空置房源-->
       <div class="vacancyHouse">
         <h1></h1>
-        <div v-for="item in vacancyHouse">
+        <div @click="redirectHouseResource(item)" v-for="item in vacancyHouse">
           <i></i>
           <p>
             <b>{{item.num}}</b>
@@ -87,16 +87,32 @@
         vacancyHouse: [
           {
             num: '0',
+            id:1,
             scope: '小于7天',
+            params: {
+              kong:[0,7]
+            },
           }, {
             num: '0',
+            id:2,
             scope: '8-14天',
+            params: {
+              kong:[8,14]
+            },
           }, {
             num: '0',
+            id:3,
             scope: '15-21天',
+            params: {
+              kong:[15,21]
+            },
           }, {
             num: '0',
+            id:4,
             scope: '大于21天',
+            params: {
+              kong:[22,100]
+            },
           },
         ],
         trans: [
@@ -124,10 +140,10 @@
           //   id: '2',
           //   icon: tab_home2,
           // },
-          // {
-          //   id: '3',
-          //   icon: tab_home3,
-          // },
+          {
+            id: '3',
+            icon: tab_home3,
+          },
           {
             id: '4',
             icon: tab_home4,
@@ -136,6 +152,7 @@
       }
     },
     mounted() {
+      this.getEmptyHouseData();//获取空置房源信息
     },
     activated() {
 
@@ -154,11 +171,45 @@
           case '4':
             this.routerLink('/toBeDoneList');
             break;
-          // case '3':
-          //   this.routerLink('/houseResource');
-          //   break;
+          case '3':
+            this.routerLink('/houseResource');
+            break;
         }
       },
+
+      /**
+       * 路由跳转到房源管理页面
+       * @param item item内部携带请求参数
+       */
+      redirectHouseResource(item) {
+        this.routerLink('houseResource',{kong:item.params.kong});
+      },
+
+      /**
+       * 获取空置房源信息
+       */
+      getEmptyHouseData() {
+        let city_id = this.$store.state.app.personalDetail.city_id;
+        let cityList = this.$store.state.app.allCityList;
+        let city_name = '';
+        for (let item of cityList) {
+          if (String(item.code) === String(city_id)) {
+            city_name = item.name;
+            break;
+          }
+        }
+        let params = {
+          city_name
+        };
+        this.$httpHs.getEmptyHouse(params).then(res=> {
+          if(res.code==200) {
+            _.forEach(res.data,(val,key) => {
+              let endChar = key.charAt(key.length-1);
+              _.find(this.vacancyHouse,{id:parseInt(endChar)}).num = val;
+            });
+          }
+        });
+      }
     },
   }
 </script>
