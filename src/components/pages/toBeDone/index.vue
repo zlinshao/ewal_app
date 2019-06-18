@@ -246,7 +246,7 @@
         if (item.status) {
           sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
         }
-        this.routerLink(url);
+        this.routerLink(url, item);
       },
       // 获取合同模板
       getContract() {
