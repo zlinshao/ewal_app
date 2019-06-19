@@ -373,7 +373,7 @@
           }
         })
       },
-      // 历史流程
+      // 审批历史流程
       historyProcess(detail) {
         this.$httpZll.getHistoryProcess(detail.process_id).then(res => {
           if(res){
@@ -682,7 +682,7 @@
             this.cancel('comment');
             if (res.content && res.content.message) {
               this.$prompt('评论成功！', 'success');
-              this.historyProcess(this.allDetail);
+              this.historyProcess( this.detailData);
             } else {
               this.$prompt('评论失败！', 'fail');
             }

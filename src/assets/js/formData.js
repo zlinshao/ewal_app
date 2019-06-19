@@ -2391,20 +2391,33 @@ defineCollectReport = {
     },
   ],
 };
-
+// 未收先租
+defineRentBWCReport = [
+  {
+    label: '房屋地址',
+    placeholder: '必填 请输入',
+    keyName: 'rent_without_collect_address',
+    keyType: '',
+    type: 'text',
+    slot: '',
+  },
+];
 // 租房预定
-defineRentBookingReport = {
+defineRentBookingReport = [
+  {
+    label: '房屋地址',
+    placeholder: '已禁用',
+    disabled: 'disabled',
+    keyName: 'address',
+    keyType: '',
+    type: 'text',
+    slot: '',
+  },
+];
+// 租房预定
+defineBookingBWCReport = {
   // 合同信息
   slither0: [
-    {
-      label: '房屋地址',
-      placeholder: '已禁用',
-      disabled: 'disabled',
-      keyName: 'address',
-      keyType: '',
-      type: 'text',
-      slot: '',
-    },
     {
       label: '签约日期',
       placeholder: '必填 请选择',
@@ -2922,7 +2935,6 @@ defineRentBookingReport = {
     },
   ],
 };
-
 // 租房报备
 defineRentReport = {
   // 合同信息
@@ -3644,18 +3656,19 @@ defineContinueRent = [{
 ];
 
 // 转租报备
-defineSubletReport = [{
-  label: '转租类型',
-  placeholder: '必填 请选择',
-  readonly: 'readonly',
-  keyName: 'trans_type',
-  keyType: '0',
-  type: 'text',
-  status: 'objInt',
-  picker: 'picker',
-  showForm: 'formatData', //picker 显示form 或 formatData
-  slot: '',
-},
+defineSubletReport = [
+  {
+    label: '转租类型',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'trans_type',
+    keyType: '0',
+    type: 'text',
+    status: 'objInt',
+    picker: 'picker',
+    showForm: 'formatData', //picker 显示form 或 formatData
+    slot: '',
+  },
   {
     label: '房屋地址',
     disabled: 'disabled',
@@ -3664,17 +3677,6 @@ defineSubletReport = [{
     keyType: '',
     type: 'text',
     status: '',
-    slot: '',
-  },
-];
-// 未收先租
-defineRentBWCReport = [
-  {
-    label: '房屋地址',
-    placeholder: '必填 请输入',
-    keyName: 'rent_without_collect_address',
-    keyType: '',
-    type: 'text',
     slot: '',
   },
 ];

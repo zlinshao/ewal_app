@@ -32,6 +32,7 @@ const app = {
     },
     // 所有城市
     ALL_CITY_LIST(state, view) {
+      console.log(view);
       state.allCityList = view;
     },
     // 监听键盘弹出/收起

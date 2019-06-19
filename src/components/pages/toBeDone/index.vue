@@ -318,10 +318,13 @@
                 }
               } else {
                 if (val.tk_result) {
+                  let bulletin = val.tk_result === 'bulletin' ? bulletinRouterStatus.bulletin_rent_basic : bulletinRouterStatus.bulletin_booking_renting;
                   result = val.tk_result === 'bulletin' ? '1' : '0';
                   if (val.book_url) {
+                    bulletin = bulletinRouterStatus.bulletin_rent_basic;
                     result = '1';
                   }
+                  sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                   this.routerLink(val.task_action, {result: result});
                 } else {
                   this.routerLink(val.task_action);

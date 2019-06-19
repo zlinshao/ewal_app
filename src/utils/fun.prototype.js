@@ -84,24 +84,16 @@ export default {
       return JSON.parse(JSON.stringify(val));
     };
     // 复选
-    Vue.prototype.checkChooseCommon = function (item, value, type = 'id') {
+    Vue.prototype.checkChooseCommon = function (item, value) {
       if (value.length) {
         if (value.includes(item.id)) {
           let index = value.indexOf(item);
           value.splice(index, 1);
         } else {
-          if (type === 'id') {
-            value.push(item.id);
-          } else {
-            value.push(item);
-          }
+          value.push(item.id);
         }
       } else {
-        if (type === 'id') {
-          value.push(item.id);
-        } else {
-          value.push(item);
-        }
+        value.push(item.id);
       }
     };
     // 列表 数据重组
@@ -361,11 +353,12 @@ export default {
           break;
         case 'bulletin_booking_renting'://预定
           title = ['合同信息', '客户信息'];
-          data = this.jsonClone(defineRentBookingReport);
+          data = this.jsonClone(defineBookingBWCReport);
+          data.slither0 = defineRentBookingReport.concat(data.slither0);
           break;
         case 'bulletin_rent_RWC'://未收先租
           title = ['合同信息', '客户信息'];
-          data = this.jsonClone(defineRentBookingReport);
+          data = this.jsonClone(defineBookingBWCReport);
           data.slither0 = defineRentBWCReport.concat(data.slither0);
           break;
         case 'bulletin_change'://调租
@@ -624,25 +617,10 @@ export default {
                 this.$prompt('签署成功！');
                 this.routerLink(action.route);
               } else {
-                let params = {
-                  taskDefinitionKey: 'InputBulletinData',
-                  rootProcessInstanceId: item.root_id,
-                };
-                this.$httpZll.getNewTaskId(params).then(res => {
+                this.$getTaskList(item).then(res => {
                   if (res) {
-                    let query = {};
-                    let task = this.groupHandlerListData(res.data)[0];
-                    if (!task) {
-                      this.$prompt('获取任务失败', 'fail');
-                      return;
-                    }
-                    query = task;
-                    query.task_id = task.id;
-                    query.process_id = task.processInstanceId;
-                    query.root_id = task.rootProcessInstanceId;
-                    query.task_action = action.route;
-                    this.againTaskDetail(query).then(_ => {
-                      this.againDetailRequest(query, 'again', replace);
+                    this.againTaskDetail(res).then(_ => {
+                      this.againDetailRequest(res, 'again', replace);
                     });
                   }
                 });
@@ -652,9 +630,28 @@ export default {
         }
       });
     };
+    // 获取任务列表
+    Vue.prototype.$getTaskList = function (item) {
+      return new Promise((resolve, reject) => {
+        let params = {
+          taskDefinitionKey: 'InputBulletinData',
+          rootProcessInstanceId: item.root_id,
+        };
+        this.$httpZll.getNewTaskId(params).then(res => {
+          if (res) {
+            let task = this.groupHandlerListData(res.data)[0];
+            if (!task) {
+              this.$prompt('获取任务失败', 'fail');
+              resolve(false);
+              return;
+            }
+            resolve(task);
+          }
+        });
+      })
+    };
     // 任务详情
     Vue.prototype.againTaskDetail = function (val) {
-      console.log(val);
       return new Promise((resolve, reject) => {
         let url = '';
         if (val.book_url) {
@@ -664,13 +661,17 @@ export default {
         }
         this.$httpZll.get(url, {}, 'prompt').then(res => {
           if (res.success) {
-            let data = {};
-            let content = res.data.content;
-            let arr = ['property_fee', 'property_phone'];
-            if (content.add_data) {
-              for (let item of content.add_data) {
-                if (arr.includes(item.name)) {
-                  content[item.name] = item.value;
+            let data = {}, content = {};
+            if (val.book_url) {
+              content = res.data;
+            } else {
+              content = res.data.content;
+              let arr = ['property_fee', 'property_phone'];
+              if (content.add_data) {
+                for (let item of content.add_data) {
+                  if (arr.includes(item.name)) {
+                    content[item.name] = item.value;
+                  }
                 }
               }
             }
@@ -745,24 +746,24 @@ export default {
           //   jsApiList: ['biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
           // });
           // console.log(res);
-          dd.ready(() => {
-            dd.runtime.permission.requestAuthCode({
-              corpId: _config.corpId,
-              onSuccess(info) {
-                that.$httpZll.getTokenInfo(info.code).then((res) => {
-                  that.personalData(res, resolve);
-                })
-              },
-              onFail(err) {
-                alert('dd error: ' + JSON.stringify(err));
-                // alert('您不在系统内，请联系管理员添加！');
-                that.closeDD();
-              }
-            });
-          });
-          dd.error((err) => {
-            alert('dd error: ' + JSON.stringify(err));
-          });
+          // dd.ready(() => {
+          //   dd.runtime.permission.requestAuthCode({
+          //     corpId: _config.corpId,
+          //     onSuccess(info) {
+          //       that.$httpZll.getTokenInfo(info.code).then((res) => {
+          //         that.personalData(res, resolve);
+          //       })
+          //     },
+          //     onFail(err) {
+          //       alert('dd error: ' + JSON.stringify(err));
+          //       // alert('您不在系统内，请联系管理员添加！');
+          //       that.closeDD();
+          //     }
+          //   });
+          // });
+          // dd.error((err) => {
+          //   alert('dd error: ' + JSON.stringify(err));
+          // });
           let data = {
             avatar: "http://p.qlogo.cn/bizmail/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw/0",
             city_id: "120000",
@@ -787,28 +788,7 @@ export default {
       this.$httpZll.getUserInfo().then(res => {
         if (res) {
           let data = {}, info = res.data.detail;
-          data.avatar = info.avatar;
-          data.phone = info.phone;
-          data.staff_id = info.id;
-          data.staff_name = info.name;
-          if (info.org && info.org.length) {
-            let org = info.org[0];
-            if (org.city && org.city.length) {
-              let city = org.city[0];
-              data.city_id = city.city_id;
-              data.city_name = city.city_name;
-            } else {
-              data.city_id = '120000';
-              data.city_name = '天津市';
-              data.location = [117.201538, 39.085294];
-            }
-            data.department_name = org.name;
-            data.department_id = org.id;
-          } else {
-            resolve(false);
-            this.$prompt('获取部门失败!', 'fail');
-            return;
-          }
+          personalDataHandler(data, info);
           this.$store.dispatch('personal_storage', data);
           resolve(true);
         }
@@ -824,5 +804,28 @@ export default {
         }
       });
     };
+  }
+}
+
+// 个人信息处理
+function personalDataHandler(data, info) {
+  data.avatar = info.avatar;
+  data.phone = info.phone;
+  data.staff_id = info.id;
+  data.staff_name = info.name;
+  if (info.org && info.org.length) {
+    let org = info.org[0];
+    if (org.city && org.city.length) {
+      for (let city of org.city) {
+
+      }
+      this.$store.dispatch('all_city_list', org.city);
+    }
+    data.department_name = org.name;
+    data.department_id = org.id;
+  } else {
+    resolve(false);
+    this.$prompt('获取部门失败!', 'fail');
+    return;
   }
 }
