@@ -63,12 +63,8 @@
     mounted() {
     },
     activated() {
-      for (let item of this.cityList) {
-        if (String(item.code) === String(this.personal.city_id)) {
-          this.city_name = item.name;
-          this.params.city = item.code;
-        }
-      }
+      this.city_name = this.personal.name;
+      this.params.city = this.personal.code;
     },
     watch: {
       'params.name'(val) {

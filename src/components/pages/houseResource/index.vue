@@ -379,12 +379,7 @@
       //重置city
       resetCity() {
         this.params.city_id = this.personal.city_id;
-        _.forEach(this.cityList,(o)=> {
-          if(parseInt(this.params.city_id)==parseInt(o.code)) {
-            this.city_name = o.name;
-            return;
-          }
-        })
+        this.city_name = this.personal.city_name;
       },
 
       handleGetStaffDepartInfo(val, type) {

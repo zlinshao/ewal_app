@@ -87,10 +87,10 @@ export default new Router({
     },
     {
       path: '/toBeDoneList',
-      name: '待办',
+      name: '待办列表',
       hidden: 'index.vue',
       component: ToBeDoneList,
-      meta: {title: '待办', index: 4},
+      meta: {title: '待办列表', index: 4},
     },
     {
       path: '/punchClock',
