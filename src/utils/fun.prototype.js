@@ -661,7 +661,7 @@ export default {
         }
         this.$httpZll.get(url, {}, 'prompt').then(res => {
           if (res.success) {
-            let data = {}, content = {};
+            let data = val, content = {};
             if (val.book_url) {
               content = res.data;
             } else {
@@ -676,7 +676,6 @@ export default {
               }
             }
             data.content = content;
-            data.task_id = val.task_id;
             data.process_instance_id = val.process_id;
             data.root_process_instance_id = val.root_id;
             sessionStorage.setItem('task_detail', JSON.stringify(data));

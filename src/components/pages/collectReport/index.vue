@@ -395,7 +395,7 @@
           }
           this.formatData[config.keyName] = val.address;
           //获取特殊事项的房屋详情
-          if(config.bulletinType.bulletin === 'bulletin_special'){
+          if (config.bulletinType.bulletin === 'bulletin_special') {
             this.getBulletinDetailFun(val.contract_id);
           }
         }
@@ -570,11 +570,9 @@
         if (draw.children.length === 1) {
           if (draw.keyName === 'period_price_way_arr') {
             this.form[draw.keyName][0].period = this.form.month;
-            console.log(this.form[draw.keyName][0])
           }
           if (draw.keyName === 'current_pay_info') {
             this.form[draw.keyName][0].money_sep = this.form.money_sum;
-            console.log(this.form[draw.keyName][0])
           }
         }
         if (draw.status !== 'countDate') return;
@@ -857,6 +855,7 @@
       },
       // 发布
       saveReport(val) {
+        console.log(this.form);
         if (val !== 1 && val !== 2) {
           if (this.$attestationKey(this.drawForm)) return;
         }
@@ -877,20 +876,19 @@
               this.form.task_id = this.taskDetail.task_id || '';
               this.form.process_instance_id = this.taskDetail.process_instance_id || '';
             }
-            console.log(this.taskDetail)
             this.form.spot_code = this.$refs.code.spot_code;
             this.$httpZll.submitReport(this.form, bulletin.to).then(res => {
               if (res) {
                 if (val === 1) {
-                  let data  = res.data;
+                  let data = res.data;
                   this.form.id = data.id;
                   //特殊事项
-                    if(data.task_id){
-                      this.taskDetail.task_id = data.task_id;
-                    }
-                    if(data.process_instance_id){
-                      this.taskDetail.process_instance_id = data.process_instance_id;
-                    }
+                  if (data.task_id) {
+                    this.taskDetail.task_id = data.task_id;
+                  }
+                  if (data.process_instance_id) {
+                    this.taskDetail.process_instance_id = data.process_instance_id;
+                  }
                 } else {
                   this.bulletin_types(bulletin);
                   this.$store.dispatch('approval_tabs', {tab: '2', status: 0});
@@ -934,9 +932,9 @@
         if (bulletin.type) {
           this.form.type = bulletin.type;
         }
-        if (bulletin.bulletin === 'bulletin_rent_basic') {
+        if (bulletin.bulletin === 'bulletin_rent_basic' || bulletin.bulletin === 'bulletin_booking_renting') {
           let query = this.$route.query;
-          if (query.result) {
+          if (query.result || query.result === 0) {
             this.form.is_sign = query.result;
           }
         }
@@ -1007,13 +1005,14 @@
                 this.getPunchClockData();
               } else {
                 if (type !== 'bulletin_special') {
-                this.childBulletin(this.taskDetail.content);}
+                  this.childBulletin(this.taskDetail.content);
+                }
               }
             }
           } else {
             let res = data.data;
             // if (type !== 'bulletin_special') {
-              this.childBulletin(res, 'draft');
+            this.childBulletin(res, 'draft');
             // }
             this.handlePreFill(res);
           }
@@ -1273,7 +1272,6 @@
           item.num = this.form[item.key];
         }
         this.changeHiddenAll = false;
-        console.log(this.form);
         this.form.id = id;
         if (!this.isGetTake) {
           this.form.signer = {};
@@ -1283,7 +1281,7 @@
         // this.form.account_name = '贾少君';
       },
       //获取详情数据（特殊事项ll）
-      getBulletinDetailFun(contract_id){
+      getBulletinDetailFun(contract_id) {
         let data = {};
         this.$httpZll.getBulletinDetail(contract_id).then(res => {
           if (res) {

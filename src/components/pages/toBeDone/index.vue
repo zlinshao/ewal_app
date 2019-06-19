@@ -301,6 +301,7 @@
       },
       // 去打卡 去签约
       goOperates(val) {
+        console.log(val)
         switch (val.task_action) {
           case 'punchClock':
             sessionStorage.setItem('punchClock', JSON.stringify(val));
