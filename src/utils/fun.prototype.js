@@ -617,25 +617,10 @@ export default {
                 this.$prompt('签署成功！');
                 this.routerLink(action.route);
               } else {
-                let params = {
-                  taskDefinitionKey: 'InputBulletinData',
-                  rootProcessInstanceId: item.root_id,
-                };
-                this.$httpZll.getNewTaskId(params).then(res => {
+                this.$getTaskList(item).then(res => {
                   if (res) {
-                    let query = {};
-                    let task = this.groupHandlerListData(res.data)[0];
-                    if (!task) {
-                      this.$prompt('获取任务失败', 'fail');
-                      return;
-                    }
-                    query = task;
-                    query.task_id = task.id;
-                    query.process_id = task.processInstanceId;
-                    query.root_id = task.rootProcessInstanceId;
-                    query.task_action = action.route;
-                    this.againTaskDetail(query).then(_ => {
-                      this.againDetailRequest(query, 'again', replace);
+                    this.againTaskDetail(res).then(_ => {
+                      this.againDetailRequest(res, 'again', replace);
                     });
                   }
                 });
@@ -645,9 +630,28 @@ export default {
         }
       });
     };
+    // 获取任务列表
+    Vue.prototype.$getTaskList = function (item) {
+      return new Promise((resolve, reject) => {
+        let params = {
+          taskDefinitionKey: 'InputBulletinData',
+          rootProcessInstanceId: item.root_id,
+        };
+        this.$httpZll.getNewTaskId(params).then(res => {
+          if (res) {
+            let task = this.groupHandlerListData(res.data)[0];
+            if (!task) {
+              this.$prompt('获取任务失败', 'fail');
+              resolve(false);
+              return;
+            }
+            resolve(task);
+          }
+        });
+      })
+    };
     // 任务详情
     Vue.prototype.againTaskDetail = function (val) {
-      console.log(val);
       return new Promise((resolve, reject) => {
         let url = '';
         if (val.book_url) {
@@ -769,7 +773,7 @@ export default {
             department_id: '395',
             department_name: "开发",
             phone: "18052001167",
-            staff_id: '69',
+            staff_id: '',
             staff_name: "张琳琳",
           };
           globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU3OTdkZWJjOWRhODc0OGY5Yjk2ZWM2MjI5ZThjOTFiOTQ2ZWU2NTA4ZjM1MzdiMGI5NzdjZDcxYzQyM2IwYWE0Mzk4ZjA0MzljMTBhNjI5In0.eyJhdWQiOiIxIiwianRpIjoiZTc5N2RlYmM5ZGE4NzQ4ZjliOTZlYzYyMjllOGM5MWI5NDZlZTY1MDhmMzUzN2IwYjk3N2NkNzFjNDIzYjBhYTQzOThmMDQzOWMxMGE2MjkiLCJpYXQiOjE1NTk4ODg2MjUsIm5iZiI6MTU1OTg4ODYyNSwiZXhwIjoxNTYxMTg0NjI1LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.vEbN37TYOYd9moQViB0hSoG0LVcnbzrntBEvIrrJ00TndWWF7m8Bu4JU0tU6Dcw1LHMFuv7HkqmDVddlwJmdgFtpYOdKAHL1s1vDkUbmoKDai8ZnvZR514x7rwkMW3qrr1lJ7z4s7le7UG6_tWFeRiR02D8LPbgQVyfT3xQ3OTG9cs-ZuYYbgGZRKf1Mm891WKqtxvXHokEQCmsEWxaKJwCMVmjOUq4WH1PPHWHWfA__Q4T6ea7X0CvmWuJU1RBXr-zBflHxGuRgVDth2eSiaJly6E2x_hsFOKptN4hEMHn7vlDZyvKmGvCUbW9zs8E94by8HQEy6YhNT70I1qFFSpOVI83i8_kAXDhEsiTbcImQYWTlTP2d4sT9tFDBpdDCgYV35-pSRdk5adukMvQkji0kwt2Q16xw_W9bQsY0HJY3X9D2w7t9mljzASrILFi-sq096q2JlKNdi8J3PxRPKuOVWPlfwvD1V-rKQmwGOhj_LbKUFfGNiUZBBsMeyYRb7oaGTpuHOzQhkIDLpXgMV1CG08s2Czc3PPfLGACjj-Cdgbf08LG5orzsrCF-ZRkLxZQ-wTxeuRjxF6WOG6kIYT2Y7SKbOpys4RWQMxMRfB_tsUlxEKueyrfNka9vGmy7C25qz7RO7ffVE9TRxyE2C15AkWP4FDb4FtKrcqoM1Kk';
@@ -784,28 +788,7 @@ export default {
       this.$httpZll.getUserInfo().then(res => {
         if (res) {
           let data = {}, info = res.data.detail;
-          data.avatar = info.avatar;
-          data.phone = info.phone;
-          data.staff_id = info.id;
-          data.staff_name = info.name;
-          if (info.org && info.org.length) {
-            let org = info.org[0];
-            if (org.city && org.city.length) {
-              let city = org.city[0];
-              data.city_id = city.city_id;
-              data.city_name = city.city_name;
-            } else {
-              data.city_id = '120000';
-              data.city_name = '天津市';
-              data.location = [117.201538, 39.085294];
-            }
-            data.department_name = org.name;
-            data.department_id = org.id;
-          } else {
-            resolve(false);
-            this.$prompt('获取部门失败!', 'fail');
-            return;
-          }
+          personalDataHandler(data, info);
           this.$store.dispatch('personal_storage', data);
           resolve(true);
         }
@@ -821,5 +804,28 @@ export default {
         }
       });
     };
+  }
+}
+
+// 个人信息处理
+function personalDataHandler(data, info) {
+  data.avatar = info.avatar;
+  data.phone = info.phone;
+  data.staff_id = info.id;
+  data.staff_name = info.name;
+  if (info.org && info.org.length) {
+    let org = info.org[0];
+    if (org.city && org.city.length) {
+      for (let city of org.city) {
+
+      }
+      this.$store.dispatch('all_city_list', org.city);
+    }
+    data.department_name = org.name;
+    data.department_id = org.id;
+  } else {
+    resolve(false);
+    this.$prompt('获取部门失败!', 'fail');
+    return;
   }
 }

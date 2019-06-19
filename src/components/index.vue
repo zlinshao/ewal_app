@@ -90,28 +90,28 @@
             id:1,
             scope: '小于7天',
             params: {
-              kong:[0,7]
+              kong:{min:0,max:7}
             },
           }, {
             num: '0',
             id:2,
             scope: '8-14天',
             params: {
-              kong:[8,14]
+              kong:{min:8,max:14}
             },
           }, {
             num: '0',
             id:3,
             scope: '15-21天',
             params: {
-              kong:[15,21]
+              kong:{min:15,max:21}
             },
           }, {
             num: '0',
             id:4,
             scope: '大于21天',
             params: {
-              kong:[22,100]
+              kong:{min:22,max:100}
             },
           },
         ],

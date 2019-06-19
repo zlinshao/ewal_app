@@ -6,13 +6,20 @@
         <p>请完成相关选项</p>
         <h3 @click="finish()">完成</h3>
       </div>
-      {{checksList.checks}}
       <div class="radioChecks">
         <div v-for="item in checksList.checks">
           <p @click="checkChoose(item, checksChoose)" :class="{'chooseCheck': checksChoose.includes(item)}">
             {{item.text}}
           </p>
         </div>
+      </div>
+      <div class="otherFee" v-if="otherFreeStatus">
+        <label>其他费用</label>
+        <textarea
+          placeholder="必填 请输入"
+          v-model="forms.other_fee"
+          rows="3">
+        </textarea>
       </div>
     </van-popup>
   </div>
@@ -25,6 +32,7 @@
     data() {
       return {
         checksModule: false,
+        otherFreeStatus: false,
         checksList: [],
         checksChoose: [],
         forms: {},
@@ -72,15 +80,26 @@
       // 复选
       checkChoose(item, value) {
         if (value.length) {
+          let idx;
           value.forEach((key, index) => {
-            if (key === item) {
-              value.splice(index, 1);
-            } else {
-              value.push(item);
+            if (key.id === item.id) {
+              idx = index
             }
           });
+          if (idx || idx === 0) {
+            value.splice(idx, 1);
+          } else {
+            value.push(item);
+          }
         } else {
           value.push(item);
+        }
+        for (let key of value) {
+          if (key.id === 6 || key.id === '6') {
+            this.forms.other_fee = '';
+            this.otherFreeStatus = true;
+            return;
+          }
         }
       },
       finish() {
@@ -103,6 +122,19 @@
   @import "../../assets/scss/common.scss";
 
   #checkChoose {
+    .otherFee {
+      padding: 0 .3rem .3rem 0;
+      @include flex();
 
+      label {
+        white-space: nowrap;
+        padding: .06rem .3rem 0 .2rem;
+      }
+
+      textarea {
+        border: none;
+        width: 100%;
+      }
+    }
   }
 </style>
