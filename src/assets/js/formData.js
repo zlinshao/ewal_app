@@ -3635,27 +3635,52 @@ defineNewRentReport = [
 ];
 
 // 续租
-defineContinueRent = [{
-  label: '原房屋地址',
-  disabled: 'disabled',
-  placeholder: '已禁用',
-  keyName: 'house_id_rent',
-  keyType: '',
-  type: 'text',
-  slot: '',
-},
-  {
-    label: '现房屋地址',
-    readonly: 'readonly',
-    placeholder: '必填 请选择',
-    keyName: 'house_id',
+defineContinueRent ={
+  slither0:[
+    {
+    label: '原房屋地址',
+    disabled: 'disabled',
+    placeholder: '已禁用',
+    keyName: 'house_id_rent',
     keyType: '',
     type: 'text',
-    picker: 'searchHouse',
-    showForm: 'formatData', //picker 显示form 或 formatData
     slot: '',
-  }
-];
+  },
+    {
+      label: '现房屋地址',
+      readonly: 'readonly',
+      placeholder: '必填 请选择',
+      keyName: 'house_id',
+      keyType: '',
+      type: 'text',
+      picker: 'searchHouse',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    }
+  ],
+  slither1:[
+    {
+      label: '原房屋地址',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'house_id_rent',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '现房屋地址',
+      readonly: 'readonly',
+      placeholder: '必填 请选择',
+      keyName: 'house_id',
+      keyType: '',
+      type: 'text',
+      picker: 'searchHouse',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    }
+  ]
+};
 
 // 转租报备
 defineSubletReport = [
@@ -5196,7 +5221,7 @@ defineCheckoutReport = {
 };
 
 // 续收报备
-defineContinueCollectReport = {
+defineContinueCollect = {
   // 客户信息
   slither0: [{
     label: '客户姓名',
