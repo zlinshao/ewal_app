@@ -336,7 +336,7 @@
           //不需要电子合同
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
           //不需要task_id
-          ['bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_change', 'bulletin_special', 'bulletin_checkout'],
+          ['bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_change', 'bulletin_checkout'],
         ];
         this.isGetTake = data[0].includes(type.bulletin);
         this.noTaskId = data[1].includes(type.bulletin);
@@ -874,14 +874,23 @@
           case 0:// 发布
           case 1:// 草稿
             if (!this.noTaskId) {
-              this.form.task_id = this.taskDetail.task_id;
-              this.form.process_instance_id = this.taskDetail.process_instance_id;
+              this.form.task_id = this.taskDetail.task_id || '';
+              this.form.process_instance_id = this.taskDetail.process_instance_id || '';
             }
+            console.log(this.taskDetail)
             this.form.spot_code = this.$refs.code.spot_code;
             this.$httpZll.submitReport(this.form, bulletin.to).then(res => {
               if (res) {
                 if (val === 1) {
-                  this.form.id = res.data.id;
+                  let data  = res.data;
+                  this.form.id = data.id;
+                  //特殊事项
+                    if(data.task_id){
+                      this.taskDetail.task_id = data.task_id;
+                    }
+                    if(data.process_instance_id){
+                      this.taskDetail.process_instance_id = data.process_instance_id;
+                    }
                 } else {
                   this.bulletin_types(bulletin);
                   this.$store.dispatch('approval_tabs', {tab: '2', status: 0});

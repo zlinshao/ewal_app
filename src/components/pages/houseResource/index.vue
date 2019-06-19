@@ -51,22 +51,21 @@
             </div>
             <h4>朝向</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_orientation"
-                 @click="chooseHouseProperty(item,'house_toward')">
+              <p class="choose-btn-item" v-for="item in house_orientation" @click="chooseHouseProperty(item,'house_toward')">
                 <b :class="{'choose': params.house_toward.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>楼层</h4>
             <div class="chooseBtn">
               <p class="choose-btn-item" v-for="item in house_floor" @click="chooseHouseProperty(item,'floor')">
-                <b :class="{'choose': params.floor.includes(item.id)}">{{ item.val }}</b>
+                <b :class="{'choose': (params.floor.min==null&&params.floor.max==null)}">{{ item.val }}</b>
               </p>
               <p class="choose-btn-item">
-                <van-field placeholder="最低层" type="number" @input="handleInputBottom"></van-field>
+                <van-field placeholder="最低层" type="number" v-model.number="params.floor.min"></van-field>
               </p>
               <a style="margin-top: .2rem">-</a>
               <p class="choose-btn-item">
-                <van-field placeholder="最高层" type="number" @input="handleInputTop"></van-field>
+                <van-field placeholder="最高层" type="number" v-model.number="params.floor.max"></van-field>
               </p>
             </div>
             <h4>电梯</h4>
@@ -93,35 +92,34 @@
             </div>
             <h4>预警状态</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_warning_status"
-                 @click="chooseHouseProperty(item,'warning_status')">
+              <p class="choose-btn-item" v-for="item in house_warning_status" @click="chooseHouseProperty(item,'warning_status')">
                 <b :class="{'choose': params.warning_status.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
             <h4>当前空置时长</h4>
             <div class="chooseBtn">
               <p class="choose-btn-item" v-for="item in house_floor" @click="chooseHouseProperty(item,'kong')">
-                <b :class="{'choose': params.kong.includes(item.id)}">{{ item.val }}</b>
+                <b :class="{'choose': (params.kong.min==null&&params.kong.max==null)}">{{ item.val }}</b>
               </p>
               <p class="choose-btn-item">
-                <van-field placeholder="请输入" type="number" @input="handleKongBottom"></van-field>
+                <van-field placeholder="请输入" type="number" v-model.number="params.kong.min"></van-field>
               </p>
               <a style="margin-top: .2rem">-</a>
               <p class="choose-btn-item">
-                <van-field placeholder="请输入" type="number" @input="handleKongTop"></van-field>
+                <van-field placeholder="请输入" type="number" v-model.number="params.kong.max"></van-field>
               </p>
             </div>
             <h4>出租价格</h4>
             <div class="chooseBtn">
               <p class="choose-btn-item" v-for="item in house_floor" @click="chooseHouseProperty(item,'rent_price')">
-                <b :class="{'choose': params.rent_price.includes(item.id)}">{{ item.val }}</b>
+                <b :class="{'choose': (params.rent_price.min==null&&params.rent_price.max==null)}">{{ item.val }}</b>
               </p>
               <p class="choose-btn-item">
-                <van-field placeholder="请输入" type="number" @input="handlePriceBottom"></van-field>
+                <van-field placeholder="请输入" type="number" v-model.number="params.rent_price.min"></van-field>
               </p>
               <a style="margin-top: .2rem">-</a>
               <p class="choose-btn-item">
-                <van-field placeholder="请输入" type="number" @input="handlePriceTop"></van-field>
+                <van-field placeholder="请输入" type="number" v-model.number="params.rent_price.max"></van-field>
               </p>
             </div>
             <!--<div class="commonBtn">
@@ -149,8 +147,7 @@
               <!--<a class="writingMode status2">未出租</a>-->
             </div>
             <div class="rightInfo">
-              <h2 class="house-name">{{ item.name }} <a class="notice" :class="['notice' + item.warning_status]"></a>
-              </h2>
+              <h2 class="house-name">{{ item.name }} <a class="notice" :class="['notice' + item.warning_status]"></a></h2>
               <div class="info flex">
                 <a>{{ parseInt(item.area) || 0}}㎡</a><i></i>
                 <a>{{ item.floor && item.floor.this || 0 }}/{{ item.floor && item.floor.all || 0 }}</a><i></i>
@@ -159,7 +156,7 @@
                 <a>{{ item.decorate || '/'}}</a>
               </div>
               <div class="flex tag">
-                <a class="tag1">余{{ item.remaining_rent_days }}天</a>
+<!--                <a class="tag1">余{{ item.remaining_rent_days }}天</a>-->
                 <a class="tag2" v-if="item.quality === 1">低质量</a>
               </div>
               <div class="bottom flex">
@@ -249,7 +246,6 @@
           {id: 3, val: '待入住'},
           {id: 5, val: '已结束'},
         ],
-        status_choose: '',
 
         house_type: [
           {
@@ -327,15 +323,24 @@
           room: [], //房型
           decoration: [], //装修
           house_toward: [], //朝向
-          floor: [],// 楼层
+          floor: {
+            min:null,
+            max:null,
+          },// 楼层
           house_lift: [], //电梯
           rent_days: [], //剩余时长
           warning_status: [], //预警
-          rent_price: [],
-          kong: [], //空置天数
+          rent_price: {
+            min:null,
+            max:null,
+          },//出租价格
+          kong: {
+            min:null,
+            max:null,
+          }, //空置天数
           is_org_user: 0,
           org_user_id: [],
-          city_id: '',
+          city_id:'',
         },
         house_list: [], //房屋列表
       }
@@ -349,16 +354,16 @@
 
     activated() {
       let kong = this.$route.query.kong;
-      if (kong && kong.constructor == Array) {
+      if(kong) {
         this.params.kong = kong;
       }
-      this.params.city_id = this.personal.city_id;
+      this.resetCity();
       delete this.params.is_org_user;
       this.handleGetHouseResource(true);
     },
 
     deactivated() {
-      this.params.kong = [];
+      this.resetParams();
     },
 
     watch: {},
@@ -371,6 +376,12 @@
       }
     },
     methods: {
+      //重置city
+      resetCity() {
+        this.params.city_id = this.personal.city_id;
+        this.city_name = this.personal.city_name;
+      },
+
       handleGetStaffDepartInfo(val, type) {
         if (val !== 'close') {
           this.params.org_user_id = [];
@@ -384,29 +395,10 @@
         this.offset_top = 0;
         this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
       },
-      handleKongBottom(val) {
-        this.params.kong[0] = val;
-      },
-      handleKongTop() {
-        this.params.kong[1] = val;
-      },
-      handlePriceBottom() {
-        this.params.rent_price[0] = val;
-      },
-      handlePriceTop() {
-        this.params.rent_price[1] = val;
-      },
-      handleInputBottom(val) {
-        this.params.floor[0] = val;
-      },
-      handleInputTop(val) {
-        this.params.floor[1] = val;
-      },
       //请求房屋详情
       handleHouseDetail(item) {
-        sessionStorage.setItem('fromHouseIndex', 'true');
-        this.routerLink('/houseDetail', {id: item.id});
-        //this.routerLink('/houseDetail', {id: 248073});
+        sessionStorage.setItem('fromHouseIndex','true');
+        this.routerLink('/houseDetail',{id: item.id});
       },
 
       //重置params
@@ -421,26 +413,46 @@
           room: [], //房型
           decoration: [], //装修
           house_toward: [], //朝向
-          floor: [],// 楼层
+          floor: {
+            min:null,
+            max:null,
+          },// 楼层
           house_lift: [], //电梯
           rent_days: [], //剩余时长
           warning_status: [], //预警
-          rent_price: [],
-          kong: [], //空置天数
+          rent_price: {
+            min:null,
+            max:null,
+          },
+          kong: {
+            min:null,
+            max:null,
+          }, //空置天数
           is_org_user: 0,
           org_user_id: [],
-          city_id: '',
+          city_id:'',
         };
-        //this.status_choose = null;
+        this.resetCity();
+      },
+
+      //解析参数
+      parseParams(originParams) {
+        let newParams = _.cloneDeep(originParams);
+        _.forEach(newParams,(val,key)=> {
+          if(key=='floor'||key=='kong'||key=='rent_price') {
+            newParams[key] = _.remove(Object.values(newParams[key]),(o)=> {return o!==null});
+          }
+        })
+        return newParams;
       },
 
       //按钮
       searchBtn(type, idx) {
-        if (idx === 1) {
+        this.params.page = 1;//重置page
+        if(idx===1) {
           switch (type) {
             case 'reset':
               this.resetParams();
-              //this.params.status = [];
               break;
             case 'confirm':
               this.onSearch();
@@ -449,26 +461,18 @@
         } else if (idx === 2) {
           switch (type) {
             case 'reset':
-              /*this.params.house_lift = [];
-              this.params.house_toward = [];
-              this.params.floor = [];
-              this.params.decoration = [];
-              this.params.room = [];*/
               this.resetParams();
               break;
             case 'confirm':
               this.onSearch();
               break;
           }
-        } else if (idx === 3) {
+        } else if(idx===3) {
 
-        } else {
+        }else {
           this.filter_list[3].active = false;
           switch (type) {
             case 'reset':
-              /* this.params.rent_price = [];
-               this.params.rent_days = [];
-               this.params.warning_status = [];*/
               this.resetParams();
               break;
             case 'confirm':
@@ -479,27 +483,18 @@
       },
       //选择房屋属性
       chooseHouseProperty(item, type) {
-        if (this.params[type].indexOf(item.id) !== -1) {
-          this.params[type].splice(this.params[type].indexOf(item.id), 1);
-        } else {
-          this.params[type].push(item.id);
-        }
-      },
-      //选择房屋状态
-      chooseHouseStatus(item) {
-        this.status_choose = item.id;
-        //console.log(item);
-        if (item.id == 0) {
-          this.params.status = null;
-        } else {
-          this.params.status = [item.id];
-        }
+        if(type=='floor'||type=='kong'||type=='rent_price') {
+          this.params[type].min = null;
+          this.params[type].max = null;
+        }else if(type=='demo') {
 
-        /*if (this.params.status.indexOf(item.id) !== -1) {
-          this.params.status.splice(this.params.status.indexOf(item.id), 1);
-        } else {
-          this.params.status.push(item.id);
-        }*/
+        }else {
+          if (this.params[type].indexOf(item.id) !== -1) {
+            this.params[type].splice(this.params[type].indexOf(item.id), 1);
+          } else {
+            this.params[type].push(item.id);
+          }
+        }
       },
       handleCloseExpand() {
         this.offset_top = 0;
@@ -519,14 +514,16 @@
       * params: cleanData  是否清除列表 默认false
       * */
       async handleGetHouseResource(cleanData = false) {
-        if (cleanData) {
+        if(cleanData) {
           this.house_list = [];
         }
         this.fullLoading = true;
-        await this.$httpZll.get(this.server + 'v1.0/market/house', this.params, '加载中...').then(res => {
+        let newParams = this.parseParams(this.params);
+        console.log(newParams)
+        await this.$httpZll.get(this.server + 'v1.0/market/house', newParams, '加载中...').then(res => {
           this.fullLoading = false;
           if (res.code === 200) {
-            _.forEach(res.data.data, (o) => {
+            _.forEach(res.data.data,(o)=> {
               this.house_list.push(o);
             })
             this.paging = res.data.all_count;
@@ -552,16 +549,16 @@
       handleFilterHouse(tmp) {
         this.offset_top = this.current_filter === tmp.id ? 0 : 117;
         //this.filter_list[tmp.id - 1].active = this.offset_top <= 0;
-        this.filter_list.forEach(o => {
+        this.filter_list.forEach(o=> {
           o.active = false;
         });
         this.filter_list[tmp.id - 1].active = !this.filter_list[tmp.id - 1].active;
         this.staff_depart_visible = tmp.id === 3;
         this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
-        if (!this.current_filter) {//上拉按钮朝上
+        if(!this.current_filter) {//上拉按钮朝上
           this.filter_list[tmp.id - 1].active = false;
         }
-        if (this.current_filter != 3) {//不选部门员工下拉搜索框时重置参数
+        if(this.current_filter!=3) {//不选部门员工下拉搜索框时重置参数
           this.params.org_user_id = [];
           this.params.is_org_user = 0;
         }
