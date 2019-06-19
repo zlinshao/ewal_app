@@ -1249,7 +1249,7 @@
       },
       // 初始化数据
       resetting() {
-        this.slither = 3;
+        this.slither = 0;
         let allForm = [], id = this.form.id || '';
         for (let item of Object.keys(this.drawSlither)) {
           allForm = allForm.concat(this.drawSlither[item]);
