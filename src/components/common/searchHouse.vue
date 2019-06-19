@@ -107,12 +107,8 @@
     mounted() {
     },
     activated() {
-      for (let item of this.cityList) {
-        if (String(item.code) === String(this.personal.city_id)) {
-          this.city_name = item.name;
-          this.params.city_name = item.name + '市';
-        }
-      }
+      this.city_name = this.personal.name;
+      this.params.city_name = this.personal.name;
     },
     watch: {
       'params.search'(val) {
@@ -125,7 +121,8 @@
       config(val) {
         this.onConfig = val;
         //特殊事项报备(ll)
-        if (val.bulletinType.bulletin === 'bulletin_special') {
+        let bulletin = JSON.parse(sessionStorage.bulletin_type || '{}');
+        if (bulletin === 'bulletin_special') {
           this.params.contract_type = val.contract_type;
         }
       },

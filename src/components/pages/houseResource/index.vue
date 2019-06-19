@@ -51,7 +51,8 @@
             </div>
             <h4>朝向</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_orientation" @click="chooseHouseProperty(item,'house_toward')">
+              <p class="choose-btn-item" v-for="item in house_orientation"
+                 @click="chooseHouseProperty(item,'house_toward')">
                 <b :class="{'choose': params.house_toward.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
@@ -92,7 +93,8 @@
             </div>
             <h4>预警状态</h4>
             <div class="chooseBtn">
-              <p class="choose-btn-item" v-for="item in house_warning_status" @click="chooseHouseProperty(item,'warning_status')">
+              <p class="choose-btn-item" v-for="item in house_warning_status"
+                 @click="chooseHouseProperty(item,'warning_status')">
                 <b :class="{'choose': params.warning_status.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
@@ -147,7 +149,8 @@
               <!--<a class="writingMode status2">未出租</a>-->
             </div>
             <div class="rightInfo">
-              <h2 class="house-name">{{ item.name }} <a class="notice" :class="['notice' + item.warning_status]"></a></h2>
+              <h2 class="house-name">{{ item.name }} <a class="notice" :class="['notice' + item.warning_status]"></a>
+              </h2>
               <div class="info flex">
                 <a>{{ parseInt(item.area) || 0}}㎡</a><i></i>
                 <a>{{ item.floor && item.floor.this || 0 }}/{{ item.floor && item.floor.all || 0 }}</a><i></i>
@@ -332,7 +335,7 @@
           kong: [], //空置天数
           is_org_user: 0,
           org_user_id: [],
-          city_id:'',
+          city_id: '',
         },
         house_list: [], //房屋列表
       }
@@ -346,7 +349,7 @@
 
     activated() {
       let kong = this.$route.query.kong;
-      if(kong && kong.constructor==Array) {
+      if (kong && kong.constructor == Array) {
         this.params.kong = kong;
       }
       this.params.city_id = this.personal.city_id;
@@ -401,8 +404,8 @@
       },
       //请求房屋详情
       handleHouseDetail(item) {
-        sessionStorage.setItem('fromHouseIndex','true');
-        this.routerLink('/houseDetail',{id: item.id});
+        sessionStorage.setItem('fromHouseIndex', 'true');
+        this.routerLink('/houseDetail', {id: item.id});
         //this.routerLink('/houseDetail', {id: 248073});
       },
 
@@ -426,14 +429,14 @@
           kong: [], //空置天数
           is_org_user: 0,
           org_user_id: [],
-          city_id:'',
+          city_id: '',
         };
         //this.status_choose = null;
       },
 
       //按钮
       searchBtn(type, idx) {
-        if(idx===1) {
+        if (idx === 1) {
           switch (type) {
             case 'reset':
               this.resetParams();
@@ -457,9 +460,9 @@
               this.onSearch();
               break;
           }
-        } else if(idx===3) {
+        } else if (idx === 3) {
 
-        }else {
+        } else {
           this.filter_list[3].active = false;
           switch (type) {
             case 'reset':
@@ -486,9 +489,9 @@
       chooseHouseStatus(item) {
         this.status_choose = item.id;
         //console.log(item);
-        if(item.id==0) {
+        if (item.id == 0) {
           this.params.status = null;
-        }else {
+        } else {
           this.params.status = [item.id];
         }
 
@@ -516,14 +519,14 @@
       * params: cleanData  是否清除列表 默认false
       * */
       async handleGetHouseResource(cleanData = false) {
-        if(cleanData) {
+        if (cleanData) {
           this.house_list = [];
         }
         this.fullLoading = true;
         await this.$httpZll.get(this.server + 'v1.0/market/house', this.params, '加载中...').then(res => {
           this.fullLoading = false;
           if (res.code === 200) {
-            _.forEach(res.data.data,(o)=> {
+            _.forEach(res.data.data, (o) => {
               this.house_list.push(o);
             })
             this.paging = res.data.all_count;
@@ -549,16 +552,16 @@
       handleFilterHouse(tmp) {
         this.offset_top = this.current_filter === tmp.id ? 0 : 117;
         //this.filter_list[tmp.id - 1].active = this.offset_top <= 0;
-        this.filter_list.forEach(o=> {
+        this.filter_list.forEach(o => {
           o.active = false;
         });
         this.filter_list[tmp.id - 1].active = !this.filter_list[tmp.id - 1].active;
         this.staff_depart_visible = tmp.id === 3;
         this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
-        if(!this.current_filter) {//上拉按钮朝上
+        if (!this.current_filter) {//上拉按钮朝上
           this.filter_list[tmp.id - 1].active = false;
         }
-        if(this.current_filter!=3) {//不选部门员工下拉搜索框时重置参数
+        if (this.current_filter != 3) {//不选部门员工下拉搜索框时重置参数
           this.params.org_user_id = [];
           this.params.is_org_user = 0;
         }

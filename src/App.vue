@@ -66,7 +66,7 @@
       // 字典
       getDict() {
         // 楼层
-        for (let i = -3; i < 41; i++) {
+        for (let i = -3; i < 101; i++) {
           // 第几层
           if (i !== 0) {
             dicties.floors.value_0.push('第 ' + i + ' 层');

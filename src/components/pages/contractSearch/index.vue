@@ -145,12 +145,8 @@
     mounted() {
     },
     activated() {
-      for (let item of this.cityList) {
-        if (String(item.code) === String(this.personal.city_id)) {
-          this.city_name = item.name;
-          this.params.city_name = item.name + '市';
-        }
-      }
+      this.city_name = this.personal.name;
+      this.params.city_name = this.personal.name;
       this.close_();
     },
     watch: {
