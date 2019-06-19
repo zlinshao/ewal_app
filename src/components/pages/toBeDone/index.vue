@@ -223,8 +223,12 @@
     activated() {
       this.bulletin_type = JSON.parse(sessionStorage.bulletin_type);
       let type = this.bulletin_type.bulletin;
-      if (type === 'bulletin_rent_RWC' || type === 'bulletin_booking_renting') {
+      if (type === 'bulletin_rent_RWC' || type === 'bulletin_booking_renting' || type === 'bulletin_rent_continued') {
         this.bulletin_type = bulletinRouterStatus.bulletin_rent_basic;
+        sessionStorage.setItem('bulletin_type', JSON.stringify(this.bulletin_type));
+      }
+      if (type === 'bulletin_collect_continued') {
+        this.bulletin_type = bulletinRouterStatus.bulletin_collect_basic;
         sessionStorage.setItem('bulletin_type', JSON.stringify(this.bulletin_type));
       }
       this.fullLoading = true;
@@ -301,7 +305,6 @@
       },
       // 去打卡 去签约
       goOperates(val) {
-        console.log(val)
         switch (val.task_action) {
           case 'punchClock':
             sessionStorage.setItem('punchClock', JSON.stringify(val));
@@ -462,7 +465,6 @@
             obj.type = 'MarketCollect,MarketCollectRenew';
             break;
           case "bulletin_rent_basic":
-          case "bulletin_booking_renting":
             obj.status = 'toBeDoneRent';
             obj.type = 'MarketRent,MarketRentRenew';
             break;

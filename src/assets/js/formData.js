@@ -1,5 +1,160 @@
 // 个人信息
-setPersonalDetail = {"success":true,"message":"\u83b7\u53d6\u7528\u6237\u4fe1\u606f\u6210\u529f","data":{"id":69,"name":"\u5f20\u7433\u7433","is_enable":0,"phone":"18052001167","created_at":"2017-05-26 06:06:14","updated_at":null,"detail":{"id":69,"name":"\u5f20\u7433\u7433","avatar":"http:\/\/p.qlogo.cn\/bizmail\/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw\/0","phone":"18052001167","email":null,"ding_user_id":"053043566224354176","gender":229,"is_on_job":null,"is_enable":null,"is_leader":0,"qr_code":"","interviewee_id":null,"im_id":null,"employee_id":38,"fdd_user_id":null,"fdd_verify_result":null,"fdd_verify_no":"9456561757b241f0bb98b52b85a3096c","fdd_ca":"C1A6DBDA7887AF0F9A4E38D3287BC7E8","created_at":"2017-05-26 06:06:14","role":[{"id":139,"name":"web\u524d\u7aef\u5de5\u7a0b\u5e08\u4e13\u5458","description":"web\u524d\u7aef\u5de5\u7a0b\u5e08\u4e13\u5458","duty_id":38,"parent_id":null,"sign":"web-engineer-specialist","created_at":"2018-04-29 15:40:45","level":2,"is_top":0,"order":0,"pivot":{"position_id":139,"user_id":69}}],"position":[{"id":139,"name":"web\u524d\u7aef\u5de5\u7a0b\u5e08\u4e13\u5458","description":"web\u524d\u7aef\u5de5\u7a0b\u5e08\u4e13\u5458","duty_id":38,"parent_id":null,"sign":"web-engineer-specialist","created_at":"2018-04-29 15:40:45","level":2,"is_top":0,"order":0,"pivot":{"position_id":139,"user_id":69}}],"org":[{"id":395,"name":"\u5f00\u53d1","is_corp":0,"company_id":1,"order":0,"is_enable":1,"parent_id":141,"leader_id":2211,"ding_department_id":101296067,"position_id":null,"order_temp":0,"leader":{"id":2211,"name":"\u5f20\u6e05\u6d77","avatar":"http:\/\/p.qlogo.cn\/bizmail\/WNoted85UFkq5xuxznFlhGzVgY8CMdYYoHQkxiahcIWlFLl9ObLuFJg\/0"},"city":[{"id":77,"city_id":"120000","city_name":"天津市","city_parent":"320000","code":null,"created_at":null,"province":{"id":10,"province_id":"120000","province_name":"天津市","created_at":null},"pivot":{"city_id":77,"org_id":395}}],"pivot":{"user_id":69,"org_id":395}}],"staff":{"id":69,"real_name":"\u5f20\u7433\u7433","level":239,"emergency_call":"13775802016","birthday":"1989-04-01","id_num":"320321198904010033","bank_num":"6217001370041040502","account_bank":"\u4e2d\u56fd\u5efa\u8bbe\u94f6\u884c","branch_bank":"\u5357\u4eac\u96e8\u6da6\u5927\u8857\u652f\u884c","account_name":"105301000440","enroll":"2017-03-18","origin_addr":null,"home_addr":null,"marital_fertility_status":34,"political_status":41,"education":46,"recommender":null,"expect_forward_time":null,"forward_time":null,"school":null,"major":null,"graduation_time":null,"position_level":null,"salary_level":null,"salary":0,"agreement_first_time":null,"agreement_first_end_time":null,"agreement_second_time":null,"entry_materials":["520","522"],"operating_time":"2018-04-18 14:44:07","remark":null,"creator_id":0,"education_history":null,"updater_id":2741,"created_at":"2017-05-26 06:06:14","registered_residence":null,"send_info":{"forward_group":1},"entry_way":{"entry_mess":"","entry_type":""},"dismiss_reason":null,"branch_bank_code":null,"resignation_form":null,"contract_number":null,"interviewee_id":null,"secret_number":null,"commitment_number":null,"notice_number":null,"insurance_prohibit_number":null,"internship_number":null,"income_proof_number":null,"employ_proof_number":null,"leave_proof_number":null,"resignation_applay_number":null,"work_number":null,"society_number":null,"english_level":null,"work_status":"","city":null,"criminal_history":0,"household_register":0,"employment_permit":0,"national":null,"evaluation":5,"handover_id":null,"dismiss_time":null,"bank_card_image_id":null,"leaveproof_image_id":null,"report_id":null,"work_history":null}}}};
+setPersonalDetail = {
+  "success": true, "message": "\u83b7\u53d6\u7528\u6237\u4fe1\u606f\u6210\u529f", "data": {
+    "id": 69,
+    "name": "\u5f20\u7433\u7433",
+    "is_enable": 0,
+    "phone": "18052001167",
+    "created_at": "2017-05-26 06:06:14",
+    "updated_at": null,
+    "detail": {
+      "id": 69,
+      "name": "\u5f20\u7433\u7433",
+      "avatar": "http:\/\/p.qlogo.cn\/bizmail\/TS1DO8GPlAzOtrtIWicqPd6SVURcN7e2rqmhABvQdh9nXCuAbCkzpQw\/0",
+      "phone": "18052001167",
+      "email": null,
+      "ding_user_id": "053043566224354176",
+      "gender": 229,
+      "is_on_job": null,
+      "is_enable": null,
+      "is_leader": 0,
+      "qr_code": "",
+      "interviewee_id": null,
+      "im_id": null,
+      "employee_id": 38,
+      "fdd_user_id": null,
+      "fdd_verify_result": null,
+      "fdd_verify_no": "9456561757b241f0bb98b52b85a3096c",
+      "fdd_ca": "C1A6DBDA7887AF0F9A4E38D3287BC7E8",
+      "created_at": "2017-05-26 06:06:14",
+      "role": [{
+        "id": 139,
+        "name": "web\u524d\u7aef\u5de5\u7a0b\u5e08\u4e13\u5458",
+        "description": "web\u524d\u7aef\u5de5\u7a0b\u5e08\u4e13\u5458",
+        "duty_id": 38,
+        "parent_id": null,
+        "sign": "web-engineer-specialist",
+        "created_at": "2018-04-29 15:40:45",
+        "level": 2,
+        "is_top": 0,
+        "order": 0,
+        "pivot": {"position_id": 139, "user_id": 69}
+      }],
+      "position": [{
+        "id": 139,
+        "name": "web\u524d\u7aef\u5de5\u7a0b\u5e08\u4e13\u5458",
+        "description": "web\u524d\u7aef\u5de5\u7a0b\u5e08\u4e13\u5458",
+        "duty_id": 38,
+        "parent_id": null,
+        "sign": "web-engineer-specialist",
+        "created_at": "2018-04-29 15:40:45",
+        "level": 2,
+        "is_top": 0,
+        "order": 0,
+        "pivot": {"position_id": 139, "user_id": 69}
+      }],
+      "org": [{
+        "id": 395,
+        "name": "\u5f00\u53d1",
+        "is_corp": 0,
+        "company_id": 1,
+        "order": 0,
+        "is_enable": 1,
+        "parent_id": 141,
+        "leader_id": 2211,
+        "ding_department_id": 101296067,
+        "position_id": null,
+        "order_temp": 0,
+        "leader": {
+          "id": 2211,
+          "name": "\u5f20\u6e05\u6d77",
+          "avatar": "http:\/\/p.qlogo.cn\/bizmail\/WNoted85UFkq5xuxznFlhGzVgY8CMdYYoHQkxiahcIWlFLl9ObLuFJg\/0"
+        },
+        "city": [{
+          "id": 77,
+          "city_id": "120000",
+          "city_name": "天津市",
+          "city_parent": "320000",
+          "code": null,
+          "created_at": null,
+          "province": {"id": 10, "province_id": "120000", "province_name": "天津市", "created_at": null},
+          "pivot": {"city_id": 77, "org_id": 395}
+        }],
+        "pivot": {"user_id": 69, "org_id": 395}
+      }],
+      "staff": {
+        "id": 69,
+        "real_name": "\u5f20\u7433\u7433",
+        "level": 239,
+        "emergency_call": "13775802016",
+        "birthday": "1989-04-01",
+        "id_num": "320321198904010033",
+        "bank_num": "6217001370041040502",
+        "account_bank": "\u4e2d\u56fd\u5efa\u8bbe\u94f6\u884c",
+        "branch_bank": "\u5357\u4eac\u96e8\u6da6\u5927\u8857\u652f\u884c",
+        "account_name": "105301000440",
+        "enroll": "2017-03-18",
+        "origin_addr": null,
+        "home_addr": null,
+        "marital_fertility_status": 34,
+        "political_status": 41,
+        "education": 46,
+        "recommender": null,
+        "expect_forward_time": null,
+        "forward_time": null,
+        "school": null,
+        "major": null,
+        "graduation_time": null,
+        "position_level": null,
+        "salary_level": null,
+        "salary": 0,
+        "agreement_first_time": null,
+        "agreement_first_end_time": null,
+        "agreement_second_time": null,
+        "entry_materials": ["520", "522"],
+        "operating_time": "2018-04-18 14:44:07",
+        "remark": null,
+        "creator_id": 0,
+        "education_history": null,
+        "updater_id": 2741,
+        "created_at": "2017-05-26 06:06:14",
+        "registered_residence": null,
+        "send_info": {"forward_group": 1},
+        "entry_way": {"entry_mess": "", "entry_type": ""},
+        "dismiss_reason": null,
+        "branch_bank_code": null,
+        "resignation_form": null,
+        "contract_number": null,
+        "interviewee_id": null,
+        "secret_number": null,
+        "commitment_number": null,
+        "notice_number": null,
+        "insurance_prohibit_number": null,
+        "internship_number": null,
+        "income_proof_number": null,
+        "employ_proof_number": null,
+        "leave_proof_number": null,
+        "resignation_applay_number": null,
+        "work_number": null,
+        "society_number": null,
+        "english_level": null,
+        "work_status": "",
+        "city": null,
+        "criminal_history": 0,
+        "household_register": 0,
+        "employment_permit": 0,
+        "national": null,
+        "evaluation": 5,
+        "handover_id": null,
+        "dismiss_time": null,
+        "bank_card_image_id": null,
+        "leaveproof_image_id": null,
+        "report_id": null,
+        "work_history": null
+      }
+    }
+  }
+};
 // 待办收房预填
 collectCreatedDrafts = {
   area: "122",
@@ -1358,22 +1513,23 @@ defineSupplyAgreement = {
 // 收房报备
 defineCollectReport = {
   // 房屋信息
-  slither0: [{
-    label: '房屋地址', // 标题
-    placeholder: '必填 请选择', // placeholder
-    // readonly: 'readonly',// 只读 picker必须有值
-    disabled: 'disabled', // 禁用
-    keyName: 'house_address', // 字段名
-    keyType: '', // 数据类型
-    type: 'text', // input 类型
-    // hidden: false,// true隐藏 false显示
-    // status: '',// date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 column多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
-    // picker: 'searchHouse',// 是否显示在弹窗内 不存在为正常输入框 值为picker正常选择 searchVillage 搜索小区
-    // showForm: 'formatData',//picker 显示form 或 formatData
-    // prompts: '',//红色提示信息
-    // pickerRead: 'no', // 在弹窗内是否为readonly// 1房屋信息 2物品信息 3合同信息 4客户信息
-    // slot: '',// 预留字段
-  },
+  slither0: [
+    {
+      label: '房屋地址', // 标题
+      placeholder: '必填 请选择', // placeholder
+      // readonly: 'readonly',// 只读 picker必须有值
+      disabled: 'disabled', // 禁用
+      keyName: 'house_address', // 字段名
+      keyType: '', // 数据类型
+      type: 'text', // input 类型
+      // hidden: false,// true隐藏 false显示
+      // status: '',// date为正常日期选择  arr picker源数据为数组确定值为int  obj picker源数据为对象确定值为{id:'',name:''}格式 column多列选择确定值为[] objInt确定值为 int 弹窗内选择日期dateSlot
+      // picker: 'searchHouse',// 是否显示在弹窗内 不存在为正常输入框 值为picker正常选择 searchVillage 搜索小区
+      // showForm: 'formatData',//picker 显示form 或 formatData
+      // prompts: '',//红色提示信息
+      // pickerRead: 'no', // 在弹窗内是否为readonly// 1房屋信息 2物品信息 3合同信息 4客户信息
+      // slot: '',// 预留字段
+    },
     {
       label: '小区地址',
       placeholder: '已禁用',
@@ -1593,18 +1749,19 @@ defineCollectReport = {
     },
   ],
   // 物品信息
-  slither1: [{
-    label: '床和床垫的情况',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'bed',
-    keyType: '',
-    type: 'text',
-    status: 'objInt',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    picker: 'pickerArticle',
-    slot: '',
-  },
+  slither1: [
+    {
+      label: '床和床垫的情况',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'bed',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      picker: 'pickerArticle',
+      slot: '',
+    },
     {
       label: '床备注',
       placeholder: '请输入',
@@ -1822,18 +1979,19 @@ defineCollectReport = {
     },
   ],
   // 客户信息
-  slither2: [{
-    label: '签约人身份',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'signatory_identity',
-    keyType: '',
-    type: 'text',
-    status: 'objInt',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    picker: 'picker',
-    slot: '',
-  },
+  slither2: [
+    {
+      label: '签约人身份',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'signatory_identity',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
     {
       label: '客户姓名',
       placeholder: '必填 请输入',
@@ -2039,18 +2197,19 @@ defineCollectReport = {
     },
   ],
   // 合同信息
-  slither3: [{
-    label: '是否电子合同',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'is_electronic_contract',
-    keyType: '1',
-    type: 'text',
-    status: 'objInt',
-    picker: 'picker',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    slot: '',
-  },
+  slither3: [
+    {
+      label: '是否电子合同',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'is_electronic_contract',
+      keyType: '1',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
     {
       label: '合同编号',
       disabled: 'disabled',

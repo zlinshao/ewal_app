@@ -1255,6 +1255,11 @@
           this.formatData[item] = res[item];
         }
       },
+      disabledDefaultValue() {
+        let all = this.initFormData(this.drawSlither.slither3, this.showData);
+        console.log(all.form);
+        console.log(all.formatData);
+      },
       // 初始化数据
       resetting() {
         this.slither = 0;
@@ -1277,6 +1282,7 @@
           this.form.signer = {};
           this.form.contract_number = this.electronicContractNumber;
         }
+        this.disabledDefaultValue();
         // this.form.account = '6225212583158743';
         // this.form.account_name = '贾少君';
       },
