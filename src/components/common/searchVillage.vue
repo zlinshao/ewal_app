@@ -63,8 +63,8 @@
     mounted() {
     },
     activated() {
-      this.city_name = this.personal.name;
-      this.params.city = this.personal.code;
+      this.city_name = this.personal.city_name;
+      this.params.city = this.personal.city_id;
     },
     watch: {
       'params.name'(val) {
