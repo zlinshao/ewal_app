@@ -317,8 +317,9 @@
                   this.againDetailRequest(val, 'again');
                 }
               } else {
+                let bulletin;
                 if (val.tk_result) {
-                  let bulletin = val.tk_result === 'bulletin' ? bulletinRouterStatus.bulletin_rent_basic : bulletinRouterStatus.bulletin_booking_renting;
+                  bulletin = val.tk_result === 'bulletin' ? bulletinRouterStatus.bulletin_rent_basic : bulletinRouterStatus.bulletin_booking_renting;
                   result = val.tk_result === 'bulletin' ? '1' : '0';
                   if (val.book_url) {
                     bulletin = bulletinRouterStatus.bulletin_rent_basic;
@@ -327,6 +328,10 @@
                   sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                   this.routerLink(val.task_action, {result: result});
                 } else {
+                  if (val.bulletin_type) {
+                    bulletin = bulletinRouterStatus[val.bulletin_type];
+                    sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
+                  }
                   this.routerLink(val.task_action);
                 }
               }
@@ -458,7 +463,7 @@
           case "bulletin_rent_basic":
           case "bulletin_booking_renting":
             obj.status = 'toBeDoneRent';
-            obj.type = 'MarketRent';
+            obj.type = 'MarketRent,MarketRentRenew';
             break;
           case "bulletin_retainage":
             obj.status = 'toBeDoneRetainage';
