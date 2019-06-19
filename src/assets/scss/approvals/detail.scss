@@ -564,7 +564,7 @@
   // 历史审批流程
   .history_content {
     height: 100%;
-    // @include flex('bet-column');
+    @include flex('bet-column');
     // 审批内容
     .contentMain {
       margin-top: 1rem;
@@ -586,10 +586,9 @@
           //审批
           .approval {
             .header_info {
-              display: flex;
-              justify-content: space-between;
+              margin: .1rem .2rem .1rem 0;
+              @include flex('items-bet');
               align-items: center;
-              margin-right: .2rem;
 
               > span {
                 img {
@@ -633,8 +632,8 @@
 
             .content_info {
               border-left: 1px solid #9B9B9B;
-              padding: 0 .3rem .6rem .3rem;
-              margin: .1rem 0 .1rem .3rem;
+              padding: 0 .3rem .15rem .3rem;
+              margin-left: .3rem;
 
               .info_span {
                 display: flex;
@@ -654,6 +653,10 @@
                 }
               }
             }
+
+            .noBorder {
+              border: none;
+            }
           }
 
           // 修改、评论
@@ -664,12 +667,12 @@
 
               > span {
                 margin-left: .25rem;
+                @include flex('items-center');
 
                 .icon {
-                  display: inline-block;
                   width: .1rem;
                   height: .1rem;
-                  border-radius: .1rem;
+                  @include radius(50%);
                   background-color: #4570FE;
                   margin-left: 0;
                 }
@@ -685,7 +688,7 @@
                 .modify_message {
                   color: #4570FE;
                   font-size: .26rem;
-                  margin-bottom: 0.2rem;
+                  padding-bottom: .2rem;
 
                   span {
                     font-size: .26rem;
@@ -736,7 +739,6 @@
               justify-content: flex-start;
               flex-direction: row;
               flex-wrap: wrap;
-              border-left: 0px solid #9B9B9B;
 
               > span {
                 display: block;

@@ -165,13 +165,15 @@
                   <div class="header_info">
                     <span>
                       <img :src="personal.avatar" alt="">
-                      <span>{{item.user ? item.user.name : '******'}}（{{item.result?item.result:'审批中'}}）</span>
+                      <span>{{item.user ? item.user.name : '******'}}（{{item.result ? item.result : '审批中'}}）</span>
                     </span>
-                    <span class="date">{{item.time}}</span>
+                    <span class="date">{{item.time ? item.time : nowDate}}</span>
                   </div>
-                  <div class="content_info">
+                  <div class="content_info" :class="[item.result ? '' : 'noBorder']">
                     <span class="info_span">
-                      <span class="right">{{item.result?'耗时':'等待'}}:&nbsp; {{item.duration}}分钟</span>
+                      <span class="right">
+                        {{item.result ? '耗时' : '等待'}}:&nbsp;{{item.duration}}分钟
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -305,6 +307,7 @@
         changeFormData: {},//附属房东变化
         approvalStaff: '',//审批人
         historyProList: [], //历史流程
+        nowDate: '',
       }
     },
     created() {
@@ -312,6 +315,10 @@
     mounted() {
     },
     activated() {
+      this.nowDate = this.myUtils.startTime();
+      setInterval(_ => {
+        this.nowDate = this.myUtils.startTime();
+      }, 1000);
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let detail = JSON.parse(sessionStorage.approvalDetail || '{}');
@@ -320,7 +327,7 @@
       this.historyProcess(detail);
       this.getOperates(detail, this.tabs);
       this.handleData(detail);
-      this.approvalDetail(detail.bm_detail_request_url);
+      this.approvalDetail('http://test.market.api.ewal.lejias.cn/v1.0/market/process/edit/1302034');
     },
     watch: {},
     computed: {
@@ -781,6 +788,12 @@
         console.log(this.formatData);
         for (let item of Object.keys(res)) {
           switch (item) {
+            case 'house_id'://房屋地址
+              this.formatData[item] = res.address;
+              break;
+            case 'house_address'://房屋地址
+              this.formatData[item] = res[item];
+              break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
               door[0] = door[0] ? door[0] + '-' : '';
