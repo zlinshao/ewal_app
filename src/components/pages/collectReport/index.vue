@@ -396,8 +396,8 @@
           }
           this.formatData[config.keyName] = val.address;
           //获取特殊事项的房屋详情
-          if (config.bulletinType.bulletin === 'bulletin_special') {
-            this.getBulletinDetail(val.contract_id);
+          if(config.bulletinType.bulletin === 'bulletin_special'){
+            this.getBulletinDetailFun(val.contract_id);
           }
         }
       },
@@ -995,20 +995,18 @@
           this.form.id = '';//草稿ID
           if (!data) {
             if (type !== 'bulletin_rent_RWC') {
-              4
               if (!this.isGetTake) {
                 this.getPunchClockData();
               } else {
                 if (type !== 'bulletin_special') {
-                  this.childBulletin(this.taskDetail.content);
-                }
+                this.childBulletin(this.taskDetail.content);}
               }
             }
           } else {
             let res = data.data;
-            if (type !== 'bulletin_special') {
+            // if (type !== 'bulletin_special') {
               this.childBulletin(res, 'draft');
-            }
+            // }
             this.handlePreFill(res);
           }
           if ((!this.isGetTake) && key !== 'RentBooking') {
@@ -1277,7 +1275,7 @@
         // this.form.account_name = '贾少君';
       },
       //获取详情数据（特殊事项ll）
-      getBulletinDetail(contract_id, echoParam) {
+      getBulletinDetailFun(contract_id){
         let data = {};
         this.$httpZll.getBulletinDetail(contract_id).then(res => {
           if (res) {
