@@ -96,7 +96,7 @@
                 <b :class="{'choose': params.warning_status.includes(item.id)}">{{ item.val }}</b>
               </p>
             </div>
-            <h4>当前空置时长</h4>
+            <!--<h4>当前空置时长</h4>
             <div class="chooseBtn">
               <p class="choose-btn-item" v-for="item in house_floor" @click="chooseHouseProperty(item,'kong')">
                 <b :class="{'choose': (params.kong.min==null&&params.kong.max==null)}">{{ item.val }}</b>
@@ -120,11 +120,6 @@
               <a style="margin-top: .2rem">-</a>
               <p class="choose-btn-item">
                 <van-field placeholder="请输入" type="number" v-model.number="params.rent_price.max"></van-field>
-              </p>
-            </div>
-            <!--<div class="commonBtn">
-              <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="searchBtn(item.type,2)">
-                {{item.label}}
               </p>
             </div>-->
           </div>
