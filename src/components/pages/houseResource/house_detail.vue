@@ -17,12 +17,11 @@
             </div>
             <div v-if="detail.village_info" class="address">
               {{detail.village_info.subway_road}}
-              <!--              仙林大学城仙鹤门二号路1号-->
             </div>
           </div>
           <!--标签-->
           <div class="tags flex">
-            <a v-if="detail.house_detail && detail.house_detail.quality === 0" class="tag tag-quality">低质量</a>
+            <a v-if="detail.house_detail && detail.house_detail.quality == 1" class="tag tag-quality">低质量</a>
             <a class="tag tag-quality"
                v-if="detail.house_detail && detail.house_detail.warning_current_days > 0">已空置{{
               detail.house_detail && detail.house_detail.warning_current_days }}天</a>

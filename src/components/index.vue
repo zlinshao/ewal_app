@@ -189,8 +189,8 @@
        * 获取空置房源信息
        */
       getEmptyHouseData() {
-        let city_id = this.$store.state.app.personalDetail.city_id;
-        let params = {city_name: city_id};
+        let city_name = this.$store.state.app.personalDetail.city_name;
+        let params = {city_name: city_name};
         this.$httpHs.getEmptyHouse(params).then(res => {
           if (Number(res.code) === 200) {
             _.forEach(res.data, (val, key) => {
