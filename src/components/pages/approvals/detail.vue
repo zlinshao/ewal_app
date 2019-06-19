@@ -152,91 +152,88 @@
       </div>
     </van-popup>
     <!--历史审批流程-->
-    <div class="records" @click="recordPopup = true"><p></p> </div>
+    <div class="records" @click="recordPopup = true"><p></p></div>
     <van-popup v-model="recordPopup" overlay-class="overlay-color" position="right" :overlay="true" class="recordPopup">
       <div class="history_content">
         <div class="contentMain">
           <span class="startApply">发起申请</span>
           <ul class="list">
-              <li v-for="(item,index) in historyProList" >
-                <div class="process">
-                  <!-- 审批 -->
-                  <div  v-if="item.type=='approval'" class="approval">
-                      <div class="header_info">
-                        <span >
-                          <img :src="personal.avatar" alt="">
-                          <span>{{item.user?item.user.name:'无名字'}}（{{item.result?item.result:'审批中'}}）</span>
-                          <!-- <b><b></b></i> -->
-                        </span>
-                        <span class="date">{{item.time}}</span>
-                      </div>
-                      <div class="content_info">
-                        <span class="info_span">
-                          <!-- <img :src="personal.avatar" alt=""> -->
-                          <span class="right">{{item.result?'耗时':'等待'}}:&nbsp; {{item.duration}}分钟</span>
-                        </span>
-                      </div>
+            <li v-for="(item,index) in historyProList">
+              <div class="process">
+                <!-- 审批 -->
+                <div v-if="item.type === 'approval'" class="approval">
+                  <div class="header_info">
+                    <span>
+                      <img :src="personal.avatar" alt="">
+                      <span>{{item.user ? item.user.name : '******'}}（{{item.result?item.result:'审批中'}}）</span>
+                    </span>
+                    <span class="date">{{item.time}}</span>
                   </div>
-                  <!--修改的result为数组多条,修改的内容里有图片-->
-                  <div v-if="item.type=='modify'" class="modify  approval">
-                    <div class="header_info">
-                      <span>
-                          <span class="icon"></span>
-                        <span class="user_name">{{item.user? item.user.name:"无名"}}—{{item.name}}</span>
-                      </span>
-                      <span class="date">{{item.time}}</span>
-                    </div>
-                    <div class="content_info">
-                      <h4 v-if='item.result.length>0' v-for="(result,index) in item.result">
-                        <p  class="modify_message" v-if='result.new'>
-                          <span>  {{result.name}}修改为：</span>
-                          <span  v-if="typeof(result.new)=='string'">{{result.new}}</span>
-                        </p>
-                        <p  class="modify_photo" v-if="typeof(result.new)!='string' ">
-                        <!-- <p  class="modify_photo"  v-for=''> -->
-                          <img :src="photo.uri"  v-for="(photo,index) in result.new">
-                          <!-- <img :src="personal.avatar"  v-for="photo in 6"> -->
-                        </p>
-                      </h4>
-                    </div>
-                  </div>
-                  <!--评论：result为对象,评论的内容里有图片 -->
-                  <div v-if="item.type=='comment'" class="modify approval">
-                    <div class="header_info">
-                      <span>
-                          <span class="icon"></span>
-                        <span class="user_name">{{item.user? item.user.name:"无名"}}—{{item.name}}</span>
-                      </span>
-                      <span class="date">{{item.time}}</span>
-                    </div>
-                    <div class="content_info">
-                      <h4 v-if='item.result'>
-                        <p class="modify_message">{{item.result.message}}</p>
-                        <p class="modify_photo" v-if='item.result.attachments.length>0'>
-                          <!-- <img :src="photo" v-for="(photo,index) in item.result.attachments"> -->
-                          <img  :src="photo.uri" v-for="(photo,index) in  item.result.attachments">
-                        </p>
-                      </h4>
-                    </div>
-                  </div>
-                  <!-- 抄送 : result为数组-->
-                  <div  v-if="item.type=='cc'" class="cc approval">
-                      <div class="header_info">
-                        <span >
-                          <img src="../../../assets/image/approvals/detail/cc_process.png" alt="">
-                          <!-- <img src="../../../assets/image/approvals/detail/cc_process_un.png" alt=""> -->
-                          <span>{{item.result.length>0?item.result.length:'0'}}人&nbsp;({{item.name}})&nbsp;</span>
-                        </span>
-                      </div>
-                      <div class="content_info">
-                        <span  v-for='result in item.result'>
-                          <img :src="result.avatar">
-                          <span class="cc_name"> {{result.name}}</span>
-                        </span>
-                      </div>
+                  <div class="content_info">
+                    <span class="info_span">
+                      <span class="right">{{item.result?'耗时':'等待'}}:&nbsp; {{item.duration}}分钟</span>
+                    </span>
                   </div>
                 </div>
-              </li>
+                <!--修改的result为数组多条,修改的内容里有图片-->
+                <div v-if="item.type === 'modify'" class="modify  approval">
+                  <div class="header_info">
+                    <span>
+                      <span class="icon"></span>
+                      <span class="user_name">{{item.user ? item.user.name : "******"}}—{{item.name}}</span>
+                    </span>
+                    <span class="date">{{item.time}}</span>
+                  </div>
+                  <div class="content_info">
+                    <div v-if='item.result.length > 0' v-for="(result,index) in item.result">
+                      <p class="modify_message" v-if='result.new'>
+                        <span>  {{result.name}}修改为：</span>
+                        <span v-if="typeof(result.new)=='string'">{{result.new}}</span>
+                      </p>
+                      <p class="modify_photo" v-if="typeof(result.new) !== 'string' ">
+                        <img :src="photo.uri" v-for="(photo,index) in result.new" alt=""
+                             @click="$bigPhoto(result.new, photo.uri)">
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!--评论：result为对象,评论的内容里有图片 -->
+                <div v-if="item.type === 'comment'" class="modify approval">
+                  <div class="header_info">
+                      <span>
+                          <span class="icon"></span>
+                        <span class="user_name">{{item.user ? item.user.name : "******"}}—{{item.name}}</span>
+                      </span>
+                    <span class="date">{{item.time}}</span>
+                  </div>
+                  <div class="content_info">
+                    <div v-if='item.result'>
+                      <p class="modify_message">{{item.result.message}}</p>
+                      <p class="modify_photo" v-if='item.result.attachments.length > 0'>
+                        <img :src="photo.uri" v-for="photo in  item.result.attachments" alt=""
+                             @click="$bigPhoto(item.result.attachments, photo.uri)">
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!-- 抄送 : result为数组-->
+                <div v-if="item.type === 'cc'" class="cc approval">
+                  <div class="header_info">
+                    <span>
+                      <img src="../../../assets/image/approvals/detail/cc_process.png" alt="">
+                      <span>{{item.result.length > 0 ? item.result.length : '0'}}人&nbsp;({{item.name}})&nbsp;</span>
+                    </span>
+                  </div>
+                  <div class="content_info">
+                    <span v-for='result in item.result'>
+                      <img :src="result.avatar" alt="" v-if="result.avatar">
+                      <img src="../../../assets/image/common/noHead.png" alt="" v-else>
+                      <span class="cc_name"> {{result.name}}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </li>
           </ul>
         </div>
         <div class="commonBtn">
@@ -307,7 +304,7 @@
         searchStaffModule: false,
         changeFormData: {},//附属房东变化
         approvalStaff: '',//审批人
-        historyProList:[], //历史流程
+        historyProList: [], //历史流程
       }
     },
     created() {
@@ -376,26 +373,26 @@
       // 审批历史流程
       historyProcess(detail) {
         this.$httpZll.getHistoryProcess(detail.process_id).then(res => {
-          if(res){
-            this.historyProList=res;
+          if (res) {
+            this.historyProList = res;
             // 图片id获取图片地址
-            this.historyProList.forEach((element,index)=>{
+            this.historyProList.forEach((element, index) => {
               // 评论的result是对象
-              if(element.type=='comment'){
-                if(element.result.attachments.length>0){
-                    this.$httpZll.getUploadUrl(element.result.attachments, 'close').then(res => {
-                      this.historyProList[index].result.attachments=res.data;
-                    })
+              if (element.type === 'comment') {
+                if (element.result.attachments.length > 0) {
+                  this.$httpZll.getUploadUrl(element.result.attachments, 'close').then(res => {
+                    this.historyProList[index].result.attachments = res.data;
+                  })
                 }
               }
               // 修改的result是数组
-              if(element.type=='modify'){
-                if(element.result.length>0){
-                  element.result.forEach((item,i)=>{
-                    if(item.new.indexOf('[')!=-1 && item.new.indexOf(']')!=-1){
-                      let photo=JSON.parse(item.new);
+              if (element.type === 'modify') {
+                if (element.result.length > 0) {
+                  element.result.forEach((item, i) => {
+                    if (item.new.indexOf('[') !== -1 && item.new.indexOf(']') !== -1) {
+                      let photo = JSON.parse(item.new);
                       this.$httpZll.getUploadUrl(photo, 'close').then(res => {
-                          this.historyProList[index].result[i].new=res.data;
+                        this.historyProList[index].result[i].new = res.data;
                       })
                     }
                   })
@@ -682,7 +679,7 @@
             this.cancel('comment');
             if (res.content && res.content.message) {
               this.$prompt('评论成功！', 'success');
-              this.historyProcess( this.detailData);
+              this.historyProcess(this.detailData);
             } else {
               this.$prompt('评论失败！', 'fail');
             }

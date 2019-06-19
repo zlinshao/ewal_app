@@ -503,6 +503,8 @@ export default {
     };
     // 查看大图
     Vue.prototype.$bigPhoto = function (val, uri) {
+      console.log(val)
+      console.log(uri)
       let images = [];
       if (val instanceof Array) {
         for (let item of val) {
