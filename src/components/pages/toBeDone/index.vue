@@ -453,7 +453,7 @@
         switch (type) {
           case "bulletin_collect_basic":
             obj.status = 'toBeDoneCollect';
-            obj.type = 'MarketCollect';
+            obj.type = 'MarketCollect,MarketCollectRenew';
             break;
           case "bulletin_rent_basic":
           case "bulletin_booking_renting":

@@ -155,7 +155,7 @@
       this.getEmptyHouseData();//获取空置房源信息
     },
     activated() {
-
+      sessionStorage.setItem('task_detail', '{}');
     },
     watch: {},
     computed: {},
