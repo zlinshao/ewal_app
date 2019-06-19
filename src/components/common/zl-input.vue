@@ -2,7 +2,7 @@
   <div id="zl-input">
     <div class="zl-input">
       <div class="zl-input-form textarea" v-if="type === 'textarea'">
-        <label class="labelTitle">{{label}}</label>
+        <label class="labelTitle" v-if="label">{{label}}</label>
         <div class="textarea">
         <textarea
           v-if="readonly || disabled"

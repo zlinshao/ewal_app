@@ -188,10 +188,9 @@
         </div>
       </div>
       <div class="footer" :class="{'footerStatic': keyUpStatus}" v-if="queryData.revise !== 'revise'">
-        <p class="p1" @click="saveReport(1)" v-if="bulletinType.bulletin !== 'bulletin_rent_RWC'">
+        <p class="p1" @click="saveReport(1)">
           <span class="writingMode">草稿</span>
         </p>
-        <p class="p1" v-else></p>
         <p class="p2" @click="saveReport(2)">
           <span>重置</span>
         </p>
@@ -1252,7 +1251,7 @@
       },
       // 初始化数据
       resetting() {
-        this.slither = 0;
+        this.slither = 3;
         let allForm = [], id = this.form.id || '';
         for (let item of Object.keys(this.drawSlither)) {
           allForm = allForm.concat(this.drawSlither[item]);
