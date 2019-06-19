@@ -219,8 +219,15 @@
       handleGoContract() {
         this.routerLink('/houseContract', this.$route.query);
       },
+      //查看交接单跳转
       handleLookAssociate() {
-        this.routerLink('/houseProperty',this.$route.query);
+        if(this.detail.handover_data&&this.detail.handover_data.view_url) {
+          sessionStorage.setItem('fromHouseIndex','true');
+          window.location.href = this.detail.handover_data.view_url;
+        }else {
+          this.$prompt('暂无交接单');
+        }
+        //this.routerLink('/houseProperty',this.$route.query);
       },
       /**
        * 获取房屋详情
