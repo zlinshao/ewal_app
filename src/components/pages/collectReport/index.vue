@@ -1255,8 +1255,8 @@
           this.formatData[item] = res[item];
         }
       },
-      disabledDefaultValue() {
-        let all = this.initFormData(this.drawSlither.slither3, this.showData);
+      disabledDefaultValue(slither) {
+        let all = this.initFormData(this.drawSlither[slither], this.showData);
         console.log(all.form);
         console.log(all.formatData);
       },
@@ -1282,7 +1282,7 @@
           this.form.signer = {};
           this.form.contract_number = this.electronicContractNumber;
         }
-        this.disabledDefaultValue();
+        // this.disabledDefaultValue('slither1');
         // this.form.account = '6225212583158743';
         // this.form.account_name = '贾少君';
       },

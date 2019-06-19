@@ -662,10 +662,11 @@ export default {
         }
         this.$httpZll.get(url, {}, 'prompt').then(res => {
           if (res.success) {
-            let data = val, content = {};
+            let data = {}, content = {};
             if (val.book_url) {
               content = res.data;
             } else {
+              // if(val.bulletin_type === 'bulletin_collect_continued'){}
               content = res.data.content;
               let arr = ['property_fee', 'property_phone'];
               if (content.add_data) {
@@ -677,6 +678,8 @@ export default {
               }
             }
             data.content = content;
+            data.task_id = val.task_id;
+            data.taskDefinitionKey = val.taskDefinitionKey;
             data.process_instance_id = val.process_id;
             data.root_process_instance_id = val.root_id;
             sessionStorage.setItem('task_detail', JSON.stringify(data));
