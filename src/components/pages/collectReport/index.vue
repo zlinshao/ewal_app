@@ -1255,6 +1255,7 @@
           this.formatData[item] = res[item];
         }
       },
+      // 禁止预填 字段
       disabledDefaultValue(slither) {
         let all = this.initFormData(this.drawSlither[slither], this.showData);
         console.log(all.form);

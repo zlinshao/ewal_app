@@ -145,8 +145,8 @@
     mounted() {
     },
     activated() {
-      this.city_name = this.personal.name;
-      this.params.city_name = this.personal.name;
+      this.city_name = this.personal.city_name;
+      this.params.city_name = this.personal.city_name;
       this.close_();
     },
     watch: {
