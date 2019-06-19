@@ -73,7 +73,7 @@
                   </div>
                   <span v-else>
                     <span v-if="formatData[key].name">{{formatData[key].name}}</span>
-                    <span v-else-if="key === 'album'" v-for="pic in Object.keys(formatData[key])" class="spanPhotos">1
+                    <span v-else-if="key === 'album'" v-for="pic in Object.keys(formatData[key])" class="spanPhotos">
                       <img v-for="photo in formatData[key][pic]" :src="photo.uri" alt="">
                     </span>
                     <span v-else>{{formatData[key]}}</span>
