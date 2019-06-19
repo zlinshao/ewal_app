@@ -1,24 +1,24 @@
 <template>
   <div id="staff-depart-search" v-show="module">
     <div class="searchInput">
-        <div class="input">
-          <p @click="choose_visible = true">
-            {{ params.name }}
-            <i></i>
-          </p>
-          <div>
-            <input type="text" placeholder="请输入搜索内容" v-model="params.search">
-            <span v-if="params.search" @click="params.search = ''"></span>
-          </div>
-          <p class="searchBtn" @click="onSearch" v-if="params.search">搜索</p>
-          <p class="btn-cancel" @click="handleCloseSearch" v-else>取消</p>
+      <div class="input">
+        <p @click="choose_visible = true">
+          {{ params.name }}
+          <i></i>
+        </p>
+        <div>
+          <input type="text" placeholder="请输入搜索内容" v-model="params.search">
+          <span v-if="params.search" @click="params.search = ''"></span>
         </div>
-        <div class="chooseBtn" v-if="choose_visible">
-          <p v-for="item in type_list" @click="chooseClickItem(item)">
-            <b :class="{'choose': params.choose === item.id}">{{ item.val }}</b>
-          </p>
-        </div>
+        <p class="searchBtn" @click="onSearch" v-if="params.search">搜索</p>
+        <p class="btn-cancel" @click="handleCloseSearch" v-else>取消</p>
       </div>
+      <div class="chooseBtn" v-if="choose_visible">
+        <p v-for="item in type_list" @click="chooseClickItem(item)">
+          <b :class="{'choose': params.choose === item.id}">{{ item.val }}</b>
+        </p>
+      </div>
+    </div>
     <ul class="item-container scroll_bar" v-if="staff_depart_list.length > 0">
       <li
         v-for="(item,key) in staff_depart_list"
@@ -125,7 +125,7 @@
       onSearch() {
         this.choose_visible = false;
         if (this.params.choose === 1) {
-          this.$httpZll.searchStaffList(this.params.search).then(res => {
+          this.$httpZll.searchStaffList({search:this.params.search}).then(res => {
             console.log(res);
             if (Number(res.code) === 20000) {
               this.staff_depart_list = res.data.data;
@@ -136,7 +136,7 @@
           })
         }
         if (this.params.choose === 2){
-          var search = this.params.search;
+          let search = this.params.search;
           this.$httpHs.getOrganization({search},'加载中...').then(res => {
             console.log(res);
             if (Number(res.code) === 20000) {
