@@ -333,8 +333,8 @@ export default {
           data = this.jsonClone(defineCollectReport);
           break;
         case 'bulletin_collect_continued'://续收
-          title = ['房屋信息', '物品信息', '客户信息', '合同信息'];
-          data = this.jsonClone(defineCollectReport);
+          title = [ '客户信息', '合同信息'];
+          data = this.jsonClone(defineContinueCollect);
           break;
         case 'bulletin_rent_basic'://租房
           title = ['合同信息', '客户信息'];
@@ -347,9 +347,10 @@ export default {
           data.slither0 = defineSubletReport.concat(data.slither0);
           break;
         case 'bulletin_rent_continued'://续租
-          title = ['合同信息', '客户信息'];
-          data = this.jsonClone(defineRentReport);
-          data.slither0 = defineNewRentReport.concat(data.slither0);
+          title = [ '客户信息','合同信息'];
+          data = this.jsonClone(defineContinueRent);
+          // data = this.jsonClone(defineRentReport);
+          // data.slither0 = defineNewRentReport.concat(data.slither0);
           break;
         case 'bulletin_booking_renting'://预定
           title = ['合同信息', '客户信息'];
