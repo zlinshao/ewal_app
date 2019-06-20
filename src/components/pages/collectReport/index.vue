@@ -285,6 +285,7 @@
 
         isGetTake: false,                   //尾款
         noTaskId: false,                   //不需要task_id
+        allResetting: {}
       }
     },
     created() {
@@ -947,6 +948,7 @@
                   } else {
                     this.resetting();
                   }
+                  this.disabledDefaultValueHandler(this.allResetting);
                 } else {
                   this.childBulletin(this.taskDetail.content);
                 }
@@ -1050,6 +1052,11 @@
                   this.childBulletin(this.taskDetail.content);
                 }
               }
+            }
+            let arr = [];//不需要清空字段
+            if (type === 'bulletin_change') {
+              arr = ['address', 'house_id', 'contract_id'];
+              this.disabledDefaultValue('slither0', arr);
             }
           } else {
             let res = data.data;
@@ -1298,10 +1305,22 @@
         }
       },
       // 禁止预填 字段
-      disabledDefaultValue(slither) {
+      disabledDefaultValue(slither, val) {
         let all = this.initFormData(this.drawSlither[slither], this.showData);
-        console.log(all.form);
-        console.log(all.formatData);
+        all.noEmpty = val;
+        this.disabledDefaultValueHandler(all);
+        this.allResetting = this.jsonClone(all);
+      },
+      // 禁止预填 清空处理
+      disabledDefaultValueHandler(all) {
+        for (let item of Object.keys(all.form)) {
+          if (!item.includes(all.noEmpty))
+            this.form[item] = all.form[item];
+        }
+        for (let item of Object.keys(all.formatData)) {
+          if (!item.includes(all.noEmpty))
+            this.formatData[item] = all.formatData[item];
+        }
       },
       // 初始化数据
       resetting() {
@@ -1325,7 +1344,6 @@
           this.form.signer = {};
           this.form.contract_number = this.electronicContractNumber;
         }
-        // this.disabledDefaultValue('slither1');
         // this.form.account = '6225212583158743';
         // this.form.account_name = '贾少君';
       },
