@@ -454,7 +454,7 @@
             break;
           case 'period_price_way_arr':
             if (child === 'month_unit_price') {
-              this.countPrice();//押金计算
+              this.countPrice('pay_way_bet');//押金计算
             }
             this.moreChangeDateCount(key);//变化日期计算
             break;
@@ -585,7 +585,7 @@
           }
         }
         if (draw.status !== 'countDate') return;
-        this.countPrice();
+        this.countPrice('pay_way_bet');
         this.moreChangeDateCount(key);
       },
       // 下拉框筛选
