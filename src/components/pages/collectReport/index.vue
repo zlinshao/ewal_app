@@ -238,6 +238,7 @@
     components: {SearchHouse, Electrical, NoPicker, CheckChoose, RemarkTerms},
     data() {
       return {
+
         bulletinTitle: [],
         slither: 0,                         //模块切换记录
         allReportNum: 0,                    //表单模块数
@@ -292,6 +293,8 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      console.log('taskDetail');
+      console.log(this.taskDetail);
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -339,7 +342,9 @@
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
         ];
+
         this.isGetTake = data[0].includes(type.bulletin);
+        console.log(this.isGetTake)
         this.noTaskId = data[1].includes(type.bulletin);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
@@ -360,6 +365,35 @@
         if (type === 'bulletin_rent_basic' || type === 'bulletin_booking_renting') {
           this.form.is_sign = '';
         }
+
+        switch (type) {
+          case 'bulletin_rent_basic':
+            this.form.is_sign = '';
+            let query = this.$route.query;
+            if (query.result) {
+              this.form.is_sign = query.result;
+            }
+            break;
+          case'bulletin_change':
+            this.form.house_id_rent = this.taskDetail.house_id;
+            this.form.contract_id_rent = this.taskDetail.contract_id;
+            this.form.house_address = this.taskDetail.address;
+            this.formatData.house_id_rent = this.taskDetail.address;
+            break;
+          case'bulletin_special':  //特殊事项报备
+            this.form.house_address = this.taskDetail.address;
+            this.form.customer_name = this.taskDetail.customer_info[0].name;
+
+            // this.form.month = this.taskDetail.month_price[0].period;
+            this.form.price=[];
+            for (let item of this.taskDetail.month_price) {
+              let str=`${item.begin_date}~${item.end_date}:${item.price}元/月`;
+              this.form.price.push(str);
+            }
+            // this.form.price = this.taskDetail.month_price[0].price;
+            break;
+        }
+
       },
       // touch 左右切换
       tapStart(event) {
@@ -1008,6 +1042,7 @@
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
+          let s = this.form;
           if (!data) {
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
@@ -1022,6 +1057,11 @@
             if (type === 'bulletin_change') {
               arr = ['address', 'house_id', 'contract_id'];
               this.disabledDefaultValue('slither0', arr);
+            }
+            //续收报备
+            if (type === 'bulletin_collect_continued') {
+              // arr = ['address', 'house_id', 'contract_id'];
+              this.disabledDefaultValue('slither1', arr);
             }
           } else {
             let res = data.data;
