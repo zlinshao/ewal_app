@@ -348,7 +348,7 @@
         this.resetting();
         this.distinguishForm(type.bulletin);
         if (type.bulletin === 'bulletin_agency') {
-          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 1 : 2;
+          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 0 : 1;
           this.form.collect_or_rent = type;
           this.formatData.collect_or_rent = dicties['collect_or_rent'][type];
         }
@@ -1091,14 +1091,19 @@
       },
       // 尾款待办信息 / 渠道
       childBulletin(res, draft) {
+        console.log(this.form);
+
         for (let item of Object.keys(this.form)) {
           switch (item) {
             case 'month':
             case 'address':
-            case 'house_id':
             case 'house_address':
             case 'customer_name':
               this.form[item] = res[item] || this.form[item];
+              break;
+            case 'house_id':
+              this.form[item] = res[item] || this.form[item];
+              this.formatData.house_id = res.address || this.form.address;
               break;
             case 'agency_infos':
               if (draft) {
