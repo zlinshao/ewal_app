@@ -327,7 +327,7 @@
       this.historyProcess(detail);
       this.getOperates(detail, this.tabs);
       this.handleData(detail);
-      this.approvalDetail('http://test.market.api.ewal.lejias.cn/v1.0/market/process/edit/1302034');
+      this.approvalDetail(detail.bm_detail_request_url);
     },
     watch: {},
     computed: {
