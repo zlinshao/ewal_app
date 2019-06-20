@@ -847,6 +847,9 @@
                 this.customerDomShow(item);
               }
               break;
+            case 'agency_infos':
+              this.customerDomShow(item);
+              break;
             case 'period_price_way_arr'://付款方式变化
               let pay_way = ['pay_way'];
               this.changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
