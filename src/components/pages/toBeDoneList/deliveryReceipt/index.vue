@@ -325,7 +325,7 @@
           if (res) {
             let data = res.data;
             this.form.id = data.id;
-            this.payment_type = data.payment_type || 1;
+            this.payment_type = Number(data.payment_type);
             this.resetting(this.payment_type);
             this.handlePreFill(data);
           } else {
@@ -755,6 +755,7 @@
           defineCheckoutReport['slither'] = handlerFreeDeliveryChange[val];
           this.drawSlither = this.jsonClone(defineCheckoutReport);
         } else {
+          defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
           this.drawSlither = this.jsonClone(defineArticleReceipt);
         }
         for (let item of Object.keys(this.drawSlither)) {
