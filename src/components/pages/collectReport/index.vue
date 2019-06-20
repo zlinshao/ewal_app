@@ -362,6 +362,35 @@
         if (type === 'bulletin_rent_basic' || type === 'bulletin_booking_renting') {
           this.form.is_sign = '';
         }
+
+        switch (type) {
+          case 'bulletin_rent_basic':
+            this.form.is_sign = '';
+            let query = this.$route.query;
+            if (query.result) {
+              this.form.is_sign = query.result;
+            }
+            break;
+          case'bulletin_change':
+            this.form.house_id_rent = this.taskDetail.house_id;
+            this.form.contract_id_rent = this.taskDetail.contract_id;
+            this.form.house_address = this.taskDetail.address;
+            this.formatData.house_id_rent = this.taskDetail.address;
+            break;
+          case'bulletin_special':  //特殊事项报备
+            this.form.house_address = this.taskDetail.address;
+            this.form.customer_name = this.taskDetail.customer_info[0].name;
+
+            // this.form.month = this.taskDetail.month_price[0].period;
+            this.form.price=[];
+            for (let item of this.taskDetail.month_price) {
+              let str=`${item.begin_date}~${item.end_date}:${item.price}元/月`;
+              this.form.price.push(str);
+            }
+            // this.form.price = this.taskDetail.month_price[0].price;
+            break;
+        }
+
       },
       // touch 左右切换
       tapStart(event) {
