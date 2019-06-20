@@ -6679,16 +6679,16 @@ defineContinueCollect = {
       showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
-    {
-      label: '月单价',
-      placeholder: '已禁用',
-      disabled: 'disabled',
-      keyName: 'price',
-      keyType: '',
-      type: 'textarea',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
+    // {
+    //   label: '月单价',
+    //   placeholder: '已禁用',
+    //   disabled: 'disabled',
+    //   keyName: 'price',
+    //   keyType: '',
+    //   type: 'textarea',
+    //   showForm: 'formatData', //picker 显示form 或 formatData
+    //   slot: '',
+    // },
     {
       label: '押',
       placeholder: '必填 请选择',

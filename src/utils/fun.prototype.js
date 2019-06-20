@@ -717,7 +717,9 @@ export default {
           let data = {};
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
-              resolve(result.content.draft_content);
+              let contentInfo = result.content.draft_content;
+              contentInfo.album = result.content.album;
+              resolve(contentInfo);
             }
           });
         } else {
