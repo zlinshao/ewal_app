@@ -798,8 +798,8 @@ export default {
         for (let org of info.org) {
           if (org.city && org.city.length) {
             for (let city of org.city) {
-              // cityObj.code = city.city_id;
-              // cityObj.name = city.city_name;
+              cityObj.code = city.city_id;
+              cityObj.name = city.city_name;
               cityObj.code = 120000;
               cityObj.name = '天津市';
               cityArr.push(cityObj);
