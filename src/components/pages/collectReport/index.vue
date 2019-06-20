@@ -284,6 +284,7 @@
 
         isGetTake: false,                   //尾款
         noTaskId: false,                   //不需要task_id
+        allResetting: {}
       }
     },
     created() {
@@ -914,6 +915,7 @@
                   } else {
                     this.resetting();
                   }
+                  this.disabledDefaultValueHandler(this.allResetting);
                 } else {
                   this.childBulletin(this.taskDetail.content);
                 }
@@ -1270,17 +1272,20 @@
       // 禁止预填 字段
       disabledDefaultValue(slither, val) {
         let all = this.initFormData(this.drawSlither[slither], this.showData);
-        let form = all.form;
-        let format = all.formatData;
-        for (let item of Object.keys(form)) {
-          if (!item.includes(val))
-            this.form[item] = form[item];
+        all.noEmpty = val;
+        this.disabledDefaultValueHandler(all);
+        this.allResetting = this.jsonClone(all);
+      },
+      // 禁止预填 清空处理
+      disabledDefaultValueHandler(all) {
+        for (let item of Object.keys(all.form)) {
+          if (!item.includes(all.noEmpty))
+            this.form[item] = all.form[item];
         }
-        for (let item of Object.keys(format)) {
-          if (!item.includes(val))
-            this.formatData[item] = format[item];
+        for (let item of Object.keys(all.formatData)) {
+          if (!item.includes(all.noEmpty))
+            this.formatData[item] = all.formatData[item];
         }
-        console.log(this.form)
       },
       // 初始化数据
       resetting() {
