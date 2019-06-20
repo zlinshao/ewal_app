@@ -1054,10 +1054,13 @@
           switch (item) {
             case 'month':
             case 'address':
-            case 'house_id':
             case 'house_address':
             case 'customer_name':
               this.form[item] = res[item] || this.form[item];
+              break;
+            case 'house_id':
+              this.form[item] = res[item] || this.form[item];
+              this.formatData.house_id = res.address || this.form.address;
               break;
             case 'agency_infos':
               if (draft) {
