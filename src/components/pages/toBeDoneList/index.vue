@@ -276,8 +276,6 @@
         },
         taskCompleteBefore: '',
         taskCompleteAfter: ''
-
-
       }
     },
     created() {
