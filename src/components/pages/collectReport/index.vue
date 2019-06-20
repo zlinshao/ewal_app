@@ -338,11 +338,10 @@
           //不需要电子合同
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
           //不需要task_id
-          ['bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_change', 'bulletin_checkout'],
+          ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
         ];
 
         this.isGetTake = data[0].includes(type.bulletin);
-        console.log(this.isGetTake)
         this.noTaskId = data[1].includes(type.bulletin);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
@@ -1067,9 +1066,7 @@
             }
           } else {
             let res = data.data;
-            // if (type !== 'bulletin_special') {
             this.childBulletin(res, 'draft');
-            // }
             this.handlePreFill(res);
           }
           if ((!this.isGetTake) && key !== 'RentBooking') {
@@ -1284,7 +1281,6 @@
                 this.$httpZll.getUploadUrl(res.album[pic], 'close').then(res => {
                   this.album[pic] = res.data;
                   this.album = Object.assign({}, this.album);
-                  console.log(thia.album);
                 })
               } else {
                 this.album[pic] = res.album[pic];
