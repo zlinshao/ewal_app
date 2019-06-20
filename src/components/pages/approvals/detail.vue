@@ -279,7 +279,7 @@
         deliverPopup: false,//转交
 
         commentForm: {
-          author: 69,
+          author: '',
           content: {
             message: '',
             attachments: []
@@ -319,6 +319,7 @@
       setInterval(_ => {
         this.nowDate = this.myUtils.startTime();
       }, 1000);
+      this.commentForm.author = this.personal.staff_id;
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let detail = JSON.parse(sessionStorage.approvalDetail || '{}');
