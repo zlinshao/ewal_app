@@ -266,7 +266,7 @@
       // }
       this.allDetail = JSON.parse(sessionStorage.deliveryReceipt || '{}');
       this.getDraft(this.allDetail.task_id);
-      this.allReportNum = Object.keys(defineCheckoutReport).length;
+      this.allReportNum = Object.keys(defineArticleReceipt).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
       this.mainWidth = {minWidth: main, maxWidth: main};
@@ -739,13 +739,7 @@
       resetting(val) {
         let type = JSON.parse(sessionStorage.bulletin_type || '{}');
         this.slither = 0;
-        if (type.bulletin === 'bulletin_checkout') {
-          defineCheckoutReport['slither'] = handlerFreeDeliveryChange[val];
-          this.drawSlither = this.jsonClone(defineCheckoutReport);
-        } else {
-          defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
-          this.drawSlither = this.jsonClone(defineArticleReceipt);
-        }
+        this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
           if (item !== 'slither') {
             if (item === 'bedroom') {

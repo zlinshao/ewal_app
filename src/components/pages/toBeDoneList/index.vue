@@ -578,9 +578,9 @@
       onConTime(val) {
         this.timeModule = false;
         if (val !== 'close') {
-          if (val.dateKey == 'taskCompleteBefore') {
+          if (val.dateKey === 'taskCompleteBefore') {
             this.taskCompleteBefore = val.dateVal;
-          } else if (val.dateKey == 'taskCompleteAfter') {
+          } else if (val.dateKey === 'taskCompleteAfter') {
             this.taskCompleteAfter = val.dateVal;
           }
         }
