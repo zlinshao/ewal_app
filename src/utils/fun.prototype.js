@@ -718,7 +718,14 @@ export default {
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
               let contentInfo = result.content.draft_content;
-              contentInfo.album = result.content.album;
+              if(val.bulletin_type === 'bulletin_collect_continued'|| val.bulletin_type === 'bulletin_rent_continued'){
+                contentInfo.album={
+                  id_card_photo:[],
+                  bank_card_photo:[]
+                }
+                contentInfo.album.id_card_photo = result.content.draft_content.id_card_photo; //证件照片
+                contentInfo.album.bank_card_photo = result.content.draft_content.bank_card_photo;  //银行卡照片
+              }
               resolve(contentInfo);
             }
           });
