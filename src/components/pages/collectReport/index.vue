@@ -345,7 +345,7 @@
         this.resetting();
         this.distinguishForm(type.bulletin);
         if (type.bulletin === 'bulletin_agency') {
-          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 1 : 2;
+          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 0 : 1;
           this.form.collect_or_rent = type;
           this.formatData.collect_or_rent = dicties['collect_or_rent'][type];
         }
