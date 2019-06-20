@@ -4572,6 +4572,18 @@ defineChangeReport = {
       ],
     },
     {
+      label: '是否电子合同',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'is_electronic_contract',
+      keyType: '1',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
       label: '合同开始时间',
       placeholder: '必填 请选择',
       readonly: 'readonly',
