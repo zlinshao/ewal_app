@@ -9,7 +9,7 @@ class myUtils {
   static startTime() {
     let date = new Date();
     let year = date.getFullYear();
-    let month = date.getMonth();
+    let month = date.getMonth() + 1;
     let day = date.getDate();
     let h = date.getHours();
     let m = date.getMinutes();
