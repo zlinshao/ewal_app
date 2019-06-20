@@ -2,8 +2,11 @@
   <div id="deliveryReceipt" :style="this.mainListHeight()">
     <div class="top" ref="top">
       <div>
-        <p @click="slither = 0" :class="{'choose': slither !== 4}">物品交接</p>
-        <p @click="slither = 4" :class="{'choose': slither === 4}">费用交接</p>
+        <p @click="slither = 0" :class="{'choose': slither !== Object.keys(drawSlither).length - 1}">物品交接</p>
+        <p @click="slither = Object.keys(drawSlither).length - 1"
+           :class="{'choose': slither === Object.keys(drawSlither).length - 1}">
+          费用交接
+        </p>
         <h2>{{mainTop[slither]}}</h2>
       </div>
       <h1 @click="previewDelivery">
@@ -217,7 +220,7 @@
     data() {
       return {
         allDetail: {},
-        mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'],
+        mainTop: [],
         payment_type: 1,
         slither: 0,
         startClientX: 0,
@@ -269,10 +272,13 @@
       this.allDetail = JSON.parse(sessionStorage.deliveryReceipt || '{}');
       let type = this.bulletinType.bulletin;
       if (type === 'bulletin_checkout') {
+        this.mainTop = ['退租协议', '客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
         this.allReportNum = Object.keys(defineCheckoutReport).length;
       } else {
+        this.mainTop = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
         this.allReportNum = Object.keys(defineArticleReceipt).length;
       }
+      this.getDraft(this.allDetail.task_id);
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
       this.mainWidth = {minWidth: main, maxWidth: main};
