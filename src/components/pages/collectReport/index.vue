@@ -341,10 +341,9 @@
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
-        ];
 
+        ];
         this.isGetTake = data[0].includes(type.bulletin);
-        console.log(this.isGetTake)
         this.noTaskId = data[1].includes(type.bulletin);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
@@ -385,9 +384,9 @@
             this.form.customer_name = this.taskDetail.customer_info[0].name;
 
             // this.form.month = this.taskDetail.month_price[0].period;
-            this.form.price=[];
+            this.form.price = [];
             for (let item of this.taskDetail.month_price) {
-              let str=`${item.begin_date}~${item.end_date}:${item.price}元/月`;
+              let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
               this.form.price.push(str);
             }
             // this.form.price = this.taskDetail.month_price[0].price;
@@ -1046,7 +1045,11 @@
           if (!data) {
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
-                this.getPunchClockData();
+                if (type === 'bulletin_collect_continued') {
+                  this.handlePreFill(this.taskDetail.content);
+                } else {
+                  this.getPunchClockData();
+                }
               } else {
                 if (type !== 'bulletin_special') {
                   this.childBulletin(this.taskDetail.content);
@@ -1060,8 +1063,7 @@
             }
             //续收报备
             if (type === 'bulletin_collect_continued') {
-              // arr = ['address', 'house_id', 'contract_id'];
-              this.disabledDefaultValue('slither1', arr);
+              this.disabledDefaultValue('slither0', arr);
             }
           } else {
             let res = data.data;
@@ -1319,11 +1321,11 @@
       // 禁止预填 清空处理
       disabledDefaultValueHandler(all) {
         for (let item of Object.keys(all.form)) {
-          if (!item.includes(all.noEmpty))
+          if (!all.noEmpty.includes(item))
             this.form[item] = all.form[item];
         }
         for (let item of Object.keys(all.formatData)) {
-          if (!item.includes(all.noEmpty))
+          if (!all.noEmpty.includes(item))
             this.formatData[item] = all.formatData[item];
         }
       },
