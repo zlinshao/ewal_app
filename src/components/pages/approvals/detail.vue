@@ -682,6 +682,7 @@
           this.$prompt('请填写评论内容');
           return;
         }
+        // 03603217-9360-11e9-a5f9-02420617522e
         this.$httpZll.setBulletinComment(this.commentForm, this.detailData.process_id).then(res => {
           if (res) {
             this.cancel('comment');
