@@ -3,10 +3,10 @@
     <div class="up">
       <div v-for="item in Object.keys(showFormat)" v-if="followRecord[item]">
         <label>{{showFormat[item]}}</label>
-        <span class="remaining_time">
-          <span class="unit">{{followRecord.due_date_hours}}<b>h</b></span>
-          <span class="unit">{{followRecord.due_date_minutes}}<b>m</b></span>
-        </span>
+<!--        <span class="remaining_time">-->
+<!--          <span class="unit">{{followRecord.due_date_hours}}<b>h</b></span>-->
+<!--          <span class="unit">{{followRecord.due_date_minutes}}<b>m</b></span>-->
+<!--        </span>-->
         <span class="house_goods" v-if="item === 'house_goods'">
           <b v-if="followRecord[item]">
             <span v-for="house in Object.keys(followRecord[item])" style="display: block;">
