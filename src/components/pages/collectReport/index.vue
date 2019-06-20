@@ -1009,6 +1009,11 @@
                 }
               }
             }
+            let arr = [];//不需要清空字段
+            if (type === 'bulletin_change') {
+              arr = ['address', 'house_id', 'contract_id'];
+              this.disabledDefaultValue('slither0', arr);
+            }
           } else {
             let res = data.data;
             // if (type !== 'bulletin_special') {
@@ -1256,10 +1261,19 @@
         }
       },
       // 禁止预填 字段
-      disabledDefaultValue(slither) {
+      disabledDefaultValue(slither, val) {
         let all = this.initFormData(this.drawSlither[slither], this.showData);
-        console.log(all.form);
-        console.log(all.formatData);
+        let form = all.form;
+        let format = all.formatData;
+        for (let item of Object.keys(form)) {
+          if (!item.includes(val))
+            this.form[item] = form[item];
+        }
+        for (let item of Object.keys(format)) {
+          if (!item.includes(val))
+            this.formatData[item] = format[item];
+        }
+        console.log(this.form)
       },
       // 初始化数据
       resetting() {
@@ -1283,7 +1297,6 @@
           this.form.signer = {};
           this.form.contract_number = this.electronicContractNumber;
         }
-        // this.disabledDefaultValue('slither1');
         // this.form.account = '6225212583158743';
         // this.form.account_name = '贾少君';
       },
