@@ -48,7 +48,7 @@
           <div class="commonBtn" v-if="outcome">
             <div class="btn back" @click="oncancel()">取消</div>
             <div class="btn" :class="btn.action" v-for="btn in outcome.outcomeOptions"
-                 @click="finishPunchClock(btn,outcome.variableName)" v-if="btn.action !== 'booking'"><!--v-if="btn.action !== 'booking'"-->
+                 @click="finishPunchClock(btn,outcome.variableName)"><!--v-if="btn.action !== 'booking'"-->
               {{btn.title}}
             </div>
           </div>
