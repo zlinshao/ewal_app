@@ -568,6 +568,8 @@
     @include flex('bet-column');
     // 审批内容
     .contentMain {
+      height: 100%;
+      @include scroll;
       margin-top: 1rem;
       // 发起申请
       .startApply {
@@ -767,6 +769,7 @@
     }
 
     .commonBtn {
+      margin-top: .2rem;
       padding: .36rem;
       border-top: 1px solid rgba(216, 216, 216, .5);
     }
