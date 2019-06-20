@@ -676,15 +676,16 @@
       },
       // 评论
       onComment() {
-        this.commentForm.content.message = this.commentForm.content.message.replace(/\s+/g, '');
-        if (!this.commentForm.content.message) {
+        let content = this.commentForm.content;
+        this.commentForm.content.message = content.message.replace(/\s+/g, '');
+        if ((!content.message) && (!content.attachments.length)) {
           this.$prompt('请填写评论内容');
           return;
         }
         this.$httpZll.setBulletinComment(this.commentForm, this.detailData.process_id).then(res => {
           if (res) {
             this.cancel('comment');
-            if (res.content && res.content.message) {
+            if (res.content && (res.content.message || res.content.attachments.length)) {
               this.$prompt('评论成功！', 'success');
               this.historyProcess(this.detailData);
             } else {
