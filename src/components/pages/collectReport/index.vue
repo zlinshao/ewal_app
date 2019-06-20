@@ -1058,6 +1058,11 @@
               arr = ['address', 'house_id', 'contract_id'];
               this.disabledDefaultValue('slither0', arr);
             }
+            //续收报备
+            if (type === 'bulletin_collect_continued') {
+              // arr = ['address', 'house_id', 'contract_id'];
+              this.disabledDefaultValue('slither1', arr);
+            }
           } else {
             let res = data.data;
             // if (type !== 'bulletin_special') {
