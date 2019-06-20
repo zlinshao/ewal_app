@@ -739,6 +739,7 @@
       resetting(val) {
         let type = JSON.parse(sessionStorage.bulletin_type || '{}');
         this.slither = 0;
+        defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
         this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
           if (item !== 'slither') {
