@@ -1053,7 +1053,8 @@
             }
             let arr = [];//不需要清空字段
             if (type === 'bulletin_change') {
-              arr = ['address', 'house_id', 'contract_id'];
+              debugger
+              arr = ['address', 'house_id', 'contract_id','house_id_rent'];
               this.disabledDefaultValue('slither0', arr);
             }
             //续收报备
