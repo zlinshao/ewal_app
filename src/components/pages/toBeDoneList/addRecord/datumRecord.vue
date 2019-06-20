@@ -1,13 +1,13 @@
 <template>
   <div id="datumRecord" :style="mainListHeight()">
     <div class="up">
-      <div v-for="item in Object.keys(showFormat)" v-if="followRecord[item] || item === 'remaining_time'">
+      <div v-for="item in Object.keys(showFormat)" v-if="followRecord[item]">
         <label>{{showFormat[item]}}</label>
-        <span class="remaining_time" v-if="item === 'remaining_time'">
+        <span class="remaining_time">
           <span class="unit">{{followRecord.due_date_hours}}<b>h</b></span>
           <span class="unit">{{followRecord.due_date_minutes}}<b>m</b></span>
         </span>
-        <span class="house_goods" v-else-if="item === 'house_goods'">
+        <span class="house_goods" v-if="item === 'house_goods'">
           <b v-if="followRecord[item]">
             <span v-for="house in Object.keys(followRecord[item])" style="display: block;">
               <b>{{house==='is_fill'?'':'缺少'}}</b>{{makeGoods[house]}}{{followRecord[item][house]}}个
@@ -86,7 +86,7 @@
           house_address: '房屋地址',
           house_goods: '待办内容',
           due_date: '结束时间',
-          remaining_time: '剩余时间',
+          // remaining_time: '剩余时间',
           bulletin_staff_name: '跟进人',
         },
         makeGoods: {
