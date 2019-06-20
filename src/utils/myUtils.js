@@ -4,6 +4,30 @@ class myUtils {
   constructor(data) {
   }
 
+  // 获取当前时间
+  // 时间
+  static startTime() {
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDate();
+    let h = date.getHours();
+    let m = date.getMinutes();
+    let s = date.getSeconds();
+    month = this.checkTime(month);
+    day = this.checkTime(day);
+    m = this.checkTime(m);
+    s = this.checkTime(s);
+    return year + '-' + month + '-' + day + ' ' + h + ":" + m + ":" + s;
+  }
+
+  static checkTime(i) {
+    if (i < 10) {
+      i = "0" + i
+    }
+    return i
+  }
+
   // 提示信息
   static prompt(msg, type) {
     switch (type) {

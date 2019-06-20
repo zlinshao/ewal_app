@@ -168,8 +168,10 @@
     mounted() {
     },
     activated() {
-      this.startTime();
-      setInterval(this.startTime, 1000);
+      this.today = this.myUtils.startTime();
+      setInterval(_ => {
+        this.today = this.myUtils.startTime();
+      }, 1000);
       let query = JSON.parse(sessionStorage.punchClock || '{}');
       let bulletin = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.close_();
@@ -249,27 +251,6 @@
           this.villageInfo.location = [];
           this.$prompt('获取位置信息失败', 'fail');
         }
-      },
-      // 时间
-      startTime() {
-        let date = new Date();
-        let year = date.getFullYear();
-        let month = date.getMonth();
-        let day = date.getDate();
-        let h = date.getHours();
-        let m = date.getMinutes();
-        let s = date.getSeconds();
-        month = this.checkTime(month);
-        day = this.checkTime(day);
-        m = this.checkTime(m);
-        s = this.checkTime(s);
-        this.today = year + '-' + month + '-' + day + ' ' + h + ":" + m + ":" + s;
-      },
-      checkTime(i) {
-        if (i < 10) {
-          i = "0" + i
-        }
-        return i
       },
       // 打卡
       punchClock(val) {

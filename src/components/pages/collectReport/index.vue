@@ -451,7 +451,7 @@
             break;
           case 'period_price_way_arr':
             if (child === 'month_unit_price') {
-              this.countPrice();//押金计算
+              this.countPrice('pay_way_bet');//押金计算
             }
             this.moreChangeDateCount(key);//变化日期计算
             break;
@@ -496,27 +496,33 @@
           let begin_date = new Date(item.begin_date);
           item.end_date = this.myUtils.formatAddRem('mm', period, begin_date);
           if (bulletin === 'bulletin_collect_basic') {
-            this.sePaySecondDate(key, val);
+            this.sePaySecondDate();
           }
         })
       },
       // 第二次打款日期
-      sePaySecondDate(key, date) {
+      sePaySecondDate() {
+        let date = this.form.pay_first_date || '';
         if (!date) return;
         let val = new Date(date);
-        let pay_second = this.myUtils.formatAddRem('mm', 1, val);
+        let pay_way = Number(this.form.period_price_way_arr[0].pay_way || 1);
+        let pay_second = this.myUtils.formatAddRem('mm', pay_way, val);
         this.setFormDate('pay_second_date', pay_second)
       },
       // 计算押金
-      countPrice() {
-        let bet = this.form.pay_way_bet;
-        if (bet || bet === 0) {
-          bet = Number(bet);
+      countPrice(val) {
+        if (val === 'pay_way_bet') {
+          let bet = this.form.pay_way_bet;
+          if (bet || bet === 0) {
+            bet = Number(bet);
+          } else {
+            bet = 1;
+          }
+          let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
+          this.form.deposit = bet * price;
         } else {
-          bet = 1;
+          this.sePaySecondDate();
         }
-        let price = Number(this.form.period_price_way_arr[0].month_unit_price || 0);
-        this.form.deposit = bet * price;
       },
       // 输入变化周期计算日期
       moreChangeDateCount(key) {
@@ -576,7 +582,7 @@
           }
         }
         if (draw.status !== 'countDate') return;
-        this.countPrice();
+        this.countPrice('pay_way_bet');
         this.moreChangeDateCount(key);
       },
       // 下拉框筛选
@@ -633,9 +639,10 @@
           // 付款方式变化处理
           if (parentKey === 'period_price_way_arr') {
             this.moreChangeDateCount(parentKey);
-            this.sePaySecondDate(parentKey, this.form.pay_first_date || '');
+            this.sePaySecondDate();
           }
-          if (name === 'pay_way_bet') this.countPrice();
+          if (name === 'pay_way_bet') this.countPrice(name);
+          if (name === 'pay_way') this.countPrice(name);
           //特殊事项变化处理
           this.specialPickerFun(form, show, picker);
         }
