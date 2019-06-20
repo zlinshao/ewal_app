@@ -4498,7 +4498,7 @@ defineSubletReport = [
     keyName: 'house_id',
     keyType: '',
     type: 'text',
-    status: '',
+    showForm: 'formatData', //picker 显示form 或 formatData
     slot: '',
   },
 ];
