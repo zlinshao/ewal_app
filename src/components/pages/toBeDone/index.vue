@@ -319,6 +319,7 @@
       },
       // 去打卡 去签约
       goOperates(val) {
+        console.log(val)
         switch (val.task_action) {
           case 'punchClock':
             sessionStorage.setItem('punchClock', JSON.stringify(val));
@@ -327,9 +328,8 @@
           case 'collectReport':
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
-            if (type === 'bulletin_rent_RWC') {
-
-              bulletin = bulletinRouterStatus.bulletin_booking_renting;
+            if (val.bulletin_type === 'bulletin_rent_RWC') {
+              bulletin = bulletinRouterStatus.bulletin_rent_RWC;
               sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
               this.routerLink(val.task_action);
             } else {
