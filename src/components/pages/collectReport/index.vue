@@ -238,6 +238,7 @@
     components: {SearchHouse, Electrical, NoPicker, CheckChoose, RemarkTerms},
     data() {
       return {
+
         bulletinTitle: [],
         slither: 0,                         //模块切换记录
         allReportNum: 0,                    //表单模块数
@@ -289,6 +290,7 @@
     created() {
     },
     activated() {
+      debugger
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
       this.bulletin_types(this.bulletinType);
@@ -331,6 +333,7 @@
     methods: {
       // 报备类型
       bulletin_types(type) {
+        debugger
         let bulletinData = this.$bulletinType(type.bulletin);
         let data = [
           //不需要电子合同
@@ -862,6 +865,7 @@
       },
       // 发布
       saveReport(val) {
+        debugger
         console.log(this.form);
         if (val !== 1 && val !== 2) {
           if (this.$attestationKey(this.drawForm)) return;
@@ -1006,6 +1010,8 @@
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
+          debugger
+          let s = this.form;
           if (!data) {
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
