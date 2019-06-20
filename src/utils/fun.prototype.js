@@ -333,7 +333,7 @@ export default {
           data = this.jsonClone(defineCollectReport);
           break;
         case 'bulletin_collect_continued'://续收
-          title = [ '客户信息', '合同信息'];
+          title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineContinueCollect);
           break;
         case 'bulletin_rent_basic'://租房
@@ -347,7 +347,7 @@ export default {
           data.slither0 = defineSubletReport.concat(data.slither0);
           break;
         case 'bulletin_rent_continued'://续租
-          title = [ '客户信息','合同信息'];
+          title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineContinueRent);
           // data = this.jsonClone(defineRentReport);
           // data.slither0 = defineNewRentReport.concat(data.slither0);
@@ -667,28 +667,57 @@ export default {
             let data = {}, content = {};
             if (val.book_url) {
               content = res.data;
+              this.setContentDetail(val, data, content);
+              resolve(true);
             } else {
-              // if(val.bulletin_type === 'bulletin_collect_continued'){}
-              content = res.data.content;
-              let arr = ['property_fee', 'property_phone'];
-              if (content.add_data) {
-                for (let item of content.add_data) {
-                  if (arr.includes(item.name)) {
-                    content[item.name] = item.value;
+              this.getBulletinDetailFun(res, val).then(item => {
+                content = item;
+                console.log(item);
+                let arr = ['property_fee', 'property_phone'];
+                if (content.add_data) {
+                  for (let item of content.add_data) {
+                    if (arr.includes(item.name)) {
+                      content[item.name] = item.value;
+                    }
                   }
                 }
-              }
+                this.setContentDetail(val, data, content);
+                resolve(true);
+              });
             }
-            data.content = content;
-            data.task_id = val.task_id;
-            data.taskDefinitionKey = val.taskDefinitionKey;
-            data.process_instance_id = val.process_id;
-            data.root_process_instance_id = val.root_id;
-            sessionStorage.setItem('task_detail', JSON.stringify(data));
           }
-          resolve(true);
         });
       });
+    };
+    //对详情内容的处理
+    Vue.prototype.setContentDetail = function (val, data, content) {
+      data.content = content;
+      data.task_id = val.task_id;
+      data.taskDefinitionKey = val.taskDefinitionKey;
+      data.process_instance_id = val.process_id;
+      data.root_process_instance_id = val.root_id;
+      sessionStorage.setItem('task_detail', JSON.stringify(data));
+    };
+
+    //续收、续租：需要拿content==>contract_info==>id去请求againTaskDetail任务详情接口作为他的详情数据
+    Vue.prototype.getBulletinDetailFun = function (res, val, content) {
+      return new Promise((resolve, reject) => {
+        let arr = ['bulletin_collect_continued', 'bulletin_rent_continued'];
+        let isFlag = arr.includes(val.bulletin_type);
+        if (isFlag) {
+          let contract_id = res.data.content.contract_info.id;
+          contract_id = 47588;
+          let data = {};
+          this.$httpZll.getBulletinDetail(contract_id).then(result => {
+            if (result) {
+              resolve(result.content.draft_content);
+            }
+          });
+        } else {
+          resolve(res.data.content);
+        }
+      })
+
     };
     // 报备详情
     Vue.prototype.againDetailRequest = function (val, again, replace) {

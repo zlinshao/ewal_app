@@ -4486,7 +4486,6 @@ defineContinueRent ={
       slot: '',
     },
   ],
-
 };
 
 // 转租报备
@@ -7015,5 +7014,4 @@ defineContinueCollect = {
       }]
     },
   ],
-
 }
