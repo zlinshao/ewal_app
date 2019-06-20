@@ -5555,7 +5555,7 @@ defineChangeReport = {
   ],
 };*/
 
-// 渠道报备
+// 渠道费报备
 defineAgencyReport = {
   slither0: [{
     label: '收租标记',
