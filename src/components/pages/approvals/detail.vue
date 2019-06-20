@@ -123,7 +123,7 @@
           <textarea placeholder="必填 请输入" v-model="commentForm.content.message"></textarea>
         </div>
         <div v-for="item in commentUpload">
-          <label style="padding-top: .2rem">{{item.text}}</label>
+          <label style="padding-top: .18rem">{{item.text}}</label>
           <Upload :file="item" :close="!commentPopup" @success="getImgData"></Upload>
         </div>
       </div>
@@ -940,11 +940,14 @@
 <style lang="scss" scoped>
   @import "../../../assets/scss/approvals/detail.scss";
 
-  .approvalStaff {
-    position: absolute;
-    bottom: .24rem;
-    left: 1rem;
-    z-index: 10;
-    color: #FFFFFF;
+  #approvalDetail {
+    .approvalStaff {
+      position: absolute;
+      bottom: .24rem;
+      left: 1rem;
+      z-index: 10;
+      color: #FFFFFF;
+    }
   }
+
 </style>
