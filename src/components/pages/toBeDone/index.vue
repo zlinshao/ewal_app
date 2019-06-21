@@ -333,7 +333,6 @@
             }
             if (!val.finish_RWC) {
               if (val.new_RWC) {
-                console.log(val);
                 this.routerLink(val.task_action);
               }
             }
@@ -357,11 +356,12 @@
                   } else {
                     if (val.bulletin_type) {
                       bulletin = bulletinRouterStatus[val.bulletin_type];
+                    } else {
+                      bulletin = bulletinRouterStatus.bulletin_collect_basic;
                     }
                     this.routerLink(val.task_action);
                   }
                   sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
-
                 } else {
                   this.routerLink(val.task_action);
                 }

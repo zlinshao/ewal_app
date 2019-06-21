@@ -1099,8 +1099,6 @@
       },
       // 尾款待办信息 / 渠道
       childBulletin(res, draft) {
-        console.log(this.form);
-
         for (let item of Object.keys(this.form)) {
           switch (item) {
             case 'month':
@@ -1192,6 +1190,7 @@
               break;
           }
         }
+        this.setAlbumDraft(res);
       },
       // 预填数据处理
       handlePreFill(res, status) {
@@ -1287,6 +1286,10 @@
               break;
           }
         }
+        this.setAlbumDraft(res);
+      },
+      // 图片预填
+      setAlbumDraft(res) {
         if (res.album) {
           for (let pic of Object.keys(res.album)) {
             if (res.album[pic] && res.album[pic].length) {
@@ -1314,10 +1317,7 @@
           }
         }
         if (objInt.includes(item)) {
-          let num = '';
-          if (res[item] || res[item] === 0) {
-            num = Number(res[item]);
-          }
+          let num = this.myUtils.isNum(res[item]) ? Number(res[item]) : res[item];
           this.formatData[item] = dicties[item][num];
         }
         if (date.includes(item)) {
