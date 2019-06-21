@@ -1016,11 +1016,11 @@
                 }
               }
             }
-            let arr = [];//不需要清空字段
-            if (type === 'bulletin_change') {
-              arr = ['address', 'house_id', 'contract_id'];
-              this.disabledDefaultValue('slither0', arr);
-            }
+            // let arr = [];//不需要清空字段
+            // if (type === 'bulletin_change') {
+            //   arr = ['address', 'house_id', 'contract_id'];
+            //   this.disabledDefaultValue('slither0', arr);
+            // }
           } else {
             let res = data.data;
             // if (type !== 'bulletin_special') {
