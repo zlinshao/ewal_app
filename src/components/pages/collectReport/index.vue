@@ -1299,7 +1299,6 @@
       },
       // 下拉框 匹配字典
       pickerDefaultValue(res, item) {
-        console.log(item)
         let objInt = [], date = [];
         for (let picker of this.drawForm) {
           if (picker.status === 'objInt' || picker.status === 'arr') {

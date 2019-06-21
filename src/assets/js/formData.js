@@ -558,7 +558,7 @@ approvalSearch = {
   toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentBooking'],
   toBeDoneRetainage: ['RentRetainage'],
   toBeDoneAgency: ['BulletinAgency'],
-  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage'],
+  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking', 'Market-RentNotHouseBooking'],
   approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
@@ -567,17 +567,17 @@ approvalSearch = {
 // 新增小区
 defineNewAddVillage = [
   {
-  label: '省',
-  placeholder: '必填 请选择',
-  readonly: 'readonly',
-  keyName: 'province',
-  keyType: '',
-  type: 'text',
-  status: 'obj',
-  showForm: 'formatData', //picker 显示form 或 formatData
-  picker: 'picker',
-  slot: '',
-},
+    label: '省',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'province',
+    keyType: '',
+    type: 'text',
+    status: 'obj',
+    showForm: 'formatData', //picker 显示form 或 formatData
+    picker: 'picker',
+    slot: '',
+  },
   {
     label: '市',
     placeholder: '必填 请选择',
