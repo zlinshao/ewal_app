@@ -4096,6 +4096,7 @@ defineContinueRent ={
       keyType: '',
       type: 'text',
       picker: 'date',
+      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
     {
