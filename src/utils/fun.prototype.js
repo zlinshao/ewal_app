@@ -861,7 +861,7 @@ export default {
             for (let city of org.city) {
               // cityObj.code = city.city_id;
               // cityObj.name = city.city_name;
-              cityObj.code = 120000;
+              cityObj.code = 320100;
               cityObj.name = '天津市';
               cityArr.push(cityObj);
               // province[city.province.province_id] = city.province.province_name;

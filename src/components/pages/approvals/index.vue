@@ -619,6 +619,7 @@
             }
             let data = this.groupHandlerListData(res.data, this.urlApi);
             this.outcomes(data, this.tabs);
+            console.log(data);
             if (this.params['params' + tab].page === 1) {
               this.approvalList['list' + tab]['data' + twoLevel] = data;
             } else {
