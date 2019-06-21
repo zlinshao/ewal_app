@@ -285,7 +285,8 @@
 
         isGetTake: false,                   //尾款
         noTaskId: false,                   //不需要task_id
-        allResetting: {}
+        allResetting: {},
+        photoUploadStatus: true,
       }
     },
     created() {
@@ -1044,11 +1045,15 @@
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
           if (!data) {
+            let arr = [];//不需要清空字段
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
                 //续收、续租预填数据
                 if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
                   this.handlePreFill(this.taskDetail.content);
+                  console.log(this.taskDetail)
+                  arr = ['address', 'house_id', 'contract_id', 'contract_number'];
+                  this.disabledDefaultValue('slither0', arr);
                 } else {
                   this.getPunchClockData();
                 }
@@ -1062,14 +1067,8 @@
                 this.handlePreFill(this.taskDetail.content);
               }
             }
-            let arr = [];//不需要清空字段
             if (type === 'bulletin_change') {
               arr = ['address', 'house_id', 'contract_id', 'contract_number', 'house_id_rent'];
-              this.disabledDefaultValue('slither0', arr);
-            }
-            //续收报备
-            if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
-              arr = ['address', 'house_id', 'contract_id', 'contract_number'];
               this.disabledDefaultValue('slither0', arr);
             }
           } else {
@@ -1355,6 +1354,7 @@
       // 初始化数据
       resetting() {
         this.slither = 0;
+        this.photoUploadStatus = true;
         let allForm = [], id = this.form.id || '';
         for (let item of Object.keys(this.drawSlither)) {
           allForm = allForm.concat(this.drawSlither[item]);
