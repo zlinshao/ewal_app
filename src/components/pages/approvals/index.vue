@@ -21,7 +21,7 @@
             <span class="numberFont" v-if="!item.value">{{paging['paging'+tabs.tab]}}</span>
           </p>
         </div>
-      <i @click="approvalModule = true"></i>
+        <i @click="approvalModule = true"></i>
       </div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]">
@@ -136,7 +136,7 @@
         moduleHeight: {},
         // 搜索 审批类型
         highParams: {},
-        newHighParams:{}, 
+        newHighParams: {},
         highList: {
           rootProcessDefinitionKeyIn: {
             title: '待办类型',
@@ -544,7 +544,7 @@
               case 1:
                 this.params['params' + tab] = {
                   page: 1,
-                  processDefinitionKeys: 'MG-BulletinApproval,Market-VillageExpand,Agency-Supervision,Rent-Retainage',
+                  processDefinitionKeys: approvalSearch.processDefinitionKeys.join(','),
                   finished: Boolean(status),
                   taskCategory: 'approval',
                 };
@@ -574,7 +574,7 @@
               category: 'cc',
               finished: Boolean(status),
             };
-             this.params['params' + tab].assignee = this.personal.staff_id;
+            this.params['params' + tab].assignee = this.personal.staff_id;
             break;
           case '4':
             this.params['params' + tab].taskAssignee = this.personal.staff_id;
@@ -583,8 +583,8 @@
         // 搜索的参数处理
         this.newHighParams = this.jsonClone(this.highParams);
         //待办类型由数组转化为字符串
-        if(this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length>0){
-          this.newHighParams.rootProcessDefinitionKeyIn= this.highParams.rootProcessDefinitionKeyIn.join(',');
+        if (this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length > 0) {
+          this.newHighParams.rootProcessDefinitionKeyIn = this.highParams.rootProcessDefinitionKeyIn.join(',');
         }
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
@@ -606,7 +606,7 @@
       // 列表
       getApproval(url, params, tab) {
         // 搜索的参数
-        params = Object.assign({}, params,this.newHighParams);
+        params = Object.assign({}, params, this.newHighParams);
         this.ids = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {

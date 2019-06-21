@@ -558,6 +558,7 @@ approvalSearch = {
   toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentBooking'],
   toBeDoneRetainage: ['RentRetainage'],
   toBeDoneAgency: ['BulletinAgency'],
+  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking'],
   approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
@@ -3795,7 +3796,7 @@ defineNewRentReport = [
 ];
 
 // 续租
-defineContinueRent ={
+defineContinueRent = {
   // 合同信息
   slither0: [
     {
@@ -4856,7 +4857,7 @@ defineChangeReport = {
         type: 'text',
         status: '',
         slot: '',
-      }, ]
+      },]
     },
     {
       label: '是否渠道',
@@ -6902,16 +6903,16 @@ defineContinueCollect = {
   // 客户信息
   slither1: [
     {
-    label: '客户姓名',
-    placeholder: '必填 请输入',
-    keyName: 'customer_name',
-    keyType: '',
-    type: 'text',
-    button: '身份识别',
-    icon: 'identity',
-    status: '',
-    slot: '',
-  },
+      label: '客户姓名',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      button: '身份识别',
+      icon: 'identity',
+      status: '',
+      slot: '',
+    },
     {
       label: '性别',
       placeholder: '必填 请选择',

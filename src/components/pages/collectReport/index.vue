@@ -943,7 +943,7 @@
                 if (!this.isGetTake) {
                   if (bulletin.bulletin !== 'bulletin_special' && bulletin.bulletin !== 'bulletin_rent_RWC') {
                     if (bulletin.bulletin === 'bulletin_collect_continued' || bulletin.bulletin === 'bulletin_rent_continued') {
-                      this.disabledDefaultValueHandler(this.allResetting);
+                      this.disabledDefaultValueHandler(this.allResetting, 'album');
                     } else {
                       this.getPunchClockData();
                     }
@@ -1063,7 +1063,7 @@
               this.disabledDefaultValue('slither0', arr);
             }
             //续收报备
-            if (type === 'bulletin_collect_continued') {
+            if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
               arr = ['address', 'house_id', 'contract_id', 'contract_number'];
               this.disabledDefaultValue('slither0', arr);
             }
@@ -1324,8 +1324,10 @@
         this.allResetting = this.jsonClone(all);
       },
       // 禁止预填 清空处理
-      disabledDefaultValueHandler(all) {
-        all.album = this.jsonClone(this.album);
+      disabledDefaultValueHandler(all, album) {
+        if (album) {
+          all.album = this.jsonClone(this.album);
+        }
         for (let item of Object.keys(all.form)) {
           if (!all.noEmpty.includes(item)) {
             this.form[item] = all.form[item];
@@ -1336,11 +1338,11 @@
             this.formatData[item] = all.formatData[item];
           }
         }
-        for (let item of Object.keys(all.album)) {
-          if (!all.noEmpty.includes(item)) {
-            this.album[item] = all.album[item];
-          }
-        }
+        // for (let item of Object.keys(all.album)) {
+        //   if (!all.noEmpty.includes(item)) {
+        //     this.album[item] = all.album[item];
+        //   }
+        // }
       },
       // 初始化数据
       resetting() {

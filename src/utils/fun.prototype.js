@@ -618,7 +618,7 @@ export default {
                 this.$prompt('签署成功！');
                 this.routerLink(action.route);
               } else {
-                this.$getTaskList(item,'InputBulletinData').then(res => {
+                this.$getTaskList(item, 'InputBulletinData').then(res => {
                   if (res) {
                     this.againTaskDetail(res).then(_ => {
                       this.againDetailRequest(res, 'again', replace);
@@ -711,16 +711,14 @@ export default {
         let isFlag = arr.includes(val.bulletin_type);
         if (isFlag) {
           let contract_id = res.data.content.contract_info.id;
-          contract_id = 47588;
-          let data = {};
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
               let contentInfo = result.content.draft_content;
-              if(val.bulletin_type === 'bulletin_collect_continued'|| val.bulletin_type === 'bulletin_rent_continued'){
-                contentInfo.album={
-                  id_card_photo:[],
-                  bank_card_photo:[]
-                }
+              if (val.bulletin_type === 'bulletin_collect_continued' || val.bulletin_type === 'bulletin_rent_continued') {
+                contentInfo.album = {
+                  id_card_photo: [],
+                  bank_card_photo: []
+                };
                 contentInfo.album.id_card_photo = result.content.draft_content.id_card_photo; //证件照片
                 contentInfo.album.bank_card_photo = result.content.draft_content.bank_card_photo;  //银行卡照片
               }
@@ -831,8 +829,8 @@ export default {
       let data = {};
       data.avatar = info.avatar;
       data.phone = info.phone;
-      data.staff_id = info.id;
-      //data.staff_id = '';
+      // data.staff_id = info.id;
+      data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
