@@ -721,16 +721,25 @@ export default {
         let isFlag = arr.includes(val.bulletin_type);
         if (isFlag) {
           let contract_id = res.data.content.contract_info.id;
+          contract_id=72935; //续租
+          // contract_id=43901; //续收
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
               let contentInfo = result.content.draft_content;
-              if (val.bulletin_type === 'bulletin_collect_continued' || val.bulletin_type === 'bulletin_rent_continued') {
-                contentInfo.album = {
+              if(val.bulletin_type === 'bulletin_collect_continued'){ //续收图片处理
+                contentInfo.album= {
                   id_card_photo: [],
-                  bank_card_photo: []
+                  bank_card_photo: [],
                 };
                 contentInfo.album.id_card_photo = result.content.draft_content.id_card_photo; //证件照片
                 contentInfo.album.bank_card_photo = result.content.draft_content.bank_card_photo;  //银行卡照片
+              }else if(val.bulletin_type === 'bulletin_rent_continued'){ //续租图片处理
+                contentInfo.album= {
+                  id_card_photo: [],
+                  photo: [],
+                };
+                contentInfo.album.id_card_photo = result.content.draft_content.id_card_photo; //证件照片
+                contentInfo.album.photo = result.content.draft_content.photo;  //凭证截图
               }
               resolve(contentInfo);
             }
