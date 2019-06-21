@@ -332,7 +332,7 @@
               sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
             }
             console.log(val);
-            return;
+            // return;
             if (val.new_RWC) {
               this.routerLink(val.task_action);
             }
