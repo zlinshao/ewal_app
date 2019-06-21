@@ -941,7 +941,6 @@
           case 2:// 重置
             this.$dialog('重置', '您确定要清空表单吗?').then(status => {
               if (status) {
-                this.bulletin_types(bulletin);
                 if (!this.isGetTake) {
                   if (bulletin.bulletin !== 'bulletin_special' && bulletin.bulletin !== 'bulletin_rent_RWC') {
                     if (bulletin.bulletin === 'bulletin_collect_continued' || bulletin.bulletin === 'bulletin_rent_continued') {
@@ -950,7 +949,7 @@
                       this.getPunchClockData();
                     }
                   } else {
-                    this.resetting();
+                    this.bulletin_types(bulletin);
                   }
                 } else {
                   this.childBulletin(this.taskDetail.content);
@@ -1051,7 +1050,6 @@
                 //续收、续租预填数据
                 if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
                   this.handlePreFill(this.taskDetail.content);
-                  console.log(this.taskDetail)
                   arr = ['address', 'house_id', 'contract_id', 'contract_number'];
                   this.disabledDefaultValue('slither0', arr);
                 } else {
@@ -1353,6 +1351,7 @@
       },
       // 初始化数据
       resetting() {
+        console.log(111)
         this.slither = 0;
         this.photoUploadStatus = true;
         let allForm = [], id = this.form.id || '';
