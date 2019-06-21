@@ -942,11 +942,14 @@
                 this.bulletin_types(bulletin);
                 if (!this.isGetTake) {
                   if (bulletin.bulletin !== 'bulletin_special' && bulletin.bulletin !== 'bulletin_rent_RWC') {
-                    this.getPunchClockData();
+                    if (bulletin.bulletin === 'bulletin_collect_continued' || bulletin.bulletin === 'bulletin_rent_continued') {
+                      this.disabledDefaultValueHandler(this.allResetting);
+                    } else {
+                      this.getPunchClockData();
+                    }
                   } else {
                     this.resetting();
                   }
-                  this.disabledDefaultValueHandler(this.allResetting);
                 } else {
                   this.childBulletin(this.taskDetail.content);
                 }
@@ -1056,12 +1059,12 @@
             }
             let arr = [];//不需要清空字段
             if (type === 'bulletin_change') {
-              arr = ['address', 'house_id', 'contract_id','house_id_rent'];
+              arr = ['address', 'house_id', 'contract_id', 'contract_number', 'house_id_rent'];
               this.disabledDefaultValue('slither0', arr);
             }
             //续收报备
             if (type === 'bulletin_collect_continued') {
-              // arr = ['address', 'house_id', 'contract_id'];
+              arr = ['address', 'house_id', 'contract_id', 'contract_number'];
               this.disabledDefaultValue('slither0', arr);
             }
           } else {
@@ -1322,13 +1325,21 @@
       },
       // 禁止预填 清空处理
       disabledDefaultValueHandler(all) {
+        all.album = this.jsonClone(this.album);
         for (let item of Object.keys(all.form)) {
-          if (!all.noEmpty.includes(item))
+          if (!all.noEmpty.includes(item)) {
             this.form[item] = all.form[item];
+          }
         }
         for (let item of Object.keys(all.formatData)) {
-          if (!all.noEmpty.includes(item))
+          if (!all.noEmpty.includes(item)) {
             this.formatData[item] = all.formatData[item];
+          }
+        }
+        for (let item of Object.keys(all.album)) {
+          if (!all.noEmpty.includes(item)) {
+            this.album[item] = all.album[item];
+          }
         }
       },
       // 初始化数据

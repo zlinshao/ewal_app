@@ -216,8 +216,12 @@ class httpZll extends httpService {
         "tenantId":"market",
         "variables":[
           {
-            "name": "bulletin_type",
-            "value": 'bulletin_rent_RWC'
+            name: 'title',
+            value: '未收先租报备',
+          },
+          {
+            name: 'bulletin_type',
+            value: 'bulletin_rent_RWC'
           }
         ]
       }).then(res => {
