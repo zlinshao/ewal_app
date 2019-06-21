@@ -338,18 +338,17 @@
           //不需要电子合同
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
           //不需要task_id
-          ['bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_change', 'bulletin_checkout'],
+          ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
         ];
 
         this.isGetTake = data[0].includes(type.bulletin);
-        console.log(this.isGetTake)
         this.noTaskId = data[1].includes(type.bulletin);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
         this.distinguishForm(type.bulletin);
         if (type.bulletin === 'bulletin_agency') {
-          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 1 : 2;
+          let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 0 : 1;
           this.form.collect_or_rent = type;
           this.formatData.collect_or_rent = dicties['collect_or_rent'][type];
         }
@@ -1067,9 +1066,7 @@
             }
           } else {
             let res = data.data;
-            // if (type !== 'bulletin_special') {
             this.childBulletin(res, 'draft');
-            // }
             this.handlePreFill(res);
           }
           if ((!this.isGetTake) && key !== 'RentBooking') {
@@ -1094,14 +1091,19 @@
       },
       // 尾款待办信息 / 渠道
       childBulletin(res, draft) {
+        console.log(this.form);
+
         for (let item of Object.keys(this.form)) {
           switch (item) {
             case 'month':
             case 'address':
-            case 'house_id':
             case 'house_address':
             case 'customer_name':
               this.form[item] = res[item] || this.form[item];
+              break;
+            case 'house_id':
+              this.form[item] = res[item] || this.form[item];
+              this.formatData.house_id = res.address || this.form.address;
               break;
             case 'agency_infos':
               if (draft) {
@@ -1284,7 +1286,6 @@
                 this.$httpZll.getUploadUrl(res.album[pic], 'close').then(res => {
                   this.album[pic] = res.data;
                   this.album = Object.assign({}, this.album);
-                  console.log(thia.album);
                 })
               } else {
                 this.album[pic] = res.album[pic];

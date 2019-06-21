@@ -57,7 +57,7 @@
                 <div class="approvalStatus" :class="[item.approvedStatus ? 'publish': 'reject']"
                      v-if="tabs.tab === '1' && tabs.status === 1"></div>
                 <div class="moreOperate" @click.stop="moreOperates(item.id)"
-                     v-if="tabs.tab === '2' && tabs.status !== 0"></div>
+                     v-if="tabs.tab === '2' && tabs.status !== 0 && item.bulletin_type !== 'bulletin_agency'"></div>
               </div>
               <div class="listDown" v-if="item.outcome">
                 <div v-for="more in item.outcome.outcomeOptions"

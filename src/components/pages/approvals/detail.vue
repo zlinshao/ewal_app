@@ -279,7 +279,7 @@
         deliverPopup: false,//转交
 
         commentForm: {
-          author: 69,
+          author: '',
           content: {
             message: '',
             attachments: []
@@ -319,6 +319,7 @@
       setInterval(_ => {
         this.nowDate = this.myUtils.startTime();
       }, 1000);
+      this.commentForm.author = this.personal.staff_id;
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
       let detail = JSON.parse(sessionStorage.approvalDetail || '{}');
@@ -676,15 +677,16 @@
       },
       // 评论
       onComment() {
-        this.commentForm.content.message = this.commentForm.content.message.replace(/\s+/g, '');
-        if (!this.commentForm.content.message) {
+        let content = this.commentForm.content;
+        this.commentForm.content.message = content.message.replace(/\s+/g, '');
+        if ((!content.message) && (!content.attachments.length)) {
           this.$prompt('请填写评论内容');
           return;
         }
         this.$httpZll.setBulletinComment(this.commentForm, this.detailData.process_id).then(res => {
           if (res) {
             this.cancel('comment');
-            if (res.content && res.content.message) {
+            if (res.content && (res.content.message || res.content.attachments.length)) {
               this.$prompt('评论成功！', 'success');
               this.historyProcess(this.detailData);
             } else {
@@ -847,6 +849,9 @@
                 this.customerDomShow(item);
               }
               break;
+            case 'agency_infos':
+              this.customerDomShow(item);
+              break;
             case 'period_price_way_arr'://付款方式变化
               let pay_way = ['pay_way'];
               this.changeHandle(res, item, pay_way, this.drawSlither, this.formatData);
@@ -936,11 +941,14 @@
 <style lang="scss" scoped>
   @import "../../../assets/scss/approvals/detail.scss";
 
-  .approvalStaff {
-    position: absolute;
-    bottom: .24rem;
-    left: 1rem;
-    z-index: 10;
-    color: #FFFFFF;
+  #approvalDetail {
+    .approvalStaff {
+      position: absolute;
+      bottom: .24rem;
+      left: 1rem;
+      z-index: 10;
+      color: #FFFFFF;
+    }
   }
+
 </style>

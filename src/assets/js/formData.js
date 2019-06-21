@@ -5555,7 +5555,7 @@ defineChangeReport = {
   ],
 };*/
 
-// 渠道报备
+// 渠道费报备
 defineAgencyReport = {
   slither0: [{
     label: '收租标记',
@@ -5575,7 +5575,7 @@ defineAgencyReport = {
       keyName: 'house_id',
       keyType: '',
       type: 'text',
-      status: '',
+      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
     {

@@ -169,6 +169,7 @@
     },
     activated() {
       this.today = this.myUtils.startTime();
+      console.log(this.today);
       setInterval(_ => {
         this.today = this.myUtils.startTime();
       }, 1000);
