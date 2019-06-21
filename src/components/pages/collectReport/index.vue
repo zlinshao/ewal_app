@@ -333,8 +333,7 @@
     methods: {
       // 报备类型
       bulletin_types(type) {
-        console.log(type)
-        let bulletinData = this.$bulletinType(type.bulletin);
+        let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.finish_RWC);
         let data = [
           //不需要电子合同
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
@@ -362,7 +361,6 @@
         if (type === 'bulletin_rent_basic' || type === 'bulletin_booking_renting') {
           this.form.is_sign = '';
         }
-
         switch (type) {
           case 'bulletin_rent_basic':
             this.form.is_sign = '';
@@ -390,7 +388,6 @@
             // this.form.price = this.taskDetail.month_price[0].price;
             break;
         }
-
       },
       // touch 左右切换
       tapStart(event) {
@@ -1042,7 +1039,6 @@
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
-          let s = this.form;
           if (!data) {
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
@@ -1057,7 +1053,9 @@
                 }
               }
             } else {
-              // this.handlePreFill(this.taskDetail.content);
+              if (this.taskDetail.finish_RWC) {
+                this.handlePreFill(this.taskDetail.content);
+              }
             }
             let arr = [];//不需要清空字段
             if (type === 'bulletin_change') {
@@ -1074,7 +1072,7 @@
             this.childBulletin(res, 'draft');
             this.handlePreFill(res);
           }
-          if ((!this.isGetTake) && key !== 'RentBooking') {
+          if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
             this.electronicContract();
           }
         });
@@ -1196,8 +1194,8 @@
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'house_id':
-              this.form.address = res.address;
-              this.formatData.house_id = res.address;
+              this.form.address = res.address || '';
+              this.formatData.house_id = res.address || '';
               break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
@@ -1286,7 +1284,7 @@
         }
         if (res.album) {
           for (let pic of Object.keys(res.album)) {
-            if (res.album[pic].length) {
+            if (res.album[pic] && res.album[pic].length) {
               if (typeof res.album[pic][0] !== 'object') {
                 this.$httpZll.getUploadUrl(res.album[pic], 'close').then(res => {
                   this.album[pic] = res.data;
@@ -1301,6 +1299,7 @@
       },
       // 下拉框 匹配字典
       pickerDefaultValue(res, item) {
+        console.log(item)
         let objInt = [], date = [];
         for (let picker of this.drawForm) {
           if (picker.status === 'objInt' || picker.status === 'arr') {

@@ -558,14 +558,15 @@ approvalSearch = {
   toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentBooking'],
   toBeDoneRetainage: ['RentRetainage'],
   toBeDoneAgency: ['BulletinAgency'],
-  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking'],
+  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage'],
   approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
 };
 
 // 新增小区
-defineNewAddVillage = [{
+defineNewAddVillage = [
+  {
   label: '省',
   placeholder: '必填 请选择',
   readonly: 'readonly',
@@ -2561,6 +2562,29 @@ defineRentBWCReport = [
     keyName: 'rent_without_collect_address',
     keyType: '',
     type: 'text',
+    slot: '',
+  },
+];
+// 未收先租 通过
+defineRentRWCReport = [
+  {
+    label: '房屋地址',
+    disabled: 'disabled',
+    placeholder: '必填 请输入',
+    keyName: 'rent_without_collect_address',
+    keyType: '',
+    type: 'text',
+    slot: '',
+  },
+  {
+    label: '现房屋地址',
+    readonly: 'readonly',
+    placeholder: '必填 请选择',
+    keyName: 'house_id',
+    keyType: '',
+    type: 'text',
+    picker: 'searchHouse',
+    showForm: 'formatData', //picker 显示form 或 formatData
     slot: '',
   },
 ];

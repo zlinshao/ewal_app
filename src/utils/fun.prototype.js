@@ -328,7 +328,7 @@ export default {
       return search;
     };
     // 报备类型数据匹配
-    Vue.prototype.$bulletinType = function (type) {
+    Vue.prototype.$bulletinType = function (type, rwc) {
       let data = {}, title = [];
       switch (type) {
         case 'bulletin_collect_basic'://收房
@@ -362,8 +362,13 @@ export default {
           break;
         case 'bulletin_rent_RWC'://未收先租
           title = ['合同信息', '客户信息'];
-          data = this.jsonClone(defineBookingBWCReport);
-          data.slither0 = defineRentBWCReport.concat(data.slither0);
+          if (rwc === 'bulletin_rent_RWC') {
+            data = this.jsonClone(defineRentReport);
+            data.slither0 = defineRentRWCReport.concat(data.slither0);
+          } else {
+            data = this.jsonClone(defineBookingBWCReport);
+            data.slither0 = defineRentBWCReport.concat(data.slither0);
+          }
           break;
         case 'bulletin_change'://调租
           title = ['合同信息', '客户信息'];
@@ -703,6 +708,9 @@ export default {
       data.taskDefinitionKey = val.taskDefinitionKey;
       data.process_instance_id = val.process_id;
       data.root_process_instance_id = val.root_id;
+      if (val.finish_RWC) {
+        data.finish_RWC = val.finish_RWC;
+      }
       sessionStorage.setItem('task_detail', JSON.stringify(data));
     };
 
