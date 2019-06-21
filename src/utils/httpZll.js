@@ -209,15 +209,20 @@ class httpZll extends httpService {
   }
 
   // 开启一个流程
-  static postOpenOneProcess() {
+  static postOpenOneProcess(id) {
     return new Promise((resolve, reject) => {
+      let time = common.startTime('time');
       this.post(`${url_done}/runtime/process-instances`, {
         "message": "BookingMessage",
         "tenantId":"market",
         "variables":[
           {
             name: 'title',
-            value: '未收先租报备',
+            value: '未收先租 ' + time,
+          },
+          {
+            name: 'bulletin_staff_id',
+            value: id,
           },
           {
             name: 'bulletin_type',

@@ -6,7 +6,7 @@ class myUtils {
 
   // 获取当前时间
   // 时间
-  static startTime() {
+  static startTime(type) {
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
@@ -18,7 +18,11 @@ class myUtils {
     day = this.checkTime(day);
     m = this.checkTime(m);
     s = this.checkTime(s);
-    return year + '-' + month + '-' + day + ' ' + h + ":" + m + ":" + s;
+    if (type === 'time') {
+      return year + '-' + month + '-' + day + ' ' + h + ":" + m;
+    } else {
+      return year + '-' + month + '-' + day + ' ' + h + ":" + m + ":" + s;
+    }
   }
 
   static checkTime(i) {

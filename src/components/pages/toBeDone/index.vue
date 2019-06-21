@@ -250,7 +250,7 @@
       addRouterLink(url, item) {
         if (item.status) {
           sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
-          this.$httpZll.postOpenOneProcess().then(res => {
+          this.$httpZll.postOpenOneProcess(this.personal.staff_id).then(res => {
             let obj = {root_id: ''};
             obj.root_id = res.id;
             this.$getTaskList(obj).then(data => {
