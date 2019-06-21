@@ -370,7 +370,6 @@
             break;
         }
       },
-
       // 变更 签署 转交 代签 结束任务
       clickBtn(action = {}, item = {}) {
         let user_id = '';
