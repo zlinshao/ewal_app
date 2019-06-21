@@ -308,6 +308,7 @@
         approvalStaff: '',//审批人
         historyProList: [], //历史流程
         nowDate: '',
+        photoUploadStatus: true,
       }
     },
     created() {
@@ -677,6 +678,10 @@
       },
       // 评论
       onComment() {
+        if (!this.photoUploadStatus) {
+          this.$prompt('图片上传中...');
+          return;
+        }
         let content = this.commentForm.content;
         this.commentForm.content.message = content.message.replace(/\s+/g, '');
         if ((!content.message) && (!content.attachments.length)) {
@@ -707,6 +712,7 @@
       // 图片上传
       getImgData(val) {
         this.commentForm.content[val[0]] = val[1];
+        this.photoUploadStatus = val[2]
       },
       // 视频播放
       videoPlay(event = '') {
@@ -918,6 +924,7 @@
       },
       // 取消
       cancel(val) {
+        this.photoUploadStatus = true;
         switch (val) {
           case 'comment':
             this.commentForm.content = {
