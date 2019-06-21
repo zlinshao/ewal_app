@@ -248,6 +248,7 @@
 
         childPhoto: [],
         bulletinType: {},                   //报备类型
+        checkout: false,
       }
     },
     created() {
@@ -270,8 +271,8 @@
       // }
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.allDetail = JSON.parse(sessionStorage.deliveryReceipt || '{}');
-      let type = this.bulletinType.bulletin;
-      if (type === 'bulletin_checkout') {
+      this.checkout = this.bulletinType.bulletin === 'bulletin_checkout';
+      if (this.checkout) {
         this.mainTop = ['退租协议', '客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
         this.allReportNum = Object.keys(defineCheckoutReport).length;
       } else {
@@ -750,8 +751,7 @@
       // 重置
       resetting(val) {
         this.slither = 0;
-        let type = this.bulletinType;
-        if (type.bulletin === 'bulletin_checkout') {
+        if (this.checkout) {
           defineCheckoutReport['slither'] = handlerFreeDeliveryChange[val];
           this.drawSlither = this.jsonClone(defineCheckoutReport);
         } else {
