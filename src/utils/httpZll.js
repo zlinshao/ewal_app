@@ -227,6 +227,10 @@ class httpZll extends httpService {
           {
             name: 'bulletin_type',
             value: 'bulletin_rent_RWC'
+          },
+          {
+            name: 'new_RWC',
+            value: 'bulletin_rent_RWC'
           }
         ]
       }).then(res => {

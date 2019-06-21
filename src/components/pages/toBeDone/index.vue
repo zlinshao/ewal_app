@@ -15,7 +15,7 @@
       <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
         <li v-for="item in toBeDoneList">
           <div class="mainTitle">
-            <label>{{item.title}}</label>
+            <label>{{item.address || item.title}}</label>
             <p @click="clickBtn({action:'finishTask'},item)"><i></i></p>
           </div>
           <p class="statusBtn">
@@ -327,11 +327,17 @@
           case 'collectReport':
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
+            if (val.bulletin_type === 'bulletin_rent_RWC') {
+              bulletin = bulletinRouterStatus.bulletin_rent_RWC;
+              sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
+            }
+            console.log(val);
+            return;
+            if (val.new_RWC) {
+              this.routerLink(val.task_action);
+            }
             this.againTaskDetail(val).then(_ => {
-              if (val.bulletin_type === 'bulletin_rent_RWC') {
-                bulletin = bulletinRouterStatus.bulletin_rent_RWC;
-                sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
-              }
+              return;
               if (val.bm_detail_request_url) {
                 if (type === 'bulletin_retainage' || type === 'bulletin_agency' || val.bulletin_type === 'bulletin_rent_RWC') {
                   this.againDetailRequest(val);
@@ -353,9 +359,10 @@
                       bulletin = bulletinRouterStatus[val.bulletin_type];
                     }
                   }
+                  sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
+                } else {
+                  this.routerLink(val.task_action);
                 }
-                sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
-                this.routerLink(val.task_action);
               }
             });
             break;
@@ -558,8 +565,6 @@
             break;
         }
       },
-
-
     },
   }
 </script>

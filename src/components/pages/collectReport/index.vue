@@ -333,6 +333,7 @@
     methods: {
       // 报备类型
       bulletin_types(type) {
+        console.log(type)
         let bulletinData = this.$bulletinType(type.bulletin);
         let data = [
           //不需要电子合同
@@ -1056,7 +1057,7 @@
                 }
               }
             } else {
-              this.handlePreFill(this.taskDetail.content);
+              // this.handlePreFill(this.taskDetail.content);
             }
             let arr = [];//不需要清空字段
             if (type === 'bulletin_change') {
@@ -1150,7 +1151,7 @@
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'house_id':
-              this.formatData.house_id = res.address;
+              this.formatData.house_id = res.address || res.rent_without_collect_address;
               break;
             case 'community':
               this.formatData[item] = res[item].village_name;

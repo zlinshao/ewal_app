@@ -680,7 +680,6 @@ export default {
             } else {
               this.getBulletinDetailFun(res, val).then(item => {
                 content = item;
-                console.log(item);
                 let arr = ['property_fee', 'property_phone'];
                 if (content.add_data) {
                   for (let item of content.add_data) {
@@ -833,7 +832,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '';
+      data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;

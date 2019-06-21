@@ -657,10 +657,22 @@
           default:
             let postData = {};
             postData.action = 'complete';
-            postData.variables = [{
-              name: name,
-              value: action.action,
-            }];
+            console.log(name === 'pqjl_approved' && detail.bulletin_type === 'bulletin_rent_RWC' && action.action);
+            if (name === 'gkzx_approved' && detail.bulletin_type === 'bulletin_rent_RWC' && action.action) {
+              postData.variables = [{
+                name: name,
+                value: action.action,
+              }, {
+                name: 'finish_RWC',
+                value: 'bulletin_rent_RWC'
+              }];
+            } else {
+              postData.variables = [{
+                name: name,
+                value: action.action,
+              }];
+            }
+            console.log(postData);
             this.$httpZll.finishBeforeTask(detail.task_id, postData).then(res => {
               if (res) {
                 this.$prompt('审核成功！', 'success');
@@ -787,7 +799,6 @@
       },
       // 数据转换文本
       handleDetail(res) {
-        console.log(this.formatData);
         for (let item of Object.keys(res)) {
           switch (item) {
             case 'house_id'://房屋地址
