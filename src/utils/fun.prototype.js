@@ -220,6 +220,9 @@ export default {
       let value = [];//家电家具
       let show = {};
       for (let item of drawForm) {
+        if (item.icon === 'identity') {
+          formatData.identity = item.icon;
+        }
         if (item.moreArray) {
           form[item.keyName] = item.keyType;
           formatData[item.keyName] = this.jsonClone(item.keyType);

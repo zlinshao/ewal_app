@@ -1363,8 +1363,10 @@
         }
         this.changeHiddenAll = false;
         this.form.id = id;
-        if (!this.isGetTake) {
+        if (all.formatData.identity === 'identity') {
           this.form.signer = {};
+        }
+        if (!this.isGetTake) {
           this.form.contract_number = this.electronicContractNumber;
         }
         // this.form.account = '6225212583158743';
