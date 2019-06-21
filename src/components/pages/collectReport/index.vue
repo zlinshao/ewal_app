@@ -376,7 +376,7 @@
             this.formatData.house_id_rent = this.taskDetail.address;
             break;
           case'bulletin_special':  //特殊事项报备
-            if(JSON.stringify(this.taskDetail) !== '{}'){
+            if (JSON.stringify(this.taskDetail) !== '{}') {
               this.form.house_address = this.taskDetail.address;
               this.form.customer_name = this.taskDetail.customer_info[0].name;
               // this.form.month = this.taskDetail.month_price[0].period;
@@ -635,7 +635,7 @@
             //特殊事项
             if (this.bulletinType.bulletin !== 'bulletin_special') {
               this.searchHouseModule = true;
-            }else{
+            } else {
               this.specialSearchHouseFun();
             }
             break;
@@ -1283,7 +1283,7 @@
               this.$changeHandle(res, item, [], this.drawSlither, this.formatData);
               break;
             default:
-              this.pickerDefaultValue(res, item);
+              this.pickerDefaultValue(this.form, item);
               break;
           }
         }
@@ -1314,7 +1314,10 @@
           }
         }
         if (objInt.includes(item)) {
-          let num = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '');
+          let num = '';
+          if (res[item] || res[item] === 0) {
+            num = Number(res[item]);
+          }
           this.formatData[item] = dicties[item][num];
         }
         if (date.includes(item)) {
@@ -1398,21 +1401,21 @@
       },
       //特殊事项报备:选择房屋地址，处理合同类型
       specialSearchHouseFun() {
-          if (this.form.collect_or_rent === '') {
-            this.$prompt('请选择收租类型');
-            return;
-          }
-          switch (this.form.collect_or_rent) {  //0-收房，1-租房
-            case '0':
-              this.searchConfig.contract_type = 1;
-              break;
-            case '1':
-              this.searchConfig.contract_type = 2;
-              break;
-          }
-          //重新赋值，房屋搜所组件才能监测到searchConfig值的变化
-          this.searchConfig = this.jsonClone(this.searchConfig);
-          this.searchHouseModule = true;
+        if (this.form.collect_or_rent === '') {
+          this.$prompt('请选择收租类型');
+          return;
+        }
+        switch (this.form.collect_or_rent) {  //0-收房，1-租房
+          case '0':
+            this.searchConfig.contract_type = 1;
+            break;
+          case '1':
+            this.searchConfig.contract_type = 2;
+            break;
+        }
+        //重新赋值，房屋搜所组件才能监测到searchConfig值的变化
+        this.searchConfig = this.jsonClone(this.searchConfig);
+        this.searchHouseModule = true;
       },
     },
   }
