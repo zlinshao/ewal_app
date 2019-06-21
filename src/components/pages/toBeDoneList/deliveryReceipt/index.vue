@@ -4,9 +4,7 @@
       <div>
         <p @click="slither = 0" :class="{'choose': slither !== Object.keys(drawSlither).length - 1}">物品交接</p>
         <p @click="slither = Object.keys(drawSlither).length - 1"
-           :class="{'choose': slither === Object.keys(drawSlither).length - 1}">
-          费用交接
-        </p>
+           :class="{'choose': slither === Object.keys(drawSlither).length - 1}">费用交接</p>
         <h2>{{mainTop[slither]}}</h2>
       </div>
       <h1 @click="previewDelivery">
@@ -270,7 +268,9 @@
       //   });
       // }
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
-      this.allDetail = JSON.parse(sessionStorage.deliveryReceipt || '{}');
+      this.allDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      this.slither = 0;
+      this.drawSlither = {};
       this.checkout = this.bulletinType.bulletin === 'bulletin_checkout';
       if (this.checkout) {
         this.mainTop = ['退租协议', '客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
@@ -750,7 +750,6 @@
       },
       // 重置
       resetting(val) {
-        this.slither = 0;
         if (this.checkout) {
           defineCheckoutReport['slither'] = handlerFreeDeliveryChange[val];
           this.drawSlither = this.jsonClone(defineCheckoutReport);

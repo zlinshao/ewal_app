@@ -327,19 +327,19 @@
           case 'collectReport':
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
-            if (val.bulletin_type === 'bulletin_rent_RWC') {
-              bulletin = bulletinRouterStatus.bulletin_rent_RWC;
-              sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
-              this.routerLink(val.task_action);
-            } else {
-              this.againTaskDetail(val).then(_ => {
-                if (val.bm_detail_request_url) {
-                  if (type === 'bulletin_retainage' || type === 'bulletin_agency') {
-                    this.againDetailRequest(val);
-                  } else {
-                    this.againDetailRequest(val, 'again');
-                  }
+            this.againTaskDetail(val).then(_ => {
+              if (val.bulletin_type === 'bulletin_rent_RWC') {
+                bulletin = bulletinRouterStatus.bulletin_rent_RWC;
+                sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
+              }
+              if (val.bm_detail_request_url) {
+                if (type === 'bulletin_retainage' || type === 'bulletin_agency' || val.bulletin_type === 'bulletin_rent_RWC') {
+                  this.againDetailRequest(val);
                 } else {
+                  this.againDetailRequest(val, 'again');
+                }
+              } else {
+                if (val.bulletin_type !== 'bulletin_rent_RWC') {
                   if (val.tk_result) {
                     bulletin = val.tk_result === 'bulletin' ? bulletinRouterStatus.bulletin_rent_basic : bulletinRouterStatus.bulletin_booking_renting;
                     result = val.tk_result === 'bulletin' ? '1' : '0';
@@ -347,18 +347,17 @@
                       bulletin = bulletinRouterStatus.bulletin_rent_basic;
                       result = '1';
                     }
-                    sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                     this.routerLink(val.task_action, {result: result});
                   } else {
                     if (val.bulletin_type) {
                       bulletin = bulletinRouterStatus[val.bulletin_type];
-                      sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                     }
-                    this.routerLink(val.task_action);
                   }
                 }
-              });
-            }
+                sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
+                this.routerLink(val.task_action);
+              }
+            });
             break;
         }
       },
@@ -493,6 +492,10 @@
             obj.type = 'MarketRent';
             break;
           case "bulletin_agency":
+            obj.status = 'toBeDoneAgency';
+            obj.type = 'MarketCollect,MarketRent';
+            break;
+          case "bulletin_checkout":
             obj.status = 'toBeDoneAgency';
             obj.type = 'MarketCollect,MarketRent';
             break;

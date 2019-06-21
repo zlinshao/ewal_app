@@ -340,7 +340,6 @@
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
         ];
-
         this.isGetTake = data[0].includes(type.bulletin);
         this.noTaskId = data[1].includes(type.bulletin);
         this.bulletinTitle = bulletinData.title;
@@ -1056,6 +1055,8 @@
                   this.childBulletin(this.taskDetail.content);
                 }
               }
+            } else {
+              this.handlePreFill(this.taskDetail.content);
             }
             let arr = [];//不需要清空字段
             if (type === 'bulletin_change') {
