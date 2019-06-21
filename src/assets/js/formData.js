@@ -3796,7 +3796,7 @@ defineNewRentReport = [
 ];
 
 // 续租
-defineContinueRent = {
+defineContinueRent ={
   // 合同信息
   slither0: [
     {
@@ -5713,7 +5713,8 @@ defineAgencyReport = {
 
 // 房屋尾款报备
 defineRetainageReport = {
-  slither0: [{
+  slither0: [
+    {
     label: '房屋地址',
     placeholder: '已禁用',
     disabled: 'disabled',
@@ -6606,6 +6607,7 @@ defineContinueCollect = {
     },
     {
       label: '合同编号',
+      disabled: 'disabled',
       placeholder: '必填 请填写',
       keyName: 'contract_number',
       keyType: 'LJSHE',
@@ -6649,6 +6651,15 @@ defineContinueCollect = {
       ],
     },
     {
+      label: '空置天数',
+      placeholder: '必填 请输入',
+      keyName: 'vacancy',
+      keyType: '',
+      type: 'number',
+      status: '',
+      slot: '',
+    },
+    {
       label: '合同开始时间',
       placeholder: '必填 请选择',
       readonly: 'readonly',
@@ -6671,37 +6682,16 @@ defineContinueCollect = {
       slot: '',
     },
     {
-      label: '第一次支付时间',
+      label: '空置期结束时间',
       placeholder: '必填 请选择',
       readonly: 'readonly',
-      keyName: 'pay_first_date',
+      keyName: 'end_date_vacant',
       keyType: '',
       type: 'text',
       picker: 'date',
       showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
-    {
-      label: '第二次支付时间',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'pay_second_date',
-      keyType: '',
-      type: 'text',
-      picker: 'date',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    // {
-    //   label: '月单价',
-    //   placeholder: '已禁用',
-    //   disabled: 'disabled',
-    //   keyName: 'price',
-    //   keyType: '',
-    //   type: 'textarea',
-    //   showForm: 'formatData', //picker 显示form 或 formatData
-    //   slot: '',
-    // },
     {
       label: '押',
       placeholder: '必填 请选择',
@@ -6723,30 +6713,30 @@ defineContinueCollect = {
       changeBtn: '付款变化',
       children: [
         [
-          // {
-          //     label: '开始时间',
-          //     placeholder: '已禁用',
-          //     disabled: 'disabled',
-          //     keyName: 'begin_date',
-          //     keyType: '',
-          //     type: 'text',
-          //     status: '',
-          //     picker: '',
-          //     length: 1,
-          //     slot: '',
-          // },
-          // {
-          //     label: '结束时间',
-          //     placeholder: '已禁用',
-          //     disabled: 'disabled',
-          //     keyName: 'end_date',
-          //     keyType: '',
-          //     type: 'text',
-          //     status: '',
-          //     picker: '',
-          //     length: 1,
-          //     slot: '',
-          // },
+          {
+            label: '开始时间',
+            placeholder: '已禁用',
+            disabled: 'disabled',
+            keyName: 'begin_date',
+            keyType: '',
+            type: 'text',
+            status: '',
+            picker: '',
+            length: 1,
+            slot: '',
+          },
+          {
+            label: '结束时间',
+            placeholder: '已禁用',
+            disabled: 'disabled',
+            keyName: 'end_date',
+            keyType: '',
+            type: 'text',
+            status: '',
+            picker: '',
+            length: 1,
+            slot: '',
+          },
           {
             label: '变化周期',
             placeholder: '必填 请填写',
@@ -6758,26 +6748,17 @@ defineContinueCollect = {
           },
           {
             label: '付款方式',
-            placeholder: '必填 请输入',
+            placeholder: '必填 请选择',
+            readonly: 'readonly',
             keyName: 'pay_way',
             keyType: '',
-            type: 'number',
+            type: 'text',
+            status: 'objInt',
+            showForm: 'formatData', //picker 显示form 或 formatData
+            picker: 'picker',
             changeBtn: '付款变化',
             slot: '',
           },
-          // {
-          //   label: '付款方式',
-          //   placeholder: '必填 请选择',
-          //   readonly: 'readonly',
-          //   keyName: 'pay_way',
-          //   keyType: '',
-          //   type: 'text',
-          //   status: 'objInt',
-          //   showForm: 'formatData',//picker 显示form 或 formatData
-          //   picker: 'picker',
-          //   changeBtn: '付款变化',
-          //   slot: '',
-          // },
           {
             label: '月单价',
             placeholder: '必填 月单价',
@@ -6802,14 +6783,104 @@ defineContinueCollect = {
       slot: '',
     },
     {
-      label: '违约金',
-      placeholder: '已禁用',
-      disabled: 'disabled',
-      keyName: 'penalty',
+      label: '第一次支付时间',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'pay_first_date',
       keyType: '',
       type: 'text',
-      status: '',
+      picker: 'date',
+      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
+    },
+    {
+      label: '第二次支付时间',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'pay_second_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '可否装修',
+      readonly: 'readonly',
+      placeholder: '必填 请选择',
+      keyName: 'can_decorate',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'pickerCon',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '可否添加物品',
+      readonly: 'readonly',
+      placeholder: '必填 请选择',
+      keyName: 'can_add_goods',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'pickerCon',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '是否渠道',
+      readonly: 'readonly',
+      placeholder: '必填 请选择',
+      keyName: 'is_agency',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      controlShow: '1',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+      showList: [{
+        label: '渠道名称',
+        placeholder: '必填 请输入',
+        keyName: 'agency_name',
+        keyType: '',
+        hidden: true,
+        type: 'text',
+        status: '',
+        slot: '',
+      },
+        {
+          label: '渠道价格',
+          placeholder: '必填 请输入',
+          keyName: 'agency_price',
+          keyType: '',
+          hidden: true,
+          type: 'number',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '渠道联系人',
+          placeholder: '必填 请输入',
+          keyName: 'agency_user_name',
+          keyType: '',
+          hidden: true,
+          type: 'text',
+          status: '',
+          slot: '',
+        },
+        {
+          label: '渠道手机',
+          placeholder: '必填 请输入',
+          keyName: 'agency_phone',
+          keyType: '',
+          hidden: true,
+          type: 'number',
+          status: '',
+          slot: '',
+        },
+      ]
     },
     {
       label: '非房东费用',
@@ -6849,30 +6920,6 @@ defineContinueCollect = {
       ],
     },
     {
-      label: '可否装修',
-      readonly: 'readonly',
-      placeholder: '必填 请选择',
-      keyName: 'can_decorate',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      picker: 'pickerCon',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '可否添加物品',
-      readonly: 'readonly',
-      placeholder: '必填 请选择',
-      keyName: 'can_add_goods',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      picker: 'pickerCon',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
       label: '备注条款',
       placeholder: '请选择',
       keyName: 'remark_terms',
@@ -6903,16 +6950,28 @@ defineContinueCollect = {
   // 客户信息
   slither1: [
     {
-      label: '客户姓名',
-      placeholder: '必填 请输入',
-      keyName: 'customer_name',
+      label: '签约人身份',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'signatory_identity',
       keyType: '',
       type: 'text',
-      button: '身份识别',
-      icon: 'identity',
-      status: '',
+      status: 'objInt',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      picker: 'picker',
       slot: '',
     },
+    {
+    label: '客户姓名',
+    placeholder: '必填 请输入',
+    keyName: 'customer_name',
+    keyType: '',
+    type: 'text',
+    button: '身份识别',
+    icon: 'identity',
+    status: '',
+    slot: '',
+  },
     {
       label: '性别',
       placeholder: '必填 请选择',
@@ -7013,6 +7072,86 @@ defineContinueCollect = {
       type: 'text',
       status: '',
       slot: '',
+    },
+    {
+      keyName: undefined,
+      status: 'subsidiary_customer',
+      picker: 'changeHiddenAll',
+      changeBtn: '+增加附属租客',
+    },
+    {
+      keyName: 'subsidiary_customer',
+      picker: 'changeHiddenAll',
+      label: '附属租客',
+      changeBtn: '增加附属租客',
+      keyType: [],
+      children: [
+        [{
+          label: '客户姓名',
+          placeholder: '必填 请输入',
+          keyName: 'customer_name',
+          keyType: '',
+          type: 'text',
+          button: '身份识别',
+          icon: 'identity',
+          slot: '',
+        },
+          {
+            label: '性别',
+            placeholder: '必填 请选择',
+            readonly: 'readonly',
+            keyName: 'customer_sex',
+            keyType: '',
+            type: 'text',
+            status: 'objInt',
+            showForm: 'formatData', //picker 显示form 或 formatData
+            picker: 'picker',
+            slot: '',
+          },
+          {
+            label: '证件类型',
+            placeholder: '必填 请选择',
+            readonly: 'readonly',
+            keyName: 'card_type',
+            keyType: '',
+            type: 'text',
+            status: 'objInt',
+            showForm: 'formatData', //picker 显示form 或 formatData
+            picker: 'picker',
+            slot: '',
+          },
+          {
+            label: '证件号',
+            placeholder: '必填 请输入',
+            keyName: 'card_id',
+            keyType: '',
+            type: 'text',
+            status: '',
+            slot: '',
+          },
+          {
+            label: '联系方式',
+            placeholder: '必填 请选择',
+            readonly: 'readonly',
+            keyName: 'contact_way',
+            keyType: '',
+            type: 'text',
+            status: 'objInt',
+            showForm: 'formatData', //picker 显示form 或 formatData
+            picker: 'picker',
+            slot: '',
+          },
+          {
+            label: '联系电话',
+            placeholder: '必填 请输入',
+            keyName: 'contact_phone',
+            keyType: '',
+            type: 'text',
+            status: '',
+            slot: '',
+          },
+        ],
+      ],
     },
     {
       label: '上传',

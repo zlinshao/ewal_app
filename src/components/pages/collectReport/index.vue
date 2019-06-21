@@ -378,14 +378,15 @@
             this.formatData.house_id_rent = this.taskDetail.address;
             break;
           case'bulletin_special':  //特殊事项报备
-            this.form.house_address = this.taskDetail.address;
-            this.form.customer_name = this.taskDetail.customer_info[0].name;
-
-            // this.form.month = this.taskDetail.month_price[0].period;
-            this.form.price = [];
-            for (let item of this.taskDetail.month_price) {
-              let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
-              this.form.price.push(str);
+            if(JSON.stringify(this.taskDetail) !== '{}'){
+              this.form.house_address = this.taskDetail.address;
+              this.form.customer_name = this.taskDetail.customer_info[0].name;
+              // this.form.month = this.taskDetail.month_price[0].period;
+              this.form.price = [];
+              for (let item of this.taskDetail.month_price) {
+                let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
+                this.form.price.push(str);
+              }
             }
             // this.form.price = this.taskDetail.month_price[0].price;
             break;
@@ -632,11 +633,14 @@
             this.chooseTime(val, value, num, parentKey);
             break;
           case 'searchHouse':
-            this.searchHouseModule = true;
             this.searchConfig = val;
             this.searchConfig.bulletinType = this.bulletinType;
             //特殊事项
-            this.specialSearchHouseFun();
+            if (this.bulletinType.bulletin !== 'bulletin_special') {
+              this.searchHouseModule = true;
+            }else{
+              this.specialSearchHouseFun();
+            }
             break;
           case 'noPicker':
             this.noPickerModule = true;
@@ -1046,7 +1050,8 @@
           if (!data) {
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
-                if (type === 'bulletin_collect_continued') {
+                //续收、续租预填数据
+                if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
                   this.handlePreFill(this.taskDetail.content);
                 } else {
                   this.getPunchClockData();
@@ -1151,7 +1156,7 @@
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'house_id':
-              this.formatData.house_id = res.address || res.rent_without_collect_address;
+              this.formatData.house_id = res.address;
               break;
             case 'community':
               this.formatData[item] = res[item].village_name;
@@ -1395,7 +1400,6 @@
       },
       //特殊事项报备:选择房屋地址，处理合同类型
       specialSearchHouseFun() {
-        if (this.bulletinType.bulletin === 'bulletin_special') {
           if (this.form.collect_or_rent === '') {
             this.$prompt('请选择收租类型');
             return;
@@ -1410,10 +1414,8 @@
           }
           //重新赋值，房屋搜所组件才能监测到searchConfig值的变化
           this.searchConfig = this.jsonClone(this.searchConfig);
-        }
+          this.searchHouseModule = true;
       },
-
-
     },
   }
 </script>
