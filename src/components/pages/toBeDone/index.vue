@@ -15,7 +15,7 @@
       <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
         <li v-for="item in toBeDoneList">
           <div class="mainTitle">
-            <label>{{item.address || item.title}}</label>
+            <label>{{item.title}}</label>
             <p @click="clickBtn({action:'finishTask'},item)"><i></i></p>
           </div>
           <p class="statusBtn">
@@ -331,13 +331,12 @@
               bulletin = bulletinRouterStatus.bulletin_rent_RWC;
               sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
             }
-            console.log(val);
-            // return;
-            if (val.new_RWC) {
-              this.routerLink(val.task_action);
+            if (!val.finish_RWC) {
+              if (val.new_RWC) {
+                this.routerLink(val.task_action);
+              }
             }
             this.againTaskDetail(val).then(_ => {
-              return;
               if (val.bm_detail_request_url) {
                 if (type === 'bulletin_retainage' || type === 'bulletin_agency' || val.bulletin_type === 'bulletin_rent_RWC') {
                   this.againDetailRequest(val);
@@ -345,7 +344,7 @@
                   this.againDetailRequest(val, 'again');
                 }
               } else {
-                if (val.bulletin_type !== 'bulletin_rent_RWC') {
+                if (val.finish_RWC !== 'bulletin_rent_RWC') {
                   if (val.tk_result) {
                     bulletin = val.tk_result === 'bulletin' ? bulletinRouterStatus.bulletin_rent_basic : bulletinRouterStatus.bulletin_booking_renting;
                     result = val.tk_result === 'bulletin' ? '1' : '0';
@@ -357,7 +356,10 @@
                   } else {
                     if (val.bulletin_type) {
                       bulletin = bulletinRouterStatus[val.bulletin_type];
+                    } else {
+                      bulletin = bulletinRouterStatus.bulletin_collect_basic;
                     }
+                    this.routerLink(val.task_action);
                   }
                   sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                 } else {
@@ -368,7 +370,6 @@
             break;
         }
       },
-
       // 变更 签署 转交 代签 结束任务
       clickBtn(action = {}, item = {}) {
         let user_id = '';

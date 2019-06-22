@@ -558,25 +558,26 @@ approvalSearch = {
   toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentBooking'],
   toBeDoneRetainage: ['RentRetainage'],
   toBeDoneAgency: ['BulletinAgency'],
-  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking'],
-  approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate','InputBulletinData'],
+  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking', 'Market-RentNotHouseBooking'],
+  approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
 };
 
 // 新增小区
-defineNewAddVillage = [{
-  label: '省',
-  placeholder: '必填 请选择',
-  readonly: 'readonly',
-  keyName: 'province',
-  keyType: '',
-  type: 'text',
-  status: 'obj',
-  showForm: 'formatData', //picker 显示form 或 formatData
-  picker: 'picker',
-  slot: '',
-},
+defineNewAddVillage = [
+  {
+    label: '省',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'province',
+    keyType: '',
+    type: 'text',
+    status: 'obj',
+    showForm: 'formatData', //picker 显示form 或 formatData
+    picker: 'picker',
+    slot: '',
+  },
   {
     label: '市',
     placeholder: '必填 请选择',
@@ -2564,6 +2565,29 @@ defineRentBWCReport = [
     slot: '',
   },
 ];
+// 未收先租 通过
+defineRentRWCReport = [
+  {
+    label: '房屋地址',
+    disabled: 'disabled',
+    placeholder: '必填 请输入',
+    keyName: 'rent_without_collect_address',
+    keyType: '',
+    type: 'text',
+    slot: '',
+  },
+  {
+    label: '现房屋地址',
+    readonly: 'readonly',
+    placeholder: '必填 请选择',
+    keyName: 'house_id',
+    keyType: '',
+    type: 'text',
+    picker: 'searchHouse',
+    showForm: 'formatData', //picker 显示form 或 formatData
+    slot: '',
+  },
+];
 // 租房预定
 defineRentBookingReport = [
   {
@@ -3796,7 +3820,7 @@ defineNewRentReport = [
 ];
 
 // 续租
-defineContinueRent ={
+defineContinueRent = {
   // 合同信息
   slither0: [
     {
@@ -6653,9 +6677,10 @@ defineContinueCollect = {
     },
     {
       label: '空置天数',
-      placeholder: '必填 请输入',
+      placeholder: '已禁用',
+      disabled: 'disabled',
       keyName: 'vacancy',
-      keyType: '',
+      keyType: 7,
       type: 'number',
       status: '',
       slot: '',
