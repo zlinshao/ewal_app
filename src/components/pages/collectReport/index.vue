@@ -1052,6 +1052,10 @@
                   this.handlePreFill(this.taskDetail.content);
                   arr = ['address', 'house_id', 'contract_id', 'contract_number'];
                   this.disabledDefaultValue('slither0', arr);
+                } else if (type === 'bulletin_change') {
+                  this.handlePreFill(this.taskDetail.content);
+                  arr = ['address', 'house_id', 'contract_id', 'contract_number', 'house_id_rent'];
+                  this.disabledDefaultValue('slither0', arr);
                 } else {
                   this.getPunchClockData();
                 }
@@ -1065,10 +1069,7 @@
                 this.handlePreFill(this.taskDetail.content);
               }
             }
-            if (type === 'bulletin_change') {
-              arr = ['address', 'house_id', 'contract_id', 'contract_number', 'house_id_rent'];
-              this.disabledDefaultValue('slither0', arr);
-            }
+
           } else {
             let res = data.data;
             this.childBulletin(res, 'draft');
@@ -1217,7 +1218,8 @@
               break;
             case 'signer'://认证
               if (!status) {
-                if (res[item].fadada_user_id && !Array.isArray(res[item])) {
+                console.log(res[item]);
+                if (res[item] && res[item].fadada_user_id && !Array.isArray(res[item])) {
                   this.certified();
                 }
               }
