@@ -741,7 +741,15 @@
       },
       // 获取电子合同编号
       electronicContract() {
-        let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
+        let arrSF=['bulletin_collect_basic','bulletin_collect_continued'];  //收房
+        // let arrZF=['bulletin_rent_continued'];  //租房
+        let version='';
+        // let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
+        if(arrSF.includes(this.bulletinType.bulletin)){
+           version = '1.1';
+        }else {
+          version = '1.2';
+        }
         let data = {
           city_id: this.personal.city_id,
           version: version,
