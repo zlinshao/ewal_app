@@ -396,6 +396,9 @@
             }
             // this.form.price = this.taskDetail.month_price[0].price;
             break;
+          case 'bulletin_rent_continued':
+            this.form.is_sign = 1;
+            break;
         }
       },
       // touch 左右切换

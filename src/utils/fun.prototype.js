@@ -735,7 +735,7 @@ export default {
         if (isFlag) {
           let contract_id = res.data.content.contract_info.id;
           // contract_id = 72935; //续租
-          contract_id = 43901; //续收
+          // contract_id = 43901; //续收
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
               let contentInfo = result.content.draft_content;
