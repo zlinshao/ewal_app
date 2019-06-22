@@ -451,18 +451,22 @@ export default {
             if (child) {
               child[item] = this.jsonClone(list.children[0]);
             }
-            for (let i = 1; i < res[item].length; i++) {
-              list.children.push(list.children[0]);
+            if(res[item]){
+              for (let i = 1; i < res[item].length; i++) {
+                list.children.push(list.children[0]);
+              }
             }
           }
         }
       }
-      data[item] = this.jsonClone(res[item]);
-      res[item].forEach((key, idx) => {
-        for (let key of val) {
-          data[item][idx][key] = dicties[key][res[item][idx][key]];
-        }
-      });
+      if(res[item]){
+        data[item] = this.jsonClone(res[item]);
+        res[item].forEach((key, idx) => {
+            for (let key of val) {
+              data[item][idx][key] = dicties[key][res[item][idx][key]];
+            }
+        });
+      }
     };
     // 下拉框 显示 重置
     Vue.prototype.$closePicker = function () {
@@ -729,7 +733,7 @@ export default {
         if (isFlag) {
           let contract_id = res.data.content.contract_info.id;
           contract_id = 72935; //续租
-          // contract_id=43901; //续收
+          // contract_id = 43901; //续收
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
               let contentInfo = result.content.draft_content;
@@ -738,16 +742,19 @@ export default {
                   id_card_photo: [],
                   bank_card_photo: [],
                 };
-                contentInfo.album.id_card_photo = result.content.draft_content.id_card_photo; //证件照片
-                contentInfo.album.bank_card_photo = result.content.draft_content.bank_card_photo;  //银行卡照片
+                contentInfo.album.id_card_photo = contentInfo.id_card_photo; //证件照片
+                contentInfo.album.bank_card_photo = contentInfo.bank_card_photo;  //银行卡照片
               } else if (val.bulletin_type === 'bulletin_rent_continued') { //续租图片处理
                 contentInfo.album = {
                   id_card_photo: [],
                   photo: [],
                 };
-                contentInfo.album.id_card_photo = result.content.draft_content.id_card_photo; //证件照片
-                contentInfo.album.photo = result.content.draft_content.photo;  //凭证截图
+                contentInfo.album.id_card_photo = contentInfo.id_card_photo; //证件照片
+                contentInfo.album.photo = contentInfo.photo;  //凭证截图
               }
+              contentInfo.address = result.house_address;
+              contentInfo.house_id = result.house_id;
+              contentInfo.contract_id = result.contract_id;
               resolve(contentInfo);
             }
           });
@@ -856,7 +863,8 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      data.staff_id = '';
+      // data.staff_id = '100016';
+      // data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
@@ -867,7 +875,7 @@ export default {
             for (let city of org.city) {
               // cityObj.code = city.city_id;
               // cityObj.name = city.city_name;
-              cityObj.code = 120000;
+              cityObj.code = 320100;
               cityObj.name = '天津市';
               cityArr.push(cityObj);
               // province[city.province.province_id] = city.province.province_name;
