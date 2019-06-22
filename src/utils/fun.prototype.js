@@ -390,6 +390,8 @@ export default {
           data = this.jsonClone(defineRetainageReport);
           break;
         case 'bulletin_special'://特殊
+        case 'bulletin_special_rent':
+        case 'bulletin_special_collect':
           title = ['特殊事项报备'];
           data = this.jsonClone(defineSpecialReport);
           break;

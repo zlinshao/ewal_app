@@ -794,7 +794,7 @@
             this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
             let content = {};
-            if (res.data.content.bulletin_content) {
+            if (res.data.content.bulletin_content && typeof(res.data.content.bulletin_content) === 'object'  ) {
               content = JSON.parse(res.data.content.bulletin_content || '{}');
             } else {
               content = res.data.content;
