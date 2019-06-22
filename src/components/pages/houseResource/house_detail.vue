@@ -158,14 +158,22 @@
         village_list: [], //同小区房源
 
         house_config: [//房屋配置
-          {id: 1,key: 'house_config_refrigerator',label: '冰箱',val: 0},
+          /*{id: 1,key: 'house_config_refrigerator',label: '冰箱',val: 0},
           {id: 2,key: 'house_config_tv',label: '电视',val: 0},
           {id: 3,key: 'house_config_airc',label: '空凋',val: 0},
           {id: 4,key: 'house_config_gas',label: '燃气',val: 0},
           {id: 5,key: 'house_config_heater',label: '热水器',val: 0},
           {id: 6,key: 'house_config_microwave',label: '微波炉',val: 0},
           {id: 7,key: 'house_config_washing',label: '洗衣机',val: 0},
-          {id: 8,key: 'house_config_hood',label: '油烟机',val: 0},
+          {id: 8,key: 'house_config_hood',label: '油烟机',val: 0},*/
+          {id: 1,key: 'fridge',label: '冰箱',val: 0},
+          {id: 2,key: 'television',label: '电视',val: 0},
+          {id: 3,key: 'air_condition',label: '空调',val: 0},
+          {id: 4,key: 'gas_stove',label: '燃气',val: 0},
+          {id: 5,key: 'water_heater',label: '热水器',val: 0},
+          {id: 6,key: 'microwave',label: '微波炉',val: 0},
+          {id: 7,key: 'wash_machine',label: '洗衣机',val: 0},
+          {id: 8,key: 'hood',label: '油烟机',val: 0},
         ]
       }
     },
@@ -240,9 +248,13 @@
           if (res.code === 200) {
             this.detail = res.data;
             this.village_list = res.data.village_data||[];
-            if(res.data.handover_data && res.data.handover_data.house_config) {//房屋配置
-              _.forEach(res.data.handover_data.house_config,(val,key)=> {
-                _.find(this.house_config,{key:key}).val = val;
+            //给房屋配置赋值
+            if(res.data.house_detail && res.data.house_detail.house_state) {//房屋配置
+              let house_config_keys = _.map(this.house_config,'key');
+              _.forEach(res.data.house_detail.house_state.goods_info,(val,key)=> {
+                if(_.includes(house_config_keys,key)) {
+                  _.find(this.house_config,{key:key}).val = val;
+                }
               });
             }else {
               _(this.house_config).forEach((o)=> {

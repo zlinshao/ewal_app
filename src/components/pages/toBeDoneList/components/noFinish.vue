@@ -2,12 +2,10 @@
   <div id="polishing">
     <van-popup v-model="popupModule" overlay-class="overlay-color" position="right" :overlay="true" class="popupModule">
       <div class="moduleTop">
-        <h1>
-          {{taskDefinitionKey[allDetail.taskDefinitionKey]}}
-        </h1>
+        <h1>{{taskDefinitionKey[allDetail.taskDefinitionKey]}}</h1>
         <h2>
           <span class="numberFont">50<b>%</b></span>
-          <i style="height: 04%;"></i>
+          <i style="height: 50%;"></i>
         </h2>
       </div>
       <!--转交-->

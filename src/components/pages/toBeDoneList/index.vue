@@ -276,8 +276,6 @@
         },
         taskCompleteBefore: '',
         taskCompleteAfter: ''
-
-
       }
     },
     created() {
@@ -405,8 +403,13 @@
                 this.noModuleDetail = val;
                 break;
               case 'InputHandoverOrder'://交接单
-                sessionStorage.setItem('deliveryReceipt', JSON.stringify(val));
-                this.routerLink('/deliveryReceipt', {task_id: val.task_id});
+                sessionStorage.setItem('bulletin_type', '{}');
+                let data = {};
+                data.ewal_contract = val.ewal_contract;
+                data.task_id = val.task_id;
+                data.bulletin_type = val.bulletin_type;
+                sessionStorage.setItem('task_detail', JSON.stringify(data));
+                this.routerLink('/deliveryReceipt');
                 break;
             }
             break;

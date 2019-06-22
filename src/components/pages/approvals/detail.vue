@@ -320,6 +320,7 @@
       setInterval(_ => {
         this.nowDate = this.myUtils.startTime();
       }, 1000);
+      this.photoUploadStatus = true;
       this.commentForm.author = this.personal.staff_id;
       let top = this.$refs.top.offsetHeight;
       this.mainHeight = this.mainListHeight(top);
@@ -658,10 +659,22 @@
           default:
             let postData = {};
             postData.action = 'complete';
-            postData.variables = [{
-              name: name,
-              value: action.action,
-            }];
+            console.log(name === 'pqjl_approved' && detail.bulletin_type === 'bulletin_rent_RWC' && action.action);
+            if (name === 'gkzx_approved' && detail.bulletin_type === 'bulletin_rent_RWC' && action.action) {
+              postData.variables = [{
+                name: name,
+                value: action.action,
+              }, {
+                name: 'finish_RWC',
+                value: 'bulletin_rent_RWC'
+              }];
+            } else {
+              postData.variables = [{
+                name: name,
+                value: action.action,
+              }];
+            }
+            console.log(postData);
             this.$httpZll.finishBeforeTask(detail.task_id, postData).then(res => {
               if (res) {
                 this.$prompt('审核成功！', 'success');
@@ -712,7 +725,7 @@
       // 图片上传
       getImgData(val) {
         this.commentForm.content[val[0]] = val[1];
-        this.photoUploadStatus = val[2]
+        this.photoUploadStatus = val[2];
       },
       // 视频播放
       videoPlay(event = '') {
@@ -781,7 +794,7 @@
             this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
             let content = {};
-            if (res.data.content.bulletin_content) {
+            if (res.data.content.bulletin_content && typeof(res.data.content.bulletin_content) === 'object'  ) {
               content = JSON.parse(res.data.content.bulletin_content || '{}');
             } else {
               content = res.data.content;
@@ -793,11 +806,13 @@
       },
       // 数据转换文本
       handleDetail(res) {
-        console.log(this.formatData);
         for (let item of Object.keys(res)) {
           switch (item) {
             case 'house_id'://房屋地址
               this.formatData[item] = res.address;
+              break;
+            case 'house_id_rent':
+              this.formatData[item] = res.old_address;
               break;
             case 'house_address'://房屋地址
               this.formatData[item] = res[item];

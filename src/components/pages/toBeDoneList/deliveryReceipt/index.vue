@@ -2,8 +2,9 @@
   <div id="deliveryReceipt" :style="this.mainListHeight()">
     <div class="top" ref="top">
       <div>
-        <p @click="slither = 0" :class="{'choose': slither !== 4}">物品交接</p>
-        <p @click="slither = 4" :class="{'choose': slither === 4}">费用交接</p>
+        <p @click="slither = 0" :class="{'choose': slither !== Object.keys(drawSlither).length - 1}">物品交接</p>
+        <p @click="slither = Object.keys(drawSlither).length - 1"
+           :class="{'choose': slither === Object.keys(drawSlither).length - 1}">费用交接</p>
         <h2>{{mainTop[slither]}}</h2>
       </div>
       <h1 @click="previewDelivery">
@@ -217,7 +218,7 @@
     data() {
       return {
         allDetail: {},
-        mainTop: ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'],
+        mainTop: [],
         payment_type: 1,
         slither: 0,
         startClientX: 0,
@@ -244,6 +245,8 @@
         drawSlither: {},
 
         childPhoto: [],
+        bulletinType: {},                   //报备类型
+        checkout: false,
       }
     },
     created() {
@@ -264,9 +267,19 @@
       //
       //   });
       // }
-      this.allDetail = JSON.parse(sessionStorage.deliveryReceipt || '{}');
+      this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
+      this.allDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      this.slither = 0;
+      this.drawSlither = {};
+      this.checkout = this.bulletinType.bulletin === 'bulletin_checkout';
+      if (this.checkout) {
+        this.mainTop = ['退租协议', '客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
+        this.allReportNum = Object.keys(defineCheckoutReport).length;
+      } else {
+        this.mainTop = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
+        this.allReportNum = Object.keys(defineArticleReceipt).length;
+      }
       this.getDraft(this.allDetail.task_id);
-      this.allReportNum = Object.keys(defineArticleReceipt).length;
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
       this.mainWidth = {minWidth: main, maxWidth: main};
@@ -280,27 +293,25 @@
         this.slither = index;
       },
       // 监听 input
-      listenInput(name) {
-        if (name !== 'total_fee') {
-          let value = 0;
-          for (let key of this.form.other_fee) {
-            value = value + Number(key.value || 0);
-          }
-          let num4 = Number(this.form.property_costs || 0);
-          let num5 = Number(this.form.public_fee || 0);
-          let num6 = Number(this.form.repair_fees || 0);
-          if (Number(this.form.payment_type) === 3) {
-            let num1 = Number(this.form.water_card_balance || 0);
-            let num2 = Number(this.form.electric_card_balance || 0);
-            let num3 = Number(this.form.gas_card_balance || 0);
-            this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
-          } else {
-            let num7 = Number(this.form.water_settlement_amount || 0);
-            let num8 = Number(this.form.electric_valley_settlement_amount || 0);
-            let num9 = Number(this.form.electric_peak_settlement_amount || 0);
-            let num10 = Number(this.form.gas_settlement_amount || 0);
-            this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
-          }
+      listenInput() {
+        let value = 0;
+        for (let key of this.form.other_fee) {
+          value = value + Number(key.value || 0);
+        }
+        let num4 = Number(this.form.property_costs || 0);
+        let num5 = Number(this.form.public_fee || 0);
+        let num6 = Number(this.form.repair_fees || 0);
+        if (Number(this.form.payment_type) === 3) {
+          let num1 = Number(this.form.water_card_balance || 0);
+          let num2 = Number(this.form.electric_card_balance || 0);
+          let num3 = Number(this.form.gas_card_balance || 0);
+          this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
+        } else {
+          let num7 = Number(this.form.water_settlement_amount || 0);
+          let num8 = Number(this.form.electric_valley_settlement_amount || 0);
+          let num9 = Number(this.form.electric_peak_settlement_amount || 0);
+          let num10 = Number(this.form.gas_settlement_amount || 0);
+          this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
         }
       },
       // 预览交接单
@@ -315,7 +326,7 @@
           if (res) {
             let data = res.data;
             this.form.id = data.id;
-            this.payment_type = data.payment_type || 1;
+            this.payment_type = Number(data.payment_type);
             this.resetting(this.payment_type);
             this.handlePreFill(data);
           } else {
@@ -739,10 +750,13 @@
       },
       // 重置
       resetting(val) {
-        let type = JSON.parse(sessionStorage.bulletin_type || '{}');
-        this.slither = 0;
-        defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
-        this.drawSlither = this.jsonClone(defineArticleReceipt);
+        if (this.checkout) {
+          defineCheckoutReport['slither'] = handlerFreeDeliveryChange[val];
+          this.drawSlither = this.jsonClone(defineCheckoutReport);
+        } else {
+          defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
+          this.drawSlither = this.jsonClone(defineArticleReceipt);
+        }
         for (let item of Object.keys(this.drawSlither)) {
           if (item !== 'slither') {
             if (item === 'bedroom') {

@@ -2,7 +2,7 @@
   <div ref="parent" id="circlePanel">
     <div class="circleOut" ref="out">
       <div class="circleIn" ref="into">
-        <div class="circleItem" v-for="(item,index) in buttonList" @click="toBulletin(item)" ref="item">
+        <div class="circleItem" v-for="item in buttonList" @click="toBulletin(item)" ref="item">
           <img :src="item.icon" class="circleIcon" :class="[item.type]" :style="{transform: itemAngle}" alt="">
         </div>
       </div>
@@ -62,29 +62,29 @@
             icon: ic_weikuan,
           },
           {
-            // url: 'contractSearch',
-            url: '',
+            url: 'contractSearch',
+            // url: '',
             name: '调租',
             status: bulletinRouterStatus.bulletin_change,
             icon: ic_tiaozu,
           },
           {
-            // url: 'contractSearch',
-            url: '',
+            url: 'contractSearch',
+            // url: '',
             name: '转租',
             status: bulletinRouterStatus.bulletin_rent_trans,
             icon: ic_zhuanzu,
           },
           {
-            // url: 'collectReport',
-            url: '',
+            url: 'collectReport',
+            // url: '',
             name: '特殊事项',
             status: bulletinRouterStatus.bulletin_special,
             icon: ic_teshu,
           },
           {
-            // url: 'contractSearch',
-            url: '',
+            url: 'toBeDone',
+            // url: '',
             name: '退租',
             status: bulletinRouterStatus.bulletin_checkout,
             icon: ic_tuizu,
@@ -212,6 +212,10 @@
           case 'special':
             name = '特殊待办';
             bulletin = '特殊报备';
+            break;
+          case 'checkout':
+            name = '退租待办';
+            bulletin = '退租报备';
             break;
         }
         for (let value of routes) {
