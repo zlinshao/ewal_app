@@ -1055,7 +1055,7 @@
                 } else if (type === 'bulletin_change') {
                   this.handlePreFill(this.taskDetail.content);
                   arr = ['address', 'house_id', 'contract_id', 'contract_number', 'house_id_rent'];
-                  this.disabledDefaultValue('slither0', arr);
+                  //this.disabledDefaultValue('slither0', arr);
                 } else {
                   this.getPunchClockData();
                 }
