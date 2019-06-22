@@ -1245,6 +1245,7 @@
               break;
             case 'remark_terms'://备注条款
               let terms = [];
+              console.log(this.form[item]);
               for (let name of this.form[item]) {
                 terms.push(name + '、' + dicties[item][name]);
               }
