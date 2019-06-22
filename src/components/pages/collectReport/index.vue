@@ -334,6 +334,7 @@
       // 报备类型
       bulletin_types(type) {
         console.log(type)
+        debugger
         let bulletinData = this.$bulletinType(type.bulletin);
         let data = [
           //不需要电子合同
@@ -1197,12 +1198,17 @@
       },
       // 预填数据处理
       handlePreFill(res, status) {
+        debugger
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'house_id':
               this.form.address = res.address;
               this.formatData.house_id = res.address;
+              break;
+            case 'house_id_rent'://原房屋地址
+              this.form.house_address = res.house_address;
+              this.formatData.house_id_rent = res.house_address;
               break;
             case 'door_address'://门牌地址
               let door = this.jsonClone(res[item]);
