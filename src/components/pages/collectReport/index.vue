@@ -380,14 +380,11 @@
               this.form.is_sign = query.result;
             }
             break;
-          case 'bulletin_change'://调租
+          case'bulletin_change':
             this.form.house_id_rent = this.taskDetail.house_id;
             this.form.contract_id_rent = this.taskDetail.contract_id;
             this.form.old_address = this.taskDetail.address;
             this.formatData.house_id_rent = this.taskDetail.address;
-            break;
-          case 'bulletin_rent_trans'://转租
-            this.formatData.house_id = this.taskDetail.address;
             break;
           case'bulletin_special':  //特殊事项报备
             if (JSON.stringify(this.taskDetail) !== '{}') {
@@ -1074,10 +1071,6 @@
                   this.handlePreFill(this.taskDetail.content);
                   arr = ['address', 'house_id', 'contract_id', 'contract_number', 'house_id_rent'];
                   this.disabledDefaultValue('slither0', arr);
-                }else if (type === 'bulletin_rent_trans') {
-                  this.handlePreFill(this.taskDetail.content);
-                  arr = ['address', 'house_id', 'contract_id', 'contract_number'];
-                  //this.disabledDefaultValue('slither1', arr);
                 } else {
                   this.getPunchClockData();
                 }
