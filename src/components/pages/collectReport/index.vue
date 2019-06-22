@@ -1070,7 +1070,7 @@
                 } else if (type === 'bulletin_change') {
                   this.handlePreFill(this.taskDetail.content);
                   arr = ['address', 'house_id', 'contract_id', 'contract_number', 'house_id_rent'];
-                  //this.disabledDefaultValue('slither0', arr);
+                  this.disabledDefaultValue('slither0', arr);
                 } else {
                   this.getPunchClockData();
                 }
@@ -1342,6 +1342,7 @@
         let all = this.initFormData(this.bulletinSlither[slither], this.showData);
         all.noEmpty = val;
         this.allResetting = this.jsonClone(all);
+        this.disabledDefaultValueHandler(all);
       },
       // 禁止预填 清空处理
       disabledDefaultValueHandler(all) {
