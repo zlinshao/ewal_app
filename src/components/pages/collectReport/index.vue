@@ -285,6 +285,7 @@
 
         isGetTake: false,                   //尾款
         noTaskId: false,                   //不需要task_id
+        noContractInfo: false,             //不预填合同
         allResetting: {},
         photoUploadStatus: true,
 
@@ -342,21 +343,17 @@
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
+          // 不预填合同
+          ['bulletin_collect_continued', 'bulletin_rent_continued'],
         ];
         this.isGetTake = data[0].includes(type.bulletin);
         this.noTaskId = data[1].includes(type.bulletin);
+        this.noContractInfo = data[2].includes(type.bulletin);
         this.bulletinTitle = bulletinData.title;
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.bulletinSlither = this.jsonClone(bulletinData.data);
         this.resetting();
         this.distinguishForm(type.bulletin);
-        if (type.type) {
-          if (this.taskDetail.finish_RWC) {
-            this.form.type = 1;
-          } else {
-            this.form.type = type.type;
-          }
-        }
         if (type.bulletin === 'bulletin_agency') {
           let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 0 : 1;
           this.form.collect_or_rent = type;
@@ -961,7 +958,7 @@
               if (status) {
                 if (!this.isGetTake) {
                   if (bulletin.bulletin !== 'bulletin_special' && bulletin.bulletin !== 'bulletin_rent_RWC') {
-                    if (bulletin.bulletin === 'bulletin_collect_continued' || bulletin.bulletin === 'bulletin_rent_continued') {
+                    if (this.noContractInfo) {
                       this.disabledDefaultValueHandler(this.allResetting);
                     } else {
                       this.getPunchClockData();
@@ -991,6 +988,13 @@
       },
       // 提交前 数据处理
       saveReportHandler(bulletin) {
+        if (bulletin.type) {
+          if (this.taskDetail.finish_RWC) {
+            this.form.type = 1;
+          } else {
+            this.form.type = bulletin.type;
+          }
+        }
         if (bulletin.bulletin === 'bulletin_rent_basic' || bulletin.bulletin === 'bulletin_booking_renting') {
           let query = this.$route.query;
           if (query.result || query.result === 0) {
@@ -1058,19 +1062,21 @@
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
+          if (this.noContractInfo) {
+            this.disabledDefaultValue('slither0');
+            this.allResetting.noEmpty = ['address', 'house_id', 'contract_id', 'contract_number'];
+          } else if (type === 'bulletin_change') {
+            this.disabledDefaultValue('slither0');
+            this.allResetting.noEmpty = ['address', 'house_id', 'contract_id', 'contract_number'];
+          }
           if (!data) {
             let arr = [];//不需要清空字段
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
                 //续收、续租预填数据
-                if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
+                if (this.noContractInfo || type === 'bulletin_change') {
                   this.handlePreFill(this.taskDetail.content);
-                  arr = ['address', 'house_id', 'contract_id', 'contract_number'];
-                  this.disabledDefaultValue('slither0', arr);
-                } else if (type === 'bulletin_change') {
-                  this.handlePreFill(this.taskDetail.content);
-                  arr = ['address', 'house_id', 'contract_id', 'contract_number', 'house_id_rent'];
-                  this.disabledDefaultValue('slither0', arr);
+                  this.disabledDefaultValueHandler(this.allResetting);
                 } else {
                   this.getPunchClockData();
                 }
@@ -1338,11 +1344,9 @@
         }
       },
       // 禁止预填 字段
-      disabledDefaultValue(slither, val) {
+      disabledDefaultValue(slither) {
         let all = this.initFormData(this.bulletinSlither[slither], this.showData);
-        all.noEmpty = val;
         this.allResetting = this.jsonClone(all);
-        this.disabledDefaultValueHandler(all);
       },
       // 禁止预填 清空处理
       disabledDefaultValueHandler(all) {
@@ -1357,11 +1361,11 @@
             this.formatData[item] = all.formatData[item];
           }
         }
-        for (let item of Object.keys(all.album)) {
-          if (!all.noEmpty.includes(item)) {
-            this.album[item] = all.album[item];
-          }
-        }
+        // for (let item of Object.keys(all.album)) {
+        //   if (!all.noEmpty.includes(item)) {
+        //     this.album[item] = all.album[item];
+        //   }
+        // }
       },
       // 初始化数据
       resetting() {

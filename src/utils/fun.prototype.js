@@ -451,7 +451,7 @@ export default {
             if (child) {
               child[item] = this.jsonClone(list.children[0]);
             }
-            if(res[item]){
+            if (res[item]) {
               for (let i = 1; i < res[item].length; i++) {
                 list.children.push(list.children[0]);
               }
@@ -459,12 +459,12 @@ export default {
           }
         }
       }
-      if(res[item]){
+      if (res[item]) {
         data[item] = this.jsonClone(res[item]);
         res[item].forEach((key, idx) => {
-            for (let key of val) {
-              data[item][idx][key] = dicties[key][res[item][idx][key]];
-            }
+          for (let key of val) {
+            data[item][idx][key] = dicties[key][res[item][idx][key]];
+          }
         });
       }
     };
@@ -732,8 +732,8 @@ export default {
         let isFlag = arr.includes(val.bulletin_type);
         if (isFlag) {
           let contract_id = res.data.content.contract_info.id;
-          contract_id = 72935; //续租
-          // contract_id = 43901; //续收
+          // contract_id = 72935; //续租
+          contract_id = 43901; //续收
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
               let contentInfo = result.content.draft_content;
@@ -863,7 +863,6 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '100016';
       // data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
