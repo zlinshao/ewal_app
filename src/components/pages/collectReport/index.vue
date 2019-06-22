@@ -499,7 +499,7 @@
         let vacancy = Number(this.form.vacancy || 0);//空置期天数
         let mmEnd = this.myUtils.dateAdd('mm', month, begin);
         let ddEnd;//合同结束日期
-        if (bulletin === 'bulletin_collect_basic') {
+        if (bulletin === 'bulletin_collect_basic' || bulletin === 'bulletin_collect_continued') {
           ddEnd = this.myUtils.dateAdd('dd', (vacancy + day - 1), mmEnd);//合同结束日期
           let vacant = this.myUtils.dateAdd('dd', vacancy, newBegin);//空置期结束日期
           let pay_first = this.myUtils.dateAdd('dd', 1, vacant);//第一次打款日期
