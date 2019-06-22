@@ -749,6 +749,8 @@ export default {
                 contentInfo.album.photo = contentInfo.photo;  //凭证截图
               }
               contentInfo.address = result.house_address;
+              contentInfo.house_id = result.house_id;
+              contentInfo.contract_id = result.contract_id;
               resolve(contentInfo);
             }
           });

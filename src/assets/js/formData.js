@@ -6677,9 +6677,10 @@ defineContinueCollect = {
     },
     {
       label: '空置天数',
-      placeholder: '必填 请输入',
+      placeholder: '已禁用',
+      disabled: 'disabled',
       keyName: 'vacancy',
-      keyType: '',
+      keyType: 7,
       type: 'number',
       status: '',
       slot: '',
