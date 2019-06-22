@@ -335,7 +335,7 @@ export default {
       return search;
     };
     // 报备类型数据匹配
-    Vue.prototype.$bulletinType = function (type, rwc) {
+    Vue.prototype.$bulletinType = function (type) {
       let data = {}, title = [];
       switch (type) {
         case 'bulletin_collect_basic'://收房
@@ -369,13 +369,8 @@ export default {
           break;
         case 'bulletin_rent_RWC'://未收先租
           title = ['合同信息', '客户信息'];
-          if (rwc === 'bulletin_rent_RWC') {
-            data = this.jsonClone(defineRentReport);
-            data.slither0 = defineRentRWCReport.concat(data.slither0);
-          } else {
-            data = this.jsonClone(defineBookingBWCReport);
-            data.slither0 = defineRentBWCReport.concat(data.slither0);
-          }
+          data = this.jsonClone(defineBookingBWCReport);
+          data.slither0 = defineRentBWCReport.concat(data.slither0);
           break;
         case 'bulletin_change'://调租
           title = ['合同信息', '客户信息'];
@@ -715,9 +710,6 @@ export default {
       data.taskDefinitionKey = val.taskDefinitionKey;
       data.process_instance_id = val.process_id;
       data.root_process_instance_id = val.root_id;
-      if (val.finish_RWC) {
-        data.finish_RWC = val.finish_RWC;
-      }
       sessionStorage.setItem('task_detail', JSON.stringify(data));
     };
 
@@ -728,29 +720,26 @@ export default {
         let isFlag = arr.includes(val.bulletin_type);
         if (isFlag) {
           let contract_id = res.data.content.contract_info.id;
-          // contract_id = 72935; //续租
-          contract_id = 43901; //续收
+          contract_id=72935; //续租
+          // contract_id=43901; //续收
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
               let contentInfo = result.content.draft_content;
-              if (val.bulletin_type === 'bulletin_collect_continued') { //续收图片处理
-                contentInfo.album = {
+              if(val.bulletin_type === 'bulletin_collect_continued'){ //续收图片处理
+                contentInfo.album= {
                   id_card_photo: [],
                   bank_card_photo: [],
                 };
-                contentInfo.album.id_card_photo = contentInfo.id_card_photo; //证件照片
-                contentInfo.album.bank_card_photo = contentInfo.bank_card_photo;  //银行卡照片
-              } else if (val.bulletin_type === 'bulletin_rent_continued') { //续租图片处理
-                contentInfo.album = {
+                contentInfo.album.id_card_photo = result.content.draft_content.id_card_photo; //证件照片
+                contentInfo.album.bank_card_photo = result.content.draft_content.bank_card_photo;  //银行卡照片
+              }else if(val.bulletin_type === 'bulletin_rent_continued'){ //续租图片处理
+                contentInfo.album= {
                   id_card_photo: [],
                   photo: [],
                 };
-                contentInfo.album.id_card_photo = contentInfo.id_card_photo; //证件照片
-                contentInfo.album.photo = contentInfo.photo;  //凭证截图
+                contentInfo.album.id_card_photo = result.content.draft_content.id_card_photo; //证件照片
+                contentInfo.album.photo = result.content.draft_content.photo;  //凭证截图
               }
-              contentInfo.address = result.house_address;
-              contentInfo.house_id = result.house_id;
-              contentInfo.contract_id = result.contract_id;
               resolve(contentInfo);
             }
           });
@@ -840,7 +829,7 @@ export default {
           //   alert('dd error: ' + JSON.stringify(err));
           // });
           this.$personalDataHandler(setPersonalDetail.data.detail, resolve);
-          globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjdiYzVkMTM2NTBiZjJjZGRiN2Y3NTFiYTExZmVhZWExOTRiZGNlZTA5ZTc4NDcwYTYwMzQwNDk2NDFkNTI1NzdhOWQyMDg3MWIyYWY4Zjc0In0.eyJhdWQiOiIxIiwianRpIjoiN2JjNWQxMzY1MGJmMmNkZGI3Zjc1MWJhMTFmZWFlYTE5NGJkY2VlMDllNzg0NzBhNjAzNDA0OTY0MWQ1MjU3N2E5ZDIwODcxYjJhZjhmNzQiLCJpYXQiOjE1NjExODQ5ODcsIm5iZiI6MTU2MTE4NDk4NywiZXhwIjoxNTYyNDgwOTg3LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.bZWWUDv4ZchHRsd3R0Lnew36wYHpN-A1823vvUt0-p6kauOAF4iZDt9MdjioR2aFEKe8gK9Vlxb8usbWSPA6_ihyDcX1WYxphRWKGiTRuOS3LmeIU3k2FtJl2_zeDJTRpWn4NQdj9b-a0P79yeoSKZ8FgNSm9I6qxcemTOnuw94i8IAjoH3C6u0j922bAP2snEwsZabPDugO5FIKozGdre12l4FNGMSw5S4gLmVZqe4QI_ydCj7mV8C0OrB0Q3S_OnZzy1UdFpKOT7N2LTm9E1sO3l30xlLhVZvK86IQ48jGD-f-s92g9b7wb7QlheWrD1bIUjdJHVGlLy7h3UQRHu-tLZ03W6joKaqOUil5p6XLCi-l61aMwV47Ok8Me8SFfyOiyH_ud5fgUUc14Txun6xwuVmR8zFz5Dj62QfZ1KUDByMGAFl7w7DpimM0bbxXk4_v_8uY7-3teCF0pAn6CS17S2yxOED0G4wAtxFKf-CqYJofbvx5WMJaauu94ItKYSSPVeW7_ZoysW_quwnNLFD8w3lPt3X7OiU3AOx-YMC0bPnua1Wwv5kJyKdLcbPVh5XQ71c54n6xF2QgkfcoXv7xo-2HgopMk2LPPIZ9xHYqaxVmnoRdNA5Hjhz6nNadZvXcf4KObbSSA_WasZS3p-tQfyHup2JmpCJ4dvH1Otk';
+          globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU3OTdkZWJjOWRhODc0OGY5Yjk2ZWM2MjI5ZThjOTFiOTQ2ZWU2NTA4ZjM1MzdiMGI5NzdjZDcxYzQyM2IwYWE0Mzk4ZjA0MzljMTBhNjI5In0.eyJhdWQiOiIxIiwianRpIjoiZTc5N2RlYmM5ZGE4NzQ4ZjliOTZlYzYyMjllOGM5MWI5NDZlZTY1MDhmMzUzN2IwYjk3N2NkNzFjNDIzYjBhYTQzOThmMDQzOWMxMGE2MjkiLCJpYXQiOjE1NTk4ODg2MjUsIm5iZiI6MTU1OTg4ODYyNSwiZXhwIjoxNTYxMTg0NjI1LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.vEbN37TYOYd9moQViB0hSoG0LVcnbzrntBEvIrrJ00TndWWF7m8Bu4JU0tU6Dcw1LHMFuv7HkqmDVddlwJmdgFtpYOdKAHL1s1vDkUbmoKDai8ZnvZR514x7rwkMW3qrr1lJ7z4s7le7UG6_tWFeRiR02D8LPbgQVyfT3xQ3OTG9cs-ZuYYbgGZRKf1Mm891WKqtxvXHokEQCmsEWxaKJwCMVmjOUq4WH1PPHWHWfA__Q4T6ea7X0CvmWuJU1RBXr-zBflHxGuRgVDth2eSiaJly6E2x_hsFOKptN4hEMHn7vlDZyvKmGvCUbW9zs8E94by8HQEy6YhNT70I1qFFSpOVI83i8_kAXDhEsiTbcImQYWTlTP2d4sT9tFDBpdDCgYV35-pSRdk5adukMvQkji0kwt2Q16xw_W9bQsY0HJY3X9D2w7t9mljzASrILFi-sq096q2JlKNdi8J3PxRPKuOVWPlfwvD1V-rKQmwGOhj_LbKUFfGNiUZBBsMeyYRb7oaGTpuHOzQhkIDLpXgMV1CG08s2Czc3PPfLGACjj-Cdgbf08LG5orzsrCF-ZRkLxZQ-wTxeuRjxF6WOG6kIYT2Y7SKbOpys4RWQMxMRfB_tsUlxEKueyrfNka9vGmy7C25qz7RO7ffVE9TRxyE2C15AkWP4FDb4FtKrcqoM1Kk';
         });
       });
     };
@@ -870,7 +859,7 @@ export default {
             for (let city of org.city) {
               // cityObj.code = city.city_id;
               // cityObj.name = city.city_name;
-              cityObj.code = 320100;
+              cityObj.code = 120000;
               cityObj.name = '天津市';
               cityArr.push(cityObj);
               // province[city.province.province_id] = city.province.province_name;

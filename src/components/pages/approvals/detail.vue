@@ -811,6 +811,9 @@
             case 'house_id'://房屋地址
               this.formatData[item] = res.address;
               break;
+            case 'house_id_rent':
+              this.formatData[item] = res.old_address;
+              break;
             case 'house_address'://房屋地址
               this.formatData[item] = res[item];
               break;
