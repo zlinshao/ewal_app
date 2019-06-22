@@ -347,6 +347,13 @@
         this.drawSlither = this.jsonClone(bulletinData.data);
         this.resetting();
         this.distinguishForm(type.bulletin);
+        if (type.type) {
+          if (this.taskDetail.finish_RWC) {
+            this.form.type = 1;
+          } else {
+            this.form.type = type.type;
+          }
+        }
         if (type.bulletin === 'bulletin_agency') {
           let type = this.taskDetail.bulletin === 'bulletin_collect_basic' ? 0 : 1;
           this.form.collect_or_rent = type;
@@ -741,13 +748,13 @@
       },
       // 获取电子合同编号
       electronicContract() {
-        let arrSF=['bulletin_collect_basic','bulletin_collect_continued'];  //收房
+        let arrSF = ['bulletin_collect_basic', 'bulletin_collect_continued'];  //收房
         // let arrZF=['bulletin_rent_continued'];  //租房
-        let version='';
+        let version = '';
         // let version = this.bulletinType.bulletin === 'bulletin_collect_basic' ? '1.1' : '1.2';
-        if(arrSF.includes(this.bulletinType.bulletin)){
-           version = '1.1';
-        }else {
+        if (arrSF.includes(this.bulletinType.bulletin)) {
+          version = '1.1';
+        } else {
           version = '1.2';
         }
         let data = {
@@ -981,9 +988,6 @@
       },
       // 提交前 数据处理
       saveReportHandler(bulletin) {
-        if (bulletin.type) {
-          this.form.type = bulletin.type;
-        }
         if (bulletin.bulletin === 'bulletin_rent_basic' || bulletin.bulletin === 'bulletin_booking_renting') {
           let query = this.$route.query;
           if (query.result || query.result === 0) {
