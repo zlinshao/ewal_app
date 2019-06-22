@@ -373,7 +373,7 @@
           case'bulletin_change':
             this.form.house_id_rent = this.taskDetail.house_id;
             this.form.contract_id_rent = this.taskDetail.contract_id;
-            this.form.house_address = this.taskDetail.address;
+            this.form.old_address = this.taskDetail.address;
             this.formatData.house_id_rent = this.taskDetail.address;
             break;
           case'bulletin_special':  //特殊事项报备
@@ -1063,7 +1063,7 @@
                 } else if (type === 'bulletin_change') {
                   this.handlePreFill(this.taskDetail.content);
                   arr = ['address', 'house_id', 'contract_id', 'contract_number', 'house_id_rent'];
-                  //this.disabledDefaultValue('slither0', arr);
+                  this.disabledDefaultValue('slither0', arr);
                 } else {
                   this.getPunchClockData();
                 }
