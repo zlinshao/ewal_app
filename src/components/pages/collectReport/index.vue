@@ -1218,7 +1218,6 @@
               break;
             case 'signer'://认证
               if (!status) {
-                console.log(res[item]);
                 if (res[item] && res[item].fadada_user_id && !Array.isArray(res[item])) {
                   this.certified();
                 }
@@ -1247,7 +1246,6 @@
               break;
             case 'remark_terms'://备注条款
               let terms = [];
-              console.log(this.form[item]);
               for (let name of this.form[item]) {
                 terms.push(name + '、' + dicties[item][name]);
               }
@@ -1354,7 +1352,6 @@
       },
       // 初始化数据
       resetting() {
-        console.log(111)
         this.slither = 0;
         this.photoUploadStatus = true;
         let allForm = [], id = this.form.id || '';
