@@ -695,7 +695,6 @@ export default {
           url = val.detail_request_url;
         }
         if (!url) {
-          console.log(val)
           this.setContentDetail(val);
           resolve(true);
           return;

@@ -104,7 +104,8 @@
         </div>
       </div>
       <div class="scroll_bar">
-        <div class="radioChecksLabel" v-for="item of Object.keys(highList)" v-if="(highList[item].type === 'check'&& highList[item].value.length>0 ) || (highList[item].type === 'radio' && tabs==1 )">
+        <div class="radioChecksLabel" v-for="item of Object.keys(highList)"
+             v-if="(highList[item].type === 'check'&& highList[item].value.length>0 ) || (highList[item].type === 'radio' && tabs==1 )">
           <label>{{highList[item].title}}</label>
           <div class="radioChecks">
             <div v-for="val in highList[item].value" class="contents">
@@ -394,6 +395,7 @@
       },
       // 列表事件
       goOperates(val, type) {
+        let data = {};
         switch (type) {
           case 'noFinish':
             switch (val.taskDefinitionKey) {
@@ -404,7 +406,15 @@
                 break;
               case 'InputHandoverOrder'://交接单
                 sessionStorage.setItem('bulletin_type', '{}');
-                let data = {};
+                data.ewal_contract = val.ewal_contract;
+                data.task_id = val.task_id;
+                data.bulletin_type = val.bulletin_type;
+                sessionStorage.setItem('task_detail', JSON.stringify(data));
+                this.routerLink('/deliveryReceipt');
+                break;
+              case 'Collect-InputCheckoutData'://交接单
+              case 'rent-InputCheckoutData'://交接单
+                sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.bulletin_checkout));
                 data.ewal_contract = val.ewal_contract;
                 data.task_id = val.task_id;
                 data.bulletin_type = val.bulletin_type;
