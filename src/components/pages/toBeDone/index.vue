@@ -524,8 +524,8 @@
             obj.type = 'MarketCollect,MarketRent';
             break;
           case "bulletin_checkout":
-            obj.status = 'toBeDoneAgency';
-            obj.type = 'MarketCollect,MarketRent';
+            obj.status = 'bulletinCheckout';
+            obj.type = 'Market-CollectWithdrawal,Market-RentWithdrawal';
             break;
           case "bulletin_change":
             obj.status = 'toBeDoneChange';

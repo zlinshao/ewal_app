@@ -412,15 +412,6 @@
                 sessionStorage.setItem('task_detail', JSON.stringify(data));
                 this.routerLink('/deliveryReceipt');
                 break;
-              case 'Collect-InputCheckoutData'://交接单
-              case 'rent-InputCheckoutData'://交接单
-                sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus.bulletin_checkout));
-                data.ewal_contract = val.ewal_contract;
-                data.task_id = val.task_id;
-                data.bulletin_type = val.bulletin_type;
-                sessionStorage.setItem('task_detail', JSON.stringify(data));
-                this.routerLink('/deliveryReceipt');
-                break;
             }
             break;
           case 'finish':
