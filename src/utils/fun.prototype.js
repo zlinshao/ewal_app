@@ -746,8 +746,6 @@ export default {
         let isFlag = arr.includes(val.bulletin_type);
         if (isFlag) {
           let contract_id = res.data.content.contract_info.id;
-          // contract_id = 72935; //续租
-          // contract_id = 43901; //续收
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
               let contentInfo = result.content.draft_content;
@@ -924,5 +922,15 @@ export default {
         }
       });
     };
+    //时间戳的处理
+    Vue.prototype.datetoLocaleString= function (val){
+      let time = new Date();
+      let y = time.getFullYear();
+      let m = time.getMonth()+1;
+      let d = time.getDate();
+      m = m<10?'0'+m:m;
+      d  = d <10?'0'+d :d;
+      return y+'-'+m+'-'+d;
+    }
   }
 }
