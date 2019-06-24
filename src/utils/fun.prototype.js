@@ -774,7 +774,56 @@ export default {
           resolve(res.data.content);
         }
       })
-
+    };
+    Vue.prototype.$bulletinTitles = function (type) {
+      console.log(type)
+      let name = '', bulletin = '';
+      switch (type) {
+        case 'bulletin_collect_basic':
+          name = '收房待办';
+          bulletin = '收房报备';
+          break;
+        case 'bulletin_collect_continued':
+          name = '续收待办';
+          bulletin = '续收报备';
+          break;
+        case 'bulletin_rent_basic':
+          name = '租房待办';
+          bulletin = '租房报备';
+          break;
+        case 'bulletin_rent_trans':
+          bulletin = '转租报备';
+          break;
+        case 'bulletin_rent_continued':
+          bulletin = '续租报备';
+          break;
+        case 'bulletin_rent_RWC':
+          bulletin = '未收先租报备';
+          break;
+        case 'bulletin_change':
+          name = '调租待办';
+          bulletin = '调租报备';
+          break;
+        case 'bulletin_agency':
+          name = '渠道费待办';
+          bulletin = '渠道费报备';
+          break;
+        case 'bulletin_retainage':
+          name = '尾款待办';
+          bulletin = '尾款报备';
+          break;
+        case 'bulletin_special':
+        case 'bulletin_special_collect':
+        case 'bulletin_special_rent':
+          name = '特殊待办';
+          bulletin = '特殊报备';
+          break;
+        case 'bulletin_checkout':
+          name = '退租待办';
+          bulletin = '退租报备';
+          break;
+      }
+      return {name, bulletin}
     };
     // 报备详情
     Vue.prototype.againDetailRequest = function (val, again, replace) {

@@ -344,6 +344,15 @@
           case 'deliveryReceipt':
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
+            let routes = this.$router.options.routes, all = {}, title = '', bulletinName = '';
+            all = this.$bulletinTitles(val.bulletin_type);
+            title = all.name;
+            bulletinName = all.bulletin;
+            for (let value of routes) {
+              if (value.path === '/collectReport') {
+                value.meta.title = bulletinName;
+              }
+            }
             if (val.bulletin_type === 'bulletin_rent_RWC') {
               bulletin = bulletinRouterStatus.bulletin_rent_RWC;
               sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));

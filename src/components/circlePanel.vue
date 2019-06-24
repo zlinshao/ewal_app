@@ -190,42 +190,10 @@
       // 报备跳转
       toBulletin(item) {
         sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
-        let routes = this.$router.options.routes, name = '', bulletin = '';
-        switch (item.status.to) {
-          case 'collect':
-            name = '收房待办';
-            bulletin = '收房报备';
-            break;
-          case 'rent':
-            if (item.status.bulletin === 'bulletin_rent_trans') {
-              name = '转租待办';
-              bulletin = '转租报备';
-            } else {
-              name = '租房待办';
-              bulletin = '租房报备';
-            }
-            break;
-          case 'agency':
-            name = '渠道费待办';
-            bulletin = '渠道费报备';
-            break;
-          case 'retainage':
-            name = '尾款待办';
-            bulletin = '尾款报备';
-            break;
-          case 'special':
-            name = '特殊待办';
-            bulletin = '特殊报备';
-            break;
-          case 'checkout':
-            name = '退租待办';
-            bulletin = '退租报备';
-            break;
-          case 'change':
-            name = '调租待办';
-            bulletin = '调租报备';
-            break;
-        }
+        let routes = this.$router.options.routes, all = {}, name = '', bulletin = '';
+        all = this.$bulletinTitles(item.status.bulletin);
+        name = all.name;
+        bulletin = all.bulletin;
         for (let value of routes) {
           if (value.path === '/toBeDone') {
             value.meta.title = name;
