@@ -62,14 +62,14 @@
             icon: ic_weikuan,
           },
           {
-            url: 'contractSearch',
+            url: 'toBeDone',
             // url: '',
             name: '调租',
             status: bulletinRouterStatus.bulletin_change,
             icon: ic_tiaozu,
           },
           {
-            url: 'contractSearch',
+            url: 'toBeDone',
             // url: '',
             name: '转租',
             status: bulletinRouterStatus.bulletin_rent_trans,
@@ -198,8 +198,14 @@
             bulletin = '收房报备';
             break;
           case 'rent':
-            name = '租房待办';
-            bulletin = '租房报备';
+            if (item.status.bulletin === 'bulletin_rent_trans') {
+              name = '转租待办';
+              bulletin = '转租报备';
+            } else {
+              name = '租房待办';
+              bulletin = '租房报备';
+            }
+
             break;
           case 'agency':
             name = '渠道费待办';
@@ -216,6 +222,10 @@
           case 'checkout':
             name = '退租待办';
             bulletin = '退租报备';
+            break;
+          case 'change':
+            name = '调租待办';
+            bulletin = '调租报备';
             break;
         }
         for (let value of routes) {

@@ -877,9 +877,9 @@ export default {
               // cityObj.code = city.city_id;
               // cityObj.name = city.city_name;
               cityObj.code = 320100;
-              cityObj.name = '南京市';
+              cityObj.name = '天津市';
               // province[city.province.province_id] = city.province.province_name;
-              province[320100] = '南京市';
+              province[320100] = '天津市';
               cityArr.push(cityObj);
             }
           }

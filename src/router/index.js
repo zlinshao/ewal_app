@@ -71,7 +71,7 @@ export default new Router({
       path: '/contractSearch',
       name: '选择房屋',
       component: ContractSearch,
-      meta: {title: '选择房屋', index: 2},
+      meta: {title: '选择房屋', index: 3},
     },
     {
       path: '/supplyAgreement',
@@ -134,7 +134,7 @@ export default new Router({
       path: '/collectReport',
       name: '报备',
       component: CollectReport,
-      meta: {title: '报备', index: 3},
+      meta: {title: '报备', index: 5},
     },
     {
       path: '/houseResource',
