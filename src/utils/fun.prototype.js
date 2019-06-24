@@ -746,8 +746,6 @@ export default {
         let isFlag = arr.includes(val.bulletin_type);
         if (isFlag) {
           let contract_id = res.data.content.contract_info.id;
-          // contract_id = 72935; //续租
-          // contract_id = 43901; //续收
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
               let contentInfo = result.content.draft_content;
@@ -776,7 +774,56 @@ export default {
           resolve(res.data.content);
         }
       })
-
+    };
+    Vue.prototype.$bulletinTitles = function (type) {
+      console.log(type)
+      let name = '', bulletin = '';
+      switch (type) {
+        case 'bulletin_collect_basic':
+          name = '收房待办';
+          bulletin = '收房报备';
+          break;
+        case 'bulletin_collect_continued':
+          name = '续收待办';
+          bulletin = '续收报备';
+          break;
+        case 'bulletin_rent_basic':
+          name = '租房待办';
+          bulletin = '租房报备';
+          break;
+        case 'bulletin_rent_trans':
+          bulletin = '转租报备';
+          break;
+        case 'bulletin_rent_continued':
+          bulletin = '续租报备';
+          break;
+        case 'bulletin_rent_RWC':
+          bulletin = '未收先租报备';
+          break;
+        case 'bulletin_change':
+          name = '调租待办';
+          bulletin = '调租报备';
+          break;
+        case 'bulletin_agency':
+          name = '渠道费待办';
+          bulletin = '渠道费报备';
+          break;
+        case 'bulletin_retainage':
+          name = '尾款待办';
+          bulletin = '尾款报备';
+          break;
+        case 'bulletin_special':
+        case 'bulletin_special_collect':
+        case 'bulletin_special_rent':
+          name = '特殊待办';
+          bulletin = '特殊报备';
+          break;
+        case 'bulletin_checkout':
+          name = '退租待办';
+          bulletin = '退租报备';
+          break;
+      }
+      return {name, bulletin}
     };
     // 报备详情
     Vue.prototype.againDetailRequest = function (val, again, replace) {
@@ -839,26 +886,26 @@ export default {
           //   jsApiList: ['biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
           // });
           // console.log(res);
-          dd.ready(() => {
-            dd.runtime.permission.requestAuthCode({
-              corpId: _config.corpId,
-              onSuccess(info) {
-                that.$httpZll.getTokenInfo(info.code).then((res) => {
-                  that.personalData(res, resolve);
-                })
-              },
-              onFail(err) {
-                alert('dd error: ' + JSON.stringify(err));
-                // alert('您不在系统内，请联系管理员添加！');
-                that.closeDD();
-              }
-            });
-          });
-          dd.error((err) => {
-            alert('dd error: ' + JSON.stringify(err));
-          });
-          // this.$personalDataHandler(setPersonalDetail.data.detail, resolve);
-          // globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjdiYzVkMTM2NTBiZjJjZGRiN2Y3NTFiYTExZmVhZWExOTRiZGNlZTA5ZTc4NDcwYTYwMzQwNDk2NDFkNTI1NzdhOWQyMDg3MWIyYWY4Zjc0In0.eyJhdWQiOiIxIiwianRpIjoiN2JjNWQxMzY1MGJmMmNkZGI3Zjc1MWJhMTFmZWFlYTE5NGJkY2VlMDllNzg0NzBhNjAzNDA0OTY0MWQ1MjU3N2E5ZDIwODcxYjJhZjhmNzQiLCJpYXQiOjE1NjExODQ5ODcsIm5iZiI6MTU2MTE4NDk4NywiZXhwIjoxNTYyNDgwOTg3LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.bZWWUDv4ZchHRsd3R0Lnew36wYHpN-A1823vvUt0-p6kauOAF4iZDt9MdjioR2aFEKe8gK9Vlxb8usbWSPA6_ihyDcX1WYxphRWKGiTRuOS3LmeIU3k2FtJl2_zeDJTRpWn4NQdj9b-a0P79yeoSKZ8FgNSm9I6qxcemTOnuw94i8IAjoH3C6u0j922bAP2snEwsZabPDugO5FIKozGdre12l4FNGMSw5S4gLmVZqe4QI_ydCj7mV8C0OrB0Q3S_OnZzy1UdFpKOT7N2LTm9E1sO3l30xlLhVZvK86IQ48jGD-f-s92g9b7wb7QlheWrD1bIUjdJHVGlLy7h3UQRHu-tLZ03W6joKaqOUil5p6XLCi-l61aMwV47Ok8Me8SFfyOiyH_ud5fgUUc14Txun6xwuVmR8zFz5Dj62QfZ1KUDByMGAFl7w7DpimM0bbxXk4_v_8uY7-3teCF0pAn6CS17S2yxOED0G4wAtxFKf-CqYJofbvx5WMJaauu94ItKYSSPVeW7_ZoysW_quwnNLFD8w3lPt3X7OiU3AOx-YMC0bPnua1Wwv5kJyKdLcbPVh5XQ71c54n6xF2QgkfcoXv7xo-2HgopMk2LPPIZ9xHYqaxVmnoRdNA5Hjhz6nNadZvXcf4KObbSSA_WasZS3p-tQfyHup2JmpCJ4dvH1Otk';
+          // dd.ready(() => {
+          //   dd.runtime.permission.requestAuthCode({
+          //     corpId: _config.corpId,
+          //     onSuccess(info) {
+          //       that.$httpZll.getTokenInfo(info.code).then((res) => {
+          //         that.personalData(res, resolve);
+          //       })
+          //     },
+          //     onFail(err) {
+          //       alert('dd error: ' + JSON.stringify(err));
+          //       // alert('您不在系统内，请联系管理员添加！');
+          //       that.closeDD();
+          //     }
+          //   });
+          // });
+          // dd.error((err) => {
+          //   alert('dd error: ' + JSON.stringify(err));
+          // });
+          this.$personalDataHandler(setPersonalDetail.data.detail, resolve);
+          globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjdiYzVkMTM2NTBiZjJjZGRiN2Y3NTFiYTExZmVhZWExOTRiZGNlZTA5ZTc4NDcwYTYwMzQwNDk2NDFkNTI1NzdhOWQyMDg3MWIyYWY4Zjc0In0.eyJhdWQiOiIxIiwianRpIjoiN2JjNWQxMzY1MGJmMmNkZGI3Zjc1MWJhMTFmZWFlYTE5NGJkY2VlMDllNzg0NzBhNjAzNDA0OTY0MWQ1MjU3N2E5ZDIwODcxYjJhZjhmNzQiLCJpYXQiOjE1NjExODQ5ODcsIm5iZiI6MTU2MTE4NDk4NywiZXhwIjoxNTYyNDgwOTg3LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.bZWWUDv4ZchHRsd3R0Lnew36wYHpN-A1823vvUt0-p6kauOAF4iZDt9MdjioR2aFEKe8gK9Vlxb8usbWSPA6_ihyDcX1WYxphRWKGiTRuOS3LmeIU3k2FtJl2_zeDJTRpWn4NQdj9b-a0P79yeoSKZ8FgNSm9I6qxcemTOnuw94i8IAjoH3C6u0j922bAP2snEwsZabPDugO5FIKozGdre12l4FNGMSw5S4gLmVZqe4QI_ydCj7mV8C0OrB0Q3S_OnZzy1UdFpKOT7N2LTm9E1sO3l30xlLhVZvK86IQ48jGD-f-s92g9b7wb7QlheWrD1bIUjdJHVGlLy7h3UQRHu-tLZ03W6joKaqOUil5p6XLCi-l61aMwV47Ok8Me8SFfyOiyH_ud5fgUUc14Txun6xwuVmR8zFz5Dj62QfZ1KUDByMGAFl7w7DpimM0bbxXk4_v_8uY7-3teCF0pAn6CS17S2yxOED0G4wAtxFKf-CqYJofbvx5WMJaauu94ItKYSSPVeW7_ZoysW_quwnNLFD8w3lPt3X7OiU3AOx-YMC0bPnua1Wwv5kJyKdLcbPVh5XQ71c54n6xF2QgkfcoXv7xo-2HgopMk2LPPIZ9xHYqaxVmnoRdNA5Hjhz6nNadZvXcf4KObbSSA_WasZS3p-tQfyHup2JmpCJ4dvH1Otk';
         });
       });
     };
@@ -877,7 +924,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '';
+      //data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
@@ -924,5 +971,15 @@ export default {
         }
       });
     };
+    //时间戳的处理
+    Vue.prototype.datetoLocaleString = function (val) {
+      let time = new Date();
+      let y = time.getFullYear();
+      let m = time.getMonth() + 1;
+      let d = time.getDate();
+      m = m < 10 ? '0' + m : m;
+      d = d < 10 ? '0' + d : d;
+      return y + '-' + m + '-' + d;
+    }
   }
 }

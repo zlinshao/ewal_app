@@ -1066,7 +1066,6 @@
         this.$httpZll.getBulletinDraft(params).then(data => {
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
-          this.form.id = '';//草稿ID
           let arr = [];
           if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
             arr = ['address', 'house_id', 'contract_id', 'contract_number'];
@@ -1101,6 +1100,7 @@
             }
 
           } else {
+            this.form.id = '';//草稿ID
             let res = data.data;
             this.childBulletin(res, 'draft');
             this.handlePreFill(res);
