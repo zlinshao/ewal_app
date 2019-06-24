@@ -31,7 +31,7 @@
               <div class="contract_content" @click="onConfirm(item)">
                 <div class="top">
                   <h1>
-                    <b>{{contract_type == 1 ? '收' : '租'}}</b>
+                    <b>{{params.contract_type == 1 ? '收' : '租'}}</b>
                     <span v-if="item.house_name && item.house_name.name">{{item.house_name.name}}</span>
                     <span v-else>******</span>
                   </h1>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="main">
                   <div>
-                    <h1>{{contract_type == 1 ? '房东' : '租客'}}</h1>
+                    <h1>{{params.contract_type == 1 ? '房东' : '租客'}}</h1>
                     <h2 v-if="item.customer_info && item.customer_info[0].name">
                       <span>{{item.customer_info[0].name}}</span>
                     </h2>
