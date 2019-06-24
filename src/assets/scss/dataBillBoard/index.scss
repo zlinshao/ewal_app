@@ -1,0 +1,177 @@
+@import "../common.scss";
+
+@mixin houseBg($m) {
+  @include bgImage('../../../assets/image/dataBillBoard/' + $m);
+}
+
+#dataBillBoard {
+  > div.dataBillBoard {
+    width: 100%;
+    height: 100%;
+    background:rgba(230,244,249,1);
+    //头部切换栏
+    .tabs_list{
+      display: flex;
+      justify-content: space-between;
+      padding: .3rem;
+      color: #4570FE;
+      span{
+        font-size: .28rem;
+      }
+      .left_calendarDate{
+        img{
+          width: .3rem;
+          height: .3rem;
+          vertical-align: middle;
+        }
+        span{
+          display: inline-block;
+          color:#4A4A4A;
+        }
+      }
+      .right_name{
+        span:nth-child(1){
+          padding-right: .4rem;
+        }
+      }
+    }
+    //滚动部分
+    .main_list{
+      //卡片和图表
+      .data_card{
+        position: relative;
+        .card_bg{
+          @include houseBg('billBoard_card@3x.png');
+          z-index: -1;
+          width: auto;
+          height: 4rem;
+          padding-top: .4rem;
+          margin: .1rem .3rem  0 .3rem;
+          span{
+            display: block;
+            width: 100%;
+            text-align: center;
+            font-size:.24rem;
+            color:#00E3FF;
+          }
+          span:nth-child(2){
+            font-size:.48rem;
+            font-weight:600;
+            color:#FFFFFF;
+            padding-top: .1rem;
+          }
+        }
+        #myEcharts{
+          z-index: 99;
+          width: 100%;
+          height: 2.5rem;
+          position: absolute;
+          bottom: 0;
+        }
+      }
+      //列表
+      .lists{
+        margin: 0 .3rem ;
+        .list{
+          padding: .3rem;
+          background:#FFFFFF;
+          opacity:0.6;
+          border-radius: 5px;
+          margin-top: .2rem;
+          .base_info{
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: .4rem;
+            span{
+              display: inline-block;
+              font-size:.3rem;
+              color:rgba(0,0,0,1);
+            }
+            span:nth-child(1){
+              font-weight:bold;
+            }
+            span:nth-child(2){
+              font-size:.24rem;
+              color:#4570FE;
+              //border:1px solid rgba(69,112,254,0.1);
+              background:rgba(69,112,254,0.1);
+              border-radius: 20px;
+              padding: .1rem .3rem ;
+            }
+          }
+          .data_info{
+            display: flex;
+            justify-content: space-between;
+            span{
+              display: block;
+              font-size:.22rem;
+              color:rgba(104,104,116,1)
+            }
+            .label_val{
+              height: .6rem;
+              line-height: .6rem;
+              padding-top: .1rem;
+              font-size: .26rem;
+            }
+            .left_data{
+              display: flex;
+              justify-content: flex-start;
+              .duty{
+                margin-right: .4rem;
+                span:nth-child(2){
+                  color:#F4511E;
+                }
+              }
+              .perform{
+                span:nth-child(2){
+                  color:#4570FE;
+                }
+              }
+            }
+            .right_data{
+              .earnings_name{
+                text-align: right;
+              }
+              span:nth-child(2){
+                font-size: .32rem;
+                color:#FD9007;
+              }
+            }
+          }
+        }
+        .noMore, .noData {
+          @include flex('flex-center');
+          width: 100%;
+          padding: .2rem;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}
+.commonFooterTag {
+  position: fixed;
+  bottom: 0;
+  height: 1.8rem;
+  width: 100%;
+  padding: .15rem .4rem;
+  @include flex('justify-around');
+  align-items: flex-end;
+  @include bgImage("../../../assets/image/common/commonfootertag.png");
+
+  p {
+    width: .6rem;
+    height: .6rem;
+  }
+
+  @for $i from 1 through 4 {
+    .p-#{$i} {
+      @include bgImage("../../../assets/image/home/tab_home#{$i}.png");
+    }
+  }
+
+  .p-2 {
+    @include bgImage("../../../assets/image/home/tab_home_pre2.png");
+  }
+}
+

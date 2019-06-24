@@ -36,6 +36,9 @@ import Questionnaire from '@/components/pages/questionnaire/index.vue';
 import CreateQuestionnaire from '@/components/pages/questionnaire/createQuestionnaire.vue';
 import Exam from '@/components/pages/exam';
 
+//数据看板
+import DataBillBoard from '@/components/pages/dataBillBoard/index.vue';
+
 Vue.use(Router);
 
 export default new Router({
@@ -195,6 +198,12 @@ export default new Router({
       component:Exam,
       name:'exam',
       meta: {title:'考试',index:4},
-    }
+    },
+    {
+      path: '/dataBillBoard',
+      name: '数据看板',
+      component: DataBillBoard,
+      meta: {title: '数据看板', index: 8}
+    },
   ]
 })
