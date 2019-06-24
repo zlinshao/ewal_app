@@ -344,7 +344,7 @@
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
           // 不预填
-          ['bulletin_collect_continued', 'bulletin_rent_continued', 'bulletin_change', 'bulletin_rent_trans'],
+          ['bulletin_collect_continued', 'bulletin_rent_continued', 'bulletin_change'],
         ];
         this.isGetTake = data[0].includes(type.bulletin);
         this.noTaskId = data[1].includes(type.bulletin);
@@ -384,16 +384,16 @@
             this.formatData.house_id_rent = this.taskDetail.address;
             break;
           case'bulletin_special':  //特殊事项报备
-            // if (JSON.stringify(this.taskDetail) !== '{}') {
-            //   this.form.house_address = this.taskDetail.address;
-            // this.form.customer_name = this.taskDetail.customer_info[0].name;
-            // this.form.month = this.taskDetail.month_price[0].period;
-            // this.form.price = [];
-            // for (let item of this.taskDetail.month_price) {
-            //   let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
-            //   this.form.price.push(str);
-            // }
-            // }
+            if (JSON.stringify(this.taskDetail) !== '{}') {
+              this.form.house_address = this.taskDetail.address;
+              this.form.customer_name = this.taskDetail.customer_info[0].name;
+              // this.form.month = this.taskDetail.month_price[0].period;
+              this.form.price = [];
+              for (let item of this.taskDetail.month_price) {
+                let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
+                this.form.price.push(str);
+              }
+            }
             // this.form.price = this.taskDetail.month_price[0].price;
             break;
           case 'bulletin_rent_continued':
@@ -1066,22 +1066,22 @@
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
           let arr = [];
-          if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
+          if (this.noContractInfo) {
             arr = ['address', 'house_id', 'contract_id', 'contract_number'];
             this.disabledDefaultValue('slither0', arr);
           } else if (type === 'bulletin_change') {
             arr = ['house_id_rent', 'contract_id', 'contract_number'];
             this.disabledDefaultValue('slither0', arr);
-          } else if (type === 'bulletin_rent_trans') {
+          }else if(type==='bulletin_rent_trans') {
             arr = [];
-            this.disabledDefaultValue('slither1', arr);
+            this.disabledDefaultValue('slither1',arr);
           }
           if (!data) {
             let arr = [];//不需要清空字段
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
                 //续收、续租预填数据
-                if (this.noContractInfo) {
+                if (this.noContractInfo || type === 'bulletin_change') {
                   this.handlePreFill(this.taskDetail.content);
                   this.disabledDefaultValueHandler(this.allResetting);
                 } else {
@@ -1304,15 +1304,6 @@
                 }
               });
               break;
-            case 'price':
-              let str = [], price = res[item];
-              this.form[item] = price || this.form[item];
-              this.formatData[item] = '';
-              for (let key of price) {
-                str.push(`${key.begin_date}至${key.end_date}:${key.month_unit_price}元`);
-              }
-              this.formatData[item] = str.join(' ; ');
-              break;
             case 'period_price_way_arr'://付款方式变化
               this.$changeHandle(res, item, ['pay_way'], this.drawSlither, this.formatData);
               break;
@@ -1370,7 +1361,6 @@
       },
       // 禁止预填 清空处理
       disabledDefaultValueHandler(all) {
-        console.log(all)
         this.drawSlither = this.jsonClone(this.bulletinSlither);
         for (let item of Object.keys(all.form)) {
           if (!all.noEmpty.includes(item)) {
@@ -1386,6 +1376,8 @@
         for (let item of Object.keys(all.album)) {
           this.album[item] = all.album[item];
         }
+        console.log(all.form)
+        console.log(all.formatData)
       },
       // 初始化数据
       resetting() {
