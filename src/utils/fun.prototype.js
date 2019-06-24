@@ -417,16 +417,16 @@ export default {
           title = ['补充协议'];
           switch (type) {
             case 'supplement_lord_time':
-              data.slither0 = this.jsonData(defineSupplyAgreement[1]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[1]);
               break;
             case 'supplement_lord_change_bank':
-              data.slither0 = this.jsonData(defineSupplyAgreement[2]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[2]);
               break;
             case 'supplement_lord_change_price':
-              data.slither0 = this.jsonData(defineSupplyAgreement[3]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[3]);
               break;
             case 'supplement_renter_time':
-              data.slither0 = this.jsonData(defineSupplyAgreement[4]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[4]);
               break;
           }
           break;
