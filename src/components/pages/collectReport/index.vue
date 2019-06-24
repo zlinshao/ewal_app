@@ -384,16 +384,16 @@
             this.formatData.house_id_rent = this.taskDetail.address;
             break;
           case'bulletin_special':  //特殊事项报备
-            if (JSON.stringify(this.taskDetail) !== '{}') {
-              this.form.house_address = this.taskDetail.address;
-              this.form.customer_name = this.taskDetail.customer_info[0].name;
+            // if (JSON.stringify(this.taskDetail) !== '{}') {
+            //   this.form.house_address = this.taskDetail.address;
+              // this.form.customer_name = this.taskDetail.customer_info[0].name;
               // this.form.month = this.taskDetail.month_price[0].period;
-              this.form.price = [];
-              for (let item of this.taskDetail.month_price) {
-                let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
-                this.form.price.push(str);
-              }
-            }
+              // this.form.price = [];
+              // for (let item of this.taskDetail.month_price) {
+              //   let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
+              //   this.form.price.push(str);
+              // }
+            // }
             // this.form.price = this.taskDetail.month_price[0].price;
             break;
           case 'bulletin_rent_continued':
@@ -961,7 +961,7 @@
               if (status) {
                 if (!this.isGetTake) {
                   if (bulletin.bulletin !== 'bulletin_special' && bulletin.bulletin !== 'bulletin_rent_RWC') {
-                    if (this.noContractInfo || bulletin.bulletin === 'bulletin_change') {
+                    if (this.noContractInfo) {
                       this.disabledDefaultValueHandler(this.allResetting);
                     } else {
                       this.getPunchClockData();
@@ -1065,12 +1065,13 @@
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
+          let arr = [];
           if (this.noContractInfo) {
-            this.disabledDefaultValue('slither0');
-            this.allResetting.noEmpty = ['address', 'house_id', 'contract_id', 'contract_number'];
+            arr = ['address', 'house_id', 'contract_id', 'contract_number'];
+            this.disabledDefaultValue('slither0', arr);
           } else if (type === 'bulletin_change') {
-            this.disabledDefaultValue('slither0');
-            this.allResetting.noEmpty = ['house_id_rent', 'contract_id', 'contract_number'];
+            arr = ['house_id_rent', 'contract_id', 'contract_number'];
+            this.disabledDefaultValue('slither0', arr);
           }
           if (!data) {
             let arr = [];//不需要清空字段
@@ -1100,7 +1101,7 @@
             this.handlePreFill(res);
           }
           if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
-            this.electronicContract();
+            // this.electronicContract();
           }
         });
       },
@@ -1300,6 +1301,15 @@
                 }
               });
               break;
+            case 'price':
+              let str = [], price = res[item];
+              this.form[item] = price || this.form[item];
+              this.formatData[item] = '';
+              for (let key of price) {
+                str.push(`${key.begin_date}至${key.end_date}:${key.month_unit_price}元`);
+              }
+              this.formatData[item] = str.join(' ; ');
+              break;
             case 'period_price_way_arr'://付款方式变化
               this.$changeHandle(res, item, ['pay_way'], this.drawSlither, this.formatData);
               break;
@@ -1350,9 +1360,10 @@
         }
       },
       // 禁止预填 字段
-      disabledDefaultValue(slither) {
+      disabledDefaultValue(slither, arr) {
         let all = this.initFormData(this.bulletinSlither[slither], this.showData);
         this.allResetting = this.jsonClone(all);
+        this.allResetting.noEmpty = arr;
       },
       // 禁止预填 清空处理
       disabledDefaultValueHandler(all) {
@@ -1362,6 +1373,7 @@
             this.form[item] = all.form[item];
           }
         }
+
         for (let item of Object.keys(all.formatData)) {
           if (!all.noEmpty.includes(item)) {
             this.formatData[item] = all.formatData[item];

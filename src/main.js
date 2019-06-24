@@ -30,9 +30,9 @@ Vue.prototype.$httpZll = httpZll;
 Vue.prototype.$httpTj = httpTj;
 Vue.prototype.$httpHs = httpHs;
 
-import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
-let vConsole = new VConsole(); // 初始化
-Vue.use(vConsole);
+// import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
+// let vConsole = new VConsole(); // 初始化
+// Vue.use(vConsole);
 
 // 监听软键盘
 (function () {
@@ -66,13 +66,13 @@ Vue.use(vConsole);
 router.afterEach(route => {
   // 从路由的元信息中获取 title 属性
   if (route.meta.title) {
-    dd.biz.navigation.setTitle({
-      title: route.meta.title,//控制标题文本，空字符串表示显示默认文本
-      onSuccess(result) {
-      },
-      onFail(err) {
-      }
-    });
+    // dd.biz.navigation.setTitle({
+    //   title: route.meta.title,//控制标题文本，空字符串表示显示默认文本
+    //   onSuccess(result) {
+    //   },
+    //   onFail(err) {
+    //   }
+    // });
   }
 });
 

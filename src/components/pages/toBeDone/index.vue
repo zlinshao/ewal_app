@@ -57,6 +57,7 @@
     <deliver :module="deliverPopup" :config="deliverConfig" @close="deliverPopup = false"></deliver>
     <!--新建待办任务-->
     <div class="addToBeDone" @click="showAddPopup = true" v-if="showRightAdd"></div>
+    <div class="addToBeDone newAdd" @click="addBulletin(bulletin_type.bulletin)" v-if="addType"><span>+</span></div>
     <van-popup v-model="showAddPopup" overlay-class="overlay-color" position="right" :overlay="true"
                class="showAddPopup">
       <p class="addTitle">
@@ -206,6 +207,7 @@
         toBeDoneList: [],
         variableName: '',
         bulletin_type: {},//报备类型
+        addType: false,
         showRightAdd: false,//显示新增
         searchStaffModule: false,
         contractMoulds: {},
@@ -223,6 +225,7 @@
     activated() {
       this.bulletin_type = JSON.parse(sessionStorage.bulletin_type);
       let type = this.bulletin_type.bulletin;
+      this.addType = type === 'bulletin_change' || type === 'bulletin_rent_trans' || type === 'bulletin_special';
       if (type === 'bulletin_rent_RWC' || type === 'bulletin_booking_renting' || type === 'bulletin_rent_continued') {
         this.bulletin_type = bulletinRouterStatus.bulletin_rent_basic;
         sessionStorage.setItem('bulletin_type', JSON.stringify(this.bulletin_type));
@@ -247,6 +250,13 @@
       },
     },
     methods: {
+      addBulletin(type) {
+        if (type === 'bulletin_special') {
+          this.routerLink('/collectReport');
+        } else {
+          this.routerLink('/contractSearch');
+        }
+      },
       addRouterLink(url, item) {
         if (item.status) {
           sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
@@ -509,6 +519,18 @@
           case "bulletin_checkout":
             obj.status = 'toBeDoneAgency';
             obj.type = 'MarketCollect,MarketRent';
+            break;
+          case "bulletin_change":
+            obj.status = 'toBeDoneChange';
+            obj.type = 'Market-ChangeRentHouse';
+            break;
+          case "bulletin_rent_trans":
+            obj.status = 'toBeDoneChange';
+            obj.type = 'Market-ChangeRentCustomer';
+            break;
+          case "bulletin_special":
+            obj.status = 'toBeDoneChange';
+            obj.type = 'Market-Special';
             break;
         }
         // Market-CollectWithdrawal 收房退租
