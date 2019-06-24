@@ -326,11 +326,11 @@
               //   url: '/supplyAgreement',
               //   text: '补充协议',
               // },
-              // {
-              //   url: '/collectReport',
-              //   status: bulletinRouterStatus.bulletin_rent_RWC,
-              //   text: '未收先租',
-              // }
+              {
+                url: '/collectReport',
+                status: bulletinRouterStatus.bulletin_rent_RWC,
+                text: '未收先租',
+              }
             ];
             break;
         }
