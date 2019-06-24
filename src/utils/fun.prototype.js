@@ -417,16 +417,16 @@ export default {
           title = ['补充协议'];
           switch (type) {
             case 'supplement_lord_time':
-              data.slither0 = this.jsonData(defineSupplyAgreement[1]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[1]);
               break;
             case 'supplement_lord_change_bank':
-              data.slither0 = this.jsonData(defineSupplyAgreement[2]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[2]);
               break;
             case 'supplement_lord_change_price':
-              data.slither0 = this.jsonData(defineSupplyAgreement[3]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[3]);
               break;
             case 'supplement_renter_time':
-              data.slither0 = this.jsonData(defineSupplyAgreement[4]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[4]);
               break;
           }
           break;
@@ -704,7 +704,7 @@ export default {
             let content = {};
             if (val.book_url) {
               content = res.data;
-              this.setContentDetail(val, data, content);
+              this.setContentDetail(val, content);
               resolve(true);
             } else {
               this.getBulletinDetailFun(res, val).then(item => {
@@ -877,7 +877,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '';
+      data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
