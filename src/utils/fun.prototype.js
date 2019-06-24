@@ -704,7 +704,7 @@ export default {
             let content = {};
             if (val.book_url) {
               content = res.data;
-              this.setContentDetail(val, data, content);
+              this.setContentDetail(val, content);
               resolve(true);
             } else {
               this.getBulletinDetailFun(res, val).then(item => {
@@ -877,7 +877,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '';
+      data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;

@@ -570,7 +570,7 @@ approvalSearch = {
   toBeDoneAgency: ['BulletinAgency'],
   toBeDoneChange: ['InputBulletinData'],
   bulletinCheckout: ['Rent-InputCheckoutData', 'Collect-InputCheckoutData'],
-  processDefinitionKeys: ['MG-BulletinFinanicApproval', 'MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking', 'Market-RentNotHouseBooking', 'Market-ChangeRentCustomer'],
+  processDefinitionKeys: ['MG-BulletinFinanicApproval', 'MG-BulletinApproval', 'Market-VillageExpand', 'Rent-Retainage'],
   approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
@@ -5119,7 +5119,7 @@ defineAgencyReport = {
     keyType: '',
     type: 'text',
     showForm: 'formatData', //picker 显示form 或 formatData
-    status: '',
+    status: 'objInt',
     slot: '',
   },
     {
