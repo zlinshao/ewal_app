@@ -896,10 +896,6 @@ export default {
             }
           }
         }
-        // 22f393c5-964c-11e9-9876-02420617522e
-        // 22f393c5-964c-11e9-9876-02420617522e
-        // 22f393c5-964c-11e9-9876-02420617522e
-        // 22f393c5-964c-11e9-9876-02420617522e
         dicties.province = province;
         this.$store.dispatch('all_city_list', cityArr);
         if (!cityArr.length) {

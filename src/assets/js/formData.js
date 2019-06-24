@@ -570,7 +570,7 @@ approvalSearch = {
   toBeDoneAgency: ['BulletinAgency'],
   toBeDoneChange: ['InputBulletinData'],
   bulletinCheckout: ['Rent-InputCheckoutData', 'Collect-InputCheckoutData'],
-  processDefinitionKeys: ['Market-Special-collect', 'Market-Special-rent', 'MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking', 'Market-RentNotHouseBooking', 'Market-ChangeRentCustomer'],
+  processDefinitionKeys: ['MG-BulletinFinanicApproval', 'MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking', 'Market-RentNotHouseBooking', 'Market-ChangeRentCustomer'],
   approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
