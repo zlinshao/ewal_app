@@ -1072,13 +1072,16 @@
           } else if (type === 'bulletin_change') {
             arr = ['house_id_rent', 'contract_id', 'contract_number'];
             this.disabledDefaultValue('slither0', arr);
+          }else if (type === 'bulletin_rent_trans') {
+            arr = [ 'contract_id', 'contract_number'];
+            this.disabledDefaultValue('slither1', arr);
           }
           if (!data) {
             let arr = [];//不需要清空字段
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
                 //续收、续租预填数据
-                if (this.noContractInfo || type === 'bulletin_change') {
+                if (this.noContractInfo || type === 'bulletin_change' || type === 'bulletin_rent_trans') {
                   this.handlePreFill(this.taskDetail.content);
                   this.disabledDefaultValueHandler(this.allResetting);
                 } else {
