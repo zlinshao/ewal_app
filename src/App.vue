@@ -126,6 +126,7 @@
             dicties.decorate = dict[404];//装修
             dicties.card_type = dict[409];//证件类型
             dicties.property_type = dict[410];//房屋类型
+            dicties.check_type = dict[328];//退租类型
             break;
           case 'h1':
             if (res.data && res.data.length) {

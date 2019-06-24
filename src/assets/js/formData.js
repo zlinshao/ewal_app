@@ -545,6 +545,16 @@ bulletinRouterStatus = {
     bulletin: 'bulletin_special',
     to: 'special',
   },
+  // 特殊事项报备
+  bulletin_special_collect: {
+    bulletin: 'bulletin_special_collect',
+    to: 'special',
+  },
+  // 特殊事项报备
+  bulletin_special_rent: {
+    bulletin: 'bulletin_special_rent',
+    to: 'special',
+  },
   //退租报备
   bulletin_checkout: {
     bulletin: 'bulletin_checkout',
@@ -559,7 +569,7 @@ approvalSearch = {
   toBeDoneRetainage: ['RentRetainage'],
   toBeDoneAgency: ['BulletinAgency'],
   toBeDoneChange: ['InputBulletinData'],
-  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking', 'Market-RentNotHouseBooking'],
+  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking', 'Market-RentNotHouseBooking','Market-ChangeRentCustomer'],
   approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
@@ -4536,7 +4546,7 @@ defineSubletReport = [
     keyName: 'house_id',
     keyType: '',
     type: 'text',
-    status: '',
+    showForm: 'formatData', //picker 显示form 或 formatData
     slot: '',
   },
 ];
@@ -5257,15 +5267,15 @@ defineAgencyReport = {
 defineRetainageReport = {
   slither0: [
     {
-    label: '房屋地址',
-    placeholder: '已禁用',
-    disabled: 'disabled',
-    keyName: 'house_id',
-    keyType: '',
-    type: 'text',
-    status: '',
-    slot: '',
-  },
+      label: '房屋地址',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'house_id',
+      keyType: '',
+      type: 'text',
+      status: '',
+      slot: '',
+    },
     {
       label: '客户姓名',
       disabled: 'disabled',
@@ -6505,16 +6515,16 @@ defineContinueCollect = {
       slot: '',
     },
     {
-    label: '客户姓名',
-    placeholder: '必填 请输入',
-    keyName: 'customer_name',
-    keyType: '',
-    type: 'text',
-    button: '身份识别',
-    icon: 'identity',
-    status: '',
-    slot: '',
-  },
+      label: '客户姓名',
+      placeholder: '必填 请输入',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      button: '身份识别',
+      icon: 'identity',
+      status: '',
+      slot: '',
+    },
     {
       label: '性别',
       placeholder: '必填 请选择',
