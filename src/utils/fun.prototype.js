@@ -139,7 +139,7 @@ export default {
                 obj.approvedStatus = names.value;
               }
             }
-          } else if (key.name.includes('_approved')) {
+          } else if (key.name.includes('_approved') && !key.name.startsWith('bm_')) {
             obj.approvedStatus = key.value;
           }
         }
