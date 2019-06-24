@@ -569,7 +569,7 @@ approvalSearch = {
   toBeDoneRetainage: ['RentRetainage'],
   toBeDoneAgency: ['BulletinAgency'],
   toBeDoneChange: ['InputBulletinData'],
-  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking', 'Market-RentNotHouseBooking'],
+  processDefinitionKeys: ['MG-BulletinApproval', 'Market-VillageExpand', 'Agency-Supervision', 'Rent-Retainage', 'Market-RentBooking', 'Market-RentNotHouseBooking','Market-ChangeRentCustomer'],
   approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
@@ -4546,7 +4546,7 @@ defineSubletReport = [
     keyName: 'house_id',
     keyType: '',
     type: 'text',
-    status: '',
+    showForm: 'formatData', //picker 显示form 或 formatData
     slot: '',
   },
 ];
