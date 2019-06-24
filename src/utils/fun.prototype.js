@@ -776,7 +776,6 @@ export default {
       })
     };
     Vue.prototype.$bulletinTitles = function (type) {
-      console.log(type)
       let name = '', bulletin = '';
       switch (type) {
         case 'bulletin_collect_basic':
