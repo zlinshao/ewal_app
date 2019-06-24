@@ -338,7 +338,7 @@ export default {
       return search;
     };
     // 报备类型数据匹配
-    Vue.prototype.$bulletinType = function (type, rwc) {
+    Vue.prototype.$bulletinType = function (type, rwc = '') {
       let data = {}, title = [];
       switch (type) {
         case 'bulletin_collect_basic'://收房
@@ -873,7 +873,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '';
+      data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;

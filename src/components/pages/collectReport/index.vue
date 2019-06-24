@@ -384,16 +384,16 @@
             this.formatData.house_id_rent = this.taskDetail.address;
             break;
           case'bulletin_special':  //特殊事项报备
-            if (JSON.stringify(this.taskDetail) !== '{}') {
-              this.form.house_address = this.taskDetail.address;
-              this.form.customer_name = this.taskDetail.customer_info[0].name;
+            // if (JSON.stringify(this.taskDetail) !== '{}') {
+            //   this.form.house_address = this.taskDetail.address;
+              // this.form.customer_name = this.taskDetail.customer_info[0].name;
               // this.form.month = this.taskDetail.month_price[0].period;
-              this.form.price = [];
-              for (let item of this.taskDetail.month_price) {
-                let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
-                this.form.price.push(str);
-              }
-            }
+              // this.form.price = [];
+              // for (let item of this.taskDetail.month_price) {
+              //   let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
+              //   this.form.price.push(str);
+              // }
+            // }
             // this.form.price = this.taskDetail.month_price[0].price;
             break;
           case 'bulletin_rent_continued':
@@ -1301,6 +1301,15 @@
                 }
               });
               break;
+            case 'price':
+              let str = [], price = res[item];
+              this.form[item] = price || this.form[item];
+              this.formatData[item] = '';
+              for (let key of price) {
+                str.push(`${key.begin_date}至${key.end_date}:${key.month_unit_price}元`);
+              }
+              this.formatData[item] = str.join(' ; ');
+              break;
             case 'period_price_way_arr'://付款方式变化
               this.$changeHandle(res, item, ['pay_way'], this.drawSlither, this.formatData);
               break;
@@ -1373,8 +1382,6 @@
         for (let item of Object.keys(all.album)) {
           this.album[item] = all.album[item];
         }
-        console.log(all.form)
-        console.log(all.formatData)
       },
       // 初始化数据
       resetting() {
