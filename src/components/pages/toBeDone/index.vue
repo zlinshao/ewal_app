@@ -345,7 +345,11 @@
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
             let routes = this.$router.options.routes, all = {}, title = '', bulletinName = '';
-            all = this.$bulletinTitles(val.bulletin_type);
+            if (val.bulletin_type) {
+              all = this.$bulletinTitles(val.bulletin_type);
+            } else {
+              all = this.$bulletinTitles(type);
+            }
             title = all.name;
             bulletinName = all.bulletin;
             for (let value of routes) {
