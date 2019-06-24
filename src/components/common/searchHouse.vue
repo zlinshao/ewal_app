@@ -122,7 +122,7 @@
         this.onConfig = val;
         //特殊事项报备(ll)
         let bulletin = JSON.parse(sessionStorage.bulletin_type || '{}');
-        if (bulletin.includes('bulletin_special')) {
+        if (bulletin.bulletin.includes('bulletin_special')) {
           this.params.contract_type = val.contract_type;
         }
       },
