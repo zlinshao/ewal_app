@@ -827,26 +827,26 @@ export default {
           //   jsApiList: ['biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
           // });
           // console.log(res);
-          dd.ready(() => {
-            dd.runtime.permission.requestAuthCode({
-              corpId: _config.corpId,
-              onSuccess(info) {
-                that.$httpZll.getTokenInfo(info.code).then((res) => {
-                  that.personalData(res, resolve);
-                })
-              },
-              onFail(err) {
-                alert('dd error: ' + JSON.stringify(err));
-                // alert('您不在系统内，请联系管理员添加！');
-                that.closeDD();
-              }
-            });
-          });
-          dd.error((err) => {
-            alert('dd error: ' + JSON.stringify(err));
-          });
-          // this.$personalDataHandler(setPersonalDetail.data.detail, resolve);
-          // globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjdiYzVkMTM2NTBiZjJjZGRiN2Y3NTFiYTExZmVhZWExOTRiZGNlZTA5ZTc4NDcwYTYwMzQwNDk2NDFkNTI1NzdhOWQyMDg3MWIyYWY4Zjc0In0.eyJhdWQiOiIxIiwianRpIjoiN2JjNWQxMzY1MGJmMmNkZGI3Zjc1MWJhMTFmZWFlYTE5NGJkY2VlMDllNzg0NzBhNjAzNDA0OTY0MWQ1MjU3N2E5ZDIwODcxYjJhZjhmNzQiLCJpYXQiOjE1NjExODQ5ODcsIm5iZiI6MTU2MTE4NDk4NywiZXhwIjoxNTYyNDgwOTg3LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.bZWWUDv4ZchHRsd3R0Lnew36wYHpN-A1823vvUt0-p6kauOAF4iZDt9MdjioR2aFEKe8gK9Vlxb8usbWSPA6_ihyDcX1WYxphRWKGiTRuOS3LmeIU3k2FtJl2_zeDJTRpWn4NQdj9b-a0P79yeoSKZ8FgNSm9I6qxcemTOnuw94i8IAjoH3C6u0j922bAP2snEwsZabPDugO5FIKozGdre12l4FNGMSw5S4gLmVZqe4QI_ydCj7mV8C0OrB0Q3S_OnZzy1UdFpKOT7N2LTm9E1sO3l30xlLhVZvK86IQ48jGD-f-s92g9b7wb7QlheWrD1bIUjdJHVGlLy7h3UQRHu-tLZ03W6joKaqOUil5p6XLCi-l61aMwV47Ok8Me8SFfyOiyH_ud5fgUUc14Txun6xwuVmR8zFz5Dj62QfZ1KUDByMGAFl7w7DpimM0bbxXk4_v_8uY7-3teCF0pAn6CS17S2yxOED0G4wAtxFKf-CqYJofbvx5WMJaauu94ItKYSSPVeW7_ZoysW_quwnNLFD8w3lPt3X7OiU3AOx-YMC0bPnua1Wwv5kJyKdLcbPVh5XQ71c54n6xF2QgkfcoXv7xo-2HgopMk2LPPIZ9xHYqaxVmnoRdNA5Hjhz6nNadZvXcf4KObbSSA_WasZS3p-tQfyHup2JmpCJ4dvH1Otk';
+          // dd.ready(() => {
+          //   dd.runtime.permission.requestAuthCode({
+          //     corpId: _config.corpId,
+          //     onSuccess(info) {
+          //       that.$httpZll.getTokenInfo(info.code).then((res) => {
+          //         that.personalData(res, resolve);
+          //       })
+          //     },
+          //     onFail(err) {
+          //       alert('dd error: ' + JSON.stringify(err));
+          //       // alert('您不在系统内，请联系管理员添加！');
+          //       that.closeDD();
+          //     }
+          //   });
+          // });
+          // dd.error((err) => {
+          //   alert('dd error: ' + JSON.stringify(err));
+          // });
+          this.$personalDataHandler(setPersonalDetail.data.detail, resolve);
+          globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjdiYzVkMTM2NTBiZjJjZGRiN2Y3NTFiYTExZmVhZWExOTRiZGNlZTA5ZTc4NDcwYTYwMzQwNDk2NDFkNTI1NzdhOWQyMDg3MWIyYWY4Zjc0In0.eyJhdWQiOiIxIiwianRpIjoiN2JjNWQxMzY1MGJmMmNkZGI3Zjc1MWJhMTFmZWFlYTE5NGJkY2VlMDllNzg0NzBhNjAzNDA0OTY0MWQ1MjU3N2E5ZDIwODcxYjJhZjhmNzQiLCJpYXQiOjE1NjExODQ5ODcsIm5iZiI6MTU2MTE4NDk4NywiZXhwIjoxNTYyNDgwOTg3LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.bZWWUDv4ZchHRsd3R0Lnew36wYHpN-A1823vvUt0-p6kauOAF4iZDt9MdjioR2aFEKe8gK9Vlxb8usbWSPA6_ihyDcX1WYxphRWKGiTRuOS3LmeIU3k2FtJl2_zeDJTRpWn4NQdj9b-a0P79yeoSKZ8FgNSm9I6qxcemTOnuw94i8IAjoH3C6u0j922bAP2snEwsZabPDugO5FIKozGdre12l4FNGMSw5S4gLmVZqe4QI_ydCj7mV8C0OrB0Q3S_OnZzy1UdFpKOT7N2LTm9E1sO3l30xlLhVZvK86IQ48jGD-f-s92g9b7wb7QlheWrD1bIUjdJHVGlLy7h3UQRHu-tLZ03W6joKaqOUil5p6XLCi-l61aMwV47Ok8Me8SFfyOiyH_ud5fgUUc14Txun6xwuVmR8zFz5Dj62QfZ1KUDByMGAFl7w7DpimM0bbxXk4_v_8uY7-3teCF0pAn6CS17S2yxOED0G4wAtxFKf-CqYJofbvx5WMJaauu94ItKYSSPVeW7_ZoysW_quwnNLFD8w3lPt3X7OiU3AOx-YMC0bPnua1Wwv5kJyKdLcbPVh5XQ71c54n6xF2QgkfcoXv7xo-2HgopMk2LPPIZ9xHYqaxVmnoRdNA5Hjhz6nNadZvXcf4KObbSSA_WasZS3p-tQfyHup2JmpCJ4dvH1Otk';
         });
       });
     };
@@ -874,12 +874,12 @@ export default {
         for (let org of info.org) {
           if (org.city && org.city.length) {
             for (let city of org.city) {
-              cityObj.code = city.city_id;
-              cityObj.name = city.city_name;
-              // cityObj.code = 320100;
-              // cityObj.name = '天津市';
-              province[city.province.province_id] = city.province.province_name;
-              // province[320100] = '天津市';
+              // cityObj.code = city.city_id;
+              // cityObj.name = city.city_name;
+              cityObj.code = 320100;
+              cityObj.name = '南京市';
+              // province[city.province.province_id] = city.province.province_name;
+              province[320100] = '南京市';
               cityArr.push(cityObj);
             }
           }
