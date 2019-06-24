@@ -287,6 +287,9 @@ export default {
           for (let key of Object.keys(item.moreKeys)) {
             form[key] = item.moreKeys[key];
           }
+        } else if (item.picker === 'date') {
+          form[item.keyName] = item.keyType;
+          formatData[item.keyName] = item.keyType;
         } else {
           if (item.status === 'obj') {
             form[item.keyName] = {
@@ -687,6 +690,11 @@ export default {
           url = val.book_url;
         } else {
           url = val.detail_request_url;
+        }
+        if (!url) {
+          sessionStorage.setItem('task_detail', '{}');
+          resolve(true);
+          return;
         }
         this.$httpZll.get(url, {}, 'prompt').then(res => {
           if (res.success) {

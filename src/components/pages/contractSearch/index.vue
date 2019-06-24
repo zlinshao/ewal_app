@@ -190,6 +190,8 @@
         this.$httpZll.getBulletinDetail(data.contract_id).then(res => {
           if (res) {
             data.content = res.content.draft_content;
+            data.content.old_address = res.house_address || res.address || '';
+            data.content.address = res.house_address || res.address || '';
             sessionStorage.setItem('task_detail', JSON.stringify(data));
             if (type.bulletin === 'bulletin_checkout') {
               this.routerReplace('/deliveryReceipt');

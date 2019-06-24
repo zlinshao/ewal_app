@@ -961,7 +961,7 @@
               if (status) {
                 if (!this.isGetTake) {
                   if (bulletin.bulletin !== 'bulletin_special' && bulletin.bulletin !== 'bulletin_rent_RWC') {
-                    if (this.noContractInfo || bulletin.bulletin === 'bulletin_change') {
+                    if (this.noContractInfo) {
                       this.disabledDefaultValueHandler(this.allResetting);
                     } else {
                       this.getPunchClockData();
@@ -1065,12 +1065,13 @@
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
           this.form.id = '';//草稿ID
+          let arr = [];
           if (this.noContractInfo) {
-            this.disabledDefaultValue('slither0');
-            this.allResetting.noEmpty = ['address', 'house_id', 'contract_id', 'contract_number'];
+            arr = ['address', 'house_id', 'contract_id', 'contract_number'];
+            this.disabledDefaultValue('slither0', arr);
           } else if (type === 'bulletin_change') {
-            this.disabledDefaultValue('slither0');
-            this.allResetting.noEmpty = ['house_id_rent', 'contract_id', 'contract_number'];
+            arr = ['house_id_rent', 'contract_id', 'contract_number'];
+            this.disabledDefaultValue('slither0', arr);
           }
           if (!data) {
             let arr = [];//不需要清空字段
@@ -1100,7 +1101,7 @@
             this.handlePreFill(res);
           }
           if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
-            this.electronicContract();
+            // this.electronicContract();
           }
         });
       },
@@ -1350,9 +1351,10 @@
         }
       },
       // 禁止预填 字段
-      disabledDefaultValue(slither) {
+      disabledDefaultValue(slither, arr) {
         let all = this.initFormData(this.bulletinSlither[slither], this.showData);
         this.allResetting = this.jsonClone(all);
+        this.allResetting.noEmpty = arr;
       },
       // 禁止预填 清空处理
       disabledDefaultValueHandler(all) {
@@ -1362,6 +1364,7 @@
             this.form[item] = all.form[item];
           }
         }
+
         for (let item of Object.keys(all.formatData)) {
           if (!all.noEmpty.includes(item)) {
             this.formatData[item] = all.formatData[item];
@@ -1370,6 +1373,8 @@
         for (let item of Object.keys(all.album)) {
           this.album[item] = all.album[item];
         }
+        console.log(all.form)
+        console.log(all.formatData)
       },
       // 初始化数据
       resetting() {
