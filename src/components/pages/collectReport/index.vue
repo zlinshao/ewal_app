@@ -1123,7 +1123,10 @@
         let res = this.taskDetail;
         this.form.id = '';
         this.handlePreFill(res.content, 'again');
-        this.electronicContract();
+        let key = this.taskDetail.taskDefinitionKey;
+        if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
+          this.electronicContract();
+        }
       },
       // 尾款待办信息 / 渠道
       childBulletin(res, draft) {
@@ -1372,7 +1375,6 @@
       },
       // 禁止预填 清空处理
       disabledDefaultValueHandler(all) {
-        console.log(all)
         this.drawSlither = this.jsonClone(this.bulletinSlither);
         for (let item of Object.keys(all.form)) {
           if (!all.noEmpty.includes(item)) {

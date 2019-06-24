@@ -417,16 +417,16 @@ export default {
           title = ['补充协议'];
           switch (type) {
             case 'supplement_lord_time':
-              data.slither0 = this.jsonData(defineSupplyAgreement[1]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[1]);
               break;
             case 'supplement_lord_change_bank':
-              data.slither0 = this.jsonData(defineSupplyAgreement[2]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[2]);
               break;
             case 'supplement_lord_change_price':
-              data.slither0 = this.jsonData(defineSupplyAgreement[3]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[3]);
               break;
             case 'supplement_renter_time':
-              data.slither0 = this.jsonData(defineSupplyAgreement[4]);
+              data.slither0 = this.jsonClone(defineSupplyAgreement[4]);
               break;
           }
           break;
@@ -704,7 +704,7 @@ export default {
             let content = {};
             if (val.book_url) {
               content = res.data;
-              this.setContentDetail(val, data, content);
+              this.setContentDetail(val, content);
               resolve(true);
             } else {
               this.getBulletinDetailFun(res, val).then(item => {
@@ -886,20 +886,16 @@ export default {
         for (let org of info.org) {
           if (org.city && org.city.length) {
             for (let city of org.city) {
-              // cityObj.code = city.city_id;
-              // cityObj.name = city.city_name;
-              cityObj.code = 320100;
-              cityObj.name = '天津市';
-              // province[city.province.province_id] = city.province.province_name;
-              province[320100] = '天津市';
+              cityObj.code = city.city_id;
+              cityObj.name = city.city_name;
+              // cityObj.code = 320100;
+              // cityObj.name = '天津市';
+              province[city.province.province_id] = city.province.province_name;
+              // province[320100] = '天津市';
               cityArr.push(cityObj);
             }
           }
         }
-        // 22f393c5-964c-11e9-9876-02420617522e
-        // 22f393c5-964c-11e9-9876-02420617522e
-        // 22f393c5-964c-11e9-9876-02420617522e
-        // 22f393c5-964c-11e9-9876-02420617522e
         dicties.province = province;
         this.$store.dispatch('all_city_list', cityArr);
         if (!cityArr.length) {

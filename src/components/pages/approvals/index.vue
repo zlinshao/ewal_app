@@ -548,6 +548,10 @@
                   finished: Boolean(status),
                   taskCategory: 'approval',
                 };
+                if (status === 1) {
+                  let keys = this.params['params' + tab].processDefinitionKeys;
+                  this.params['params' + tab].processDefinitionKeys = keys + ',Agency-Supervision'
+                }
                 this.params['params' + tab].taskOwner = this.personal.staff_id;
                 break;
               case 2:

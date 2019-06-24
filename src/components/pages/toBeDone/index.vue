@@ -13,7 +13,7 @@
     </div>
     <div class="main" :style="mainHeight">
       <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
-        <li v-for="item in toBeDoneList">
+        <li v-for="item in toBeDoneList" @click="hhhhhhhhhh(item)">
           <div class="mainTitle">
             <label>{{item.title}}</label>
             <p @click="clickBtn({action:'finishTask'},item)"><i></i></p>
@@ -251,6 +251,9 @@
       },
     },
     methods: {
+      hhhhhhhhhh(val) {
+
+      },
       addBulletin(type) {
         if (type.includes('bulletin_special')) {
           sessionStorage.setItem('task_detail', '{}');
@@ -305,10 +308,10 @@
                 id: 'CollectTakeLook',
                 text: '收房带看',
               },
-              // {
-              //   url: '/supplyAgreement',
-              //   text: '补充协议',
-              // }
+              {
+                url: '/supplyAgreement',
+                text: '补充协议',
+              }
             ];
             break;
           case 'bulletin_rent_basic':
@@ -319,15 +322,15 @@
                 id: 'RentTakeLook',
                 text: '租房带看',
               },
-              // {
-              //   url: '/supplyAgreement',
-              //   text: '补充协议',
-              // },
-              // {
-              //   url: '/collectReport',
-              //   status: bulletinRouterStatus.bulletin_rent_RWC,
-              //   text: '未收先租',
-              // }
+              {
+                url: '/supplyAgreement',
+                text: '补充协议',
+              },
+              {
+                url: '/collectReport',
+                status: bulletinRouterStatus.bulletin_rent_RWC,
+                text: '未收先租',
+              }
             ];
             break;
         }
@@ -371,7 +374,6 @@
                     this.routerLink(val.task_action, {result: result});
                   } else {
                     if (val.bulletin_type) {
-                      debugger
                       bulletin = bulletinRouterStatus[val.bulletin_type];
                     } else {
                       bulletin = bulletinRouterStatus.bulletin_collect_basic;
