@@ -133,11 +133,14 @@ export default {
             let outcome = '';
             let come = JSON.parse(key.value);
             outcome = come.variableName;
+            obj.approvedName = outcome;
             for (let names of item.variables) {
               if (names.name === outcome) {
                 obj.approvedStatus = names.value;
               }
             }
+          } else if (key.name.includes('_approved') && !key.name.startsWith('bm_')) {
+            obj.approvedStatus = key.value;
           }
         }
         for (let key of Object.keys(item)) {
