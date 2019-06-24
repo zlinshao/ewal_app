@@ -308,10 +308,10 @@
                 id: 'CollectTakeLook',
                 text: '收房带看',
               },
-              // {
-              //   url: '/supplyAgreement',
-              //   text: '补充协议',
-              // }
+              {
+                url: '/supplyAgreement',
+                text: '补充协议',
+              }
             ];
             break;
           case 'bulletin_rent_basic':
@@ -322,10 +322,10 @@
                 id: 'RentTakeLook',
                 text: '租房带看',
               },
-              // {
-              //   url: '/supplyAgreement',
-              //   text: '补充协议',
-              // },
+              {
+                url: '/supplyAgreement',
+                text: '补充协议',
+              },
               {
                 url: '/collectReport',
                 status: bulletinRouterStatus.bulletin_rent_RWC,
