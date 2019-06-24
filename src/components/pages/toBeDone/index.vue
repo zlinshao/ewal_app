@@ -251,7 +251,7 @@
     },
     methods: {
       addBulletin(type) {
-        if (type === 'bulletin_special') {
+        if (type.includes('bulletin_special')) {
           this.routerLink('/collectReport');
         } else {
           this.routerLink('/contractSearch');
@@ -534,8 +534,10 @@
             obj.type = 'Market-ChangeRentCustomer';
             break;
           case "bulletin_special":
+          case "bulletin_special_collect":
+          case "bulletin_special_rent":
             obj.status = 'toBeDoneChange';
-            obj.type = 'Market-Special';
+            obj.type = 'Market-Special-collect,Market-Special-rent';
             break;
         }
         // Market-CollectWithdrawal 收房退租

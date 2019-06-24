@@ -340,7 +340,7 @@
         let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.finish_RWC);
         let data = [
           //不需要电子合同
-          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special'],
+          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC','bulletin_special', 'bulletin_special_collect', 'bulletin_special_rent'],
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
           // 不预填合同
@@ -384,15 +384,17 @@
             this.formatData.house_id_rent = this.taskDetail.address;
             break;
           case'bulletin_special':  //特殊事项报备
+          case'bulletin_special_collect':  //特殊事项报备
+          case'bulletin_special_rent':  //特殊事项报备
             // if (JSON.stringify(this.taskDetail) !== '{}') {
             //   this.form.house_address = this.taskDetail.address;
-              // this.form.customer_name = this.taskDetail.customer_info[0].name;
-              // this.form.month = this.taskDetail.month_price[0].period;
-              // this.form.price = [];
-              // for (let item of this.taskDetail.month_price) {
-              //   let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
-              //   this.form.price.push(str);
-              // }
+            // this.form.customer_name = this.taskDetail.customer_info[0].name;
+            // this.form.month = this.taskDetail.month_price[0].period;
+            // this.form.price = [];
+            // for (let item of this.taskDetail.month_price) {
+            //   let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
+            //   this.form.price.push(str);
+            // }
             // }
             // this.form.price = this.taskDetail.month_price[0].price;
             break;
@@ -436,7 +438,7 @@
           }
           this.formatData[config.keyName] = val.address;
           //获取特殊事项的房屋详情
-          if (config.bulletinType.bulletin === 'bulletin_special') {
+          if (config.bulletinType.bulletin.includes('bulletin_special')) {
             this.getBulletinDetailFun(val.contract_id);
           }
         }
@@ -644,7 +646,7 @@
             this.searchConfig = val;
             this.searchConfig.bulletinType = this.bulletinType;
             //特殊事项
-            if (this.bulletinType.bulletin !== 'bulletin_special') {
+            if (!this.bulletinType.bulletin.includes('bulletin_special')) {
               this.searchHouseModule = true;
             } else {
               this.specialSearchHouseFun();
@@ -960,7 +962,7 @@
             this.$dialog('重置', '您确定要清空表单吗?').then(status => {
               if (status) {
                 if (!this.isGetTake) {
-                  if (bulletin.bulletin !== 'bulletin_special' && bulletin.bulletin !== 'bulletin_rent_RWC') {
+                  if ((!bulletin.bulletin.includes('bulletin_special')) && bulletin.bulletin !== 'bulletin_rent_RWC') {
                     if (this.noContractInfo) {
                       this.disabledDefaultValueHandler(this.allResetting);
                     } else {
@@ -1085,7 +1087,7 @@
                   this.getPunchClockData();
                 }
               } else {
-                if (type !== 'bulletin_special') {
+                if (!type.includes('bulletin_special')) {
                   this.childBulletin(this.taskDetail.content);
                 }
               }
@@ -1423,7 +1425,7 @@
       },
       //特殊事项报备:选择收租类型时，清空其他数据(ll)
       specialPickerFun(form, show, picker) {
-        if (this.bulletinType.bulletin === 'bulletin_special') {
+        if (this.bulletinType.bulletin.includes('bulletin_special')) {
           if (picker.keyName === 'collect_or_rent') {
             this.resetting();
             this.form.collect_or_rent = form.collect_or_rent;
