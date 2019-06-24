@@ -371,6 +371,7 @@
                     this.routerLink(val.task_action, {result: result});
                   } else {
                     if (val.bulletin_type) {
+                      debugger
                       bulletin = bulletinRouterStatus[val.bulletin_type];
                     } else {
                       bulletin = bulletinRouterStatus.bulletin_collect_basic;
