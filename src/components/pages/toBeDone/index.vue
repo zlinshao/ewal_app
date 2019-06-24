@@ -351,7 +351,8 @@
             }
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
-                if (type === 'bulletin_retainage' || type === 'bulletin_agency' || val.bulletin_type === 'bulletin_rent_RWC') {
+                let types = ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC'];
+                if (types.includes(type)) {
                   this.againDetailRequest(val);
                 } else {
                   this.againDetailRequest(val, 'again');
@@ -376,7 +377,11 @@
                   }
                   sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                 } else {
-                  this.routerLink(val.task_action);
+                  if (val.finish_RWC) {
+                    this.routerLink(val.task_action, {result: '1'});
+                  } else {
+                    this.routerLink(val.task_action);
+                  }
                 }
               }
             });
