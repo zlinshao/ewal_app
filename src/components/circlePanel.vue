@@ -38,52 +38,52 @@
       return {
         buttonList: [
           {
-            url: 'toBeDone',
+            // url: 'toBeDone',
             name: '收房待办',
             status: bulletinRouterStatus.bulletin_collect_basic,
             icon: ic_shoufang,
           },
           {
-            url: 'toBeDone',
+            // url: 'toBeDone',
             name: '租房待办',
             status: bulletinRouterStatus.bulletin_rent_basic,
             icon: ic_zufang,
           },
           {
-            url: 'toBeDone',
+            // url: 'toBeDone',
             name: '渠道费待办',
             status: bulletinRouterStatus.bulletin_agency,
             icon: ic_qudao,
           },
           {
-            url: 'toBeDone',
+            // url: 'toBeDone',
             name: '尾款待办',
             status: bulletinRouterStatus.bulletin_retainage,
             icon: ic_weikuan,
           },
           {
-            url: 'toBeDone',
+            // url: 'toBeDone',
             // url: '',
             name: '调租',
             status: bulletinRouterStatus.bulletin_change,
             icon: ic_tiaozu,
           },
           {
-            url: 'toBeDone',
+            // url: 'toBeDone',
             // url: '',
             name: '转租',
             status: bulletinRouterStatus.bulletin_rent_trans,
             icon: ic_zhuanzu,
           },
           {
-            url: 'collectReport',
+            // url: 'toBeDone',
             // url: '',
             name: '特殊事项',
             status: bulletinRouterStatus.bulletin_special,
             icon: ic_teshu,
           },
           {
-            url: 'toBeDone',
+            // url: 'toBeDone',
             // url: '',
             name: '退租',
             status: bulletinRouterStatus.bulletin_checkout,
@@ -189,7 +189,6 @@
     methods: {
       // 报备跳转
       toBulletin(item) {
-        if (!item.url) return;
         sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
         let routes = this.$router.options.routes, name = '', bulletin = '';
         switch (item.status.to) {
@@ -205,7 +204,6 @@
               name = '租房待办';
               bulletin = '租房报备';
             }
-
             break;
           case 'agency':
             name = '渠道费待办';
@@ -232,11 +230,8 @@
           if (value.path === '/toBeDone') {
             value.meta.title = name;
           }
-          if (value.path === '/collectReport') {
-            value.meta.title = bulletin;
-          }
         }
-        this.routerLink(item.url);
+        this.routerLink('/toBeDone');
       },
       getBasePoint() {
         let parent = this.$refs.parent;
