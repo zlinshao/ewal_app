@@ -395,8 +395,8 @@ export default {
           title = ['尾款报备'];
           data = this.jsonClone(defineRetainageReport);
           break;
-        case 'bulletin_special'://特殊
-        case 'bulletin_special_rent':
+        case 'bulletin_special':
+        case 'bulletin_special_rent'://特殊
         case 'bulletin_special_collect':
           title = ['特殊事项报备'];
           data = this.jsonClone(defineSpecialReport);
@@ -695,13 +695,13 @@ export default {
           url = val.detail_request_url;
         }
         if (!url) {
-          sessionStorage.setItem('task_detail', '{}');
+          this.setContentDetail(val);
           resolve(true);
           return;
         }
         this.$httpZll.get(url, {}, 'prompt').then(res => {
           if (res.success) {
-            let data = {}, content = {};
+            let content = {};
             if (val.book_url) {
               content = res.data;
               this.setContentDetail(val, data, content);
@@ -717,7 +717,7 @@ export default {
                     }
                   }
                 }
-                this.setContentDetail(val, data, content);
+                this.setContentDetail(val, content);
                 resolve(true);
               });
             }
@@ -726,7 +726,8 @@ export default {
       });
     };
     //对详情内容的处理
-    Vue.prototype.setContentDetail = function (val, data, content) {
+    Vue.prototype.setContentDetail = function (val, content = {}) {
+      let data = {};
       data.content = content;
       data.task_id = val.task_id;
       data.taskDefinitionKey = val.taskDefinitionKey;
@@ -876,7 +877,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      data.staff_id = '';
+      // data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
@@ -895,6 +896,10 @@ export default {
             }
           }
         }
+        // 22f393c5-964c-11e9-9876-02420617522e
+        // 22f393c5-964c-11e9-9876-02420617522e
+        // 22f393c5-964c-11e9-9876-02420617522e
+        // 22f393c5-964c-11e9-9876-02420617522e
         dicties.province = province;
         this.$store.dispatch('all_city_list', cityArr);
         if (!cityArr.length) {

@@ -225,7 +225,8 @@
     activated() {
       this.bulletin_type = JSON.parse(sessionStorage.bulletin_type);
       let type = this.bulletin_type.bulletin;
-      this.addType = type === 'bulletin_change' || type === 'bulletin_rent_trans' || type === 'bulletin_special';
+      let types = ['bulletin_change', 'bulletin_rent_trans', 'bulletin_special', 'bulletin_special_collect', 'bulletin_special_rent'];
+      this.addType = types.includes(type);
       if (type === 'bulletin_rent_RWC' || type === 'bulletin_booking_renting' || type === 'bulletin_rent_continued') {
         this.bulletin_type = bulletinRouterStatus.bulletin_rent_basic;
         sessionStorage.setItem('bulletin_type', JSON.stringify(this.bulletin_type));
@@ -251,7 +252,8 @@
     },
     methods: {
       addBulletin(type) {
-        if (type === 'bulletin_special') {
+        if (type.includes('bulletin_special')) {
+          sessionStorage.setItem('task_detail', '{}');
           this.routerLink('/collectReport');
         } else {
           this.routerLink('/contractSearch');
@@ -351,7 +353,8 @@
             }
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
-                if (type === 'bulletin_retainage' || type === 'bulletin_agency' || val.bulletin_type === 'bulletin_rent_RWC') {
+                let types = ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC'];
+                if (types.includes(type)) {
                   this.againDetailRequest(val);
                 } else {
                   this.againDetailRequest(val, 'again');
@@ -377,7 +380,11 @@
                   }
                   sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                 } else {
-                  this.routerLink(val.task_action);
+                  if (val.finish_RWC) {
+                    this.routerLink(val.task_action, {result: '1'});
+                  } else {
+                    this.routerLink(val.task_action);
+                  }
                 }
               }
             });
@@ -518,8 +525,8 @@
             obj.type = 'MarketCollect,MarketRent';
             break;
           case "bulletin_checkout":
-            obj.status = 'toBeDoneAgency';
-            obj.type = 'MarketCollect,MarketRent';
+            obj.status = 'bulletinCheckout';
+            obj.type = 'Market-CollectWithdrawal,Market-RentWithdrawal';
             break;
           case "bulletin_change":
             obj.status = 'toBeDoneChange';
@@ -530,8 +537,10 @@
             obj.type = 'Market-ChangeRentCustomer';
             break;
           case "bulletin_special":
+          case "bulletin_special_collect":
+          case "bulletin_special_rent":
             obj.status = 'toBeDoneChange';
-            obj.type = 'Market-Special';
+            obj.type = 'Market-Special-collect,Market-Special-rent';
             break;
         }
         // Market-CollectWithdrawal 收房退租

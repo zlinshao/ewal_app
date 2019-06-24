@@ -31,7 +31,7 @@
               <div class="contract_content" @click="onConfirm(item)">
                 <div class="top">
                   <h1>
-                    <b>收</b>
+                    <b>{{contract_type == 1 ? '收' : '租'}}</b>
                     <span v-if="item.house_name && item.house_name.name">{{item.house_name.name}}</span>
                     <span v-else>******</span>
                   </h1>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="main">
                   <div>
-                    <h1>房东</h1>
+                    <h1>{{contract_type == 1 ? '房东' : '租客'}}</h1>
                     <h2 v-if="item.customer_info && item.customer_info[0].name">
                       <span>{{item.customer_info[0].name}}</span>
                     </h2>
@@ -122,7 +122,7 @@
         this.onConfig = val;
         //特殊事项报备(ll)
         let bulletin = JSON.parse(sessionStorage.bulletin_type || '{}');
-        if (bulletin === 'bulletin_special') {
+        if (bulletin.includes('bulletin_special')) {
           this.params.contract_type = val.contract_type;
         }
       },
