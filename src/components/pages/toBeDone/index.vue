@@ -13,7 +13,7 @@
     </div>
     <div class="main" :style="mainHeight">
       <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
-        <li v-for="item in toBeDoneList" @click="hhhhhhhhhh(item)">
+        <li v-for="item in toBeDoneList">
           <div class="mainTitle">
             <label>{{item.title}}</label>
             <p @click="clickBtn({action:'finishTask'},item)"><i></i></p>
@@ -170,6 +170,7 @@
         changeOperates: {
           punchClock: icon_qudaka,
           collectReport: icon_quqianyue,
+          deliveryReceipt: icon_quqianyue,
           phone: icon_shoujiqianshu,
           success: icon_bendiqianshu,
           modify: icon_hetongxiugai,
@@ -251,9 +252,6 @@
       },
     },
     methods: {
-      hhhhhhhhhh(val) {
-
-      },
       addBulletin(type) {
         if (type.includes('bulletin_special')) {
           sessionStorage.setItem('task_detail', '{}');
@@ -343,6 +341,7 @@
             this.routerLink(val.task_action);
             break;
           case 'collectReport':
+          case 'deliveryReceipt':
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
             if (val.bulletin_type === 'bulletin_rent_RWC') {

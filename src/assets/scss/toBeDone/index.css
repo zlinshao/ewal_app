@@ -213,7 +213,7 @@
             width: .33rem;
             height: .33rem;
             margin-right: .1rem; }
-      #toBeDone .main ul li .handleBtn .contract p i, #toBeDone .main ul li .handleBtn .contract b i, #toBeDone .main ul li .handleBtn .deliver p i, #toBeDone .main ul li .handleBtn .deliver b i, #toBeDone .main ul li .handleBtn .collectReport p i, #toBeDone .main ul li .handleBtn .collectReport b i {
+      #toBeDone .main ul li .handleBtn .contract p i, #toBeDone .main ul li .handleBtn .contract b i, #toBeDone .main ul li .handleBtn .deliver p i, #toBeDone .main ul li .handleBtn .deliver b i, #toBeDone .main ul li .handleBtn .collectReport p i, #toBeDone .main ul li .handleBtn .collectReport b i, #toBeDone .main ul li .handleBtn .deliveryReceipt p i, #toBeDone .main ul li .handleBtn .deliveryReceipt b i {
         width: .4rem;
         height: .4rem; }
       #toBeDone .main ul li .handleBtn .contract p {

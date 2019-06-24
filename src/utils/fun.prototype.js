@@ -740,7 +740,7 @@ export default {
     };
 
     //续收、续租：需要拿content==>contract_info==>id去请求againTaskDetail任务详情接口作为他的详情数据
-    Vue.prototype.getBulletinDetailFun = function (res, val, content) {
+    Vue.prototype.getBulletinDetailFun = function (res, val) {
       return new Promise((resolve, reject) => {
         let arr = ['bulletin_collect_continued', 'bulletin_rent_continued'];
         let isFlag = arr.includes(val.bulletin_type);
@@ -877,7 +877,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '';
+      data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
@@ -886,12 +886,12 @@ export default {
         for (let org of info.org) {
           if (org.city && org.city.length) {
             for (let city of org.city) {
-              cityObj.code = city.city_id;
-              cityObj.name = city.city_name;
-              // cityObj.code = 320100;
-              // cityObj.name = '天津市';
-              province[city.province.province_id] = city.province.province_name;
-              // province[320100] = '天津市';
+              // cityObj.code = city.city_id;
+              // cityObj.name = city.city_name;
+              // province[city.province.province_id] = city.province.province_name;
+              cityObj.code = 320100;
+              cityObj.name = '天津市';
+              province[320100] = '天津市';
               cityArr.push(cityObj);
             }
           }
