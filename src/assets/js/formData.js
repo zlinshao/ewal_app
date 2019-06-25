@@ -6021,7 +6021,6 @@ defineArticleReceipt = {
 
 // 退租报备
 defineCheckoutReport = {
-  // 协议类型
   slither0: [
     {
       label: '客户姓名',
@@ -6119,16 +6118,6 @@ defineCheckoutReport = {
       slot: '',
     },
   ],
-  // 客厅
-  hall_goods: handlerHallGoods('hall_goods', 11),
-  // 厨房/阳台/卫生间
-  kitchen_balcony_bathroom: handlerKitchenBalconyBathroom('kitchen_balcony_bathroom', 12),
-  // 主卧
-  master_bedroom: handlerBedroom('master_bedroom', 13),
-  // 次卧
-  bedroom: [handlerBedroom('bedroom', 15)],
-  // 费用交接
-  slither: handlerFreeDeliveryChange[1],
 };
 
 // 续收报备

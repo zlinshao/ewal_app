@@ -340,7 +340,7 @@
         let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.finish_RWC);
         let data = [
           //不需要电子合同
-          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special', 'bulletin_special_collect', 'bulletin_special_rent'],
+          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special', 'bulletin_special_collect', 'bulletin_special_rent', 'bulletin_checkout'],
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
           // 不预填
@@ -903,7 +903,7 @@
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
-          if (this.$attestationKey(this.drawForm)) return;
+          // if (this.$attestationKey(this.drawForm)) return;
         }
         if (val === 1) {
           if (!this.photoUploadStatus) {
