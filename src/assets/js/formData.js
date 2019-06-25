@@ -5274,7 +5274,7 @@ defineRetainageReport = {
       keyName: 'house_id',
       keyType: '',
       type: 'text',
-      status: '',
+      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -6023,12 +6023,69 @@ defineArticleReceipt = {
 defineCheckoutReport = {
   slither0: [
     {
+      label: '房屋地址',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'house_id',
+      keyType: '',
+      type: 'text',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
       label: '客户姓名',
       disabled: 'disabled',
       placeholder: '已禁用',
       keyName: 'customer_name',
       keyType: '',
       type: 'text',
+      slot: '',
+    },
+    {
+      label: '交接人',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'handover_staff',
+      keyType: '',
+      department: 'handover_department',
+      type: 'text',
+      status: '',
+      picker: 'searchStaff',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '交接部门',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'handover_department',
+      keyType: '',
+      type: 'text',
+      status: '',
+      picker: 'searchDepart',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '退租办理人',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'checkout_transact_staff',
+      keyType: '',
+      type: 'text',
+      status: '',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '退租办理部门',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'checkout_transact_department',
+      keyType: '',
+      type: 'text',
+      status: '',
+      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -6082,7 +6139,8 @@ defineCheckoutReport = {
       readonly: 'readonly',
       keyName: 'is_supplement_money',
       keyType: '',
-      type: 'objInt',
+      type: 'text',
+      status: 'objInt',
       picker: 'picker',
       showForm: 'formatData',
       slot: '',

@@ -208,6 +208,10 @@
     <float-button ref="code" :type="'payable'"></float-button>
     <!--房屋搜索-->
     <search-house :module="searchHouseModule" :config="searchConfig" @close="hiddenHouse"></search-house>
+    <!--员工搜索-->
+    <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
+    <!--部门搜索-->
+    <search-depart :module="searchDepartModule" @close="getDepartInfo"></search-depart>
     <!--日期-->
     <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
     <!--正常 picker-->
@@ -227,6 +231,8 @@
 </template>
 
 <script>
+  import SearchStaff from '../../common/searchStaff.vue';
+  import SearchDepart from '../../common/searchDepart.vue';
   import Electrical from '../../common/electrical.vue'
   import NoPicker from '../../common/no-picker.vue';
   import SearchHouse from '../../common/searchHouse.vue';
@@ -235,7 +241,7 @@
 
   export default {
     name: "index",
-    components: {SearchHouse, Electrical, NoPicker, CheckChoose, RemarkTerms},
+    components: {SearchHouse, SearchStaff, SearchDepart, Electrical, NoPicker, CheckChoose, RemarkTerms},
     data() {
       return {
 
@@ -269,7 +275,8 @@
         timeModule: false,                  //日期选择
         searchHouseModule: false,           //房屋搜索
         searchConfig: {},                   //搜索配置
-
+        searchStaffModule: false,           //员工搜索
+        searchDepartModule: false,          //部门搜索
         noPickerModule: false,              //模态框 只有输入框
         checksList: {},                     //非房东费用
         checksModule: false,                //非房东费用
@@ -342,7 +349,7 @@
           //不需要电子合同
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special', 'bulletin_special_collect', 'bulletin_special_rent', 'bulletin_checkout'],
           //不需要task_id
-          ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
+          ['bulletin_rent_trans', 'bulletin_change'],
           // 不预填
           ['bulletin_collect_continued', 'bulletin_rent_continued', 'bulletin_change', 'bulletin_rent_trans'],
         ];
@@ -412,6 +419,26 @@
           if (this.slither > 0) {
             this.slither--;
           }
+        }
+      },
+      // 搜索员工结果
+      getStaffInfo(val) {
+        this.onCancel();
+        if (val !== 'close') {
+          let config = this.searchConfig;
+          this.form[config.keyName] = val.staff_id;
+          this.form[config.department] = val.department_id;
+          this.formatData[config.keyName] = val.staff_name;
+          this.formatData[config.department] = val.department_name;
+        }
+      },
+      // 搜索部门结果
+      getDepartInfo(val) {
+        this.onCancel();
+        if (val !== 'close') {
+          let config = this.searchConfig;
+          this.form[config.keyName] = val.id;
+          this.formatData[config.keyName] = val.name;
         }
       },
       // 房屋搜索结果
@@ -636,6 +663,14 @@
             } else {
               this.specialSearchHouseFun();
             }
+            break;
+          case 'searchStaff':
+            this.searchConfig = val;
+            this.searchStaffModule = true;
+            break;
+          case 'searchDepart':
+            this.searchConfig = val;
+            this.searchDepartModule = true;
             break;
           case 'noPicker':
             this.noPickerModule = true;
@@ -893,6 +928,8 @@
         this.checksModule = false;
         this.remarkTermsModule = false;
         this.searchHouseModule = false;
+        this.searchStaffModule = false;
+        this.searchDepartModule = false;
       },
       // 图片上传
       getImgData(val) {
@@ -1053,7 +1090,6 @@
         this.$httpZll.getBulletinDraft(params).then(data => {
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
-
           let arr = [];
           if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
             arr = ['address', 'house_id', 'contract_id', 'contract_number'];
@@ -1066,7 +1102,6 @@
             this.disabledDefaultValue('slither1', arr);
           }
           if (!data) {
-            let arr = [];//不需要清空字段
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
                 //续收、续租预填数据
@@ -1078,7 +1113,11 @@
                 }
               } else {
                 if (!type.includes('bulletin_special')) {
-                  this.childBulletin(this.taskDetail.content);
+                  if (type.includes('bulletin_checkout')) {
+                    this.checkoutContent(this.taskDetail.content);
+                  } else {
+                    this.childBulletin(this.taskDetail.content);
+                  }
                 }
               }
             } else {
@@ -1086,7 +1125,6 @@
                 this.handlePreFill(this.taskDetail.content);
               }
             }
-
           } else {
             this.form.id = '';//草稿ID
             let res = data.data;
@@ -1114,6 +1152,22 @@
         let key = this.taskDetail.taskDefinitionKey;
         if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
           this.electronicContract();
+        }
+      },
+      // 退租
+      checkoutContent(res) {
+        this.form.collect_or_rent = '';
+        for (let item of Object.keys(this.form)) {
+          this.form[item] = res[item] || this.form[item];
+          switch (item) {
+            case 'house_id':
+              this.formatData.house_id = res.house_address || '';
+              break;
+            case 'checkout_transact_staff':
+            case 'checkout_transact_department':
+              this.formatData[item] = res[item].name || '';
+              break;
+          }
         }
       },
       // 尾款待办信息 / 渠道
@@ -1393,7 +1447,12 @@
           allForm = allForm.concat(this.drawSlither[item]);
         }
         this.drawForm = allForm;
-        let all = this.initFormData(allForm, this.showData);
+        let all = {};
+        if (this.bulletinType.bulletin === 'bulletin_checkout') {
+          all = this.initFormData(allForm, this.showData)
+        } else {
+          all = this.initFormData(allForm, this.showData, 'noStaff');
+        }
         this.form = all.form;
         this.formatData = all.formatData;
         this.album = this.jsonClone(all.album);

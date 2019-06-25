@@ -267,4 +267,6 @@ dicties = {
   pact_type: {1: '延长收房时长', 2: '房东更换银行卡', 3: '调整收房价'},
   // 退租性质
   check_type: {},
+  // 是否补款
+  is_supplement_money: oneYesZeroNo,
 };
