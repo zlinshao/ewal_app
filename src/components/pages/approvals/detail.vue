@@ -659,7 +659,6 @@
           default:
             let postData = {};
             postData.action = 'complete';
-            console.log(name === 'pqjl_approved' && detail.bulletin_type === 'bulletin_rent_RWC' && action.action);
             if (name === 'gkzx_approved' && detail.bulletin_type === 'bulletin_rent_RWC' && action.action) {
               postData.variables = [{
                 name: name,
@@ -674,7 +673,6 @@
                 value: action.action,
               }];
             }
-            console.log(postData);
             this.$httpZll.finishBeforeTask(detail.task_id, postData).then(res => {
               if (res) {
                 this.$prompt('审核成功！', 'success');

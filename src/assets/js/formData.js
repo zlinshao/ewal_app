@@ -6081,11 +6081,16 @@ defineCheckoutReport = {
       keyName: 'check_type',
       keyType: '',
       type: 'text',
-      status: 'objInt',
+      status: 'obj',
       picker: 'picker',
       showForm: 'formatData',
       slot: '',
     },
+  ],
+};
+
+checkoutTypeChange = {
+  '329': [
     {
       label: '退房日期',
       placeholder: '必填 请选择',
@@ -6142,6 +6147,61 @@ defineCheckoutReport = {
       showForm: 'formatData',
       slot: '',
     },
+    {
+      label: '支付日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_money_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '物品交接',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'handover_id',
+      keyType: '',
+      type: 'text',
+      picker: 'deliveryReceipt',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '补充约定',
+      placeholder: '必填 请输入',
+      keyName: 'supplementary_agreement',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '交接人',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'handover_staff',
+      keyType: '',
+      department: 'handover_department',
+      type: 'text',
+      picker: 'searchStaff',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '交接部门',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'handover_department',
+      keyType: '',
+      type: 'text',
+      picker: 'searchDepart',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+  ],
+  '330': [
     {
       label: '支付日期',
       placeholder: '必填 请选择',
