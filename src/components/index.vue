@@ -13,7 +13,7 @@
       <div class="addVillage" @click="routerLink('/createdVillage')"></div>
       <!--空置房源-->
       <div class="vacancyHouse">
-        <h1></h1>
+        <h1 @click="routerLink('/houseResource')"></h1>
         <div @click="redirectHouseResource(item)" v-for="item in vacancyHouse">
           <i></i>
           <p>
