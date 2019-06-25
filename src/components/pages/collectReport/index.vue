@@ -1388,7 +1388,7 @@
       resetting() {
         this.slither = 0;
         this.photoUploadStatus = true;
-        let allForm = [], id = this.form.id || '';
+        let allForm = [];
         for (let item of Object.keys(this.drawSlither)) {
           allForm = allForm.concat(this.drawSlither[item]);
         }
@@ -1402,7 +1402,6 @@
           item.num = this.form[item.key];
         }
         this.changeHiddenAll = false;
-        this.form.id = id;
         if (all.formatData.identity === 'identity') {
           this.form.signer = {};
         }
