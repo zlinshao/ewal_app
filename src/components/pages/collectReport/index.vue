@@ -1162,6 +1162,9 @@
             case 'house_id':
               this.formatData.house_id = res.house_address || '';
               break;
+            case 'collect_or_rent':
+              this.formatData[item] = dicties[item][res[item]];
+              break;
             case 'checkout_transact_staff':
             case 'checkout_transact_department':
               this.formatData[item] = res[item].name || '';
