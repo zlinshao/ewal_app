@@ -946,6 +946,7 @@
           case 2:// 重置
             this.$dialog('重置', '您确定要清空表单吗?').then(status => {
               if (status) {
+                let id = this.form.id || '';
                 if (!this.isGetTake) {
                   if ((!bulletin.bulletin.includes('bulletin_special')) && bulletin.bulletin !== 'bulletin_rent_RWC') {
                     if (this.noContractInfo) {
@@ -959,6 +960,7 @@
                 } else {
                   this.childBulletin(this.taskDetail.content);
                 }
+                this.form.id = id;
               }
             });
             break;
@@ -1051,6 +1053,7 @@
         this.$httpZll.getBulletinDraft(params).then(data => {
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
+
           let arr = [];
           if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
             arr = ['address', 'house_id', 'contract_id', 'contract_number'];
