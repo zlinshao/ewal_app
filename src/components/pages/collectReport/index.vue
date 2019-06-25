@@ -961,6 +961,7 @@
           case 2:// 重置
             this.$dialog('重置', '您确定要清空表单吗?').then(status => {
               if (status) {
+                let id = this.form.id || '';
                 if (!this.isGetTake) {
                   if ((!bulletin.bulletin.includes('bulletin_special')) && bulletin.bulletin !== 'bulletin_rent_RWC') {
                     if (this.noContractInfo) {
@@ -974,6 +975,7 @@
                 } else {
                   this.childBulletin(this.taskDetail.content);
                 }
+                this.form.id = id;
               }
             });
             break;
@@ -1066,7 +1068,7 @@
         this.$httpZll.getBulletinDraft(params).then(data => {
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
-          this.form.id = '';//草稿ID
+
           let arr = [];
           if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
             arr = ['address', 'house_id', 'contract_id', 'contract_number'];
@@ -1079,7 +1081,6 @@
             this.disabledDefaultValue('slither1', arr);
           }
           if (!data) {
-            let arr = [];//不需要清空字段
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
                 //续收、续租预填数据
@@ -1099,8 +1100,8 @@
                 this.handlePreFill(this.taskDetail.content);
               }
             }
-
           } else {
+            this.form.id = '';//草稿ID
             let res = data.data;
             this.childBulletin(res, 'draft');
             this.handlePreFill(res);
@@ -1395,7 +1396,7 @@
       resetting() {
         this.slither = 0;
         this.photoUploadStatus = true;
-        let allForm = [], id = this.form.id || '';
+        let allForm = [];
         for (let item of Object.keys(this.drawSlither)) {
           allForm = allForm.concat(this.drawSlither[item]);
         }
@@ -1409,7 +1410,6 @@
           item.num = this.form[item.key];
         }
         this.changeHiddenAll = false;
-        this.form.id = id;
         if (all.formatData.identity === 'identity') {
           this.form.signer = {};
         }
