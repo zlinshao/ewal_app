@@ -1156,7 +1156,6 @@
       },
       // 退租
       checkoutContent(res) {
-        this.form.collect_or_rent = '';
         for (let item of Object.keys(this.form)) {
           this.form[item] = res[item] || this.form[item];
           switch (item) {
@@ -1449,7 +1448,7 @@
         this.drawForm = allForm;
         let all = {};
         if (this.bulletinType.bulletin === 'bulletin_checkout') {
-          all = this.initFormData(allForm, this.showData, 'noStaff')
+          all = this.initFormData(allForm, this.showData, 'noStaff');
         } else {
           all = this.initFormData(allForm, this.showData);
         }

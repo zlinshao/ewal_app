@@ -6023,6 +6023,17 @@ defineArticleReceipt = {
 defineCheckoutReport = {
   slither0: [
     {
+      label: '退租类型',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'collect_or_rent',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
       label: '房屋地址',
       disabled: 'disabled',
       placeholder: '已禁用',
