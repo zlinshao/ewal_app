@@ -340,7 +340,7 @@
         let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.finish_RWC);
         let data = [
           //不需要电子合同
-          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC','bulletin_special', 'bulletin_special_collect', 'bulletin_special_rent'],
+          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special', 'bulletin_special_collect', 'bulletin_special_rent'],
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
           // 不预填
@@ -382,21 +382,6 @@
             this.form.contract_id_rent = this.taskDetail.contract_id;
             this.form.old_address = this.taskDetail.address;
             this.formatData.house_id_rent = this.taskDetail.address;
-            break;
-          case'bulletin_special':  //特殊事项报备
-          case'bulletin_special_collect':  //特殊事项报备
-          case'bulletin_special_rent':  //特殊事项报备
-            // if (JSON.stringify(this.taskDetail) !== '{}') {
-            //   this.form.house_address = this.taskDetail.address;
-            // this.form.customer_name = this.taskDetail.customer_info[0].name;
-            // this.form.month = this.taskDetail.month_price[0].period;
-            // this.form.price = [];
-            // for (let item of this.taskDetail.month_price) {
-            //   let str = `${item.begin_date}~${item.end_date}:${item.price}元/月`;
-            //   this.form.price.push(str);
-            // }
-            // }
-            // this.form.price = this.taskDetail.month_price[0].price;
             break;
           case 'bulletin_rent_continued':
             this.form.is_sign = 1;
@@ -1271,7 +1256,12 @@
             case 'non_landlord_fee'://非房东费用
               let names = [];
               for (let name of this.form[item]) {
-                names.push(dicties[item][name])
+                if (name === 6 || name === '6') {
+                  names.push(res.other_fee_name);
+                  this.form.other_fee_name = res.other_fee_name;
+                } else {
+                  names.push(dicties[item][name])
+                }
               }
               this.formatData[item] = names.join(',');
               break;

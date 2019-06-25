@@ -17,7 +17,7 @@
         <label>其他费用</label>
         <textarea
           placeholder="必填 请输入"
-          v-model="forms.other_fee"
+          v-model="forms.other_fee_name"
           rows="3">
         </textarea>
       </div>
@@ -96,7 +96,7 @@
         }
         for (let key of value) {
           if (key.id === 6 || key.id === '6') {
-            this.forms.other_fee = '';
+            this.forms.other_fee_name = '';
             this.otherFreeStatus = true;
             return;
           }
@@ -108,7 +108,11 @@
         let names = [];
         for (let item of this.checksChoose) {
           id.push(item.id);
-          names.push(item.text);
+          if (item.id === 6 || item.id === '6') {
+            names.push(this.forms.other_fee_name);
+          } else {
+            names.push(item.text);
+          }
         }
         this.forms[name] = id;
         this.formatData[name] = names.join(',');
