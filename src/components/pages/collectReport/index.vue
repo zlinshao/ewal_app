@@ -1449,9 +1449,9 @@
         this.drawForm = allForm;
         let all = {};
         if (this.bulletinType.bulletin === 'bulletin_checkout') {
-          all = this.initFormData(allForm, this.showData)
+          all = this.initFormData(allForm, this.showData, 'noStaff')
         } else {
-          all = this.initFormData(allForm, this.showData, 'noStaff');
+          all = this.initFormData(allForm, this.showData);
         }
         this.form = all.form;
         this.formatData = all.formatData;
