@@ -13,7 +13,7 @@
     </div>
     <div class="main" :style="mainHeight">
       <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
-        <li v-for="item in toBeDoneList" @click="hhhhhhhhhh(item)">
+        <li v-for="item in toBeDoneList">
           <div class="mainTitle">
             <label>{{item.title}}</label>
             <p @click="clickBtn({action:'finishTask'},item)"><i></i></p>
@@ -170,6 +170,7 @@
         changeOperates: {
           punchClock: icon_qudaka,
           collectReport: icon_quqianyue,
+          deliveryReceipt: icon_quqianyue,
           phone: icon_shoujiqianshu,
           success: icon_bendiqianshu,
           modify: icon_hetongxiugai,
@@ -251,9 +252,6 @@
       },
     },
     methods: {
-      hhhhhhhhhh(val) {
-
-      },
       addBulletin(type) {
         if (type.includes('bulletin_special')) {
           sessionStorage.setItem('task_detail', '{}');
@@ -308,10 +306,10 @@
                 id: 'CollectTakeLook',
                 text: '收房带看',
               },
-              {
-                url: '/supplyAgreement',
-                text: '补充协议',
-              }
+              // {
+              //   url: '/supplyAgreement',
+              //   text: '补充协议',
+              // }
             ];
             break;
           case 'bulletin_rent_basic':
@@ -343,8 +341,22 @@
             this.routerLink(val.task_action);
             break;
           case 'collectReport':
+          case 'deliveryReceipt':
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
+            let routes = this.$router.options.routes, all = {}, title = '', bulletinName = '';
+            if (val.bulletin_type) {
+              all = this.$bulletinTitles(val.bulletin_type);
+            } else {
+              all = this.$bulletinTitles(type);
+            }
+            title = all.name;
+            bulletinName = all.bulletin;
+            for (let value of routes) {
+              if (value.path === '/collectReport') {
+                value.meta.title = bulletinName;
+              }
+            }
             if (val.bulletin_type === 'bulletin_rent_RWC') {
               bulletin = bulletinRouterStatus.bulletin_rent_RWC;
               sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));

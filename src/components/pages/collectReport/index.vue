@@ -1081,6 +1081,7 @@
             this.disabledDefaultValue('slither1', arr);
           }
           if (!data) {
+            let arr = [];//不需要清空字段
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
                 //续收、续租预填数据
@@ -1100,6 +1101,7 @@
                 this.handlePreFill(this.taskDetail.content);
               }
             }
+
           } else {
             this.form.id = '';//草稿ID
             let res = data.data;
@@ -1396,7 +1398,7 @@
       resetting() {
         this.slither = 0;
         this.photoUploadStatus = true;
-        let allForm = [];
+        let allForm = [], id = this.form.id || '';
         for (let item of Object.keys(this.drawSlither)) {
           allForm = allForm.concat(this.drawSlither[item]);
         }
@@ -1410,6 +1412,7 @@
           item.num = this.form[item.key];
         }
         this.changeHiddenAll = false;
+        this.form.id = id;
         if (all.formatData.identity === 'identity') {
           this.form.signer = {};
         }

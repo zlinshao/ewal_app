@@ -13,6 +13,7 @@ import httpZll from './utils/httpZll.js'
 import httpTj from './utils/httpTj.js'
 import httpHs from './utils/httpHs.js'
 import Vant from 'vant';
+import echarts from  'echarts'
 import 'vant/lib/index.css';
 import './assets/scss/rest.css'
 import './assets/scss/currency.css'
@@ -29,10 +30,11 @@ Vue.config.productionTip = false;
 Vue.prototype.$httpZll = httpZll;
 Vue.prototype.$httpTj = httpTj;
 Vue.prototype.$httpHs = httpHs;
+Vue.prototype.$echarts = echarts;
 
-import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
-let vConsole = new VConsole(); // 初始化
-Vue.use(vConsole);
+// import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
+// let vConsole = new VConsole(); // 初始化
+// Vue.use(vConsole);
 
 // 监听软键盘
 (function () {
