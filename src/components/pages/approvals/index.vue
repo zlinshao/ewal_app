@@ -116,6 +116,26 @@
         </div>
       </div>
     </van-popup>
+    <van-popup v-model="customerUsersModule" class="customerUsersModule">
+      <h1>发送电子合同</h1>
+      <ul>
+        <li v-for="item of customer_users">
+          <div @click="sendContract(item.fadada_user_id)">
+            {{item.name}}
+          </div>
+        </li>
+        <li v-for="item in customer_users">
+          <div @click="sendContract(item.fadada_user_id)">
+            {{item.name}}
+          </div>
+        </li>
+        <li v-for="item in customer_users">
+          <div @click="sendContract(item.fadada_user_id)">
+            {{item.name}}
+          </div>
+        </li>
+      </ul>
+    </van-popup>
   </div>
 </template>
 
@@ -134,6 +154,9 @@
         approvalModule: false,
         mainHeight: {},
         moduleHeight: {},
+        contract_number: '',
+        customer_users: [],
+        customerUsersModule: false,
         // 搜索 审批类型
         highParams: {},
         newHighParams: {},
@@ -444,6 +467,8 @@
             break;
           case 'success'://本地签署
             user_id = this.$getFadadaUserId(item);
+            console.log(user_id);
+
             this.$handlerSign(item, user_id, 2).then(_ => {
               this.onSearch(this.tabs.tab);
             });
@@ -455,19 +480,39 @@
             });
             break;
           case 'contract'://发送电子合同
-            user_id = this.$getFadadaUserId(item);
-            this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
-              if (res) {
-                params = {
-                  fdd_user_id: user_id,
-                  is_number: 1,
-                };
-                this.$httpZll.sendElectronicContract(item.contract_number, params).then(_ => {
-                });
+            this.contract_number = item.contract_number;
+            if (item.signers) {
+              let signers = JSON.parse(item.signers || '[]');
+              if (signers.length) {
+                if (signers.length > 1) {
+                  this.customer_users = signers;
+                  this.customerUsersModule = true;
+                } else {
+                  user_id = signers[0].fadada_user_id;
+                  this.sendContract(user_id);
+                }
+              } else {
+                this.$prompt('用户ID不存在！')
               }
-            });
+            } else {
+              user_id = this.$getFadadaUserId(item);
+              this.sendContract(user_id);
+            }
             break;
         }
+      },
+      sendContract(user_id) {
+        this.$dialog('电子合同', '是否确认发送电子合同?').then(res => {
+          if (res) {
+            this.customerUsersModule = false;
+            let params = {
+              fdd_user_id: user_id,
+              is_number: 1,
+            };
+            this.$httpZll.sendElectronicContract(this.contract_number, params).then(_ => {
+            });
+          }
+        });
       },
       // 重新提交
       againSave(val) {
@@ -759,6 +804,39 @@
             margin-bottom: .15rem;
           }
         }
+      }
+    }
+
+    .customerUsersModule {
+      padding: .4rem;
+      width: 70%;
+      @include radius(.1rem);
+
+      h1 {
+        text-align: center;
+        font-size: .33rem;
+        padding-bottom: .6rem;
+      }
+
+      ul {
+        @include flex();
+        flex-wrap: wrap;
+
+        li {
+          width: 33.33%;
+          @include flex('flex-center');
+
+          div {
+            padding: .15rem .3rem;
+            color: #FFFFFF;
+            @include radius(.1rem);
+            background-color: #4A74FE;
+          }
+        }
+      }
+
+      .commonBtn {
+        padding: .4rem .1rem .2rem;
       }
     }
 

@@ -664,6 +664,9 @@
               this.specialSearchHouseFun();
             }
             break;
+          case 'deliveryReceipt'://交接单
+            this.routerLink('deliveryReceipt');
+            break;
           case 'searchStaff':
             this.searchConfig = val;
             this.searchStaffModule = true;
@@ -709,6 +712,7 @@
           }
           if (name === 'pay_way_bet') this.countPrice(name);
           if (name === 'pay_way') this.countPrice(name);
+          if (name === 'check_type') this.checkoutHandler(form.check_type, 'change');
           //特殊事项变化处理
           this.specialPickerFun(form, show, picker);
         }
@@ -1115,6 +1119,7 @@
                 if (!type.includes('bulletin_special')) {
                   if (type.includes('bulletin_checkout')) {
                     this.checkoutContent(this.taskDetail.content);
+                    this.checkoutHandler(this.form.check_type);
                   } else {
                     this.childBulletin(this.taskDetail.content);
                   }
@@ -1155,13 +1160,23 @@
         }
       },
       // 退租
-      checkoutContent(res) {
-        this.form.collect_or_rent = '';
+      checkoutContent(res, change) {
         for (let item of Object.keys(this.form)) {
-          this.form[item] = res[item] || this.form[item];
+          if (item !== 'check_type') {
+            this.form[item] = res[item] || this.form[item];
+          }
           switch (item) {
             case 'house_id':
               this.formatData.house_id = res.house_address || '';
+              break;
+            case 'collect_or_rent':
+              this.formatData[item] = dicties[item][res[item]];
+              break;
+            case 'check_type':
+              if (!change) {
+                this.form[item] = res[item] || this.form[item];
+                this.formatData[item] = res[item].name;
+              }
               break;
             case 'checkout_transact_staff':
             case 'checkout_transact_department':
@@ -1169,6 +1184,15 @@
               break;
           }
         }
+      },
+      // 退租表单字段切换
+      checkoutHandler(val, change) {
+        let slither = defineCheckoutReport.slither0.concat(checkoutTypeChange[val.id]);
+        this.drawSlither.slither0 = this.jsonClone(slither);
+        this.resetting();
+        this.form.check_type = val;
+        this.formatData.check_type = val.name;
+        this.checkoutContent(this.taskDetail.content, change);
       },
       // 尾款待办信息 / 渠道
       childBulletin(res, draft) {
@@ -1449,7 +1473,7 @@
         this.drawForm = allForm;
         let all = {};
         if (this.bulletinType.bulletin === 'bulletin_checkout') {
-          all = this.initFormData(allForm, this.showData, 'noStaff')
+          all = this.initFormData(allForm, this.showData, 'noStaff');
         } else {
           all = this.initFormData(allForm, this.showData);
         }
