@@ -4,7 +4,7 @@
       <div class="searchInput">
         <div class="input">
           <p @click="show_btn = !show_btn">
-            {{params.contract_txt}}
+            {{contract_txt}}
             <i></i>
           </p>
           <div>
@@ -30,14 +30,14 @@
       <div v-if="current_filter === 1" class="house-type">
         <h4>合同状态</h4>
         <div class="chooseBtn">
-          <p v-for="item in status_list" @click="chooseHouseProperty(item,'remaining')">
-            <b :class="{'choose': params.remaining === item.id }">{{ item.val }}</b>
+          <p v-for="item in status_list" @click="chooseHouseProperty(item,'status')">
+            <b :class="{'choose': params.status === item.id }">{{ item.val }}</b>
           </p>
         </div>
         <h4>合同剩余时长</h4>
         <div class="chooseBtn">
-          <p v-for="item in remaining_list" @click="chooseHouseProperty(item,'status')">
-            <b :class="{'choose': params.status === item.id }">{{ item.val }}</b>
+          <p v-for="item in remaining_list" @click="chooseHouseProperty(item,'remaining')">
+            <b :class="{'choose': params.remaining === item.id }">{{ item.val }}</b>
           </p>
         </div>
         <div class="commonBtn">
@@ -50,36 +50,52 @@
         <StaffDepartSearch :visible="staff_depart_visible" @close="handleGetInfo"></StaffDepartSearch>
       </div>
     </ExpandContainer>
-    <div class="main-content" ref="mainContent" :style="mainHeight">
+    <!-- 列表 -->
+    <div class="mainContent" ref="main-Content" :style="mainHeight">
       <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
-        <div class="contract-item" v-for="(item,key) in contract_list" :key="key" @click="handleGoDetail(item)">
-          <a class="status" :class="['status' + item.is_effective ]">{{ item.is_effective === 1 ? '生效中' : item.is_effective === 2 ? '快到期' : item.is_effective === 3 ? '已过期' : '已结束'}}</a>
-          <h2>
-            <a class="type-icon icon-collect" v-if="params.contract_type === 1">收</a>
-            <a class="type-icon icon-rent" v-if="params.contract_type === 2">租</a>
-            {{ item.house_name || '/' }}
-          </h2>
-          <div class="contract-info flex-center">
-            <div>
-              <h4>房东</h4>
-              <span class="during">{{ item.customer_info && item.customer_info.length > 0 && item.customer_info[0].name || '/'}}</span>
+        <li v-for="item in contract_list" v-if="contract_list.length">
+          <div class="contract_content" @click="handleGoDetail(item)">
+            <div class="top">
+              <h1>
+                <b>{{params.contract_type === 1 ? '收' : '租'}}</b>
+                <span v-if="item.house_name ">{{item.house_name}}</span>
+                <span v-else>******</span>
+              </h1>
+              <h2>
+                <span v-for="status in status_list"  v-if="status.id==item.contract_status">{{status.val}}</span>
+              </h2>
             </div>
-            <div>
-              <h4>开单人</h4>
-              <span>{{ item.sign_user || '/'}}</span>
-            </div>
-            <div>
-              <h4>所属部门</h4>
-              <span>{{ item.sign_org || '/'}}</span>
+            <div class="main">
+              <div>
+                <h1>{{params.contract_type === 1 ? '房东' : '租客'}}</h1>
+                <h2 v-if="item.customer_info && item.customer_info[0].name">
+                  <span>{{item.customer_info[0].name}}</span>
+                </h2>
+                <h2 v-else>******</h2>
+              </div>
+              <div>
+                <h1>开单人</h1>
+                <h2 v-if="item.sign_user">
+                  <span>{{item.sign_user}}</span>
+                </h2>
+                <h2 v-else>******</h2>
+              </div>
+              <div class="department">
+                <h1>所属片区</h1>
+                <h2 v-if="item.sign_org ">
+                  <span>{{item.sign_org}}</span>
+                </h2>
+                <h2 v-else>******</h2>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="noMore" v-if="contract_list.length === paging && contract_list.length > 4">
+        </li>
+        <li class="noMore" v-if="contract_list.length === paging && contract_list.length > 4">
           <span v-if="!fullLoading">没有更多了</span>
-        </div>
-        <div class="noData" v-if="!contract_list.length">
+        </li>
+        <li class="noData" v-if="!contract_list.length">
           <span v-if="!fullLoading">暂无相关数据...</span>
-        </div>
+        </li>
       </scroll-load>
     </div>
   </div>
@@ -95,40 +111,22 @@
     data() {
       return {
         staff_depart_visible: false,
-
-        buttons: [
-          {
-            label: '重置',
-            type: 'reset'
-          },
-          {
-            label: '确定',
-            type: 'confirm'
-          },
-        ],
-        //房屋筛选
+        current_filter: '',   //1合同搜索 2员工部门
+        offset_top: 0,
+        show_btn: false,
+        fullLoading: false,
+        mainHeight: {
+          height: 0
+        },
+        //筛选条件
         filter_list: [
           {id: 1,val: '合同搜索'},
           {id: 2,val: '员工部门'},
         ],
-        current_filter: '',
-        offset_top: 0,
-
         contract_type_list: [
           {id: 1,val: '收房'},
           {id: 2,val: '租房'},
         ],
-        params: {
-          page: 1,
-          limit: 12,
-          contract_type: 1,
-          contract_txt: '收房',
-          search: '',
-          status: '',
-          remaining: '',
-          signer: [],
-          org: []
-        },
         status_list: [
           {id: 0,val: '不限'},
           {id: 1,val: '生效中'},
@@ -142,52 +140,93 @@
           {id: 2,val: '1-2年'},
           {id: 3,val: '2年以上'},
         ],
-        show_btn: false,
-        mainHeight: {
-          height: 0
+        buttons: [
+          {
+            label: '重置',
+            type: 'reset'
+          },
+          {
+            label: '确定',
+            type: 'confirm'
+          },
+        ],
+        contract_txt:'收房',     //收租
+        paging: 0,           //总条数
+        contract_list: [],    //列表
+        params: {
+          search:'',          //搜索字段
+          status:'' ,          //合同状态
+          remaining:'',        //合同剩余时长
+          signer: [],          //员工
+          org: [],             //部门
+          contract_type: 1,    //收租类型，默认收房
+          page: 1,
+          limit: 6,          //没有分页
+          from:'mobile',        //mobile app端
+          city_name:'',        //城市
         },
-
-        paging: 0,
-        fullLoading: false,
-        contract_list: [],
       }
     },
-    mounted() {
-      var top = this.$refs['mainContent'].offsetTop;
-      this.mainHeight.height = window.innerHeight - top + 'px';
-      this.handleGetContractList();
+    created() {
+      this.resetParams();
     },
-    watch: {},
-    computed: {},
-    methods: {
-      //合同详情
-      handleGoDetail(item) {
-        this.routerLink('/contract_detail',{contract_id: item.contract_id,contract_type: this.params.contract_type});
+    mounted() {
+    },
+    activated(){
+      let top = this.$refs['main-Content'].offsetTop;
+      this.mainHeight.height = window.innerHeight - top + 'px';
+      this.params.city_name=this.personal.city_name; //城市赋值
+s    },
+    watch: {
+      'params.search'(val) {
+        this.params.search = val.replace(/\s+/g, '');
       },
+    },
+    computed: {
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
+    },
+    methods: {
+      //选择收租类型
+      chooseClickType(item) {
+        this.params.contract_type = item.id;
+        this.contract_txt = item.val;
+        this.show_btn = false;
+        this.params.page=1;
+        this.contract_list = [];
+        this.handleGetContractList();
+      },
+      //选择合同状态、剩余时长
+      chooseHouseProperty(item,type) {
+        this.params[type] = item.id;
+      },
+      //选择员工或部门
       handleGetInfo(val,type) {
-        console.log(val,type);
+        this.params.signer = [];
+        this.params.org = [];
         if (val !== 'close') {
+          let arr=[];
+          for (let  item of val) {
+            arr.push(item.id);
+          }
           switch (type) {
             case 'staff':
-              this.params.signer = [];
-              for (var staff of val) {
-                this.params.signer.push(staff.id);
-              }
+              this.params.signer = arr;
               break;
             case 'depart':
-              this.params.org = [];
-              for (var depart of val) {
-                this.params.org.push(depart.id);
-                break;
-              }
+              this.params.org = arr;
+              break;
           }
-          this.contract_list = [];
-          this.handleGetContractList();
         }
+        this.params.page=1;
+        this.contract_list = [];
+        this.handleGetContractList();
         this.offset_top = 0;
         this.current_filter = '';
         this.staff_depart_visible = false;
       },
+      //合同搜索的确定、重置按钮
       searchBtn(type) {
         switch (type) {
           case 'reset':
@@ -195,35 +234,39 @@
             this.params.remaining = '';
             break;
           case 'confirm':
+            this.params.page=1;
             this.contract_list = [];
             this.handleGetContractList();
             this.offset_top = '';
             this.current_filter = '';
             break;
         }
+
       },
-      //选择
-      chooseHouseProperty(item,type) {
-        this.params[type] = item.id;
+      //搜索按钮
+      onSearch() {
+        this.params.page=1;
+        this.contract_list = [];
+        this.show_btn = false;
+        this.handleGetContractList();
       },
-      //房屋筛选
-      handleFilterContract(tmp) {
-        this.offset_top = this.current_filter === tmp.id ? 0 : 123;
-        this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
-      },
+      //列表
       handleGetContractList() {
+        console.log(111)
         this.fullLoading = true;
-        this.$httpHs.ContractList(this.params,'加载中...').then(res => {
+        this.$httpZll.getContractList(this.params).then(res => {
           this.fullLoading = false;
-          for (var item of res.data) {
+          for (let item of res.data) {
             this.contract_list.push(item);
           }
           this.paging = res.count;
+          console.log(this.contract_list)
         })
       },
+      //分页
       scrollLoad(val) {
-        console.log(val);
         if (!val) {
+          this.params.page = 1;
           this.contract_list = [];
           this.handleGetContractList();
         } else {
@@ -233,17 +276,36 @@
           this.handleGetContractList();
         }
       },
-      onSearch() {
-        this.contract_list = [];
-        this.show_btn = false;
-        this.handleGetContractList();
+      //重置params
+      resetParams() {
+        this.params = {
+          page: 1,
+          limit: 6,          //没有分页
+          contract_type: 1,    //收租类型，默认收房
+          search:'',          //搜索字段
+          status:'' ,          //合同状态
+          remaining:'',        //合同剩余时长
+          signer: [],          //员工
+          org: [],             //部门
+          // from:'task',         //task app端
+          from:'mobile',
+          city_name:'',        //城市
+        };
       },
-      chooseClickType(item) {
-        this.params.contract_type = item.id;
-        this.params.contract_txt = item.val;
-        this.show_btn = false;
-        this.contract_list = [];
-        this.handleGetContractList();
+
+      //房屋筛选
+      handleFilterContract(tmp) {
+        this.offset_top = this.current_filter === tmp.id ? 0 : 123;
+        this.current_filter = this.offset_top <= 0 ? '' : tmp.id;
+      },
+
+      //合同详情
+      handleGoDetail(item) {
+        let param={
+          contract_id: item.contract_id,
+          contract_type: this.params.contract_type
+        }
+        this.routerLink('/contract_detail',param);
       },
     },
   }
@@ -312,9 +374,112 @@
         margin-bottom: 10px;
       }
     }
-    .main-content {
+    /*列表*/
+    ul {
+      background: transparent;
+      li {
+        padding: 0;
+        margin-bottom: .15rem;
+        .contract_content {
+          width: 100%;
+          @include radius(.1rem);
+          background-color: #FFFFFF;
+          padding: .3rem 0 .3rem .3rem;
+
+          .top {
+            @include flex('items-bet');
+            width: 100%;
+
+            h1, h2 {
+              @include flex('items-bet');
+            }
+
+            h1 {
+              overflow: hidden;
+
+              b {
+                margin-right: .1rem;
+                min-width: .45rem;
+                max-width: .45rem;
+                height: .45rem;
+                @include flex('flex-center');
+                @include radius(.1rem);
+                color: #4570FE;
+                background-color: rgba(69, 112, 254, .2);
+              }
+
+              span {
+                @include ellipsis;
+              }
+            }
+
+            h2 {
+              white-space: nowrap;
+              padding: .1rem .2rem;
+              color: #7BB242;
+              @include radius(.1rem 0 0 .1rem);
+              background-color: rgba(123, 178, 66, .2);
+            }
+
+            .status {
+
+            }
+          }
+
+          .main {
+            width: 100%;
+            margin-top: .4rem;
+            @include flex();
+
+            div {
+              padding: 0 .24rem;
+              width: 30%;
+
+              h1, h2 {
+                text-align: center;
+              }
+
+              h1 {
+                color: #D2D2D2;
+              }
+
+              h2 {
+                margin-top: .2rem;
+                font-size: .26rem;
+
+                span {
+                  font-size: .26rem;
+                }
+              }
+            }
+
+            div {
+              border-right: 1px dashed #A2A2A2;
+            }
+
+            .department {
+              width: 40%;
+              border-right: none;
+            }
+          }
+        }
+      }
+      .noMore, .noData {
+        @include flex('flex-center');
+        width: 100%;
+        padding: .2rem;
+        background: transparent;
+      }
+      .noData {
+        height: 8rem;
+      }
+    }
+    .mainContent {
+      //@include scroll;
+      /*height: 100%;*/
+      /*padding: 0 .25rem;*/
       background-color: #F2F2F2;
-      padding: .2rem .3rem;
+      padding: .2rem .3rem 0;
       .contract-item {
         min-height: 2.5rem;
         background-color: white;
@@ -399,12 +564,7 @@
           }
         }
       }
-      .noMore,.noData {
-        text-align: center;
-      }
-      .noData {
-        margin-top: 2rem;
-      }
+
     }
   }
 </style>

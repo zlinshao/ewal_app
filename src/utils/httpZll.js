@@ -761,9 +761,9 @@ class httpZll extends httpService {
   }
 
   // 图片id获取图片地址
-  static getUploadUrl(ids, close) {
+  static getUploadUrl(ids, close,prompt='') {
     return new Promise((resolve, reject) => {
-      this.post(`${url}api/v1/get_urls`, {ids: ids}, '', close).then(res => {
+      this.post(`${url}api/v1/get_urls`, {ids: ids}, prompt, close).then(res => {
         if (res.code.endsWith('0')) {
           resolve(res);
         } else {
@@ -815,6 +815,8 @@ class httpZll extends httpService {
       });
     });
   }
+
+
 
 }
 
