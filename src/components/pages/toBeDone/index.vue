@@ -368,8 +368,14 @@
             }
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
+                let status = true;
                 let types = ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC'];
-                if (types.includes(type)) {
+                for (let key of Object.keys(val)) {
+                  if (key.includes('_approved')) {
+                    status = false;
+                  }
+                }
+                if (types.includes(type) || status) {
                   this.againDetailRequest(val);
                 } else {
                   this.againDetailRequest(val, 'again');
