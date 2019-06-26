@@ -269,6 +269,7 @@
       // }
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.allDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      console.log(this.allDetail);
       this.slither = 0;
       this.drawSlither = {};
       this.checkout = this.bulletinType.bulletin === 'bulletin_checkout';
@@ -831,8 +832,13 @@
           this.form.house_id = contract.house_id;//房屋ID
           this.form.contract_id = contract.v3_contract_id;//合同ID
         } else {
-          this.form.house_id = '';
-          this.form.contract_id = '';
+          if (this.allDetail.house_id) {
+            this.form.house_id = this.allDetail.house_id;
+            this.form.contract_id = this.allDetail.contract_id;
+          } else {
+            this.form.house_id = '';
+            this.form.contract_id = '';
+          }
         }
         this.form.collect_or_rent = this.allDetail.bulletin_type === 'bulletin_collect_basic' ? 1 : 2;//收租标记
         this.form = Object.assign({}, this.form);

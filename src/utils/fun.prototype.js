@@ -680,6 +680,8 @@ export default {
               this.routerLink(val.task_action, {again: again});
             }
           }
+        } else {
+          this.$prompt(res.message);
         }
       });
     };

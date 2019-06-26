@@ -304,6 +304,7 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      this.taskDetail.content.id = '';
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -370,8 +371,8 @@
       // 区分报备类型参数
       distinguishForm(type) {
         if (type !== 'bulletin_collect_basic' && type !== 'bulletin_rent_RWC') {
-          this.form.house_id = this.taskDetail.house_id;
-          this.form.contract_id = this.taskDetail.contract_id;
+          this.form.house_id = this.taskDetail.house_id || '';
+          this.form.contract_id = this.taskDetail.contract_id || '';
         }
         if (type === 'bulletin_rent_basic' || type === 'bulletin_booking_renting') {
           this.form.is_sign = '';
@@ -987,7 +988,6 @@
           case 2:// 重置
             this.$dialog('重置', '您确定要清空表单吗?').then(status => {
               if (status) {
-                let id = this.form.id || '';
                 if (!this.isGetTake) {
                   if ((!bulletin.bulletin.includes('bulletin_special')) && bulletin.bulletin !== 'bulletin_rent_RWC') {
                     if (this.noContractInfo) {
@@ -1001,7 +1001,6 @@
                 } else {
                   this.childBulletin(this.taskDetail.content);
                 }
-                this.form.id = id;
               }
             });
             break;
@@ -1161,6 +1160,7 @@
       },
       // 退租
       checkoutContent(res, change) {
+        console.log(this.form);
         for (let item of Object.keys(this.form)) {
           if (item !== 'check_type') {
             this.form[item] = res[item] || this.form[item];
@@ -1170,7 +1170,7 @@
               this.formatData.house_id = res.house_address || '';
               break;
             case 'collect_or_rent':
-              this.formatData[item] = dicties[item][res[item]];
+              this.formatData[item] = dicties[item][res[item]] || '0';
               break;
             case 'check_type':
               if (!change) {
@@ -1465,6 +1465,7 @@
       // 初始化数据
       resetting() {
         this.slither = 0;
+        let id = this.form.id || '';
         this.photoUploadStatus = true;
         let allForm = [];
         for (let item of Object.keys(this.drawSlither)) {
@@ -1478,6 +1479,7 @@
           all = this.initFormData(allForm, this.showData);
         }
         this.form = all.form;
+        this.form.id = id;
         this.formatData = all.formatData;
         this.album = this.jsonClone(all.album);
         this.electricalList = all.value;
