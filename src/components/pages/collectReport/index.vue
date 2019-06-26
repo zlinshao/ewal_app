@@ -208,6 +208,10 @@
     <float-button ref="code" :type="'payable'"></float-button>
     <!--房屋搜索-->
     <search-house :module="searchHouseModule" :config="searchConfig" @close="hiddenHouse"></search-house>
+    <!--员工搜索-->
+    <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
+    <!--部门搜索-->
+    <search-depart :module="searchDepartModule" @close="getDepartInfo"></search-depart>
     <!--日期-->
     <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
     <!--正常 picker-->
@@ -227,6 +231,8 @@
 </template>
 
 <script>
+  import SearchStaff from '../../common/searchStaff.vue';
+  import SearchDepart from '../../common/searchDepart.vue';
   import Electrical from '../../common/electrical.vue'
   import NoPicker from '../../common/no-picker.vue';
   import SearchHouse from '../../common/searchHouse.vue';
@@ -235,7 +241,7 @@
 
   export default {
     name: "index",
-    components: {SearchHouse, Electrical, NoPicker, CheckChoose, RemarkTerms},
+    components: {SearchHouse, SearchStaff, SearchDepart, Electrical, NoPicker, CheckChoose, RemarkTerms},
     data() {
       return {
 
@@ -269,7 +275,8 @@
         timeModule: false,                  //日期选择
         searchHouseModule: false,           //房屋搜索
         searchConfig: {},                   //搜索配置
-
+        searchStaffModule: false,           //员工搜索
+        searchDepartModule: false,          //部门搜索
         noPickerModule: false,              //模态框 只有输入框
         checksList: {},                     //非房东费用
         checksModule: false,                //非房东费用
@@ -297,6 +304,7 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      this.taskDetail.content.id = '';
       this.bulletin_types(this.bulletinType);
       this.allReportNum = Object.keys(this.drawSlither).length;
       let main = this.$refs.mainRadius.offsetWidth + "px";//一个 ul 宽度
@@ -342,7 +350,7 @@
           //不需要电子合同
           ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special', 'bulletin_special_collect', 'bulletin_special_rent', 'bulletin_checkout'],
           //不需要task_id
-          ['bulletin_rent_trans', 'bulletin_change', 'bulletin_checkout'],
+          ['bulletin_rent_trans', 'bulletin_change'],
           // 不预填
           ['bulletin_collect_continued', 'bulletin_rent_continued', 'bulletin_change', 'bulletin_rent_trans'],
         ];
@@ -363,8 +371,8 @@
       // 区分报备类型参数
       distinguishForm(type) {
         if (type !== 'bulletin_collect_basic' && type !== 'bulletin_rent_RWC') {
-          this.form.house_id = this.taskDetail.house_id;
-          this.form.contract_id = this.taskDetail.contract_id;
+          this.form.house_id = this.taskDetail.house_id || '';
+          this.form.contract_id = this.taskDetail.contract_id || '';
         }
         if (type === 'bulletin_rent_basic' || type === 'bulletin_booking_renting') {
           this.form.is_sign = '';
@@ -412,6 +420,26 @@
           if (this.slither > 0) {
             this.slither--;
           }
+        }
+      },
+      // 搜索员工结果
+      getStaffInfo(val) {
+        this.onCancel();
+        if (val !== 'close') {
+          let config = this.searchConfig;
+          this.form[config.keyName] = val.staff_id;
+          this.form[config.department] = val.department_id;
+          this.formatData[config.keyName] = val.staff_name;
+          this.formatData[config.department] = val.department_name;
+        }
+      },
+      // 搜索部门结果
+      getDepartInfo(val) {
+        this.onCancel();
+        if (val !== 'close') {
+          let config = this.searchConfig;
+          this.form[config.keyName] = val.id;
+          this.formatData[config.keyName] = val.name;
         }
       },
       // 房屋搜索结果
@@ -637,6 +665,17 @@
               this.specialSearchHouseFun();
             }
             break;
+          case 'deliveryReceipt'://交接单
+            this.routerLink('deliveryReceipt');
+            break;
+          case 'searchStaff':
+            this.searchConfig = val;
+            this.searchStaffModule = true;
+            break;
+          case 'searchDepart':
+            this.searchConfig = val;
+            this.searchDepartModule = true;
+            break;
           case 'noPicker':
             this.noPickerModule = true;
             break;
@@ -674,6 +713,7 @@
           }
           if (name === 'pay_way_bet') this.countPrice(name);
           if (name === 'pay_way') this.countPrice(name);
+          if (name === 'check_type') this.checkoutHandler(form.check_type, 'change');
           //特殊事项变化处理
           this.specialPickerFun(form, show, picker);
         }
@@ -893,6 +933,8 @@
         this.checksModule = false;
         this.remarkTermsModule = false;
         this.searchHouseModule = false;
+        this.searchStaffModule = false;
+        this.searchDepartModule = false;
       },
       // 图片上传
       getImgData(val) {
@@ -946,7 +988,6 @@
           case 2:// 重置
             this.$dialog('重置', '您确定要清空表单吗?').then(status => {
               if (status) {
-                let id = this.form.id || '';
                 if (!this.isGetTake) {
                   if ((!bulletin.bulletin.includes('bulletin_special')) && bulletin.bulletin !== 'bulletin_rent_RWC') {
                     if (this.noContractInfo) {
@@ -960,7 +1001,6 @@
                 } else {
                   this.childBulletin(this.taskDetail.content);
                 }
-                this.form.id = id;
               }
             });
             break;
@@ -1053,7 +1093,6 @@
         this.$httpZll.getBulletinDraft(params).then(data => {
           // this.form = collectBulletinDraft;//收房预填
           // this.form = rentBulletinDraft;//租房预填
-
           let arr = [];
           if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
             arr = ['address', 'house_id', 'contract_id', 'contract_number'];
@@ -1066,7 +1105,6 @@
             this.disabledDefaultValue('slither1', arr);
           }
           if (!data) {
-            let arr = [];//不需要清空字段
             if (type !== 'bulletin_rent_RWC') {
               if (!this.isGetTake) {
                 //续收、续租预填数据
@@ -1078,7 +1116,12 @@
                 }
               } else {
                 if (!type.includes('bulletin_special')) {
-                  this.childBulletin(this.taskDetail.content);
+                  if (type.includes('bulletin_checkout')) {
+                    this.checkoutContent(this.taskDetail.content);
+                    this.checkoutHandler(this.form.check_type);
+                  } else {
+                    this.childBulletin(this.taskDetail.content);
+                  }
                 }
               }
             } else {
@@ -1086,7 +1129,6 @@
                 this.handlePreFill(this.taskDetail.content);
               }
             }
-
           } else {
             this.form.id = '';//草稿ID
             let res = data.data;
@@ -1115,6 +1157,42 @@
         if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
           this.electronicContract();
         }
+      },
+      // 退租
+      checkoutContent(res, change) {
+        console.log(this.form);
+        for (let item of Object.keys(this.form)) {
+          if (item !== 'check_type') {
+            this.form[item] = res[item] || this.form[item];
+          }
+          switch (item) {
+            case 'house_id':
+              this.formatData.house_id = res.house_address || '';
+              break;
+            case 'collect_or_rent':
+              this.formatData[item] = dicties[item][res[item]] || '0';
+              break;
+            case 'check_type':
+              if (!change) {
+                this.form[item] = res[item] || this.form[item];
+                this.formatData[item] = res[item].name;
+              }
+              break;
+            case 'checkout_transact_staff':
+            case 'checkout_transact_department':
+              this.formatData[item] = res[item].name || '';
+              break;
+          }
+        }
+      },
+      // 退租表单字段切换
+      checkoutHandler(val, change) {
+        let slither = defineCheckoutReport.slither0.concat(checkoutTypeChange[val.id]);
+        this.drawSlither.slither0 = this.jsonClone(slither);
+        this.resetting();
+        this.form.check_type = val;
+        this.formatData.check_type = val.name;
+        this.checkoutContent(this.taskDetail.content, change);
       },
       // 尾款待办信息 / 渠道
       childBulletin(res, draft) {
@@ -1387,14 +1465,21 @@
       // 初始化数据
       resetting() {
         this.slither = 0;
+        let id = this.form.id || '';
         this.photoUploadStatus = true;
         let allForm = [];
         for (let item of Object.keys(this.drawSlither)) {
           allForm = allForm.concat(this.drawSlither[item]);
         }
         this.drawForm = allForm;
-        let all = this.initFormData(allForm, this.showData);
+        let all = {};
+        if (this.bulletinType.bulletin === 'bulletin_checkout') {
+          all = this.initFormData(allForm, this.showData, 'noStaff');
+        } else {
+          all = this.initFormData(allForm, this.showData);
+        }
         this.form = all.form;
+        this.form.id = id;
         this.formatData = all.formatData;
         this.album = this.jsonClone(all.album);
         this.electricalList = all.value;

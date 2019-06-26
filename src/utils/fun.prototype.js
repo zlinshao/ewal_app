@@ -658,6 +658,33 @@ export default {
         }
       });
     };
+    // 报备详情
+    Vue.prototype.againDetailRequest = function (val, again, replace) {
+      this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
+        if (res.success) {
+          let data = {};
+          data.content = res.data.content;
+          data.task_id = val.task_id;
+          data.house_id = val.house_id;
+          data.contract_id = val.contract_id || '';
+          data.bulletin = val.bulletin_type;
+          data.process_instance_id = val.process_id;
+          data.completion_amount = val.completion_amount;
+          sessionStorage.setItem('task_detail', JSON.stringify(data));
+          if (val.bulletin_type.includes('bulletin_checkout')) {
+            this.routerLink('/collectReport');
+          } else {
+            if (replace) {
+              this.routerReplace(val.task_action, {again: again});
+            } else {
+              this.routerLink(val.task_action, {again: again});
+            }
+          }
+        } else {
+          this.$prompt(res.message);
+        }
+      });
+    };
     // 获取任务列表
     Vue.prototype.$getTaskList = function (item, status) {
       return new Promise((resolve, reject) => {
@@ -824,28 +851,6 @@ export default {
       }
       return {name, bulletin}
     };
-    // 报备详情
-    Vue.prototype.againDetailRequest = function (val, again, replace) {
-      this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
-        if (res.success) {
-          let data = {};
-          data.content = res.data.content;
-          data.task_id = val.task_id;
-          data.house_id = val.house_id;
-          data.contract_id = val.contract_id || '';
-          data.bulletin = val.bulletin_type;
-          data.process_instance_id = val.process_id;
-          data.completion_amount = val.completion_amount;
-          sessionStorage.setItem('task_detail', JSON.stringify(data));
-          if (replace) {
-            this.routerReplace(val.task_action, {again: again});
-          } else {
-            // this.routerLink(val.task_action, {again: again});
-            this.routerLink('/collectReport', {again: again});
-          }
-        }
-      });
-    };
     // 确认弹出窗口
     Vue.prototype.$dialog = function (title, content) {
       return new Promise((resolve, reject) => {
@@ -924,7 +929,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      //data.staff_id = '';
+      // data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
