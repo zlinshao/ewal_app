@@ -302,6 +302,9 @@ export default {
           } else if (item.status === 'arr') {
             form[item.keyName] = item.keyType;
             formatData[item.keyName] = item.keyType;
+          } else if (item.status === 'objName') {
+            form[item.keyName] = item.keyType;
+            formatData[item.keyName] = '';
           } else if (item.keyName) {
             form[item.keyName] = item.keyType;
           }

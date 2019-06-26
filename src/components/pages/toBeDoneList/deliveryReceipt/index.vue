@@ -831,11 +831,14 @@
           this.form.house_id = contract.house_id;//房屋ID
           this.form.contract_id = contract.v3_contract_id;//合同ID
         } else {
-          if (this.allDetail.contract_id) {
+          if (this.allDetail.house_id) {
             this.form.house_id = this.allDetail.house_id;
-            this.form.contract_id = this.allDetail.contract_id;
           } else {
             this.form.house_id = '';
+          }
+          if (this.allDetail.contract_id) {
+            this.form.contract_id = this.allDetail.contract_id;
+          } else {
             this.form.contract_id = '';
           }
         }

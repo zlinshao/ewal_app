@@ -304,6 +304,7 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      console.log(this.taskDetail);
       if (this.taskDetail.content) {
         this.taskDetail.content.id = '';
       }
@@ -429,10 +430,19 @@
         this.onCancel();
         if (val !== 'close') {
           let config = this.searchConfig;
-          this.form[config.keyName] = val.staff_id;
-          this.form[config.department] = val.department_id;
-          this.formatData[config.keyName] = val.staff_name;
-          this.formatData[config.department] = val.department_name;
+          if (config.status === 'objName') {
+            this.form[config.keyName].id = val.staff_id;
+            this.form[config.keyName].name = val.staff_name;
+            this.formatData[config.keyName] = val.staff_name;
+            this.form[config.department].id = val.department_id;
+            this.form[config.department].name = val.department_name;
+            this.formatData[config.department] = val.department_name;
+          } else {
+            this.form[config.keyName] = val.staff_id;
+            this.formatData[config.keyName] = val.staff_name;
+            this.form[config.department] = val.department_id;
+            this.formatData[config.department] = val.department_name;
+          }
         }
       },
       // 搜索部门结果
@@ -440,8 +450,15 @@
         this.onCancel();
         if (val !== 'close') {
           let config = this.searchConfig;
-          this.form[config.keyName] = val.id;
-          this.formatData[config.keyName] = val.name;
+          if (config.status === 'objName') {
+            this.form[config.keyName] = {};
+            this.form[config.keyName].id = val.id;
+            this.form[config.keyName].name = val.name;
+            this.formatData[config.keyName] = val.name;
+          } else {
+            this.form[config.keyName] = val.id;
+            this.formatData[config.keyName] = val.name;
+          }
         }
       },
       // 房屋搜索结果
@@ -668,6 +685,8 @@
             }
             break;
           case 'deliveryReceipt'://交接单
+            this.taskDetail.content = this.form;
+            sessionStorage.setItem('task_detail', JSON.stringify(this.taskDetail));
             this.routerLink('deliveryReceipt');
             break;
           case 'searchStaff':
@@ -947,7 +966,7 @@
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
-          if (this.$attestationKey(this.drawForm)) return;
+          // if (this.$attestationKey(this.drawForm)) return;
         }
         if (val === 1) {
           if (!this.photoUploadStatus) {
@@ -1162,13 +1181,13 @@
       },
       // 退租
       checkoutContent(res, change) {
-        console.log(this.form);
         for (let item of Object.keys(this.form)) {
           if (item !== 'check_type') {
             this.form[item] = res[item] || this.form[item];
           }
           switch (item) {
             case 'house_id':
+              this.form.house_address = res.house_address || '';
               this.formatData.house_id = res.house_address || '';
               break;
             case 'collect_or_rent':
@@ -1180,9 +1199,18 @@
                 this.formatData[item] = res[item].name;
               }
               break;
+            case 'handover_staff':
+            case 'handover_department':
             case 'checkout_transact_staff':
             case 'checkout_transact_department':
-              this.formatData[item] = res[item].name || '';
+              if (res[item]) {
+                this.formatData[item] = res[item].name || '';
+              } else {
+                this.formatData[item] = '';
+              }
+              break;
+            default:
+              this.pickerDefaultValue(this.form, item);
               break;
           }
         }
@@ -1192,6 +1220,11 @@
         let slither = defineCheckoutReport.slither0.concat(checkoutTypeChange[val.id]);
         this.drawSlither.slither0 = this.jsonClone(slither);
         this.resetting();
+        this.form.house_id = '';
+        this.form.contract_id = '';
+        this.form.customer_fdd_user_id = '';
+        this.form.customer_phone = '';
+        this.form.customer_idcard = '';
         this.form.check_type = val;
         this.formatData.check_type = val.name;
         this.checkoutContent(this.taskDetail.content, change);

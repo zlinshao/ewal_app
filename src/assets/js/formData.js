@@ -5548,7 +5548,6 @@ defineSpecialReport = {
       picker: 'upload',
       photos: [{
         label: '图片',
-        placeholder: '必填',
         keyName: 'photo',
       }]
     },
@@ -6183,7 +6182,8 @@ checkoutTypeChange = {
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'handover_staff',
-      keyType: '',
+      keyType: {},
+      status: 'objName',
       department: 'handover_department',
       type: 'text',
       picker: 'searchStaff',
@@ -6195,7 +6195,8 @@ checkoutTypeChange = {
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'handover_department',
-      keyType: '',
+      keyType: {},
+      status: 'objName',
       type: 'text',
       picker: 'searchDepart',
       showForm: 'formatData', //picker 显示form 或 formatData
