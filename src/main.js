@@ -32,9 +32,9 @@ Vue.prototype.$httpTj = httpTj;
 Vue.prototype.$httpHs = httpHs;
 Vue.prototype.$echarts = echarts;
 
-// import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
-// let vConsole = new VConsole(); // 初始化
-// Vue.use(vConsole);
+import VConsole from 'vconsole/dist/vconsole.min.js'; //import vconsole
+let vConsole = new VConsole(); // 初始化
+Vue.use(vConsole);
 
 // 监听软键盘
 (function () {
