@@ -246,7 +246,7 @@
 
         childPhoto: [],
         bulletinType: {},                   //报备类型
-        checkout: false,
+        checkout: false,                    //是否从退租报备进来
       }
     },
     created() {
@@ -273,7 +273,6 @@
       this.slither = 0;
       this.drawSlither = {};
       this.checkout = this.bulletinType.bulletin === 'bulletin_checkout';
-      console.log(this.checkout);
       this.mainTop = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
       this.allReportNum = Object.keys(defineArticleReceipt).length;
       this.getDraft(this.allDetail.task_id);
@@ -832,7 +831,7 @@
           this.form.house_id = contract.house_id;//房屋ID
           this.form.contract_id = contract.v3_contract_id;//合同ID
         } else {
-          if (this.allDetail.house_id) {
+          if (this.allDetail.contract_id) {
             this.form.house_id = this.allDetail.house_id;
             this.form.contract_id = this.allDetail.contract_id;
           } else {
