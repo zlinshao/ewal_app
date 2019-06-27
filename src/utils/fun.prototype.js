@@ -571,9 +571,13 @@ export default {
         let url = '', sign = {};
         switch (item.bulletin_type) {
           case 'bulletin_collect_basic':
+          case 'bulletin_collect_continued':
             url = 'sign_collect';
             break;
           case 'bulletin_rent_basic':
+          case 'bulletin_rent_trans':
+          case 'bulletin_rent_continued':
+          case 'bulletin_change':
             url = 'sign_rent';
         }
         sign = {
@@ -673,8 +677,9 @@ export default {
           data.bulletin = val.bulletin_type;
           data.process_instance_id = val.process_id;
           data.completion_amount = val.completion_amount;
-          sessionStorage.setItem('task_detail', JSON.stringify(data));
+
           if (val.bulletin_type.includes('bulletin_checkout')) {
+            data.id = val.id;
             this.routerLink('/collectReport');
           } else {
             if (replace) {
@@ -932,7 +937,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '';
+      data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;

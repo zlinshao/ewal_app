@@ -1221,6 +1221,7 @@
         this.drawSlither.slither0 = this.jsonClone(slither);
         this.resetting();
         this.form.house_id = '';
+        this.form.id = '';
         this.form.contract_id = '';
         this.form.customer_fdd_user_id = '';
         this.form.customer_phone = '';
