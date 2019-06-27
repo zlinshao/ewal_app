@@ -182,48 +182,53 @@
         })
       },
       onConfirm(item) {
-        let type = JSON.parse(sessionStorage.bulletin_type || '{}');
-        let data = {};
-        data.house_id = item.house_id || '';
-        data.contract_id = item.id || '';
-        data.address = item.house_name.name || '';
-        // data.period_price_way_arr = item.pay_way || [];
-        // data.trans_type = item.type;
-        // data.money_sum = item.money_sum || '';
-        // data.current_pay_info = item.money_table || [];
-        // data.is_agency = item.is_agency;
-        // data.is_family = item.is_family;
-        // data.customer_info = item.customer_info;
-        // data.memo = item.memo || '';
-        // data.num_of_residents = item.num_of_residents || '';
-        // data.rental_use = item.rental_use || '';
-        // data.remark_terms = ['1', '2', '3', '4', '5'];
-        // data.deposit = item.mortgage_price || '';
-        // data.bet = item.pay_bet;
-        // data.month = item.sign_month || '';
-        // data.rental_use_remark = item.rental_use_remark || '';
-        // data.day = item.sign_remainder_day || '';
-        // data.begin_date = item.start_at.substring(0, 10);
-        // data.end_date = item.end_at.substring(0, 10);
-        // data.sign_date = item.sign_at.substring(0, 10);
-        // console.log(data);
-        // if (item.agency_info) {
-        //   for (let info of Object.keys(item.agency_info)) {
-        //     data[info] = item.agency_info[info];
-        //   }
-        // } else {
-        //   item.agency_name = '';
-        //   item.agency_phone = '';
-        //   item.agency_price = '';
-        //   item.agency_user_name = '';
-        // }
-        // data.album = item.album;
+        let data = {}, content = {content: {}}, address;
         this.$httpZll.getBulletinDetail(data.contract_id).then(res => {
           if (res) {
             data.content = res.content.draft_content;
             data.content.old_address = res.house_address || res.address || '';
             data.content.address = res.house_address || res.address || '';
             sessionStorage.setItem('task_detail', JSON.stringify(data));
+            this.routerReplace('/collectReport');
+          } else {
+            content.house_id = item.house_id || '';
+            content.contract_id = item.id || '';
+            address = item.house_name.name || '';
+            content.address = address;
+            data.address = address;
+            data.old_address = address;
+            data.period_price_way_arr = item.pay_way || [];
+            data.trans_type = item.trans_type || '0';
+            data.money_sum = item.money_sum || '';
+            data.current_pay_info = item.money_table || [];
+            data.is_agency = item.is_agency;
+            data.is_family = item.is_family;
+            data.customer_info = item.customer_info;
+            data.memo = item.memo || '';
+            data.num_of_residents = item.num_of_residents || '';
+            data.rental_use = item.rental_use || '';
+            data.remark_terms = ['1', '2', '3', '4', '5'];
+            data.deposit = item.mortgage_price || '';
+            data.bet = item.pay_bet;
+            data.month = item.sign_month || '';
+            data.day = item.sign_remainder_day || '';
+            data.rental_use_remark = item.rental_use_remark || '';
+            data.begin_date = item.start_at.substring(0, 10);
+            data.end_date = item.end_at.substring(0, 10);
+            data.sign_date = item.sign_at.substring(0, 10);
+            if (item.agency_info) {
+              for (let info of Object.keys(item.agency_info)) {
+                data[info] = item.agency_info[info] || '';
+              }
+            } else {
+              item.agency_name = '';
+              item.agency_phone = '';
+              item.agency_price = '';
+              item.agency_user_name = '';
+            }
+            data.album = item.album;
+            content.content = data;
+            sessionStorage.setItem('task_detail', JSON.stringify(content));
             this.routerReplace('/collectReport');
           }
         });

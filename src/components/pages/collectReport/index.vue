@@ -1122,7 +1122,6 @@
             arr = ['house_id_rent', 'contract_id', 'contract_number'];
             this.disabledDefaultValue('slither0', arr);
           } else if (type === 'bulletin_rent_trans') {
-            arr = [];
             this.disabledDefaultValue('slither1', arr);
           }
           if (!data) {
@@ -1130,6 +1129,7 @@
               if (!this.isGetTake) {
                 //续收、续租预填数据
                 if (this.noContractInfo) {
+                  console.log(this.taskDetail)
                   this.handlePreFill(this.taskDetail.content);
                   this.disabledDefaultValueHandler(this.allResetting);
                 } else {
@@ -1141,6 +1141,7 @@
                     this.checkoutContent(this.taskDetail.content);
                     this.checkoutHandler(this.form.check_type);
                   } else {
+
                     this.childBulletin(this.taskDetail.content);
                   }
                 }
@@ -1157,7 +1158,7 @@
             this.handlePreFill(res);
           }
           if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
-            this.electronicContract();
+            // this.electronicContract();
           }
         });
       },
