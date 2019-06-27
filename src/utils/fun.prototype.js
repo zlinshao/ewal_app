@@ -345,6 +345,7 @@ export default {
     };
     // 报备类型数据匹配
     Vue.prototype.$bulletinType = function (type, rwc = '') {
+      console.log(type);
       let data = {}, title = [];
       switch (type) {
         case 'bulletin_collect_basic'://收房
@@ -405,7 +406,9 @@ export default {
           data = this.jsonClone(defineSpecialReport);
           break;
         case 'bulletin_checkout'://退租
-          title = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
+        case 'bulletin_checkout_collect'://退租
+        case 'bulletin_checkout_rent'://退租
+          title = ['退租'];
           data = this.jsonClone(defineCheckoutReport);
           break;
         case 'Market-VillageExpand'://新增小区
@@ -678,7 +681,6 @@ export default {
           data.process_instance_id = val.process_id;
           data.completion_amount = val.completion_amount;
           if (val.bulletin_type.includes('bulletin_checkout')) {
-            data.id = val.id;
             this.routerLink('/collectReport');
           } else {
             if (replace) {

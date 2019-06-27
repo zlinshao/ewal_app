@@ -538,7 +538,7 @@
             break;
           case "bulletin_retainage":
             obj.status = 'toBeDoneRetainage';
-            obj.type = 'MarketRent';
+            obj.type = 'MarketRent,MarketRentRenew';
             break;
           case "bulletin_agency":
             obj.status = 'toBeDoneAgency';
