@@ -6139,7 +6139,7 @@ checkoutTypeChange = {
     {
       label: '押金退款',
       placeholder: '必填 请输入',
-      keyName: 'supplementary_agreement',
+      keyName: 'deposit_drawback',
       keyType: '',
       type: 'number',
       slot: '',
@@ -6376,7 +6376,7 @@ checkoutTypeChange = {
     {
       label: '押金退款',
       placeholder: '必填 请输入',
-      keyName: 'supplementary_agreement',
+      keyName: 'deposit_drawback',
       keyType: '',
       type: 'number',
       slot: '',
@@ -6729,7 +6729,7 @@ checkoutTypeChange = {
     {
       label: '押金退款',
       placeholder: '必填 请输入',
-      keyName: 'supplementary_agreement',
+      keyName: 'deposit_drawback',
       keyType: '',
       type: 'number',
       slot: '',
