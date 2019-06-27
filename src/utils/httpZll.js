@@ -214,8 +214,8 @@ class httpZll extends httpService {
       let time = common.startTime('time');
       this.post(`${url_done}/runtime/process-instances`, {
         "message": "BookingMessage",
-        "tenantId":"market",
-        "variables":[
+        "tenantId": "market",
+        "variables": [
           {
             name: 'title',
             value: '未收先租 ' + time,
@@ -411,6 +411,19 @@ class httpZll extends httpService {
   static getNewDeliveryDraft(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/handover/info`, params, 'prompt').then(res => {
+        if (res.success) {
+          resolve(res);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  // 获取 交接单 pdf
+  static getDeliveryPDF(id) {
+    return new Promise((resolve, reject) => {
+      this.get(`${market}v1.0/market/handover/${id}`, {}, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
         } else {
@@ -761,7 +774,7 @@ class httpZll extends httpService {
   }
 
   // 图片id获取图片地址
-  static getUploadUrl(ids, close,prompt='') {
+  static getUploadUrl(ids, close, prompt = '') {
     return new Promise((resolve, reject) => {
       this.post(`${url}api/v1/get_urls`, {ids: ids}, prompt, close).then(res => {
         if (res.code.endsWith('0')) {
@@ -829,7 +842,6 @@ class httpZll extends httpService {
       });
     });
   }
-
 
 
 }
