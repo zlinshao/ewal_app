@@ -269,6 +269,4 @@ dicties = {
   check_type: {},
   // 是否补款
   is_supplement_money: oneYesZeroNo,
-  // fadd客户id
-  customer_users: {},
 };
