@@ -168,11 +168,12 @@
       }
     },
     created() {
-      this.resetParams();
+
     },
     mounted() {
     },
     activated(){
+      this.resetParams();
       let top = this.$refs['main-Content'].offsetTop;
       this.mainHeight.height = window.innerHeight - top + 'px';
       this.params.city_name=this.personal.city_name; //城市赋值
@@ -285,7 +286,6 @@
           remaining:'',        //合同剩余时长
           signer: [],          //员工
           org: [],             //部门
-          // from:'task',         //task app端
           from:'mobile',
           city_name:'',        //城市
         };
