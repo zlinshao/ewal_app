@@ -761,6 +761,9 @@
         this.allBulletin = data;
         this.objInt = this.objIntArray(bulletinData.data);
         this.allReportNum = Object.keys(data).length;
+        this.setDrawSlither(data);
+      },
+      setDrawSlither(data) {
         let obj = {};
         for (let val of Object.keys(data)) {
           obj[val] = {};
@@ -788,11 +791,17 @@
         this.$httpZll.getApprovalDetail(url).then((res) => {
           if (res) {
             this.allDetail = this.jsonClone(res.data);
+            if (this.allDetail.bulletin_type.includes('bulletin_checkout')) {
+              let id = this.allDetail.content.check_type.id;
+              this.allBulletin.slither0 = this.allBulletin.slither0.concat(checkoutTypeChange[id]);
+              this.setDrawSlither(this.allBulletin);
+              this.objInt = this.objIntArray(this.allBulletin);
+            }
             this.allDetail.task_id = this.detailData.task_id;
             this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
             let content = {};
-            if (res.data.content.bulletin_content && typeof(res.data.content.bulletin_content) === 'object'  ) {
+            if (res.data.content.bulletin_content && typeof (res.data.content.bulletin_content) === 'object') {
               content = JSON.parse(res.data.content.bulletin_content || '{}');
             } else {
               content = res.data.content;
