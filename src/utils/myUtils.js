@@ -121,12 +121,17 @@ class myUtils {
     hh = hh[1] ? hh : '0' + hh;
     md = md[1] ? md : '0' + md;
     ss = md[1] ? ss : '0' + ss;
+    //年月（lili）
+    if (type === 'year-month') {
+      return year + '-' + mm ;
+    }
     if (type === 'date') {
       return year + '-' + mm + '-' + dd;
     }
     if (type === 'datetime') {
       return year + '-' + mm + '-' + dd + ' ' + hh + ':' + md;
     }
+
     return year + '-' + mm + '-' + dd + ' ' + hh + ':' + md + ':' + ss;
   };
 

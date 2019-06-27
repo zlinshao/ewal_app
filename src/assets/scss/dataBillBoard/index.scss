@@ -30,8 +30,12 @@
         }
       }
       .right_name{
+        color: rgba(69,112,254,0.5);;
         span:nth-child(1){
           padding-right: .4rem;
+        }
+        .activeTabs{
+          color:#4570FE;
         }
       }
     }
@@ -61,12 +65,54 @@
             padding-top: .1rem;
           }
         }
-        #myEcharts{
+        .myEcharts{
+          @include houseBg('echarts@3x.png');
           z-index: 99;
           width: 100%;
-          height: 2.5rem;
           position: absolute;
           bottom: 0;
+          .echart_info1{
+            display: inline-block;
+            position: absolute;
+            bottom: 46%;
+            left: 15%;
+          }
+          .echart_info2{
+            display: inline-block;
+            position: absolute;
+            bottom: 80%;
+            left: 68%;
+          }
+          .echart_info3{
+            display: inline-block;
+            position: absolute;
+            bottom: 46%;
+            left: 56%;
+          }
+          .label{
+            color: #fff;
+            font-size: .22rem;
+            display: block;
+            margin-left: .3rem;
+            margin-bottom:.1rem;
+          }
+          .info{
+            display: block;
+            span{
+              font-size: .32rem;
+            }
+            img{
+              width: .35rem;
+              height: .35rem;
+              vertical-align: bottom;
+            }
+            .span_num1{
+              color: #FFE904;
+            }
+            .span_num2{
+              color: #1AFEF1;
+            }
+          }
         }
       }
       //列表
@@ -144,6 +190,9 @@
           width: 100%;
           padding: .2rem;
           background-color: transparent;
+        }
+        .noData{
+          height: 4.8rem;
         }
       }
     }

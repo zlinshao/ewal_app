@@ -932,7 +932,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      data.staff_id = '';
+      // data.staff_id = '';
       data.staff_name = info.name;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
@@ -980,14 +980,12 @@ export default {
       });
     };
     //时间戳的处理
-    Vue.prototype.datetoLocaleString = function (val) {
+    Vue.prototype.datetoLocaleString = function () {
       let time = new Date();
       let y = time.getFullYear();
       let m = time.getMonth() + 1;
-      let d = time.getDate();
       m = m < 10 ? '0' + m : m;
-      d = d < 10 ? '0' + d : d;
-      return y + '-' + m + '-' + d;
+      return y + '-' + m;
     }
   }
 }

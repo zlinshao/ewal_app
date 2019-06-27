@@ -55,6 +55,11 @@
         let strDate = date.getDate();
         let hh = date.getHours();
         let mm = date.getMinutes();
+        //之展示年月（lili）
+        if (this.dateType === 'year-month') {
+          this.currentDate = new Date(year, month);
+          return;
+        }
         if (this.dateType === 'date') {
           this.currentDate = new Date(year, month, strDate);
           return;
@@ -70,8 +75,17 @@
         this.timeValue = val;
         let date = val.split('-');
         let date1 = Number(date[1]) - 1;
-        let date2 = date[2];
-        let time = date2.split(' ');
+        if(this.dateType !== 'year-month'){
+          let date2 = date[2];
+          let time = date2.split(' ');
+        }
+        //之展示年月（lili）
+        if (this.dateType === 'year-month') {
+
+          console.log(val);
+          this.currentDate = new Date(date[0], date1);
+          return;
+        }
         if (this.dateType === 'date') {
           this.currentDate = new Date(date[0], date1, Number(time[0]));
           return;
