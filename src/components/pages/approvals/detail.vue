@@ -773,6 +773,7 @@
         this.allReportNum = Object.keys(data).length;
         this.setDrawSlither(data);
       },
+      // formatData 键 值 匹配
       setDrawSlither(data) {
         let obj = {};
         for (let val of Object.keys(data)) {
@@ -802,7 +803,12 @@
           if (res) {
             this.allDetail = this.jsonClone(res.data);
             if (this.allDetail.bulletin_type.includes('bulletin_checkout')) {
-              let id = this.allDetail.content.check_type.id;
+              let ids = ['329', '331'], val = this.allDetail.content.check_type.id, id = '3290';
+              if (ids.includes(val)) {
+                id = val + this.allDetail.content.collect_or_rent;
+              } else {
+                id = val;
+              }
               this.allBulletin.slither0 = this.allBulletin.slither0.concat(checkoutTypeChange[id]);
               this.setDrawSlither(this.allBulletin);
               this.objInt = this.objIntArray(this.allBulletin);
