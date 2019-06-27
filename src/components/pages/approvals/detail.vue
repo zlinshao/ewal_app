@@ -76,6 +76,9 @@
                     <span v-else-if="key === 'album'" v-for="pic in Object.keys(formatData[key])" class="spanPhotos">
                       <img v-for="photo in formatData[key][pic]" :src="photo.uri" alt="">
                     </span>
+                    <span v-else-if="key === 'handover_id'" @click="deliveryPDF(key,formatData[key])" :class="key">
+                      {{handover[key]}}
+                    </span>
                     <span v-else>{{formatData[key]}}</span>
                   </span>
                 </div>
@@ -277,7 +280,7 @@
         recordPopup: false,//历史流程
         commentPopup: false,//评论
         deliverPopup: false,//转交
-
+        handover: {'handover_id': '查看交接单'},
         commentForm: {
           author: '',
           content: {
@@ -363,6 +366,13 @@
           if (this.slither > 0) {
             this.slither--;
           }
+        }
+      },
+      deliveryPDF(val, id) {
+        if (val === 'handover_id') {
+          this.$httpZll.getDeliveryPDF(id).then(res => {
+            this.$ddSkip(res.data.view_url)
+          })
         }
       },
       // 转交
@@ -977,6 +987,10 @@
       left: 1rem;
       z-index: 10;
       color: #FFFFFF;
+    }
+
+    .handover_id {
+      color: #4A74FE;
     }
   }
 
