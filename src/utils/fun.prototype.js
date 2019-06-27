@@ -345,7 +345,6 @@ export default {
     };
     // 报备类型数据匹配
     Vue.prototype.$bulletinType = function (type, rwc = '') {
-      console.log(type);
       let data = {}, title = [];
       switch (type) {
         case 'bulletin_collect_basic'://收房
