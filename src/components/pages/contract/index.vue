@@ -168,15 +168,16 @@
       }
     },
     created() {
-      this.resetParams();
+
     },
     mounted() {
     },
     activated(){
+      this.resetParams();
       let top = this.$refs['main-Content'].offsetTop;
       this.mainHeight.height = window.innerHeight - top + 'px';
       this.params.city_name=this.personal.city_name; //城市赋值
-s    },
+    },
     watch: {
       'params.search'(val) {
         this.params.search = val.replace(/\s+/g, '');
@@ -252,7 +253,6 @@ s    },
       },
       //列表
       handleGetContractList() {
-        console.log(111)
         this.fullLoading = true;
         this.$httpZll.getContractList(this.params).then(res => {
           this.fullLoading = false;
@@ -260,7 +260,6 @@ s    },
             this.contract_list.push(item);
           }
           this.paging = res.count;
-          console.log(this.contract_list)
         })
       },
       //分页
@@ -287,7 +286,6 @@ s    },
           remaining:'',        //合同剩余时长
           signer: [],          //员工
           org: [],             //部门
-          // from:'task',         //task app端
           from:'mobile',
           city_name:'',        //城市
         };

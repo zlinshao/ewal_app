@@ -816,6 +816,20 @@ class httpZll extends httpService {
     });
   }
 
+  //获取业务员个人业绩
+  static getPersonalList(data) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_hr}achv/achv/get_personal`, data).then(res => {
+        if (res) {
+          resolve(res);
+        } else {
+          resolve(res);
+          $httpPrompt(res.msg);
+        }
+      });
+    });
+  }
+
 
 
 }
