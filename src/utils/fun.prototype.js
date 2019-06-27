@@ -571,9 +571,13 @@ export default {
         let url = '', sign = {};
         switch (item.bulletin_type) {
           case 'bulletin_collect_basic':
+          case 'bulletin_collect_continued':
             url = 'sign_collect';
             break;
           case 'bulletin_rent_basic':
+          case 'bulletin_rent_trans':
+          case 'bulletin_rent_continued':
+          case 'bulletin_change':
             url = 'sign_rent';
         }
         sign = {
@@ -673,8 +677,9 @@ export default {
           data.bulletin = val.bulletin_type;
           data.process_instance_id = val.process_id;
           data.completion_amount = val.completion_amount;
-          sessionStorage.setItem('task_detail', JSON.stringify(data));
+
           if (val.bulletin_type.includes('bulletin_checkout')) {
+            data.id = val.id;
             this.routerLink('/collectReport');
           } else {
             if (replace) {
@@ -980,14 +985,12 @@ export default {
       });
     };
     //时间戳的处理
-    Vue.prototype.datetoLocaleString = function (val) {
+    Vue.prototype.datetoLocaleString = function () {
       let time = new Date();
       let y = time.getFullYear();
       let m = time.getMonth() + 1;
-      let d = time.getDate();
       m = m < 10 ? '0' + m : m;
-      d = d < 10 ? '0' + d : d;
-      return y + '-' + m + '-' + d;
+      return y + '-' + m;
     }
   }
 }

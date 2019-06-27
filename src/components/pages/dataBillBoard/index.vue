@@ -3,47 +3,61 @@
     <div class="dataBillBoard" :style="mainListHeight()">
       <!--  顶部切换的条件   -->
       <div class="tabs_list"   ref="topSearch">
-        <div class="left_calendarDate" @click="chooseDate">
+        <div class="left_calendarDate" >
           <img src="../../../assets/image/dataBillBoard/rili@3x.png">
-          <span >{{calendarDate}}</span>
+          <span @click="chooseDate()">{{params.date}}</span>
         </div>
         <div class="right_name">
-          <span @click="getList">数据分析</span>
-          <span @click="getList">业绩工资</span>
+          <span v-for="item in tabsTitle" :class="{ 'activeTabs':tabsId === item.id}" @click="tabsClick(item.id)">{{item.name}}</span>
         </div>
       </div>
       <!--滚动部分-->
-      <div class="main_list" :style="mainHeight">
+      <div class="main_list" ref="main-Content" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="!fullLoading">
           <!--卡片和图表    -->
           <div class="data_card">
             <div class="card_bg">
               <span>总收益</span>
-              <span class="numberFont">{{45978990000}}</span>
+              <span class="numberFont">{{billBoardData.real_salary_all || '--'}}</span>
             </div>
-            <div id="myEcharts" ></div>
+            <div class="myEcharts" :style="{height:echartsHeight+'px'}">
+              <span  :class="[billBoardData.real_achievement_all<=billBoardData.overflow_achv_all ? 'echart_info1' : 'echart_info2']">
+                <span class="label">实际业绩</span>
+                <span class="info numberFont">
+                  <img src="../../../assets/image/dataBillBoard/shij@3x.png" >
+                  <span class="span_num1">{{billBoardData.real_achievement_all|| '--'}}</span>
+                </span>
+              </span>
+              <span :class="[billBoardData.real_achievement_all<billBoardData.overflow_achv_all ? 'echart_info2' : 'echart_info1',{'echart_info3':billBoardData.real_achievement_all===billBoardData.overflow_achv_all}]">
+                <span class="label">溢出业绩</span>
+                <span class="info numberFont">
+                  <img src="../../../assets/image/dataBillBoard/yichu@3x.png" alt="">
+                  <span class="span_num2">{{billBoardData.overflow_achv_all|| '--'}}</span>
+                </span>
+              </span>
+            </div>
           </div>
           <!-- 数据列表-->
           <div class="lists">
             <div class="list"  v-for="(item,key) in listData" :key="key" @click="handleDetail(item)">
               <div class="base_info">
-                <span>{{item.name}}</span>
-                <span>{{item.typeName}}</span>
+                <span>{{item.rent_house_name}}</span>
+                <span>{{item.achv_type === 1 ? '新收新租':'二次出租'}}</span>
               </div>
               <div class="data_info">
                 <div class="left_data">
                   <span class="duty">
                     <span>认责</span>
-                    <span class="label_val numberFont">{{item.aa}}</span>
+                    <span class="label_val numberFont">{{item.vacancy_duty || '--'}}</span>
                   </span>
                   <span class="perform">
                     <span>业绩</span>
-                    <span class="label_val numberFont">{{item.bb}}</span>
+                    <span class="label_val numberFont">{{item.real_money || '--'}}</span>
                   </span>
                 </div>
                 <span class="right_data">
                   <span class="earnings_name">收益</span>
-                  <span class="label_val numberFont">{{item.cc}}</span>
+                  <span class="label_val numberFont">{{item.real_achievement || '--'}}</span>
                 </span>
               </div>
             </div>
@@ -72,53 +86,29 @@
     name: "index",
     data() {
       return {
-        //列表
-        listData:[
-          {name:'仙居雅苑仙居雅苑1-101',typeName:'新收',type:'1',aa:'76000',bb:'344597600',cc:'3445976000'},
-          {name:'仙居雅苑仙居雅苑1-101',typeName:'新租',type:'2',aa:'76000',bb:'344597600',cc:'3445976000'},
-          {name:'仙居雅苑仙居雅苑1-101',typeName:'续收',type:'3',aa:'76000',bb:'344597600',cc:'3445976000'},
-          {name:'仙居雅苑仙居雅苑1-101',typeName:'续租',type:'4',aa:'76000',bb:'344597600',cc:'3445976000'},
-          {name:'仙居雅苑仙居雅苑1-101',typeName:'二次出租',type:'5',aa:'76000',bb:'344597600',cc:'3445976000'},
+        billBoardData:{},
+        listData:[],        //列表数据
+        tabsTitle:[
+          // {id:1,name:'数据分析'},
+          {id:2,name:'业绩工资'},
         ],
+        tabsId: 2,
+        paging: 0,                         //总条数
         timeModule: false,                  //日期选择
-        calendarDate:'',                    //日期
         formatData: {                      //传给日期组件的字段
-          dateType: 'date',
-          dateKey: '',  //字段名
+          dateType: 'year-month',
+          dateKey: 'date',  //字段名
           dateVal: ''  //日期回显时
         },
-        //图表参数
-        option :{  //图表
-          grid : { //距离容器边界间距
-            top : 0,
-            bottom: 0,
-            left:0,
-            right:0
-          },
-          xAxis: {
-            type: 'category',
-            show:false,
-            boundaryGap: false,
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          },
-          yAxis: {
-            type: 'value',
-            show:false,
-          },
-          series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line',
-            areaStyle: {},
-            smooth: true,
-            symbol:'none',  //去掉点的
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-              offset: 0,
-              color: 'rgba(0,172,193,1)'
-            }, {
-              offset: 1,
-              color: 'rgba(156,224,84,1)'
-            }])
-          }]
+        fullLoading: false,
+        mainHeight: '',
+        echartsHeight:0,
+        //传参
+        params: {
+          page: 1,
+          limit: 12,
+          uid: '',          //当前登录的用户id
+          date:'',          //日期
         },
         // 底部切换
         indexBottom: [
@@ -139,130 +129,66 @@
             icon: 'p-4',
           },
         ],
-        server: globalConfig.server_market,
-        mainHeight: '',
-        paging: 0,
-        fullLoading: false,
-        //传参
-        params: {
-          page: 1,
-          // limit: 12,
-          limit: 5,
-          search: '',
-          name: '',
-          status: [],
-          is_org_user: 0,
-          org_user_id: [],
-        },
       }
+    },
+    created() {
     },
     mounted() {
       this.$nextTick(function () {
         let top = this.$refs.topSearch.offsetHeight;
         this.mainHeight = this.mainListHeight(top + 50);
+        this.echartsHeight=this.screenWidth*205/750;  //图表的高度设置，用于定位
       });
-      //日期
-      this.calendarDate=this.datetoLocaleString();
-      //绘制图表
-      this.drawEcharts();
     },
-
-    activated() {
+    activated(){
+      this.params.date=this.datetoLocaleString();   //日期
+      this.params.uid=this.personal.staff_id;        //登陆人id
     },
-
-    deactivated() {
-      this.resetParams();
-    },
-
     watch: {},
     computed: {
-      // personal() {
-      //   return this.$store.state.app.personalDetail;
-      // },
+      personal() {
+        return this.$store.state.app.personalDetail;
+      },
     },
     methods: {
+      //数据分析、业绩工资进行切换
+      tabsClick(val){
+        this.tabsId=val;
+      },
       //日期
-      chooseDate(val) {
+      chooseDate() {
         this.timeModule = true;
-        this.formatData.dateKey = 'calendarDate';
-        this.formatData.dateVal = this.calendarDate;
+        this.formatData.dateVal = this.params.date;
       },
       // 日期组件的事件
       onConTime(val) {
         this.timeModule = false;
         if (val !== 'close') {
-          this.calendarDate = val.dateVal;
-        }
-      },
-
-      //绘制图表
-      drawEcharts(){
-        let myEcharts=this.$echarts.init(document.getElementById('myEcharts'));
-        myEcharts.setOption(this.option);
-      },
-
-
-      //重置params
-      resetParams() {
-        this.params = {
-          page: 1,
-          limit: 12,
-          search: '',
-          name: '',
-          status: [],
-          is_org_user: 0,
-          org_user_id: [],
-          city_id:'',
-        };
-
-      },
-      //滚动
-      scrollLoad(val) {
-        console.log(val);
-        if (!val) {
-          this.params.page = 1;
-          //this.handleGetList();
-        } else {
-          if (this.fullLoading) return;
-          if (this.listData.length === this.paging) return;
-          this.params.page++;
+          this.params[val.dateKey] = val.dateVal;
           this.handleGetList();
         }
       },
-      /*
-    * 获取列表
-    * params: cleanData  是否清除列表 默认false
-    * */
-      handleGetList(cleanData = false) {
-        if(cleanData) {
-          this.listData = [];
-        }
+
+      //获取列表
+      handleGetList(){
         this.fullLoading = true;
-        this.getList();
-        let newParams = this.parseParams(this.params);
-        console.log(newParams)
-        //  this.$httpZll.get(this.server + 'v1.0/market/house', newParams, '加载中...').then(res => {
-        //   this.fullLoading = false;
-        //   if (res.code === 200) {
-        //     _.forEach(res.data.data,(o)=> {
-        //       this.listData.push(o);
-        //     })
-        //     this.paging = res.data.all_count;
-        //   } else {
-        //     this.listData = [];
-        //   }
-        // })
+        this.$httpZll.getPersonalList(this.params).then(res => {
+          this.fullLoading = false;
+          this.listData = res.data.data;
+          this.billBoardData=res.data;
+          this.paging = this.listData.length;
+        })
       },
-      getList(){
-       let arr=[
-         {name:'仙居雅苑仙居雅苑1-101',typeName:'新收',type:'1',aa:'76000',bb:'344597600',cc:'3445976000'},
-         {name:'仙居雅苑仙居雅苑1-101',typeName:'新租',type:'2',aa:'76000',bb:'344597600',cc:'3445976000'},
-         {name:'仙居雅苑仙居雅苑1-101',typeName:'续收',type:'3',aa:'76000',bb:'344597600',cc:'3445976000'},
-         {name:'仙居雅苑仙居雅苑1-101',typeName:'续租',type:'4',aa:'76000',bb:'344597600',cc:'3445976000'},
-         {name:'仙居雅苑仙居雅苑1-101',typeName:'二次出租',type:'5',aa:'76000',bb:'344597600',cc:'3445976000'},
-       ]
-        this.listData.push(arr);
+      //分页
+      scrollLoad(val) {
+        if (!val) {
+          this.params.page = 1;
+          this.billBoardData = {};
+          this.listData=[]
+          this.handleGetList();
+        }
       },
+
       // 底部按钮跳转
       footerTag(val) {
         switch (val) {

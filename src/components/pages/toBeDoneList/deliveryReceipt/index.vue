@@ -730,6 +730,8 @@
                 if (val) {
                   this.form.id = res.data.id;
                 } else {
+                  this.allDetail.content.handover_id = res.data.id;
+                  sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
                   this.$router.go(-1);
                 }
               }
