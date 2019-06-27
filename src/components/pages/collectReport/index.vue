@@ -305,7 +305,7 @@
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
       console.log(this.taskDetail);
-      if (this.taskDetail.content) {
+      if (this.taskDetail.content && this.bulletinType.bulletin !== 'bulletin_checkout') {
         this.taskDetail.content.id = '';
       }
       this.bulletin_types(this.bulletinType);
@@ -1197,6 +1197,13 @@
               if (!change) {
                 this.form[item] = res[item] || {id: '329', name: '正常退租'};
                 this.formatData[item] = this.form[item].name;
+              }
+              break;
+            case 'handover_id':
+              if (this.form[item]) {
+                this.formatData[item] = '交单成功';
+              } else {
+                this.formatData[item] = '';
               }
               break;
             case 'handover_staff':
