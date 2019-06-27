@@ -1195,8 +1195,8 @@
               break;
             case 'check_type':
               if (!change) {
-                this.form[item] = res[item] || this.form[item];
-                this.formatData[item] = res[item].name;
+                this.form[item] = res[item] || {id: '329', name: '正常退租'};
+                this.formatData[item] = this.form[item].name;
               }
               break;
             case 'handover_staff':

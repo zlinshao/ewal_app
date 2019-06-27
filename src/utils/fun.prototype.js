@@ -677,7 +677,6 @@ export default {
           data.bulletin = val.bulletin_type;
           data.process_instance_id = val.process_id;
           data.completion_amount = val.completion_amount;
-
           if (val.bulletin_type.includes('bulletin_checkout')) {
             data.id = val.id;
             this.routerLink('/collectReport');
@@ -688,6 +687,7 @@ export default {
               this.routerLink(val.task_action, {again: again});
             }
           }
+          sessionStorage.setItem('task_detail', JSON.stringify(data));
         } else {
           this.$prompt(res.message);
         }
