@@ -6088,6 +6088,62 @@ defineCheckoutReport = {
   ],
 };
 
+// 普通退租
+normalCheckoutRent = [
+  {
+    label: '退租日期',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'checkout_date',
+    keyType: '',
+    type: 'text',
+    picker: 'date',
+    showForm: 'formatData',
+    slot: '',
+  },
+  {
+    label: '押金退款',
+    placeholder: '必填 请输入',
+    keyName: 'deposit_drawback',
+    keyType: '',
+    type: 'number',
+    slot: '',
+  },
+  {
+    label: '备注',
+    placeholder: '请输入',
+    keyName: 'remark',
+    keyType: '',
+    type: 'textarea',
+    slot: '',
+  },
+  {
+    label: '交接人',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'handover_staff',
+    keyType: '',
+    department: 'handover_department',
+    type: 'text',
+    status: '',
+    picker: 'searchStaff',
+    showForm: 'formatData', //picker 显示form 或 formatData
+    slot: '',
+  },
+  {
+    label: '交接部门',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'handover_department',
+    keyType: '',
+    type: 'text',
+    status: '',
+    picker: 'searchDepart',
+    showForm: 'formatData', //picker 显示form 或 formatData
+    slot: '',
+  },
+];
+
 checkoutTypeChange = {
   // 正常退租 收
   '3290': [
@@ -6515,147 +6571,12 @@ checkoutTypeChange = {
     },
   ],
   // 调租
-  '332': [
-    {
-      label: '支付日期',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'payment_money_date',
-      keyType: '',
-      type: 'text',
-      picker: 'date',
-      showForm: 'formatData',
-      slot: '',
-    },
-    {
-      label: '补充约定',
-      placeholder: '必填 请输入',
-      keyName: 'supplementary_agreement',
-      keyType: '',
-      type: 'text',
-      slot: '',
-    },
-    {
-      label: '交接人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: '',
-      department: 'handover_department',
-      type: 'text',
-      status: '',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '交接部门',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: '',
-      type: 'text',
-      status: '',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-  ],
+  '332': normalCheckoutRent,
   // 个人转租
-  '333': [
-    {
-      label: '支付日期',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'payment_money_date',
-      keyType: '',
-      type: 'text',
-      picker: 'date',
-      showForm: 'formatData',
-      slot: '',
-    },
-    {
-      label: '补充约定',
-      placeholder: '必填 请输入',
-      keyName: 'supplementary_agreement',
-      keyType: '',
-      type: 'text',
-      slot: '',
-    },
-    {
-      label: '交接人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: '',
-      department: 'handover_department',
-      type: 'text',
-      status: '',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '交接部门',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: '',
-      type: 'text',
-      status: '',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-  ],
+  '333': normalCheckoutRent,
   // 公司转租
-  '582': [
-    {
-      label: '支付日期',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'payment_money_date',
-      keyType: '',
-      type: 'text',
-      picker: 'date',
-      showForm: 'formatData',
-      slot: '',
-    },
-    {
-      label: '补充约定',
-      placeholder: '必填 请输入',
-      keyName: 'supplementary_agreement',
-      keyType: '',
-      type: 'text',
-      slot: '',
-    },
-    {
-      label: '交接人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: '',
-      department: 'handover_department',
-      type: 'text',
-      status: '',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '交接部门',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: '',
-      type: 'text',
-      status: '',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-  ],
-  // 公司违约退租
+  '582': normalCheckoutRent,
+  // 公司退租
   '612': [
     {
       label: '退租日期',
@@ -6714,60 +6635,7 @@ checkoutTypeChange = {
     },
   ],
   // 纸质退租
-  '763': [
-    {
-      label: '退租日期',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'checkout_date',
-      keyType: '',
-      type: 'text',
-      picker: 'date',
-      showForm: 'formatData',
-      slot: '',
-    },
-    {
-      label: '押金退款',
-      placeholder: '必填 请输入',
-      keyName: 'deposit_drawback',
-      keyType: '',
-      type: 'number',
-      slot: '',
-    },
-    {
-      label: '备注',
-      placeholder: '请输入',
-      keyName: 'remark',
-      keyType: '',
-      type: 'textarea',
-      slot: '',
-    },
-    {
-      label: '交接人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: '',
-      department: 'handover_department',
-      type: 'text',
-      status: '',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '交接部门',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: '',
-      type: 'text',
-      status: '',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-  ],
+  '763': normalCheckoutRent,
 };
 
 // 续收报备
