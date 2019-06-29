@@ -808,7 +808,7 @@ class httpZll extends httpService {
         if (res.code === '110100') {
           resolve(res);
         } else {
-          resolve(res);
+          resolve(false);
           $httpPrompt(res.msg);
         }
       });

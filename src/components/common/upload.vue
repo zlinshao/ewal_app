@@ -194,12 +194,12 @@
               resolve(fileType);
             };
           }).then(fileType => {
-            let qiniuUploadUrl;
-            if (window.location.protocol === 'https:') {
-              qiniuUploadUrl = 'https://up.qbox.me';
-            } else {
-              qiniuUploadUrl = 'http://upload.qiniu.com';
-            }
+            // let qiniuUploadUrl;
+            // if (window.location.protocol === 'https:') {
+            //   qiniuUploadUrl = 'https://up.qbox.me';
+            // } else {
+            //   qiniuUploadUrl = 'http://upload.qiniu.com';
+            // }
             let putExtra = {
               fname: fileName,
               params: {},
@@ -246,7 +246,7 @@
             data.type = fileType;
             data.size = file.size;
             that.$httpZll.uploadServer(data).then(res => {
-              if (res.code === "110100") {
+              if (res) {
                 that.ids.push(Number(res.data.id));
                 let status = that.ids.length === that.showFile.length;
                 that.$emit('success', [that.file.keyName, that.ids, status], that.file);

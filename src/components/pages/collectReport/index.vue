@@ -1158,7 +1158,7 @@
             this.handlePreFill(res);
           }
           if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
-            // this.electronicContract();
+            this.electronicContract();
           }
         });
       },
