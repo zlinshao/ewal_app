@@ -688,6 +688,8 @@ export default {
               this.routerLink(val.task_action, {again: again});
             }
           }
+          // data.house_id = '147385';
+          // data.content.house_address = '高新花苑3-5-2';
           sessionStorage.setItem('task_detail', JSON.stringify(data));
         } else {
           this.$prompt(res.message);
