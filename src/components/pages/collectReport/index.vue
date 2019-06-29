@@ -672,7 +672,7 @@
         this.moreChangeDateCount(key);
       },
       // 下拉框筛选
-      choosePicker(val, value, num = '', parentKey = '') {
+      choosePicker(val, value, num, parentKey = '') {
         this.popupStatus = val.picker;
         switch (val.picker) {
           case 'picker':
