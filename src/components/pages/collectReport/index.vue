@@ -28,15 +28,27 @@
                   </zl-input>
 
                   <div v-if="item.showList">
-                    <zl-input
-                      v-if="!show.hidden"
-                      v-for="(show,num) in item.showList"
-                      :key="num"
-                      v-model="form[show.keyName]"
-                      :type="show.type"
-                      :label="show.label"
-                      :placeholder="show.placeholder">
-                    </zl-input>
+                    <div v-for="(show,num) in item.showList" v-if="!show.hidden">
+                      <zl-input
+                        v-if="show.showForm === 'formatData' || (show.picker && show.readonly)"
+                        v-model="formatData[show.keyName]"
+                        @focus="choosePicker(show,form[show.keyName])"
+                        :key="num"
+                        :type="show.type"
+                        :label="show.label"
+                        :readonly="show.readonly"
+                        :disabled="show.disabled"
+                        :placeholder="item.placeholder">
+                      </zl-input>
+                      <zl-input
+                        v-else
+                        :key="num"
+                        v-model="form[show.keyName]"
+                        :type="show.type"
+                        :label="show.label"
+                        :placeholder="show.placeholder">
+                      </zl-input>
+                    </div>
                   </div>
                 </div>
                 <!--变化 隐藏所有子元素-->
@@ -731,8 +743,7 @@
             this.moreChangeDateCount(parentKey);
             this.sePaySecondDate();
           }
-          if (name === 'pay_way_bet') this.countPrice(name);
-          if (name === 'pay_way') this.countPrice(name);
+          if (name === 'pay_way_bet' || name === 'pay_way') this.countPrice(name);
           if (name === 'check_type') this.checkoutHandler(form.check_type, 'change');
           //特殊事项变化处理
           this.specialPickerFun(form, show, picker);

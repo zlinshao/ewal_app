@@ -4,6 +4,7 @@
       <div class="top1">
         <p class="p1"></p>
         <p class="p2"></p>
+        <!--@click="routerLink('/adminApprovals')"-->
       </div>
       <ul class="items-around">
         <li v-for="item in approvalTerm" @click="changeApproval(item)">
