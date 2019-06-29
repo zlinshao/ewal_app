@@ -1,7 +1,7 @@
 <template>
   <div id="admin-approvals">
     <div class="admin-approvals">
-
+·······················
     </div>
   </div>
 </template>

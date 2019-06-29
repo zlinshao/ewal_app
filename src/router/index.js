@@ -11,7 +11,8 @@ import ToBeDoneList from '@/components/pages/toBeDoneList/index.vue'//所有待�
 import DatumRecord from '@/components/pages/toBeDoneList/addRecord/datumRecord.vue'//增加资料跟进记录
 import PunchClock from '@/components/pages/punchClock/index.vue'//待办
 import DeliveryReceipt from '@/components/pages/toBeDoneList/deliveryReceipt/index.vue'//交接单
-import Approvals from '@/components/pages/approvals/index.vue'//审批
+import Approvals from '@/components/pages/approvals/index.vue'//业务审批
+import AdminApprovals from '@/components/pages/adminApprovals/index.vue'//行政审批
 import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
 import CreatedTask from '@/components/pages/createdTask/index.vue'//新建 带看任务
 import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建小区
@@ -104,10 +105,17 @@ export default new Router({
     },
     {
       path: '/approvals',
-      name: '审批',
+      name: '业务审批',
       hidden: 'index.vue',
       component: Approvals,
-      meta: {title: '审批', index: 5},
+      meta: {title: '业务审批', index: 5},
+    },
+    {
+      path: '/adminApprovals',
+      name: '行政审批',
+      hidden: 'index.vue',
+      component: AdminApprovals,
+      meta: {title: '行政审批', index: 5},
     },
     {
       path: '/approvalDetail',
