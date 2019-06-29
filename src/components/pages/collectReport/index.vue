@@ -1202,7 +1202,7 @@
               break;
             case 'handover_id':
               if (this.form[item]) {
-                this.formatData[item] = '交单成功';
+                this.formatData[item] = '交接单发布成功';
               } else {
                 this.formatData[item] = '';
               }
