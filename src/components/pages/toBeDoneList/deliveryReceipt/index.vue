@@ -266,7 +266,7 @@
       this.allDetail = JSON.parse(sessionStorage.task_detail || '{}');
       this.slither = 0;
       this.drawSlither = {};
-      this.checkout = this.bulletinType.bulletin.includes('bulletin_checkout');
+      this.checkout = this.bulletinType.bulletin === 'bulletin_checkout';
       this.mainTop = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
       this.allReportNum = Object.keys(defineArticleReceipt).length;
       this.getDraft(this.allDetail.task_id);
@@ -319,8 +319,13 @@
             this.resetting(this.payment_type);
             this.handlePreFill(data);
           } else {
-
-            this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
+            let house_id = '';
+            if (this.allDetail.ewal_contract) {
+              house_id = JSON.parse(this.allDetail.ewal_contract || '{}').house_id;
+            } else {
+              house_id = this.allDetail.house_id || '';
+            }
+            this.$httpZll.getNewDeliveryDraft({house_id: house_id}).then(res => {
               if (res) {
                 let value = JSON.parse(res.data.draft_content || '{}');
                 this.resetting(value.payment_type || 1);
