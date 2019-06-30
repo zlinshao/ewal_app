@@ -976,7 +976,7 @@
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
-          if (this.$attestationKey(this.drawForm)) return;
+          // if (this.$attestationKey(this.drawForm)) return;
         }
         if (val === 1) {
           if (!this.photoUploadStatus) {
@@ -1139,7 +1139,6 @@
               if (!this.isGetTake) {
                 //续收、续租预填数据
                 if (this.noContractInfo) {
-                  console.log(this.taskDetail)
                   this.handlePreFill(this.taskDetail.content);
                   this.disabledDefaultValueHandler(this.allResetting);
                 } else {
@@ -1211,7 +1210,7 @@
               }
               break;
             case 'handover_id':
-              if (this.form[item]) {
+              if (this.form[item] && this.form[item] !== '0') {
                 this.formatData[item] = '交接单发布成功';
               } else {
                 this.formatData[item] = '';
@@ -1247,6 +1246,7 @@
         this.form.house_id = '';
         this.form.id = '';
         this.form.contract_id = '';
+        this.form.handover_id = '0';
         this.form.customer_fdd_user_id = '';
         this.form.customer_phone = '';
         this.form.customer_idcard = '';
