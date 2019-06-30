@@ -1210,7 +1210,7 @@
               }
               break;
             case 'handover_id':
-              if (this.form[item] && this.form[item] !== '0') {
+              if (this.form[item]) {
                 this.formatData[item] = '交接单发布成功';
               } else {
                 this.formatData[item] = '';
@@ -1246,7 +1246,6 @@
         this.form.house_id = '';
         this.form.id = '';
         this.form.contract_id = '';
-        this.form.handover_id = '0';
         this.form.customer_fdd_user_id = '';
         this.form.customer_phone = '';
         this.form.customer_idcard = '';
