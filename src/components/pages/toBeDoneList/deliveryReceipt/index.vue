@@ -262,11 +262,6 @@
       })
     },
     activated() {
-      // if (this.allDetail.bulletin_type === 'bulletin_rent_basic') {
-      //   this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
-      //
-      //   });
-      // }
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.allDetail = JSON.parse(sessionStorage.task_detail || '{}');
       this.slither = 0;
@@ -324,7 +319,16 @@
             this.resetting(this.payment_type);
             this.handlePreFill(data);
           } else {
-            this.resetting(1);
+
+            this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
+              if (res) {
+                let value = JSON.parse(res.data.draft_content || '{}');
+                this.resetting(value.payment_type || 1);
+                this.handlePreFill(value);
+              } else {
+                this.resetting(1);
+              }
+            });
           }
         })
       },
