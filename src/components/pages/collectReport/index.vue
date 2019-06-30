@@ -442,6 +442,8 @@
         if (val !== 'close') {
           let config = this.searchConfig;
           if (config.status === 'objName') {
+            this.form[config.keyName] = {};
+            this.form[config.department] = {};
             this.form[config.keyName].id = val.staff_id;
             this.form[config.keyName].name = val.staff_name;
             this.formatData[config.keyName] = val.staff_name;
