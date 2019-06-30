@@ -392,9 +392,9 @@ class httpZll extends httpService {
   }
 
   // 交接单
-  static postDeliveryReceipt(data) {
+  static postDeliveryReceipt(data, url) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/handover`, data, 'prompt').then(res => {
+      this.post(`${market}v1.0/market/handover${url}`, data, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
           $httpPrompt(res.message, 'success');

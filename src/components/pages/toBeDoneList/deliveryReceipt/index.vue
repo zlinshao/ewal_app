@@ -197,7 +197,7 @@
       </div>
     </div>
     <div class="changeTag justify-center">
-      <i v-for="(item,index) in allReportNum" :class="{'hover': slither === index}" @click="changeTag(index)"></i>
+      <i v-for="(item,index) in allReportNum" :class="{'hover': slither === index}" @click="slither = index"></i>
     </div>
     <!--日期-->
     <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
@@ -269,10 +269,9 @@
       // }
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.allDetail = JSON.parse(sessionStorage.task_detail || '{}');
-      console.log(this.allDetail);
       this.slither = 0;
       this.drawSlither = {};
-      this.checkout = this.bulletinType.bulletin === 'bulletin_checkout';
+      this.checkout = this.bulletinType.bulletin.includes('bulletin_checkout');
       this.mainTop = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
       this.allReportNum = Object.keys(defineArticleReceipt).length;
       this.getDraft(this.allDetail.task_id);
@@ -285,9 +284,6 @@
     watch: {},
     computed: {},
     methods: {
-      changeTag(index) {
-        this.slither = index;
-      },
       // 监听 input
       listenInput(name) {
         if (name !== 'total_fee') {
@@ -723,11 +719,13 @@
       },
       // 发布
       saveReport(val) {
+        let url = '';
+        url = this.checkout ? '/check_out' : '';
         this.form.is_draft = val;
         switch (val) {
           case 0:
           case 1:
-            this.$httpZll.postDeliveryReceipt(this.form).then(res => {
+            this.$httpZll.postDeliveryReceipt(this.form, url).then(res => {
               if (res) {
                 if (val) {
                   this.form.id = res.data.id;
