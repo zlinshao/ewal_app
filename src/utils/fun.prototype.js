@@ -603,7 +603,7 @@ export default {
       })
     };
     // 签署电子合同
-    Vue.prototype.$handlerSign = function (item, user_id, type) {
+    Vue.prototype.$handlerSign = function (item, user_id, type, name = '') {
       return new Promise((resolve, reject) => {
         let title = ['电子合同', ''];
         let params = {
@@ -611,7 +611,7 @@ export default {
           type: type,
           index: 1,
         };
-        title[1] = type === 2 ? '是否确认签署电子合同?' : '是否确认发送客户签署电子合同?';
+        title[1] = type === 2 ? `客户姓名：${name}<br>是否确认签署电子合同?` : '是否确认发送客户签署电子合同?';
         this.$signPostApi(item, params, title).then(res => {
           if (res) {
             this.$ddSkip(res);

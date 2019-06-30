@@ -524,6 +524,15 @@ class httpZll extends httpService {
     });
   }
 
+  // 获取singer
+  static getElectronicContractSinger(executionId) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_done}runtime/executions/${executionId}/variables/signer`, {}, 'prompt').then(res => {
+        resolve(res);
+      })
+    })
+  }
+
   // 发送电子合同
   static sendElectronicContract(number, params) {
     return new Promise((resolve, reject) => {
