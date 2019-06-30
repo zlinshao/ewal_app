@@ -467,11 +467,13 @@
             this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
-            user_id = this.$getFadadaUserId(item);
-            console.log(user_id);
-
-            this.$handlerSign(item, user_id, 2).then(_ => {
-              this.onSearch(this.tabs.tab);
+            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+              let value = JSON.parse(res.value || '{}');
+              if (value.fadada_user_id) {
+                this.$handlerSign(item, user_id, 2, value.name).then(_ => {
+                  this.onSearch(this.tabs.tab);
+                });
+              }
             });
             break;
           case 'phone'://客户手机签署
