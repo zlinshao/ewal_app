@@ -321,7 +321,7 @@
           } else {
             let house_id = '';
             if (this.allDetail.ewal_contract) {
-              house_id = JSON.parse(this.allDetail.ewal_contract || '{}').house_id;
+              house_id = JSON.parse(this.allDetail.ewal_contract || '{}').house_id || '';
             } else {
               house_id = this.allDetail.house_id || '';
             }
