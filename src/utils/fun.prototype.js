@@ -611,7 +611,7 @@ export default {
           type: type,
           index: 1,
         };
-        title[1] = type === 2 ? `客户姓名：${name}<br>是否确认签署电子合同?` : '是否确认发送客户签署电子合同?';
+        title[1] = type === 2 ? `客户姓名：${name}<br>是否确认签署电子合同?` : `客户姓名：${name}<br>是否确认发送客户签署电子合同?`;
         this.$signPostApi(item, params, title).then(res => {
           if (res) {
             this.$ddSkip(res);
