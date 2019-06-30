@@ -1150,7 +1150,6 @@
                     this.checkoutContent(this.taskDetail.content);
                     this.checkoutHandler(this.form.check_type);
                   } else {
-
                     this.childBulletin(this.taskDetail.content);
                   }
                 }
@@ -1163,8 +1162,13 @@
           } else {
             this.form.id = '';//草稿ID
             let res = data.data;
-            this.childBulletin(res, 'draft');
-            this.handlePreFill(res);
+            if (type.includes('bulletin_checkout')) {
+              this.checkoutContent(res);
+              this.checkoutHandler(this.form.check_type);
+            } else {
+              this.childBulletin(res, 'draft');
+              this.handlePreFill(res);
+            }
           }
           if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
             this.electronicContract();
