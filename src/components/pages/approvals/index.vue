@@ -3,8 +3,8 @@
     <div ref="approvalTop" class="approvalTop">
       <div class="top1">
         <p class="p1"></p>
-        <p class="p2"></p>
-        <!--@click="routerLink('/adminApprovals')"-->
+        <p class="p2" @click="routerReplace('/adminApprovals')"></p>
+        <!---->
       </div>
       <ul class="items-around">
         <li v-for="item in approvalTerm" @click="changeApproval(item)">
@@ -467,24 +467,38 @@
             this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
-            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
-              let value = JSON.parse(res.value || '{}');
-              if (value.fadada_user_id) {
-                this.$handlerSign(item, value.fadada_user_id, 2, value.name).then(_ => {
-                  this.onSearch(this.tabs.tab);
-                });
-              }
-            });
+            if (item.bulletin_type.includes('bulletin_collect')) {
+              user_id = this.$getFadadaUserId(item);
+              this.$handlerSign(item, user_id, 2, item.signer.name).then(_ => {
+                this.onSearch(this.tabs.tab);
+              });
+            } else {
+              this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+                let value = JSON.parse(res.value || '{}');
+                if (value.fadada_user_id) {
+                  this.$handlerSign(item, value.fadada_user_id, 2, value.name).then(_ => {
+                    this.onSearch(this.tabs.tab);
+                  });
+                }
+              });
+            }
             break;
           case 'phone'://客户手机签署
-            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
-              let value = JSON.parse(res.value || '{}');
-              if (value.fadada_user_id) {
-                this.$handlerSign(item, value.fadada_user_id, 1, value.name).then(_ => {
-                  this.onSearch(this.tabs.tab);
-                });
-              }
-            });
+            if (item.bulletin_type.includes('bulletin_collect')) {
+              user_id = this.$getFadadaUserId(item);
+              this.$handlerSign(item, user_id, 1, item.signer.name).then(_ => {
+                this.onSearch(this.tabs.tab);
+              });
+            } else {
+              this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+                let value = JSON.parse(res.value || '{}');
+                if (value.fadada_user_id) {
+                  this.$handlerSign(item, value.fadada_user_id, 1, value.name).then(_ => {
+                    this.onSearch(this.tabs.tab);
+                  });
+                }
+              });
+            }
             break;
           case 'contract'://发送电子合同
             this.contract_number = item.contract_number;
@@ -541,7 +555,7 @@
         this.routerLink('/approvalDetail', this.tabs);
       },
       // 接口配置
-      apiHandle(tab, status) {
+      setApiHandle(tab, status) {
         switch (tab) {
           case '1'://我审批的
             this.urlApi = status === 1 ? 'history/tasks' : 'runtime/tasks';
@@ -555,8 +569,6 @@
                 this.urlApi = 'history/process-instances';
                 break;
               case 2:
-                this.urlApi = 'runtime/tasks';
-                break;
               case 3:
                 this.urlApi = 'runtime/tasks';
                 break;
@@ -578,7 +590,7 @@
       paramsHandle(tab, status) {
         this.showOnSearch();
         this.showStatus = (tab === '1' && !status) || (tab === '2' && !status) || tab === '4';
-        this.apiHandle(tab, status);
+        this.setApiHandle(tab, status);
         switch (tab) {
           case '1':
             this.params['params' + tab] = {
@@ -639,8 +651,9 @@
         // 搜索的参数处理
         this.newHighParams = this.jsonClone(this.highParams);
         //待办类型由数组转化为字符串
-        if (this.highParams.rootProcessDefinitionKeyIn && this.highParams.rootProcessDefinitionKeyIn.length > 0) {
-          this.newHighParams.rootProcessDefinitionKeyIn = this.highParams.rootProcessDefinitionKeyIn.join(',');
+        let root = this.highParams.rootProcessDefinitionKeyIn;
+        if (root && root.length > 0) {
+          this.newHighParams.rootProcessDefinitionKeyIn = root.join(',');
         }
         this.getApproval(this.urlApi, this.params['params' + tab], tab);
       },
@@ -673,7 +686,7 @@
             if (!twoLevel) {
               this.paging['paging' + tab] = res.total;
             }
-            let data = this.groupHandlerListData(res.data, this.urlApi);
+            let data = this.groupHandlerListData(res.data, url);
             this.outcomes(data, this.tabs);
             if (this.params['params' + tab].page === 1) {
               this.approvalList['list' + tab]['data' + twoLevel] = data;
@@ -767,371 +780,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../../assets/scss/common.scss";
-
-  @mixin approvalsImg($n) {
-    @include bgImage('../../../assets/image/approvals/' + $n + '.png');
-  }
-
-  #approvals {
-    .approvalTop {
-      height: 2.8rem;
-      background: #E6F4F9;
-      border-top: .16rem solid #F8F8F8;
-
-      .top1 {
-        padding-left: .3rem;
-        @include flex();
-
-        p {
-          margin-top: -.06rem;
-          width: 1.4rem;
-          height: .5rem;
-        }
-
-        .p1 {
-          @include approvalsImg('yewulei');
-        }
-
-        .p2 {
-          @include approvalsImg('xingzhenglei');
-        }
-      }
-
-      ul {
-        padding: .3rem .2rem;
-
-        li {
-          @include flex('flex-center');
-          flex-direction: column;
-
-          p {
-            width: 1rem;
-            height: 1rem;
-            margin-bottom: .15rem;
-          }
-        }
-      }
-    }
-
-    .customerUsersModule {
-      padding: .4rem;
-      width: 70%;
-      @include radius(.1rem);
-
-      h1 {
-        text-align: center;
-        font-size: .33rem;
-        padding-bottom: .6rem;
-      }
-
-      ul {
-        @include flex();
-        flex-wrap: wrap;
-
-        li {
-          width: 33.33%;
-          @include flex('flex-center');
-
-          div {
-            padding: .15rem .3rem;
-            color: #FFFFFF;
-            @include radius(.1rem);
-            background-color: #4A74FE;
-          }
-        }
-      }
-
-      .commonBtn {
-        padding: .4rem .1rem .2rem;
-      }
-    }
-
-    .main {
-      .mainTop {
-        height: .88rem;
-        @include flex('items-bet');
-        padding: 0 .36rem;
-
-        p {
-          position: relative;
-          margin-right: .36rem;
-
-          span {
-            position: absolute;
-            top: -.15rem;
-            right: -.15rem;
-            width: .3rem;
-            height: .3rem;
-            font-size: .24rem;
-            color: #FFFFFF;
-            text-align: center;
-            line-height: .33rem;
-            @include radius(50%);
-            background-color: #F4511E;
-          }
-        }
-
-        i {
-          width: .5rem;
-          height: .5rem;
-          @include bgImage('../../../assets/image/common/searchblue.png');
-        }
-      }
-
-      .mainContent {
-        background: #f8f8f8;
-
-        .contentList {
-          position: relative;
-          margin: .2rem .3rem;
-          @include radius(.06rem);
-          overflow: hidden;
-
-          .leftShift {
-            transform: translateX(-60%);
-          }
-
-          .listUp {
-            position: relative;
-            z-index: 2;
-            padding: .3rem;
-            background-color: #FFFFFF;
-            @include transition(transform .3s);
-
-            .listTitle {
-              @include ellipsis;
-            }
-
-            .listMiddle {
-              margin: .12rem 0 .48rem;
-              @include flex('items-bet');
-
-              p {
-                font-size: .26rem;
-                padding: .12rem .2rem;
-                @include radius(1rem);
-                color: #4570FE;
-                background-color: rgba(69, 112, 254, .1);
-              }
-
-              div {
-                @include flex('items-center');
-
-                b {
-                  width: .54rem;
-                  height: .54rem;
-
-                  img {
-                    @include radius(50%);
-                  }
-                }
-
-                span {
-                  white-space: nowrap;
-                  margin-left: .12rem;
-                  font-size: .28rem;
-                  color: #686874;
-                }
-              }
-            }
-
-            .listBottom {
-              @include flex('items-around');
-
-              div {
-                width: 100%;
-                @include flex('items-center');
-
-                i {
-                  width: .4rem;
-                  height: .4rem;
-                  margin-right: .1rem;
-                  background-color: #CF2E33;
-
-                  img {
-                    @include radius(50%);
-                  }
-                }
-
-                .icon-1 {
-                  @include approvalsImg('daishenhe');
-                }
-
-                .icon-2 {
-                  @include approvalsImg('yidenghou');
-                }
-              }
-            }
-
-            .moreOperate {
-              position: absolute;
-              top: 0;
-              right: 0;
-              width: .6rem;
-              height: .57rem;
-              @include approvalsImg('gengduocaozuo');
-              background-size: 114% 100%;
-              background-position: center left;
-            }
-
-            .approvalStatus {
-              position: absolute;
-              right: 0;
-              bottom: 0;
-              width: 1.3rem;
-              height: 1.3rem;
-            }
-
-            .finish {
-              width: 1.6rem;
-              height: 1.6rem;
-              @include approvalsImg('yiwancheng');
-            }
-
-            .publish {
-              @include approvalsImg('yitongguo');
-            }
-
-            .reject {
-              @include approvalsImg('yijujue');
-            }
-          }
-
-          .listDown {
-            position: absolute;
-            z-index: 1;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 40%;
-            padding: .2rem;
-            @include flex('flex-center');
-            background-color: #D8D8D8;
-            flex-wrap: wrap;
-
-            div {
-              width: 50%;
-              @include flex('items-center');
-
-              i {
-                min-width: .33rem;
-                max-width: .33rem;
-                height: .33rem;
-                margin-right: .1rem;
-              }
-
-              .icon-preview {
-                @include approvalsImg('hetongyulan');
-              }
-
-              .icon-success {
-                @include approvalsImg('bendiqianshu');
-              }
-
-              .icon-phone {
-                @include approvalsImg('kehushoujiqianshu');
-              }
-
-              .icon-modify {
-                @include approvalsImg('xiugaihetong');
-              }
-
-              .icon-again {
-                @include approvalsImg('chongxintijiao');
-              }
-
-              .icon-contract {
-                @include approvalsImg('fasongdianzihetong');
-              }
-
-              span {
-                white-space: nowrap;
-                font-size: .24rem;
-              }
-            }
-
-            .listDown2 {
-              width: 100%;
-              padding-left: 30%;
-            }
-          }
-        }
-      }
-
-      .noMore, .noData {
-        @include flex('flex-center');
-        width: 100%;
-        padding: .2rem 0;
-      }
-
-      .noData {
-        height: 8rem;
-      }
-    }
-
-    .hover {
-      color: #4570FE;
-    }
-
-    @keyframes manger {
-      from {
-        @include transform(scale(6));
-      }
-      to {
-        @include transform(scale(1));
-      }
-    }
-
-    @-moz-keyframes manger {
-      from {
-        @include transform(scale(6));
-      }
-      to {
-        @include transform(scale(1));
-      }
-    }
-
-    @-webkit-keyframes manger {
-      from {
-        @include transform(scale(6));
-      }
-      to {
-        @include transform(scale(1));
-      }
-    }
-
-    @-o-keyframes manger {
-      from {
-        @include transform(scale(6));
-      }
-      to {
-        @include transform(scale(1));
-      }
-    }
-
-    .van-popup.van-popup--right {
-      top: 2.8rem;
-      width: 100%;
-      @include transform(translate3d(0, 0, 0));
-      @include transition(all 0s);
-      @include scroll;
-    }
-
-    .searchApproval {
-      padding: .1rem;
-
-      .searchInput {
-        margin-top: .3rem;
-      }
-
-      label {
-        padding: .3rem;
-      }
-
-      .commonBtn {
-        padding: .42rem 0;
-      }
-    }
-  }
+  @import "../../../assets/scss/approvals/index.scss";
 </style>

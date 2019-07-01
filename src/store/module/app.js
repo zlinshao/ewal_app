@@ -16,6 +16,11 @@ const app = {
       tab: '1',
       status: 0,
     },
+    // 行政类审批
+    adminTab: {
+      tab: '',
+      status: 0,
+    },
     // 待办任务切换
     doneTab: '1',
   },
@@ -41,6 +46,10 @@ const app = {
     // 审批切换
     APPROVAL_TABS(state, view) {
       state.approvalTab = view;
+    },
+    // 行政类审批
+    ADMIN_APPROVAL_TABS(state, view) {
+      state.adminTab = view;
     },
     // 待办切换
     DONE_TABS(state, view) {
@@ -68,6 +77,10 @@ const app = {
     // 审批切换
     approval_tabs({commit}, view) {
       commit('APPROVAL_TABS', view);
+    },
+    // 行政类审批
+    admin_approval_tabs({commit}, view) {
+      commit('ADMIN_APPROVAL_TABS', view);
     },
     // 待办切换
     done_tabs({commit}, view) {
