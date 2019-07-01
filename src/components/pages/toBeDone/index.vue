@@ -416,12 +416,20 @@
         let user_id = '';
         switch (action.action) {
           case 'success'://本地签署
-            user_id = this.getFadadaUserId(item);
-            this.handlerSign(item, user_id, 2);
+            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+              let value = JSON.parse(res.value || '{}');
+              if (value.fadada_user_id) {
+                this.handlerSign(item, value.fadada_user_id, 2, value.name);
+              }
+            });
             break;
           case 'phone'://客户手机签署
-            user_id = this.getFadadaUserId(item);
-            this.handlerSign(item, user_id, 1);
+            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+              let value = JSON.parse(res.value || '{}');
+              if (value.fadada_user_id) {
+                this.handlerSign(item, value.fadada_user_id, 1, value.name);
+              }
+            });
             break;
           case 'allograph'://代签
           case 'deliver'://转交
@@ -453,7 +461,7 @@
         this.deliverPopup = false;
       },
       // 签署
-      handlerSign(item, user_id, type) {
+      handlerSign(item, user_id, type, name = '') {
         let title = [];
         let params = {
           customer_id: user_id,
@@ -465,7 +473,8 @@
           title = ['收据', '是否确认签署收据?'];
         } else {
           params.index = 1;
-          title = ['电子合同', '是否确认签署电子合同?'];
+          let content = type === 2 ? `客户姓名：${name}<br>是否确认签署电子合同?` : `客户姓名：${name}<br>是否确认发送客户签署电子合同?`;
+          title = ['电子合同', content];
         }
         this.$signPostApi(item, params, title).then(res => {
           if (res) {

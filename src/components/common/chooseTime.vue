@@ -75,14 +75,13 @@
         this.timeValue = val;
         let date = val.split('-');
         let date1 = Number(date[1]) - 1;
+        let time;
         if(this.dateType !== 'year-month'){
           let date2 = date[2];
-          let time = date2.split(' ');
+          time = date2.split(' ');
         }
         //之展示年月（lili）
         if (this.dateType === 'year-month') {
-
-          console.log(val);
           this.currentDate = new Date(date[0], date1);
           return;
         }
@@ -99,9 +98,8 @@
         this.timeShow = false;
         let data = {};
         data.dateVal = this.timeValue;
-        data.dateIdx = this.formatData.dateIdx || '';
-        data.dateKey = this.formatData.dateKey;
         data.dateIdx = this.formatData.dateIdx;
+        data.dateKey = this.formatData.dateKey;
         data.parentKey = this.formatData.parentKey;
         this.$emit('close', data);
       },

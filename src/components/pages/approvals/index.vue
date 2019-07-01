@@ -4,6 +4,7 @@
       <div class="top1">
         <p class="p1"></p>
         <p class="p2"></p>
+        <!--@click="routerLink('/adminApprovals')"-->
       </div>
       <ul class="items-around">
         <li v-for="item in approvalTerm" @click="changeApproval(item)">
@@ -466,17 +467,23 @@
             this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
-            user_id = this.$getFadadaUserId(item);
-            console.log(user_id);
-
-            this.$handlerSign(item, user_id, 2).then(_ => {
-              this.onSearch(this.tabs.tab);
+            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+              let value = JSON.parse(res.value || '{}');
+              if (value.fadada_user_id) {
+                this.$handlerSign(item, value.fadada_user_id, 2, value.name).then(_ => {
+                  this.onSearch(this.tabs.tab);
+                });
+              }
             });
             break;
           case 'phone'://客户手机签署
-            user_id = this.$getFadadaUserId(item);
-            this.$handlerSign(item, user_id, 1).then(_ => {
-              this.onSearch(this.tabs.tab);
+            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+              let value = JSON.parse(res.value || '{}');
+              if (value.fadada_user_id) {
+                this.$handlerSign(item, value.fadada_user_id, 1, value.name).then(_ => {
+                  this.onSearch(this.tabs.tab);
+                });
+              }
             });
             break;
           case 'contract'://发送电子合同

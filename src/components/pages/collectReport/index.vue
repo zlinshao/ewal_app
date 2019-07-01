@@ -28,15 +28,27 @@
                   </zl-input>
 
                   <div v-if="item.showList">
-                    <zl-input
-                      v-if="!show.hidden"
-                      v-for="(show,num) in item.showList"
-                      :key="num"
-                      v-model="form[show.keyName]"
-                      :type="show.type"
-                      :label="show.label"
-                      :placeholder="show.placeholder">
-                    </zl-input>
+                    <div v-for="(show,num) in item.showList" v-if="!show.hidden">
+                      <zl-input
+                        v-if="show.showForm === 'formatData' || (show.picker && show.readonly)"
+                        v-model="formatData[show.keyName]"
+                        @focus="choosePicker(show,form[show.keyName])"
+                        :key="num"
+                        :type="show.type"
+                        :label="show.label"
+                        :readonly="show.readonly"
+                        :disabled="show.disabled"
+                        :placeholder="item.placeholder">
+                      </zl-input>
+                      <zl-input
+                        v-else
+                        :key="num"
+                        v-model="form[show.keyName]"
+                        :type="show.type"
+                        :label="show.label"
+                        :placeholder="show.placeholder">
+                      </zl-input>
+                    </div>
                   </div>
                 </div>
                 <!--变化 隐藏所有子元素-->
@@ -325,14 +337,14 @@
       'form.month'(val) {
         if (val && this.form.period_price_way_arr && this.form.period_price_way_arr.length === 1) {
           this.form.period_price_way_arr[0].period = val;
+          let bulletin = this.bulletinType.bulletin;
+          let pay_first = new Date(this.form.begin_date);
+          this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
         }
       },
       'form.money_sum'(val) {
         if (val && this.form.current_pay_info && this.form.current_pay_info.length === 1) {
           this.form.current_pay_info[0].money_sep = val;
-          let bulletin = this.bulletinType.bulletin;
-          let pay_first = new Date(this.form.begin_date);
-          this.changeDateCount('period_price_way_arr', pay_first, bulletin);//付款方式变化 日期计算
         }
       },
     },
@@ -430,6 +442,8 @@
         if (val !== 'close') {
           let config = this.searchConfig;
           if (config.status === 'objName') {
+            this.form[config.keyName] = {};
+            this.form[config.department] = {};
             this.form[config.keyName].id = val.staff_id;
             this.form[config.keyName].name = val.staff_name;
             this.formatData[config.keyName] = val.staff_name;
@@ -557,6 +571,7 @@
       },
       // 付款方式变化 日期计算
       changeDateCount(key, date) {
+        console.log(1);
         let bulletin = this.bulletinType.bulletin;
         let val = this.myUtils.formatDate(date);
         let value = this.form[key];
@@ -660,7 +675,7 @@
         this.moreChangeDateCount(key);
       },
       // 下拉框筛选
-      choosePicker(val, value, num = '', parentKey = '') {
+      choosePicker(val, value, num, parentKey = '') {
         this.popupStatus = val.picker;
         switch (val.picker) {
           case 'picker':
@@ -731,8 +746,7 @@
             this.moreChangeDateCount(parentKey);
             this.sePaySecondDate();
           }
-          if (name === 'pay_way_bet') this.countPrice(name);
-          if (name === 'pay_way') this.countPrice(name);
+          if (name === 'pay_way_bet' || name === 'pay_way') this.countPrice(name);
           if (name === 'check_type') this.checkoutHandler(form.check_type, 'change');
           //特殊事项变化处理
           this.specialPickerFun(form, show, picker);
@@ -965,7 +979,7 @@
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
-          if (this.$attestationKey(this.drawForm)) return;
+          // if (this.$attestationKey(this.drawForm)) return;
         }
         if (val === 1) {
           if (!this.photoUploadStatus) {
@@ -1128,7 +1142,6 @@
               if (!this.isGetTake) {
                 //续收、续租预填数据
                 if (this.noContractInfo) {
-                  console.log(this.taskDetail)
                   this.handlePreFill(this.taskDetail.content);
                   this.disabledDefaultValueHandler(this.allResetting);
                 } else {
@@ -1140,7 +1153,6 @@
                     this.checkoutContent(this.taskDetail.content);
                     this.checkoutHandler(this.form.check_type);
                   } else {
-
                     this.childBulletin(this.taskDetail.content);
                   }
                 }
@@ -1153,8 +1165,13 @@
           } else {
             this.form.id = '';//草稿ID
             let res = data.data;
-            this.childBulletin(res, 'draft');
-            this.handlePreFill(res);
+            if (type.includes('bulletin_checkout')) {
+              this.checkoutContent(res);
+              this.checkoutHandler(this.form.check_type);
+            } else {
+              this.childBulletin(res, 'draft');
+              this.handlePreFill(res);
+            }
           }
           if (((!this.isGetTake) && key !== 'RentBooking') || this.taskDetail.finish_RWC) {
             this.electronicContract();

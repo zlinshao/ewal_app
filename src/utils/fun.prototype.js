@@ -211,7 +211,7 @@ export default {
       for (let item of data) {
         if (item.keyName) {
           if (item.placeholder && item.placeholder.includes('必填')) {
-            if (!item.keyType && item.keyType !== 0) {
+            if ((!item.keyType) && item.keyType !== 0 && typeof item.keyType !== 'object') {
               if (this.form[item.keyName] === item.keyType) {
                 this.$prompt(item.label + item.placeholder);
                 return true
@@ -603,7 +603,7 @@ export default {
       })
     };
     // 签署电子合同
-    Vue.prototype.$handlerSign = function (item, user_id, type) {
+    Vue.prototype.$handlerSign = function (item, user_id, type, name = '') {
       return new Promise((resolve, reject) => {
         let title = ['电子合同', ''];
         let params = {
@@ -611,7 +611,7 @@ export default {
           type: type,
           index: 1,
         };
-        title[1] = type === 2 ? '是否确认签署电子合同?' : '是否确认发送客户签署电子合同?';
+        title[1] = type === 2 ? `客户姓名：${name}<br>是否确认签署电子合同?` : `客户姓名：${name}<br>是否确认发送客户签署电子合同?`;
         this.$signPostApi(item, params, title).then(res => {
           if (res) {
             this.$ddSkip(res);
@@ -688,6 +688,8 @@ export default {
               this.routerLink(val.task_action, {again: again});
             }
           }
+          // data.house_id = '147385';
+          // data.content.house_address = '高新花苑3-5-2';
           sessionStorage.setItem('task_detail', JSON.stringify(data));
         } else {
           this.$prompt(res.message);

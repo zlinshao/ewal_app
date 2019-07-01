@@ -392,9 +392,9 @@ class httpZll extends httpService {
   }
 
   // 交接单
-  static postDeliveryReceipt(data) {
+  static postDeliveryReceipt(data, url) {
     return new Promise((resolve, reject) => {
-      this.post(`${market}v1.0/market/handover`, data, 'prompt').then(res => {
+      this.post(`${market}v1.0/market/handover${url}`, data, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
           $httpPrompt(res.message, 'success');
@@ -410,7 +410,7 @@ class httpZll extends httpService {
   // 获取房屋最新交接单
   static getNewDeliveryDraft(params) {
     return new Promise((resolve, reject) => {
-      this.get(`${market}v1.0/market/handover/info`, params, 'prompt').then(res => {
+      this.get(`${market}v1.0/market/handover/house_handover`, params, 'prompt').then(res => {
         if (res.success) {
           resolve(res);
         } else {
@@ -522,6 +522,15 @@ class httpZll extends httpService {
         }
       });
     });
+  }
+
+  // 获取singer
+  static getElectronicContractSinger(executionId) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_done}runtime/executions/${executionId}/variables/signer`, {}, 'prompt').then(res => {
+        resolve(res);
+      })
+    })
   }
 
   // 发送电子合同

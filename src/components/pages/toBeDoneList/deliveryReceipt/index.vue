@@ -197,7 +197,7 @@
       </div>
     </div>
     <div class="changeTag justify-center">
-      <i v-for="(item,index) in allReportNum" :class="{'hover': slither === index}" @click="changeTag(index)"></i>
+      <i v-for="(item,index) in allReportNum" :class="{'hover': slither === index}" @click="slither = index"></i>
     </div>
     <!--日期-->
     <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
@@ -262,14 +262,8 @@
       })
     },
     activated() {
-      // if (this.allDetail.bulletin_type === 'bulletin_rent_basic') {
-      //   this.$httpZll.getNewDeliveryDraft({house_id: this.allDetail.house_id}).then(res => {
-      //
-      //   });
-      // }
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.allDetail = JSON.parse(sessionStorage.task_detail || '{}');
-      console.log(this.allDetail);
       this.slither = 0;
       this.drawSlither = {};
       this.checkout = this.bulletinType.bulletin === 'bulletin_checkout';
@@ -285,29 +279,28 @@
     watch: {},
     computed: {},
     methods: {
-      changeTag(index) {
-        this.slither = index;
-      },
       // 监听 input
-      listenInput() {
-        let value = 0;
-        for (let key of this.form.other_fee) {
-          value = value + Number(key.value || 0);
-        }
-        let num4 = Number(this.form.property_costs || 0);
-        let num5 = Number(this.form.public_fee || 0);
-        let num6 = Number(this.form.repair_fees || 0);
-        if (Number(this.form.payment_type) === 3) {
-          let num1 = Number(this.form.water_card_balance || 0);
-          let num2 = Number(this.form.electric_card_balance || 0);
-          let num3 = Number(this.form.gas_card_balance || 0);
-          this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
-        } else {
-          let num7 = Number(this.form.water_settlement_amount || 0);
-          let num8 = Number(this.form.electric_valley_settlement_amount || 0);
-          let num9 = Number(this.form.electric_peak_settlement_amount || 0);
-          let num10 = Number(this.form.gas_settlement_amount || 0);
-          this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
+      listenInput(name) {
+        if (name !== 'total_fee') {
+          let value = 0;
+          for (let key of this.form.other_fee) {
+            value = value + Number(key.value || 0);
+          }
+          let num4 = Number(this.form.property_costs || 0);
+          let num5 = Number(this.form.public_fee || 0);
+          let num6 = Number(this.form.repair_fees || 0);
+          if (Number(this.form.payment_type) === 3) {
+            let num1 = Number(this.form.water_card_balance || 0);
+            let num2 = Number(this.form.electric_card_balance || 0);
+            let num3 = Number(this.form.gas_card_balance || 0);
+            this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
+          } else {
+            let num7 = Number(this.form.water_settlement_amount || 0);
+            let num8 = Number(this.form.electric_valley_settlement_amount || 0);
+            let num9 = Number(this.form.electric_peak_settlement_amount || 0);
+            let num10 = Number(this.form.gas_settlement_amount || 0);
+            this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
+          }
         }
       },
       // 预览交接单
@@ -326,7 +319,21 @@
             this.resetting(this.payment_type);
             this.handlePreFill(data);
           } else {
-            this.resetting(1);
+            let house_id = '';
+            if (this.allDetail.ewal_contract) {
+              house_id = JSON.parse(this.allDetail.ewal_contract || '{}').house_id || '';
+            } else {
+              house_id = this.allDetail.house_id || '';
+            }
+            this.$httpZll.getNewDeliveryDraft({house_id: house_id}).then(res => {
+              if (res) {
+                let value = JSON.parse(res.data.draft_content || '{}');
+                this.resetting(value.payment_type || 1);
+                this.handlePreFill(value);
+              } else {
+                this.resetting(1);
+              }
+            });
           }
         })
       },
@@ -721,11 +728,13 @@
       },
       // 发布
       saveReport(val) {
+        let url = '';
+        url = this.checkout ? '/check_out' : '';
         this.form.is_draft = val;
         switch (val) {
           case 0:
           case 1:
-            this.$httpZll.postDeliveryReceipt(this.form).then(res => {
+            this.$httpZll.postDeliveryReceipt(this.form, url).then(res => {
               if (res) {
                 if (val) {
                   this.form.id = res.data.id;
