@@ -23,11 +23,18 @@
         </div>
         <i></i>
       </div>
+      <div class="allChecks" ref="allChecks"
+           v-show="approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]].length"></div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]" v-if="tabs.tab">
           <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]">
-            <div class="contentList">
-              11111111111
+            <div class="contentList adminList">
+              <i class="adminCheck"></i>
+              <div class="adminMain">
+                <ul>
+                  <li>王晓</li>
+                </ul>
+              </div>
             </div>
           </li>
           <li class="noMore"
@@ -235,13 +242,22 @@
         this.$nextTick(_ => {
           let approvalTop = this.$refs.approvalTop.offsetHeight;
           let mainTop = this.$refs.mainTop.offsetHeight;
-          let top = approvalTop + mainTop;
+          let allChecks = this.$refs.allChecks.offsetHeight;
+          let top = approvalTop + mainTop + allChecks;
           if (this.tabs.tab) {
             this.mainHeight = this.mainListHeight(top);
           } else {
             this.mainHeight = this.mainListHeight(approvalTop);
           }
         });
+      },
+      // 搜索
+      onSearch(num) {
+        let tab = String(num);
+        let status = Number(this.tabs.status);
+        this.twoLevel['tab' + tab] = status;
+        this.approvalList['list' + tab]['data' + status] = [];
+        this.paramsHandle(tab, status);
       },
       // 滚动加载
       scrollLoad(val) {
@@ -259,12 +275,96 @@
         }
       },
       // 请求参数配置
-      paramsHandle() {
-
+      paramsHandle(tab, status) {
+        this.setApiHandle(tab, status);
+        switch (tab) {
+          case '1':
+            this.params['params' + tab] = {
+              page: 1,
+              category: 'approval',
+              finished: Boolean(status),
+              active: true,
+            };
+            this.params['params' + tab].assignee = this.personal.staff_id;
+            break;
+          case '2':
+            switch (status) {
+              case 0:
+              case 1:
+                this.params['params' + tab] = {
+                  page: 1,
+                  finished: Boolean(status),
+                  taskCategory: 'approval',
+                };
+                this.params['params' + tab].taskOwner = this.personal.staff_id;
+                break;
+            }
+            break;
+          case '3':
+            this.params['params' + tab] = {
+              page: 1,
+              category: 'cc',
+              finished: Boolean(status),
+            };
+            this.params['params' + tab].assignee = this.personal.staff_id;
+            break;
+          case '4':
+            this.params['params' + tab].taskAssignee = this.personal.staff_id;
+            break;
+        }
+        // 搜索的参数处理
+        this.params['params' + tab].tenantId = 'hr';
+        this.getApprovalList(this.urlApi, this.params['params' + tab], tab);
+      },
+      // 接口匹配
+      setApiHandle(tab, status) {
+        switch (tab) {
+          case '1'://我审批的
+            this.urlApi = status === 1 ? 'history/tasks' : 'runtime/tasks';
+            break;
+          case '2'://我发起的
+            switch (status) {
+              case 0:
+                this.urlApi = 'runtime/process-instances';
+                break;
+              case 1:
+                this.urlApi = 'history/process-instances';
+                break;
+            }
+            break;
+          case '3'://抄送我的
+            if (status === 0) {
+              this.urlApi = 'runtime/tasks';
+            } else {
+              this.urlApi = 'history/tasks';
+            }
+            break;
+          case '4'://暂不处理
+            this.urlApi = 'runtime/process-instances';
+            break;
+        }
       },
       // 审批列表
       getApprovalList(url, params, tab) {
-
+        this.fullLoading['load' + tab] = true;
+        this.$httpZll.getMeInitiate(url, params).then(res => {
+          this.fullLoading['load' + tab] = false;
+          if (res) {
+            let twoLevel = this.twoLevel['tab' + tab];
+            this.total['total' + tab] = res.total;
+            if (!twoLevel) {
+              this.paging['paging' + tab] = res.total;
+            }
+            let data = this.groupHandlerListData(res.data, url);
+            if (this.params['params' + tab].page === 1) {
+              this.approvalList['list' + tab]['data' + twoLevel] = data;
+            } else {
+              for (let item of data) {
+                this.approvalList['list' + tab]['data' + twoLevel].push(item);
+              }
+            }
+          }
+        });
       },
       // 头部切换
       changeApproval(val) {
@@ -274,11 +374,17 @@
         this.tabs.tab = tab;
         this.tabs.status = status;
         this.$store.dispatch('admin_approval_tabs', this.tabs);
+        this.paramsHandle(tab, status);
         this.countListHeight();
       },
       // 二级切换
-      tabsTag() {
-
+      tabsTag(status) {
+        let tab = this.tabs.tab;
+        if (this.tabs.status === status) return;
+        this.tabs.status = status;
+        this.twoLevel['tab' + tab] = status;
+        this.$store.dispatch('admin_approval_tabs', this.tabs);
+        this.onSearch(tab);
       },
     }
   }

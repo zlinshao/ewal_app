@@ -110,6 +110,11 @@
       }
     }
 
+    .allChecks {
+      height: .6rem;
+      background-color: #f8f8f8
+    }
+
     .mainContent {
       background: #f8f8f8;
 
@@ -118,7 +123,7 @@
         margin: .2rem .3rem;
         @include radius(.06rem);
         overflow: hidden;
-
+        //业务类审批
         .leftShift {
           transform: translateX(-60%);
         }
@@ -286,6 +291,26 @@
             width: 100%;
             padding-left: 30%;
           }
+        }
+      }
+
+      //行政类审批
+      .adminList {
+        @include flex();
+        margin: 0;
+        background-color: #FFFFFF;
+        border-bottom: 1px solid #D8D8D8;
+
+        .adminCheck {
+          min-width: .3rem;
+          max-width: .3rem;
+          height: .3rem;
+          @include radius(50%);
+          border: 1px solid #D8D8D8;
+        }
+
+        .adminMain {
+          width: 100%;
         }
       }
     }

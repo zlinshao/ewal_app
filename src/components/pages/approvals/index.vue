@@ -541,7 +541,7 @@
         this.routerLink('/approvalDetail', this.tabs);
       },
       // 接口配置
-      apiHandle(tab, status) {
+      setApiHandle(tab, status) {
         switch (tab) {
           case '1'://我审批的
             this.urlApi = status === 1 ? 'history/tasks' : 'runtime/tasks';
@@ -576,7 +576,7 @@
       paramsHandle(tab, status) {
         this.showOnSearch();
         this.showStatus = (tab === '1' && !status) || (tab === '2' && !status) || tab === '4';
-        this.apiHandle(tab, status);
+        this.setApiHandle(tab, status);
         switch (tab) {
           case '1':
             this.params['params' + tab] = {
@@ -672,7 +672,7 @@
             if (!twoLevel) {
               this.paging['paging' + tab] = res.total;
             }
-            let data = this.groupHandlerListData(res.data, this.urlApi);
+            let data = this.groupHandlerListData(res.data, url);
             this.outcomes(data, this.tabs);
             if (this.params['params' + tab].page === 1) {
               this.approvalList['list' + tab]['data' + twoLevel] = data;
