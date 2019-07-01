@@ -616,10 +616,21 @@
                 if (num === '6' && item.action === 'phone') {
                   index = 1;
                 }
-                user_id = this.$getFadadaUserId(detail);
-                this.$handlerSign(detail, user_id, index).then(_ => {
-                  this.$router.go(-1);
-                });
+                if (detail.bulletin_type.includes('bulletin_collect')) {
+                  user_id = this.$getFadadaUserId(detail);
+                  this.$handlerSign(detail, user_id, index, detail.signer.name).then(_ => {
+                    this.$router.go(-1);
+                  });
+                } else {
+                  this.$httpZll.getElectronicContractSinger(detail.executionId).then(res => {
+                    let value = JSON.parse(res.value || '{}');
+                    if (value.fadada_user_id) {
+                      this.$handlerSign(detail, user_id, index, value.name).then(_ => {
+                        this.$router.go(-1);
+                      });
+                    }
+                  });
+                }
               }
             }
             break;

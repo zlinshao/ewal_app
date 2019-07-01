@@ -467,24 +467,38 @@
             this.$reviseContract(action, name, item);
             break;
           case 'success'://本地签署
-            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
-              let value = JSON.parse(res.value || '{}');
-              if (value.fadada_user_id) {
-                this.$handlerSign(item, value.fadada_user_id, 2, value.name).then(_ => {
-                  this.onSearch(this.tabs.tab);
-                });
-              }
-            });
+            if (item.bulletin_type.includes('bulletin_collect')) {
+              user_id = this.$getFadadaUserId(item);
+              this.$handlerSign(item, user_id, 2, item.signer.name).then(_ => {
+                this.onSearch(this.tabs.tab);
+              });
+            } else {
+              this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+                let value = JSON.parse(res.value || '{}');
+                if (value.fadada_user_id) {
+                  this.$handlerSign(item, value.fadada_user_id, 2, value.name).then(_ => {
+                    this.onSearch(this.tabs.tab);
+                  });
+                }
+              });
+            }
             break;
           case 'phone'://客户手机签署
-            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
-              let value = JSON.parse(res.value || '{}');
-              if (value.fadada_user_id) {
-                this.$handlerSign(item, value.fadada_user_id, 1, value.name).then(_ => {
-                  this.onSearch(this.tabs.tab);
-                });
-              }
-            });
+            if (item.bulletin_type.includes('bulletin_collect')) {
+              user_id = this.$getFadadaUserId(item);
+              this.$handlerSign(item, user_id, 1, item.signer.name).then(_ => {
+                this.onSearch(this.tabs.tab);
+              });
+            } else {
+              this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+                let value = JSON.parse(res.value || '{}');
+                if (value.fadada_user_id) {
+                  this.$handlerSign(item, value.fadada_user_id, 1, value.name).then(_ => {
+                    this.onSearch(this.tabs.tab);
+                  });
+                }
+              });
+            }
             break;
           case 'contract'://发送电子合同
             this.contract_number = item.contract_number;

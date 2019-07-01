@@ -416,20 +416,30 @@
         let user_id = '';
         switch (action.action) {
           case 'success'://本地签署
-            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
-              let value = JSON.parse(res.value || '{}');
-              if (value.fadada_user_id) {
-                this.handlerSign(item, value.fadada_user_id, 2, value.name);
-              }
-            });
+            if (item.bulletin_type.includes('bulletin_collect')) {
+              user_id = this.$getFadadaUserId(item);
+              this.handlerSign(item, user_id, 2, item.signer.name);
+            } else {
+              this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+                let value = JSON.parse(res.value || '{}');
+                if (value.fadada_user_id) {
+                  this.handlerSign(item, value.fadada_user_id, 2, value.name);
+                }
+              });
+            }
             break;
           case 'phone'://客户手机签署
-            this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
-              let value = JSON.parse(res.value || '{}');
-              if (value.fadada_user_id) {
-                this.handlerSign(item, value.fadada_user_id, 1, value.name);
-              }
-            });
+            if (item.bulletin_type.includes('bulletin_collect')) {
+              user_id = this.$getFadadaUserId(item);
+              this.handlerSign(item, user_id, 1, item.signer.name);
+            } else {
+              this.$httpZll.getElectronicContractSinger(item.executionId).then(res => {
+                let value = JSON.parse(res.value || '{}');
+                if (value.fadada_user_id) {
+                  this.handlerSign(item, value.fadada_user_id, 1, value.name);
+                }
+              });
+            }
             break;
           case 'allograph'://代签
           case 'deliver'://转交
