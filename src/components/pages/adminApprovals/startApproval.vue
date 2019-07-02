@@ -33,7 +33,7 @@
       resetting(type) {
         this.approvalList = adminApprovalsData[type];
         let all = this.initFormData(this.approvalList, this.showData, 'noStaff');
-        console.log(all)
+        console.log(all);
       },
     },
   }
