@@ -481,6 +481,16 @@ rentBulletinDraft = {
   "spot_code": "s9f10"
 };
 
+// 特殊情况
+bulletinRouterSpecial = {
+  bulletin: 'bulletin_special',
+  to: 'special',
+};
+// 退租
+bulletinRouterCheck = {
+  bulletin: 'bulletin_checkout',
+  to: 'checkout',
+};
 // 报备类型
 bulletinRouterStatus = {
   // 收房报备
@@ -541,35 +551,17 @@ bulletinRouterStatus = {
     to: 'retainage',
   },
   // 特殊事项报备
-  bulletin_special: {
-    bulletin: 'bulletin_special',
-    to: 'special',
-  },
+  bulletin_special: bulletinRouterSpecial,
   // 特殊事项报备
-  bulletin_special_collect: {
-    bulletin: 'bulletin_special_collect',
-    to: 'special',
-  },
+  bulletin_special_collect: bulletinRouterSpecial,
   // 特殊事项报备
-  bulletin_special_rent: {
-    bulletin: 'bulletin_special_rent',
-    to: 'special',
-  },
+  bulletin_special_rent: bulletinRouterSpecial,
   //退租报备
-  bulletin_checkout: {
-    bulletin: 'bulletin_checkout',
-    to: 'checkout',
-  },
+  bulletin_checkout: bulletinRouterCheck,
   //退租报备
-  bulletin_checkout_collect: {
-    bulletin: 'bulletin_checkout',
-    to: 'checkout',
-  },
+  bulletin_checkout_collect: bulletinRouterCheck,
   //退租报备
-  bulletin_checkout_rent: {
-    bulletin: 'bulletin_checkout',
-    to: 'checkout',
-  },
+  bulletin_checkout_rent: bulletinRouterCheck,
 };
 
 // 审批筛选

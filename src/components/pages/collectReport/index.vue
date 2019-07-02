@@ -363,7 +363,7 @@
         let bulletinData = this.$bulletinType(type.bulletin, this.taskDetail.finish_RWC);
         let data = [
           //不需要电子合同
-          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special', 'bulletin_special_collect', 'bulletin_special_rent', 'bulletin_checkout'],
+          ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC', 'bulletin_special', 'bulletin_checkout'],
           //不需要task_id
           ['bulletin_rent_trans', 'bulletin_change'],
           // 不预填
