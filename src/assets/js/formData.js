@@ -560,6 +560,16 @@ bulletinRouterStatus = {
     bulletin: 'bulletin_checkout',
     to: 'checkout',
   },
+  //退租报备
+  bulletin_checkout_collect: {
+    bulletin: 'bulletin_checkout',
+    to: 'checkout',
+  },
+  //退租报备
+  bulletin_checkout_rent: {
+    bulletin: 'bulletin_checkout',
+    to: 'checkout',
+  },
 };
 
 // 审批筛选
@@ -570,8 +580,8 @@ approvalSearch = {
   toBeDoneAgency: ['BulletinAgency'],
   toBeDoneChange: ['InputBulletinData'],
   bulletinCheckout: ['Rent-InputCheckoutData', 'Collect-InputCheckoutData'],
-  processDefinitionKeys: ['MG-BulletinFinanicApproval', 'MG-BulletinApproval', 'Market-VillageExpand', 'Rent-Retainage'],
-  approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
+  processDefinitionKeys: ['MG-BulletinFinanicApproval', 'MG-BulletinApproval', 'MG-BulletinApprovalPF', 'Market-VillageExpand', 'Rent-Retainage'],
+  approvals1: ['pqjl_approval', 'gkzx_approval', 'zcb_approval', 'cw_approval', 'finance_approved', 'AcceptTransfer', 'AcceptDelegate'],
   approvals22: ['SignEC'],
   approvals23: ['InputBulletinData'],
 };
