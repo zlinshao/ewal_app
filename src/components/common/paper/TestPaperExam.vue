@@ -257,18 +257,20 @@
           datetime: '',
         };
       },
-
+      //取消考试
       cancelActionSheet() {
-        this.$dialog.confirm({title: '确定要取消本次考试作答吗？', message: '若确定则此次考试的作答将不计入 本次考试题当中'}).then(() => {
+        this.$dialog('确定要取消本次考试作答吗？',  '若确定则此次考试的作答将不计入 本次考试题当中').then((res) => {
+          if(!res) return;
           this.action_sheet_visible = false;
           this.clearData();
         });
 
       },
-
+      //提交考试
       submitExam() {
-        this.$dialog.confirm({title: '确认提交吗?', message: '提交之后将无法重新作答'})
-          .then(() => {
+        this.$dialog('确认提交吗?', '提交之后将无法重新作答')
+          .then((res) => {
+            if (!res) return;
             let id = this.examData.id;//id
             let exam_id = this.examData.exam_id;
             let newArr = _.flatten([this.exam_category_list.single.exam_list, this.exam_category_list.judge.exam_list, this.exam_category_list.short.exam_list]);
@@ -306,19 +308,12 @@
               answer
             };
             this.$httpTj.submitExam(exam_id, params).then(res => {
-              debugger
               console.log(res);
               if (res.code.endsWith('0')) {
                 this.paper_dialog_params.score = res.data.score;
-
                 this.paper_dialog_visible = true;
-                //this.action_sheet_visible = false;
               }
             });
-            /*this.$http.put(`${this.url}train/exam/set/${id}`, params).then(res => {
-              console.log(res);
-              debugger
-            });*/
           });
       },
       handlePaperDialogView() {

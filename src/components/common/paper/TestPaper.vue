@@ -217,18 +217,21 @@
           datetime: '',
         };
       },
-
+      //取消问卷
       cancelActionSheet() {
-        this.$dialog.confirm({title: '确认取消吗?', message: '取消之后还可以重新作答'}).then(()=> {
+        this.$dialog('确认取消吗?', '取消之后还可以重新作答').then((res)=> {
+          if (!res) return;
           this.action_sheet_visible = false;
           this.clearData();
         });
 
       },
-
+      //提交问卷
       submitQuestionnaire() {
-        this.$dialog.confirm({title: '确认提交吗?', message: '提交之后将无法重新作答'})
-          .then(() => {
+        console.log(this.$dialog)
+        this.$dialog('确认提交吗?', '提交之后将无法重新作答')
+          .then((res) => {
+            if(!res) return;
             let id = this.questionnaireData.id;//问卷id
             let newArr = _.flatten([this.exam_category_list.single.exam_list, this.exam_category_list.judge.exam_list, this.exam_category_list.short.exam_list]);
             //判断是否有漏答题目
