@@ -23,18 +23,18 @@
         </div>
         <i></i>
       </div>
-      <div class="allChecks" ref="allChecks" v-show="tabs.tab">
-        <label>全选</label>
-        <p>
-          <i class="i1"></i>
-          <i class="i2"></i>
-          <i class="i3"></i>
-          <i class="i4"></i>
-        </p>
-      </div>
-      <div class="mainContent" :style="mainHeight">
+      <!--<div class="allChecks" ref="allChecks" v-show="tabs.tab">-->
+      <!--  <label>全选</label>-->
+      <!--  <p>-->
+      <!--    <i class="i1"></i>-->
+      <!--    <i class="i2"></i>-->
+      <!--    <i class="i3"></i>-->
+      <!--    <i class="i4"></i>-->
+      <!--  </p>-->
+      <!--</div>-->
+      <div class="mainContent" :style="mainHeight" v-show="tabs.tab">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]" v-if="tabs.tab">
-          <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]">
+          <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]" class="admin-list">
             <div class="contentList adminList">
               <i class="adminCheck" :class="[checkIds.includes(item.id) ? 'hover' : '']"
                  @click="adminChecked(item)"></i>
@@ -81,8 +81,27 @@
           </li>
         </scroll-load>
       </div>
+      <!--发起 行政审批-->
+      <div class="mainContent" :style="mainHeight" v-show="!tabs.tab">
+        <ul class="entranceList">
+          <li v-for="list in Object.keys(entranceList)">
+            <h1 class="approvalTitle">
+              <span>{{listTitle[list]}}</span>
+            </h1>
+            <div class="approvalList">
+              <div v-for="item in entranceList[list]" @click="routerLink('startApproval',{type:item.type})">
+                <h2>
+                  <img :src="item.icon" alt="">
+                </h2>
+                <h3>{{item.title}}</h3>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-    <admin-detail :module="detailModule" @close="detailModule = false"></admin-detail>
+    <!--审批详情-->
+    <admin-detail :module="detailModule" @close="hiddenDetailModule()"></admin-detail>
   </div>
 </template>
 
@@ -100,6 +119,91 @@
       return {
         mainHeight: {},
         detailModule: false,
+        // 发起审批
+        entranceList: {
+          '1': [
+            {
+              type: 'personnel_demand',
+              icon: require('../../../assets/image/adminApprovals/renyuanxuqiu.png'),
+              title: '人员需求',
+            },
+            {
+              type: 'personal_change',
+              icon: require('../../../assets/image/adminApprovals/gerenyidong.png'),
+              title: '个人调岗/异动',
+            },
+            {
+              type: 'group_change',
+              icon: require('../../../assets/image/adminApprovals/zhengzuyidong.png'),
+              title: '整组调岗/异动',
+            },
+            {
+              type: 'positive',
+              icon: require('../../../assets/image/adminApprovals/zhuanzheng.png'),
+              title: '转正',
+            },
+            {
+              type: 'dimission',
+              icon: require('../../../assets/image/adminApprovals/lizhi.png'),
+              title: '离职',
+            },
+            {
+              type: 'civilian_promotion',
+              icon: require('../../../assets/image/adminApprovals/jinsheng.png'),
+              title: '文职晋升',
+            },
+          ],
+          '2': [
+            {
+              type: 'salary',
+              icon: require('../../../assets/image/adminApprovals/xinzitiaozheng.png'),
+              title: '薪资调整',
+            }
+          ],
+          '3': [
+            {
+              type: 'announcement',
+              icon: require('../../../assets/image/adminApprovals/gonggao.png'),
+              title: '公告',
+            }
+          ],
+          '4': [
+            {
+              type: 'add_office_dormitory',
+              icon: require('../../../assets/image/adminApprovals/zjbgsss.png'),
+              title: '增加办公室/宿舍',
+            },
+            {
+              type: 'sub_office_dormitory',
+              icon: require('../../../assets/image/adminApprovals/jsbgsss.png'),
+              title: '减少办公室/宿舍',
+            },
+            {
+              type: 'live_dormitory',
+              icon: require('../../../assets/image/adminApprovals/zhusu.png'),
+              title: '住宿',
+            },
+            {
+              type: 'leave_dormitory',
+              icon: require('../../../assets/image/adminApprovals/lisu.png'),
+              title: '离宿',
+            }
+          ],
+          '5': [
+            {
+              type: '',
+              icon: require('../../../assets/image/adminApprovals/qita.png'),
+              title: '其他',
+            }
+          ],
+        },
+        listTitle: {
+          '1': '人事',
+          '2': '人事专用',
+          '3': '公告',
+          '4': '行政',
+          '5': '其他',
+        },
         //加载是否结束
         fullLoading: {
           load1: true,
@@ -249,12 +353,6 @@
               text: '修改合同',
             },
           ],
-          more3: [
-            {
-              id: '7',
-              text: '重新提交',
-            },
-          ]
         },
         checkIds: [],
       }
@@ -262,6 +360,8 @@
     mounted() {
     },
     activated() {
+      let tabs = {tab: '', status: 0};
+      this.$store.dispatch('admin_approval_tabs', tabs);
       this.countListHeight();
     },
     computed: {
@@ -279,8 +379,8 @@
         this.$nextTick(_ => {
           let approvalTop = this.$refs.approvalTop.offsetHeight;
           let mainTop = this.$refs.mainTop.offsetHeight;
-          let allChecks = this.$refs.allChecks.offsetHeight;
-          let top = approvalTop + mainTop + allChecks;
+          // let allChecks = this.$refs.allChecks.offsetHeight;
+          let top = approvalTop + mainTop;
           if (this.tabs.tab) {
             this.mainHeight = this.mainListHeight(top);
           } else {
@@ -407,6 +507,7 @@
       // 头部切换
       changeApproval(val) {
         this.countListHeight();
+        this.hiddenDetailModule();
         this.checkIds = [];
         let tab = val.id;
         let status = this.twoLevel['tab' + tab];
@@ -432,6 +533,13 @@
           this.checkIds.splice(index, 1);
         } else {
           this.checkIds.push(item.id);
+        }
+      },
+      // 详情
+      hiddenDetailModule(val) {
+        this.detailModule = false;
+        if (val) {
+
         }
       },
     }

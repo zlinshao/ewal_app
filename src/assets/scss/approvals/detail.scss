@@ -251,8 +251,7 @@
         }
 
         /*拒绝*/
-        .refuse,
-        .cancel {
+        .refuse, .cancel {
           @include detailImg('jujue');
         }
 
@@ -263,8 +262,7 @@
         }
 
         /*通过*/
-        .publish,
-        .urge {
+        .publish, .urge {
           color: #FFFFFF;
           @include detailImg('tongguo');
         }
