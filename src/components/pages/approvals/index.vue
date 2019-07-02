@@ -575,11 +575,7 @@
             }
             break;
           case '3'://抄送我的
-            if (status === 0) {
-              this.urlApi = 'runtime/tasks';
-            } else {
-              this.urlApi = 'history/tasks';
-            }
+              this.urlApi = 'history/process-instances';
             break;
           case '4'://暂不处理
             this.urlApi = 'runtime/process-instances';

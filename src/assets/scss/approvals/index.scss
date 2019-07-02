@@ -4,6 +4,11 @@
   @include bgImage('../../../assets/image/approvals/' + $n + '.png');
 }
 
+@mixin adminImg($n) {
+  @include bgImage('../../../assets/image/adminApprovals/' + $n + '.png');
+}
+
+
 #approvals, #adminApprovals {
   .approvalTop {
     height: 2.8rem;
@@ -26,6 +31,14 @@
 
       .p2 {
         @include approvalsImg('xingzhenglei');
+      }
+
+      .p3 {
+        @include adminImg('yewulei');
+      }
+
+      .p4 {
+        @include adminImg('xingzhenglei');
       }
     }
 
@@ -111,8 +124,43 @@
     }
 
     .allChecks {
-      height: .6rem;
-      background-color: #f8f8f8
+      height: .72rem;
+      @include flex('items-bet');
+      padding: 0 .36rem;
+      background-color: #f8f8f8;
+
+      label {
+        color: #4A4A4A;
+      }
+
+      p {
+        @include flex('items-center');
+
+        i {
+          width: .4rem;
+          margin-left: .3rem;
+        }
+
+        .i1 {
+          height: .4rem;
+          @include adminImg('tijiao');
+        }
+
+        .i2 {
+          height: .33rem;
+          @include adminImg('zhuanjiao');
+        }
+
+        .i3 {
+          height: .4rem;
+          @include adminImg('shanchu');
+        }
+
+        .i4 {
+          height: .4rem;
+          @include adminImg('yidu');
+        }
+      }
     }
 
     .mainContent {
@@ -295,22 +343,82 @@
       }
 
       //行政类审批
+      .adminList + .adminList{
+
+      }
       .adminList {
         @include flex();
         margin: 0;
+        padding: .3rem;
         background-color: #FFFFFF;
-        border-bottom: 1px solid #D8D8D8;
+
 
         .adminCheck {
-          min-width: .3rem;
-          max-width: .3rem;
-          height: .3rem;
+          min-width: .4rem;
+          max-width: .4rem;
+          height: .4rem;
           @include radius(50%);
           border: 1px solid #D8D8D8;
+          margin: .1rem .2rem 0 0;
+        }
+
+        .adminCheck.hover {
+          border: none;
+          @include adminImg('adminchecked');
         }
 
         .adminMain {
           width: 100%;
+
+          ul {
+            li {
+              @include flex();
+
+              img {
+                width: .6rem;
+                height: .6rem;
+                @include radius(50%);
+              }
+
+              .adminInfo {
+                width: 100%;
+                margin: .03rem 0 0 .2rem;
+
+                span {
+                  color: #686874;
+                  font-size: .25rem;
+                }
+
+                h1 {
+                  font-size: .32rem;
+                }
+
+                div {
+                  @include flex('items-bet');
+                }
+
+                .adminTitle {
+                  margin-bottom: .12rem;
+                }
+
+                .approvalStatus {
+                  color: #F4511E;
+                  margin-top: .12rem;
+
+                  span {
+                    padding: 0 .1rem;
+
+                    i {
+                      display: inline-block;
+                      @include adminImg('gdczd');
+                      width: .05rem;
+                      height: .3rem;
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

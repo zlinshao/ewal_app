@@ -316,6 +316,7 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
+      console.log(this.taskDetail)
       if (this.taskDetail.content && this.bulletinType.bulletin !== 'bulletin_checkout') {
         this.taskDetail.content.id = '';
       }
@@ -571,7 +572,6 @@
       },
       // 付款方式变化 日期计算
       changeDateCount(key, date) {
-        console.log(1);
         let bulletin = this.bulletinType.bulletin;
         let val = this.myUtils.formatDate(date);
         let value = this.form[key];
@@ -1184,7 +1184,13 @@
         this.form.spot_code = '';//唯一识别码
         this.form.id = '';
         this.form.process_id = res.process_id || '';//修改ID
-        this.handlePreFill(res.content);
+        if (res.bulletin_type.includes('bulletin_checkout')) {
+          this.checkoutContent(res.content);
+          this.checkoutHandler(this.form.check_type);
+        } else {
+          this.handlePreFill(res.content);
+        }
+
       },
       // 重新发布
       againSave() {

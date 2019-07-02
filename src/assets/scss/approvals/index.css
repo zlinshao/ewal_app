@@ -1,21 +1,21 @@
 /*
 Error: Invalid GBK character "\xE4"
-        on line 126 of index.scss
+        on line 174 of index.scss
 
-121:       .contentList {
-122:         position: relative;
-123:         margin: .2rem .3rem;
-124:         @include radius(.06rem);
-125:         overflow: hidden;
-126:         //业务类审批
-127:         .leftShift {
-128:           transform: translateX(-60%);
-129:         }
-130: 
-131:         .listUp {
+169:       .contentList {
+170:         position: relative;
+171:         margin: .2rem .3rem;
+172:         @include radius(.06rem);
+173:         overflow: hidden;
+174:         //业务类审批
+175:         .leftShift {
+176:           transform: translateX(-60%);
+177:         }
+178: 
+179:         .listUp {
 
 Backtrace:
-index.scss:126
+index.scss:174
 C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1090:in `rescue in block in find_encoding_error'
 C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1087:in `block in find_encoding_error'
 C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1086:in `each'
@@ -37,4 +37,4 @@ C:/APP/ruby/Ruby24-x64/bin/sass:23:in `<main>'
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Invalid GBK character \"\xE4\"\A         on line 126 of index.scss\A \A 121:       .contentList {\A 122:         position: relative;\A 123:         margin: .2rem .3rem;\A 124:         @include radius(.06rem);\A 125:         overflow: hidden;\A 126:         //业务类审批\A 127:         .leftShift {\A 128:           transform: translateX(-60%);\A 129:         }\A 130: \A 131:         .listUp {"; }
+  content: "Error: Invalid GBK character \"\xE4\"\A         on line 174 of index.scss\A \A 169:       .contentList {\A 170:         position: relative;\A 171:         margin: .2rem .3rem;\A 172:         @include radius(.06rem);\A 173:         overflow: hidden;\A 174:         //业务类审批\A 175:         .leftShift {\A 176:           transform: translateX(-60%);\A 177:         }\A 178: \A 179:         .listUp {"; }

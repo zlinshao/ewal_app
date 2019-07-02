@@ -2,8 +2,8 @@
   <div id="adminApprovals">
     <div ref="approvalTop" class="approvalTop">
       <div class="top1">
-        <p class="p1" @click="routerReplace('/approvals')"></p>
-        <p class="p2" @click="changeApproval('')"></p>
+        <p class="p3" @click="routerReplace('/approvals')"></p>
+        <p class="p4" @click="changeApproval('')"></p>
       </div>
       <ul class="items-around">
         <li v-for="item in approvalTerm" @click="changeApproval(item)">
@@ -23,23 +23,56 @@
         </div>
         <i></i>
       </div>
-      <div class="allChecks" ref="allChecks"
-           v-show="approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]].length"></div>
+      <div class="allChecks" ref="allChecks" v-show="tabs.tab">
+        <label>全选</label>
+        <p>
+          <i class="i1"></i>
+          <i class="i2"></i>
+          <i class="i3"></i>
+          <i class="i4"></i>
+        </p>
+      </div>
       <div class="mainContent" :style="mainHeight">
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]" v-if="tabs.tab">
           <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]">
             <div class="contentList adminList">
-              <i class="adminCheck"></i>
+              <i class="adminCheck" :class="[checkIds.includes(item.id) ? 'hover' : '']"
+                 @click="adminChecked(item)"></i>
               <div class="adminMain">
                 <ul>
-                  <li>王晓</li>
+                  <li>
+                    <img :src="personal.avatar" v-if="personal.avatar" alt="">
+                    <img src="../../../assets/image/common/noHead.png" alt="" v-else>
+                    <div class="adminInfo">
+                      <div class="adminTitle">
+                        <h1>王啸啸提交的调休审批</h1>
+                        <span>2019-04-11 12:48</span>
+                      </div>
+                      <h2>
+                        <span>应休开始时间</span>
+                        <span>2019-04-11 09:00</span>
+                      </h2>
+                      <h2>
+                        <span>应休结束时间</span>
+                        <span>2019-04-11 09:00</span>
+                      </h2>
+                      <h2>
+                        <span>审批紧急程度</span>
+                        <span></span>
+                      </h2>
+                      <div class="approvalStatus">
+                        <h1>王佳怡审核中</h1>
+                        <span><i></i></span>
+                      </div>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>
           </li>
           <li class="noMore"
               v-if="approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]].length === total['total'+tabs.tab] &&
-                    approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]].length > 4">
+                    approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]].length > 3">
             <div v-if="!fullLoading['load'+tabs.tab]">没有更多了</div>
           </li>
           <li class="noData"
@@ -220,6 +253,7 @@
             },
           ]
         },
+        checkIds: [],
       }
     },
     mounted() {
@@ -232,7 +266,7 @@
         return this.$store.state.app.adminTab;
       },
       personal() {
-        return this.$store.state.app.personal;
+        return this.$store.state.app.personalDetail;
       },
     },
     watch: {},
@@ -313,6 +347,7 @@
             break;
         }
         // 搜索的参数处理
+        if (!tab) return;
         this.params['params' + tab].tenantId = 'hr';
         this.getApprovalList(this.urlApi, this.params['params' + tab], tab);
       },
@@ -369,6 +404,7 @@
       // 头部切换
       changeApproval(val) {
         this.countListHeight();
+        this.checkIds = [];
         let tab = val.id;
         let status = this.twoLevel['tab' + tab];
         this.tabs.tab = tab;
@@ -385,6 +421,15 @@
         this.twoLevel['tab' + tab] = status;
         this.$store.dispatch('admin_approval_tabs', this.tabs);
         this.onSearch(tab);
+      },
+      // 多选
+      adminChecked(item) {
+        if (this.checkIds.includes(item.id)) {
+          let index = this.checkIds.indexOf(item.id);
+          this.checkIds.splice(index, 1);
+        } else {
+          this.checkIds.push(item.id);
+        }
       },
     }
   }

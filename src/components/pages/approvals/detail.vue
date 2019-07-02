@@ -638,8 +638,9 @@
       },
       // 报备类型跳转
       bulletinRouter(type) {
-        sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
+        console.log(bulletinRouterStatus[type])
         sessionStorage.setItem('bulletin_type', JSON.stringify(bulletinRouterStatus[type]));
+        sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
         this.routerLink('/collectReport', {revise: 'revise'});
       },
       // 同意 拒绝 催办 撤销
