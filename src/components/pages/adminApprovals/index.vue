@@ -43,7 +43,7 @@
                   <li>
                     <img :src="personal.avatar" v-if="personal.avatar" alt="">
                     <img src="../../../assets/image/common/noHead.png" alt="" v-else>
-                    <div class="adminInfo">
+                    <div class="adminInfo" @click="detailModule = true">
                       <div class="adminTitle">
                         <h1>王啸啸提交的调休审批</h1>
                         <span>2019-04-11 12:48</span>
@@ -82,6 +82,7 @@
         </scroll-load>
       </div>
     </div>
+    <admin-detail :module="detailModule" @close="detailModule = false"></admin-detail>
   </div>
 </template>
 
@@ -90,13 +91,15 @@
   import woshenpide from '../../../assets/image/approvals/woshenpide.png'
   import chaosongwode from '../../../assets/image/approvals/chaosongwode.png'
   import zanbuchuli from '../../../assets/image/approvals/zanbuchuli.png'
+  import AdminDetail from './adminDetail.vue'
 
   export default {
     name: "admin-approvals",
-    components: {},
+    components: {AdminDetail},
     data() {
       return {
         mainHeight: {},
+        detailModule: false,
         //加载是否结束
         fullLoading: {
           load1: true,
