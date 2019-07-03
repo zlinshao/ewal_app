@@ -1,5 +1,6 @@
 <template>
-  <div id="startApproval">
+  <div id="startApproval" :style="mainListHeight()">
+    <div class="startTop"></div>
     <ul>
       <li v-for="(item,index) in approvalList">
         <div v-if="item.showForm === 'formatData' || (item.picker && item.readonly)">
@@ -12,7 +13,8 @@
             :readonly="item.readonly"
             :disabled="item.disabled"
             :placeholder="item.placeholder">
-            <div class="zl-button" :class="item.close" v-if="item.button" @click="closeInput(item)">{{item.button}}
+            <div class="zl-button" :class="item.close" v-if="item.button" @click="closeInput(item)">
+              {{item.button}}
             </div>
             <div class="unit" v-if="item.unit">{{item.unit}}</div>
           </zl-input>
@@ -48,6 +50,13 @@
         </div>
       </li>
     </ul>
+    <div class="commonBtn">
+      <p :class="['btn ' + item.type || '']" v-for="item of buttons" @click="saveSubmit(item.type)">
+        {{item.label}}
+      </p>
+    </div>
+    <!--正常 picker-->
+    <picker :module="pickerModule" :pickers="pickers" :form="form" :formData="formatData" @close="onConfirm"></picker>
     <!--员工搜索-->
     <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
     <!--部门搜索-->
@@ -88,6 +97,20 @@
           dateType: '',                 //日期类型 默认date 时分datetime
           dateIdx: '',                  //日期字段下标 变化情况使用
         },
+        buttons: [
+          {
+            label: '取消',
+            type: 'back'
+          },
+          {
+            label: '邀请同事提交',
+            type: 'deliver'
+          },
+          {
+            label: '提交',
+            type: 'success'
+          },
+        ],
       }
     },
     activated() {
@@ -126,9 +149,9 @@
             break;
           case 'searchPosition':
             this.searchConfig = val;
-            if (this.form.now_org.id) {
-              this.searchConfig.org_id = this.form.now_org.id;
-              this.searchConfig.org_name = this.form.now_org.name;
+            if (this.form.org_id.id) {
+              this.searchConfig.org_id = this.form.org_id.id;
+              this.searchConfig.org_name = this.form.org_id.name;
               this.searchPositionModule = true;
             } else {
               this.$prompt('请选择部门！');
@@ -138,6 +161,14 @@
             this.searchConfig = val;
             this.searchDepartModule = true;
             break;
+        }
+      },
+      // 确认下拉选择
+      onConfirm(form, show) {
+        this.onCancel();
+        if (form !== 'close') {
+          this.form = form;
+          this.formatData = show;
         }
       },
       // 日期选择
@@ -175,12 +206,32 @@
       },
       onCancel() {
         this.timeModule = false;
+        this.pickerModule = false;
         this.searchStaffModule = false;
         this.searchDepartModule = false;
         this.searchPositionModule = false;
       },
       getImgData(val) {
         this.form[val[0]] = val[1];
+      },
+      // 提交
+      saveSubmit(val) {
+        switch (val) {
+          case 'back':
+            this.$router.go(-1);
+            break;
+          case 'deliver':
+
+            break;
+          case 'success':
+            if (this.$attestationKey(this.approvalList)) return;
+            let type = this.$route.query.type;
+            this.form.type = type;
+            this.$httpZll.sendAdminApproval(this.form).then(res => {
+              console.log(res);
+            });
+            break;
+        }
       },
       resetting(type) {
         this.approvalList = this.jsonClone(adminApprovalsData[type]);
@@ -195,8 +246,32 @@
 </script>
 
 <style scoped lang="scss">
-  #startApproval {
+  @import "../../../assets/scss/common.scss";
 
+  #startApproval {
+    background-color: #F8F8F8;
+    @include flex('bet-column');
+
+    .startTop {
+      height: .8rem;
+      @include bgImage('../../../assets/image/add/toubupolang.png');
+    }
+
+    ul {
+      height: 100%;
+      background-color: #FFFFFF;
+      margin: 0 .3rem;
+    }
+
+    .commonBtn {
+      background-color: #FFFFFF;
+      border-top: 1px solid #D8D8D8;
+      padding: .3rem;
+
+      .deliver {
+        padding: .15rem .3rem;
+      }
+    }
   }
 </style>
 

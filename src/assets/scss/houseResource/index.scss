@@ -5,7 +5,7 @@
 }
 
 #houseResource {
-  > div.houseResource {
+  .houseResource {
     .search-type {
       text-align: center;
       border-top: 1px solid #F4F4F4;
@@ -220,6 +220,14 @@
         }
       }
     }
+  }
+
+  .recommend-house {
+    position: fixed;
+    bottom: 2.5rem;
+    right: .3rem;
+    width: 1rem;
+    height: 1rem;
   }
 }
 

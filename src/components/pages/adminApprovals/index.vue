@@ -86,7 +86,7 @@
         <ul class="entranceList">
           <li v-for="list in Object.keys(entranceList)">
             <h1 class="approvalTitle">
-              <span>{{listTitle[list]}}</span>
+              <span :class="['title' + list]"></span>
             </h1>
             <div class="approvalList">
               <div v-for="item in entranceList[list]" @click="routerLink('startApproval',{type:item.type})">
@@ -163,7 +163,7 @@
           '3': [
             {
               type: 'announcement',
-              icon: require('../../../assets/image/adminApprovals/gonggao.png'),
+              icon: require('../../../assets/image/adminApprovals/gonggaoshenpi.png'),
               title: '公告',
             }
           ],
@@ -189,12 +189,6 @@
               title: '离宿',
             }
           ],
-        },
-        listTitle: {
-          '1': '人事',
-          '2': '人事专用',
-          '3': '公告',
-          '4': '行政',
         },
         //加载是否结束
         fullLoading: {

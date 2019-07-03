@@ -74,6 +74,19 @@ class httpZll extends httpService {
     })
   }
 
+  // 公告类型
+  static getAnnouncementType() {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_hr}announcement/announcement_type`).then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res.data);
+        } else {
+          resolve(false);
+        }
+      })
+    })
+  }
+
   // 所有城市
   static getAllCityList(params) {
     return new Promise((resolve, reject) => {
@@ -196,7 +209,8 @@ class httpZll extends httpService {
       });
     });
   }
-  // 员工搜索
+
+  // 岗位搜索
   static searchPositionList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}/organization/position`, params, 'prompt').then(res => {
@@ -496,6 +510,21 @@ class httpZll extends httpService {
         } else {
           resolve(false);
           $httpPrompt(res.code);
+        }
+      });
+    });
+  }
+
+  // 行政审批
+  static sendAdminApproval(data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_hr}process/process`, data, 'prompt').then(res => {
+        if (res.code.endsWith('0')) {
+          resolve(res);
+          $httpPrompt(res.msg, 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.msg);
         }
       });
     });

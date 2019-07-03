@@ -173,6 +173,9 @@
     <div class="commonFooterTag">
       <p v-for="item in indexBottom" :class="item.icon" @click="footerTag(item.id)"></p>
     </div>
+
+<!--    <div @click="routerLink('/createQuestionnaire')" class="recommend-house"></div>-->
+
   </div>
 </template>
 

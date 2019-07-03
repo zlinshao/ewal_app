@@ -768,6 +768,13 @@
             if (key.status === 'objInt') {
               arr.push(key.keyName);
             }
+            if (key.showList) {
+              for (let list of key.showList) {
+                if (list.status === 'objInt') {
+                  arr.push(list.keyName);
+                }
+              }
+            }
           }
         }
         return arr;
