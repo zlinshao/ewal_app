@@ -17,6 +17,13 @@
             <div class="unit" v-if="item.unit">{{item.unit}}</div>
           </zl-input>
         </div>
+        <!--上传-->
+        <div v-else-if="item.photos" class="uploadForm">
+          <div v-for="upload in item.photos" class="flex">
+            <Upload :file="upload" :getImg="album[upload.keyName]" @success="getImgData"></Upload>
+          </div>
+        </div>
+        <!--输入框-->
         <div v-else>
           <div v-if="item.disabled">
             <zl-input
@@ -41,6 +48,8 @@
         </div>
       </li>
     </ul>
+    <!--员工搜索-->
+    <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
     <!--部门搜索-->
     <search-depart :module="searchDepartModule" @close="getDepartInfo"></search-depart>
     <!--日期-->
@@ -65,6 +74,7 @@
         searchDepartModule: false,
         searchConfig: {},
         approvalList: [],
+        album: {},
         form: {},
         formatData: {},
         showData: {
@@ -131,6 +141,14 @@
           this.formatData[val.dateKey] = val.dateVal;
         }
       },
+      // 搜索员工结果
+      getStaffInfo(val) {
+        this.onCancel();
+        if (val !== 'close') {
+          let config = this.searchConfig;
+          console.log(val);
+        }
+      },
       // 部门
       getDepartInfo(val) {
         this.onCancel();
@@ -143,13 +161,18 @@
       },
       onCancel() {
         this.timeModule = false;
+        this.searchStaffModule = false;
         this.searchDepartModule = false;
+      },
+      getImgData(val) {
+        this.form[val[0]] = val[1];
       },
       resetting(type) {
         this.approvalList = adminApprovalsData[type];
         let all = this.initFormData(this.approvalList, this.showData, 'noStaff');
         this.form = all.form;
         this.formatData = all.formatData;
+        this.album = this.jsonClone(all.album);
         console.log(all)
       },
     },
