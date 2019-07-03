@@ -166,14 +166,14 @@
           {id: 6,key: 'house_config_microwave',label: '微波炉',val: 0},
           {id: 7,key: 'house_config_washing',label: '洗衣机',val: 0},
           {id: 8,key: 'house_config_hood',label: '油烟机',val: 0},*/
-          {id: 1,key: 'fridge',label: '冰箱',val: 0},
-          {id: 2,key: 'television',label: '电视',val: 0},
-          {id: 3,key: 'air_condition',label: '空调',val: 0},
-          {id: 4,key: 'gas_stove',label: '燃气',val: 0},
-          {id: 5,key: 'water_heater',label: '热水器',val: 0},
-          {id: 6,key: 'microwave',label: '微波炉',val: 0},
-          {id: 7,key: 'wash_machine',label: '洗衣机',val: 0},
-          {id: 8,key: 'hood',label: '油烟机',val: 0},
+          {id: 1, key: 'fridge', label: '冰箱', val: 0},
+          {id: 2, key: 'television', label: '电视', val: 0},
+          {id: 3, key: 'air_condition', label: '空调', val: 0},
+          {id: 4, key: 'gas_stove', label: '燃气', val: 0},
+          {id: 5, key: 'water_heater', label: '热水器', val: 0},
+          {id: 6, key: 'microwave', label: '微波炉', val: 0},
+          {id: 7, key: 'wash_machine', label: '洗衣机', val: 0},
+          {id: 8, key: 'hood', label: '油烟机', val: 0},
         ]
       }
     },
@@ -183,18 +183,22 @@
       this.mainHeight = this.mainListHeight(top + 20);*/
     },
     async activated() {
-      if(sessionStorage.getItem('fromHouseIndex')=='true') {//防止从图片详情及交接单页返回页请求详情接口
+      if (sessionStorage.getItem('fromHouseIndex') == 'true') {//防止从图片详情及交接单页返回页请求详情接口
         this.detail = null;
         this.village_list = [];
         await this.handleGetHouseDetail();
         let top = this.$refs['house_main'].offsetTop;
         this.mainHeight = this.mainListHeight(top + 20);
-        sessionStorage.setItem('fromHouseIndex','false');
+        sessionStorage.setItem('fromHouseIndex', 'false');
       }
 
     },
     watch: {},
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personalDetail
+      }
+    },
     methods: {
       handleInitialMap(position = [], name = '') {
         let that = this;
@@ -228,10 +232,10 @@
       },
       //查看交接单跳转
       handleLookAssociate() {
-        if(this.detail.handover_data&&this.detail.handover_data.view_url) {
-          sessionStorage.setItem('fromHouseIndex','true');
+        if (this.detail.handover_data && this.detail.handover_data.view_url) {
+          sessionStorage.setItem('fromHouseIndex', 'true');
           window.location.href = this.detail.handover_data.view_url;
-        }else {
+        } else {
           this.$prompt('暂无交接单');
         }
         //this.routerLink('/houseProperty',this.$route.query);
@@ -244,20 +248,21 @@
           return false;
         }
         let house_id = this.$route.query.id;
-        await this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {/*city:'南京'*/}, '获取中...').then(res => {
+        let city = this.personal.city_name;
+        await this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}?city=${city}`, {/*city:'南京'*/}, '获取中...').then(res => {
           if (res.code === 200) {
             this.detail = res.data;
-            this.village_list = res.data.village_data||[];
+            this.village_list = res.data.village_data || [];
             //给房屋配置赋值
-            if(res.data.house_detail && res.data.house_detail.house_state) {//房屋配置
-              let house_config_keys = _.map(this.house_config,'key');
-              _.forEach(res.data.house_detail.house_state.goods_info,(val,key)=> {
-                if(_.includes(house_config_keys,key)) {
-                  _.find(this.house_config,{key:key}).val = val;
+            if (res.data.house_detail && res.data.house_detail.house_state) {//房屋配置
+              let house_config_keys = _.map(this.house_config, 'key');
+              _.forEach(res.data.house_detail.house_state.goods_info, (val, key) => {
+                if (_.includes(house_config_keys, key)) {
+                  _.find(this.house_config, {key: key}).val = val;
                 }
               });
-            }else {
-              _(this.house_config).forEach((o)=> {
+            } else {
+              _(this.house_config).forEach((o) => {
                 o.val = 0;
               });
             }
@@ -290,26 +295,32 @@
         height: 230px;
         border-top: .1rem solid #F4F4F4;
       }
+
       .main-content {
         position: relative;
         top: -.3rem;
         border-radius: 15px 15px 0 0;
         z-index: 1;
         background-color: white;
+
         > div {
           padding: .3rem .3rem 0 .3rem;
+
           .header {
             position: relative;
+
             h1, h3 {
               font-weight: bold;
               font-family: 'dingzitiblod';
             }
+
             h3 {
               position: absolute;
               right: 0;
               top: 0;
               color: #CF2E33;
             }
+
             > div.address {
               font-family: 'dingzitiblod';
               font-size: .25rem;
@@ -317,64 +328,80 @@
               color: #9B9B9B;
               border-bottom: 1px dashed #F2F2F2;
             }
+
             a.notice {
               width: 18px;
               height: 18px;
               vertical-align: middle;
               margin-left: 5px;
             }
+
             a.notice1 {
               @include houseBg('gantan-cheng.png');
             }
+
             a.notice2 {
               @include houseBg('gantan-hong.png');
             }
           }
+
           .tags {
             padding: 5px 0;
+
             .tag {
               padding: 3px 8px;
               border-radius: 3px;
               font-family: 'dingzitiblod';
               font-size: .25rem;
+
               &:not(:last-child) {
                 margin-right: 5px;
               }
             }
+
             .tag-quality {
               background-color: #FDEDEC;
               color: #EA635F;
             }
           }
+
           .property {
             padding: .2rem 0;
             border-bottom: 1px dashed #F2F2F2;
+
             div.van-col {
               margin: .1rem auto;
             }
+
             .label, .val {
               font-family: 'dingzitiblod';
               font-size: .25rem;
             }
+
             .label {
               display: inline-block;
               text-align: left;
               color: #D7D7D7;
               margin-right: 10px;
             }
+
             .val {
               color: #898991;
             }
           }
+
           .configuration {
             padding: .2rem 0;
             border-bottom: 1px dashed #F2F2F2;
+
             > div {
               &:first-child {
                 position: relative;
+
                 h2, a {
                   font-family: 'dingzitiblod';
                 }
+
                 a {
                   position: absolute;
                   right: -.3rem;
@@ -390,48 +417,59 @@
                 }
               }
             }
+
             .furniture {
               flex-wrap: wrap;
               padding: .2rem 0;
+
               div.furniture {
                 width: 40pt;
                 height: 40pt;
                 margin: .2rem auto;
                 border-radius: 50%;
               }
+
               div.furniture-tip {
                 @include flex('flex-center');
                 color: #797982;
               }
+
               @for $i from 1 to 9 {
                 .fur#{$i} {
                   background: url("../../../assets/image/houseResource/fur#{$i}.png") no-repeat center;
 
                 }
               }
+
               .show_furniture {
                 opacity: .3;
               }
             }
           }
+
           .location {
             padding: .3rem 0;
             border-bottom: 1px dashed #F2F2F2;
+
             h3 {
               font-family: 'dingzitiblod';
             }
+
             #map-container {
               min-height: 200px;
               border-radius: 10px;
               margin: .2rem 0;
             }
           }
+
           .common_city {
             padding: .3rem 0;
             border-bottom: 1px dashed #F2F2F2;
+
             h3 {
               font-family: 'dingzitiblod';
             }
+
             a.clinch-btn {
               display: inline-block;
               padding: 3px 8px;
@@ -442,8 +480,10 @@
               margin: .2rem 0;
               border-radius: 3px;
             }
+
             div.house-clinch {
               position: relative;
+
               a {
                 position: absolute;
                 right: 0;
@@ -452,6 +492,7 @@
                 font-family: 'dingzitiblod';
               }
             }
+
             p.type-clinch {
               margin-top: 5px;
               font-family: 'dingzitiblod';
@@ -459,33 +500,41 @@
               color: #9B9B9B;
             }
           }
+
           .more-house {
             padding: .3rem 0;
             border-bottom: 1px dashed #F2F2F2;
+
             h3 {
               font-family: 'dingzitiblod';
               margin-bottom: .2rem;
             }
+
             > div {
               margin-bottom: .2rem;
+
               img {
                 width: 75pt;
                 height: 60pt;
                 border-radius: 3px;
               }
+
               > div {
                 margin-left: .2rem;
                 position: relative;
                 width: calc(100% - 75pt);
+
                 h4, a, span {
                   font-family: 'dingzitiblod';
                 }
+
                 a {
                   position: absolute;
                   right: 0;
                   top: 0;
                   color: #CF2E33;
                 }
+
                 span {
                   display: inline-block;
                   font-size: 14px;
@@ -497,23 +546,28 @@
           }
         }
       }
+
       .footer {
         border-top: 2px solid #F2F2F2;
         /*background-color: rebeccapurple;*/
         color: #808080;
+
         > div {
           width: 60px;
           margin: .1rem auto;
           text-align: center;
+
           a {
             display: inline-block;
             width: 30px;
             height: 30px;
             @include houseBg('lishihetong.png');
+
             &:active {
               @include houseBg('lishihetong-lan.png');
             }
           }
+
           h5 {
             font-size: 14px;
             font-family: 'dingzitiblod';
