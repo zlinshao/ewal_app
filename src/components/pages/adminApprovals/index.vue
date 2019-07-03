@@ -189,20 +189,12 @@
               title: '离宿',
             }
           ],
-          '5': [
-            {
-              type: '',
-              icon: require('../../../assets/image/adminApprovals/qita.png'),
-              title: '其他',
-            }
-          ],
         },
         listTitle: {
           '1': '人事',
           '2': '人事专用',
           '3': '公告',
           '4': '行政',
-          '5': '其他',
         },
         //加载是否结束
         fullLoading: {
