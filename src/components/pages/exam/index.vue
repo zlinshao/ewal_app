@@ -147,7 +147,7 @@
                       进入考试>
                     </div>
 <!--                    <div class="item-exam-score" v-if="parseInt(item.enroll[0].score)"><span>{{item.enroll[0].score}}</span><span>分</span></div>-->
-                    <div class="item-exam-score" v-if="item.status==2 && item.enroll[0].status==2"><span>{{item.enroll[0].score}}</span><span>分</span></div>
+                    <div class="item-exam-score" v-if="item.enroll[0].status==2"><span>{{item.enroll[0].score}}</span><span>分</span></div>
                   </div>
                   <div v-if="item.missExam" class="miss-exam"></div>
                 </div>
