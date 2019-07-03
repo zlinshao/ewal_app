@@ -104,10 +104,16 @@
                                @click="changeInput(slither,item.keyName,index,change)">
                             {{key.changeBtn}}
                           </div>
-                          <div class="zl-confirmation" :class="[key.icon]"
-                               v-if="key.button" @click="confirmation(key.icon,item.keyName,num)">
-                            <i :class="key.icon" v-if="key.icon"></i>
-                            {{key.button}}
+                          <div v-if="key.button">
+                            <div class="zl-confirmation" :class="[key.icon]" v-if="key.button === '已认证'">
+                              <i :class="key.icon" v-if="key.icon"></i>
+                              {{key.button}}
+                            </div>
+                            <div class="zl-confirmation" :class="[key.icon]"
+                                 @click="confirmation(key.icon,item.keyName,num)" v-else>
+                              <i :class="key.icon" v-if="key.icon"></i>
+                              {{key.button}}
+                            </div>
                           </div>
                           <div class="unit" v-if="item.unit">{{item.unit}}</div>
                         </zl-input>
@@ -183,10 +189,15 @@
                         :label="item.label"
                         @input="listenInput(item.keyName)"
                         :placeholder="item.placeholder">
-                        <div class="zl-confirmation" :class="[item.icon]"
-                             v-if="item.button" @click="confirmation(item.icon)">
-                          <i :class="item.icon" v-if="item.icon"></i>
-                          {{item.button}}
+                        <div v-if="item.button">
+                          <div class="zl-confirmation" :class="[item.icon]" v-if="item.button === '已认证'">
+                            <i :class="item.icon" v-if="item.icon"></i>
+                            {{item.button}}
+                          </div>
+                          <div class="zl-confirmation" :class="[item.icon]" @click="confirmation(item.icon)" v-else>
+                            <i :class="item.icon" v-if="item.icon"></i>
+                            {{item.button}}
+                          </div>
                         </div>
                         <div class="unit" v-if="item.unit">{{item.unit}}</div>
                       </zl-input>
@@ -853,7 +864,11 @@
                   if (parentKey) {
                     this.form[parentKey][index].fadada_user_id = res.data.fadada_user_id;
                   } else {
-                    this.form.signer = res.data;
+                    if (this.bulletinType.bulletin === 'bulletin_checkout') {
+                      this.form.customer_fdd_user_id = res.data.fadada_user_id;
+                    } else {
+                      this.form.signer = res.data;
+                    }
                   }
                   this.certified('', parentKey, index);
                 } else {
@@ -1060,7 +1075,8 @@
             this.form.type = bulletin.type;
           }
         }
-        if (bulletin.bulletin === 'bulletin_rent_basic' || bulletin.bulletin === 'bulletin_booking_renting') {
+        let types = ['bulletin_rent_basic', 'bulletin_booking_renting', 'bulletin_rent_RWC'];
+        if (types.includes(bulletin.bulletin)) {
           let query = this.$route.query;
           if (query.result || query.result === 0) {
             this.form.is_sign = query.result;
@@ -1201,6 +1217,25 @@
           this.electronicContract();
         }
       },
+      // 退租表单字段切换
+      checkoutHandler(val, change) {
+        let ids = ['329', '331'], id = '3290';
+        if (ids.includes(val.id)) {
+          id = val.id + this.form.collect_or_rent;
+        } else {
+          id = val.id;
+        }
+        let slither = defineCheckoutReport.slither0.concat(checkoutTypeChange[id]);
+        this.drawSlither.slither0 = this.jsonClone(slither);
+        this.resetting();
+        this.form.id = '';
+        this.form.house_id = '';
+        this.form.contract_id = '';
+        this.form.customer_fdd_user_id = '';
+        this.form.check_type = val;
+        this.formatData.check_type = val.name;
+        this.checkoutContent(this.taskDetail.content, change);
+      },
       // 退租
       checkoutContent(res, change) {
         for (let item of Object.keys(this.form)) {
@@ -1212,8 +1247,19 @@
               this.form.house_address = res.house_address || '';
               this.formatData.house_id = res.house_address || '';
               break;
+            case 'contact_phone':
+              this.form[item] = res.customer_phone || '';
+              break;
+            case 'card_id':
+              this.form[item] = res.customer_idcard || '';
+              break;
             case 'collect_or_rent':
               this.formatData[item] = dicties[item][res[item]] || '0';
+              break;
+            case 'customer_fdd_user_id':
+              if (this.form[item]) {
+                this.certified();
+              }
               break;
             case 'check_type':
               if (!change) {
@@ -1243,27 +1289,6 @@
               break;
           }
         }
-      },
-      // 退租表单字段切换
-      checkoutHandler(val, change) {
-        let ids = ['329', '331'], id = '3290';
-        if (ids.includes(val.id)) {
-          id = val.id + this.form.collect_or_rent;
-        } else {
-          id = val.id;
-        }
-        let slither = defineCheckoutReport.slither0.concat(checkoutTypeChange[id]);
-        this.drawSlither.slither0 = this.jsonClone(slither);
-        this.resetting();
-        this.form.house_id = '';
-        this.form.id = '';
-        this.form.contract_id = '';
-        this.form.customer_fdd_user_id = '';
-        this.form.customer_phone = '';
-        this.form.customer_idcard = '';
-        this.form.check_type = val;
-        this.formatData.check_type = val.name;
-        this.checkoutContent(this.taskDetail.content, change);
       },
       // 尾款待办信息 / 渠道
       childBulletin(res, draft) {
