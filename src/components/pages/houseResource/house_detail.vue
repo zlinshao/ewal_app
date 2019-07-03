@@ -130,8 +130,8 @@
                   <h4 class="recommend-name">{{item.name}}</h4>
                 </div>
                 <div class="flex recommend-second-line">
-                  <span>{{item.area}}㎡ {{item.house_type}}</span>
-                  <div class="price">{{item.price}}元/月</div>
+                  <span>{{item.area||'-'}}㎡ {{item.house_type}}</span>
+                  <div class="price">{{item.price||'-'}}元/月</div>
                 </div>
               </div>
             </div>
