@@ -5996,6 +5996,7 @@ checkoutTypeChange = {
           status: 'objInt',
           picker: 'picker',
           showForm: 'formatData', //picker 显示 form 或 formatData
+          prompts: '*若退款账号非租客本人账号，请提醒租客，退款过程中若产生任何纠纷，由租房人本人承担',
           slot: '',
         },
         {
