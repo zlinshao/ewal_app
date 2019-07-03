@@ -316,7 +316,6 @@
     activated() {
       this.bulletinType = JSON.parse(sessionStorage.bulletin_type || '{}');
       this.taskDetail = JSON.parse(sessionStorage.task_detail || '{}');
-      console.log(this.taskDetail)
       if (this.taskDetail.content && this.bulletinType.bulletin !== 'bulletin_checkout') {
         this.taskDetail.content.id = '';
       }

@@ -336,6 +336,10 @@
   padding: .13rem .3rem;
   background: linear-gradient(137deg, #448aff 0%, #4570fe 100%); }
 
+.zl-button.close {
+  color: #448aff;
+  background: transparent; }
+
 .zl-confirmation {
   display: flex;
   display: -webkit-flex;

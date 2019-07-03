@@ -12,17 +12,39 @@
             :readonly="item.readonly"
             :disabled="item.disabled"
             :placeholder="item.placeholder">
-            <div class="zl-button" v-if="item.button">{{item.button}}</div>
+            <div class="zl-button" :class="item.close" v-if="item.button" @click="closeInput(item)">{{item.button}}
+            </div>
             <div class="unit" v-if="item.unit">{{item.unit}}</div>
           </zl-input>
         </div>
         <div v-else>
-
+          <div v-if="item.disabled">
+            <zl-input
+              :key="index"
+              v-model="form[item.keyName]"
+              :type="item.type"
+              :disabled="item.disabled"
+              :label="item.label"
+              :placeholder="item.placeholder">
+            </zl-input>
+          </div>
+          <div v-else>
+            <zl-input
+              :key="index"
+              v-model="form[item.keyName]"
+              :type="item.type"
+              :label="item.label"
+              :placeholder="item.placeholder">
+            </zl-input>
+          </div>
+          <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
         </div>
       </li>
     </ul>
     <!--部门搜索-->
     <search-depart :module="searchDepartModule" @close="getDepartInfo"></search-depart>
+    <!--日期-->
+    <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
   </div>
 </template>
 
@@ -37,6 +59,7 @@
       return {
         approvalStatus: '',
         pickers: {},
+        timeModule: false,
         pickerModule: false,
         searchStaffModule: false,
         searchDepartModule: false,
@@ -61,19 +84,27 @@
     watch: {},
     computed: {},
     methods: {
+      // 清除日期
+      closeInput(item) {
+        this.form[item.keyName] = item.keyType;
+        if (item.status === 'objName') {
+          this.formatData[item.keyName] = '';
+        } else {
+          this.formatData[item.keyName] = item.keyType;
+        }
+      },
       // 下拉框筛选
-      choosePicker(val, value, num, parentKey = '') {
-        this.popupStatus = val.picker;
+      choosePicker(val, value) {
         switch (val.picker) {
           case 'picker':
             this.pickerModule = true;
-            this.inputSelect(val, num, parentKey).then(picker => {
+            this.inputSelect(val).then(picker => {
               this.pickers = picker;
             });
             break;
           case 'date':
           case 'datetime':
-            this.chooseTime(val, value, num, parentKey);
+            this.chooseTime(val, value);
             break;
           case 'searchStaff':
             this.searchConfig = val;
@@ -85,8 +116,34 @@
             break;
         }
       },
+      // 日期选择
+      chooseTime(val, date) {
+        this.timeModule = true;
+        this.formatData.dateKey = val.keyName;
+        this.formatData.dateType = val.picker;
+        this.formatData.dateVal = date;
+      },
+      // 确认时间
+      onConTime(val) {
+        this.onCancel();
+        if (val !== 'close') {
+          this.form[val.dateKey] = val.dateVal;
+          this.formatData[val.dateKey] = val.dateVal;
+        }
+      },
+      // 部门
       getDepartInfo(val) {
-        console.log(this.form)
+        this.onCancel();
+        let config = this.searchConfig;
+        if (val !== 'close') {
+          this.form[config.keyName].id = val.id;
+          this.form[config.keyName].name = val.name;
+          this.formatData[config.keyName] = val.name;
+        }
+      },
+      onCancel() {
+        this.timeModule = false;
+        this.searchDepartModule = false;
       },
       resetting(type) {
         this.approvalList = adminApprovalsData[type];

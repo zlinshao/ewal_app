@@ -110,11 +110,7 @@
         this.department.name = item.name;
       },
       sureDepart() {
-        if (this.department.id) {
-          this.$emit('close', this.department);
-        } else {
-          this.searchModule = false;
-        }
+        this.$emit('close', this.department);
       },
       close_() {
         this.department.id = '';

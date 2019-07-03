@@ -126,6 +126,11 @@
   background: linear-gradient(137deg, rgba(68, 138, 255, 1) 0%, rgba(69, 112, 254, 1) 100%);
 }
 
+.zl-button.close {
+  color: #448aff;
+  background: transparent;
+}
+
 //input 验证按钮
 .zl-confirmation {
   @include flex('items-center');
