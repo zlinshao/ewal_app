@@ -6916,6 +6916,29 @@ defineContinueCollect = {
 };
 
 // 行政审批
-adminPersonnelDemand = {
-
+adminApprovalsData = {
+  // 人员需求
+  personnel_demand: [],
+  // 个人调岗/异动
+  personal_change: [],
+  // 整组调岗/异动
+  group_change: [],
+  // 转正
+  positive: [],
+  // 离职
+  dimission: [],
+  // 文职晋升
+  civilian_promotion: [],
+  // 薪资调整
+  salary: [],
+  // 公告
+  announcement: [],
+  // 增加办公室/宿舍
+  add_office_dormitory: [],
+  // 减少办公室/宿舍
+  sub_office_dormitory: [],
+  // 住宿
+  live_dormitory: [],
+  // 离宿
+  leave_dormitory: [],
 };
