@@ -4,7 +4,7 @@
     <van-actionsheet v-model="action_sheet_visible">
       <div class="action-sheet-container">
         <div class="main-container ">
-          <div @click="paper_dialog_visible = true" class="banner-top">
+          <div class="banner-top">
             <div class="exam-banner">
               <div class="exam-banner-top">
                 <div class="icon-tip"></div>
