@@ -6918,7 +6918,20 @@ defineContinueCollect = {
 // 行政审批
 adminApprovalsData = {
   // 人员需求
-  personnel_demand: [],
+  personnel_demand: [
+    {
+      label: '申请部门',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'department_id',
+      keyType: {},
+      status: 'objName',
+      type: 'text',
+      picker: 'searchDepart',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+  ],
   // 个人调岗/异动
   personal_change: [],
   // 整组调岗/异动
