@@ -146,7 +146,8 @@
                     <div @click="answer(item)" v-if="item.status==1 && (item.enroll[0].status==0||item.enroll[0].status==1)" class="item-bottom-right">
                       进入考试>
                     </div>
-                    <div class="item-exam-score" v-if="item.enroll[0].score"><span>{{item.enroll[0].score}}</span><span>分</span></div>
+<!--                    <div class="item-exam-score" v-if="parseInt(item.enroll[0].score)"><span>{{item.enroll[0].score}}</span><span>分</span></div>-->
+                    <div class="item-exam-score" v-if="item.status==2 && item.enroll[0].status==2"><span>{{item.enroll[0].score}}</span><span>分</span></div>
                   </div>
                   <div v-if="item.missExam" class="miss-exam"></div>
                 </div>
@@ -373,7 +374,7 @@
               //
             } else if (o.status == 2) {
               let isExam = o.enroll && o.enroll[0].status==2;
-              if (isExam == 0) {
+              if (!isExam) {
                 o.missExam = true;
                 //
               }
