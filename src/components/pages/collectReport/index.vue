@@ -48,6 +48,9 @@
                         :label="show.label"
                         :placeholder="show.placeholder">
                       </zl-input>
+                      <div class="prompts" :class="[show.prompts.length>16?'noPaddingLeft':'']" v-if="show.prompts">
+                        {{show.prompts}}
+                      </div>
                     </div>
                   </div>
                 </div>
