@@ -119,20 +119,24 @@
             </van-steps>
           </div>
           <!--推荐房源-->
-          <!--<div class="more-house">
+          <div class="more-house">
             <h3>推荐房源</h3>
-            <div v-for="(item,index) in detail.recommend_data" class="flex" :key="index">
+            <div v-if="detail.recommend_data.length>0" @click="goRecommendHouseDetail(item)"
+                 v-for="(item,index) in detail.recommend_data" class="flex recommend-container" :key="index">
               <img v-if="item.cover" alt="">
               <img v-else src="./detail.png" alt="">
-              <div>
-                <div class="flex">
-                  <h4>{{item.name}}</h4>
-                  <a class="price">{{item.price}}元/月</a>
+              <div class="recommend-container__inner">
+                <div class="flex ">
+                  <h4 class="recommend-name">{{item.name}}</h4>
                 </div>
-                <span>{{item.area}}㎡ {{item.house_type}}</span>
+                <div class="flex recommend-second-line">
+                  <span>{{item.area}}㎡ {{item.house_type}}</span>
+                  <div class="price">{{item.price}}元/月</div>
+                </div>
               </div>
             </div>
-          </div>-->
+            <a v-if="detail.recommend_data.length==0" class="clinch-btn">暂无推荐房源...</a>
+          </div>
           <div class="footer">
             <div @click="handleGoContract">
               <a></a>
@@ -193,13 +197,27 @@
       }
 
     },
-    watch: {},
+    watch: {
+      $route: {
+        handler: function (val, oldVal) {
+          if (val.path == '/houseDetail') {
+            this.handleGetHouseDetail();
+          }
+        },
+        deep: true
+      }
+    },
     computed: {
       personal() {
         return this.$store.state.app.personalDetail
       }
     },
     methods: {
+      //推荐房源点击跳转房屋详情
+      goRecommendHouseDetail(item) {
+        this.routerLink('/houseDetail', {id: item.house_id});
+      },
+
       handleInitialMap(position = [], name = '') {
         let that = this;
         this.map = new AMap.Map('map-container', {
@@ -470,16 +488,6 @@
               font-family: 'dingzitiblod';
             }
 
-            a.clinch-btn {
-              display: inline-block;
-              padding: 3px 8px;
-              background-color: #ECF5EC;
-              color: #51A554;
-              font-family: 'dingzitiblod';
-              font-size: 14px;
-              margin: .2rem 0;
-              border-radius: 3px;
-            }
 
             div.house-clinch {
               position: relative;
@@ -501,6 +509,17 @@
             }
           }
 
+          a.clinch-btn {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: #ECF5EC;
+            color: #51A554;
+            font-family: 'dingzitiblod';
+            font-size: 14px;
+            margin: .2rem 0;
+            border-radius: 3px;
+          }
+
           .more-house {
             padding: .3rem 0;
             border-bottom: 1px dashed #F2F2F2;
@@ -510,7 +529,7 @@
               margin-bottom: .2rem;
             }
 
-            > div {
+            .recommend-container {
               margin-bottom: .2rem;
 
               img {
@@ -519,21 +538,31 @@
                 border-radius: 3px;
               }
 
-              > div {
+              .recommend-container__inner {
                 margin-left: .2rem;
                 position: relative;
                 width: calc(100% - 75pt);
 
-                h4, a, span {
+                /*.recommend-name {
+                  font-size: .28rem;
+                }*/
+
+
+                h4, span {
                   font-family: 'dingzitiblod';
                 }
 
-                a {
-                  position: absolute;
-                  right: 0;
-                  top: 0;
-                  color: #CF2E33;
+                .recommend-second-line {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  .price {
+                    color: #CF2E33;
+                    font-family: 'dingzitiblod';
+                  }
                 }
+
+
 
                 span {
                   display: inline-block;
