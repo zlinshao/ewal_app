@@ -146,7 +146,8 @@
                     <div @click="answer(item)" v-if="item.status==1 && (item.enroll[0].status==0||item.enroll[0].status==1)" class="item-bottom-right">
                       进入考试>
                     </div>
-                    <div class="item-exam-score" v-if="item.enroll[0].score"><span>{{item.enroll[0].score}}</span><span>分</span></div>
+<!--                    <div class="item-exam-score" v-if="parseInt(item.enroll[0].score)"><span>{{item.enroll[0].score}}</span><span>分</span></div>-->
+                    <div class="item-exam-score" v-if="item.enroll[0].status==2"><span>{{item.enroll[0].score}}</span><span>分</span></div>
                   </div>
                   <div v-if="item.missExam" class="miss-exam"></div>
                 </div>
@@ -170,14 +171,20 @@
     <van-tabbar v-model="active">
       <van-tabbar-item>
         <span>我的考试</span>
-        <img
+        <!--<img
           style="width: .6rem;height: .5rem"
           slot="icon"
           slot-scope="props"
           :src="props.active ? iconLeft.active : iconLeft.normal"
+        >-->
+        <img
+          style="width: .6rem;height: .5rem"
+          slot="icon"
+          slot-scope="props"
+          :src="iconLeft.normal"
         >
       </van-tabbar-item>
-      <van-tabbar-item>
+      <!--<van-tabbar-item>
         <span>在线报名</span>
         <img
           style="width: .6rem;height: .5rem"
@@ -185,7 +192,7 @@
           slot-scope="props"
           :src="props.active ? iconRight.active : iconRight.normal"
         >
-      </van-tabbar-item>
+      </van-tabbar-item>-->
     </van-tabbar>
     <test-paper-exam :exam-data="exam_data" :visible.sync="test_paper_visible"></test-paper-exam>
 
@@ -270,6 +277,13 @@
 
       }
     },
+
+    computed: {
+      personal() {
+        return this.$store.state.app.personal;
+      }
+    },
+
     watch: {
       'params.status': {
         handler(val, oldVal) {
@@ -295,7 +309,7 @@
         }).then(res => {
           if (res.code.endsWith('0')) {
             let params = {
-              user_id: 289,
+              user_id: this.personal.staff_id,
               type: res.data.type,//试卷类型 1.入职 2培训 3问卷 3在此页面暂且用不到 分离出单独的问卷模块 在问卷页面
             };
             this.$httpTj.generateExam(res.data.id, params).then(res => {
@@ -360,7 +374,7 @@
               //
             } else if (o.status == 2) {
               let isExam = o.enroll && o.enroll[0].status==2;
-              if (isExam == 0) {
+              if (!isExam) {
                 o.missExam = true;
                 //
               }
@@ -369,6 +383,7 @@
 
           //计算我的考试数据及最新考试
           if (isFirstInvoke) {
+            this.latestExamList = [];
             this.my_exam_count= [0, 0, 0, 0];
             _.forEach(this.examList, (o) => {
               if (o.status != 2) {

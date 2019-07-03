@@ -9,7 +9,8 @@
           </div>
         </div>
         <div @click="handleViewExam" class="inner-bottom">
-          查看试卷
+          <!--查看试卷-->
+          感谢参与
         </div>
       </div>
     </div>
@@ -53,7 +54,7 @@
     },
     methods: {
       handleViewExam() {
-        this.$emit('view');
+        //this.$emit('view');
       },
       handleClose() {
         this.paper_dialog_visible = false;

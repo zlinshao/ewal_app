@@ -13,6 +13,7 @@ import PunchClock from '@/components/pages/punchClock/index.vue'//待办
 import DeliveryReceipt from '@/components/pages/toBeDoneList/deliveryReceipt/index.vue'//交接单
 import Approvals from '@/components/pages/approvals/index.vue'//业务审批
 import AdminApprovals from '@/components/pages/adminApprovals/index.vue'//行政审批
+import StartApproval from '@/components/pages/adminApprovals/startApproval.vue'//发起审批
 import ApprovalDetail from '@/components/pages/approvals/detail.vue'//审核
 import CreatedTask from '@/components/pages/createdTask/index.vue'//新建 带看任务
 import CreatedVillage from '@/components/pages/createdVillage/index.vue'//新建小区
@@ -118,6 +119,13 @@ export default new Router({
       meta: {title: '行政审批', index: 5},
     },
     {
+      path: '/startApproval',
+      name: '发起审批',
+      hidden: 'index.vue',
+      component: StartApproval,
+      meta: {title: '发起审批', index: 6},
+    },
+    {
       path: '/approvalDetail',
       name: '审核',
       component: ApprovalDetail,
@@ -190,22 +198,22 @@ export default new Router({
       meta: {title: '合同详情', index: 13}
     },
     {/*问卷调查*/
-      path:'/questionnaire',
-      name:'questionnaire',
-      component:Questionnaire,
-      meta:{title:'问卷调查',index:1},
+      path: '/questionnaire',
+      name: 'questionnaire',
+      component: Questionnaire,
+      meta: {title: '问卷调查', index: 1},
     },
     {
-      path:'/createQuestionnaire',
-      name:'createQuestionnaire',
-      component:CreateQuestionnaire,
-      meta:{title:'创建问卷',index:2}
+      path: '/createQuestionnaire',
+      name: 'createQuestionnaire',
+      component: CreateQuestionnaire,
+      meta: {title: '创建问卷', index: 2}
     },
     {/*考试*/
-      path:'/exam',
-      component:Exam,
-      name:'exam',
-      meta: {title:'考试',index:4},
+      path: '/exam',
+      component: Exam,
+      name: 'exam',
+      meta: {title: '考试', index: 4},
     },
     {
       path: '/dataBillBoard',
