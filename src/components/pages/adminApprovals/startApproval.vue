@@ -52,6 +52,8 @@
     <search-staff :module="searchStaffModule" @close="getStaffInfo"></search-staff>
     <!--部门搜索-->
     <search-depart :module="searchDepartModule" @close="getDepartInfo"></search-depart>
+    <!--岗位搜索-->
+    <search-position :module="searchPositionModule" @close="getDepartInfo" :config="searchConfig"></search-position>
     <!--日期-->
     <choose-time :module="timeModule" :formatData="formatData" @close="onConTime"></choose-time>
   </div>
@@ -60,10 +62,11 @@
 <script>
   import SearchStaff from '../../common/searchStaff.vue';
   import SearchDepart from '../../common/searchDepart.vue';
+  import SearchPosition from '../../common/searchPosition.vue';
 
   export default {
     name: "start-approval",
-    components: {SearchStaff, SearchDepart},
+    components: {SearchStaff, SearchDepart, SearchPosition},
     data() {
       return {
         approvalStatus: '',
@@ -72,6 +75,7 @@
         pickerModule: false,
         searchStaffModule: false,
         searchDepartModule: false,
+        searchPositionModule: false,
         searchConfig: {},
         approvalList: [],
         album: {},
@@ -96,12 +100,12 @@
     methods: {
       // 清除日期
       closeInput(item) {
-        this.form[item.keyName] = item.keyType;
         if (item.status === 'objName') {
-          this.formatData[item.keyName] = '';
+          this.form[item.keyName] = {};
         } else {
-          this.formatData[item.keyName] = item.keyType;
+          this.form[item.keyName] = '';
         }
+        this.formatData[item.keyName] = '';
       },
       // 下拉框筛选
       choosePicker(val, value) {
@@ -119,6 +123,16 @@
           case 'searchStaff':
             this.searchConfig = val;
             this.searchStaffModule = true;
+            break;
+          case 'searchPosition':
+            this.searchConfig = val;
+            if (this.form.now_org.id) {
+              this.searchConfig.org_id = this.form.now_org.id;
+              this.searchConfig.org_name = this.form.now_org.name;
+              this.searchPositionModule = true;
+            } else {
+              this.$prompt('请选择部门！');
+            }
             break;
           case 'searchDepart':
             this.searchConfig = val;
@@ -149,7 +163,7 @@
           console.log(val);
         }
       },
-      // 部门
+      // 部门 / 岗位
       getDepartInfo(val) {
         this.onCancel();
         let config = this.searchConfig;
@@ -163,12 +177,13 @@
         this.timeModule = false;
         this.searchStaffModule = false;
         this.searchDepartModule = false;
+        this.searchPositionModule = false;
       },
       getImgData(val) {
         this.form[val[0]] = val[1];
       },
       resetting(type) {
-        this.approvalList = adminApprovalsData[type];
+        this.approvalList = this.jsonClone(adminApprovalsData[type]);
         let all = this.initFormData(this.approvalList, this.showData, 'noStaff');
         this.form = all.form;
         this.formatData = all.formatData;

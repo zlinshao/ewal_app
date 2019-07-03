@@ -644,17 +644,18 @@ defineNewTask = {
     // },
   ],
   // 租房待办
-  RentTakeLook: [{
-    label: '带看时间',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'take_time',
-    keyType: '',
-    type: 'text',
-    picker: 'date',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    slot: '',
-  },
+  RentTakeLook: [
+    {
+      label: '带看时间',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'take_time',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
     {
       label: '带看地址',
       placeholder: '必填 请选择',
@@ -5733,7 +5734,7 @@ defineCheckoutReport = {
     {
       label: '证件号',
       placeholder: '必填 请输入',
-      keyName: 'card_id',
+      keyName: 'customer_idcard',
       keyType: '',
       type: 'text',
       slot: '',
@@ -5741,7 +5742,7 @@ defineCheckoutReport = {
     {
       label: '联系电话',
       placeholder: '必填 请输入',
-      keyName: 'contact_phone',
+      keyName: 'customer_phone',
       keyType: '',
       type: 'number',
       slot: '',
@@ -7072,10 +7073,16 @@ adminApprovalsData = {
     },
     {
       label: '现岗位',
-      placeholder: '必填 请输入',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
       keyName: 'now_position',
-      keyType: '',
+      keyType: {},
+      status: 'objName',
       type: 'text',
+      button: '清除',
+      close: 'close',
+      picker: 'searchPosition',
+      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
     {
@@ -7104,7 +7111,7 @@ adminApprovalsData = {
     },
   ],
   // 整组调岗/异动
-  group_change:  [
+  group_change: [
     {
       label: '组员',
       placeholder: '必填 请选择',
@@ -7257,7 +7264,83 @@ adminApprovalsData = {
     },
   ],
   // 文职晋升
-  civilian_promotion: [],
+  civilian_promotion: [
+    {
+      label: '入职日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'enroll',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      button: '清除',
+      close: 'close',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '现部门',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'now_org',
+      keyType: {},
+      status: 'objName',
+      type: 'text',
+      button: '清除',
+      close: 'close',
+      picker: 'searchDepart',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '现岗位',
+      placeholder: '必填 请输入',
+      keyName: 'now_position',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '原因',
+      placeholder: '必填 请输入',
+      keyName: 'change_reason',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+    {
+      label: '交接单',
+      placeholder: '必填 请输入',
+      keyName: 'change_receipt',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '原薪资',
+      placeholder: '必填 请输入',
+      keyName: 'old_salary',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '现薪资',
+      placeholder: '必填 请输入',
+      keyName: 'now_salary',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '上传',
+      picker: 'upload',
+      photos: [{
+        label: '附件',
+        keyName: 'attachment',
+      }]
+    },
+  ],
   // 薪资调整
   salary: [
     {
@@ -7326,7 +7409,54 @@ adminApprovalsData = {
   // 减少办公室/宿舍
   sub_office_dormitory: [],
   // 住宿
-  live_dormitory: [],
+  live_dormitory: [
+    {
+      label: '房屋地址',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'house_id',
+      keyType: '',
+      type: 'text',
+      picker: 'searchHouse',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '人员',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'guest_ids',
+      keyType: [],
+      status: 'objName',
+      type: 'text',
+      button: '清除',
+      close: 'close',
+      picker: 'searchStaff',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '入住时间',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'live_time',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      button: '清除',
+      close: 'close',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '备注',
+      placeholder: '必填 请输入',
+      keyName: 'remarks',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+  ],
   // 离宿
   leave_dormitory: [],
 };

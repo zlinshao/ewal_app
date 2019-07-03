@@ -537,6 +537,8 @@
           case 'customer_name':
           case 'card_id':
           case 'contact_phone':
+          case 'customer_idcard':
+          case 'customer_phone':
             if (slither) {
               this.certified('change', slither, index);
             } else {
@@ -854,8 +856,8 @@
             } else {
               params = {
                 customer_name: this.form.customer_name,
-                idcard: this.form.card_id,
-                mobile: this.form.contact_phone,
+                idcard: this.form.card_id || this.form.customer_idcard,
+                mobile: this.form.contact_phone || this.form.customer_phone,
               };
             }
             this.$httpZll.customerIdentity(params).then(res => {
@@ -1246,12 +1248,6 @@
             case 'house_id':
               this.form.house_address = res.house_address || '';
               this.formatData.house_id = res.house_address || '';
-              break;
-            case 'contact_phone':
-              this.form[item] = res.customer_phone || '';
-              break;
-            case 'card_id':
-              this.form[item] = res.customer_idcard || '';
               break;
             case 'collect_or_rent':
               this.formatData[item] = dicties[item][res[item]] || '0';
