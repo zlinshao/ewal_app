@@ -177,7 +177,7 @@
         this.$httpZll.getContractList(this.params).then(res => {
           this.fullLoading = true;
           if (res) {
-            this.searchList = res.data;
+            this.searchList = res.data.data;
           }
         })
       },
@@ -246,7 +246,7 @@
         if (item) {
           if (item.name === this.city_name) return;
           this.city_name = item.name;
-          this.params.city_name = item.name + '市';
+          this.params.city_name = item.name;
           this.close_();
         }
       },
