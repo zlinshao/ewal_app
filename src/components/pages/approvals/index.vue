@@ -671,13 +671,15 @@
       // 列表
       getApproval(url, params, tab) {
         // 搜索的参数
+        let twoLevel = this.twoLevel['tab' + tab];
         params = Object.assign({}, params, this.newHighParams);
         this.ids = [];
+        this.approvalList['list' + tab]['data' + twoLevel] = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
           if (res) {
-            let twoLevel = this.twoLevel['tab' + tab];
+
             this.total['total' + tab] = res.total;
             if (!twoLevel) {
               this.paging['paging' + tab] = res.total;
