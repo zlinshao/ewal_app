@@ -29,7 +29,7 @@
                 <span v-if="item.house_name && item.house_name.name">{{item.house_name.name}}</span>
                 <span v-else>******</span>
               </h1>
-              <h2><span>生效中</span></h2>
+              <h2><span class="status1">生效中</span></h2>
             </div>
             <div class="main">
               <div>
