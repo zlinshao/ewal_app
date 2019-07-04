@@ -184,14 +184,24 @@
               overflow: hidden;
               -ms-text-overflow: ellipsis;
               text-overflow: ellipsis; }
-          #contractSearch .searchHouse ul li .contract_content .top h2, #searchHouse .searchHouse ul li .contract_content .top h2 {
+          #contractSearch .searchHouse ul li .contract_content .top h2 span, #searchHouse .searchHouse ul li .contract_content .top h2 span {
             white-space: nowrap;
             padding: .1rem .2rem;
-            color: #7BB242;
             -webkit-border-radius: 0.1rem 0 0 0.1rem;
             -moz-border-radius: 0.1rem 0 0 0.1rem;
-            border-radius: 0.1rem 0 0 0.1rem;
-            background-color: rgba(123, 178, 66, 0.2); }
+            border-radius: 0.1rem 0 0 0.1rem; }
+          #contractSearch .searchHouse ul li .contract_content .top h2 .status1, #searchHouse .searchHouse ul li .contract_content .top h2 .status1 {
+            color: #84B74F;
+            background-color: #E5F0D9; }
+          #contractSearch .searchHouse ul li .contract_content .top h2 .status2, #searchHouse .searchHouse ul li .contract_content .top h2 .status2 {
+            color: #FEA434;
+            background-color: #FFE9CE; }
+          #contractSearch .searchHouse ul li .contract_content .top h2 .status3, #searchHouse .searchHouse ul li .contract_content .top h2 .status3 {
+            color: #A7A7A7;
+            background-color: #E6E6E6; }
+          #contractSearch .searchHouse ul li .contract_content .top h2 .status4, #searchHouse .searchHouse ul li .contract_content .top h2 .status4 {
+            color: #F66E44;
+            background-color: #FDDCD2; }
         #contractSearch .searchHouse ul li .contract_content .main, #searchHouse .searchHouse ul li .contract_content .main {
           width: 100%;
           margin-top: .4rem;

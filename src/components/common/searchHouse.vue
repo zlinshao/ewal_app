@@ -35,7 +35,7 @@
                     <span v-if="item.house_name && item.house_name.name">{{item.house_name.name}}</span>
                     <span v-else>******</span>
                   </h1>
-                  <h2><span>生效中</span></h2>
+                  <h2><span class="status1">生效中</span></h2>
                 </div>
                 <div class="main">
                   <div>
@@ -57,9 +57,7 @@
                     <h2 v-if="item.sign_org && item.sign_org.name">
                       <span>{{item.sign_org.name}}</span>
                     </h2>
-                    <h2 v-else>
-                      ******
-                    </h2>
+                    <h2 v-else>******</h2>
                   </div>
                 </div>
               </div>
@@ -144,7 +142,7 @@
         this.$httpZll.getContractList(this.params).then(res => {
           this.fullLoading = true;
           if (res) {
-            this.searchList = res.data;
+            this.searchList = res.data.data;
           }
         })
       },
@@ -170,7 +168,7 @@
         if (item) {
           if (item.name === this.city_name) return;
           this.city_name = item.name;
-          this.params.city_name = item.name + '市';
+          this.params.city_name = item.name;
           this.close_();
         }
       },
