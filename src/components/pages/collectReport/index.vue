@@ -1264,6 +1264,9 @@
                 this.certified();
               }
               break;
+            case'is_checkout_deposit':
+
+              break;
             case 'check_type':
               if (!change) {
                 this.form[item] = res[item] || {id: '329', name: '正常退租'};
