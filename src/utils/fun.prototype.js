@@ -750,7 +750,7 @@ export default {
               this.setContentDetail(val, content);
               resolve(true);
             } else {
-              this.getBulletinDetailFun(res, val).then(item => {
+              this.getBulletinDetailFun(res.data, val).then(item => {
                 content = item;
                 let arr = ['property_fee', 'property_phone'];
                 if (content.add_data) {
@@ -783,7 +783,7 @@ export default {
     };
 
     //续收、续租：需要拿content==>contract_info==>id去请求againTaskDetail任务详情接口作为他的详情数据
-    Vue.prototype.getBulletinDetailFun = function (res, val, content) {
+    Vue.prototype.getBulletinDetailFun = function (res, val) {
       return new Promise((resolve, reject) => {
         let arr = ['bulletin_collect_continued', 'bulletin_rent_continued'];
         let isFlag = arr.includes(val.bulletin_type);
