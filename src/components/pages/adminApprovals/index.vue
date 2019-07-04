@@ -36,8 +36,8 @@
         <scroll-load @getLoadMore="scrollLoad" :disabled="fullLoading['load'+tabs.tab]" v-if="tabs.tab">
           <li v-for="item in approvalList['list'+tabs.tab]['data'+twoLevel['tab'+tabs.tab]]" class="admin-list">
             <div class="contentList adminList">
-              <i class="adminCheck" :class="[checkIds.includes(item.id) ? 'hover' : '']"
-                 @click="adminChecked(item)"></i>
+              <!--<i class="adminCheck" :class="[checkIds.includes(item.id) ? 'hover' : '']"-->
+              <!--@click="adminChecked(item)"></i>-->
               <div class="adminMain">
                 <ul>
                   <li>
@@ -45,21 +45,21 @@
                     <img src="../../../assets/image/common/noHead.png" alt="" v-else>
                     <div class="adminInfo" @click="detailModule = true">
                       <div class="adminTitle">
-                        <h1>王啸啸提交的调休审批</h1>
-                        <span>2019-04-11 12:48</span>
+                        <h1>{{item.title}}</h1>
+                        <span style="white-space: nowrap">2019-04-11 12:48</span>
                       </div>
-                      <h2>
-                        <span>应休开始时间</span>
-                        <span>2019-04-11 09:00</span>
-                      </h2>
-                      <h2>
-                        <span>应休结束时间</span>
-                        <span>2019-04-11 09:00</span>
-                      </h2>
-                      <h2>
-                        <span>审批紧急程度</span>
-                        <span></span>
-                      </h2>
+                      <!--<h2>-->
+                      <!--<span>应休开始时间</span>-->
+                      <!--<span>2019-04-11 09:00</span>-->
+                      <!--</h2>-->
+                      <!--<h2>-->
+                      <!--<span>应休结束时间</span>-->
+                      <!--<span>2019-04-11 09:00</span>-->
+                      <!--</h2>-->
+                      <!--<h2>-->
+                      <!--<span>审批紧急程度</span>-->
+                      <!--<span></span>-->
+                      <!--</h2>-->
                       <div class="approvalStatus">
                         <h1>王佳怡审核中</h1>
                         <span><i></i></span>
@@ -89,7 +89,8 @@
               <span :class="['title' + list]"></span>
             </h1>
             <div class="approvalList">
-              <div v-for="item in entranceList[list]" @click="routerLink('startApproval',{type:item.type})">
+              <div v-for="item in entranceList[list]"
+                   @click="routerLink('startApproval',{type: item.type,key: item.key})">
                 <h2>
                   <img :src="item.icon" alt="">
                 </h2>
@@ -124,31 +125,37 @@
           '1': [
             {
               type: 'personnel_demand',
+              key: 'HR-ApplyForPersonnelDemand',
               icon: require('../../../assets/image/adminApprovals/renyuanxuqiu.png'),
               title: '人员需求',
             },
             {
               type: 'personal_change',
+              key: 'HR-ApplyForPersonalChange',
               icon: require('../../../assets/image/adminApprovals/gerenyidong.png'),
               title: '个人调岗/异动',
             },
             {
               type: 'group_change',
+              key: 'HR-ApplyForGroupChange',
               icon: require('../../../assets/image/adminApprovals/zhengzuyidong.png'),
               title: '整组调岗/异动',
             },
             {
               type: 'positive',
+              key: 'HR-ApplyForPositive',
               icon: require('../../../assets/image/adminApprovals/zhuanzheng.png'),
               title: '转正',
             },
             {
               type: 'dimission',
+              key: 'HR-ApplyForDimission',
               icon: require('../../../assets/image/adminApprovals/lizhi.png'),
               title: '离职',
             },
             {
               type: 'civilian_promotion',
+              key: 'HR-ApplyForCivilianPromotion',
               icon: require('../../../assets/image/adminApprovals/jinsheng.png'),
               title: '文职晋升',
             },
@@ -156,6 +163,7 @@
           '2': [
             {
               type: 'salary',
+              key: 'HR-ApplyForSalary',
               icon: require('../../../assets/image/adminApprovals/xinzitiaozheng.png'),
               title: '薪资调整',
             }
@@ -163,6 +171,7 @@
           '3': [
             {
               type: 'announcement',
+              key: 'HR-ApplyForAnnouncement',
               icon: require('../../../assets/image/adminApprovals/gonggaoshenpi.png'),
               title: '公告',
             }
@@ -170,21 +179,25 @@
           '4': [
             {
               type: 'add_office_dormitory',
+              key: 'HR-ApplyForAddOfficeDormitory',
               icon: require('../../../assets/image/adminApprovals/zjbgsss.png'),
               title: '增加办公室/宿舍',
             },
             {
               type: 'sub_office_dormitory',
+              key: 'HR-ApplyForSubOfficeDormitory',
               icon: require('../../../assets/image/adminApprovals/jsbgsss.png'),
               title: '减少办公室/宿舍',
             },
             {
               type: 'live_dormitory',
+              key: 'HR-ApplyForLiveDormitory',
               icon: require('../../../assets/image/adminApprovals/zhusu.png'),
               title: '住宿',
             },
             {
               type: 'leave_dormitory',
+              key: 'HR-ApplyForLeaveDormitory',
               icon: require('../../../assets/image/adminApprovals/lisu.png'),
               title: '离宿',
             }

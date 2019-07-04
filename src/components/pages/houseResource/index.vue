@@ -517,14 +517,13 @@
         }
         this.fullLoading = true;
         let newParams = this.parseParams(this.params);
-        console.log(newParams)
         await this.$httpZll.get(this.server + 'v1.0/market/house', newParams, '加载中...').then(res => {
           this.fullLoading = false;
-          if (res.code === 200) {
-            _.forEach(res.data.data,(o)=> {
+          if (res.data.code === 200) {
+            _.forEach(res.data.data.data,(o)=> {
               this.house_list.push(o);
-            })
-            this.paging = res.data.all_count;
+            });
+            this.paging = res.data.data.all_count;
           } else {
             this.house_list = [];
           }

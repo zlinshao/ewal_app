@@ -4268,7 +4268,6 @@ defineChangeReport = {
       label: '签约时长',
       keyName: 'month',
       placeholder: '必填 请输入',
-      //prompts: '不包含空置期',
       moreString: [{
         placeholder: '必填 月数',
         keyName: 'month',
@@ -6440,20 +6439,19 @@ defineContinueCollect = {
       keyName: 'month',
       placeholder: '必填 请输入',
       prompts: '不包含空置期',
-      moreString: [{
-        placeholder: '必填 月数',
-        keyName: 'month',
-        keyType: '',
-        type: 'number',
-        status: '',
-        slot: '',
-      },
+      moreString: [
+        {
+          placeholder: '必填 月数',
+          keyName: 'month',
+          keyType: '',
+          type: 'number',
+          slot: '',
+        },
         {
           placeholder: '选填 天数',
           keyName: 'day',
           keyType: '',
           type: 'number',
-          status: '',
           slot: '',
         },
       ],
@@ -7034,6 +7032,60 @@ adminApprovalsData = {
       slot: '',
     },
     {
+      label: '工作经验',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'experience',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '年龄',
+      keyName: 'year',
+      keyType: {},
+      moreObject: [
+        {
+          placeholder: '必填 最小',
+          keyName: 'min',
+          keyType: '',
+          type: 'number',
+          slot: '',
+        },
+        {
+          placeholder: '选填 最大',
+          keyName: 'max',
+          keyType: '',
+          type: 'number',
+          slot: '',
+        },
+      ],
+    },
+    {
+      label: '薪资要求',
+      keyName: 'salary',
+      keyType: {},
+      moreObject: [
+        {
+          placeholder: '必填 最低',
+          keyName: 'min',
+          keyType: '',
+          type: 'number',
+          slot: '',
+        },
+        {
+          placeholder: '选填 最高',
+          keyName: 'max',
+          keyType: '',
+          type: 'number',
+          slot: '',
+        },
+      ],
+    },
+    {
       label: '申请原因',
       placeholder: '必填 请输入',
       keyName: 'reason',
@@ -7059,11 +7111,24 @@ adminApprovalsData = {
     },
     {
       label: '需求人数',
-      placeholder: '必填 请输入',
       keyName: 'number',
-      keyType: '',
-      type: 'number',
-      slot: '',
+      keyType: {},
+      moreObject: [
+        {
+          placeholder: '必填 最少',
+          keyName: 'min',
+          keyType: '',
+          type: 'number',
+          slot: '',
+        },
+        {
+          placeholder: '选填 最多',
+          keyName: 'max',
+          keyType: '',
+          type: 'number',
+          slot: '',
+        },
+      ],
     },
     {
       label: '期望到岗日期',
@@ -7440,7 +7505,57 @@ adminApprovalsData = {
     },
   ],
   // 公告
-  announcement: [],
+  announcement: [
+    {
+      label: '公告类型',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'type_id',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      picker: 'picker',
+      slot: '',
+    },
+    {
+      label: '公告标题',
+      placeholder: '必填 请输入',
+      keyName: 'title',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      button: '清除',
+      close: 'close',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '公告内容',
+      placeholder: '必填 请输入',
+      keyName: 'content',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+    {
+      label: '上传',
+      picker: 'upload',
+      photos: [{
+        label: '附件',
+        keyName: 'file_info',
+      }]
+    },
+  ],
   // 增加办公室/宿舍
   add_office_dormitory: [],
   // 减少办公室/宿舍

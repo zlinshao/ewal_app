@@ -47,6 +47,11 @@
                         :type="show.type"
                         :label="show.label"
                         :placeholder="show.placeholder">
+                        <div class="zl-confirmation" :class="[show.icon]" v-if="show.button"
+                             @click="confirmation(show.icon)">
+                          <i :class="show.icon" v-if="show.icon"></i>
+                          {{show.button}}
+                        </div>
                       </zl-input>
                       <div class="prompts" :class="[show.prompts.length>16?'noPaddingLeft':'']" v-if="show.prompts">
                         {{show.prompts}}
@@ -167,7 +172,6 @@
                         v-model="form[string.keyName]"
                         :type="string.type"
                         :disabled="item.disabled"
-                        :label="string.label"
                         @input="listenInput(string.keyName)"
                         :placeholder="string.placeholder">
                       </zl-input>

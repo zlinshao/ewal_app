@@ -164,17 +164,18 @@
         }
         let house_id = this.$route.query.id;
         await this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}`, {}, '获取中...').then(res => {
-          if (res.code === 200) {
-            if (res.data.handover_data) {
-              if (res.data.handover_data.house_config) {
+          if (res.data.code === 200) {
+            let data = res.data.data;
+            if (data.handover_data) {
+              if (data.handover_data.house_config) {
                 for (let key in this.property_list) {
-                  this.property_list[key].val = res.data.handover_data.house_config[key] ? res.data.handover_data.house_config[key] : 0;
+                  this.property_list[key].val = data.handover_data.house_config[key] ? data.handover_data.house_config[key] : 0;
                 }
               }
               for (let item of this.extra_property) {
-                if (res.data.handover_data[item.key]) {
+                if (data.handover_data[item.key]) {
                   for (let tmp of item.value) {
-                    tmp.val = res.data.handover_data[item.key][tmp.key] ? res.data.handover_data[item.key][tmp.key] : 0;
+                    tmp.val = data.handover_data[item.key][tmp.key] ? data.handover_data[item.key][tmp.key] : 0;
                   }
                 }
               }
