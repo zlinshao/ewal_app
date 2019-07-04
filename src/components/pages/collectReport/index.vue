@@ -1265,7 +1265,9 @@
               }
               break;
             case'is_checkout_deposit':
-
+            case'is_supplement_money':
+              this.formatData[item] = dicties[item][res[item]] || '0';
+              this.inputStatus(item, this.form);
               break;
             case 'check_type':
               if (!change) {
@@ -1530,6 +1532,16 @@
           }
           if (picker.picker === 'date') {
             date.push(picker.keyName);
+          }
+          if (picker.showList) {
+            for (let list of picker.showList) {
+              if (list.status === 'objInt' || list.status === 'arr') {
+                objInt.push(list.keyName);
+              }
+              if (list.picker === 'date') {
+                date.push(list.keyName);
+              }
+            }
           }
         }
         if (objInt.includes(item)) {
