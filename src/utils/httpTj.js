@@ -71,7 +71,7 @@ class httpTj extends httpService {
           resolve(res.data);
         } else {
           $httpPrompt(res.data.msg);
-          resolve(null);
+          resolve(false);
         }
       })
     })
@@ -83,6 +83,7 @@ class httpTj extends httpService {
         if (res.data.code.endsWith('0')) {
           resolve(res.data);
         } else {
+          resolve(false);
           $httpPrompt(res.data.msg);
         }
       })
@@ -93,12 +94,12 @@ class httpTj extends httpService {
   static generateExam(id,params) {
     return new Promise((resolve,reject)=> {
       this.get(`${url}train/exam/${id}/generate`,params,).then(res=> {
-        /*if(res.data.code.endsWith('0')) {
+        if(res.data.code.endsWith('0')) {
           resolve(res.data);
         }else {
+          resolve(false);
           $httpPrompt(res.data.msg);
-        }*/
-        resolve(res.data);
+        }
       });
     });
   };

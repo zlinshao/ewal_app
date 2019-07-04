@@ -307,30 +307,23 @@
           this.exam_data = res.data;
           return res;
         }).then(res => {
-          if (res.code.endsWith('0')) {
+          if (res) {
             let params = {
               user_id: this.personal.staff_id,
               type: res.data.type,//试卷类型 1.入职 2培训 3问卷 3在此页面暂且用不到 分离出单独的问卷模块 在问卷页面
             };
             this.$httpTj.generateExam(res.data.id, params).then(res => {
-              if (res.code.endsWith('0')) {
-                //debugger
+              if (res) {
                 this.test_paper_visible = true;
                 if(res.data && res.data.question_set) {
                   this.exam_data.exam_id = res.data.id;//考试id  传到TestPaperExam组件中 用来提交考试
                   this.exam_data.question_set = res.data.question_set;
                 }
-              } else {
-                this.myUtils.prompt(res.msg);
               }
             });
-          } else {
-            this.myUtils.prompt(res.msg);
           }
         });
-
       },
-
 
       scrollLoad(val) {
         if (!val) {

@@ -28,9 +28,14 @@ class httpHs extends httpService {
   // }
 
   //获取合同列表历史记录
-  static getContractList({house_id,contract_type,page,limit},msg) {
-    return new Promise((resolve,reject) => {
-      this.get(market + 'v1.0/market/contract/house-contract',{house_id,contract_type,page,limit},msg).then(res => {
+  static getContractList({house_id, contract_type, page, limit}, msg) {
+    return new Promise((resolve, reject) => {
+      this.get(market + 'v1.0/market/contract/house-contract', {
+        house_id,
+        contract_type,
+        page,
+        limit
+      }, msg).then(res => {
         if (Number(res.data.code) === 200) {
           resolve(res.data);
         } else {
@@ -41,12 +46,13 @@ class httpHs extends httpService {
   }
 
   //合同列表
-  static ContractList(params,msg) {
-    return new Promise((resolve,reject) => {
-      this.get(market + 'v1.0/market/contract',params,msg).then(res => {
+  static ContractList(params, msg) {
+    return new Promise((resolve, reject) => {
+      this.get(market + 'v1.0/market/contract', params, msg).then(res => {
         if (Number(res.data.code) === 200) {
           resolve(res.data);
         } else {
+          resolve(false);
           $httpPrompt(res.data.message);
         }
       })
@@ -54,30 +60,34 @@ class httpHs extends httpService {
   }
 
   //部门列表
-  static getOrganization({parent_id,search}, status) {
+  static getOrganization({parent_id, search}, status) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}organization/organization`, {
         parent_id,
         search
       }, status).then(res => {
-        resolve(res.data);
+        if (Number(res.data.code) === 20000) {
+          resolve(res.data);
+        } else {
+          $httpPrompt('暂无数据');
+        }
       });
     });
   }
 
   //合同详情
-  static getContractDetail({contract_type,contract_id},status) {
-    return new Promise((resolve,reject) => {
-      this.get(market + `v1.0/market/contract/${contract_type}/${contract_id}`,{},status).then(res => {
+  static getContractDetail({contract_type, contract_id}, status) {
+    return new Promise((resolve, reject) => {
+      this.get(market + `v1.0/market/contract/${contract_type}/${contract_id}`, {}, status).then(res => {
         resolve(res.data);
       })
     })
   }
 
   //空置房源
-  static getEmptyHouse(params,status) {
-    return new Promise((resolve,reject) => {
-      this.get(market + `v1.0/market/house/kong-days`,params,status).then(res => {
+  static getEmptyHouse(params, status) {
+    return new Promise((resolve, reject) => {
+      this.get(market + `v1.0/market/house/kong-days`, params, status).then(res => {
         resolve(res.data);
       })
     })
