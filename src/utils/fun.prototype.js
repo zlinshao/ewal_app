@@ -244,6 +244,11 @@ export default {
           for (let str of item.moreString) {
             form[str.keyName] = str.keyType;
           }
+        } else if (item.moreObject) {
+          form[item.keyName] = item.keyType;
+          for (let str of item.moreObject) {
+            form[item.keyName][str.keyName] = str.keyType;
+          }
         } else if (item.showList) {
           show[item.keyName] = false;
           form[item.keyName] = item.keyType;
@@ -670,9 +675,9 @@ export default {
     // 报备详情
     Vue.prototype.againDetailRequest = function (val, again, replace) {
       this.$httpZll.get(val.bm_detail_request_url, {}, 'prompt').then(res => {
-        if (res.success) {
+        if (res.data.success) {
           let data = {};
-          data.content = res.data.content;
+          data.content = res.data.data.content;
           data.task_id = val.task_id;
           data.house_id = val.house_id;
           data.contract_id = val.contract_id || '';
@@ -738,10 +743,10 @@ export default {
           return;
         }
         this.$httpZll.get(url, {}, 'prompt').then(res => {
-          if (res.success) {
+          if (res.data.success) {
             let content = {};
             if (val.book_url) {
-              content = res.data;
+              content = res.data.data;
               this.setContentDetail(val, content);
               resolve(true);
             } else {
