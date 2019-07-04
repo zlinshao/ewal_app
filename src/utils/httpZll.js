@@ -856,7 +856,7 @@ class httpZll extends httpService {
   static getToken() {
     return new Promise((resolve, reject) => {
       this.get(`${url}api/v1/token`, '').then(res => {
-        if (res.code === '11020') {
+        if (res.data.code === '11020') {
           resolve(res.data);
         } else {
           resolve(false);
@@ -870,7 +870,7 @@ class httpZll extends httpService {
   static uploadServer(data) {
     return new Promise((resolve, reject) => {
       this.post(`${url}api/v1/upload-direct`, data).then(res => {
-        if (res.code === '110100') {
+        if (res.data.code === '110100') {
           resolve(res.data);
         } else {
           resolve(false);
