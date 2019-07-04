@@ -120,11 +120,11 @@
       getDetail(api, btn) {
         this.$httpZll.get(api).then(res => {
           let address = {};
-          if (res.success) {
+          if (res.data.success) {
             if (btn) {
               this.$prompt('当前报备暂不能签约！');
             }
-            let content = res.data.content;
+            let content = res.data.data.content;
             let arr = ['property_fee', 'property_phone'];
             if (content.add_data) {
               for (let item of content.add_data) {
@@ -134,15 +134,15 @@
               }
             }
             this.allDetail.content = content;
-            let community = res.data.content.community;
+            let community = res.data.data.content.community;
             address.location = [community.longitude, community.latitude];
             address.village_name = community.village_name;
-            this.villageDetail = res.data.content.add_data || [];
+            this.villageDetail = res.data.data.content.add_data || [];
             for (let item of this.villageDetail) {
               if (item.name.includes('photo')) {
                 this.$httpZll.getUploadUrl(item.value, btn).then(res => {
                   if (res) {
-                    item.value = res.data;
+                    item.value = res.data.data;
                   } else {
                     item.value = [];
                   }

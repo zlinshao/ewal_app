@@ -18,12 +18,6 @@ axios.interceptors.request.use((request) => {
 
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
-  if (!response.data) {
-    response.data = {};
-    response.data.httpCode = response.status;
-  } else {
-    response.data.httpCode = response.status;
-  }
   return response
 }, err => {
   if (err && err.response) {
@@ -120,7 +114,7 @@ class Axios {
         if (!close) {
           $httpPrompt('', 'close');
         }
-        resolve(response.data);
+        resolve(response);
       }).catch(err => {
         reject(err);
       })
@@ -140,7 +134,7 @@ class Axios {
         if (!close) {
           $httpPrompt('', 'close');
         }
-        resolve(response.data);
+        resolve(response);
       }).catch(err => {
         console.log(err);
       })
@@ -160,7 +154,7 @@ class Axios {
         if (!close) {
           $httpPrompt('', 'close');
         }
-        resolve(response.data);
+        resolve(response);
       }).catch(err => {
         console.log(err);
       })
@@ -180,7 +174,7 @@ class Axios {
         if (!close) {
           $httpPrompt('', 'close');
         }
-        resolve(response.data);
+        resolve(response);
       }).catch(err => {
         console.log(err);
       })
@@ -200,7 +194,7 @@ class Axios {
         if (!close) {
           $httpPrompt('', 'close');
         }
-        resolve(response.data);
+        resolve(response);
       }).catch(err => {
         console.log(err);
       })

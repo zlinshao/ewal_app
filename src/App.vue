@@ -130,7 +130,6 @@
             dicties.card_type = dict[409];//证件类型
             dicties.property_type = dict[410];//房屋类型
             dicties.check_type = dict[328];//退租类型
-            dicties.education = dict[714];//学历
             break;
           case 'h1':
             if (res.data && res.data.length) {
@@ -143,7 +142,7 @@
           case 'h2':
             if (res.data && res.data.length) {
               for (let item of res.data) {
-                dicties.type_id[item.id] = [item.name];
+                dicties.type_id[item.id] = item.name;
               }
             }
             break;
