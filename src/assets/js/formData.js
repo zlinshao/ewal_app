@@ -73,11 +73,11 @@ setPersonalDetail = {
         "city": [{
           "id": 77,
           "city_id": "120000",
-          "city_name": "天津市",
+          "city_name": "南京市",
           "city_parent": "320000",
           "code": null,
           "created_at": null,
-          "province": {"id": 10, "province_id": "120000", "province_name": "天津市", "created_at": null},
+          "province": {"id": 10, "province_id": "120000", "province_name": "江苏省", "created_at": null},
           "pivot": {"city_id": 77, "org_id": 395}
         }],
         "pivot": {"user_id": 69, "org_id": 395}
