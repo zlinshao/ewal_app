@@ -61,15 +61,24 @@
             <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
           </div>
         </li>
-        <li>
-          <p>
+        <li class="approvalProcess">
+          <p class="promptTitle">
             <label>审批流程</label>
             <span>已启用自动去重</span>
           </p>
           <div v-for="flow in approvalFlow" class="approvalFlow">
             <i></i>
-            <h1>{{flow.name}}</h1>
-            <h2>{{flow.assginees.length+'个'+flow.name}}</h2>
+            <div>
+              <h1>{{flow.name}}</h1>
+              <h2>{{flow.assginees.length+'个'+flow.name}}</h2>
+            </div>
+            <div class="approvalPersonal">
+              <p v-for="key in flow.assginees">
+                <img :src="key.avatar" alt="" v-if="key.avatar">
+                <img src="../../../assets/image/common/noHead.png" alt="" v-else>
+                <span v-if="key.name">{{key.name}}</span>
+              </p>
+            </div>
           </div>
         </li>
       </ul>
@@ -156,7 +165,7 @@
     watch: {},
     computed: {
       personal() {
-        return this.$store.state.app.personal;
+        return this.$store.state.app.personalDetail;
       }
     },
     methods: {
@@ -307,35 +316,76 @@
         background-color: #FFFFFF;
         margin: 0 .3rem;
 
-        .approvalFlow {
-          border-left: 1px dashed #9B9B9B;
-          position: relative;
-          margin: 0 .3rem;
-          padding: 0 .3rem .3rem;
+        .approvalProcess {
+          .promptTitle {
+            padding: .3rem;
+            border-top: 1px dashed #D8D8D8;
 
-          i {
-            position: absolute;
-            left: -.16rem;
-            top: 0;
-            width: .3rem;
-            height: .3rem;
-            @include radius(50%);
-            background-color: #D8D8D8;
+            span {
+              padding-left: .2rem;
+              color: #F4511E;
+            }
           }
 
-          h1 {
-            color: #4A4A4A;
-            margin: 0 0 .1rem;
+          .approvalFlow {
+            border-left: 1px dashed #9B9B9B;
+            position: relative;
+            margin: 0 .3rem 0 .6rem;
+            padding: 0 .3rem .3rem;
+            @include flex('justify-bet');
+
+            i {
+              position: absolute;
+              left: -.18rem;
+              top: 0;
+              width: .36rem;
+              height: .36rem;
+              @include radius(50%);
+              background-color: #D8D8D8;
+            }
+
+            h1, h2 {
+              white-space: nowrap;
+            }
+
+            h1 {
+              color: #4A4A4A;
+              margin: 0 0 .1rem;
+            }
+
+            h2 {
+              color: #001A6E;
+              font-size: .24rem;
+            }
+
           }
 
-          h2 {
-            color: #001A6E;
-            font-size: .24rem;
-          }
-        }
+          .approvalPersonal {
+            @include flex('items-center');
+            flex-direction: row-reverse;
+            flex-wrap: wrap;
 
-        .approvalFlow:last-child {
-          border: none;
+            img {
+              width: .6rem;
+              height: .6rem;
+              @include radius(50%);
+            }
+
+            p {
+              @include flex('bet-column');
+              align-items: center;
+              padding: 0 0 .15rem .2rem;
+            }
+
+            span {
+              padding-top: .06rem;
+              display: block;
+            }
+          }
+
+          .approvalFlow:last-child {
+            border: none;
+          }
         }
       }
 
