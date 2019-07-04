@@ -19,9 +19,9 @@ class httpHs extends httpService {
   //   return new Promise((resolve, reject) => {
   //     this.get(`${market}v1.0/market/dictionary/parent_son`).then(res => {
   //       if (res.success) {
-  //         resolve(res);
+  //         resolve(res.data);
   //       } else {
-  //         $httpPrompt(res.message);
+  //         $httpPrompt(res.data.message);
   //       }
   //     })
   //   })
@@ -31,10 +31,10 @@ class httpHs extends httpService {
   static getContractList({house_id,contract_type,page,limit},msg) {
     return new Promise((resolve,reject) => {
       this.get(market + 'v1.0/market/contract/house-contract',{house_id,contract_type,page,limit},msg).then(res => {
-        if (Number(res.code) === 200) {
+        if (Number(res.data.code) === 200) {
           resolve(res.data);
         } else {
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -44,10 +44,10 @@ class httpHs extends httpService {
   static ContractList(params,msg) {
     return new Promise((resolve,reject) => {
       this.get(market + 'v1.0/market/contract',params,msg).then(res => {
-        if (Number(res.code) === 200) {
+        if (Number(res.data.code) === 200) {
           resolve(res.data);
         } else {
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -60,7 +60,7 @@ class httpHs extends httpService {
         parent_id,
         search
       }, status).then(res => {
-        resolve(res);
+        resolve(res.data);
       });
     });
   }
@@ -69,7 +69,7 @@ class httpHs extends httpService {
   static getContractDetail({contract_type,contract_id},status) {
     return new Promise((resolve,reject) => {
       this.get(market + `v1.0/market/contract/${contract_type}/${contract_id}`,{},status).then(res => {
-        resolve(res);
+        resolve(res.data);
       })
     })
   }
@@ -78,7 +78,7 @@ class httpHs extends httpService {
   static getEmptyHouse(params,status) {
     return new Promise((resolve,reject) => {
       this.get(market + `v1.0/market/house/kong-days`,params,status).then(res => {
-        resolve(res);
+        resolve(res.data);
       })
     })
   }
