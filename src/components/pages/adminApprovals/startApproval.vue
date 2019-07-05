@@ -76,7 +76,7 @@
               <p v-for="key in flow.assginees">
                 <img :src="key.avatar" alt="" v-if="key.avatar">
                 <img src="../../../assets/image/common/noHead.png" alt="" v-else>
-                <span v-if="key.name">{{key.name}}</span>
+                <span>{{key.name || '******'}}</span>
               </p>
             </div>
           </div>
@@ -317,6 +317,7 @@
         margin: 0 .3rem;
 
         .approvalProcess {
+          margin-top: .3rem;
           .promptTitle {
             padding: .3rem;
             border-top: 1px dashed #D8D8D8;
@@ -331,7 +332,7 @@
             border-left: 1px dashed #9B9B9B;
             position: relative;
             margin: 0 .3rem 0 .6rem;
-            padding: 0 .3rem .3rem;
+            padding: 0 .3rem .5rem;
             @include flex('justify-bet');
 
             i {
@@ -350,7 +351,7 @@
 
             h1 {
               color: #4A4A4A;
-              margin: 0 0 .1rem;
+              margin: 0 0 .2rem;
             }
 
             h2 {

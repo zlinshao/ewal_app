@@ -281,4 +281,6 @@ dicties = {
   is_checkout_deposit: oneYesZeroNo,
   // 是否为本人账户
   is_self_account: oneYesZeroNo,
+  // 紧急程度
+  // is_self_account: {},
 };

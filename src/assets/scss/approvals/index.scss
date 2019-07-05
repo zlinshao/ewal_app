@@ -401,7 +401,12 @@
                 }
 
                 .adminTitle {
-                  margin-bottom: .12rem;
+                  margin-bottom: .3rem;
+
+                  span {
+                    padding: .036rem 0 0 .1rem;
+                    white-space: nowrap
+                  }
                 }
 
                 .approvalStatus {
@@ -409,7 +414,7 @@
                   margin-top: .12rem;
 
                   span {
-                    padding: 0 .1rem;
+                    padding: 0 .2rem;
 
                     i {
                       display: inline-block;
@@ -450,15 +455,19 @@
             .title1 {
               @include adminImg('renshi');
             }
+
             .title2 {
               @include adminImg('renshizhuanyong');
             }
+
             .title3 {
               @include adminImg('gonggao');
             }
+
             .title4 {
               @include adminImg('xingzheng');
             }
+
             .title5 {
               @include adminImg('qita');
             }

@@ -43,10 +43,10 @@
                   <li>
                     <img :src="personal.avatar" v-if="personal.avatar" alt="">
                     <img src="../../../assets/image/common/noHead.png" alt="" v-else>
-                    <div class="adminInfo" @click="detailModule = true">
+                    <div class="adminInfo" @click="showDetailModule(item)">
                       <div class="adminTitle">
                         <h1>{{item.title}}</h1>
-                        <span style="white-space: nowrap">2019-04-11 12:48</span>
+                        <span>2019-04-11 12:48</span>
                       </div>
                       <!--<h2>-->
                       <!--<span>应休开始时间</span>-->
@@ -61,8 +61,9 @@
                       <!--<span></span>-->
                       <!--</h2>-->
                       <div class="approvalStatus">
-                        <h1>王佳怡审核中</h1>
-                        <span><i></i></span>
+                        <h1 v-if="item.status.length">{{item.status[0]}}</h1>
+                        <h1 v-else>{{item.name}}</h1>
+                        <span @click.stop="moreOperateBtn"><i></i></span>
                       </div>
                     </div>
                   </li>
@@ -102,7 +103,7 @@
       </div>
     </div>
     <!--审批详情-->
-    <admin-detail :module="detailModule" @close="hiddenDetailModule()"></admin-detail>
+    <admin-detail :module="detailModule" :content="details" @close="hiddenDetailModule()"></admin-detail>
   </div>
 </template>
 
@@ -354,6 +355,7 @@
           ],
         },
         checkIds: [],
+        details: {},
       }
     },
     mounted() {
@@ -373,6 +375,9 @@
     },
     watch: {},
     methods: {
+      moreOperateBtn() {
+        console.log(1)
+      },
       // 计算 列表高度
       countListHeight() {
         this.$nextTick(_ => {
@@ -533,6 +538,10 @@
         } else {
           this.checkIds.push(item.id);
         }
+      },
+      showDetailModule(val) {
+        this.detailModule = true;
+        this.details = val;
       },
       // 详情
       hiddenDetailModule(val) {

@@ -13,11 +13,17 @@
         </div>
       </main>
       <footer>
-        <ul>
-          <li v-for="item of buttons" :class="item.route" @click="onOperates(item)">
+        <ul v-if="operates.outcomeOptions.length">
+          <li v-for="item in operates.outcomeOptions" :class="item.route" @click="clickBtn(item,operates.variableName)">
+            <span class="writingMode">{{item.title}}</span>
+          </li>
+          <li v-for="item in buttons" :class="item.route" @click="clickBtn(item,operates.variableName)">
             <span class="writingMode">{{item.title}}</span>
           </li>
         </ul>
+        <div class="commonBtn" v-else>
+          <p v-for="item in buttons" class="btn" :class="item.route" @click="clickBtn(item)">{{item.title}}</p>
+        </div>
       </footer>
     </van-popup>
   </div>
@@ -30,36 +36,15 @@
     data() {
       return {
         adminDetailModule: false,
-        buttons: [
-          {
-            route: "comment",
-            title: '评论',
-          },
-          {
-            route: "refuse",
-            title: '拒绝',
-          },
-          {
-            route: "suspend",
-            title: '暂缓',
-          },
-          {
-            route: "deliver",
-            title: '转交',
-          },
-          {
-            route: "publish",
-            title: '提交',
-          },
-        ]
+        operates: {
+          outcomeOptions: []
+        },
+        buttons: [],
       }
     },
     watch: {
       module(val) {
         this.adminDetailModule = val;
-        this.$httpZll.getHistoryProcess('99b9e08c-9bf1-11e9-94ae-02420617522e').then(res => {
-
-        })
       },
       adminDetailModule(val) {
         if (!val) {
@@ -67,12 +52,109 @@
         }
       },
       content(val) {
-        console.log(val);
+        this.detailData = val;
+        this.setOperates(val);
+        this.$httpZll.get(val.detail_request_url).then(res => {
+          console.log(res.data);
+        });
+        this.$httpZll.getHistoryProcess(val.process_id).then(res => {
+          console.log(res);
+        })
+      }
+    },
+    computed: {
+      tabs() {
+        return this.$store.state.app.adminTab;
       }
     },
     methods: {
-      onOperates(item) {
-        console.log(item);
+      // 操作按钮
+      setOperates(val) {
+        let {tab, status} = this.tabs;
+        this.operates = {outcomeOptions: []};
+        if (tab === '1') {
+          if (status === 0) {
+            if (val.outcome) {
+              this.operates = JSON.parse(val.outcome);
+            }
+            this.buttons = [
+              {
+                action: true,
+                route: "deliver",
+                title: '转交',
+              },
+              {
+                action: true,
+                route: "suspend",
+                title: '暂缓',
+              },
+              {
+                action: true,
+                route: "comment",
+                title: '评论',
+              },
+            ]
+          } else if (status === 1) {
+            this.buttons = [
+              {
+                action: true,
+                route: "back",
+                title: '取消',
+              },
+              {
+                action: true,
+                route: "comment",
+                title: '评论',
+              },
+            ]
+          }
+        } else {
+        }
+      },
+      clickBtn(action = {}, name = '') {
+        let detail = this.detailData;
+        let msg = {suspend: '暂缓', urge: '催办', cancel: '撤销'};
+        switch (action.route) {
+          case "back":
+            this.$emit('close');
+            break;
+          case'suspend'://暂缓
+          case'urge'://催办
+          case'cancel'://撤销
+            this.$httpZll.putActionTask(detail.process_id, {action: action.route}).then(_ => {
+              this.$prompt((msg[action.route] + '成功'), 'success');
+              if (action.route === 'suspend' || action.route === 'cancel') {
+                setTimeout(_ => {
+                  if (action.route === 'suspend') {
+                    this.$store.dispatch('admin_approval_tabs', {tab: '4'});
+                  } else {
+                    this.$store.dispatch('admin_approval_tabs', {tab: '2', status: 3});
+                  }
+                  this.$router.go(-1);
+                }, 500);
+              }
+            });
+            break;
+          default:
+            let postData = {};
+            postData.action = 'complete';
+            postData.variables = [{
+              name: name,
+              value: action.action,
+            }];
+            this.$httpZll.finishBeforeTask(detail.task_id, postData).then(res => {
+              if (res) {
+                this.$prompt('审核成功！', 'success');
+                setTimeout(_ => {
+                  if (this.tabs.tab === '4') {
+                    this.$store.dispatch('admin_approval_tabs', {tab: '1', status: 1});
+                  }
+                  this.$router.go(-1);
+                }, 500);
+              }
+            });
+            break;
+        }
       },
     }
   }
@@ -104,13 +186,20 @@
       footer {
         overflow: hidden;
 
+        .commonBtn {
+          padding: .3rem;
+        }
+
         ul {
           padding: .3rem .3rem 0;
           @include flex('justify-around');
+          flex-direction: row-reverse;
 
           li {
             height: 1.6rem;
-            padding: .45rem .12rem 0;
+            width: .6rem;
+            padding-top: .4rem;
+            text-align: center;
             background-color: #4A74FE;
           }
 
