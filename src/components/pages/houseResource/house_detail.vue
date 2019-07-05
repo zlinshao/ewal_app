@@ -268,13 +268,14 @@
         let house_id = this.$route.query.id;
         let city = this.personal.city_name;
         await this.$httpZll.get(this.server + `v1.0/market/house/detail/${house_id}?city=${city}`, {/*city:'南京'*/}, '获取中...').then(res => {
-          if (res.code === 200) {
-            this.detail = res.data;
-            this.village_list = res.data.village_data || [];
+          if (res.data.code === 200) {
+            let data = res.data.data;
+            this.detail = data;
+            this.village_list = data.village_data || [];
             //给房屋配置赋值
-            if (res.data.house_detail && res.data.house_detail.house_state) {//房屋配置
+            if (data.house_detail && data.house_detail.house_state) {//房屋配置
               let house_config_keys = _.map(this.house_config, 'key');
-              _.forEach(res.data.house_detail.house_state.goods_info, (val, key) => {
+              _.forEach(data.house_detail.house_state.goods_info, (val, key) => {
                 if (_.includes(house_config_keys, key)) {
                   _.find(this.house_config, {key: key}).val = val;
                 }

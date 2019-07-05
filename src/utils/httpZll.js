@@ -21,7 +21,7 @@ class httpZll extends httpService {
   static getDDConfig() {
     return new Promise((resolve, reject) => {
       this.get(`${url_login}api/sns/dingtalk/config`).then(res => {
-        resolve(res);
+        resolve(res.data);
       })
     })
   }
@@ -30,7 +30,7 @@ class httpZll extends httpService {
   static getTokenInfo(code) {
     return new Promise((resolve, reject) => {
       this.get(`${url_login}api/sns/dingtalk/fromClient`, {code: code}).then(res => {
-        resolve(res);
+        resolve(res.data);
       })
     })
   }
@@ -39,10 +39,10 @@ class httpZll extends httpService {
   static getUserInfo(code) {
     return new Promise((resolve, reject) => {
       this.get(`${url_login}api/auth/user`, {code: code}).then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.message, 'fail');
+          $httpPrompt(res.data.message, 'fail');
         }
       })
     })
@@ -52,10 +52,10 @@ class httpZll extends httpService {
   static getOauthToken() {
     return new Promise((resolve, reject) => {
       this.get(`${url_login}oauth/token`).then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -65,10 +65,23 @@ class httpZll extends httpService {
   static getAllDict() {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/dictionary/parent_son`).then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
+        }
+      })
+    })
+  }
+
+  // 公告类型
+  static getAnnouncementType() {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_hr}announcement/announcement_type`).then(res => {
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
+        } else {
+          resolve(false);
         }
       })
     })
@@ -78,10 +91,10 @@ class httpZll extends httpService {
   static getAllCityList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/city/address`, params).then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -91,10 +104,10 @@ class httpZll extends httpService {
   static getCityList() {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/city/address/city-list`).then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -104,12 +117,12 @@ class httpZll extends httpService {
   static newAddVillage(data) {
     return new Promise((resolve, reject) => {
       this.post(`${market}/v1.0/market/task/AddCommunity`, data, 'prompt').then(res => {
-        if (res.success) {
-          $httpPrompt(res.message, 'success');
-          resolve(res);
+        if (res.data.success) {
+          $httpPrompt(res.data.message, 'success');
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -119,11 +132,11 @@ class httpZll extends httpService {
   static searchVillageList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/community/pattern`, params, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -133,11 +146,11 @@ class httpZll extends httpService {
   static searchHouseList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/house`, params, 'prompt').then(res => {
-        if (Number(res.code) === 200) {
-          resolve(res);
+        if (Number(res.data.code) === 200) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -147,10 +160,10 @@ class httpZll extends httpService {
   static getContractList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/contract`, params, 'prompt').then(res => {
-        if (Number(res.code) === 200) {
+        if (Number(res.data.code) === 200) {
           resolve(res.data);
         } else {
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -160,11 +173,11 @@ class httpZll extends httpService {
   static getBulletinDetail(id) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/process/contract/${id}`, {}, 'prompt').then(res => {
-        if (Number(res.code) === 200) {
+        if (Number(res.data.code) === 200) {
           resolve(res.data);
         } else {
           resolve(false);
-          // $httpPrompt(res.message);
+          // $httpPrompt(res.data.message);
         }
       })
     })
@@ -174,8 +187,8 @@ class httpZll extends httpService {
   static getUserIdStaffDetail(params, id) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}staff/user/${id}`, params, 'prompt').then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
           resolve(false);
         }
@@ -187,24 +200,25 @@ class httpZll extends httpService {
   static searchStaffList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}staff/user`, params, 'prompt').then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       });
     });
   }
-  // 员工搜索
+
+  // 岗位搜索
   static searchPositionList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}/organization/position`, params, 'prompt').then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       });
     });
@@ -216,7 +230,7 @@ class httpZll extends httpService {
       this.get(`${url_hr}organization/organization`, {
         parent_id: org
       }, status).then(res => {
-        resolve(res);
+        resolve(res.data);
       });
     });
   }
@@ -247,7 +261,7 @@ class httpZll extends httpService {
           }
         ]
       }).then(res => {
-        resolve(res);
+        resolve(res.data);
       });
     });
   }
@@ -256,12 +270,12 @@ class httpZll extends httpService {
   static createdTask(data, name) {
     return new Promise((resolve, reject) => {
       this.post(`${market}v1.0/market/task/${name}`, data, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+        if (res.data.success) {
+          resolve(res.data);
+          $httpPrompt(res.data.message, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -271,8 +285,8 @@ class httpZll extends httpService {
   static getContractMould(params) {
     return new Promise((resolve, reject) => {
       this.get(`${mould}fdd/pdf`, params, 'prompt', close).then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
           resolve(false);
         }
@@ -284,12 +298,12 @@ class httpZll extends httpService {
   static postFinishPunchClock(data) {
     return new Promise((resolve, reject) => {
       this.put(`${market}v1.0/market/task/variables`, data, 'prompt').then(res => {
-        if (res.success) {
-          $httpPrompt(res.message, 'success');
-          resolve(res);
+        if (res.data.success) {
+          $httpPrompt(res.data.message, 'success');
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -306,11 +320,11 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}${url}`, params, 'prompt', close).then(res => {
-        if (199 < res.httpCode < 300) {
-          resolve(res);
+        if (199 < res.status < 300) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
         }
       });
     });
@@ -333,11 +347,11 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
-        if (199 < res.httpCode < 300) {
-          resolve(res);
+        if (199 < res.status < 300) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
         }
       });
     });
@@ -351,11 +365,11 @@ class httpZll extends httpService {
     };
     return new Promise((resolve, reject) => {
       this.post(`${url_done}runtime/tasks/${id}`, params, 'prompt').then(res => {
-        if (199 < res.httpCode < 300) {
+        if (199 < res.status < 300) {
           resolve(true);
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
         }
       });
     });
@@ -365,11 +379,11 @@ class httpZll extends httpService {
   static postToBeDoneDeliver(id, data, val) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {
-        if (199 < res.httpCode < 300) {
+        if (199 < res.status < 300) {
           resolve(true);
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
         }
       });
     });
@@ -379,12 +393,12 @@ class httpZll extends httpService {
   static finishToBeDoneTask(id, data) {
     return new Promise((resolve, reject) => {
       this.delete(`${url_done}runtime/process-instances/${id}`, data, 'prompt').then(res => {
-        if (199 < res.httpCode < 300) {
+        if (199 < res.status < 300) {
           resolve(true);
           $httpPrompt('任务删除成功!', 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
         }
       });
     });
@@ -394,11 +408,11 @@ class httpZll extends httpService {
   static followRecordList(id) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/task-follow-up/list?task_id=${id}`, {}, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -408,12 +422,12 @@ class httpZll extends httpService {
   static postDeliveryReceipt(data, url) {
     return new Promise((resolve, reject) => {
       this.post(`${market}v1.0/market/handover${url}`, data, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+        if (res.data.success) {
+          resolve(res.data);
+          $httpPrompt(res.data.message, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
 
       });
@@ -424,8 +438,8 @@ class httpZll extends httpService {
   static getNewDeliveryDraft(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/handover/house_handover`, params, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
           resolve(false);
         }
@@ -437,8 +451,8 @@ class httpZll extends httpService {
   static getDeliveryPDF(id) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/handover/${id}`, {}, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
           resolve(false);
         }
@@ -450,8 +464,8 @@ class httpZll extends httpService {
   static getDeliveryDraft(id) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/handover/draft?task_id=${id}`, {}, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
           resolve(false);
         }
@@ -463,11 +477,11 @@ class httpZll extends httpService {
   static postPreviewDelivery(data) {
     return new Promise((resolve, reject) => {
       this.post(`${market}v1.0/market/handover/preview`, data, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -477,11 +491,11 @@ class httpZll extends httpService {
   static finishBeforeTask(id, data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}runtime/tasks/${id}`, data, 'prompt').then(res => {
-        if (199 < res.httpCode < 300) {
+        if (199 < res.status < 300) {
           resolve(true);
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
         }
       });
     });
@@ -491,11 +505,40 @@ class httpZll extends httpService {
   static getNewTaskId(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/tasks`, params, 'prompt').then(res => {
-        if (199 < res.httpCode < 300) {
-          resolve(res);
+        if (199 < res.status < 300) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
+        }
+      });
+    });
+  }
+
+  // 行政审批
+  static sendAdminApproval(data) {
+    return new Promise((resolve, reject) => {
+      this.post(`${url_hr}process/process`, data, 'prompt').then(res => {
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
+          $httpPrompt(res.data.msg, 'success');
+        } else {
+          resolve(false);
+          $httpPrompt(res.data.msg);
+        }
+      });
+    });
+  }
+
+  // 获取审批流程
+  static getAdminApprovalProcess(params) {
+    return new Promise((resolve, reject) => {
+      this.get(`${url_done}assignment/process-definition-key`, params, 'prompt').then(res => {
+        if (199 < res.status < 300) {
+          resolve(res.data);
+        } else {
+          resolve(false);
+          $httpPrompt(res.status);
         }
       });
     });
@@ -512,11 +555,11 @@ class httpZll extends httpService {
     }
     return new Promise((resolve, reject) => {
       this.get(`${url_done}${url}`, params, 'prompt').then(res => {
-        if (199 < res.httpCode < 300) {
-          resolve(res);
+        if (199 < res.status < 300) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
         }
       });
     });
@@ -526,12 +569,12 @@ class httpZll extends httpService {
   static localSignContract(url, data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_identity}fdd/contract/${url}`, data, 'prompt').then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
-          $httpPrompt(res.msg, 'success');
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
+          $httpPrompt(res.data.msg, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       });
     });
@@ -541,7 +584,7 @@ class httpZll extends httpService {
   static getElectronicContractSinger(executionId) {
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/executions/${executionId}/variables/signer`, {}, 'prompt').then(res => {
-        resolve(res);
+        resolve(res.data);
       })
     })
   }
@@ -550,12 +593,12 @@ class httpZll extends httpService {
   static sendElectronicContract(number, params) {
     return new Promise((resolve, reject) => {
       this.get(`${url_identity}fdd/contract/send/${number}`, params, 'prompt').then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
-          $httpPrompt(res.msg, 'success');
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
+          $httpPrompt(res.data.msg, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       })
     })
@@ -565,11 +608,11 @@ class httpZll extends httpService {
   static getPolishingDetail(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/contract/album/${params.type}/${params.id}`, {}).then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       })
     })
@@ -579,12 +622,12 @@ class httpZll extends httpService {
   static setPolishingBulletin(task_id = '', params, api = '') {
     return new Promise((resolve, reject) => {
       this.post(`${market}v1.0/market/task-follow-up${api}?task_id=${task_id}`, params, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+        if (res.data.success) {
+          resolve(res.data);
+          $httpPrompt(res.data.message, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -594,12 +637,12 @@ class httpZll extends httpService {
   static getApprovalDetail(url) {
     return new Promise((resolve, reject) => {
       this.get(url, {}, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+        if (res.data.success) {
+          resolve(res.data);
+          $httpPrompt(res.data.message, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -609,11 +652,11 @@ class httpZll extends httpService {
   static getHistoryProcess(id) {
     return new Promise((resolve, reject) => {
       this.get(`${url_done}history/process-instances/${id}/log`).then(res => {
-        if (res) {
-          resolve(res);
+        if (res.data) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
         }
       })
     })
@@ -623,11 +666,11 @@ class httpZll extends httpService {
   static setBulletinComment(data, id) {
     return new Promise((resolve, reject) => {
       this.post(`${url_done}history/process-instances/${id}/comments`, data).then(res => {
-        if (199 < res.httpCode < 300) {
-          resolve(res);
+        if (199 < res.status < 300) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.code);
+          $httpPrompt(res.status);
         }
       })
     })
@@ -637,12 +680,12 @@ class httpZll extends httpService {
   static putActionTask(id, data) {
     return new Promise((resolve, reject) => {
       this.put(`${url_done}runtime/process-instances/${id}`, data, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+        if (res.data.success) {
+          resolve(res.data);
+          $httpPrompt(res.data.message, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -652,12 +695,12 @@ class httpZll extends httpService {
   static getBankNameAttestation(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/helper/bank_name`, params, 'prompt').then((res) => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+        if (res.data.success) {
+          resolve(res.data);
+          $httpPrompt(res.data.message, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       })
     })
@@ -667,11 +710,11 @@ class httpZll extends httpService {
   static getElectronicContract(data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_identity}fdd/number/take`, data).then((res) => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       })
     })
@@ -681,10 +724,10 @@ class httpZll extends httpService {
   static customerIdentity(data) {
     return new Promise((resolve, reject) => {
       this.post(`${url_identity}fdd/customer/cert`, data, 'prompt').then((res) => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
           this.getFDDUserId(data).then(user => {
             resolve(user);
           });
@@ -701,8 +744,8 @@ class httpZll extends httpService {
     data.phone = params.mobile;
     return new Promise((resolve, reject) => {
       this.get(`${url_identity}fdd/customer/verified`, data, '', 'close').then((res) => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         }
       })
     })
@@ -712,11 +755,11 @@ class httpZll extends httpService {
   static bulletinCode = function (code) {
     return new Promise((resolve, reject) => {
       this.get(`${url_code}api/registration/uinq_code?prefix=${code}`).then((res) => {
-        if (Number(res.code) === 200) {
-          resolve(res);
+        if (Number(res.data.code) === 200) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       })
     })
@@ -726,11 +769,11 @@ class httpZll extends httpService {
   static getFinancialAccount(id) {
     return new Promise((resolve, reject) => {
       this.get(`${url_code}api/allocation/org_account?org_id=${id}`).then(res => {
-        if (Number(res.code) === 200) {
-          resolve(res);
+        if (Number(res.data.code) === 200) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       })
     })
@@ -740,12 +783,12 @@ class httpZll extends httpService {
   static postSupplyAgreement(data, type) {
     return new Promise((resolve, reject) => {
       this.post(`${market}v1.0/market/bulletin/agreement/${type}`, data, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+        if (res.data.success) {
+          resolve(res.data);
+          $httpPrompt(res.data.message, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -755,12 +798,12 @@ class httpZll extends httpService {
   static submitReport(data, to) {
     return new Promise((resolve, reject) => {
       this.post(`${market}v1.0/market/bulletin?to=${to}`, data, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+        if (res.data.success) {
+          resolve(res.data);
+          $httpPrompt(res.data.message, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -770,12 +813,12 @@ class httpZll extends httpService {
   static putReviseReport(data, to) {
     return new Promise((resolve, reject) => {
       this.put(`${market}v1.0/market/bulletin/${data.id}?to=${to}`, data, 'prompt').then(res => {
-        if (Number(res.code) === 200) {
-          resolve(res);
-          $httpPrompt(res.message, 'success');
+        if (Number(res.data.code) === 200) {
+          resolve(res.data);
+          $httpPrompt(res.data.message, 'success');
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
 
@@ -786,8 +829,8 @@ class httpZll extends httpService {
   static getBulletinDraft(params) {
     return new Promise((resolve, reject) => {
       this.get(`${market}v1.0/market/bulletin`, params, 'prompt').then(res => {
-        if (res.success) {
-          resolve(res);
+        if (res.data.success) {
+          resolve(res.data);
         } else {
           resolve(false);
         }
@@ -799,11 +842,11 @@ class httpZll extends httpService {
   static getUploadUrl(ids, close, prompt = '') {
     return new Promise((resolve, reject) => {
       this.post(`${url}api/v1/get_urls`, {ids: ids}, prompt, close).then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.message);
+          $httpPrompt(res.data.message);
         }
       });
     });
@@ -813,11 +856,11 @@ class httpZll extends httpService {
   static getToken() {
     return new Promise((resolve, reject) => {
       this.get(`${url}api/v1/token`, '').then(res => {
-        if (res.code === '11020') {
-          resolve(res);
+        if (res.data.code === '11020') {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       });
     });
@@ -827,11 +870,11 @@ class httpZll extends httpService {
   static uploadServer(data) {
     return new Promise((resolve, reject) => {
       this.post(`${url}api/v1/upload-direct`, data).then(res => {
-        if (res.code === '110100') {
-          resolve(res);
+        if (res.data.code === '110100') {
+          resolve(res.data);
         } else {
           resolve(false);
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       });
     });
@@ -841,11 +884,11 @@ class httpZll extends httpService {
   static getToDoTypeList(data) {
     return new Promise((resolve, reject) => {
       this.get(`${url_done}runtime/taskKeys`, data).then(res => {
-        if (res) {
-          resolve(res);
+        if (res.data) {
+          resolve(res.data);
         } else {
-          resolve(res);
-          $httpPrompt(res.msg);
+          resolve(false);
+          $httpPrompt(res.data.msg);
         }
       });
     });
@@ -855,11 +898,11 @@ class httpZll extends httpService {
   static getPersonalList(data) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}achv/achv/get_personal`, data).then(res => {
-        if (res) {
-          resolve(res);
+        if (res.data) {
+          resolve(res.data);
         } else {
-          resolve(res);
-          $httpPrompt(res.msg);
+          resolve(false);
+          $httpPrompt(res.data.msg);
         }
       });
     });

@@ -58,15 +58,31 @@
             }
 
             h2 {
-              white-space: nowrap;
-              padding: .1rem .2rem;
-              color: #7BB242;
-              @include radius(.1rem 0 0 .1rem);
-              background-color: rgba(123, 178, 66, .2);
-            }
+              span {
+                white-space: nowrap;
+                padding: .1rem .2rem;
+                @include radius(.1rem 0 0 .1rem);
+              }
 
-            .status {
+              .status1 {
+                color: #84B74F;
+                background-color: #E5F0D9;
+              }
 
+              .status2 {
+                color: #FEA434;
+                background-color: #FFE9CE;
+              }
+
+              .status3 {
+                color: #A7A7A7;
+                background-color: #E6E6E6;
+              }
+
+              .status4 {
+                color: #F66E44;
+                background-color: #FDDCD2;
+              }
             }
           }
 

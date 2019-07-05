@@ -267,6 +267,18 @@ dicties = {
   pact_type: {1: '延长收房时长', 2: '房东更换银行卡', 3: '调整收房价'},
   // 退租性质
   check_type: {},
+  // 公告类型
+  type_id: {},
+  // 性别
+  gender: {0: '限男', 1: '限女', 2: '男优先', 3: '女优先', 4: '不限'},
+  // 工作经验
+  experience: {0: '1年', 1: '1-3年', 2: '3-5年', 3: '5-10年', 4: '10年以上', 5: '不限'},
+  // 学历
+  education: {0: '高中及以上', 1: '大专及以上', 2: '本科及以上', 3: '不限'},
   // 是否补款
   is_supplement_money: oneYesZeroNo,
+  // 是否退还押金
+  is_checkout_deposit: oneYesZeroNo,
+  // 是否为本人账户
+  is_self_account: oneYesZeroNo,
 };

@@ -47,7 +47,15 @@
                         :type="show.type"
                         :label="show.label"
                         :placeholder="show.placeholder">
+                        <div class="zl-confirmation" :class="[show.icon]" v-if="show.button"
+                             @click="confirmation(show.icon)">
+                          <i :class="show.icon" v-if="show.icon"></i>
+                          {{show.button}}
+                        </div>
                       </zl-input>
+                      <div class="prompts" :class="[show.prompts.length>16?'noPaddingLeft':'']" v-if="show.prompts">
+                        {{show.prompts}}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -164,7 +172,6 @@
                         v-model="form[string.keyName]"
                         :type="string.type"
                         :disabled="item.disabled"
-                        :label="string.label"
                         @input="listenInput(string.keyName)"
                         :placeholder="string.placeholder">
                       </zl-input>
@@ -995,7 +1002,7 @@
       saveReport(val) {
         console.log(this.form);
         if (val !== 1 && val !== 2) {
-          // if (this.$attestationKey(this.drawForm)) return;
+          if (this.$attestationKey(this.drawForm)) return;
         }
         if (val === 1) {
           if (!this.photoUploadStatus) {
@@ -1256,6 +1263,11 @@
               if (this.form[item]) {
                 this.certified();
               }
+              break;
+            case'is_checkout_deposit':
+            case'is_supplement_money':
+              this.formatData[item] = dicties[item][res[item]] || '0';
+              this.inputStatus(item, this.form);
               break;
             case 'check_type':
               if (!change) {
@@ -1520,6 +1532,16 @@
           }
           if (picker.picker === 'date') {
             date.push(picker.keyName);
+          }
+          if (picker.showList) {
+            for (let list of picker.showList) {
+              if (list.status === 'objInt' || list.status === 'arr') {
+                objInt.push(list.keyName);
+              }
+              if (list.picker === 'date') {
+                date.push(list.keyName);
+              }
+            }
           }
         }
         if (objInt.includes(item)) {

@@ -19,7 +19,7 @@ class httpTj extends httpService {
   //   return new Promise((resolve, reject) => {
   //     this.get(`${market}v1.0/market/dictionary/parent_son`).then(res => {
   //       if (res.success) {
-  //         resolve(res);
+  //         resolve(res.data);
   //       } else {
   //         $httpPrompt(res.message);
   //       }
@@ -29,10 +29,10 @@ class httpTj extends httpService {
   static getQuestionnaireList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url}questionnaire`, params,'prompt').then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       })
     })
@@ -42,10 +42,10 @@ class httpTj extends httpService {
   static getQuestionnaireDetail(id) {
     return new Promise((resolve, reject) => {
       this.get(`${url}questionnaire/${id}`, {},'prompt').then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       })
     })
@@ -54,10 +54,10 @@ class httpTj extends httpService {
   static submitQuestionnaire(params) {
     return new Promise((resolve,reject)=> {
       this.post(`${url}questionnaire/submit`,params,'prompt').then(res=> {
-        if(res.code.endsWith('0')) {
-          resolve(res);
+        if(res.data.code.endsWith('0')) {
+          resolve(res.data);
         }else {
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       });
     });
@@ -67,11 +67,11 @@ class httpTj extends httpService {
   static getExamList(params) {
     return new Promise((resolve, reject) => {
       this.get(`${url}train/exam`, params,'prompt').then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.msg);
-          resolve(null);
+          $httpPrompt(res.data.msg);
+          resolve(false);
         }
       })
     })
@@ -80,10 +80,11 @@ class httpTj extends httpService {
   static getExamDetail(id) {
     return new Promise((resolve, reject) => {
       this.get(`${url}train/exam/${id}`, {},'prompt').then(res => {
-        if (res.code.endsWith('0')) {
-          resolve(res);
+        if (res.data.code.endsWith('0')) {
+          resolve(res.data);
         } else {
-          $httpPrompt(res.msg);
+          resolve(false);
+          $httpPrompt(res.data.msg);
         }
       })
     })
@@ -93,12 +94,12 @@ class httpTj extends httpService {
   static generateExam(id,params) {
     return new Promise((resolve,reject)=> {
       this.get(`${url}train/exam/${id}/generate`,params,).then(res=> {
-        /*if(res.code.endsWith('0')) {
-          resolve(res);
+        if(res.data.code.endsWith('0')) {
+          resolve(res.data);
         }else {
-          $httpPrompt(res.msg);
-        }*/
-        resolve(res);
+          resolve(false);
+          $httpPrompt(res.data.msg);
+        }
       });
     });
   };
@@ -107,10 +108,10 @@ class httpTj extends httpService {
   static submitExam(id,params) {
     return new Promise((resolve,reject)=> {
       this.put(`${url}train/exam/set/${id}`,params,'prompt').then(res=> {
-        if(res.code.endsWith('0')) {
-          resolve(res);
+        if(res.data.code.endsWith('0')) {
+          resolve(res.data);
         }else {
-          $httpPrompt(res.msg);
+          $httpPrompt(res.data.msg);
         }
       });
     });

@@ -62,7 +62,8 @@
                 <span v-else>******</span>
               </h1>
               <h2>
-                <span v-for="status in status_list"  v-if="status.id==item.contract_status">{{status.val}}</span>
+                <span v-for="status in status_list" :class="['status' + status.id]"
+                      v-if="status.id === item.contract_status">{{status.val}}</span>
               </h2>
             </div>
             <div class="main">
@@ -107,7 +108,7 @@
 
   export default {
     name: "index",
-    components: { ExpandContainer ,StaffDepartSearch},
+    components: {ExpandContainer, StaffDepartSearch},
     data() {
       return {
         staff_depart_visible: false,
@@ -120,25 +121,25 @@
         },
         //筛选条件
         filter_list: [
-          {id: 1,val: '合同搜索'},
-          {id: 2,val: '员工部门'},
+          {id: 1, val: '合同搜索'},
+          {id: 2, val: '员工部门'},
         ],
         contract_type_list: [
-          {id: 1,val: '收房'},
-          {id: 2,val: '租房'},
+          {id: 1, val: '收房'},
+          {id: 2, val: '租房'},
         ],
         status_list: [
-          {id: 0,val: '不限'},
-          {id: 1,val: '生效中'},
-          {id: 2,val: '快到期'},
-          {id: 3,val: '已过期'},
-          {id: 4,val: '已结束'},
+          {id: 0, val: '不限'},
+          {id: 1, val: '生效中'},
+          {id: 2, val: '快到期'},
+          {id: 3, val: '已过期'},
+          {id: 4, val: '已结束'},
         ],
         remaining_list: [
-          {id: 0,val: '不限'},
-          {id: 1,val: '一年以下'},
-          {id: 2,val: '1-2年'},
-          {id: 3,val: '2年以上'},
+          {id: 0, val: '不限'},
+          {id: 1, val: '一年以下'},
+          {id: 2, val: '1-2年'},
+          {id: 3, val: '2年以上'},
         ],
         buttons: [
           {
@@ -150,20 +151,20 @@
             type: 'confirm'
           },
         ],
-        contract_txt:'收房',     //收租
+        contract_txt: '收房',     //收租
         paging: 0,           //总条数
         contract_list: [],    //列表
         params: {
-          search:'',          //搜索字段
-          status:'' ,          //合同状态
-          remaining:'',        //合同剩余时长
+          search: '',          //搜索字段
+          status: '',          //合同状态
+          remaining: '',        //合同剩余时长
           signer: [],          //员工
           org: [],             //部门
           contract_type: 1,    //收租类型，默认收房
           page: 1,
           limit: 6,          //没有分页
-          from:'mobile',        //mobile app端
-          city_name:'',        //城市
+          from: 'mobile',        //mobile app端
+          city_name: '',        //城市
         },
       }
     },
@@ -172,11 +173,11 @@
     },
     mounted() {
     },
-    activated(){
+    activated() {
       this.resetParams();
       let top = this.$refs['main-Content'].offsetTop;
       this.mainHeight.height = window.innerHeight - top + 'px';
-      this.params.city_name=this.personal.city_name; //城市赋值
+      this.params.city_name = this.personal.city_name; //城市赋值
     },
     watch: {
       'params.search'(val) {
@@ -194,21 +195,21 @@
         this.params.contract_type = item.id;
         this.contract_txt = item.val;
         this.show_btn = false;
-        this.params.page=1;
+        this.params.page = 1;
         this.contract_list = [];
         this.handleGetContractList();
       },
       //选择合同状态、剩余时长
-      chooseHouseProperty(item,type) {
+      chooseHouseProperty(item, type) {
         this.params[type] = item.id;
       },
       //选择员工或部门
-      handleGetInfo(val,type) {
+      handleGetInfo(val, type) {
         this.params.signer = [];
         this.params.org = [];
         if (val !== 'close') {
-          let arr=[];
-          for (let  item of val) {
+          let arr = [];
+          for (let item of val) {
             arr.push(item.id);
           }
           switch (type) {
@@ -220,7 +221,7 @@
               break;
           }
         }
-        this.params.page=1;
+        this.params.page = 1;
         this.contract_list = [];
         this.handleGetContractList();
         this.offset_top = 0;
@@ -235,7 +236,7 @@
             this.params.remaining = '';
             break;
           case 'confirm':
-            this.params.page=1;
+            this.params.page = 1;
             this.contract_list = [];
             this.handleGetContractList();
             this.offset_top = '';
@@ -246,7 +247,7 @@
       },
       //搜索按钮
       onSearch() {
-        this.params.page=1;
+        this.params.page = 1;
         this.contract_list = [];
         this.show_btn = false;
         this.handleGetContractList();
@@ -256,7 +257,7 @@
         this.fullLoading = true;
         this.$httpZll.getContractList(this.params).then(res => {
           this.fullLoading = false;
-          for (let item of res.data) {
+          for (let item of res.data.data) {
             this.contract_list.push(item);
           }
           this.paging = res.count;
@@ -269,7 +270,7 @@
           this.contract_list = [];
           this.handleGetContractList();
         } else {
-          if(this.fullLoading) return;
+          if (this.fullLoading) return;
           if (this.contract_list.length === this.paging) return;
           this.params.page++;
           this.handleGetContractList();
@@ -281,13 +282,13 @@
           page: 1,
           limit: 6,          //没有分页
           contract_type: 1,    //收租类型，默认收房
-          search:'',          //搜索字段
-          status:'' ,          //合同状态
-          remaining:'',        //合同剩余时长
+          search: '',          //搜索字段
+          status: '',          //合同状态
+          remaining: '',        //合同剩余时长
           signer: [],          //员工
           org: [],             //部门
-          from:'mobile',
-          city_name:'',        //城市
+          from: 'mobile',
+          city_name: '',        //城市
         };
       },
 
@@ -299,11 +300,11 @@
 
       //合同详情
       handleGoDetail(item) {
-        let param={
+        let param = {
           contract_id: item.contract_id,
           contract_type: this.params.contract_type
         }
-        this.routerLink('/contract_detail',param);
+        this.routerLink('/contract_detail', param);
       },
     },
   }
@@ -317,35 +318,43 @@
       padding: .3rem 0;
       border-top: .1rem solid #F4F4F4;
       border-bottom: .1rem solid #F4F4F4;
+
       .searchInput {
-        padding:0 .3rem;
+        padding: 0 .3rem;
         margin-top: .1rem;
       }
+
       .search-type {
         text-align: center;
         border-top: 1px solid #F4F4F4;
         margin-top: 10px;
         padding: .2rem .3rem 0 .3rem;
+
         span {
           width: 100%;
+
           .van-icon {
             vertical-align: middle;
             font-size: 12px;
           }
+
           &:not(:last-child) {
             margin-right: 4px;
           }
         }
       }
     }
+
     .chooseBtn {
       @include flex('items-center');
       flex-wrap: wrap;
+
       p {
         margin-top: .2rem;
         padding: 0 .1rem;
         width: 25%;
         @include flex('flex-center');
+
         b {
           width: 100%;
           padding: .2rem 0;
@@ -353,36 +362,41 @@
           @include radius(1rem);
           background-color: #EEEDEE;
         }
-        div.van-cell,div.van-field {
+
+        div.van-cell, div.van-field {
           width: 100%;
-          padding: .1rem 0;
-          padding-left: .2rem;
+          padding: .1rem 0 .1rem .2rem;
           text-align: center;
           @include radius(1rem);
           background-color: #EEEDEE;
         }
+
         .choose {
           background-color: rgba(69, 112, 254, .1);
           color: #4570FE;
         }
       }
     }
+
     .house-type {
       > div {
         margin-bottom: 10px;
       }
     }
+
     /*列表*/
     ul {
       background: transparent;
+
       li {
         padding: 0;
         margin-bottom: .15rem;
+
         .contract_content {
-          width: 100%;
           @include radius(.1rem);
           background-color: #FFFFFF;
           padding: .3rem 0 .3rem .3rem;
+          margin: .2rem .3rem 0;
 
           .top {
             @include flex('items-bet');
@@ -412,15 +426,31 @@
             }
 
             h2 {
-              white-space: nowrap;
-              padding: .1rem .2rem;
-              color: #7BB242;
-              @include radius(.1rem 0 0 .1rem);
-              background-color: rgba(123, 178, 66, .2);
-            }
+              span {
+                white-space: nowrap;
+                padding: .1rem .2rem;
+                @include radius(.1rem 0 0 .1rem);
+              }
 
-            .status {
+              .status1 {
+                color: #84B74F;
+                background-color: #E5F0D9;
+              }
 
+              .status2 {
+                color: #FEA434;
+                background-color: #FFE9CE;
+              }
+
+              .status3 {
+                color: #A7A7A7;
+                background-color: #E6E6E6;
+              }
+
+              .status4 {
+                color: #F66E44;
+                background-color: #FDDCD2;
+              }
             }
           }
 
@@ -462,107 +492,21 @@
           }
         }
       }
+
       .noMore, .noData {
         @include flex('flex-center');
         width: 100%;
         padding: .2rem;
         background: transparent;
       }
+
       .noData {
         height: 8rem;
       }
     }
-    .mainContent {
-      //@include scroll;
-      /*height: 100%;*/
-      /*padding: 0 .25rem;*/
-      background-color: #F2F2F2;
-      padding: .2rem .3rem 0;
-      .contract-item {
-        min-height: 2.5rem;
-        background-color: white;
-        border-radius: 8px;
-        position: relative;
-        padding: .2rem;
-        &:not(:last-child) {
-          margin-bottom: .2rem;
-        }
-        a.status {
-          position: absolute;
-          top: .2rem;
-          right: 0;
-          min-width: 1.5rem;
-          padding: .1rem .15rem;
-          border-radius: .1rem 0 0 .1rem;
-          text-align: center;
-          font-size: .25rem;
-        }
-        a.status1 {
-          color: #84B74F;
-          background-color: #E5F0D9;
-        }
-        a.status2 {
-          color: #FEA434;
-          background-color: #FFE9CE;
-        }
-        a.status3 {
-          color: #A7A7A7;
-          background-color: #E6E6E6;
-        }
-        a.status4 {
-          color: #F66E44;
-          background-color: #FDDCD2;
-        }
-        a.type-icon {
-          width: 8pt;
-          height: 8pt;
-          padding: .05rem;
-          font-size: .25rem;
-          border-radius: .08rem;
-          margin-right: .1rem;
-        }
-        a.icon-collect {
-          background-color: #ECF0FF;
-          color: #6589FF;
-        }
-        a.icon-rent {
-          background-color: #FFE9CE;
-          color: #FE9E26;
-        }
-        a,h2{
-          font-family: 'dingzitiblod';
-        }
-        div.contract-info {
-          padding: .1rem 0;
-          margin-top: .5rem;
-          > div {
-            width: 100%;
-            min-height: .8rem;
-            text-align: center;
-            &:nth-child(2) {
-              border-left: 1px dashed #808080;
-              border-right: 1px dashed #808080;
-            }
-            h4,span {
-              font-family: 'dingzitiblod';
-            }
-            h4 {
-              font-size: .2rem;
-              color: #808080;
-              text-align: center;
-              margin-bottom: .1rem;
-            }
-            span {
-              color: #5E5E5E;
-              font-size: .25rem;
-            }
-            span.during {
-              color: #4F77FE;
-            }
-          }
-        }
-      }
 
+    .mainContent {
+      background-color: #F2F2F2;
     }
   }
 </style>

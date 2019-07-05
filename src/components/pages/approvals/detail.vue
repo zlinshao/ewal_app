@@ -393,6 +393,7 @@
       // 审批历史流程
       historyProcess(detail) {
         this.$httpZll.getHistoryProcess(detail.process_id).then(res => {
+          console.log(res)
           if (res) {
             this.historyProList = res;
             // 图片id获取图片地址
@@ -767,6 +768,13 @@
           for (let key of data[item]) {
             if (key.status === 'objInt') {
               arr.push(key.keyName);
+            }
+            if (key.showList) {
+              for (let list of key.showList) {
+                if (list.status === 'objInt') {
+                  arr.push(list.keyName);
+                }
+              }
             }
           }
         }

@@ -107,9 +107,12 @@
             let h0 = this.$httpZll.getAllDict();
             // 收款账户
             let h1 = this.$httpZll.getFinancialAccount(this.personal.department_id);
-            Promise.all([h0, h1]).then((result) => {
+            // 公告类型
+            let h2 = this.$httpZll.getAnnouncementType();
+            Promise.all([h0, h1, h2]).then((result) => {
               this.handlerDict(result[0], 'h0');
               this.handlerDict(result[1], 'h1');
+              this.handlerDict(result[2], 'h2');
               this.loading = !res;
             }).catch((error) => {
               console.log(2);
@@ -133,6 +136,13 @@
               for (let item of res.data) {
                 let account = item.account;
                 dicties.remittance_account[account.id] = account.account_num + ' ' + account.account_owner + `<br>` + account.name;
+              }
+            }
+            break;
+          case 'h2':
+            if (res.data && res.data.length) {
+              for (let item of res.data) {
+                dicties.type_id[item.id] = item.name;
               }
             }
             break;

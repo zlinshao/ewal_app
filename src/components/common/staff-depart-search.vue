@@ -67,8 +67,8 @@
         },
         choose_visible: false,
         type_list: [
-          {id: 1,val: '员工'},
-          {id: 2,val: '部门'},
+          {id: 1, val: '员工'},
+          {id: 2, val: '部门'},
         ],
         module: false,
 
@@ -97,19 +97,19 @@
         switch (type) {
           case 'cancel':
             this.handleInitial();
-            this.$emit('close','close');
+            this.$emit('close', 'close');
             break;
           case 'confirm':
-            this.$emit('close',this.choose_items,this.params.choose === 1 ? 'staff': 'depart');
+            this.$emit('close', this.choose_items, this.params.choose === 1 ? 'staff' : 'depart');
         }
       },
       handleDeleteItem(idx) {
-        this.choose_items.splice(idx,1);
+        this.choose_items.splice(idx, 1);
       },
       handleChooseItem(item) {
         for (let tmp of this.choose_items) {
           if (item.id === tmp.id) {
-            this.$prompt('已选该员工','warning');
+            this.$prompt('已选该员工', 'warning');
             return false;
           }
         }
@@ -125,31 +125,27 @@
       onSearch() {
         this.choose_visible = false;
         if (this.params.choose === 1) {
-          this.$httpZll.searchStaffList({search:this.params.search}).then(res => {
-            console.log(res);
-            if (Number(res.code) === 20000) {
-              this.staff_depart_list = res.data.data;
-            }else {
-              this.staff_depart_list = [];
-              this.$prompt('暂无数据','info');
-            }
-          })
-        }
-        if (this.params.choose === 2){
-          let search = this.params.search;
-          this.$httpHs.getOrganization({search},'加载中...').then(res => {
-            console.log(res);
-            if (Number(res.code) === 20000) {
+          this.$httpZll.searchStaffList({search: this.params.search}).then(res => {
+            if (res) {
               this.staff_depart_list = res.data.data;
             } else {
               this.staff_depart_list = [];
-              this.$prompt('暂无数据','info');
+            }
+          })
+        }
+        if (this.params.choose === 2) {
+          let search = this.params.search;
+          this.$httpHs.getOrganization({search}, '加载中...').then(res => {
+            if (res) {
+              this.staff_depart_list = res.data.data;
+            } else {
+              this.staff_depart_list = [];
             }
           })
         }
       },
       handleCloseSearch() {
-        this.$emit('close','close');
+        this.$emit('close', 'close');
         this.module = false;
       },
     },
@@ -160,11 +156,14 @@
   #staff-depart-search {
     display: block !important;
     min-height: 3rem;
+
     .item-container {
       height: 4rem;
+
       li {
         padding: .1rem .2rem;
         position: relative;
+
         a {
           position: absolute;
           right: 0;
@@ -172,9 +171,11 @@
         }
       }
     }
+
     .choose-item {
       padding: .2rem 0;
       flex-wrap: wrap;
+
       span {
         padding: .1rem .2rem;
         background-color: #448aff;
@@ -182,15 +183,18 @@
         border-radius: 1.5rem;
         font-size: .25rem;
         margin-bottom: .2rem;
+
         &:not(:last-child) {
           margin-right: .2rem;
         }
+
         i {
           display: inline-block;
           width: 5pt;
           height: 5pt;
           vertical-align: top;
           margin-right: .1rem;
+
           img {
             width: 10pt;
             height: 10pt;

@@ -221,12 +221,12 @@
       villageDetail(api, bulletin) {
         this.oncancel();
         this.$httpZll.get(api).then(res => {
-          if (res.success) {
+          if (res.data.success) {
             let village = {};
             if (bulletin.bulletin === 'bulletin_rent_basic') {
-              village = res.data.content.community_info || {};
+              village = res.data.data.content.community_info || {};
             } else {
-              village = res.data.content.community || {};
+              village = res.data.data.content.community || {};
             }
             this.handlerVillageDetail(village);
           } else {
