@@ -791,7 +791,8 @@ export default {
           let contract_id = res.data.content.contract_info.id;
           this.$httpZll.getBulletinDetail(contract_id).then(result => {
             if (result) {
-              let contentInfo = result.content.draft_content;
+              let data = result.data;
+              let contentInfo = data.content.draft_content;
               if (val.bulletin_type === 'bulletin_collect_continued') { //续收图片处理
                 contentInfo.album = {
                   id_card_photo: [],
@@ -807,9 +808,9 @@ export default {
                 contentInfo.album.id_card_photo = contentInfo.id_card_photo; //证件照片
                 contentInfo.album.photo = contentInfo.photo;  //凭证截图
               }
-              contentInfo.address = result.house_address;
-              contentInfo.house_id = result.house_id;
-              contentInfo.contract_id = result.contract_id;
+              contentInfo.address = data.house_address;
+              contentInfo.house_id = data.house_id;
+              contentInfo.contract_id = data.contract_id;
               resolve(contentInfo);
             }
           });
