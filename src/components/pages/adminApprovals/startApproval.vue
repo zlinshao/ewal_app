@@ -242,7 +242,7 @@
           console.log(val);
         }
       },
-      // 部门 // 岗位
+      // 部门 / 岗位
       getDepartInfo(val) {
         this.onCancel();
         let config = this.searchConfig;
@@ -271,11 +271,25 @@
             this.$router.go(-1);
             break;
           case 'success':
-            console.log(this.form);
-            if (this.$attestationKey(this.approvalList)) return;
-            let type = this.$route.query.type;
-            this.form.type = type;
-            this.$httpZll.sendAdminApproval(this.form).then(res => {
+            // if (this.$attestationKey(this.approvalList)) return;
+            let postForm = {}, data = {}, attachment = [];
+            if (this.approvalStatus) {
+              for (let key of Object.keys(this.form)) {
+                if (key !== 'attachment') {
+                  data[key] = this.form[key];
+                } else {
+                  attachment = this.form[key];
+                }
+              }
+              postForm.detail = [];
+              postForm.detail.push(data);
+              postForm.attachment = attachment;
+            } else {
+              postForm = this.form;
+            }
+            postForm.type = this.approvalStatus;
+            console.log(postForm);
+            this.$httpZll.sendAdminApproval(postForm).then(res => {
               if (res) {
                 this.routerReplace('/adminApprovals');
                 this.$store.dispatch('admin_approval_tabs', {tab: '2', status: 0});
@@ -286,6 +300,18 @@
       },
       resetting(type) {
         this.approvalList = this.jsonClone(adminApprovalsData[type]);
+        this.approvalList.push({
+          label: '紧急程度',
+          placeholder: '必填 请选择',
+          readonly: 'readonly',
+          keyName: 'priority',
+          keyType: 50,
+          type: 'text',
+          status: 'objInt',
+          showForm: 'formatData', //picker 显示form 或 formatData
+          picker: 'picker',
+          slot: '',
+        });
         let all = this.initFormData(this.approvalList, this.showData, 'noStaff');
         this.form = all.form;
         this.formatData = all.formatData;
@@ -318,6 +344,7 @@
 
         .approvalProcess {
           margin-top: .3rem;
+
           .promptTitle {
             padding: .3rem;
             border-top: 1px dashed #D8D8D8;

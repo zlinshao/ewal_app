@@ -7547,6 +7547,7 @@ adminApprovalsData = {
       type: 'textarea',
       slot: '',
     },
+
     {
       label: '上传',
       picker: 'upload',

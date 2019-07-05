@@ -118,6 +118,9 @@
           case "back":
             this.$emit('close');
             break;
+          case 'comment':// 评论
+
+            break;
           case'suspend'://暂缓
           case'urge'://催办
           case'cancel'://撤销
@@ -130,7 +133,6 @@
                   } else {
                     this.$store.dispatch('admin_approval_tabs', {tab: '2', status: 3});
                   }
-                  this.$router.go(-1);
                 }, 500);
               }
             });
