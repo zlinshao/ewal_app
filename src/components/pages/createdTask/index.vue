@@ -239,7 +239,7 @@
         switch (val) {
           case 'submit'://提交
             console.log(this.form);
-            if (this.$attestationKey(this.drawSlither)) return;
+            // if (this.$attestationKey(this.drawSlither)) return;
             this.$httpZll.createdTask(this.form, this.postName).then(res => {
               if (res.success) {
                 this.resetting();

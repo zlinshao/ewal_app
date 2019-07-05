@@ -79,7 +79,7 @@ class httpZll extends httpService {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}announcement/announcement_type`).then(res => {
         if (res.data.code.endsWith('0')) {
-          resolve(res.data);
+          resolve(res.data.data);
         } else {
           resolve(false);
         }
@@ -177,7 +177,7 @@ class httpZll extends httpService {
           resolve(res.data);
         } else {
           resolve(false);
-          // $httpPrompt(res.data.message);
+          $httpPrompt(res.data.message);
         }
       })
     })

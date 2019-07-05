@@ -7046,6 +7046,7 @@ adminApprovalsData = {
     {
       label: '年龄',
       keyName: 'year',
+      unit: '岁',
       keyType: {},
       moreObject: [
         {
@@ -7068,6 +7069,7 @@ adminApprovalsData = {
       label: '薪资要求',
       keyName: 'salary',
       keyType: {},
+      unit: 'K',
       moreObject: [
         {
           placeholder: '必填 最低',
@@ -7112,6 +7114,7 @@ adminApprovalsData = {
     {
       label: '需求人数',
       keyName: 'number',
+      unit: '人',
       keyType: {},
       moreObject: [
         {
@@ -7547,6 +7550,7 @@ adminApprovalsData = {
       type: 'textarea',
       slot: '',
     },
+
     {
       label: '上传',
       picker: 'upload',

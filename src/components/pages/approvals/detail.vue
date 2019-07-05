@@ -393,7 +393,6 @@
       // 审批历史流程
       historyProcess(detail) {
         this.$httpZll.getHistoryProcess(detail.process_id).then(res => {
-          console.log(res)
           if (res) {
             this.historyProList = res;
             // 图片id获取图片地址
