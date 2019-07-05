@@ -40,6 +40,7 @@
           outcomeOptions: []
         },
         buttons: [],
+        approvalDetail: {},
       }
     },
     watch: {
@@ -54,9 +55,7 @@
       content(val) {
         this.detailData = val;
         this.setOperates(val);
-        this.$httpZll.get(val.detail_request_url).then(res => {
-          console.log(res.data);
-        });
+        this.getApprovalDetail(val);
         this.$httpZll.getHistoryProcess(val.process_id).then(res => {
           console.log(res);
         })
@@ -68,6 +67,24 @@
       }
     },
     methods: {
+      // 获取审批详情
+      getApprovalDetail(val) {
+        this.$httpZll.get(val.detail_request_url).then(res => {
+          if (res.data.code.endsWith('0')) {
+            this.approvalDetail = res.data.data;
+            this.changerFormatData(val, res.data.data);
+          } else {
+            this.$prompt(res.data.msg);
+          }
+        });
+      },
+      changerFormatData(val, content) {
+        let form = adminApprovalsData[val.flow_type];
+        for (let item of form) {
+          console.log(item)
+        }
+
+      },
       // 操作按钮
       setOperates(val) {
         let {tab, status} = this.tabs;

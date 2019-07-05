@@ -177,7 +177,7 @@ class httpZll extends httpService {
           resolve(res.data);
         } else {
           resolve(false);
-          // $httpPrompt(res.data.message);
+          $httpPrompt(res.data.message);
         }
       })
     })

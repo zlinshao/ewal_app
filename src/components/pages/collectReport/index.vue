@@ -1615,7 +1615,7 @@
         let data = {};
         this.$httpZll.getBulletinDetail(contract_id).then(res => {
           if (res) {
-            data.content = res.content.draft_content;
+            data.content = res.data.content.draft_content;
             this.childBulletin(data.content);
           }
         });
