@@ -4374,14 +4374,10 @@ defineChangeReport = {
           },
           {
             label: '付款方式',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
+            placeholder: '必填 请输入',
             keyName: 'pay_way',
             keyType: '',
-            type: 'text',
-            status: 'objInt',
-            showForm: 'formatData', //picker 显示form 或 formatData
-            picker: 'picker',
+            type: 'number',
             changeBtn: '付款变化',
             slot: '',
           },
