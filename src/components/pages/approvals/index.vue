@@ -674,7 +674,6 @@
         let twoLevel = this.twoLevel['tab' + tab];
         params = Object.assign({}, params, this.newHighParams);
         this.ids = [];
-        this.approvalList['list' + tab]['data' + twoLevel] = [];
         this.fullLoading['load' + tab] = true;
         this.$httpZll.getMeInitiate(url, params).then(res => {
           this.fullLoading['load' + tab] = false;
