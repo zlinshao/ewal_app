@@ -73,11 +73,11 @@
     },
     computed: {},
     methods: {
-      getList(org = 1, status) {
+      getList(org = 1) {
         return new Promise(resolve => {
           this.departList = [];
           this.fullLoading = false;
-          this.$httpZll.getOrganization(org, status).then(res => {
+          this.$httpZll.getOrganization(org).then(res => {
             this.fullLoading = true;
             if (res.code.endsWith('0')) {
               this.departList = res.data.data;
