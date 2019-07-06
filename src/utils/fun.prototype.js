@@ -948,6 +948,7 @@ export default {
       data.staff_id = info.id;
       // data.staff_id = '';
       data.staff_name = info.name;
+      data.org = info.org;
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
         data.department_id = info.org[0].id;

@@ -148,6 +148,18 @@
       let key = this.$route.query.key || '';
       this.approvalStatus = type;
       this.resetting(type);
+      let org = this.personal.org;
+      if (type === 'group_change') {
+        if (this.personal.org.length > 1) {
+          for (let key of org) {
+
+          }
+        } else {
+          this.form.old_org.id = org[0].id;
+          this.form.old_org.name = org[0].name;
+          this.formatData.old_org = org[0].name;
+        }
+      }
       let params = {
         processDefinitionKey: key,
         tenantId: 'hr',
@@ -198,12 +210,6 @@
           case 'searchPosition':
             this.searchConfig = val;
             this.searchPositionModule = true;
-            // if (this.form.org_id.id) {
-            //   this.searchConfig.org_id = this.form.org_id.id;
-            //   this.searchConfig.org_name = this.form.org_id.name;
-            // } else {
-            //   this.$prompt('请选择部门！');
-            // }
             break;
           case 'searchDepart':
             this.searchConfig = val;
@@ -246,10 +252,19 @@
       getDepartInfo(val) {
         this.onCancel();
         let config = this.searchConfig;
+        let names = ['now_org', 'now_position'];
+        let data = {};
         if (val !== 'close') {
-          this.form[config.keyName].id = val.id;
-          this.form[config.keyName].name = val.name;
-          this.formatData[config.keyName] = val.name;
+          if (names.includes(config.keyName)) {
+            data.id = val.id;
+            data.name = val.name;
+            this.form[config.keyName][0] = data;
+            this.formatData[config.keyName] = val.name;
+          } else {
+            this.form[config.keyName].id = val.id;
+            this.form[config.keyName].name = val.name;
+            this.formatData[config.keyName] = val.name;
+          }
           this.form = Object.assign({}, this.form);
           this.formatData = Object.assign({}, this.formatData);
         }

@@ -4,9 +4,7 @@
   @include bgImage('../../../assets/image/approvals/detail/' + $n + '.png');
 }
 
-
 /*滑动表单过渡效果*/
-
 @mixin slides($n) {
   $num: 100% / $n;
   @for $i from 1 through $n {
@@ -559,8 +557,10 @@
       padding: .8rem .1rem .2rem;
     }
   }
+}
 
-  // 历史审批流程
+// 历史审批流程
+#approvalDetail, #adminDetail {
   .history_content {
     height: 100%;
     @include flex('bet-column');
