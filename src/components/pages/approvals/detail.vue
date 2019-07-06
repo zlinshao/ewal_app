@@ -838,7 +838,7 @@
             this.allDetail.variableName = this.operates.variableName;
             let content = {}, parse = res.data.content.bulletin_content;
             if (parse && typeof parse !== 'object') {
-              if (typeof JSON.parse(parse || '{}') === 'object') {
+              if (parse.startsWith('{') && parse.endsWith('}')) {
                 content = JSON.parse(parse || '{}');
               } else {
                 content = res.data.content;
