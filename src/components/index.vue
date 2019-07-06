@@ -68,18 +68,18 @@
             name: '审批',
             icon: ic_shenpi,
           }, {
-            url: '/contract',
-            // url: '',
+            // url: '/contract',
+            url: '',
             name: '合同',
             icon: ic_hetong,
           }, {
-            url: '/questionnaire',
-            //url: '',
+            // url: '/questionnaire',
+            url: '',
             name: '问卷',
             icon: ic_wenjuan,
           }, {
-            url: '/exam',
-            //url: '',
+            // url: '/exam',
+            url: '',
             name: '考试',
             icon: ic_kaoshi,
           }
