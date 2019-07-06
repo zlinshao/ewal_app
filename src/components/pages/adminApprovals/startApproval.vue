@@ -273,7 +273,7 @@
           case 'success':
             // if (this.$attestationKey(this.approvalList)) return;
             let postForm = {}, data = {}, attachment = [];
-            if (this.approvalStatus) {
+            if (this.approvalStatus === 'personnel_demand') {
               for (let key of Object.keys(this.form)) {
                 if (key !== 'attachment') {
                   data[key] = this.form[key];

@@ -7247,10 +7247,16 @@ adminApprovalsData = {
     },
     {
       label: '现岗位',
-      placeholder: '必填 请输入',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
       keyName: 'now_position',
-      keyType: '',
+      keyType: {},
+      status: 'objName',
       type: 'text',
+      button: '清除',
+      close: 'close',
+      picker: 'searchPosition',
+      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
     {

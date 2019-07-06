@@ -22,12 +22,35 @@
                 <div class="main">
                   <div v-for="item in formatData">
                     <h1>{{item.title}}</h1>
-                    <h2>{{item.value}}</h2>
+                    <h2 v-if="Array.isArray(item.value)">
+                      <span v-for="val in item.value">
+                         <!--图片-->
+                        <img :src="val.uri" :alt="val.uri" v-if="val.info.ext.includes('image')"
+                             @click="$bigPhoto(item.value,val.uri)">
+                        <!--视频-->
+                        <!--@click="videoPlay($event)" 播放事件-->
+                        <img src="../../../assets/image/file/video.png" @click="videoPlay($event)"
+                             v-else-if="val.info.ext.includes('video')" :alt="val.uri">
+                        <!--其它类型-->
+                        <img src="../../../assets/image/file/xls.png" :alt="val.uri"
+                             v-else-if="val.info.ext.includes('xls')" @click="$openFiles($event)">
+                        <img src="../../../assets/image/file/doc.png" :alt="val.uri"
+                             v-else-if="val.info.ext.includes('doc')" @click="$openFiles($event)">
+                        <img src="../../../assets/image/file/txt.png" :alt="val.uri"
+                             v-else-if="val.info.ext.includes('text')" @click="$openFiles($event)">
+                        <img src="../../../assets/image/file/pdf.png" :alt="val.uri"
+                             v-else-if="val.info.ext.includes('pdf')" @click="$openFiles($event)">
+                        <img src="../../../assets/image/file/file.png" :alt="val.uri" v-else
+                             @click="$openFiles($event)">
+                      </span>
+                    </h2>
+                    <h2 v-else>{{item.value}}</h2>
                   </div>
                 </div>
               </div>
             </li>
             <li class="hr"></li>
+            <!--历史审批流程-->
             <li class="log">
               <div class="history_content">
                 <div class="contentMain">
@@ -132,6 +155,15 @@
         </div>
       </footer>
     </van-popup>
+    <!--视频播放-->
+    <div id="videoId" :class="['video-' + phoneType()]" v-show="videoSrc !== ''">
+      <video id="video" :src="videoSrc" muted controls autoplay></video>
+      <div class="items-center close">
+        <span class="flex-center" @click="videoPlay()">
+          <img src="../../../assets/image/file/closeBtn.png" alt="">
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -151,6 +183,7 @@
         personalDetail: {},
         bulletinUser: {},
         nowDate: '',
+        videoSrc: '',
       }
     },
     watch: {
@@ -219,6 +252,20 @@
       }
     },
     methods: {
+      // 查看文件
+      $openFiles(event) {
+        let url = event.target.alt;
+        this.$ddSkip(url);
+      },
+      // 视频播放
+      videoPlay(event = '') {
+        if (event && event.target.alt.includes(globalConfig.domain)) {
+          this.videoSrc = event.target.alt;
+        } else {
+          this.videoSrc = '';
+          // alert('不支持的视频文件！');
+        }
+      },
       // 获取审批详情
       getApprovalDetail(val) {
         this.$httpZll.get(val.detail_request_url).then(res => {
@@ -230,18 +277,20 @@
             } else {
               data = result.data;
             }
-            this.changerFormatData(val, data);
+            this.changerFormatData(val, data, result);
           } else {
             this.$prompt(res.data.msg);
           }
         });
       },
-      changerFormatData(val, content) {
+      changerFormatData(val, content, result) {
         let form = adminApprovalsData[val.flow_type];
         this.formatData = [];
         for (let item of form) {
           let obj = {};
-          obj.title = item.label;
+          if (item.picker !== 'upload') {
+            obj.title = item.label;
+          }
           if (item.status === 'objInt') {
             obj.value = dicties[item.keyName][content[item.keyName]];
           } else if (item.moreObject) {
@@ -252,6 +301,11 @@
             obj.value = arr.join('-') + item.unit;
           } else if (item.status === 'objName') {
             obj.value = content[item.keyName].name;
+          } else if (item.picker === 'upload') {
+            for (let pic of item.photos) {
+              obj.title = pic.label;
+              obj.value = result[pic.keyName];
+            }
           } else {
             obj.value = content[item.keyName];
           }
@@ -370,21 +424,20 @@
         height: 100%;
         @include scroll;
 
-        header {
-
-        }
-
         .mainLog {
           ul {
             .detail {
               @include flex();
               padding: .3rem 0 .3rem .3rem;
 
-              img {
+              > img {
                 margin: 0 .2rem;
+                @include radius(50%);
+              }
+
+              img {
                 width: .8rem;
                 height: .8rem;
-                @include radius(50%);
               }
 
               .content {
@@ -407,18 +460,25 @@
                 .main {
                   padding: .3rem .3rem 0 0;
 
+                  img {
+                    margin: 0 .1rem .1rem 0;
+                    @include radius(.1rem);
+                  }
+
                   div {
-                    padding: .06rem 0;
+                    padding: .1rem 0;
                     @include flex();
 
                     h1 {
-                      min-width: 2.1rem;
+                      font-size: .27rem;
+                      min-width: 2rem;
                       text-align: right;
                       padding-right: .2rem;
                       color: #686874;
                     }
 
                     h2 {
+                      font-size: .27rem;
                       color: #4A4A4A;
                     }
                   }

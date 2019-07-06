@@ -225,11 +225,12 @@ class httpZll extends httpService {
   }
 
   // 组织架构 部门
-  static getOrganization(org, status) {
+  static getOrganization(org) {
     return new Promise((resolve, reject) => {
       this.get(`${url_hr}organization/organization`, {
-        parent_id: org
-      }, status).then(res => {
+        parent_id: org,
+        // user_count: 1,
+      }, 'prompt').then(res => {
         resolve(res.data);
       });
     });
