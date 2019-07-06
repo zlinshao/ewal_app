@@ -817,26 +817,32 @@
       },
       // 获取详情数据
       approvalDetail(url) {
-        this.$httpZll.getApprovalDetail(url).then((res) => {
+        this.$httpZll.getApprovalDetail(url).then(res => {
           if (res) {
             this.allDetail = this.jsonClone(res.data);
-            if (this.allDetail.bulletin_type.includes('bulletin_checkout')) {
-              let ids = ['329', '331'], val = this.allDetail.content.check_type.id, id = '3290';
-              if (ids.includes(val)) {
-                id = val + this.allDetail.content.collect_or_rent;
-              } else {
-                id = val;
+            if (this.allDetail.bulletin_type) {
+              if (this.allDetail.bulletin_type.includes('bulletin_checkout')) {
+                let ids = ['329', '331'], val = this.allDetail.content.check_type.id, id = '3290';
+                if (ids.includes(val)) {
+                  id = val + this.allDetail.content.collect_or_rent;
+                } else {
+                  id = val;
+                }
+                this.allBulletin.slither0 = this.allBulletin.slither0.concat(checkoutTypeChange[id]);
+                this.setDrawSlither(this.allBulletin);
+                this.objInt = this.objIntArray(this.allBulletin);
               }
-              this.allBulletin.slither0 = this.allBulletin.slither0.concat(checkoutTypeChange[id]);
-              this.setDrawSlither(this.allBulletin);
-              this.objInt = this.objIntArray(this.allBulletin);
             }
             this.allDetail.task_id = this.detailData.task_id;
             this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
-            let content = {};
-            if (res.data.content.bulletin_content && typeof (res.data.content.bulletin_content) === 'object') {
-              content = JSON.parse(res.data.content.bulletin_content || '{}');
+            let content = {}, parse = res.data.content.bulletin_content;
+            if (parse && typeof parse !== 'object') {
+              if (typeof JSON.parse(parse || '{}') === 'object') {
+                content = JSON.parse(parse || '{}');
+              } else {
+                content = res.data.content;
+              }
             } else {
               content = res.data.content;
             }
