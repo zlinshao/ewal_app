@@ -417,6 +417,7 @@ export default {
           break;
         case 'Market-VillageExpand'://新增小区
           title = ['新增小区'];
+          data = {};
           data.slither0 = this.jsonClone(defineNewAddVillage);
           break;
         case 'supplement_lord_time': //延长收房时长
