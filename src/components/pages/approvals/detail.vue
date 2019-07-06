@@ -834,9 +834,13 @@
             this.allDetail.task_id = this.detailData.task_id;
             this.allDetail.process_instance_id = this.detailData.process_id;
             this.allDetail.variableName = this.operates.variableName;
-            let content = {};
-            if (res.data.content.bulletin_content && typeof (res.data.content.bulletin_content) === 'object') {
-              content = JSON.parse(res.data.content.bulletin_content || '{}');
+            let content = {}, parse = res.data.content.bulletin_content;
+            if (parse && typeof parse !== 'object') {
+              if (typeof JSON.parse(parse || '{}') === 'object') {
+                content = JSON.parse(parse || '{}');
+              } else {
+                content = res.data.content;
+              }
             } else {
               content = res.data.content;
             }
