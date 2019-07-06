@@ -1,21 +1,21 @@
 /*
 Error: Invalid GBK character "\xE6"
-        on line 8 of detail.scss
+        on line 7 of detail.scss
 
+2: 
 3: @mixin detailImg($n) {
 4:   @include bgImage('../../../assets/image/approvals/detail/' + $n + '.png');
 5: }
 6: 
-7: 
-8: /*滑动表单过渡效果*\/
-9: 
-10: @mixin slides($n) {
-11:   $num: 100% / $n;
-12:   @for $i from 1 through $n {
-13:     .transition#{$n} {
+7: /*滑动表单过渡效果*\/
+8: @mixin slides($n) {
+9:   $num: 100% / $n;
+10:   @for $i from 1 through $n {
+11:     .transition#{$n} {
+12:       .slide#{$i} {
 
 Backtrace:
-detail.scss:8
+detail.scss:7
 C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1090:in `rescue in block in find_encoding_error'
 C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1087:in `block in find_encoding_error'
 C:/APP/ruby/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.7.4/lib/sass/util.rb:1086:in `each'
@@ -37,4 +37,4 @@ C:/APP/ruby/Ruby24-x64/bin/sass:23:in `<main>'
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Invalid GBK character \"\xE6\"\A         on line 8 of detail.scss\A \A 3: @mixin detailImg($n) {\A 4:   @include bgImage('../../../assets/image/approvals/detail/' + $n + '.png');\A 5: }\A 6: \A 7: \A 8: /*滑动表单过渡效果*/\A 9: \A 10: @mixin slides($n) {\A 11:   $num: 100% / $n;\A 12:   @for $i from 1 through $n {\A 13:     .transition#{$n} {"; }
+  content: "Error: Invalid GBK character \"\xE6\"\A         on line 7 of detail.scss\A \A 2: \A 3: @mixin detailImg($n) {\A 4:   @include bgImage('../../../assets/image/approvals/detail/' + $n + '.png');\A 5: }\A 6: \A 7: /*滑动表单过渡效果*/\A 8: @mixin slides($n) {\A 9:   $num: 100% / $n;\A 10:   @for $i from 1 through $n {\A 11:     .transition#{$n} {\A 12:       .slide#{$i} {"; }
