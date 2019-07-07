@@ -856,16 +856,15 @@ export default {
           name = '尾款待办';
           bulletin = '尾款报备';
           break;
-        case 'bulletin_special':
-        case 'bulletin_special_collect':
-        case 'bulletin_special_rent':
-          name = '特殊待办';
-          bulletin = '特殊报备';
-          break;
-        case 'bulletin_checkout':
-          name = '退租待办';
-          bulletin = '退租报备';
-          break;
+        default:
+          if (type.includes('bulletin_special')) {
+            name = '特殊待办';
+            bulletin = '特殊报备';
+          } else if (type.includes('bulletin_checkout')) {
+            name = '退租待办';
+            bulletin = '退租报备';
+          }
+          break
       }
       return {name, bulletin}
     };
