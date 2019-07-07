@@ -344,17 +344,15 @@
           case 'deliveryReceipt':
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
-            let routes = this.$router.options.routes, all = {}, title = '', bulletinName = '';
+            let routes = this.$router.options.routes, all = {};
             if (val.bulletin_type) {
               all = this.$bulletinTitles(val.bulletin_type);
             } else {
               all = this.$bulletinTitles(type);
             }
-            title = all.name;
-            bulletinName = all.bulletin;
             for (let value of routes) {
               if (value.path === '/collectReport') {
-                value.meta.title = bulletinName;
+                value.meta.title = all.bulletin;
               }
             }
             if (val.bulletin_type === 'bulletin_rent_RWC') {
@@ -527,7 +525,7 @@
         let obj = this.bulletinStatus(type);
         val.rootProcessDefinitionKeyIn = obj.type;
         val.assignee = this.personal.staff_id;
-        val.taskDefinitionKeyIn = approvalSearch[obj.status].join(',');
+        val.taskDefinitionKeyIn = approvalSearch[obj.status].join(',') + ',SignEC';
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           if (res) {
