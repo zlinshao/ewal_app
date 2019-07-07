@@ -390,6 +390,7 @@
     activated() {
       this.resetting();
       let tab = this.tabs.tab;
+      this.fullLoading['load' + tab] = true;
       this.approvalList['list' + tab]['data' + this.twoLevel['tab' + tab]] = [];
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
