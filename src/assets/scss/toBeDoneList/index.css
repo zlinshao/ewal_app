@@ -255,7 +255,8 @@
         -ms-text-overflow: ellipsis;
         text-overflow: ellipsis; }
       #toBeDoneList .main .finish .finishMain .finish1 span {
-        width: 1.8rem;
+        min-width: 1.8rem;
+        max-width: 1.8rem;
         height: .7rem;
         background: url("../../../assets/image/toBeDoneList/daibanyiwancheng.png") no-repeat scroll center;
         background-size: 100% 100%; }
