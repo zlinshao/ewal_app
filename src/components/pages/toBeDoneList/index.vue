@@ -23,6 +23,7 @@
                     <span>50<b>%</b></span>
                   </div>
                 </div>
+                {{item.bulletin_type}}
                 <!--<div class="surplus">剩余</div>-->
                 <!--<div>-->
                 <!--<span class="unit">{{item.due_date_hours}}<b>h</b></span>-->
