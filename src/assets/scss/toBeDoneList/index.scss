@@ -131,7 +131,8 @@
                         @include ellipsis;
                     }
                     span {
-                        width: 1.8rem;
+                        min-width: 1.8rem;
+                        max-width: 1.8rem;
                         height: .7rem;
                         @include bgImage('../../../assets/image/toBeDoneList/daibanyiwancheng.png');
                     }

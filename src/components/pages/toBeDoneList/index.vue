@@ -18,6 +18,7 @@
               <div :class="['main-'+index,listLength.includes(index)?'mainTransform':'']">
                 <p>{{item.title}}</p>
                 <div class="toBeDoneType">{{item.name}}</div>
+                <div class="toBeDoneType">{{item.bulletin_name}}</div>
                 <div class="progress">
                   <div :style="{'height': '50%'}">
                     <span>50<b>%</b></span>
