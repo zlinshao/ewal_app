@@ -736,10 +736,12 @@
           case 1:
             this.$httpZll.postDeliveryReceipt(this.form, url).then(res => {
               if (res) {
-                if (val) {
+                if (val === 1) {
                   this.form.id = res.data.id;
                 } else {
-                  this.allDetail.content.handover_id = res.data.id;
+                  if (this.checkout) {
+                    this.allDetail.content.handover_id = res.data.id;
+                  }
                   sessionStorage.setItem('task_detail', JSON.stringify(this.allDetail));
                   this.$router.go(-1);
                 }

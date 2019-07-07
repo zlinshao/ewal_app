@@ -409,7 +409,15 @@
                 sessionStorage.setItem('bulletin_type', '{}');
                 data.ewal_contract = val.ewal_contract;
                 data.task_id = val.task_id;
-                data.bulletin_type = val.bulletin_type;
+                let type = val.bulletin_type;
+                data.bulletin_type = type;
+                let routes = this.$router.options.routes;
+                let name = type === 'bulletin_collect_basic' ? '收房交接' : '租房交接';
+                for (let value of routes) {
+                  if (value.path === '/deliveryReceipt') {
+                    value.meta.title = name;
+                  }
+                }
                 sessionStorage.setItem('task_detail', JSON.stringify(data));
                 this.routerLink('/deliveryReceipt');
                 break;
