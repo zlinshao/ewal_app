@@ -177,6 +177,8 @@
       border-radius: 0 0.3rem 0 0.3rem;
       height: 100%;
       background: #FFFFFF; }
+      #toBeDoneList .main .noFinish .noFinishMain > div p {
+        word-break: break-all; }
       #toBeDoneList .main .noFinish .noFinishMain > div div {
         font-size: .24rem; }
       #toBeDoneList .main .noFinish .noFinishMain > div .toBeDoneType {
