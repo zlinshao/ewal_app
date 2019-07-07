@@ -909,26 +909,26 @@ export default {
           //   jsApiList: ['biz.cspace.preview'] // 必填，需要使用的jsapi列表，注意：不要带dd。
           // });
           // console.log(res);
-          // dd.ready(() => {
-          //   dd.runtime.permission.requestAuthCode({
-          //     corpId: _config.corpId,
-          //     onSuccess(info) {
-          //       that.$httpZll.getTokenInfo(info.code).then((res) => {
-          //         that.personalData(res, resolve);
-          //       })
-          //     },
-          //     onFail(err) {
-          //       alert('dd error: ' + JSON.stringify(err));
-          //       // alert('您不在系统内，请联系管理员添加！');
-          //       that.closeDD();
-          //     }
-          //   });
-          // });
-          // dd.error((err) => {
-          //   alert('dd error: ' + JSON.stringify(err));
-          // });
-          this.$personalDataHandler(setPersonalDetail.data.detail, resolve);
-          globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImY3N2YzYmJiNTc5ZTllOThkZjEwZDFkYjBiZGE4ZDQxNmI0MDUyYjhhZTVmZjgyMGM3ZTY0ZjM5NTgwZTFiMDdhNzQxNWM4ODIxZDIwNDNkIn0.eyJhdWQiOiIxIiwianRpIjoiZjc3ZjNiYmI1NzllOWU5OGRmMTBkMWRiMGJkYThkNDE2YjQwNTJiOGFlNWZmODIwYzdlNjRmMzk1ODBlMWIwN2E3NDE1Yzg4MjFkMjA0M2QiLCJpYXQiOjE1NjE5NjI3MDUsIm5iZiI6MTU2MTk2MjcwNSwiZXhwIjoxNTYzMjU4NzA0LCJzdWIiOiIzNjc4Iiwic2NvcGVzIjpbXX0.kh6ntyHSPuah3BH4lWUJx4AxZ9dv9isVz0fGzuyh1e38qJrYWeUUNWn9DCIfZHYzsYVNDWO7Gh2k06eyGt2JMXeu3aRoCW-SDuGH7cQb02rOnHwA4o9o7kZ7wef6AG1DPafUlAH4l_BgNYxRLHFgdufr5N43S3H6Yjx30Rt7xVWHZUr7YoSfZwK1BmzEDLhcDrqdb29hzUoeJN3fDeZsm0aQqSGyIDKojyjNAChCG6eWNsWZdhLXLUhLjsJBcXIJ0cVnAaD0bObIS_ElDSptQO72Doy_m0vzGz68GYkweynUO8UeyAX0I12xH4sFkE5N1vdIwAAhgSIV6n2dTbobI9sExhM7yNEw8vRj1JD6rC1lSpisyNqqZsTs_E1Vhw4ovldWmCMNjtAfRXHHCn5P7dlcHQmPo_K099zF7Z2eqPkSq_ii4L2LKovZKiv03J9anqHmOexEYi86jiALmnQBxWnBXkGaCbxrmse3cakBq2krh6sjFWtMHLIH66kTV61GSQhyaeVvvVjSiWwKcaj9QEHowbyeiznYCMHODk506GGEGoOny-kBdcv0I5a4a8M2JRYuOOvGwqmuZ9bnM-JqQU6b7WiHJvLseqcqNO_PzqMcRefXLZX0_SR1NnWfax7SaHBP-9-xqUHcD15Lb9QRo_hW8CKBj7CA0NoJuVQvWbQ';
+          dd.ready(() => {
+            dd.runtime.permission.requestAuthCode({
+              corpId: _config.corpId,
+              onSuccess(info) {
+                that.$httpZll.getTokenInfo(info.code).then((res) => {
+                  that.personalData(res, resolve);
+                })
+              },
+              onFail(err) {
+                alert('dd error: ' + JSON.stringify(err));
+                // alert('您不在系统内，请联系管理员添加！');
+                that.closeDD();
+              }
+            });
+          });
+          dd.error((err) => {
+            alert('dd error: ' + JSON.stringify(err));
+          });
+          // this.$personalDataHandler(setPersonalDetail.data.detail, resolve);
+          // globalConfig.token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjdiYzVkMTM2NTBiZjJjZGRiN2Y3NTFiYTExZmVhZWExOTRiZGNlZTA5ZTc4NDcwYTYwMzQwNDk2NDFkNTI1NzdhOWQyMDg3MWIyYWY4Zjc0In0.eyJhdWQiOiIxIiwianRpIjoiN2JjNWQxMzY1MGJmMmNkZGI3Zjc1MWJhMTFmZWFlYTE5NGJkY2VlMDllNzg0NzBhNjAzNDA0OTY0MWQ1MjU3N2E5ZDIwODcxYjJhZjhmNzQiLCJpYXQiOjE1NjExODQ5ODcsIm5iZiI6MTU2MTE4NDk4NywiZXhwIjoxNTYyNDgwOTg3LCJzdWIiOiI2OSIsInNjb3BlcyI6W119.bZWWUDv4ZchHRsd3R0Lnew36wYHpN-A1823vvUt0-p6kauOAF4iZDt9MdjioR2aFEKe8gK9Vlxb8usbWSPA6_ihyDcX1WYxphRWKGiTRuOS3LmeIU3k2FtJl2_zeDJTRpWn4NQdj9b-a0P79yeoSKZ8FgNSm9I6qxcemTOnuw94i8IAjoH3C6u0j922bAP2snEwsZabPDugO5FIKozGdre12l4FNGMSw5S4gLmVZqe4QI_ydCj7mV8C0OrB0Q3S_OnZzy1UdFpKOT7N2LTm9E1sO3l30xlLhVZvK86IQ48jGD-f-s92g9b7wb7QlheWrD1bIUjdJHVGlLy7h3UQRHu-tLZ03W6joKaqOUil5p6XLCi-l61aMwV47Ok8Me8SFfyOiyH_ud5fgUUc14Txun6xwuVmR8zFz5Dj62QfZ1KUDByMGAFl7w7DpimM0bbxXk4_v_8uY7-3teCF0pAn6CS17S2yxOED0G4wAtxFKf-CqYJofbvx5WMJaauu94ItKYSSPVeW7_ZoysW_quwnNLFD8w3lPt3X7OiU3AOx-YMC0bPnua1Wwv5kJyKdLcbPVh5XQ71c54n6xF2QgkfcoXv7xo-2HgopMk2LPPIZ9xHYqaxVmnoRdNA5Hjhz6nNadZvXcf4KObbSSA_WasZS3p-tQfyHup2JmpCJ4dvH1Otk';
         });
       });
     };
@@ -947,7 +947,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      data.staff_id = '';
+      // data.staff_id = '';
       data.staff_name = info.name;
       data.org = info.org;
       if (info.org && info.org.length) {

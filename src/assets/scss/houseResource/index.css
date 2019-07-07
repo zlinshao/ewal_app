@@ -127,42 +127,42 @@
   -ms-text-overflow: ellipsis;
   text-overflow: ellipsis; }
 
-#houseResource > div.houseResource .search-type {
+#houseResource .houseResource .search-type {
   text-align: center;
   border-top: 1px solid #F4F4F4;
   margin-top: 10px;
   padding: .2rem .3rem 0 .3rem; }
-  #houseResource > div.houseResource .search-type span {
+  #houseResource .houseResource .search-type span {
     font-size: .3rem;
     width: 100%; }
-    #houseResource > div.houseResource .search-type span .van-icon {
+    #houseResource .houseResource .search-type span .van-icon {
       vertical-align: middle;
       font-size: .3rem; }
-    #houseResource > div.houseResource .search-type span:not(:last-child) {
+    #houseResource .houseResource .search-type span:not(:last-child) {
       margin-right: 4px; }
-#houseResource > div.houseResource .search-content {
+#houseResource .houseResource .search-content {
   height: 300px; }
-#houseResource > div.houseResource .top-search {
+#houseResource .houseResource .top-search {
   padding: .3rem 0;
   border-top: .1rem solid #F4F4F4;
   border-bottom: .1rem solid #F4F4F4; }
-  #houseResource > div.houseResource .top-search .searchInput {
+  #houseResource .houseResource .top-search .searchInput {
     padding: 0 .3rem; }
-#houseResource > div.houseResource .main-house-list div.house {
+#houseResource .houseResource .main-house-list div.house {
   padding: .3rem;
   min-height: 100px;
   border-bottom: 1px dashed #F2F2F2;
   background-color: white;
   display: flex; }
-  #houseResource > div.houseResource .main-house-list div.house .leftPic {
+  #houseResource .houseResource .main-house-list div.house .leftPic {
     width: 2.2rem;
     height: 2.2rem;
     position: relative; }
-    #houseResource > div.houseResource .main-house-list div.house .leftPic img {
+    #houseResource .houseResource .main-house-list div.house .leftPic img {
       width: 100%;
       height: 100%;
       border-radius: 4px; }
-    #houseResource > div.houseResource .main-house-list div.house .leftPic a {
+    #houseResource .houseResource .main-house-list div.house .leftPic a {
       min-width: 15pt;
       min-height: 35pt;
       display: inline-block;
@@ -177,72 +177,72 @@
       text-align: center;
       font-family: 'dingzitiblod';
       font-size: .25rem; }
-    #houseResource > div.houseResource .main-house-list div.house .leftPic .status1 {
+    #houseResource .houseResource .main-house-list div.house .leftPic .status1 {
       background-color: #E53A36; }
-    #houseResource > div.houseResource .main-house-list div.house .leftPic .status2 {
+    #houseResource .houseResource .main-house-list div.house .leftPic .status2 {
       background-color: #FFB205; }
-    #houseResource > div.houseResource .main-house-list div.house .leftPic .status3 {
+    #houseResource .houseResource .main-house-list div.house .leftPic .status3 {
       background-color: #00ACC1; }
-    #houseResource > div.houseResource .main-house-list div.house .leftPic .status4 {
+    #houseResource .houseResource .main-house-list div.house .leftPic .status4 {
       background-color: #7CB342; }
-  #houseResource > div.houseResource .main-house-list div.house .rightInfo {
+  #houseResource .houseResource .main-house-list div.house .rightInfo {
     flex: 1;
     margin-left: .3rem;
     position: relative;
     display: flex;
     justify-content: space-between;
     flex-direction: column; }
-    #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name {
+    #houseResource .houseResource .main-house-list div.house .rightInfo h2.house-name {
       font-family: 'dingzitiblod'; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice {
+      #houseResource .houseResource .main-house-list div.house .rightInfo h2.house-name a.notice {
         display: inline-block;
         width: 18px;
         height: 16px;
         vertical-align: top; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice2 {
+      #houseResource .houseResource .main-house-list div.house .rightInfo h2.house-name a.notice2 {
         background: url("../../../assets/image/houseResource/hs.png") no-repeat scroll center;
         background-size: 100% 100%; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice3 {
+      #houseResource .houseResource .main-house-list div.house .rightInfo h2.house-name a.notice3 {
         background: url("../../../assets/image/houseResource/gantan-cheng.png") no-repeat scroll center;
         background-size: 100% 100%; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo h2.house-name a.notice4 {
+      #houseResource .houseResource .main-house-list div.house .rightInfo h2.house-name a.notice4 {
         background: url("../../../assets/image/houseResource/gantan-hong.png") no-repeat scroll center;
         background-size: 100% 100%; }
-    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info {
+    #houseResource .houseResource .main-house-list div.house .rightInfo div.info {
       display: flex;
       justify-content: space-around;
       padding: .1rem 0; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info a {
+      #houseResource .houseResource .main-house-list div.house .rightInfo div.info a {
         font-family: 'dingzitiblod';
         color: #808080;
         font-size: .23rem; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.info i {
+      #houseResource .houseResource .main-house-list div.house .rightInfo div.info i {
         width: 0;
         height: 12px;
         border-right: 1px dashed #808080;
         margin: 0 5px;
         position: relative;
         top: 2px; }
-    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a {
+    #houseResource .houseResource .main-house-list div.house .rightInfo div.tag a {
       font-size: .2rem;
       padding: 3px 3px;
       border-right: 3px;
       font-family: 'dingzitiblod'; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a:not(:last-child) {
+      #houseResource .houseResource .main-house-list div.house .rightInfo div.tag a:not(:last-child) {
         margin-right: 5px; }
-    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a.tag1 {
+    #houseResource .houseResource .main-house-list div.house .rightInfo div.tag a.tag1 {
       background-color: #F0F0F0;
       color: #808080; }
-    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.tag a.tag2 {
+    #houseResource .houseResource .main-house-list div.house .rightInfo div.tag a.tag2 {
       color: #EE7B78;
       background-color: #FFF2F2; }
-    #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom {
+    #houseResource .houseResource .main-house-list div.house .rightInfo div.bottom {
       display: flex;
       /*justify-content: space-between;
       align-items: center;*/
       position: relative;
       width: 100%; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom a {
+      #houseResource .houseResource .main-house-list div.house .rightInfo div.bottom a {
         width: .3rem;
         height: .3rem;
         background: url("../../../assets/image/houseResource/fangwu.png") no-repeat scroll center;
@@ -251,19 +251,19 @@
         vertical-align: middle;
         position: relative;
         top: 3px; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom h3, #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom span {
+      #houseResource .houseResource .main-house-list div.house .rightInfo div.bottom h3, #houseResource .houseResource .main-house-list div.house .rightInfo div.bottom span {
         font-family: 'dingzitiblod'; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom h3 {
+      #houseResource .houseResource .main-house-list div.house .rightInfo div.bottom h3 {
         color: #808087; }
-      #houseResource > div.houseResource .main-house-list div.house .rightInfo div.bottom span {
+      #houseResource .houseResource .main-house-list div.house .rightInfo div.bottom span {
         font-size: .3rem;
         color: #EE7B78;
         position: absolute;
         right: 0;
         bottom: 0; }
-  #houseResource > div.houseResource .main-house-list div.house:active {
+  #houseResource .houseResource .main-house-list div.house:active {
     background-color: #F2F2F2; }
-#houseResource > div.houseResource .main-house-list .noMore, #houseResource > div.houseResource .main-house-list .noData {
+#houseResource .houseResource .main-house-list .noMore, #houseResource .houseResource .main-house-list .noData {
   display: flex;
   display: -webkit-flex;
   align-items: center;
@@ -271,16 +271,16 @@
   width: 100%;
   padding: .2rem;
   background-color: transparent; }
-#houseResource > div.houseResource .filter-content {
+#houseResource .houseResource .filter-content {
   background-color: white;
   max-height: 400px; }
-  #houseResource > div.houseResource .filter-content .chooseBtn {
+  #houseResource .houseResource .filter-content .chooseBtn {
     display: flex;
     display: -webkit-flex;
     align-items: center;
     flex-wrap: wrap;
     margin-bottom: 10px; }
-    #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item {
+    #houseResource .houseResource .filter-content .chooseBtn p.choose-btn-item {
       margin-top: .2rem;
       padding: 0 .1rem;
       width: 25%;
@@ -288,7 +288,7 @@
       display: -webkit-flex;
       align-items: center;
       justify-content: center; }
-      #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item b {
+      #houseResource .houseResource .filter-content .chooseBtn p.choose-btn-item b {
         width: 100%;
         padding: .2rem 0;
         text-align: center;
@@ -296,7 +296,7 @@
         -moz-border-radius: 1rem;
         border-radius: 1rem;
         background-color: #EEEDEE; }
-      #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item div.van-cell, #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item div.van-field {
+      #houseResource .houseResource .filter-content .chooseBtn p.choose-btn-item div.van-cell, #houseResource .houseResource .filter-content .chooseBtn p.choose-btn-item div.van-field {
         width: 100%;
         padding: .1rem 0 .1rem .2rem;
         text-align: center;
@@ -304,11 +304,17 @@
         -moz-border-radius: 1rem;
         border-radius: 1rem;
         background-color: #EEEDEE; }
-      #houseResource > div.houseResource .filter-content .chooseBtn p.choose-btn-item .choose {
+      #houseResource .houseResource .filter-content .chooseBtn p.choose-btn-item .choose {
         background-color: rgba(69, 112, 254, 0.1);
         color: #4570FE; }
-  #houseResource > div.houseResource .filter-content .house-type > div {
+  #houseResource .houseResource .filter-content .house-type > div {
     margin-bottom: 10px; }
+#houseResource .recommend-house {
+  position: fixed;
+  bottom: 2.5rem;
+  right: .3rem;
+  width: 1rem;
+  height: 1rem; }
 
 .commonFooterTag {
   position: fixed;

@@ -277,6 +277,8 @@ dicties = {
   education: {0: '高中及以上', 1: '大专及以上', 2: '本科及以上', 3: '不限'},
   // 是否补款
   is_supplement_money: oneYesZeroNo,
+  // 是否退款
+  is_abatement_money: oneYesZeroNo,
   // 是否退还押金
   is_checkout_deposit: oneYesZeroNo,
   // 是否为本人账户
