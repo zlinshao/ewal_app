@@ -589,14 +589,11 @@
         for (let btn of data) {
           if (btn.outcome) {
             let data = [];
-            switch (type) {
-              case 'bulletin_collect_basic':
-              case 'bulletin_rent_basic':
-                data = [{
-                  title: '客户手机签署',
-                  action: 'phone',
-                }];
-                break;
+            if (btn.taskDefinitionKey === 'SignEC') {
+              data = [{
+                title: '客户手机签署',
+                action: 'phone',
+              }];
             }
             btn.outcome = JSON.parse(btn.outcome);
             btn.oldOutcome = this.jsonClone(btn.outcome);
