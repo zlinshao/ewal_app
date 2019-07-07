@@ -557,12 +557,12 @@
                   display: flex;
                   align-items: center;
                   justify-content: space-between;
+
                   .price {
                     color: #CF2E33;
                     font-family: 'dingzitiblod';
                   }
                 }
-
 
 
                 span {
