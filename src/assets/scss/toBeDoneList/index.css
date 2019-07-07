@@ -179,6 +179,8 @@
       background: #FFFFFF; }
       #toBeDoneList .main .noFinish .noFinishMain > div div {
         font-size: .24rem; }
+      #toBeDoneList .main .noFinish .noFinishMain > div p {
+        word-break: break-all; }
       #toBeDoneList .main .noFinish .noFinishMain > div .toBeDoneType {
         margin: .2rem 0 .2rem; }
       #toBeDoneList .main .noFinish .noFinishMain > div .surplus {
