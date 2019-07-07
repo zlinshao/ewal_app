@@ -389,6 +389,8 @@
     },
     activated() {
       this.resetting();
+      let tab = this.tabs.tab;
+      this.approvalList['list' + tab]['data' + this.twoLevel['tab' + tab]] = [];
       let approvalTop = this.$refs.approvalTop.offsetHeight;
       let mainTop = this.$refs.mainTop.offsetHeight;
       let top = approvalTop + mainTop;
@@ -575,7 +577,7 @@
             }
             break;
           case '3'://抄送我的
-              this.urlApi = 'history/process-instances';
+            this.urlApi = 'history/process-instances';
             break;
           case '4'://暂不处理
             this.urlApi = 'runtime/process-instances';
