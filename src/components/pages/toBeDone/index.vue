@@ -531,7 +531,7 @@
           if (res) {
             this.paging = res.total;
             let data = this.groupHandlerListData(res.data);
-            this.handlerOperates(data, type);
+            this.handlerOperates(data);
             if (this.params.page === 1) {
               this.toBeDoneList = data;
             } else {
@@ -585,7 +585,7 @@
         return obj;
       },
       // 更多操作按钮
-      handlerOperates(data, type) {
+      handlerOperates(data) {
         for (let btn of data) {
           if (btn.outcome) {
             let data = [];
