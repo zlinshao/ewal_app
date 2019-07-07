@@ -525,7 +525,7 @@
         let obj = this.bulletinStatus(type);
         val.rootProcessDefinitionKeyIn = obj.type;
         val.assignee = this.personal.staff_id;
-        val.taskDefinitionKeyIn = approvalSearch[obj.status].join(',');
+        val.taskDefinitionKeyIn = approvalSearch[obj.status].join(',') + ',SignEC';
         this.$httpZll.getToBeDoneApi(val).then(res => {
           this.fullLoading = false;
           if (res) {

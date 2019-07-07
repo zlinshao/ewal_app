@@ -241,8 +241,8 @@ bulletinRouterStatus = {
 
 // 审批筛选
 approvalSearch = {
-  toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'SignEC', 'CollectReceiptSign'],
-  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'SignEC', 'RentBooking'],
+  toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'CollectReceiptSign'],
+  toBeDoneRent: ['RentTakeLook', 'InputBulletinData','RentBooking'],
   toBeDoneRetainage: ['RentRetainage'],
   toBeDoneAgency: ['BulletinAgency'],
   toBeDoneChange: ['InputBulletinData'],
