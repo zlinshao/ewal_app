@@ -719,8 +719,14 @@
             break;
           case 'deliveryReceipt'://交接单
             this.taskDetail.content = this.form;
+            let routes = this.$router.options.routes;
+            for (let value of routes) {
+              if (value.path === '/deliveryReceipt') {
+                value.meta.title = '退租交接';
+              }
+            }
             sessionStorage.setItem('task_detail', JSON.stringify(this.taskDetail));
-            this.routerLink('deliveryReceipt');
+            this.routerLink('/deliveryReceipt');
             break;
           case 'searchStaff':
             this.searchConfig = val;
