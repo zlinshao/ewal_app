@@ -400,6 +400,7 @@
             }
           }
         }
+        this.detailFormData();
         this.isBadShowHidden();
       },
       // 请求数据处理
@@ -838,6 +839,9 @@
             }
           }
         }
+        this.detailFormData();
+      },
+      detailFormData() {
         this.form.task_id = this.allDetail.task_id;
         if (this.allDetail.ewal_contract) {
           let contract = JSON.parse(this.allDetail.ewal_contract || '{}');
@@ -857,7 +861,7 @@
         }
         this.form.collect_or_rent = this.allDetail.bulletin_type === 'bulletin_collect_basic' ? 1 : 2;//收租标记
         this.form = Object.assign({}, this.form);
-      },
+      }
     },
   }
 </script>
