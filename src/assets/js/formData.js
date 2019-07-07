@@ -6379,6 +6379,77 @@ checkoutTypeChange = {
   ],
   // 纸质退租
   '763': normalCheckoutRent,
+  // 未入住退租
+  '764': [
+    {
+      label: '退房日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'checkout_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '是否退款',
+      readonly: 'readonly',
+      placeholder: '必填 请选择',
+      keyName: 'is_abatement_money',
+      keyType: '',
+      type: 'text',
+      status: 'objInt',
+      picker: 'picker',
+      controlShow: '1',
+      showForm: 'formatData', //picker 显示 form 或 formatData
+      slot: '',
+      showList: [
+        {
+          label: '退款金额',
+          placeholder: '必填 请输入',
+          keyName: 'abatement _money',
+          keyType: '',
+          hidden: true,
+          type: 'number',
+          slot: '',
+        },
+      ]
+    },
+    {
+      label: '备注',
+      placeholder: '请输入',
+      keyName: 'remark',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+    {
+      label: '交接人',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'handover_staff',
+      keyType: {},
+      status: 'objName',
+      department: 'handover_department',
+      type: 'text',
+      picker: 'searchStaff',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+    {
+      label: '交接部门',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'handover_department',
+      keyType: {},
+      status: 'objName',
+      type: 'text',
+      picker: 'searchDepart',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      slot: '',
+    },
+  ],
 };
 
 // 续收报备
