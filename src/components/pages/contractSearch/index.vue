@@ -182,8 +182,15 @@
         })
       },
       onConfirm(item) {
+        let type = JSON.parse(sessionStorage.bulletin_type || '{}');
+        // if (type === 'bulletin_change' || type === 'bulletin_rent_trans') {
+        //   if (item.hhhhhh === '1') {
+        //     this.$prompt('请先退租该合同！');
+        //     return;
+        //   }
+        // }
         let data = {}, content = {content: {}}, address;
-        this.$httpZll.getBulletinDetail(data.contract_id).then(res => {
+        this.$httpZll.getBulletinDetail(item.contract_id).then(res => {
           if (res) {
             data.content = res.data.content.draft_content;
             data.content.old_address = res.house_address || res.address || '';

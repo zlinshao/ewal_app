@@ -1263,7 +1263,7 @@
               this.formatData.house_id = res.house_address || '';
               break;
             case 'collect_or_rent':
-              this.formatData[item] = dicties[item][res[item]] || '0';
+              this.formatData[item] = dicties[item][res[item]] || '';
               break;
             case 'customer_fdd_user_id':
               if (this.form[item]) {
@@ -1272,7 +1272,7 @@
               break;
             case'is_checkout_deposit':
             case'is_supplement_money':
-              this.formatData[item] = dicties[item][res[item]] || '0';
+              this.formatData[item] = dicties[item][res[item]] || '';
               this.inputStatus(item, this.form);
               break;
             case 'check_type':
