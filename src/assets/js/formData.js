@@ -5,6 +5,7 @@ setPersonalDetail = {
     "name": "\u5f20\u7433\u7433",
     "is_enable": 0,
     "phone": "18052001167",
+    "scope": "",
     "created_at": "2017-05-26 06:06:14",
     "updated_at": null,
     "detail": {
@@ -27,6 +28,19 @@ setPersonalDetail = {
       "fdd_verify_no": "9456561757b241f0bb98b52b85a3096c",
       "fdd_ca": "C1A6DBDA7887AF0F9A4E38D3287BC7E8",
       "created_at": "2017-05-26 06:06:14",
+      "company_info": {
+        "id": 1,
+        "name": "test",
+        "is_corp": 1,
+        "company_id": 1,
+        "order": 1,
+        "is_enable": 1,
+        "parent_id": null,
+        "leader_id": 1,
+        "ding_department_id": 1,
+        "position_id": null,
+        "order_temp": 1
+      },
       "role": [{
         "id": 139,
         "name": "web\u524d\u7aef\u5de5\u7a0b\u5e08\u4e13\u5458",
@@ -72,12 +86,12 @@ setPersonalDetail = {
         },
         "city": [{
           "id": 77,
-          "city_id": "120000",
-          "city_name": "南京市",
+          "city_id": "320100",
+          "city_name": "\u5357\u4eac\u5e02",
           "city_parent": "320000",
           "code": null,
           "created_at": null,
-          "province": {"id": 10, "province_id": "120000", "province_name": "江苏省", "created_at": null},
+          "province": {"id": 10, "province_id": "320000", "province_name": "\u6c5f\u82cf\u7701", "created_at": null},
           "pivot": {"city_id": 77, "org_id": 395}
         }],
         "pivot": {"user_id": 69, "org_id": 395}
@@ -242,7 +256,7 @@ bulletinRouterStatus = {
 // 审批筛选
 approvalSearch = {
   toBeDoneCollect: ['CollectTakeLook', 'InputBulletinData', 'CollectReceiptSign'],
-  toBeDoneRent: ['RentTakeLook', 'InputBulletinData','RentBooking'],
+  toBeDoneRent: ['RentTakeLook', 'InputBulletinData', 'RentBooking'],
   toBeDoneRetainage: ['RentRetainage'],
   toBeDoneAgency: ['BulletinAgency'],
   toBeDoneChange: ['InputBulletinData'],
