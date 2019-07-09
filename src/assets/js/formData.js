@@ -5757,26 +5757,6 @@ defineCheckoutReport = {
       slot: '',
     },
     {
-      label: '退租办理人',
-      placeholder: '已禁用',
-      disabled: 'disabled',
-      keyName: 'checkout_transact_staff',
-      keyType: '',
-      type: 'text',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '退租办理部门',
-      placeholder: '已禁用',
-      disabled: 'disabled',
-      keyName: 'checkout_transact_department',
-      keyType: '',
-      type: 'text',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
       label: '退租性质',
       placeholder: '必填 请选择',
       readonly: 'readonly',

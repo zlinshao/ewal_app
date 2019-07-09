@@ -26,16 +26,16 @@
       <!--摩天轮-->
       <CirclePanel class="circle"></CirclePanel>
       <!--小火车-->
-      <div class="smallTrain">
-        <h1></h1>
-        <div :class="[item.class?item.class:'railroadCar']" v-for="item in trans">
-          <i></i>
-          <p class="p1">
-            <b>{{item.num}}</b>
-            <span>{{item.scope}}</span>
-          </p>
-        </div>
-      </div>
+<!--      <div class="smallTrain">-->
+<!--        <h1></h1>-->
+<!--        <div :class="[item.class?item.class:'railroadCar']" v-for="item in trans">-->
+<!--          <i></i>-->
+<!--          <p class="p1">-->
+<!--            <b>{{item.num}}</b>-->
+<!--            <span>{{item.scope}}</span>-->
+<!--          </p>-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
     <div class="indexBottom">
       <p v-for="item in indexBottom" @click="bottomTabsTag(item.id)">
