@@ -368,14 +368,15 @@
             }
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
-                let status = true;
                 let types = ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC'];
-                for (let key of Object.keys(val)) {
-                  if (key.includes('_approved')) {
-                    status = false;
-                  }
-                }
-                if (types.includes(type) || status) {
+                // let status = true;
+                // for (let key of Object.keys(val)) {
+                //   if (key.includes('_approved')) {
+                //     status = false;
+                //   }
+                // }
+                // if (types.includes(type) || status) {
+                if (types.includes(type)) {
                   this.againDetailRequest(val);
                 } else {
                   this.againDetailRequest(val, 'again');

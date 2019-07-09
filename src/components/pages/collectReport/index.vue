@@ -1023,6 +1023,12 @@
         switch (val) {
           case 0:// 发布
           case 1:// 草稿
+            if (bulletin.bulletin === 'bulletin_rent_RWC') {
+              this.form.rent_type = 'rwc';
+            }
+            if (bulletin.bulletin === 'bulletin_booking_renting') {
+              this.form.rent_type = 'booking';
+            }
             if (!this.noTaskId) {
               this.form.task_id = this.taskDetail.task_id || '';
               this.form.process_instance_id = this.taskDetail.process_instance_id || '';
@@ -1519,8 +1525,10 @@
             if (res.album[pic] && res.album[pic].length) {
               if (typeof res.album[pic][0] !== 'object') {
                 this.$httpZll.getUploadUrl(res.album[pic], 'close').then(res => {
-                  this.album[pic] = res.data;
-                  this.album = Object.assign({}, this.album);
+                  if (this.form[pic].length) {
+                    this.album[pic] = res.data;
+                    this.album = Object.assign({}, this.album);
+                  }
                 })
               } else {
                 this.album[pic] = res.album[pic];
