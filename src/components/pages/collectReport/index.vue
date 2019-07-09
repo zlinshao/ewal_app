@@ -1250,27 +1250,22 @@
         this.drawSlither.slither0 = this.jsonClone(slither);
         this.drawSlither.slither0.push(
           {
-            label: '交接人',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'handover_staff',
+            label: '退租办理人',
+            placeholder: '已禁用',
+            disabled: 'disabled',
+            keyName: 'checkout_transact_staff',
             keyType: '',
-            department: 'handover_department',
             type: 'text',
-            status: '',
-            picker: 'searchStaff',
             showForm: 'formatData', //picker 显示form 或 formatData
             slot: '',
           },
           {
-            label: '交接部门',
-            placeholder: '必填 请选择',
-            readonly: 'readonly',
-            keyName: 'handover_department',
+            label: '退租办理部门',
+            placeholder: '已禁用',
+            disabled: 'disabled',
+            keyName: 'checkout_transact_department',
             keyType: '',
             type: 'text',
-            status: '',
-            picker: 'searchDepart',
             showForm: 'formatData', //picker 显示form 或 formatData
             slot: '',
           },
@@ -1321,10 +1316,10 @@
                 this.formatData[item] = '';
               }
               break;
-            case 'handover_staff':
-            case 'handover_department':
             case 'checkout_transact_staff':
             case 'checkout_transact_department':
+              this.form.handover_staff = this.form.checkout_transact_staff;
+              this.form.handover_department = this.form.checkout_transact_department;
               if (res[item]) {
                 this.formatData[item] = res[item].name || '';
               } else {
