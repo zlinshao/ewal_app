@@ -1240,7 +1240,7 @@
       },
       // 退租表单字段切换
       checkoutHandler(val, change) {
-        let ids = ['329', '331'], id = '3290';
+        let ids = ['329', '331', '612'], id = '3290';
         if (ids.includes(val.id)) {
           id = val.id + this.form.collect_or_rent;
         } else {

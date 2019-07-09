@@ -5795,14 +5795,7 @@ normalCheckoutRent = [
     showForm: 'formatData',
     slot: '',
   },
-  {
-    label: '押金退款',
-    placeholder: '必填 请输入',
-    keyName: 'deposit_drawback',
-    keyType: '',
-    type: 'number',
-    slot: '',
-  },
+  isCheckoutDeposit(),
   {
     label: '备注',
     placeholder: '请输入',
@@ -5813,12 +5806,92 @@ normalCheckoutRent = [
   },
 ];
 
+// 是否退还押金
+function isCheckoutDeposit() {
+  return {
+    label: '是否退还押金',
+    readonly: 'readonly',
+    placeholder: '必填 请选择',
+    keyName: 'is_checkout_deposit',
+    keyType: '',
+    type: 'text',
+    status: 'objInt',
+    picker: 'picker',
+    controlShow: '1',
+    showForm: 'formatData', //picker 显示 form 或 formatData
+    slot: '',
+    showList: [
+      {
+        label: '是否为本人账户',
+        readonly: 'readonly',
+        placeholder: '必填 请选择',
+        keyName: 'is_self_account',
+        keyType: '',
+        type: 'text',
+        status: 'objInt',
+        picker: 'picker',
+        hidden: true,
+        showForm: 'formatData', //picker 显示 form 或 formatData
+        prompts: '*若退款账号非租客本人账号，请提醒租客，退款过程中若产生任何纠纷，由租房人本人承担',
+        slot: '',
+      },
+      {
+        label: '退款金额',
+        placeholder: '必填 请输入',
+        keyName: 'deposit_drawback',
+        keyType: '',
+        hidden: true,
+        type: 'number',
+        slot: '',
+      },
+      {
+        label: '退款卡号',
+        placeholder: '必填 请输入',
+        keyName: 'account',
+        keyType: '',
+        type: 'number',
+        hidden: true,
+        slot: '',
+      },
+      {
+        label: '开户名',
+        placeholder: '必填 请输入',
+        keyName: 'account_name',
+        keyType: '',
+        type: 'text',
+        button: '银行卡识别',
+        icon: 'bank',
+        hidden: true,
+        slot: '',
+      },
+      {
+        label: '银行',
+        placeholder: '必填 请输入',
+        keyName: 'bank',
+        keyType: '',
+        type: 'text',
+        hidden: true,
+        slot: '',
+      },
+      {
+        label: '支行',
+        placeholder: '请输入',
+        keyName: 'subbranch',
+        keyType: '',
+        type: 'text',
+        hidden: true,
+        slot: '',
+      },
+    ]
+  }
+}
+
 // 退租性质
 checkoutTypeChange = {
   // 正常退租 收
   '3290': [
     {
-      label: '退房日期',
+      label: '退租日期',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'checkout_date',
@@ -5886,7 +5959,7 @@ checkoutTypeChange = {
   // 正常退租 租
   '3291': [
     {
-      label: '退房日期',
+      label: '退租日期',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'checkout_date',
@@ -5923,73 +5996,7 @@ checkoutTypeChange = {
         },
       ]
     },
-    {
-      label: '是否退还押金',
-      readonly: 'readonly',
-      placeholder: '必填 请选择',
-      keyName: 'is_checkout_deposit',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      controlShow: '1',
-      showForm: 'formatData', //picker 显示 form 或 formatData
-      slot: '',
-      showList: [
-        {
-          label: '是否为本人账户',
-          readonly: 'readonly',
-          placeholder: '必填 请选择',
-          keyName: 'is_self_account',
-          keyType: '',
-          type: 'text',
-          status: 'objInt',
-          picker: 'picker',
-          hidden: true,
-          showForm: 'formatData', //picker 显示 form 或 formatData
-          prompts: '*若退款账号非租客本人账号，请提醒租客，退款过程中若产生任何纠纷，由租房人本人承担',
-          slot: '',
-        },
-        {
-          label: '退款卡号',
-          placeholder: '必填 请输入',
-          keyName: 'account',
-          keyType: '',
-          type: 'number',
-          hidden: true,
-          slot: '',
-        },
-        {
-          label: '开户名',
-          placeholder: '必填 请输入',
-          keyName: 'account_name',
-          keyType: '',
-          type: 'text',
-          button: '银行卡识别',
-          icon: 'bank',
-          hidden: true,
-          slot: '',
-        },
-        {
-          label: '银行',
-          placeholder: '必填 请输入',
-          keyName: 'bank',
-          keyType: '',
-          type: 'text',
-          hidden: true,
-          slot: '',
-        },
-        {
-          label: '支行',
-          placeholder: '请输入',
-          keyName: 'subbranch',
-          keyType: '',
-          type: 'text',
-          hidden: true,
-          slot: '',
-        },
-      ]
-    },
+    isCheckoutDeposit(),
     {
       label: '支付日期',
       placeholder: '必填 请选择',
@@ -6035,7 +6042,7 @@ checkoutTypeChange = {
       slot: '',
     },
     {
-      label: '退房日期',
+      label: '退租日期',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'checkout_date',
@@ -6106,7 +6113,77 @@ checkoutTypeChange = {
       slot: '',
     },
     {
-      label: '退房日期',
+      label: '退租日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'checkout_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '支付日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_money_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    isCheckoutDeposit(),
+    {
+      label: '补充约定',
+      placeholder: '必填 请输入',
+      keyName: 'supplementary_agreement',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '物品/费用交接',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'handover_id',
+      keyType: '',
+      type: 'text',
+      picker: 'deliveryReceipt',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '备注',
+      placeholder: '请输入',
+      keyName: 'remark',
+      keyType: '',
+      type: 'textarea',
+      slot: '',
+    },
+  ],
+  // 调租
+  '332': normalCheckoutRent,
+  // 个人转租
+  '333': normalCheckoutRent,
+  // 公司转租
+  '582': normalCheckoutRent,
+  // 公司违约 退租 收
+  '6120': [
+    {
+      label: '终止日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'end_at',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '退租日期',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'checkout_date',
@@ -6136,52 +6213,11 @@ checkoutTypeChange = {
       slot: '',
     },
     {
-      label: '物品/费用交接',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_id',
-      keyType: '',
-      type: 'text',
-      picker: 'deliveryReceipt',
-      showForm: 'formatData',
-      slot: '',
-    },
-    {
-      label: '退款卡号',
+      label: '押金退款',
       placeholder: '必填 请输入',
-      keyName: 'account',
+      keyName: 'deposit_drawback',
       keyType: '',
       type: 'number',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '开户名',
-      placeholder: '必填 请输入',
-      keyName: 'account_name',
-      keyType: '',
-      type: 'text',
-      button: '银行卡识别',
-      icon: 'bank',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '银行',
-      placeholder: '必填 请输入',
-      keyName: 'bank',
-      keyType: '',
-      type: 'text',
-      status: '',
-      slot: '',
-    },
-    {
-      label: '支行',
-      placeholder: '请输入',
-      keyName: 'subbranch',
-      keyType: '',
-      type: 'text',
-      status: '',
       slot: '',
     },
     {
@@ -6193,14 +6229,30 @@ checkoutTypeChange = {
       slot: '',
     },
   ],
-  // 调租
-  '332': normalCheckoutRent,
-  // 个人转租
-  '333': normalCheckoutRent,
-  // 公司转租
-  '582': normalCheckoutRent,
-  // 公司违约 退租
-  '612': [
+  // 公司违约 退租 租
+  '6121': [
+    {
+      label: '终止日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'end_at',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '费用交至日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'pay_the_fee_to_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
     {
       label: '退租日期',
       placeholder: '必填 请选择',
@@ -6210,6 +6262,26 @@ checkoutTypeChange = {
       type: 'text',
       picker: 'date',
       showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '支付日期',
+      placeholder: '必填 请选择',
+      readonly: 'readonly',
+      keyName: 'payment_money_date',
+      keyType: '',
+      type: 'text',
+      picker: 'date',
+      showForm: 'formatData',
+      slot: '',
+    },
+    isCheckoutDeposit(),
+    {
+      label: '补充约定',
+      placeholder: '必填 请输入',
+      keyName: 'supplementary_agreement',
+      keyType: '',
+      type: 'text',
       slot: '',
     },
     {
@@ -6265,7 +6337,7 @@ checkoutTypeChange = {
   // 未入住退租
   '764': [
     {
-      label: '退房日期',
+      label: '退租日期',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'checkout_date',
@@ -6275,30 +6347,7 @@ checkoutTypeChange = {
       showForm: 'formatData',
       slot: '',
     },
-    {
-      label: '是否退款',
-      readonly: 'readonly',
-      placeholder: '必填 请选择',
-      keyName: 'is_abatement_money',
-      keyType: '',
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      controlShow: '1',
-      showForm: 'formatData', //picker 显示 form 或 formatData
-      slot: '',
-      showList: [
-        {
-          label: '退款金额',
-          placeholder: '必填 请输入',
-          keyName: 'abatement_money',
-          keyType: '',
-          hidden: true,
-          type: 'number',
-          slot: '',
-        },
-      ]
-    },
+    isCheckoutDeposit(),
     {
       label: '备注',
       placeholder: '请输入',
@@ -6311,7 +6360,7 @@ checkoutTypeChange = {
   // 违约退组(无客户)
   '765': [
     {
-      label: '退房日期',
+      label: '退租日期',
       placeholder: '必填 请选择',
       readonly: 'readonly',
       keyName: 'checkout_date',
