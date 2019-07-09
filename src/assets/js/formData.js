@@ -5805,6 +5805,17 @@ normalCheckoutRent = [
     slot: '',
   },
   {
+    label: '物品/费用交接',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'handover_id',
+    keyType: '',
+    type: 'text',
+    picker: 'deliveryReceipt',
+    showForm: 'formatData',
+    slot: '',
+  },
+  {
     label: '押金退款',
     placeholder: '必填 请输入',
     keyName: 'deposit_drawback',
@@ -5818,31 +5829,6 @@ normalCheckoutRent = [
     keyName: 'remark',
     keyType: '',
     type: 'textarea',
-    slot: '',
-  },
-  {
-    label: '交接人',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'handover_staff',
-    keyType: '',
-    department: 'handover_department',
-    type: 'text',
-    status: '',
-    picker: 'searchStaff',
-    showForm: 'formatData', //picker 显示form 或 formatData
-    slot: '',
-  },
-  {
-    label: '交接部门',
-    placeholder: '必填 请选择',
-    readonly: 'readonly',
-    keyName: 'handover_department',
-    keyType: '',
-    type: 'text',
-    status: '',
-    picker: 'searchDepart',
-    showForm: 'formatData', //picker 显示form 或 formatData
     slot: '',
   },
 ];
@@ -5914,31 +5900,6 @@ checkoutTypeChange = {
       keyName: 'remark',
       keyType: '',
       type: 'textarea',
-      slot: '',
-    },
-    {
-      label: '交接人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: {},
-      status: 'objName',
-      department: 'handover_department',
-      type: 'text',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '交接部门',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: {},
-      status: 'objName',
-      type: 'text',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
   ],
@@ -6079,31 +6040,6 @@ checkoutTypeChange = {
       type: 'textarea',
       slot: '',
     },
-    {
-      label: '交接人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: {},
-      status: 'objName',
-      department: 'handover_department',
-      type: 'text',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '交接部门',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: {},
-      status: 'objName',
-      type: 'text',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
   ],
   // 违约退租 收
   '3310': [
@@ -6162,31 +6098,6 @@ checkoutTypeChange = {
       keyName: 'remark',
       keyType: '',
       type: 'textarea',
-      slot: '',
-    },
-    {
-      label: '交接人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: {},
-      status: 'objName',
-      department: 'handover_department',
-      type: 'text',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '交接部门',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: {},
-      status: 'objName',
-      type: 'text',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
       slot: '',
     },
   ],
@@ -6301,31 +6212,6 @@ checkoutTypeChange = {
       type: 'textarea',
       slot: '',
     },
-    {
-      label: '交接人',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: {},
-      status: 'objName',
-      department: 'handover_department',
-      type: 'text',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    {
-      label: '交接部门',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: {},
-      status: 'objName',
-      type: 'text',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
   ],
   // 调租
   '332': normalCheckoutRent,
@@ -6333,7 +6219,7 @@ checkoutTypeChange = {
   '333': normalCheckoutRent,
   // 公司转租
   '582': normalCheckoutRent,
-  // 公司退租
+  // 公司违约 退租
   '612': [
     {
       label: '退租日期',
@@ -6365,34 +6251,37 @@ checkoutTypeChange = {
       type: 'textarea',
       slot: '',
     },
+  ],
+  // 纸质退租
+  '763': [
     {
-      label: '交接人',
+      label: '退租日期',
       placeholder: '必填 请选择',
       readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: {},
-      department: 'handover_department',
+      keyName: 'checkout_date',
+      keyType: '',
       type: 'text',
-      status: '',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
+      picker: 'date',
+      showForm: 'formatData',
       slot: '',
     },
     {
-      label: '交接部门',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: {},
-      type: 'text',
-      status: '',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
+      label: '押金退款',
+      placeholder: '必填 请输入',
+      keyName: 'deposit_drawback',
+      keyType: '',
+      type: 'number',
+      slot: '',
+    },
+    {
+      label: '备注',
+      placeholder: '请输入',
+      keyName: 'remark',
+      keyType: '',
+      type: 'textarea',
       slot: '',
     },
   ],
-  // 纸质退租
-  '763': normalCheckoutRent,
   // 未入住退租
   '764': [
     {
@@ -6422,7 +6311,7 @@ checkoutTypeChange = {
         {
           label: '退款金额',
           placeholder: '必填 请输入',
-          keyName: 'abatement _money',
+          keyName: 'abatement_money',
           keyType: '',
           hidden: true,
           type: 'number',
@@ -6438,29 +6327,37 @@ checkoutTypeChange = {
       type: 'textarea',
       slot: '',
     },
+  ],
+  // 违约退组(无客户)
+  '765': [
     {
-      label: '交接人',
+      label: '退房日期',
       placeholder: '必填 请选择',
       readonly: 'readonly',
-      keyName: 'handover_staff',
-      keyType: {},
-      status: 'objName',
-      department: 'handover_department',
+      keyName: 'checkout_date',
+      keyType: '',
       type: 'text',
-      picker: 'searchStaff',
-      showForm: 'formatData', //picker 显示form 或 formatData
+      picker: 'date',
+      showForm: 'formatData',
       slot: '',
     },
     {
-      label: '交接部门',
+      label: '物品/费用交接',
       placeholder: '必填 请选择',
       readonly: 'readonly',
-      keyName: 'handover_department',
-      keyType: {},
-      status: 'objName',
+      keyName: 'handover_id',
+      keyType: '',
       type: 'text',
-      picker: 'searchDepart',
-      showForm: 'formatData', //picker 显示form 或 formatData
+      picker: 'deliveryReceipt',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '备注',
+      placeholder: '请输入',
+      keyName: 'remark',
+      keyType: '',
+      type: 'textarea',
       slot: '',
     },
   ],
