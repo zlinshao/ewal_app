@@ -822,7 +822,7 @@
             this.allDetail = this.jsonClone(res.data);
             if (this.allDetail.bulletin_type) {
               if (this.allDetail.bulletin_type.includes('bulletin_checkout')) {
-                let ids = ['329', '331'], val = this.allDetail.content.check_type.id, id = '3290';
+                let ids = ['329', '331', '612'], val = this.allDetail.content.check_type.id, id = '3290';
                 if (ids.includes(val)) {
                   id = val + this.allDetail.content.collect_or_rent;
                 } else {
