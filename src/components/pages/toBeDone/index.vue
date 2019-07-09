@@ -261,6 +261,7 @@
         }
       },
       addRouterLink(url, item) {
+
         if (item.status) {
           sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
           this.$httpZll.postOpenOneProcess(this.personal.staff_id).then(res => {
@@ -355,6 +356,7 @@
                 value.meta.title = all.bulletin;
               }
             }
+
             if (val.bulletin_type === 'bulletin_rent_RWC') {
               bulletin = bulletinRouterStatus.bulletin_rent_RWC;
               sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));

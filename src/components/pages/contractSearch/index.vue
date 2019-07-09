@@ -131,7 +131,7 @@
         onConfig: {},
         params: {
           page: 1,
-          limit: 50,
+          limit: 60,
           status: 1, // 1-生效中，2-快到期，3-已过期， 4-已结束
           contract_type: 2,
           city_name: '',
@@ -182,13 +182,13 @@
         })
       },
       onConfirm(item) {
-        let type = JSON.parse(sessionStorage.bulletin_type || '{}');
-        // if (type === 'bulletin_change' || type === 'bulletin_rent_trans') {
-        //   if (item.hhhhhh === '1') {
-        //     this.$prompt('请先退租该合同！');
-        //     return;
-        //   }
-        // }
+        let type = JSON.parse(sessionStorage.bulletin_type || '{}').bulletin;
+        if (type === 'bulletin_change' || type === 'bulletin_rent_trans') {
+          if (!item.has_checkout) {
+            this.$prompt('该合同未退租，请先退租该合同！');
+            return;
+          }
+        }
         let data = {}, content = {content: {}}, address;
         this.$httpZll.getBulletinDetail(item.contract_id).then(res => {
           if (res) {
