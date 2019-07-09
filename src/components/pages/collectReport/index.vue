@@ -1248,6 +1248,33 @@
         }
         let slither = defineCheckoutReport.slither0.concat(checkoutTypeChange[id]);
         this.drawSlither.slither0 = this.jsonClone(slither);
+        this.drawSlither.slither0.push(
+          {
+            label: '交接人',
+            placeholder: '必填 请选择',
+            readonly: 'readonly',
+            keyName: 'handover_staff',
+            keyType: '',
+            department: 'handover_department',
+            type: 'text',
+            status: '',
+            picker: 'searchStaff',
+            showForm: 'formatData', //picker 显示form 或 formatData
+            slot: '',
+          },
+          {
+            label: '交接部门',
+            placeholder: '必填 请选择',
+            readonly: 'readonly',
+            keyName: 'handover_department',
+            keyType: '',
+            type: 'text',
+            status: '',
+            picker: 'searchDepart',
+            showForm: 'formatData', //picker 显示form 或 formatData
+            slot: '',
+          },
+        );
         this.resetting();
         this.form.id = '';
         this.form.house_id = '';

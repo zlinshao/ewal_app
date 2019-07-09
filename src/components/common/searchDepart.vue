@@ -52,7 +52,6 @@
       }
     },
     mounted() {
-      console.log(this.personal)
       let company = this.personal.company;
       this.crumbs[0] = company;
       this.getList(company.id);
