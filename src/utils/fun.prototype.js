@@ -955,6 +955,11 @@ export default {
       // data.staff_id = '';
       data.staff_name = info.name;
       data.org = info.org;
+      if (info.company_info) {
+        data.company = {};
+        data.company.id = info.company_info.id || 1;
+        data.company.name = info.company_info.name || '';
+      }
       if (info.org && info.org.length) {
         data.department_name = info.org[0].name;
         data.department_id = info.org[0].id;

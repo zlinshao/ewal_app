@@ -76,7 +76,7 @@
     watch: {
       getImg: {
         handler(val, oldVal) {
-          if(!val) return;
+          if (!val) return;
           this.ids = [];
           this.showFile = [];
           this.progress = {};
@@ -223,12 +223,12 @@
             // } else {
             //
             // }
-            that.uploadProgress(file, key, that.token, putExtra, config, fileType, that, pro);
+            that.uploadProgress(file, key, that.token, putExtra, config, fileType, that, pro, fileName);
           });
         }
       },
       // 上传文件
-      uploadProgress(file, key, token, putExtra, config, fileType, that, pro) {
+      uploadProgress(file, key, token, putExtra, config, fileType, that, pro, fileName) {
         let observable = qiniu.upload(file, key, token, putExtra, config);
         this.subscription[pro] = observable.subscribe({
           next(res) {
@@ -241,7 +241,7 @@
           complete(res) {
             let data = {};
             data.url = that.domain + res.key;
-            data.name = res.key;
+            data.name = fileName;
             data.raw_name = res.key;
             data.type = fileType;
             data.size = file.size;

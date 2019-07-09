@@ -48,16 +48,14 @@
           id: '',
           name: '',
         },
-        crumbs: [
-          {
-            id: 1,
-            name: '乐伽商业管理有限公司',
-          },
-        ],
+        crumbs: [],
       }
     },
     mounted() {
-      this.getList(1);
+      console.log(this.personal)
+      let company = this.personal.company;
+      this.crumbs[0] = company;
+      this.getList(company.id);
     },
     activated() {
     },
@@ -71,7 +69,11 @@
         }
       },
     },
-    computed: {},
+    computed: {
+      personal() {
+        return this.$store.state.app.personalDetail;
+      }
+    },
     methods: {
       getList(org = 1) {
         return new Promise(resolve => {
