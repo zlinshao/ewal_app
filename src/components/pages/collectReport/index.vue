@@ -1485,7 +1485,7 @@
               this.formatData[item] = names.join(',');
               break;
             case 'is_agency'://是否渠道
-              let agency = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '');
+              let agency = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '0');
               this.formatData[item] = dicties[item][agency];
               this.showHiddenInput(this.form, item);
               break;
