@@ -476,11 +476,11 @@ defineNewAddVillage = [
     keyName: 'album',
     photos: [{
       label: '小区照片',
-      placeholder: '必填',
+      // placeholder: '必填',
       keyName: 'village_photo',
     }, {
       label: '房屋照片',
-      placeholder: '必填',
+      // placeholder: '必填',
       keyName: 'home_photo',
     }, {
       label: '调研报告',
@@ -4648,7 +4648,7 @@ defineChangeReport = {
     },
     {
       label: '居住人数',
-      placeholder: '请输入',
+      placeholder: '必填 请输入',
       keyName: 'num_of_residents',
       keyType: '',
       type: 'number',
