@@ -842,6 +842,7 @@ export default {
           bulletin = '租房报备';
           break;
         case 'bulletin_rent_trans':
+          name = '租房待办';
           bulletin = '转租报备';
           break;
         case 'bulletin_rent_continued':
@@ -872,7 +873,19 @@ export default {
           }
           break
       }
-      return {name, bulletin}
+      let routes = this.$router.options.routes;
+      for (let value of routes) {
+        if (value.path === '/toBeDone') {
+          value.meta.title = name;
+        }
+        if (value.path === '/collectReport') {
+          value.meta.title = bulletin;
+        }
+      }
+    };
+    // 合同搜索
+    Vue.prototype.$contractHandlerData = function (val) {
+
     };
     // 确认弹出窗口
     Vue.prototype.$dialog = function (title, content) {

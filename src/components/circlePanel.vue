@@ -190,15 +190,7 @@
       // 报备跳转
       toBulletin(item) {
         sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
-        let routes = this.$router.options.routes, all = {}, name = '', bulletin = '';
-        all = this.$bulletinTitles(item.status.bulletin);
-        name = all.name;
-        bulletin = all.bulletin;
-        for (let value of routes) {
-          if (value.path === '/toBeDone') {
-            value.meta.title = name;
-          }
-        }
+        this.$bulletinTitles(item.status.bulletin);
         this.routerLink('/toBeDone');
       },
       getBasePoint() {

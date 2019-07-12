@@ -186,7 +186,7 @@
         if (type === 'bulletin_change' || type === 'bulletin_rent_trans') {
           if (!item.has_checkout) {
             this.$prompt('该合同未退租，请先退租该合同！');
-            return;
+            // return;
           }
         }
         let data = {}, content = {content: {}}, address;
@@ -196,7 +196,6 @@
             data.content.old_address = res.house_address || res.address || '';
             data.content.address = res.house_address || res.address || '';
             sessionStorage.setItem('task_detail', JSON.stringify(data));
-            this.routerReplace('/collectReport');
           } else {
             content.house_id = item.house_id || '';
             content.contract_id = item.id || '';
@@ -236,8 +235,10 @@
             data.album = item.album;
             content.content = data;
             sessionStorage.setItem('task_detail', JSON.stringify(content));
-            this.routerReplace('/collectReport');
           }
+          let type = JSON.parse(sessionStorage.bulletin_type).bulletin || '';
+          this.$bulletinTitles(type);
+          this.routerReplace('/collectReport');
         });
       },
       close_(val) {
