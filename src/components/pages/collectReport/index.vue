@@ -1064,7 +1064,6 @@
                       this.getPunchClockData();
                     }
                   } else {
-
                     this.bulletin_types(bulletin);
                   }
                 } else {
