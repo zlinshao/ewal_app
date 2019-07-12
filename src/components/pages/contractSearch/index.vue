@@ -186,7 +186,7 @@
         if (type === 'bulletin_change' || type === 'bulletin_rent_trans') {
           if (!item.has_checkout) {
             this.$prompt('该合同未退租，请先退租该合同！');
-            // return;
+            return;
           }
         }
         this.$httpZll.getBulletinDetail(item.contract_id).then(data => {
