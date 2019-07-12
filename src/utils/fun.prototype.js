@@ -1010,7 +1010,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      data.staff_id = '';
+      // data.staff_id = '';
       data.staff_name = info.name;
       data.org = info.org;
       if (info.company_info) {

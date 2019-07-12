@@ -1006,6 +1006,7 @@
       },
       // 发布
       saveReport(val) {
+        console.log(this.form);
         if (val !== 1 && val !== 2) {
           if (this.$attestationKey(this.drawForm)) return;
         }
@@ -1541,6 +1542,14 @@
               break;
           }
         }
+        // if (this.bulletinType.bulletin === 'bulletin_rent_basic') {
+        //   let amount = 'amount_type_received';
+        //   if (Number(this.form[amount]) === 1) {
+        //     this.formatData[amount] = '';
+        //     this.form[amount] = '';
+        //     this.form.money_sum = '';
+        //   }
+        // }
         this.setAlbumDraft(res);
       },
       // 图片预填
