@@ -189,7 +189,7 @@
             // return;
           }
         }
-        this.$httpZll.getBulletinDraft(item.contract_id).then(data => {
+        this.$httpZll.getBulletinDetail(item.contract_id).then(data => {
           this.$contractHandlerData(item, data);
           this.$bulletinTitles(type);
           this.routerReplace('/collectReport');

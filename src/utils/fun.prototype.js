@@ -904,6 +904,23 @@ export default {
         content.is_agency = item.is_agency;
         content.is_family = item.is_family;
         content.customer_info = item.customer_info;
+        if (item.customer_info && item.customer_info.length) {
+          let customer = item.customer_info[0];
+          content.customer_name = customer.name || '';
+          content.contact_phone = customer.phone || '';
+          content.card_id = customer.idcard || '';
+          content.customer_sex = customer.sex == 1 ? 'm' : 'w';
+          content.card_type = 411;
+          content.contact_way = 1;
+        } else {
+          content.customer_name = '';
+          content.contact_phone = '';
+          content.card_id = '';
+          content.customer_sex = '';
+          content.card_type = 411;
+          content.contact_way = 1;
+        }
+        console.log(content);
         content.memo = item.memo || '';
         content.num_of_residents = item.num_of_residents || '';
         content.rental_use = item.rental_use || '';
