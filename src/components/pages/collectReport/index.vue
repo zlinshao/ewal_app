@@ -1006,7 +1006,6 @@
       },
       // 发布
       saveReport(val) {
-        console.log(this.form);
         if (val !== 1 && val !== 2) {
           if (this.$attestationKey(this.drawForm)) return;
         }
@@ -1065,10 +1064,15 @@
                       this.getPunchClockData();
                     }
                   } else {
+
                     this.bulletin_types(bulletin);
                   }
                 } else {
-                  this.childBulletin(this.taskDetail.content);
+                  if (bulletin.bulletin.includes('bulletin_special')) {
+                    this.resetting();
+                  } else {
+                    this.childBulletin(this.taskDetail.content);
+                  }
                 }
               }
             });
