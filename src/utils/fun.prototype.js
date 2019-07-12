@@ -884,8 +884,53 @@ export default {
       }
     };
     // 合同搜索
-    Vue.prototype.$contractHandlerData = function (val) {
-
+    Vue.prototype.$contractHandlerData = function (item, res) {
+      let data = {content: {}}, content = {}, address = '';
+      if (res) {
+        data.content = res.data.content.draft_content;
+        data.content.old_address = res.house_address || res.address || '';
+        data.content.address = res.house_address || res.address || '';
+      } else {
+        address = item.house_name.name || '';
+        data.house_id = item.house_id || '';
+        data.contract_id = item.id || '';
+        data.address = address;
+        content.address = address;
+        content.old_address = address;
+        content.period_price_way_arr = item.pay_way || [];
+        content.trans_type = item.trans_type || '0';
+        content.money_sum = item.money_sum || '';
+        content.current_pay_info = item.money_table || [];
+        content.is_agency = item.is_agency;
+        content.is_family = item.is_family;
+        content.customer_info = item.customer_info;
+        content.memo = item.memo || '';
+        content.num_of_residents = item.num_of_residents || '';
+        content.rental_use = item.rental_use || '';
+        content.remark_terms = ['1', '2', '3', '4', '5'];
+        content.deposit = item.mortgage_price || '';
+        content.bet = item.pay_bet;
+        content.month = item.sign_month || '';
+        content.day = item.sign_remainder_day || '';
+        content.rental_use_remark = item.rental_use_remark || '';
+        content.begin_date = item.start_at.substring(0, 10);
+        content.end_date = item.end_at.substring(0, 10);
+        content.sign_date = item.sign_at.substring(0, 10);
+        if (item.agency_info) {
+          for (let info of Object.keys(item.agency_info)) {
+            content[info] = item.agency_info[info] || '';
+          }
+        } else {
+          item.agency_name = '';
+          item.agency_phone = '';
+          item.agency_price = '';
+          item.agency_user_name = '';
+        }
+        content.album = item.album;
+        data.content = content;
+      }
+      sessionStorage.setItem('task_detail', JSON.stringify(data));
+      return data;
     };
     // 确认弹出窗口
     Vue.prototype.$dialog = function (title, content) {

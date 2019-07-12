@@ -152,7 +152,7 @@
         form.house_id = item.house_id || '';
         form.contract_id = item.contract_id || '';
         form.address = item.house_name.name || '******';
-        this.$emit('close', form, this.onConfig);
+        this.$emit('close', form, this.onConfig, item);
       },
       close_(val) {
         this.chooseCity = false;

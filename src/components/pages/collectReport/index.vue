@@ -493,7 +493,7 @@
         }
       },
       // 房屋搜索结果
-      hiddenHouse(val, config) {
+      hiddenHouse(val, config, item) {
         this.onCancel();
         if (val !== 'close') {
           for (let item of Object.keys(val)) {
@@ -502,7 +502,7 @@
           this.formatData[config.keyName] = val.address;
           //获取特殊事项的房屋详情
           if (config.bulletinType.bulletin.includes('bulletin_special')) {
-            this.getBulletinDetailFun(val.contract_id);
+            this.getBulletinDetailFun(val, item);
           }
         }
       },
@@ -1547,7 +1547,7 @@
             if (res.album[pic] && res.album[pic].length) {
               if (typeof res.album[pic][0] !== 'object') {
                 this.$httpZll.getUploadUrl(res.album[pic], 'close').then(res => {
-                  if (this.form[pic].length) {
+                  if (this.form[pic] && this.form[pic].length) {
                     this.album[pic] = res.data;
                     this.album = Object.assign({}, this.album);
                   }
@@ -1647,11 +1647,11 @@
         // this.form.account_name = '贾少君';
       },
       //获取详情数据（特殊事项ll）
-      getBulletinDetailFun(contract_id) {
+      getBulletinDetailFun(val, item) {
         let data = {};
-        this.$httpZll.getBulletinDetail(contract_id).then(res => {
+        this.$httpZll.getBulletinDetail(val.contract_id).then(res => {
           if (res) {
-            data.content = res.data.content.draft_content;
+            data = this.$contractHandlerData(item, res);
             this.childBulletin(data.content);
           }
         });
