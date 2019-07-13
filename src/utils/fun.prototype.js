@@ -605,6 +605,7 @@ export default {
           if (data) {
             this.$httpZll.localSignContract(url, sign).then(res => {
               if (Number(sign.type) === 2) {
+                console.log(res)
                 resolve(res.data.data)
               } else {
                 this.$prompt('发送成功!', 'success');
@@ -1027,7 +1028,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '';
+      data.staff_id = '';
       data.staff_name = info.name;
       data.org = info.org;
       if (info.company_info) {
