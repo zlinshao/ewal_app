@@ -701,7 +701,15 @@ export default {
               this.routerLink(val.task_action, {again: again});
             }
           }
-          let bulletin = bulletinRouterStatus[val.bulletin_type];
+          let type = '', key = val.taskDefinitionKey;
+          if (key === 'BulletinAgency') {
+            type = 'bulletin_agency'
+          } else if (key === 'RentRetainage') {
+            type = 'bulletin_retainage'
+          } else {
+            type = val.bulletin_type;
+          }
+          let bulletin = bulletinRouterStatus[type];
           sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
           sessionStorage.setItem('task_detail', JSON.stringify(data));
         } else {
