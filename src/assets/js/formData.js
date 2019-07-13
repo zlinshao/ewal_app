@@ -2825,6 +2825,88 @@ defineBookingBWCReport = {
     },
   ],
 };
+// 取消预定
+defineCancelBookingReport = {
+  slither0: [
+    {
+      label: '房屋地址',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'house_id',
+      keyType: '',
+      type: 'text',
+      status: '',
+      showForm: 'formatData',
+      slot: '',
+    },
+    {
+      label: '客户姓名',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'customer_name',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '签约时长',
+      disabled: 'disabled',
+      placeholder: '已禁用',
+      keyName: 'month',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '月单价',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'price',
+      keyType: '',
+      type: 'textarea',
+      showForm: 'formatData', //picker 显示form 或 formatData
+      status: '',
+      slot: '',
+    },
+    {
+      label: '已收金额',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'money_sum',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    isCheckoutDeposit('是否退款'),
+    {
+      label: '备注',
+      placeholder: '请输入',
+      keyName: 'remark',
+      keyType: '',
+      type: 'textarea',
+      status: '',
+      slot: '',
+    },
+    {
+      label: '签约人',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'staff_name',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+    {
+      label: '部门名称',
+      placeholder: '已禁用',
+      disabled: 'disabled',
+      keyName: 'department_name',
+      keyType: '',
+      type: 'text',
+      slot: '',
+    },
+  ],
+};
 // 租房报备
 defineRentReport = {
   // 合同信息
@@ -5807,9 +5889,9 @@ normalCheckoutRent = [
 ];
 
 // 是否退还押金
-function isCheckoutDeposit() {
+function isCheckoutDeposit(name = '是否退还押金') {
   return {
-    label: '是否退还押金',
+    label: name,
     readonly: 'readonly',
     placeholder: '必填 请选择',
     keyName: 'is_checkout_deposit',

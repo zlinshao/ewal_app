@@ -625,7 +625,7 @@
                   this.$httpZll.getElectronicContractSinger(detail.executionId).then(res => {
                     let value = JSON.parse(res.value || '{}');
                     if (value.fadada_user_id) {
-                      this.$handlerSign(detail, user_id, index, value.name).then(_ => {
+                      this.$handlerSign(detail, value.fadada_user_id, index, value.name).then(_ => {
                         this.$router.go(-1);
                       });
                     }

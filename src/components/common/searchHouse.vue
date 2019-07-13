@@ -88,8 +88,8 @@
         params: {
           page: 1,
           limit: 50,
-          status: 1,// 1-生效中，2-快到期，3-已过期， 4-已结束
-          contract_type: 1,  //1-收， 2-租
+          status: 1,//1-生效中，2-快到期，3-已过期，4-已结束
+          contract_type: 1,//1-收，2-租
           city_name: '',
           from: 'task',
           search: '',
