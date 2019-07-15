@@ -110,6 +110,13 @@ export default {
               }
             }
           }
+          if (key.name === 'finish_RWC') {
+            obj.bookingBtn = [{
+              icon: 'icon_zhuanjiao',
+              title: '取消预定',
+              action: 'lose',
+            }]
+          }
           if (key.name === 'due_date') {
             let date = this.myUtils.timeDifference(key.value);
             obj.due_date_hours = date.hours;
@@ -356,6 +363,7 @@ export default {
     };
     // 报备类型数据匹配
     Vue.prototype.$bulletinType = function (type, rwc = '') {
+      console.log(type);
       let data = {}, title = [];
       switch (type) {
         case 'bulletin_collect_basic'://收房
@@ -370,6 +378,10 @@ export default {
           title = ['合同信息', '客户信息'];
           data = this.jsonClone(defineRentReport);
           data.slither0 = defineNewRentReport.concat(data.slither0);
+          break;
+        case 'bulletin_lose'://租房
+          title = ['取消预定'];
+          data = this.jsonClone(defineCancelBookingReport);
           break;
         case 'bulletin_rent_trans'://转租
           title = ['合同信息', '客户信息'];
@@ -1036,7 +1048,7 @@ export default {
       data.avatar = info.avatar;
       data.phone = info.phone;
       data.staff_id = info.id;
-      // data.staff_id = '';
+      data.staff_id = '';
       data.staff_name = info.name;
       data.org = info.org;
       if (info.company_info) {

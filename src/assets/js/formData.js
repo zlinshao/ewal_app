@@ -180,6 +180,11 @@ bulletinRouterCheck = {
   bulletin: 'bulletin_checkout',
   to: 'checkout',
 };
+// 取消预定
+bulletinRouterLose = {
+  bulletin: 'bulletin_lose',
+  to: 'lose',
+};
 // 报备类型
 bulletinRouterStatus = {
   // 收房报备
@@ -203,14 +208,6 @@ bulletinRouterStatus = {
   // 预定报备
   bulletin_booking_renting: {
     bulletin: 'bulletin_booking_renting',
-    to: 'rent',
-    type: 1,
-  },
-  // 取消预定
-  bullet: {
-    bulletin: 'bulletin_lose_rent\n' +
-      'bulletin_lose_collect\n' +
-      'bulletin_lose',
     to: 'rent',
     type: 1,
   },
@@ -247,17 +244,17 @@ bulletinRouterStatus = {
     bulletin: 'bulletin_retainage',
     to: 'retainage',
   },
+  // 取消预定
+  bulletin_lose: bulletinRouterLose,
+  bulletin_lose_collect: bulletinRouterLose,
+  bulletin_lose_rent: bulletinRouterLose,
   // 特殊事项报备
   bulletin_special: bulletinRouterSpecial,
-  // 特殊事项报备
   bulletin_special_collect: bulletinRouterSpecial,
-  // 特殊事项报备
   bulletin_special_rent: bulletinRouterSpecial,
   //退租报备
   bulletin_checkout: bulletinRouterCheck,
-  //退租报备
   bulletin_checkout_collect: bulletinRouterCheck,
-  //退租报备
   bulletin_checkout_rent: bulletinRouterCheck,
 };
 
@@ -3611,7 +3608,6 @@ defineRentReport = {
     },
   ],
 };
-
 
 // 续租
 defineContinueRent = {

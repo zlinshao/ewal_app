@@ -213,9 +213,12 @@
             width: .33rem;
             height: .33rem;
             margin-right: .1rem; }
-      #toBeDone .main ul li .handleBtn .contract p i, #toBeDone .main ul li .handleBtn .contract b i, #toBeDone .main ul li .handleBtn .deliver p i, #toBeDone .main ul li .handleBtn .deliver b i, #toBeDone .main ul li .handleBtn .collectReport p i, #toBeDone .main ul li .handleBtn .collectReport b i, #toBeDone .main ul li .handleBtn .deliveryReceipt p i, #toBeDone .main ul li .handleBtn .deliveryReceipt b i {
+      #toBeDone .main ul li .handleBtn .contract p i, #toBeDone .main ul li .handleBtn .contract b i, #toBeDone .main ul li .handleBtn .deliver p i, #toBeDone .main ul li .handleBtn .deliver b i, #toBeDone .main ul li .handleBtn .collectReport p i, #toBeDone .main ul li .handleBtn .collectReport b i, #toBeDone .main ul li .handleBtn .deliveryReceipt p i, #toBeDone .main ul li .handleBtn .deliveryReceipt b i, #toBeDone .main ul li .handleBtn .lose p i, #toBeDone .main ul li .handleBtn .lose b i {
         width: .4rem;
         height: .4rem; }
+      #toBeDone .main ul li .handleBtn .lose i {
+        background: url("../../../assets/image/toBeDone/cancel.png") no-repeat scroll center;
+        background-size: 100% 100%; }
       #toBeDone .main ul li .handleBtn .contract p {
         white-space: nowrap;
         margin-right: .3rem;

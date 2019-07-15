@@ -1165,8 +1165,6 @@
         }
         let key = this.taskDetail.taskDefinitionKey;
         this.$httpZll.getBulletinDraft(params).then(data => {
-          // this.form = collectBulletinDraft;//收房预填
-          // this.form = rentBulletinDraft;//租房预填
           let arr = [];
           if (type === 'bulletin_collect_continued' || type === 'bulletin_rent_continued') {
             arr = ['address', 'house_id', 'contract_id', 'contract_number'];
@@ -1185,8 +1183,11 @@
                   this.handlePreFill(this.taskDetail.content);
                   this.disabledDefaultValueHandler(this.allResetting);
                 } else {
-                  console.log(1)
-                  this.getPunchClockData();
+                  if (type.includes('bulletin_lose')) {
+                    this.childBulletin(this.taskDetail.content);
+                  } else {
+                    this.getPunchClockData();
+                  }
                 }
               } else {
                 if (!type.includes('bulletin_special')) {
@@ -1343,13 +1344,19 @@
           switch (item) {
             case 'month':
             case 'address':
+            case 'money_sum':
             case 'house_address':
             case 'customer_name':
               this.form[item] = res[item] || this.form[item];
               break;
             case 'house_id':
               this.form[item] = res[item] || this.form[item];
-              this.formatData.house_id = res.address || this.form.address;
+              let keys = 'rent_without_collect_address';
+              if (res[keys]) {
+                this.formatData.house_id = res[keys];
+              } else {
+                this.formatData.house_id = res.address || this.form.address;
+              }
               break;
             case 'agency_infos':
               if (draft) {
@@ -1491,7 +1498,7 @@
               this.formatData[item] = names.join(',');
               break;
             case 'is_agency'://是否渠道
-              let agency = this.myUtils.isNum(res[item]) ? Number(res[item]) : (res[item] || '0');
+              let agency = this.myUtils.isNum(res[item]) ? Number(res[item]) : res[item];
               this.formatData[item] = dicties[item][agency];
               this.showHiddenInput(this.form, item);
               break;
@@ -1596,7 +1603,9 @@
         }
         if (objInt.includes(item)) {
           let num = this.myUtils.isNum(res[item]) ? Number(res[item]) : res[item];
-          this.formatData[item] = dicties[item][num];
+          if (num) {
+            this.formatData[item] = dicties[item][num];
+          }
         }
         if (date.includes(item)) {
           this.formatData[item] = res[item];
