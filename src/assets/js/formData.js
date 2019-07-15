@@ -206,6 +206,14 @@ bulletinRouterStatus = {
     to: 'rent',
     type: 1,
   },
+  // 取消预定
+  bullet: {
+    bulletin: 'bulletin_lose_rent\n' +
+      'bulletin_lose_collect\n' +
+      'bulletin_lose',
+    to: 'rent',
+    type: 1,
+  },
   // 转租报备
   bulletin_rent_trans: {
     bulletin: 'bulletin_rent_trans',
@@ -2258,6 +2266,7 @@ defineCollectReport = {
     },
   ],
 };
+
 // 未收先租
 defineRentBWCReport = [
   {
@@ -2304,7 +2313,7 @@ defineRentBookingReport = [
     slot: '',
   },
 ];
-// 租房预定
+// 预定/未收先租
 defineBookingBWCReport = {
   // 合同信息
   slither0: [
@@ -2907,6 +2916,19 @@ defineCancelBookingReport = {
     },
   ],
 };
+// 新租
+defineNewRentReport = [
+  {
+    label: '房屋地址',
+    placeholder: '已禁用',
+    disabled: 'disabled',
+    keyName: 'house_id',
+    keyType: '',
+    type: 'text',
+    showForm: 'formatData',
+    slot: '',
+  }
+];
 // 租房报备
 defineRentReport = {
   // 合同信息
@@ -3590,20 +3612,6 @@ defineRentReport = {
   ],
 };
 
-// 新租
-defineNewRentReport = [
-  {
-    label: '房屋地址',
-    placeholder: '已禁用',
-    disabled: 'disabled',
-    keyName: 'house_id',
-    keyType: '',
-    type: 'text',
-    status: '',
-    showForm: 'formatData',
-    slot: '',
-  }
-];
 
 // 续租
 defineContinueRent = {
@@ -3616,7 +3624,6 @@ defineContinueRent = {
       keyName: 'house_id',
       keyType: '',
       type: 'text',
-      status: '',
       showForm: 'formatData',
       slot: '',
     },

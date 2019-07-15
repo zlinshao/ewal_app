@@ -1185,6 +1185,7 @@
                   this.handlePreFill(this.taskDetail.content);
                   this.disabledDefaultValueHandler(this.allResetting);
                 } else {
+                  console.log(1)
                   this.getPunchClockData();
                 }
               } else {
@@ -1391,6 +1392,7 @@
           this.form[item] = res[item] || this.form[item];
           switch (item) {
             case 'house_id':
+              this.form.address = res.address;
               this.formatData.house_id = res.address;
               break;
             case 'community':
