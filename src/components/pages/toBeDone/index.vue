@@ -44,12 +44,12 @@
               </b>
             </div>
             <!--取消预定-->
-            <div v-for="btn in item.bookingBtn" :class="btn.action" v-if="item.bookingBtn">
-              <b @click="clickBtn(btn,item)">
-                <i><img :src="btn.icon" alt=""></i>
-                <span>{{btn.title}}</span>
-              </b>
-            </div>
+<!--            <div v-for="btn in item.bookingBtn" :class="btn.action" v-if="item.bookingBtn">-->
+<!--              <b @click="clickBtn(btn,item)">-->
+<!--                <i><img :src="btn.icon" alt=""></i>-->
+<!--                <span>{{btn.title}}</span>-->
+<!--              </b>-->
+<!--            </div>-->
           </div>
         </li>
         <li class="noMore" v-if="toBeDoneList.length === paging && toBeDoneList.length > 4">
