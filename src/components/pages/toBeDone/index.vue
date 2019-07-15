@@ -33,7 +33,7 @@
             <div v-for="btn in normalOperates" :class="btn.action" v-else>
               <b @click="clickBtn(btn,item)">
                 <i><img :src="btn.icon" alt=""></i>
-                <span>{{btn.text}}</span>
+                <span>{{btn.title}}</span>
               </b>
             </div>
             <!--去打卡 / 去签约-->
@@ -43,6 +43,13 @@
                 <span>{{item.task_title}}</span>
               </b>
             </div>
+            <!--取消预定-->
+<!--            <div v-for="btn in item.bookingBtn" :class="btn.action" v-if="item.bookingBtn">-->
+<!--              <b @click="clickBtn(btn,item)">-->
+<!--                <i><img :src="btn.icon" alt=""></i>-->
+<!--                <span>{{btn.title}}</span>-->
+<!--              </b>-->
+<!--            </div>-->
           </div>
         </li>
         <li class="noMore" v-if="toBeDoneList.length === paging && toBeDoneList.length > 4">
@@ -158,11 +165,11 @@
         normalOperates: [
           // {
           //   icon: icon_daiqian,
-          //   text: '代签',
+          //   title: '代签',
           //   action: 'allograph',
           // }, {
           //   icon: icon_zhuanjiao,
-          //   text: '转交',
+          //   title: '转交',
           //   action: 'deliver',
           // }
         ],
@@ -346,7 +353,7 @@
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
             if (val.bulletin_type) {
-             this.$bulletinTitles(val.bulletin_type);
+              this.$bulletinTitles(val.bulletin_type);
             } else {
               this.$bulletinTitles(type);
             }
@@ -362,13 +369,6 @@
             this.againTaskDetail(val).then(_ => {
               if (val.bm_detail_request_url) {
                 let types = ['bulletin_retainage', 'bulletin_agency', 'bulletin_rent_RWC'];
-                // let status = true;
-                // for (let key of Object.keys(val)) {
-                //   if (key.includes('_approved')) {
-                //     status = false;
-                //   }
-                // }
-                // if (types.includes(type) || status) {
                 if (types.includes(type)) {
                   this.againDetailRequest(val);
                 } else {
@@ -377,13 +377,18 @@
               } else {
                 if (val.finish_RWC !== 'bulletin_rent_RWC') {
                   if (val.tk_result) {
-                    bulletin = val.tk_result === 'bulletin' ? bulletinRouterStatus.bulletin_rent_basic : bulletinRouterStatus.bulletin_booking_renting;
-                    result = val.tk_result === 'bulletin' ? '1' : '0';
-                    if (val.book_url) {
-                      bulletin = bulletinRouterStatus.bulletin_rent_basic;
-                      result = '1';
+                    if (val.bulletin_type === 'bulletin_lose') {
+                      bulletin = bulletinRouterStatus.bulletin_lose;
+                      this.routerLink(val.task_action);
+                    } else {
+                      bulletin = val.tk_result === 'bulletin' ? bulletinRouterStatus.bulletin_rent_basic : bulletinRouterStatus.bulletin_booking_renting;
+                      result = val.tk_result === 'bulletin' ? '1' : '0';
+                      if (val.book_url) {
+                        bulletin = bulletinRouterStatus.bulletin_rent_basic;
+                        result = '1';
+                      }
+                      this.routerLink(val.task_action, {result: result});
                     }
-                    this.routerLink(val.task_action, {result: result});
                   } else {
                     if (val.bulletin_type) {
                       bulletin = bulletinRouterStatus[val.bulletin_type];
@@ -395,7 +400,9 @@
                   sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                 } else {
                   if (val.finish_RWC) {
+                    bulletin = bulletinRouterStatus.bulletin_lose;
                     this.routerLink(val.task_action, {result: '1'});
+                    sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                   } else {
                     this.routerLink(val.task_action);
                   }
@@ -434,6 +441,12 @@
                 }
               });
             }
+            break;
+          case 'lose':
+            item.task_action = 'collectReport';
+            item.bulletin_type = 'bulletin_lose';
+            this.bulletin_type.bulletin = 'bulletin_lose';
+            this.goOperates(item);
             break;
           case 'allograph'://代签
           case 'deliver'://转交
@@ -546,6 +559,7 @@
             obj.type = 'MarketCollect,MarketCollectRenew';
             break;
           case "bulletin_rent_basic":
+          case "bulletin_lose":
             obj.status = 'toBeDoneRent';
             obj.type = 'MarketRent,MarketRentRenew';
             break;
@@ -576,8 +590,6 @@
             obj.type = 'Market-Special-collect,Market-Special-rent';
             break;
         }
-        // Market-CollectWithdrawal 收房退租
-        // Market-RentWithdrawal 租房退租
         return obj;
       },
       // 更多操作按钮
