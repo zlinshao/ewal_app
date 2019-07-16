@@ -349,6 +349,7 @@
             break;
           case 'collectReport':
           case 'deliveryReceipt':
+            console.log(val);
             let type = this.bulletin_type.bulletin;
             let result, bulletin;
             if (val.bulletin_type) {
@@ -399,9 +400,11 @@
                   sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                 } else {
                   if (val.finish_RWC) {
-                    bulletin = bulletinRouterStatus.bulletin_lose;
+                    if (val.bulletin_type === 'bulletin_lose') {
+                      bulletin = bulletinRouterStatus.bulletin_lose;
+                      sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
+                    }
                     this.routerLink(val.task_action, {result: '1'});
-                    sessionStorage.setItem('bulletin_type', JSON.stringify(bulletin));
                   } else {
                     this.routerLink(val.task_action);
                   }
