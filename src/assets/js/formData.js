@@ -5369,204 +5369,142 @@ function handlerFreeDelivery(name, key, type = 'number', place = '必填 请输�
   }
 }
 
+// 水表
+function handlerFreeWaterChange(type) {
+  let arr = [
+    handlerFreeDelivery('用水档数', 'water_level'),
+    handlerFreeDelivery('用水单价', 'water_unit_price'),
+    handlerFreeDelivery('上次缴费底数', 'water_fee_last'),
+    handlerFreeDelivery('本次缴费底数', 'water_meter'),
+    handlerFreeDelivery('结算金额', 'water_settlement_amount'),
+  ];
+  if (type === 'add') {
+    arr.unshift(handlerFreeDelivery('水卡卡号', 'water_card_num'))
+  }
+  return arr;
+}
+
+// 电表
+function handlerFreeElectricChange(type) {
+  let arr = [
+    handlerFreeDelivery('用电档数', 'electric_level'),
+    handlerFreeDelivery('谷值用电单价', 'electric_valley_unit_price'),
+    handlerFreeDelivery('上次缴费底数', 'electric_valley_last'),
+    handlerFreeDelivery('本次缴费底数', 'electric_valley'),
+    handlerFreeDelivery('谷值结算金额', 'electric_valley_settlement_amount'),
+    handlerFreeDelivery('峰值用电单价', 'electric_peak_unit_price'),
+    handlerFreeDelivery('上次缴费底数', 'electric_peak_last'),
+    handlerFreeDelivery('本次缴费底数', 'electric_peak'),
+    handlerFreeDelivery('峰值结算金额', 'electric_peak_settlement_amount'),
+  ];
+  if (type === 'add') {
+    arr.unshift(handlerFreeDelivery('电卡卡号', 'electric_card_num'))
+  }
+  return arr;
+}
+
+// 燃气表
+function handlerFreeGasChange(type) {
+  let arr = [
+    handlerFreeDelivery('燃气档数', 'gas_level'),
+    handlerFreeDelivery('燃气单价', 'gas_price'),
+    handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
+    handlerFreeDelivery('本次缴费底数', 'gas_meter'),
+    handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
+  ];
+  if (type === 'add') {
+    arr.unshift(handlerFreeDelivery('燃气卡卡号', 'gas_card_num'))
+  }
+  return arr;
+}
+
 // 费用交接切换
 handlerFreeDeliveryChange = [
-  [],
-  [
-    {
-      label: '缴费类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'payment_type',
-      keyType: 1,
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
+  {
+    label: '水卡缴费',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'water_payment_type',
+    keyType: 4,
+    type: 'text',
+    status: 'objInt',
+    picker: 'picker',
+    showForm: 'formatData', //picker 显示form 或 formatData
+    slot: '',
+    changeList: {
+      2: handlerFreeWaterChange(),
+      3: [handlerFreeDelivery('水卡余额', 'water_card_balance',)],
+      4: handlerFreeWaterChange('add'),
     },
-    handlerFreeDelivery('水卡卡号', 'water_card_num'),
-    // handlerFreeDelivery('水务公司', 'water_company', 'text'),
-    handlerFreeDelivery('用水档数', 'water_level'),
-    handlerFreeDelivery('用水单价', 'water_unit_price'),
-    handlerFreeDelivery('上次缴费底数', 'water_fee_last'),
-    handlerFreeDelivery('本次缴费底数', 'water_meter'),
-    handlerFreeDelivery('结算金额', 'water_settlement_amount'),
-    handlerFreeDelivery('电卡卡号', 'electric_card_num'),
-    // handlerFreeDelivery('电力公司', 'electric_company', 'text'),
-    handlerFreeDelivery('用电档数', 'electric_level'),
-    handlerFreeDelivery('谷值用电单价', 'electric_valley_unit_price'),
-    handlerFreeDelivery('上次缴费底数', 'electric_valley_last'),
-    handlerFreeDelivery('本次缴费底数', 'electric_valley'),
-    handlerFreeDelivery('谷值结算金额', 'electric_valley_settlement_amount'),
-    handlerFreeDelivery('峰值用电单价', 'electric_peak_unit_price'),
-    handlerFreeDelivery('上次缴费底数', 'electric_peak_last'),
-    handlerFreeDelivery('本次缴费底数', 'electric_peak'),
-    handlerFreeDelivery('峰值结算金额', 'electric_peak_settlement_amount'),
-    handlerFreeDelivery('燃气卡卡号', 'gas_card_num'),
-    // handlerFreeDelivery('燃气公司', 'gas_company', 'text'),
-    handlerFreeDelivery('燃气档数', 'gas_level'),
-    handlerFreeDelivery('燃气单价', 'gas_price'),
-    handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
-    handlerFreeDelivery('本次缴费底数', 'gas_meter'),
-    handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
-    handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
-    handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
-    handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
-    {
-      label: '其他费用',
-      placeholder: '必填 请输入',
-      keyName: 'other_fee',
-      keyType: [],
-      type: 'number',
-      status: 'other_fee',
-      button: 'other_fee',
-      slot: '',
-      value: [
-        [{
-          placeholder: '费用名称',
-          keyName: 'name',
+  },
+  {
+    label: '电卡缴费',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'electric_payment_type',
+    keyType: 5,
+    type: 'text',
+    status: 'objInt',
+    picker: 'picker',
+    showForm: 'formatData', //picker 显示form 或 formatData
+    slot: '',
+    changeList: {
+      2: handlerFreeElectricChange(),
+      3: [handlerFreeDelivery('电卡余额', 'electric_card_balance',)],
+      5: handlerFreeElectricChange('add'),
+    },
+  },
+  {
+    label: '燃气缴费',
+    placeholder: '必填 请选择',
+    readonly: 'readonly',
+    keyName: 'gas_payment_type',
+    keyType: 6,
+    type: 'text',
+    status: 'objInt',
+    picker: 'picker',
+    showForm: 'formatData', //picker 显示form 或 formatData
+    slot: '',
+    changeList: {
+      2: handlerFreeGasChange(),
+      3: [handlerFreeDelivery('燃气卡余额', 'gas_card_balance')],
+      6: handlerFreeGasChange('add'),
+    },
+  },
+  handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
+  handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
+  handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
+  {
+    label: '其他费用',
+    placeholder: '必填 请输入',
+    keyName: 'other_fee',
+    keyType: [],
+    type: 'number',
+    status: 'other_fee',
+    button: 'other_fee',
+    slot: '',
+    value: [
+      [{
+        placeholder: '费用名称',
+        keyName: 'name',
+        keyType: '',
+        type: 'text',
+        status: '',
+        slot: '',
+      },
+        {
+          placeholder: '金额 必填',
+          keyName: 'value',
           keyType: '',
-          type: 'text',
+          type: 'number',
           status: '',
           slot: '',
         },
-          {
-            placeholder: '金额 必填',
-            keyName: 'value',
-            keyType: '',
-            type: 'number',
-            status: '',
-            slot: '',
-          },
-        ]
-      ],
-    },
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
-    handlerFreeDelivery('费用总计', 'total_fee'),
-  ],
-  [
-    {
-      label: '缴费类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'payment_type',
-      keyType: 2,
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    // handlerFreeDelivery('水务公司', 'water_company', 'text'),
-    handlerFreeDelivery('用水档数', 'water_level'),
-    handlerFreeDelivery('用水单价', 'water_unit_price'),
-    handlerFreeDelivery('上次缴费底数', 'water_fee_last'),
-    handlerFreeDelivery('本次缴费底数', 'water_meter'),
-    handlerFreeDelivery('结算金额', 'water_settlement_amount'),
-    // handlerFreeDelivery('电力公司', 'electric_company', 'text'),
-    handlerFreeDelivery('用电档数', 'electric_level'),
-    handlerFreeDelivery('谷值用电单价', 'electric_valley_unit_price'),
-    handlerFreeDelivery('上次缴费底数', 'electric_valley_last'),
-    handlerFreeDelivery('本次缴费底数', 'electric_valley'),
-    handlerFreeDelivery('谷值结算金额', 'electric_valley_settlement_amount'),
-    handlerFreeDelivery('峰值用电单价', 'electric_peak_unit_price'),
-    handlerFreeDelivery('上次缴费底数', 'electric_peak_last'),
-    handlerFreeDelivery('本次缴费底数', 'electric_peak'),
-    handlerFreeDelivery('峰值结算金额', 'electric_peak_settlement_amount'),
-    // handlerFreeDelivery('燃气公司', 'gas_company', 'text'),
-    handlerFreeDelivery('燃气档数', 'gas_level'),
-    handlerFreeDelivery('燃气单价', 'gas_price'),
-    handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
-    handlerFreeDelivery('本次缴费底数', 'gas_meter'),
-    handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
-    handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
-    handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
-    handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
-    {
-      label: '其他费用',
-      placeholder: '必填 请输入',
-      keyName: 'other_fee',
-      keyType: [],
-      type: 'number',
-      status: 'other_fee',
-      button: 'other_fee',
-      slot: '',
-      value: [
-        [{
-          placeholder: '费用名称',
-          keyName: 'name',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-          {
-            placeholder: '金额 必填',
-            keyName: 'value',
-            keyType: '',
-            type: 'number',
-            status: '',
-            slot: '',
-          },
-        ]
-      ],
-    },
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
-    handlerFreeDelivery('费用总计', 'total_fee'),
-  ],
-  [
-    {
-      label: '缴费类型',
-      placeholder: '必填 请选择',
-      readonly: 'readonly',
-      keyName: 'payment_type',
-      keyType: 3,
-      type: 'text',
-      status: 'objInt',
-      picker: 'picker',
-      showForm: 'formatData', //picker 显示form 或 formatData
-      slot: '',
-    },
-    handlerFreeDelivery('水卡余额', 'water_card_balance',),
-    handlerFreeDelivery('电卡余额', 'electric_card_balance',),
-    handlerFreeDelivery('燃气卡余额', 'gas_card_balance',),
-    handlerFreeDelivery('结算金额', 'settlement_amount',),
-    handlerFreeDelivery('物业费', 'property_costs', 'number', '请输入'),
-    handlerFreeDelivery('公摊费', 'public_fee', 'number', '请输入', '若公摊物业费算在一起，则将总费用填写在物业费中即可'),
-    handlerFreeDelivery('维修费', 'repair_fees', 'number', '请输入'),
-    {
-      label: '其他费用',
-      placeholder: '必填 请输入',
-      keyName: 'other_fee',
-      keyType: [],
-      type: 'number',
-      status: 'other_fee',
-      button: 'other_fee',
-      slot: '',
-      value: [
-        [{
-          placeholder: '费用名称',
-          keyName: 'name',
-          keyType: '',
-          type: 'text',
-          status: '',
-          slot: '',
-        },
-          {
-            placeholder: '金额 必填',
-            keyName: 'value',
-            keyType: '',
-            type: 'number',
-            status: '',
-            slot: '',
-          },
-        ]
-      ],
-    },
-    handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
-    handlerFreeDelivery('费用总计', 'total_fee'),
-  ]
+      ]
+    ],
+  },
+  handlerFreeDelivery('备注', 'total_fee_remark', 'textarea', '请输入'),
+  handlerFreeDelivery('费用总计', 'total_fee'),
 ];
 
 // 客厅
@@ -5788,7 +5726,7 @@ defineArticleReceipt = {
   // 次卧
   bedroom: [handlerBedroom('bedroom', 15)],
   // 费用交接
-  slither: handlerFreeDeliveryChange[1],
+  slither: handlerFreeDeliveryChange,
 };
 
 // 退租报备

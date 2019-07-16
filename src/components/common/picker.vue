@@ -92,15 +92,19 @@
                 this.formatData[key] = value;
                 break;
               case 'objInt':
-                this.forms[key] = picker.ids[index];
-                this.formatData[key] = value;
+                let str = 'payment_type';
+                if (picker.keyName.includes(str)) {
+                  this.forms[picker.keyName][str] = picker.ids[index];
+                  this.formatData[key] = value;
+                } else {
+                  this.forms[key] = picker.ids[index];
+                  this.formatData[key] = value;
+                }
                 break;
             }
           }
         }
-        let form = this.forms;
-        let formatData = this.formatData;
-        this.$emit('close', form, formatData, picker);
+        this.$emit('close', this.forms, this.formatData, picker);
       },
     },
   }

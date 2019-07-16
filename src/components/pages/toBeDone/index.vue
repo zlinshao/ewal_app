@@ -44,12 +44,12 @@
               </b>
             </div>
             <!--取消预定-->
-<!--            <div v-for="btn in item.bookingBtn" :class="btn.action" v-if="item.bookingBtn">-->
-<!--              <b @click="clickBtn(btn,item)">-->
-<!--                <i><img :src="btn.icon" alt=""></i>-->
-<!--                <span>{{btn.title}}</span>-->
-<!--              </b>-->
-<!--            </div>-->
+            <div v-for="btn in item.bookingBtn" :class="btn.action" v-if="item.bookingBtn">
+              <b @click="clickBtn(btn,item)">
+                <i><img :src="btn.icon" alt=""></i>
+                <span>{{btn.title}}</span>
+              </b>
+            </div>
           </div>
         </li>
         <li class="noMore" v-if="toBeDoneList.length === paging && toBeDoneList.length > 4">
@@ -72,7 +72,7 @@
       </p>
       <div class="mainModule">
         <div class="module" :class="['module'+(index+1)]" v-for="(item,index) in addShowList"
-             @click="addRouterLink(item.url, item)">
+             @click="addRouterLink(item)">
           <div>
             <i></i>
             <p>{{item.text}}</p>
@@ -267,8 +267,7 @@
           this.routerLink('/contractSearch');
         }
       },
-      addRouterLink(url, item) {
-
+      addRouterLink(item) {
         if (item.status) {
           sessionStorage.setItem('bulletin_type', JSON.stringify(item.status));
           this.$httpZll.postOpenOneProcess(this.personal.staff_id).then(res => {
@@ -281,11 +280,11 @@
               detail.bulletin = data.bulletin_type;
               detail.process_instance_id = data.processInstanceId;
               sessionStorage.setItem('task_detail', JSON.stringify(detail));
-              this.routerLink(url, item);
+              this.routerLink(item.url, item);
             });
           })
         } else {
-          this.routerLink(url, item);
+          this.routerLink(item.url, item);
         }
       },
       // 获取合同模板
