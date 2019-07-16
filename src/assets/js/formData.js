@@ -5376,7 +5376,6 @@ function handlerFreeWaterChange(type) {
     handlerFreeDelivery('用水单价', 'water_unit_price'),
     handlerFreeDelivery('上次缴费底数', 'water_fee_last'),
     handlerFreeDelivery('本次缴费底数', 'water_meter'),
-    handlerFreeDelivery('结算金额', 'water_settlement_amount'),
   ];
   if (type === 'add') {
     arr.unshift(handlerFreeDelivery('水卡卡号', 'water_card_num'))
@@ -5391,11 +5390,9 @@ function handlerFreeElectricChange(type) {
     handlerFreeDelivery('谷值用电单价', 'electric_valley_unit_price'),
     handlerFreeDelivery('上次缴费底数', 'electric_valley_last'),
     handlerFreeDelivery('本次缴费底数', 'electric_valley'),
-    handlerFreeDelivery('谷值结算金额', 'electric_valley_settlement_amount'),
     handlerFreeDelivery('峰值用电单价', 'electric_peak_unit_price'),
     handlerFreeDelivery('上次缴费底数', 'electric_peak_last'),
     handlerFreeDelivery('本次缴费底数', 'electric_peak'),
-    handlerFreeDelivery('峰值结算金额', 'electric_peak_settlement_amount'),
   ];
   if (type === 'add') {
     arr.unshift(handlerFreeDelivery('电卡卡号', 'electric_card_num'))
@@ -5410,7 +5407,6 @@ function handlerFreeGasChange(type) {
     handlerFreeDelivery('燃气单价', 'gas_price'),
     handlerFreeDelivery('上次缴费底数', 'gas_fee_last'),
     handlerFreeDelivery('本次缴费底数', 'gas_meter'),
-    handlerFreeDelivery('结算金额', 'gas_settlement_amount'),
   ];
   if (type === 'add') {
     arr.unshift(handlerFreeDelivery('燃气卡卡号', 'gas_card_num'))

@@ -145,6 +145,7 @@
                       :key="index"
                       :type="change.type"
                       :label="change.label"
+                      @input="listenInput(item.keyName)"
                       :readonly="change.readonly"
                       :disabled="change.disabled"
                       :placeholder="change.placeholder">
@@ -292,29 +293,47 @@
     watch: {},
     computed: {},
     methods: {
-      // 监听 input
+      // 监听 input 金额计算
       listenInput(name) {
-        // if (name !== 'total_fee') {
-        //   let value = 0;
-        //   for (let key of this.form.other_fee) {
-        //     value = value + Number(key.value || 0);
-        //   }
-        //   let num4 = Number(this.form.property_costs || 0);
-        //   let num5 = Number(this.form.public_fee || 0);
-        //   let num6 = Number(this.form.repair_fees || 0);
-        //   if (Number(this.form.payment_type) === 3) {
-        //     let num1 = Number(this.form.water_card_balance || 0);
-        //     let num2 = Number(this.form.electric_card_balance || 0);
-        //     let num3 = Number(this.form.gas_card_balance || 0);
-        //     this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
-        //   } else {
-        //     let num7 = Number(this.form.water_settlement_amount || 0);
-        //     let num8 = Number(this.form.electric_valley_settlement_amount || 0);
-        //     let num9 = Number(this.form.electric_peak_settlement_amount || 0);
-        //     let num10 = Number(this.form.gas_settlement_amount || 0);
-        //     this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
-        //   }
-        // }
+        if (name !== 'total_fee') {
+          let value = 0;
+          for (let key of this.form.other_fee) {
+            value = value + Number(key.value || 0);
+          }
+          let water = this.form.water_payment_type;
+          let water_num1 = Number(water.water_card_balance || 0);
+          let water_num2 = Number(water.water_unit_price || 0);
+          let water_all = water_num1 + water_num2;
+
+          let electric = this.form.electric_payment_type;
+          let electric_num1 = Number(electric.electric_card_balance || 0);
+          let electric_num2 = Number(electric.electric_valley_unit_price || 0);
+          let electric_num3 = Number(electric.electric_peak_unit_price || 0);
+          let electric_all = electric_num1 + electric_num2 + electric_num3;
+
+          let gas = this.form.gas_payment_type;
+          let gas_num1 = Number(gas.gas_card_balance || 0);
+          let gas_num2 = Number(gas.gas_price || 0);
+          let gas_all = gas_num1 + gas_num2;
+
+          let num1 = Number(this.form.property_costs || 0);
+          let num2 = Number(this.form.public_fee || 0);
+          let num3 = Number(this.form.repair_fees || 0);
+          let num_all = num1 + num2 + num3;
+          this.form.total_fee = value + num_all + water_all + electric_all + gas_all;
+          //   if (Number(this.form.payment_type) === 3) {
+          //     let num1 = Number(this.form.water_card_balance || 0);
+          //     let num2 = Number(this.form.electric_card_balance || 0);
+          //     let num3 = Number(this.form.gas_card_balance || 0);
+          //     this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
+          //   } else {
+          //     let num7 = Number(this.form.water_settlement_amount || 0);
+          //     let num8 = Number(this.form.electric_valley_settlement_amount || 0);
+          //     let num9 = Number(this.form.electric_peak_settlement_amount || 0);
+          //     let num10 = Number(this.form.gas_settlement_amount || 0);
+          //     this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
+          //   }
+        }
       },
       // 预览交接单
       previewDelivery() {
@@ -642,7 +661,7 @@
           }
         }
       },
-      // 费用交接切换
+      // 费用交接切换 废弃
       changerPaymentType(val) {
         let fee = ['payment_type', 'property_costs', 'public_fee', 'repair_fees', 'other_fee', 'total_fee'];
         let form = {}, keys = [];
@@ -891,7 +910,6 @@
         }
         this.form.collect_or_rent = this.allDetail.bulletin_type === 'bulletin_collect_basic' ? 1 : 2;//收租标记
         this.form = Object.assign({}, this.form);
-        console.log(this.form)
       }
     },
   }
