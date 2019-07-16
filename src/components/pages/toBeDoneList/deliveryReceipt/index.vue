@@ -321,18 +321,6 @@
           let num3 = Number(this.form.repair_fees || 0);
           let num_all = num1 + num2 + num3;
           this.form.total_fee = value + num_all + water_all + electric_all + gas_all;
-          //   if (Number(this.form.payment_type) === 3) {
-          //     let num1 = Number(this.form.water_card_balance || 0);
-          //     let num2 = Number(this.form.electric_card_balance || 0);
-          //     let num3 = Number(this.form.gas_card_balance || 0);
-          //     this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
-          //   } else {
-          //     let num7 = Number(this.form.water_settlement_amount || 0);
-          //     let num8 = Number(this.form.electric_valley_settlement_amount || 0);
-          //     let num9 = Number(this.form.electric_peak_settlement_amount || 0);
-          //     let num10 = Number(this.form.gas_settlement_amount || 0);
-          //     this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
-          //   }
         }
       },
       // 预览交接单
@@ -423,9 +411,20 @@
                   }
                 }
                 break;
+              case 'water_payment_type':
+              case 'electric_payment_type':
+              case 'gas_payment_type':
+                this.paymentTypeReset(item);
+                let type = this.form[item].payment_type;
+                if (type || type === 0) {
+                  this.formatData[item] = dicties[item][type];
+                }
+                this.form[item] = res[item] || this.form[item];
+                break;
             }
           }
         }
+        this.listenInput();
         this.detailFormData();
         this.isBadShowHidden();
       },
@@ -651,7 +650,7 @@
         let data = this.jsonClone(defineArticleReceipt.slither);
         for (let item of data) {
           if (item.keyName === name) {
-            let type = this.form[name].payment_type;
+            let type = this.form[name].payment_type || '0';
             this.form[name] = {};
             if (String(type) === '0') return;
             for (let change of item.changeList[type]) {
@@ -660,42 +659,6 @@
             this.form[name].payment_type = type;
           }
         }
-      },
-      // 费用交接切换 废弃
-      changerPaymentType(val) {
-        let fee = ['payment_type', 'property_costs', 'public_fee', 'repair_fees', 'other_fee', 'total_fee'];
-        let form = {}, keys = [];
-        let list = this.drawSlither;
-        // 切换前 费用交接需保留字段
-        for (let item of list['slither']) {
-          if (!fee.includes(item.keyName)) {
-            keys.push(item.keyName);
-          }
-        }
-        // 切换前 赋值
-        for (let name of Object.keys(this.form)) {
-          if (!keys.includes(name)) {
-            form[name] = this.form[name];
-          }
-        }
-        // 切换后
-        list['slither'] = this.jsonClone(handlerFreeDeliveryChange[val]);
-        for (let item of list['slither']) {
-          if (!item.keyName.includes('payment_type')) {
-            form[item.keyName] = item.keyType;
-            if (item.keyName === 'other_fee') {
-              form[item.keyName] = item.keyType;
-              let obj = {};
-              for (let other of item.value) {
-                for (let val of other) {
-                  obj[val.keyName] = '';
-                }
-              }
-              form[item.keyName].push(obj);
-            }
-          }
-        }
-        this.form = this.jsonClone(form);
       },
       // 显示/隐藏 图片 备注
       isBadShowHidden() {
