@@ -138,6 +138,19 @@
                   <div class="zl-button" v-if="item.button">{{item.button}}</div>
                   <div class="unit" v-if="item.unit">{{item.unit}}</div>
                 </zl-input>
+                <div v-if="item.changeList" style="border-bottom: 3px solid #f8f8f8;">
+                  <div v-for="change in item.changeList[form[item.keyName]['payment_type']]">
+                    <zl-input
+                      v-model="form[item.keyName][change.keyName]"
+                      :key="index"
+                      :type="change.type"
+                      :label="change.label"
+                      :readonly="change.readonly"
+                      :disabled="change.disabled"
+                      :placeholder="change.placeholder">
+                    </zl-input>
+                  </div>
+                </div>
                 <div class="prompts" v-if="item.prompts">{{item.prompts}}</div>
               </div>
               <!--上传-->
@@ -219,7 +232,6 @@
       return {
         allDetail: {},
         mainTop: [],
-        payment_type: 1,
         slither: 0,
         startClientX: 0,
         endClientX: 0,
@@ -269,6 +281,7 @@
       this.checkout = this.bulletinType.bulletin === 'bulletin_checkout';
       this.mainTop = ['客厅', '厨房/阳台/卫生间', '主卧', '次卧', '费用交接'];
       this.allReportNum = Object.keys(defineArticleReceipt).length;
+      this.resetting();
       this.getDraft(this.allDetail.task_id);
       let top = this.$refs.top.offsetHeight + 30;
       let main = this.$refs.main.offsetWidth + "px";
@@ -281,27 +294,27 @@
     methods: {
       // 监听 input
       listenInput(name) {
-        if (name !== 'total_fee') {
-          let value = 0;
-          for (let key of this.form.other_fee) {
-            value = value + Number(key.value || 0);
-          }
-          let num4 = Number(this.form.property_costs || 0);
-          let num5 = Number(this.form.public_fee || 0);
-          let num6 = Number(this.form.repair_fees || 0);
-          if (Number(this.form.payment_type) === 3) {
-            let num1 = Number(this.form.water_card_balance || 0);
-            let num2 = Number(this.form.electric_card_balance || 0);
-            let num3 = Number(this.form.gas_card_balance || 0);
-            this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
-          } else {
-            let num7 = Number(this.form.water_settlement_amount || 0);
-            let num8 = Number(this.form.electric_valley_settlement_amount || 0);
-            let num9 = Number(this.form.electric_peak_settlement_amount || 0);
-            let num10 = Number(this.form.gas_settlement_amount || 0);
-            this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
-          }
-        }
+        // if (name !== 'total_fee') {
+        //   let value = 0;
+        //   for (let key of this.form.other_fee) {
+        //     value = value + Number(key.value || 0);
+        //   }
+        //   let num4 = Number(this.form.property_costs || 0);
+        //   let num5 = Number(this.form.public_fee || 0);
+        //   let num6 = Number(this.form.repair_fees || 0);
+        //   if (Number(this.form.payment_type) === 3) {
+        //     let num1 = Number(this.form.water_card_balance || 0);
+        //     let num2 = Number(this.form.electric_card_balance || 0);
+        //     let num3 = Number(this.form.gas_card_balance || 0);
+        //     this.form.total_fee = value + num1 + num2 + num3 + num4 + num5 + num6;
+        //   } else {
+        //     let num7 = Number(this.form.water_settlement_amount || 0);
+        //     let num8 = Number(this.form.electric_valley_settlement_amount || 0);
+        //     let num9 = Number(this.form.electric_peak_settlement_amount || 0);
+        //     let num10 = Number(this.form.gas_settlement_amount || 0);
+        //     this.form.total_fee = value + num4 + num5 + num6 + num7 + num8 + num9 + num10;
+        //   }
+        // }
       },
       // 预览交接单
       previewDelivery() {
@@ -315,8 +328,6 @@
           if (res) {
             let data = res.data;
             this.form.id = data.id;
-            this.payment_type = Number(data.payment_type);
-            this.resetting(this.payment_type);
             this.handlePreFill(data);
           } else {
             let house_id = '';
@@ -328,10 +339,7 @@
             this.$httpZll.getNewDeliveryDraft({house_id: house_id}).then(res => {
               if (res) {
                 let value = JSON.parse(res.data.draft_content || '{}');
-                this.resetting(value.payment_type || 1);
                 this.handlePreFill(value);
-              } else {
-                this.resetting(1);
               }
             });
           }
@@ -341,7 +349,7 @@
       handlePreFill(res) {
         let title = ['hall_goods', 'kitchen_balcony_bathroom', 'master_bedroom'];
         for (let item of Object.keys(this.form)) {
-          this.form[item] = res[item];
+          this.form[item] = res[item] || this.form[item];
           if (title.includes(item)) {
             for (let name of Object.keys(res[item])) {
               this.getHandleData(res, item, name);
@@ -382,7 +390,6 @@
                 break;
               case 'is_clean':
               case 'cleaning_type':
-              case 'payment_type':
                 this.formatData[item] = dicties[item][res[item]];
                 break;
               case 'cleaning_time':
@@ -615,8 +622,22 @@
           this.formatData = show;
           this.isBadShowHidden();
           let name = this.pickers.keyName;
-          if (name === 'payment_type') {
-            this.changerPaymentType(this.form[name]);
+          this.paymentTypeReset(name);
+        }
+      },
+      // 费用交接 缴费类型切换
+      paymentTypeReset(name) {
+        let arr = ['water_payment_type', 'electric_payment_type', 'gas_payment_type'];
+        if (!arr.includes(name)) return;
+        let data = this.jsonClone(defineArticleReceipt.slither);
+        for (let item of data) {
+          if (item.keyName === name) {
+            let type = this.form[name].payment_type;
+            this.form[name] = {};
+            for (let change of item.changeList[type]) {
+              this.form[name][change.keyName] = change.keyType;
+            }
+            this.form[name].payment_type = type;
           }
         }
       },
@@ -640,7 +661,7 @@
         // 切换后
         list['slither'] = this.jsonClone(handlerFreeDeliveryChange[val]);
         for (let item of list['slither']) {
-          if (item.keyName !== 'payment_type') {
+          if (!item.keyName.includes('payment_type')) {
             form[item.keyName] = item.keyType;
             if (item.keyName === 'other_fee') {
               form[item.keyName] = item.keyType;
@@ -654,7 +675,6 @@
             }
           }
         }
-        // this.payment_type = val;
         this.form = this.jsonClone(form);
       },
       // 显示/隐藏 图片 备注
@@ -752,7 +772,7 @@
           case 2:
             this.$dialog('重置', '您确定要清空表单吗?').then(status => {
               if (status) {
-                this.resetting(this.payment_type);
+                this.resetting();
               }
             });
             break;
@@ -760,7 +780,7 @@
       },
       // 重置
       resetting(val) {
-        defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
+        // defineArticleReceipt['slither'] = handlerFreeDeliveryChange[val];
         this.drawSlither = this.jsonClone(defineArticleReceipt);
         for (let item of Object.keys(this.drawSlither)) {
           if (item !== 'slither') {
@@ -828,6 +848,15 @@
                   }
                 }
                 this.form[key.keyName].push(obj);
+              } else if (key.changeList) {
+                this.form[key.keyName] = {};
+                this.formatData[key.keyName] = dicties[key.keyName][key.keyType];
+                this.form[key.keyName].payment_type = key.keyType;
+                for (let change of Object.keys(key.changeList)) {
+                  for (let child of key.changeList[change]) {
+                    this.form[key.keyName][child.keyName] = child.keyType;
+                  }
+                }
               } else {
                 this.form[key.keyName] = key.keyType;
                 if (key.keyType) {
@@ -861,6 +890,7 @@
         }
         this.form.collect_or_rent = this.allDetail.bulletin_type === 'bulletin_collect_basic' ? 1 : 2;//收租标记
         this.form = Object.assign({}, this.form);
+        console.log(this.form)
       }
     },
   }
