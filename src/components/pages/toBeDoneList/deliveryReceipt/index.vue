@@ -634,6 +634,7 @@
           if (item.keyName === name) {
             let type = this.form[name].payment_type;
             this.form[name] = {};
+            if (String(type) === '0') return;
             for (let change of item.changeList[type]) {
               this.form[name][change.keyName] = change.keyType;
             }
