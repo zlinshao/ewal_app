@@ -142,8 +142,7 @@
     #questionnaire .questionnaire-container .top-banner .banner {
       width: 100%;
       height: 2.7rem;
-      background: url("../../../assets/image/questionnaire/banner@2x.png") no-repeat scroll center;
-      background-size: 100% 100%;
+      background: url("../../../assets/image/questionnaire/banner@2x.png") no-repeat scroll center/100% 100%;
       overflow: visible;
       position: relative; }
     #questionnaire .questionnaire-container .top-banner .search-bar {
@@ -227,14 +226,11 @@
             width: .3rem;
             height: .3rem; }
             #questionnaire .questionnaire-container .list-container .item .item-bottom > div .icon.icon-edit {
-              background: url("../../../assets/image/questionnaire/bianjiwenjuan@2x.png") no-repeat scroll center;
-              background-size: 100% 100%; }
+              background: url("../../../assets/image/questionnaire/bianjiwenjuan@2x.png") no-repeat scroll center/100% 100%; }
             #questionnaire .questionnaire-container .list-container .item .item-bottom > div .icon.icon-view {
-              background: url("../../../assets/image/questionnaire/chakanshuju@2x.png") no-repeat scroll center;
-              background-size: 100% 100%; }
+              background: url("../../../assets/image/questionnaire/chakanshuju@2x.png") no-repeat scroll center/100% 100%; }
             #questionnaire .questionnaire-container .list-container .item .item-bottom > div .icon.icon-more {
-              background: url("../../../assets/image/questionnaire/gengduo@2x.png") no-repeat scroll center;
-              background-size: 100% 100%; }
+              background: url("../../../assets/image/questionnaire/gengduo@2x.png") no-repeat scroll center/100% 100%; }
           #questionnaire .questionnaire-container .list-container .item .item-bottom > div .item-icon-desc {
             font-family: PingFangHK-Regular;
             color: #8F8F8F;
@@ -303,8 +299,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          background: url("../../../assets/image/questionnaire/鐭╁舰@2x.png") no-repeat scroll center;
-          background-size: 100% 100%; }
+          background: url("../../../assets/image/questionnaire/鐭╁舰@2x.png") no-repeat scroll center/100% 100%; }
     #questionnaire .questionnaire-container .list-container .bottom-tip {
       color: #8F8F8F;
       padding: .3rem 1rem; }
@@ -330,14 +325,11 @@
             width: .3rem;
             height: .3rem; }
             #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div .icon.icon-stop {
-              background: url("../../../assets/image/questionnaire/zanting@2x.png") no-repeat scroll center;
-              background-size: 100% 100%; }
+              background: url("../../../assets/image/questionnaire/zanting@2x.png") no-repeat scroll center/100% 100%; }
             #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div .icon.icon-preview {
-              background: url("../../../assets/image/questionnaire/yulan@2x.png") no-repeat scroll center;
-              background-size: 100% 100%; }
+              background: url("../../../assets/image/questionnaire/yulan@2x.png") no-repeat scroll center/100% 100%; }
             #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div .icon.icon-delete {
-              background: url("../../../assets/image/questionnaire/shanchuxuanxiang@2x.png") no-repeat scroll center;
-              background-size: 100% 100%; }
+              background: url("../../../assets/image/questionnaire/shanchuxuanxiang@2x.png") no-repeat scroll center/100% 100%; }
           #questionnaire .questionnaire-container .list-container .item-operate .operate-container > div > :last-child {
             margin-top: .05rem;
             font-size: .2rem;
@@ -348,7 +340,6 @@
     right: .3rem;
     width: 1rem;
     height: 1rem;
-    background: url("../../../assets/image/questionnaire/tianjia@2x.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../../assets/image/questionnaire/tianjia@2x.png") no-repeat scroll center/100% 100%; }
 
 /*# sourceMappingURL=index.css.map */

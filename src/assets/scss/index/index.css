@@ -129,8 +129,7 @@
 
 #index .index {
   overflow: hidden;
-  background: url("../assets/image/home/home_bg.png") no-repeat scroll center;
-  background-size: 100% 100%; }
+  background: url("../assets/image/home/home_bg.png") no-repeat scroll center/100% 100%; }
   #index .index .indexTop div {
     position: relative;
     width: 110%;
@@ -164,13 +163,11 @@
     left: .42rem; }
     #index .index .vacancyHouse h1 {
       height: 1.3rem;
-      background: url("../assets/image/home/kongzhifangyuan.png") no-repeat scroll center;
-      background-size: 100% 100%;
+      background: url("../assets/image/home/kongzhifangyuan.png") no-repeat scroll center/100% 100%;
       background-size: 88% 100%; }
     #index .index .vacancyHouse h2 {
       height: .9rem;
-      background: url("../assets/image/home/yaobai.png") no-repeat scroll center;
-      background-size: 100% 100%;
+      background: url("../assets/image/home/yaobai.png") no-repeat scroll center/100% 100%;
       background-size: 30% 100%;
       -webkit-animation: sway 5s ease infinite;
       -moz-animation: sway 5s ease infinite;
@@ -230,8 +227,7 @@
       width: 1.5rem;
       height: 1.23rem;
       margin-right: -.03rem;
-      background: url("../assets/image/home/huochetou.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../assets/image/home/huochetou.png") no-repeat scroll center/100% 100%; }
     #index .index .smallTrain div {
       width: 1.24rem;
       height: .88rem;
@@ -262,24 +258,21 @@
           font-weight: bold;
           font-family: 'dingziti'; }
     #index .index .smallTrain .railroadCar p {
-      background: url("../assets/image/home/huochechexiang.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../assets/image/home/huochechexiang.png") no-repeat scroll center/100% 100%; }
     #index .index .smallTrain .lastRailroadCar {
       width: 1.7rem; }
       #index .index .smallTrain .lastRailroadCar i {
         width: .3rem; }
       #index .index .smallTrain .lastRailroadCar p {
         color: #FFFFFF;
-        background: url("../assets/image/home/huochewei.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../assets/image/home/huochewei.png") no-repeat scroll center/100% 100%; }
   #index .index .addVillage {
     position: fixed;
     top: 18%;
     right: .3rem;
     width: 1.2rem;
     height: 1rem;
-    background: url("../assets/image/home/indexaddvillage.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../assets/image/home/indexaddvillage.png") no-repeat scroll center/100% 100%; }
   #index .index .circle {
     position: fixed;
     right: -.8rem;

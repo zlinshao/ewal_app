@@ -167,8 +167,7 @@
           #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-top .icon-tip {
             width: .4rem;
             height: .4rem;
-            background: url("../../../assets/image/exam/peixunkaoshi@3x.png") no-repeat scroll center;
-            background-size: 100% 100%; }
+            background: url("../../../assets/image/exam/peixunkaoshi@3x.png") no-repeat scroll center/100% 100%; }
           #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-top > :nth-child(2) {
             font-size: .28rem;
             font-family: PingFangHK-Regular;
@@ -199,8 +198,7 @@
             #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-middle .exam-banner-middle-timestamp .icon-clock {
               width: .3rem;
               height: .3rem;
-              background: url("../../../assets/image/exam/kaoshishijian@3x.png") no-repeat scroll center;
-              background-size: 100% 100%; }
+              background: url("../../../assets/image/exam/kaoshishijian@3x.png") no-repeat scroll center/100% 100%; }
             #test_paper_exam .action-sheet-container .main-container .banner-top .exam-banner .exam-banner-middle .exam-banner-middle-timestamp .time-remain {
               font-family: DIN-Medium;
               color: #4570FD;
@@ -234,18 +232,15 @@
           #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip .bottom-tip-item .icon-left-time {
             width: .45rem;
             height: .45rem;
-            background: url("../../../assets/image/exam/zongshijian@3x.png") no-repeat scroll center;
-            background-size: 100% 100%; }
+            background: url("../../../assets/image/exam/zongshijian@3x.png") no-repeat scroll center/100% 100%; }
           #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip .bottom-tip-item .icon-exam-count {
             width: .45rem;
             height: .45rem;
-            background: url("../../../assets/image/exam/tishu@3x.png") no-repeat scroll center;
-            background-size: 100% 100%; }
+            background: url("../../../assets/image/exam/tishu@3x.png") no-repeat scroll center/100% 100%; }
           #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip .bottom-tip-item .icon-exam-score {
             width: .45rem;
             height: .45rem;
-            background: url("../../../assets/image/exam/zongfen@3x.png") no-repeat scroll center;
-            background-size: 100% 100%; }
+            background: url("../../../assets/image/exam/zongfen@3x.png") no-repeat scroll center/100% 100%; }
           #test_paper_exam .action-sheet-container .main-container .banner-top .bottom-tip .bottom-tip-item .bottom-tip-content {
             overflow: hidden;
             font-family: PingFangHK-Regular;
@@ -287,8 +282,7 @@
     #test_paper_exam .action-sheet-container .btn-container .btn-cancel {
       width: 40%;
       height: .7rem;
-      background: url("../../../assets/image/exam/quxiao.png") no-repeat scroll center;
-      background-size: 100% 100%;
+      background: url("../../../assets/image/exam/quxiao.png") no-repeat scroll center/100% 100%;
       display: flex;
       justify-content: center;
       align-items: center; }
@@ -296,8 +290,7 @@
       color: #FFFFFF;
       width: 40%;
       height: .7rem;
-      background: url("../../../assets/image/exam/queding.png") no-repeat scroll center;
-      background-size: 100% 100%;
+      background: url("../../../assets/image/exam/queding.png") no-repeat scroll center/100% 100%;
       display: flex;
       justify-content: center;
       align-items: center; }

@@ -177,8 +177,7 @@
         #toBeDone .main ul li .mainTitle p i {
           width: .36rem;
           height: .36rem;
-          background: url("../../../assets/image/toBeDone/jieshurenwu.png") no-repeat scroll center;
-          background-size: 100% 100%; }
+          background: url("../../../assets/image/toBeDone/jieshurenwu.png") no-repeat scroll center/100% 100%; }
     #toBeDone .main ul li .statusBtn {
       display: flex;
       display: -webkit-flex;
@@ -217,8 +216,7 @@
         width: .4rem;
         height: .4rem; }
       #toBeDone .main ul li .handleBtn .lose i {
-        background: url("../../../assets/image/toBeDone/cancel.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../../assets/image/toBeDone/cancel.png") no-repeat scroll center/100% 100%; }
       #toBeDone .main ul li .handleBtn .contract p {
         white-space: nowrap;
         margin-right: .3rem;
@@ -327,16 +325,14 @@
     color: #FFFFFF;
     background-color: #4171FE; }
     #toBeDone .showAddPopup .mainModule .module1 i {
-      background: url("../../../assets/image/toBeDone/xinjiandaikan.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../../../assets/image/toBeDone/xinjiandaikan.png") no-repeat scroll center/100% 100%; }
   #toBeDone .showAddPopup .mainModule .module2 {
     z-index: 1;
     bottom: 1rem;
     background-color: #FED836; }
     #toBeDone .showAddPopup .mainModule .module2 i {
       height: .7rem;
-      background: url("../../../assets/image/toBeDone/buchongxieyi.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../../../assets/image/toBeDone/buchongxieyi.png") no-repeat scroll center/100% 100%; }
   #toBeDone .showAddPopup .mainModule .module3 {
     width: 2rem;
     height: 2rem;
@@ -345,11 +341,9 @@
     right: 1.2rem;
     background-color: #9CE054; }
     #toBeDone .showAddPopup .mainModule .module3 i {
-      background: url("../../../assets/image/toBeDoneList/zufangdaikan.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../../../assets/image/toBeDoneList/zufangdaikan.png") no-repeat scroll center/100% 100%; }
   #toBeDone .showAddPopup .popupBottom {
     height: 1.5rem;
-    background: url("../../../assets/image/toBeDone/xinjiandaikandibu.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../../assets/image/toBeDone/xinjiandaikandibu.png") no-repeat scroll center/100% 100%; }
 
 /*# sourceMappingURL=index.css.map */

@@ -224,8 +224,7 @@
     #test_paper .action-sheet-container .btn-container .btn-cancel {
       width: 40%;
       height: .7rem;
-      background: url("../../../assets/image/questionnaire/quxiao.png") no-repeat scroll center;
-      background-size: 100% 100%;
+      background: url("../../../assets/image/questionnaire/quxiao.png") no-repeat scroll center/100% 100%;
       display: flex;
       justify-content: center;
       align-items: center; }
@@ -233,8 +232,7 @@
       color: #FFFFFF;
       width: 40%;
       height: .7rem;
-      background: url("../../../assets/image/questionnaire/queding.png") no-repeat scroll center;
-      background-size: 100% 100%;
+      background: url("../../../assets/image/questionnaire/queding.png") no-repeat scroll center/100% 100%;
       display: flex;
       justify-content: center;
       align-items: center; }

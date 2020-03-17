@@ -259,13 +259,11 @@
 #punchClock .staffContent, #goSignContract .staffContent {
   width: 56px;
   height: 60px;
-  background: url("../image/common/staffContentlocation.png") no-repeat scroll center;
-  background-size: 100% 100%; }
+  background: url("../image/common/staffContentlocation.png") no-repeat scroll center/100% 100%; }
 #punchClock .villageContent, #goSignContract .villageContent {
   width: 40px;
   height: 40px;
-  background: url("../image/common/villageContentlocation.png") no-repeat scroll center;
-  background-size: 100% 100%; }
+  background: url("../image/common/villageContentlocation.png") no-repeat scroll center/100% 100%; }
   #punchClock .villageContent div, #goSignContract .villageContent div {
     white-space: nowrap;
     font-size: 16px;
@@ -310,26 +308,20 @@
   display: -webkit-flex;
   justify-content: space-around;
   align-items: flex-end;
-  background: url("../../assets/image/common/commonfootertag.png") no-repeat scroll center;
-  background-size: 100% 100%; }
+  background: url("../../assets/image/common/commonfootertag.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag p {
     width: .6rem;
     height: .6rem; }
   .commonFooterTag .p-1 {
-    background: url("../../assets/image/home/tab_home1.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../assets/image/home/tab_home1.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag .p-2 {
-    background: url("../../assets/image/home/tab_home2.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../assets/image/home/tab_home2.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag .p-3 {
-    background: url("../../assets/image/home/tab_home3.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../assets/image/home/tab_home3.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag .p-4 {
-    background: url("../../assets/image/home/tab_home4.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../assets/image/home/tab_home4.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag .p-4 {
-    background: url("../../assets/image/home/tab_home_pre4.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../assets/image/home/tab_home_pre4.png") no-repeat scroll center/100% 100%; }
 
 .zl-button {
   -webkit-border-radius: 1rem;
@@ -359,11 +351,9 @@
     height: .3rem;
     margin: .02rem .1rem 0 0; }
   .zl-confirmation .identity {
-    background: url("../image/common/shenfen.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../image/common/shenfen.png") no-repeat scroll center/100% 100%; }
   .zl-confirmation .bank {
-    background: url("../image/common/yinhangka.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../image/common/yinhangka.png") no-repeat scroll center/100% 100%; }
 
 .zl-confirmation.bank {
   background: #00acc1; }
@@ -372,8 +362,7 @@
   position: fixed;
   bottom: 1.5rem;
   right: 1rem;
-  background: url("../image/common/xinjiananniu.png") no-repeat scroll center;
-  background-size: 100% 100%;
+  background: url("../image/common/xinjiananniu.png") no-repeat scroll center/100% 100%;
   width: 1.2rem;
   height: 1.2rem;
   -webkit-border-radius: 50%;
@@ -561,41 +550,29 @@
         width: .26rem;
         height: .26rem; }
       .electrical > div div h1 .electrical-1 {
-        background: url("../../assets/image/electrical/electrical1.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical1.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-2 {
-        background: url("../../assets/image/electrical/electrical2.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical2.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-3 {
-        background: url("../../assets/image/electrical/electrical3.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical3.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-4 {
-        background: url("../../assets/image/electrical/electrical4.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical4.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-5 {
-        background: url("../../assets/image/electrical/electrical5.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical5.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-6 {
-        background: url("../../assets/image/electrical/electrical6.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical6.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-7 {
-        background: url("../../assets/image/electrical/electrical7.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical7.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-8 {
-        background: url("../../assets/image/electrical/electrical8.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical8.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-9 {
-        background: url("../../assets/image/electrical/electrical9.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical9.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-10 {
-        background: url("../../assets/image/electrical/electrical10.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical10.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-11 {
-        background: url("../../assets/image/electrical/electrical11.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical11.png") no-repeat scroll center/100% 100%; }
       .electrical > div div h1 .electrical-12 {
-        background: url("../../assets/image/electrical/electrical12.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../assets/image/electrical/electrical12.png") no-repeat scroll center/100% 100%; }
     .electrical > div div p {
       text-align: center;
       padding-top: .05rem; }
@@ -612,22 +589,17 @@
     -webkit-border-radius: 1rem;
     -moz-border-radius: 1rem;
     border-radius: 1rem;
-    background: url("../image/footer/queding.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../image/footer/queding.png") no-repeat scroll center/100% 100%; }
   .commonBtn .deliver, .commonBtn .save {
-    background: url("../image/footer/zhuanjiao.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../image/footer/zhuanjiao.png") no-repeat scroll center/100% 100%; }
   .commonBtn .booking {
     color: #212121;
-    background: url("../image/footer/yuding.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../image/footer/yuding.png") no-repeat scroll center/100% 100%; }
   .commonBtn .reset {
-    background: url("../image/footer/chongzhi.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../image/footer/chongzhi.png") no-repeat scroll center/100% 100%; }
   .commonBtn .back {
     color: #212121;
-    background: url("../image/footer/quxiao.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../image/footer/quxiao.png") no-repeat scroll center/100% 100%; }
 
 .searchModule {
   display: flex;
@@ -718,8 +690,7 @@
         min-width: .42rem;
         height: .42rem;
         margin-right: .1rem;
-        background: url("../image/common/guanbi.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../image/common/guanbi.png") no-repeat scroll center/100% 100%; }
     .searchInput .input p {
       background-color: #D2D2D2;
       white-space: nowrap;
@@ -735,8 +706,7 @@
         width: .2rem;
         height: .3rem;
         margin-left: .1rem;
-        background: url("../image/common/choosedown.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../image/common/choosedown.png") no-repeat scroll center/100% 100%; }
     .searchInput .input .searchBtn {
       color: #FFFFFF;
       background-color: #4570FE; }

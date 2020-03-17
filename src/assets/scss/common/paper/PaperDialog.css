@@ -155,8 +155,7 @@
       #paper_dialog .paper-dialog-inner .inner-top .inner-top-img {
         width: 80%;
         flex: 1;
-        background: url("../../../assets/image/exam/tiaojiaochenggong@3x.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../../assets/image/exam/tiaojiaochenggong@3x.png") no-repeat scroll center/100% 100%; }
       #paper_dialog .paper-dialog-inner .inner-top .inner-top-content {
         display: flex;
         flex-direction: column;

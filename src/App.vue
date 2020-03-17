@@ -82,7 +82,7 @@
           year.push(i);
         }
         dicties.built_year = year;
-        this.loading = true;
+        this.loading = false;
         this.personalGet().then(res => {
           if (res) {
             // 所有省份

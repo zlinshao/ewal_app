@@ -151,8 +151,7 @@
       #create_questionnaire .create-container .create-container-main .add-questionnaire > div .icon-add {
         width: .4rem;
         height: .4rem;
-        background: url("../../../assets/image/questionnaire/tianjia@2x.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../../assets/image/questionnaire/tianjia@2x.png") no-repeat scroll center/100% 100%; }
       #create_questionnaire .create-container .create-container-main .add-questionnaire > div .icon-add-desc {
         padding-left: .1rem;
         color: #D2D2D2; }
@@ -182,16 +181,13 @@
         width: 1rem;
         height: 1rem; }
         #create_questionnaire .action-sheet-container .btn-container .btn-item > div:first-child.icon-single {
-          background: url("../../../assets/image/questionnaire/xuanze@2x.png") no-repeat scroll center;
-          background-size: 100% 100%; }
+          background: url("../../../assets/image/questionnaire/xuanze@2x.png") no-repeat scroll center/100% 100%; }
         #create_questionnaire .action-sheet-container .btn-container .btn-item > div:first-child.icon-judge {
-          background: url("../../../assets/image/questionnaire/panduan@2x.png") no-repeat scroll center;
-          background-size: 100% 100%; }
+          background: url("../../../assets/image/questionnaire/panduan@2x.png") no-repeat scroll center/100% 100%; }
         #create_questionnaire .action-sheet-container .btn-container .btn-item > div:first-child.icon-short {
           width: .8rem;
           height: .8rem;
-          background: url("../../../assets/image/questionnaire/xuhao@2x.png") no-repeat scroll center;
-          background-size: 100% 100%; }
+          background: url("../../../assets/image/questionnaire/xuhao@2x.png") no-repeat scroll center/100% 100%; }
       #create_questionnaire .action-sheet-container .btn-container .btn-item > div:nth-child(2) {
         padding-top: .2rem; }
   #create_questionnaire .action-sheet-container .cancel-container {
@@ -204,8 +200,7 @@
     #create_questionnaire .action-sheet-container .cancel-container .btn-cancel {
       width: 50%;
       height: .7rem;
-      background: url("../../../assets/image/questionnaire/quxiao.png") no-repeat scroll center;
-      background-size: 100% 100%;
+      background: url("../../../assets/image/questionnaire/quxiao.png") no-repeat scroll center/100% 100%;
       display: flex;
       justify-content: center;
       align-items: center; }

@@ -148,8 +148,7 @@
     #toBeDoneList .listTop .topSearch {
       width: .5rem;
       height: .5rem;
-      background: url("../../../assets/image/common/searchyellow.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../../../assets/image/common/searchyellow.png") no-repeat scroll center/100% 100%; }
   #toBeDoneList .main div,
   #toBeDoneList .main p,
   #toBeDoneList .main h1,
@@ -242,8 +241,7 @@
     border-radius: 0.1rem; }
     #toBeDoneList .main .finish .finishMain > div {
       padding-bottom: .36rem;
-      background: url("../../../assets/image/toBeDoneList/yiwanchengzhiwen.png") no-repeat scroll center;
-      background-size: 100% 100%;
+      background: url("../../../assets/image/toBeDoneList/yiwanchengzhiwen.png") no-repeat scroll center/100% 100%;
       background-position: right;
       background-size: contain; }
     #toBeDoneList .main .finish .finishMain .finish1 {
@@ -262,8 +260,7 @@
         min-width: 1.8rem;
         max-width: 1.8rem;
         height: .7rem;
-        background: url("../../../assets/image/toBeDoneList/daibanyiwancheng.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../../assets/image/toBeDoneList/daibanyiwancheng.png") no-repeat scroll center/100% 100%; }
     #toBeDoneList .main .finish .finishMain .finish2 {
       padding: 0 .3rem;
       display: flex;
@@ -309,23 +306,20 @@
     bottom: 60%;
     background-color: #FED836; }
     #toBeDoneList .showAddPopup .mainModule .module1 i {
-      background: url("../../../assets/image/toBeDoneList/shoufangdaikan.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../../../assets/image/toBeDoneList/shoufangdaikan.png") no-repeat scroll center/100% 100%; }
   #toBeDoneList .showAddPopup .mainModule .module2 {
     bottom: 40%;
     right: 4.7rem;
     color: #FFFFFF;
     background-color: #001A6E; }
     #toBeDoneList .showAddPopup .mainModule .module2 i {
-      background: url("../../../assets/image/toBeDoneList/zufangdaikan.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../../../assets/image/toBeDoneList/zufangdaikan.png") no-repeat scroll center/100% 100%; }
   #toBeDoneList .showAddPopup .mainModule .module3 {
     bottom: 30%;
     z-index: -1;
     background-color: #9CE054; }
     #toBeDoneList .showAddPopup .mainModule .module3 i {
-      background: url("../../../assets/image/toBeDoneList/baojierenwu.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../../../assets/image/toBeDoneList/baojierenwu.png") no-repeat scroll center/100% 100%; }
   #toBeDoneList .showAddPopup .mainModule .module4 {
     width: .6rem;
     height: .6rem;
@@ -338,12 +332,10 @@
     background-color: #00ACC1; }
     #toBeDoneList .showAddPopup .mainModule .module5 i {
       height: .7rem;
-      background: url("../../../assets/image/toBeDoneList/weixiurenwu.png") no-repeat scroll center;
-      background-size: 100% 100%; }
+      background: url("../../../assets/image/toBeDoneList/weixiurenwu.png") no-repeat scroll center/100% 100%; }
   #toBeDoneList .showAddPopup .popupBottom {
     height: .3rem;
-    background: url("../../../assets/image/toBeDoneList/xinjianrenwudibu.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../../assets/image/toBeDoneList/xinjianrenwudibu.png") no-repeat scroll center/100% 100%; }
   #toBeDoneList .searchHigh {
     display: flex;
     display: -webkit-flex;

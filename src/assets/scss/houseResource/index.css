@@ -200,14 +200,11 @@
         height: 16px;
         vertical-align: top; }
       #houseResource .houseResource .main-house-list div.house .rightInfo h2.house-name a.notice2 {
-        background: url("../../../assets/image/houseResource/hs.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../../assets/image/houseResource/hs.png") no-repeat scroll center/100% 100%; }
       #houseResource .houseResource .main-house-list div.house .rightInfo h2.house-name a.notice3 {
-        background: url("../../../assets/image/houseResource/gantan-cheng.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../../assets/image/houseResource/gantan-cheng.png") no-repeat scroll center/100% 100%; }
       #houseResource .houseResource .main-house-list div.house .rightInfo h2.house-name a.notice4 {
-        background: url("../../../assets/image/houseResource/gantan-hong.png") no-repeat scroll center;
-        background-size: 100% 100%; }
+        background: url("../../../assets/image/houseResource/gantan-hong.png") no-repeat scroll center/100% 100%; }
     #houseResource .houseResource .main-house-list div.house .rightInfo div.info {
       display: flex;
       justify-content: space-around;
@@ -245,8 +242,7 @@
       #houseResource .houseResource .main-house-list div.house .rightInfo div.bottom a {
         width: .3rem;
         height: .3rem;
-        background: url("../../../assets/image/houseResource/fangwu.png") no-repeat scroll center;
-        background-size: 100% 100%;
+        background: url("../../../assets/image/houseResource/fangwu.png") no-repeat scroll center/100% 100%;
         margin-right: 5px;
         vertical-align: middle;
         position: relative;
@@ -326,25 +322,19 @@
   display: -webkit-flex;
   justify-content: space-around;
   align-items: flex-end;
-  background: url("../../../assets/image/common/commonfootertag.png") no-repeat scroll center;
-  background-size: 100% 100%; }
+  background: url("../../../assets/image/common/commonfootertag.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag p {
     width: .6rem;
     height: .6rem; }
   .commonFooterTag .p-1 {
-    background: url("../../../assets/image/home/tab_home1.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../../assets/image/home/tab_home1.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag .p-2 {
-    background: url("../../../assets/image/home/tab_home2.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../../assets/image/home/tab_home2.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag .p-3 {
-    background: url("../../../assets/image/home/tab_home3.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../../assets/image/home/tab_home3.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag .p-4 {
-    background: url("../../../assets/image/home/tab_home4.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../../assets/image/home/tab_home4.png") no-repeat scroll center/100% 100%; }
   .commonFooterTag .p-3 {
-    background: url("../../../assets/image/home/tab_home_pre3.png") no-repeat scroll center;
-    background-size: 100% 100%; }
+    background: url("../../../assets/image/home/tab_home_pre3.png") no-repeat scroll center/100% 100%; }
 
 /*# sourceMappingURL=index.css.map */
